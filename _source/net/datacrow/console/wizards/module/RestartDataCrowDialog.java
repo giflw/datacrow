@@ -1,0 +1,115 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.console.wizards.module;
+
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcDialog;
+import net.datacrow.core.DataCrow;
+import net.datacrow.core.IconLibrary;
+import net.datacrow.core.resources.DcResources;
+
+public class RestartDataCrowDialog extends DcDialog implements ActionListener {
+    
+    public RestartDataCrowDialog(JFrame parent) {
+        super(parent);
+        
+        setModal(true);
+        
+        build();
+        
+        setResizable(false);
+        pack();
+        setCenteredLocation();
+        
+        setVisible(true);
+    }
+    
+    private void build() {
+        getContentPane().setLayout(Layout.getGBL());
+
+        JTextArea textMessage = ComponentFactory.getTextArea();
+        textMessage.setEditable(false);
+        textMessage.setBackground(getBackground());
+        
+        textMessage.setText(DcResources.getText("msgRestart"));
+        
+        JScrollPane scrollIn = new JScrollPane(textMessage);
+        scrollIn.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollIn.setPreferredSize(new Dimension(350,50));
+        scrollIn.setBorder(null);
+        
+        JButton buttonOk = ComponentFactory.getButton(DcResources.getText("lblYes"));
+        buttonOk.addActionListener(this);
+        buttonOk.setActionCommand("restart");
+        buttonOk.setMnemonic('O');
+
+        JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblNo"));
+        buttonCancel.addActionListener(this);
+        buttonCancel.setActionCommand("close");
+        buttonCancel.setMnemonic('C');
+        
+        getContentPane().add(ComponentFactory.getLabel(IconLibrary._icoAbout),  
+                             Layout.getGBC( 0, 0, 1, 1, 0.0, 0.0
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                             new Insets(5, 5, 5, 5), 0, 0));
+        getContentPane().add(scrollIn,      Layout.getGBC( 1, 0, 2, 3, 90.0, 90.0
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                             new Insets(5, 5, 5, 5), 0, 0));
+        
+        JPanel panelActions = new JPanel();
+        panelActions.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        panelActions.add(buttonCancel);
+        panelActions.add(buttonOk);
+        
+        getContentPane().add(panelActions,  Layout.getGBC( 2, 3, 1, 1, 0.0, 0.0
+                            ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                             new Insets(5, 5, 5, 5), 0, 0));
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("restart"))
+            DataCrow.mainFrame.finish(false, true);
+        else if (e.getActionCommand().equals("close"))
+            close();
+    }      
+}
+        

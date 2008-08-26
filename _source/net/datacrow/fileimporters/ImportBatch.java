@@ -1,0 +1,127 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.fileimporters;
+
+import java.util.Collection;
+
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
+
+public class ImportBatch extends Thread {
+
+    protected IFileImportClient listener;
+    protected FileImporter importer;
+    protected Collection<String> sources;
+    
+    public ImportBatch(IFileImportClient listener, 
+                       FileImporter importer, 
+                       Collection<String> sources) throws Exception {
+        
+        this.listener = listener;
+        this.importer = importer;
+        this.sources = sources;
+        
+
+    }
+    
+    @Override
+    public void run() {
+        try {
+            parse(sources);
+        } catch (Exception e) {
+            listener.addError(e);
+        }
+    }    
+    
+    protected void parse(Collection<String> files) {
+        try {
+            listener.addMessage(DcResources.getText("msgImportFoundXResults", "" + files.size()));
+            listener.initProgressBar(files.size());
+            int counter = 1;
+            
+            for (String filename : files) {
+
+                if  (listener.cancelled()) break;
+
+                DcObject dco = parse(filename);
+                
+                if (dco.toString().length() > 0)
+                    onlineUpdate(dco);
+                
+                DcModules.getCurrent().getCurrentInsertView().add(dco, false);
+                listener.updateProgressBar(counter++);
+            }
+        } finally {
+            listener.addMessage(DcResources.getText("msgImportStops"));
+            listener.finish();
+            cleanup();
+        }
+    }   
+    
+    protected void cleanup() {
+        listener = null;
+        importer = null;
+        sources.clear();
+        sources = null;
+    }
+    
+    protected DcObject parse(String filename) {
+        listener.addMessage(DcResources.getText("msgProcessingFileX", filename));
+        DcObject dco = null; 
+        try {
+            dco = importer.parse(filename, listener.getDirectoryUsage());
+        } catch (ParseException pe) {
+            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+            dco = DcModules.get(listener.getModule()).getDcObject();
+        }
+            
+        if (listener.getStorageMedium() != null) { 
+            for (DcField  field : dco.getFields()) {
+                if (field.getSourceModuleIdx() == DcModules._STORAGEMEDIA)
+                    dco.setValue(field.getIndex(), listener.getStorageMedium());
+            }
+        }
+
+        if (listener.getContainer() != null && dco.getField(DcObject._SYS_CONTAINER) != null) {
+            dco.setValue(DcObject._SYS_CONTAINER, listener.getContainer());
+        }
+        
+        dco.applyTemplate();
+        dco.setIDs();
+        
+        try {
+            sleep(200);
+        } catch (Exception e) {}
+
+        return dco;
+    }
+    
+    protected void onlineUpdate(DcObject dco) {
+
+    }
+}

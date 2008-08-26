@@ -1,0 +1,162 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.console.windows.messageboxes;
+
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcDialog;
+import net.datacrow.core.IconLibrary;
+import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
+
+public class MessageBox extends DcDialog implements ActionListener, KeyListener {
+
+    private JTextArea textMessage;
+    private JButton buttonOk;
+    private JPanel panel = new JPanel();
+    private JLabel labelIcon = ComponentFactory.getLabel("");
+
+    public  static final int _ERROR = 1;
+    public  static final int _WARNING = 2;
+    public  static final int _INFORMATION = 3;
+
+    public MessageBox(JFrame frame, String message, int type) {
+        super(frame);
+        init();
+        setModal(true);
+        display(message, type);
+    }
+
+    public MessageBox(String message, int type, boolean modal) {
+        super(DcSwingUtilities.getRootFrame());
+        init();
+        setModal(modal);
+        display(message, type);
+    }
+
+    public MessageBox(String message, int type) {
+        super(DcSwingUtilities.getRootFrame());
+        init();
+        setModal(true);
+        display(message, type);
+    }
+
+    @Override
+    public void close() {
+        textMessage = null;
+        buttonOk = null;
+        panel = null;
+        labelIcon = null;
+        super.close();
+    }
+
+    private void setIcon(ImageIcon icon) {
+        labelIcon.setIcon(icon);
+    }
+
+    private void display(String message, int type) {
+        textMessage.setText(message);
+        textMessage.setCaretPosition(0);
+
+        if (type == _ERROR) {
+            setIcon(IconLibrary._icoError);
+        } else if (type == _WARNING) {
+            setIcon(IconLibrary._icoWarning);
+        } else {
+            setIcon(IconLibrary._icoAbout);
+        }
+
+        this.pack();
+        this.toFront();
+
+        setCenteredLocation();
+        buttonOk.requestFocus();
+        this.setVisible(true);
+    }
+
+    private void init() {
+        this.getContentPane().add(panel);
+
+        this.setResizable(false);
+        this.getContentPane().setLayout(Layout.getGBL());
+
+        textMessage = ComponentFactory.getTextArea();
+        textMessage.setEditable(false);
+        textMessage.setBackground(panel.getBackground());
+        JScrollPane scrollIn = new JScrollPane(textMessage);
+        scrollIn.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollIn.setPreferredSize(new Dimension(350,50));
+        scrollIn.setBorder(null);
+        buttonOk = ComponentFactory.getButton(DcResources.getText("lblOK"));
+        buttonOk.addActionListener(this);
+        buttonOk.setMnemonic('O');
+
+        panel.setLayout(Layout.getGBL());
+        panel.addKeyListener(this);
+        buttonOk.addKeyListener(this);
+
+        panel.add(labelIcon,  Layout.getGBC( 0, 0, 1, 1, 0.0, 0.0
+                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                              new Insets(5, 5, 5, 5), 0, 0));
+        panel.add(scrollIn,   Layout.getGBC( 1, 0, 6, 3, 90.0, 90.0
+                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                              new Insets(5, 5, 5, 5), 0, 0));
+        panel.add(buttonOk, Layout.getGBC(0, 3, 2, 1, 0.0, 0.0
+                              ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
+                               new Insets(5, 5, 5, 5), 0, 0));
+        this.getContentPane().add(panel);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        close();
+    }
+    
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            close();
+    }
+
+    public void keyPressed(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {}
+}

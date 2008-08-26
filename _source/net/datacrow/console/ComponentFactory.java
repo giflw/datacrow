@@ -1,0 +1,920 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.console;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.ItemSelectable;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerListener;
+import java.awt.event.FocusListener;
+import java.awt.event.HierarchyBoundsListener;
+import java.awt.event.HierarchyListener;
+import java.awt.event.InputMethodListener;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.util.EventListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.AncestorListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import jonelo.jacksum.JacksumAPI;
+import net.datacrow.console.components.DcButton;
+import net.datacrow.console.components.DcCheckBox;
+import net.datacrow.console.components.DcColorSelector;
+import net.datacrow.console.components.DcComboBox;
+import net.datacrow.console.components.DcDateField;
+import net.datacrow.console.components.DcDecimalField;
+import net.datacrow.console.components.DcFileField;
+import net.datacrow.console.components.DcFileLauncherField;
+import net.datacrow.console.components.DcFilePatternField;
+import net.datacrow.console.components.DcFilePatternTextField;
+import net.datacrow.console.components.DcFileSizeField;
+import net.datacrow.console.components.DcFontSelector;
+import net.datacrow.console.components.DcHtmlEditorPane;
+import net.datacrow.console.components.DcIconSelectField;
+import net.datacrow.console.components.DcImageLabel;
+import net.datacrow.console.components.DcLabel;
+import net.datacrow.console.components.DcLoginNameField;
+import net.datacrow.console.components.DcLongTextField;
+import net.datacrow.console.components.DcLookAndFeelSelector;
+import net.datacrow.console.components.DcMenu;
+import net.datacrow.console.components.DcMenuBar;
+import net.datacrow.console.components.DcMenuItem;
+import net.datacrow.console.components.DcModuleSelector;
+import net.datacrow.console.components.DcNumberField;
+import net.datacrow.console.components.DcPasswordField;
+import net.datacrow.console.components.DcPictureField;
+import net.datacrow.console.components.DcProgramDefinitionsField;
+import net.datacrow.console.components.DcRadioButton;
+import net.datacrow.console.components.DcRatingComboBox;
+import net.datacrow.console.components.DcReferencesField;
+import net.datacrow.console.components.DcShortTextField;
+import net.datacrow.console.components.DcTabbedPane;
+import net.datacrow.console.components.DcTextPane;
+import net.datacrow.console.components.DcTimeField;
+import net.datacrow.console.components.DcTitledBorder;
+import net.datacrow.console.components.DcToolBarButton;
+import net.datacrow.console.components.DcTree;
+import net.datacrow.console.components.DcUrlField;
+import net.datacrow.console.components.IComponent;
+import net.datacrow.console.components.renderers.AvailabilityComboBoxRenderer;
+import net.datacrow.console.components.renderers.ComboBoxRenderer;
+import net.datacrow.console.components.tables.DcTable;
+import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.DcPropertyModule;
+import net.datacrow.core.objects.DcLookAndFeel;
+import net.datacrow.core.plugin.Plugin;
+import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
+
+import org.apache.log4j.Logger;
+
+import com.l2fprod.gui.plaf.skin.Skin;
+import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
+
+public final class ComponentFactory {
+
+    private static Logger logger = Logger.getLogger(ComponentFactory.class.getName());
+    
+    public static final int _YESNOCOMBO = 1;
+    public static final int _LONGTEXTFIELD = 2;
+    public static final int _CHECKBOX = 3;
+    public static final int _NUMBERFIELD = 4;
+    public static final int _SHORTTEXTFIELD = 5;
+    public static final int _URLFIELD = 6;
+    public static final int _PICTUREFIELD = 7;
+    public static final int _FONTSELECTOR = 8;
+    public static final int _TIMEFIELD = 9;
+    public static final int _THEMEFIELD = 10;
+    public static final int _RATINGCOMBOBOX = 11;
+    public static final int _FILEFIELD = 12;
+    public static final int _PASSWORDFIELD = 13;
+    public static final int _LOOKANDFEELSELECTOR = 14;
+    public static final int _MODULESELECTOR = 15;
+    public static final int _FILELAUNCHFIELD = 16;
+    public static final int _COLORSELECTOR = 17;
+    public static final int _DATEFIELD = 18;
+    public static final int _PROGRAMDEFINITIONFIELD = 19;
+    public static final int _REFERENCEFIELD = 20;
+    public static final int _REFERENCESFIELD = 21;
+    public static final int _AVAILABILITYCOMBO = 22;
+    public static final int _SIMPLEPICTUREFIELD = 23;
+    public static final int _DECIMALFIELD = 24;
+    public static final int _CHARACTERFIELD = 25;
+    public static final int _FILESIZEFIELD = 26;
+    public static final int _LOGINNAMEFIELD = 27;
+    public static final int _HASHTYPECOMBO = 28;
+    
+    private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
+    private static final Dimension iconButtonSize = new Dimension(25, 23);
+    private static final Color colorDisabled = new Color(240,240,240);
+    private static final Color colorRequired = new Color(120, 0, 0);
+
+    private static LookAndFeel defaultLaf;
+
+    /**
+     * Cleans the component. This method tries to dynamically clean any component
+     * of its children, listeners and calls specific cleaner methods on custom components.
+     * This will ensure the component to get GC-ed. After this call the component can no
+     * longer be used.
+     * 
+     * @param component the component to clean
+     */
+    public static final void clean(final Component component) {
+        
+        if (!SwingUtilities.isEventDispatchThread())
+            logger.error("Not thread-safe; should only remove components from within the Event Dispatching thread");
+
+        if (component instanceof JComponent) {
+            JComponent c = (JComponent) component;
+            
+            // remove all listeners
+            removeListeners(c);
+            
+            if (c instanceof net.datacrow.console.components.lists.DcList) 
+                ((net.datacrow.console.components.lists.DcList) c).clear();
+            
+            if (c instanceof DcTable) 
+                ((DcTable) c).clear();
+            
+            if (c instanceof IComponent)
+                ((IComponent) c).clear();
+            
+            if (c instanceof JMenu) {
+                for (int i = 0; i < ((JMenu) c).getItemCount(); i++)
+                    clean(((JMenu) c).getItem(i));
+            }
+            
+            for (int i = 0; i < c.getComponentCount(); i++)
+                clean(c.getComponent(i));
+
+            c.setComponentPopupMenu(null);
+            c.removeAll();
+            c.removeNotify();
+            c.invalidate();
+        }
+    }    
+    
+    public static void setLookAndFeel() {
+        try {
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            JDialog.setDefaultLookAndFeelDecorated(true);
+            
+            if (defaultLaf == null)
+                defaultLaf = UIManager.getLookAndFeel();
+            
+            DcLookAndFeel laf = DcSettings.getLookAndFeel(DcRepository.Settings.stLookAndFeel);
+            if (laf.getType() == DcLookAndFeel._SKINLF) {
+                Skin theSkinToUse = SkinLookAndFeel.loadThemePack(DataCrow.baseDir + "/themes/" +  laf.getFileName());
+                SkinLookAndFeel.setSkin(theSkinToUse);
+                UIManager.setLookAndFeel(new SkinLookAndFeel());
+            } else if (laf.getType() == DcLookAndFeel._LAF) {
+                UIManager.setLookAndFeel(laf.getClassName());
+            } else {
+                UIManager.setLookAndFeel(defaultLaf);
+            }
+            
+            UIManager.getLookAndFeelDefaults().put("SplitPane.border", null);
+            UIManager.put("TabbedPane.lightHighlight", UIManager.get("TabbedPane.background") );
+            UIManager.put("TabbedPane.darkShadow", UIManager.get("TabbedPane.background") );
+            UIManager.put("TabbedPane.shadow", UIManager.get("TabbedPane.background") );
+            
+            UIManager.put("Tree.leafIcon", IconLibrary._icoTreeLeaf);
+            UIManager.put("Tree.openIcon", IconLibrary._icoTreeOpen);
+            UIManager.put("Tree.closedIcon", IconLibrary._icoTreeClosed);
+            
+        } catch (Exception e) {
+            logger.error("Error while applying default UI properties", e);
+        }        
+    }
+    
+    private static final void removeListeners(JComponent c) {
+        
+        removeListeners(ActionListener.class, c);
+        removeListeners(AncestorListener.class, c);
+
+        removeListeners(ComponentListener.class, c);
+        removeListeners(ContainerListener.class, c);
+
+        removeListeners(HierarchyBoundsListener.class, c);
+        removeListeners(HierarchyListener.class, c);
+
+        removeListeners(InputMethodListener.class, c);
+        removeListeners(ItemListener.class, c);
+        
+        removeListeners(KeyListener.class, c);
+        
+        removeListeners(MouseMotionListener.class, c);
+        removeListeners(MouseWheelListener.class, c);
+        removeListeners(MouseListener.class, c);
+        
+        removeListeners(PropertyChangeListener.class, c);
+        removeListeners(VetoableChangeListener.class, c);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static final void removeListeners(Class clazz, JComponent c) {
+         EventListener[] listeners = c.getListeners(clazz);
+         for (int i = 0; i < listeners.length; i++) {
+            
+             if (listeners[i] instanceof java.awt.event.MouseListener) 
+                 c.removeMouseListener((MouseListener) listeners[i]);
+             
+             if (listeners[i] instanceof java.awt.event.ActionListener) {
+                 if (c instanceof JComboBox)
+                     ((JComboBox)c).removeActionListener((ActionListener) listeners[i]);    
+                 if (c instanceof AbstractButton)
+                     ((AbstractButton)c).removeActionListener((ActionListener) listeners[i]);
+             }
+             
+             if (listeners[i] instanceof java.awt.event.ItemListener)
+                 ((ItemSelectable) c).removeItemListener((ItemListener) listeners[i]);
+
+             if (listeners[i] instanceof AncestorListener)
+                 c.removeAncestorListener((AncestorListener) listeners[i]);
+
+             if (listeners[i] instanceof ComponentListener)
+                 c.removeComponentListener((ComponentListener) listeners[i]);
+
+             if (listeners[i] instanceof ContainerListener)
+                 c.removeContainerListener((ContainerListener) listeners[i]);
+
+             if (listeners[i] instanceof FocusListener)
+                 c.removeFocusListener((FocusListener) listeners[i]);
+
+             if (listeners[i] instanceof HierarchyBoundsListener)
+                 c.removeHierarchyBoundsListener((HierarchyBoundsListener) listeners[i]);
+
+             if (listeners[i] instanceof HierarchyListener)
+                 c.removeHierarchyListener((HierarchyListener) listeners[i]);
+
+             if (listeners[i] instanceof InputMethodListener)
+                 c.removeInputMethodListener((InputMethodListener) listeners[i]);
+
+             if (listeners[i] instanceof KeyListener)
+                 c.removeKeyListener((KeyListener) listeners[i]);
+
+             if (listeners[i] instanceof MouseMotionListener)
+                 c.removeMouseMotionListener((MouseMotionListener) listeners[i]);
+
+             if (listeners[i] instanceof MouseWheelListener)
+                 c.removeMouseWheelListener((MouseWheelListener) listeners[i]);
+
+             if (listeners[i] instanceof PropertyChangeListener)
+                 c.removePropertyChangeListener((PropertyChangeListener) listeners[i]);
+
+             if (listeners[i] instanceof VetoableChangeListener)
+                 c.removeVetoableChangeListener((VetoableChangeListener) listeners[i]);
+         }
+    }
+    
+    public static final JComponent getComponent(int majormodule, 
+                                                int minormodule, 
+                                                int index, 
+                                                String label, 
+                                                int maxTextLength) {
+        switch (index) {
+            case _YESNOCOMBO:
+                return getYesNoCombo();
+            case _LONGTEXTFIELD:
+                return getLongTextField();
+            case _CHECKBOX:
+                return getCheckBox(label);
+            case _NUMBERFIELD:
+                return getNumberField();
+            case _CHARACTERFIELD:
+                return getShortTextField(1);
+            case _DECIMALFIELD:
+                return getDecimalField();
+            case _URLFIELD:
+                return getURLField(maxTextLength);
+            case _SIMPLEPICTUREFIELD:
+                return getPictureField(true, false, false, label);
+            case _PICTUREFIELD:
+                return getPictureField(true, true, false, label);
+            case _FONTSELECTOR:
+                return getFontSelector();
+            case _TIMEFIELD:
+                return getTimeField();
+            case _AVAILABILITYCOMBO:
+                return getAvailabilityCombo();
+            case _RATINGCOMBOBOX:
+                return getRatingComboBox();
+            case _FILEFIELD:
+                return getFileField(false, false);
+            case _PASSWORDFIELD:
+                return getPasswordField();
+            case _REFERENCEFIELD:
+                return getObjectCombo(minormodule);
+            case _PROGRAMDEFINITIONFIELD:
+                return getProgramDefinitionField();
+            case _LOOKANDFEELSELECTOR:
+                return getLookAndFeelSelector();
+            case _MODULESELECTOR:
+                return getModuleSelector();
+            case _FILELAUNCHFIELD:
+                return getFileLaunchField();
+            case _REFERENCESFIELD:
+                return getReferencesField(DcModules.getMappingModIdx(majormodule, minormodule));
+            case _DATEFIELD:
+                return getDateField();          
+            case _FILESIZEFIELD:
+                return getFileSizeField();
+            case _LOGINNAMEFIELD:
+                return getLoginNameField();
+            case _HASHTYPECOMBO:
+                return getHashTypeComboBox();
+            default:
+                return getShortTextField(maxTextLength);
+        }
+    }
+    
+    public static DcHtmlEditorPane getHtmlEditorPane() {
+        return new DcHtmlEditorPane();
+    }
+    
+    public static DcLongTextField getHelpTextField() {
+        DcLongTextField textHelp = ComponentFactory.getLongTextField();
+        textHelp.setBorder(null);
+        textHelp.setEditable(false);
+        textHelp.setMargin(new Insets(5,5,5,5));
+
+        return textHelp;
+    }
+    
+    public static final DcColorSelector getColorSelector(String settingsKey) {
+        return new DcColorSelector(settingsKey);
+    }
+
+	public static final void setUneditable(JComponent component) {
+        if (component instanceof IComponent)
+            ((IComponent) component).setEditable(false);
+	}
+
+	public static final DcProgramDefinitionsField getProgramDefinitionField() {
+		return new DcProgramDefinitionsField();
+	}
+
+    public static final DcFileLauncherField getFileLaunchField() {
+        return new DcFileLauncherField();
+    }
+    
+    public static final DcModuleSelector getModuleSelector() {
+        return new DcModuleSelector();
+    }
+
+    public static final DcReferencesField getReferencesField(int mappingModIdx) {
+        return new DcReferencesField(mappingModIdx);
+    }
+    
+    public static final DcPasswordField getPasswordField() {
+    	return new DcPasswordField();
+    }
+
+    public static final DcFontSelector getFontSelector() {
+        return new DcFontSelector();
+    }
+
+    public static final DcLookAndFeelSelector getLookAndFeelSelector() {
+        return new DcLookAndFeelSelector();
+    }    
+    
+    public static final DcTimeField getTimeField() {
+    	return new DcTimeField();
+    }
+    
+    public static final JComboBox getHashTypeComboBox() {
+        JComboBox cb = getComboBox();
+        for (Object o : JacksumAPI.getAvailableAlgorithms().keySet()) {
+            cb.addItem(o);
+        }
+        return cb;
+    }
+    
+    public static final DcComboBox getMediaCombo(int module) {
+        DcModule m = DcModules.get(module);
+        int modIx = !(m instanceof DcPropertyModule) ? m.getPropertyModule(DcModules._STORAGEMEDIA).getIndex() : m.getIndex();
+
+        DcComboBox combo = getComboBox();
+        DataManager.registerUiComponent(combo, modIx);
+        return combo;
+    }    
+    
+    public static final JComboBox getStateCombo(int module) {
+        DcModule m = DcModules.get(module);
+        int modIx = !(m instanceof DcPropertyModule) ? m.getPropertyModule(DcModules._STATE).getIndex() : m.getIndex();
+
+        DcComboBox combo = getComboBox();
+        DataManager.registerUiComponent(combo, modIx);
+        return combo;
+    }    
+
+    public static final DcComboBox getContactPersonCombo() {
+        DcComboBox comboBox = getComboBox();
+        DataManager.registerUiComponent(comboBox, DcModules._CONTACTPERSON);
+        return comboBox;
+    }
+
+    public static final DcComboBox getObjectCombo(int module) {
+        DcComboBox comboBox = getComboBox();
+        DataManager.registerUiComponent(comboBox, module);
+        return comboBox;
+    }
+    
+    public static final DcComboBox getAvailabilityCombo() {
+        DcComboBox comboBox = new DcComboBox();
+        comboBox.setFont(getStandardFont());
+        comboBox.setRenderer(AvailabilityComboBoxRenderer.getInstance());
+
+        comboBox.addItem(null);
+        comboBox.addItem(Boolean.TRUE);
+        comboBox.addItem(Boolean.FALSE);
+
+        return comboBox;
+    }
+    
+    public static final DcRadioButton getRadioButton(String label, ImageIcon icon, String command) {
+        DcRadioButton radioButton = new DcRadioButton(label, icon, false);
+        radioButton.setSelectedIcon(icon);
+        radioButton.setActionCommand(command);
+        radioButton.setFont(getSystemFont());
+        return radioButton;
+    }
+    
+    public static final DcRadioButton getRadioButton(String label, ImageIcon icon) {
+        DcRadioButton radioButton = new DcRadioButton(label, icon, false);
+        return radioButton;
+    }
+
+    public static final DcFileField getFileField(boolean save, boolean dirsOnly) {
+        DcFileField ff = new DcFileField(null);
+        ff.setModus(save, dirsOnly);
+        return ff;
+    }
+
+    public static final DcFileField getFileField(boolean save, boolean dirsOnly, FileFilter filter) {
+        DcFileField ff = new DcFileField(filter);
+        ff.setModus(save, dirsOnly);
+        return ff;
+    }
+
+    public static final DcFileSizeField getFileSizeField() {
+        DcFileSizeField fld = new DcFileSizeField();
+        fld.setFont(getStandardFont());
+        return fld;
+    }
+    
+    public static final DcLoginNameField getLoginNameField() {
+        DcLoginNameField fld = new DcLoginNameField();
+        fld.setFont(getStandardFont());
+        return fld;
+    }
+    
+    public static final DcDateField getDateField() {
+        DcDateField dateField = new DcDateField();
+        dateField.setFont(getStandardFont());
+        dateField.setPreferredSize(new Dimension(dateField.getWidth(), 23));
+        return dateField;
+    }
+
+    public static final DcPictureField getPictureField(boolean scaled,
+                                                       boolean allowActions,
+                                                       boolean thumbnail,
+                                                       String name) {
+        DcPictureField pictureField = new DcPictureField(scaled, allowActions, thumbnail, name);
+        return pictureField;
+    }
+
+    public static final DcUrlField getURLField(int maxLength) {
+        DcUrlField urlField = new DcUrlField(maxLength);
+        urlField.setFont(getStandardFont());
+        return urlField;
+    }
+
+    public static final DcTree getTree(DefaultMutableTreeNode model) {
+        DcTree tree = new DcTree(model);
+        tree.setFont(getStandardFont());
+        return tree;
+    }
+
+    public static final DcNumberField getNumberField() {
+        DcNumberField numberField = new DcNumberField();
+        numberField.setPreferredSize(new Dimension(numberField.getWidth(), 21));
+        numberField.setFont(getStandardFont());
+        return numberField;
+    }
+    
+    public static final DcDecimalField getDecimalField() {
+        DcDecimalField decimalField = new DcDecimalField();
+        decimalField.setPreferredSize(new Dimension(decimalField.getWidth(), 21));
+        decimalField.setFont(getStandardFont());
+        return decimalField;
+    }    
+
+    public static final DcRatingComboBox getRatingComboBox() {
+        return new DcRatingComboBox();
+    }
+
+    public static final DcComboBox getMP3GenreComboBox() {
+        DcComboBox genreComboBox = getComboBox();
+        genreComboBox.addItem("");
+        genreComboBox.setSelectedIndex(0);
+        genreComboBox.setFont(getStandardFont());
+
+        for (int i = 0; i < DcRepository.Collections.colMusicGenres.length; i++) {
+            genreComboBox.addItem(DcRepository.Collections.colMusicGenres[i]);
+        }
+
+        return genreComboBox;
+    }
+
+    public static final DcComboBox getComboBox(Object[] items) {
+        DcComboBox comboBox = new DcComboBox(items);
+        comboBox.setFont(getStandardFont());
+        comboBox.setRenderer(ComboBoxRenderer.getInstance());
+        return comboBox;
+    }    
+
+    public static final DcImageLabel getImageLabel() {
+        return new DcImageLabel();
+    }
+
+    public static final DcIconSelectField getIconSelectField(ImageIcon icon) {
+        return new DcIconSelectField(icon);
+    }
+    
+    public static final DcImageLabel getImageLabel(ImageIcon icon) {
+        return new DcImageLabel(icon);
+    }
+    
+    public static final DcComboBox getComboBox() {
+        DcComboBox comboBox = new DcComboBox();
+        comboBox.setFont(getStandardFont());
+        comboBox.setRenderer(ComboBoxRenderer.getInstance());
+        return comboBox;
+    }
+
+    public static final DcComboBox getComboBox(DefaultComboBoxModel model) {
+        DcComboBox comboBox = new DcComboBox(model);
+        comboBox.setFont(getStandardFont());
+        comboBox.setRenderer(ComboBoxRenderer.getInstance());
+        return comboBox;
+    }
+    
+    public static final DcCheckBox getCheckBox(String labelText) {
+        DcCheckBox checkBox = new DcCheckBox(labelText);
+        checkBox.setFont(getSystemFont());
+        return checkBox;
+    }
+
+    public static final DcMenuItem getMenuItem(String text) {
+        DcMenuItem menuItem = new DcMenuItem(text);
+        menuItem.setFont(getSystemFont());
+        menuItem.setLayout(new FlowLayout(FlowLayout.LEFT));
+        return menuItem;
+    }
+    
+    public static final DcMenuItem getMenuItem(AbstractAction action) {
+        DcMenuItem menuItem = new DcMenuItem(action);
+        menuItem.setFont(getSystemFont());
+        menuItem.setLayout(new FlowLayout(FlowLayout.LEFT));
+        return menuItem;
+    }    
+    
+    public static final DcMenuItem getMenuItem(ImageIcon icon, String text) {
+        DcMenuItem menuItem = getMenuItem(text);
+        menuItem.setIcon(icon);
+        return menuItem;
+    }
+
+    public static final DcMenuItem getMenuItem(Plugin plugin) {
+        DcMenuItem menuItem = getMenuItem(plugin.getLabel());
+        menuItem.setIcon(plugin.getIcon());
+        menuItem.addActionListener(plugin);
+        menuItem.setAccelerator(plugin.getKeyStroke());
+        
+        if (plugin.getHelpText() != null)
+            menuItem.setToolTipText(plugin.getHelpText());
+        
+        return menuItem;
+    }
+
+    public static DcToolBarButton getToolBarButton(Plugin plugin) {
+        DcToolBarButton button = new DcToolBarButton(plugin);        
+        button.setFont(getSystemFont());
+        button.setLayout(new FlowLayout(FlowLayout.LEFT));
+        
+        if (plugin.getHelpText() != null)
+            button.setToolTipText(plugin.getHelpText());
+        
+        return button;
+    }
+    
+    public static final DcMenu getMenu(String text) {
+        DcMenu menu = new DcMenu(text);
+        return menu;
+    }
+
+    public static final DcMenu getMenu(ImageIcon icon, String text) {
+        DcMenu menu = new DcMenu(text);
+        menu.setFont(getSystemFont());
+        menu.setIcon(icon);
+        return menu;
+    }
+
+    public static final DcButton getTableHeader(String title) {
+        DcButton button = getButton(title);
+        button.setFont(ComponentFactory.getStandardFont());
+        button.setPreferredSize(new Dimension(button.getWidth(), 20));
+        return button;
+    }
+
+    public static final DcButton getIconButton(ImageIcon icon) {
+        DcButton button = getButton("");
+        button.setIcon(icon);
+        button.setFont(getSystemFont());
+        
+        button.setMaximumSize(iconButtonSize);
+        button.setMinimumSize(iconButtonSize);
+        button.setPreferredSize(iconButtonSize);
+        
+        return button;
+    }
+    
+    public static final DcButton getButton(ImageIcon icon) {
+        DcButton button = getButton("");
+        button.setIcon(icon);
+        button.setFont(getSystemFont());
+        return button;
+    }
+
+    public static final DcButton getButton(String buttonText) {
+        DcButton button = new DcButton();
+        ToolTipManager.sharedInstance().registerComponent(button);
+        button.setName("bt" + buttonText);
+        button.setText(buttonText);
+        
+        int height = 25;
+        
+        button.setPreferredSize(new Dimension(110, height));
+        button.setMaximumSize(new Dimension(110, height));
+        button.setMinimumSize(new Dimension(110, height));
+        button.setFont(getSystemFont());
+        return button;
+    }
+
+    public static final DcLongTextField getTextArea() {
+        DcLongTextField textArea = new DcLongTextField();
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+        textArea.setEditable(true);
+        textArea.setMargin(new Insets(5,5,5,5));
+        textArea.setFont(getStandardFont());
+        return textArea;
+    }
+    
+    public static final DcFilePatternField getFilePatternField(int module) {
+        DcFilePatternField fpf = new DcFilePatternField(module);
+        fpf.setWrapStyleWord(true);
+        fpf.setLineWrap(true);
+        fpf.setEditable(true);
+        fpf.setMargin(new Insets(5,5,5,5));
+        fpf.setFont(getStandardFont());
+        return fpf;
+    }    
+
+    public static final DcTextPane getTextPane() {
+        DcTextPane textpane = new DcTextPane();
+        textpane.setFont(getStandardFont());
+        return textpane;
+    }
+
+    public static final DcLongTextField getLongTextField() {
+        DcLongTextField longText = new DcLongTextField();
+        longText.setWrapStyleWord(true);
+        longText.setLineWrap(true);
+        longText.setEditable(true);
+        longText.setMargin(new Insets(5,5,5,5));
+        longText.setFont(getStandardFont());
+        return longText;
+    }
+
+    public static final DcLabel getLabel(ImageIcon icon) {
+        DcLabel label = new DcLabel(icon);
+        return label;
+    }
+
+    public static final JLabel getLabel(String labelText, ImageIcon icon) {
+        JLabel label = getLabel(labelText);
+        label.setIcon(icon);
+        return label;
+    }
+
+    public static final  JLabel getLabel(String labelText, int length) {
+        JLabel label = getLabel(labelText);
+        label.setPreferredSize(new Dimension(length, 23));
+        label.setText(labelText);
+        return label;
+    }
+
+    public static final DcLabel getLabel(String labelText) {
+        DcLabel label = new DcLabel();
+        label.setText(labelText);
+        label.setRequestFocusEnabled(false);
+        label.setFont(getSystemFont());
+        label.setToolTipText(labelText);
+
+        return label;
+    }
+    
+    public static final DcFilePatternTextField getFilePatternTextField() {
+        DcFilePatternTextField fptf = new DcFilePatternTextField();
+        fptf.setFont(getStandardFont());
+        fptf.setPreferredSize(new Dimension(50, 21));
+        return fptf;
+    }
+
+    public static final DcShortTextField getShortTextField(int maxTextLength) {
+        DcShortTextField textField = new DcShortTextField(maxTextLength);
+        textField.setFont(getStandardFont());
+        textField.setPreferredSize(new Dimension(50, 21));
+        return textField;
+    }
+
+    public static final DcShortTextField getTextFieldDisabled() {
+        DcShortTextField textField = new DcShortTextField(4000);
+        textField.setPreferredSize(new Dimension(50, 21));
+        textField.setEnabled(false);
+        textField.setEditable(false);
+        textField.setFont(ComponentFactory.getStandardFont());
+        textField.setForeground(ComponentFactory.getDisabledColor());
+
+        return textField;
+    }
+    
+    public static final void setBorder(JComponent c) {
+    	Border border = c.getBorder();
+    	if (!(border instanceof javax.swing.border.CompoundBorder)) {
+        	c.setBorder(BorderFactory.createCompoundBorder(
+    				c.getBorder(), 
+    				BorderFactory.createEmptyBorder(2, 2, 2, 2)));
+    	}
+    }
+    
+    public static final DcNumberField getIdFieldDisabled() {
+        DcNumberField textField = new DcNumberField();
+        textField.setPreferredSize(new Dimension(50, 21));
+        textField.setEnabled(false);
+        textField.setEditable(false);
+        textField.setFont(ComponentFactory.getStandardFont());
+        textField.setForeground(ComponentFactory.getDisabledColor());
+        return textField;
+    }    
+
+    public static final DcTabbedPane getTabbedPane() {
+        DcTabbedPane tabbedPane = new DcTabbedPane();
+        tabbedPane.setFont(getSystemFont());
+        return tabbedPane;
+    }
+
+    public static final DcTable getDCTable(boolean readonly, boolean caching) {
+        DcTable table = new DcTable(readonly, caching);
+        return table;
+    }
+
+    public static final DcTable getDCTable(DcModule module, boolean readonly, boolean caching) {
+    	DcTable table = new DcTable(module, readonly, caching);
+        return table;
+    }
+
+    public static final Icon getIcon(String iconLocation) {
+        Icon icon = new ImageIcon(iconLocation);
+        return icon;
+    }
+
+    public static final JMenuBar getMenuBar() {
+        DcMenuBar menuBar = new DcMenuBar();
+        menuBar.setFont(getStandardFont());
+        return menuBar;
+    }
+
+    public static final DcComboBox getYesNoCombo() {
+        DcComboBox comboBox = getComboBox();
+        comboBox.addItem("");
+        comboBox.addItem(DcResources.getText("lblYes"));
+        comboBox.addItem(DcResources.getText("lblNo"));
+        comboBox.setFont(getStandardFont());
+
+        return comboBox;
+    }
+
+    public static final TitledBorder getTitleBorder(String title) {
+        TitledBorder border = new DcTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), title);
+        border.setTitleFont(getSystemFont());
+        return border;
+    }
+
+    public static final Color getCurrentForegroundColor() {
+        Color color = UIManager.getLookAndFeelDefaults().getColor("TextField.foreground");
+        return color == null ? Color.BLACK : color;
+    }
+    
+    public static final Font getStandardFont() {
+        return DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
+    }
+
+    public static final Font getSystemFont() {
+        return DcSettings.getFont(DcRepository.Settings.stSystemFontBold);
+    }
+
+    public static final Font getUnreadableFont() {
+        return fontUnreadable;
+    }
+
+    public static final Color getDisabledColor() {
+       return colorDisabled;
+    }
+
+    public static final Color getRequiredColor() {
+        return colorRequired;
+    }
+
+    public static final Color getTableHeaderColor() {
+        return new Color(220, 220, 220);
+    }
+
+    public static final void setValue(JComponent c, Object o) {
+        if (c instanceof IComponent)
+            ((IComponent) c).setValue(o);
+        else 
+            logger.debug("Could not set value for " + c + " as its does not implement IComponent");
+    }
+
+    public static Object getValue(JComponent c) {
+        if (c instanceof IComponent)
+            return ((IComponent) c).getValue(); 
+        else 
+            logger.debug("Could not get value for " + c + " as its does not implement IComponent");
+        
+        return null;
+    }
+}

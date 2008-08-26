@@ -1,0 +1,65 @@
+.main {
+	background-color: Black;
+}
+
+BODY, TD, TABLE {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+	text-align: left;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+TABLE, TD, TR {
+    vertical-align: top;
+}
+
+TD, TR {
+    padding-left: 2px;
+}
+
+H1, H2, H3 {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+
+IMG {
+    margin-top: 5px;
+    margin-bottom: 10Px;
+}
+
+H1 {
+	font-size: 12pt;
+	color: #0000CC;
+}	
+
+H2 {
+	font-size: 11pt;
+	color: #3399FF;
+}	
+
+H3 {
+	font-size: 11pt;
+	color: #66CCFF;
+}	
+
+H4 {
+	font-size: 11pt;
+	color: #66CCFF;
+        font-style: italic;
+}
+
+A {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	text-decoration: underline;
+	color: #006600;
+	font-weight: bold;
+}
+
+A:Hover {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+	text-decoration: underline;
+	color: #00D647;
+}

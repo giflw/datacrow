@@ -1,0 +1,82 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.core.modules;
+
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.xml.XmlModule;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcMediaObject;
+
+public class DcMediaModule extends DcModule {
+    
+    private static final long serialVersionUID = -4813944714346927458L;
+
+    public DcMediaModule(XmlModule module) {
+        super(module);
+    }
+    
+    public DcMediaModule(int index, 
+                         boolean topModule,
+                         String name,
+                         String description,
+                         String objectName,
+                         String objectNamePlural,
+                         String tableName,
+                         String tableShortName,
+                         String tableJoin) {
+        
+        super(index, topModule, name, description, objectName, objectNamePlural, 
+              tableName, tableShortName, tableJoin);
+    }
+    
+    @Override
+    protected void initializeFields() {
+    	super.initializeFields();
+
+        addField(new DcField(DcMediaObject._A_TITLE, getIndex(), "Title", 
+                             false, true, false, true, false,
+                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                             "Title"));
+        addField(new DcField(DcMediaObject._B_DESCRIPTION, getIndex(), "Description", 
+                             false, true, false, true, false, 
+                             8000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                             "Description"));
+        addField(new DcField(DcMediaObject._C_YEAR, getIndex(), "Year", 
+                             false, true, false, true, false, 
+                             4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                             "Year"));
+        addField(new DcField(DcMediaObject._E_RATING, getIndex(), "Rating", 
+                             false, true, false, true, false, 
+                             255, ComponentFactory._RATINGCOMBOBOX, getIndex(), DcRepository.ValueTypes._LONG,
+                             "Rating"));    
+    }  
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof DcMediaModule ? ((DcMediaModule) o).getIndex() == getIndex() : false);
+    }      
+}

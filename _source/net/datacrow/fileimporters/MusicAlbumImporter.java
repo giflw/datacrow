@@ -1,0 +1,201 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.fileimporters;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import net.datacrow.console.windows.fileimport.MusicFileImportDialog;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.helpers.MusicAlbum;
+import net.datacrow.core.objects.helpers.MusicTrack;
+import net.datacrow.util.Converter;
+import net.datacrow.util.Hash;
+import net.datacrow.util.StringUtils;
+
+public class MusicAlbumImporter extends FileImporter {
+    
+    private static final int _DONOTUSE = 0;
+    private static final int _DIRISALBUM = 1;
+    private static final int _DIRISARTISTS = 2;
+    private static final int _DIRISARTIST_SUBDIRISALBUM = 3;
+    
+    protected final Collection<DcObject> albums = new ArrayList<DcObject>();
+
+    @Override
+    public void beforeParse() {
+        albums.clear();
+    }
+    
+    public MusicAlbumImporter() {
+        super(DcModules._MUSICALBUM);
+    }
+
+    @Override
+    public String[] getSupportedExtensions() {
+        return new String[] {"mp3", "ogg", "mp4", "mp4a", "m4p", "flac", 
+                             "flc", "ape", "asf", "wav", "mpc", "ra", "wma"};
+    }
+
+    @Override
+    public boolean allowDirectoryRegistration() {
+        return false;
+    }  
+    
+    @Override
+    public void showUI() {
+        MusicFileImportDialog dlg = new MusicFileImportDialog(this);
+        dlg.setVisible(true);
+    }
+    
+    @Override
+    public boolean allowSingleFileParsing() {
+        return false;
+    }
+    
+    @Override
+    public boolean canImportArt() {
+        return true;
+    }
+    
+    @Override
+    protected void afterParse(IFileImportClient listener, DcObject dco) {
+        if (!albums.contains(dco))
+            albums.add(dco);
+    }
+
+    @Override
+    protected void afterImport(IFileImportClient listener) {
+        for (DcObject dco : albums)
+            super.afterParse(listener, dco);
+    }
+
+    @Override
+    public DcObject parse(String filename, int directoryUsage) throws ParseException {
+        DcObject ma = new MusicAlbum();
+
+        try {
+            MusicFile musicFile = new MusicFile(filename);
+            
+            String artist = musicFile.getArtist();
+            String album = musicFile.getAlbum();
+            
+            String s = null; 
+            switch (directoryUsage) {
+            case _DONOTUSE:
+                break;
+            case _DIRISALBUM:
+                s = getDirectoryName(filename, 0);
+                album = s != null ? s : album;
+                break;
+            case _DIRISARTISTS:
+                s = getDirectoryName(filename, 0);
+                artist = s != null ? s : artist;
+                break;
+            case _DIRISARTIST_SUBDIRISALBUM:
+                s = getDirectoryName(filename, 0);
+                album = s != null ? s : artist;
+
+                s = getDirectoryName(filename, 1);
+                artist = s != null ? s : album;
+
+                break;
+            }
+
+            if (album != null) {
+                album = Converter.databaseValueConverter(album);
+                ma = getAlbum(album, albums);
+            }
+            
+            if (ma == null) {
+                ma = new MusicAlbum();
+                ma.setValue(MusicAlbum._A_TITLE, album);
+                
+                setImages(filename, ma, MusicAlbum._J_PICTUREFRONT, 
+                                        MusicAlbum._K_PICTUREBACK, 
+                                        MusicAlbum._L_PICTURECD);
+                
+                DataManager.createReference(ma, MusicAlbum._F_ARTISTS, artist);
+            } 
+            
+            DcObject genre = DataManager.createReference(ma, MusicAlbum._G_GENRES, musicFile.getGenre());
+
+            MusicTrack mt = new MusicTrack();
+            
+            String year = musicFile.getYear();
+            year = year.indexOf("-") > -1 ? year.substring(0, year.indexOf("-")) : year;
+            
+            int track = musicFile.getTrack();
+            track = track == 0 ? ma.getChildren() != null ?  ma.getChildren().size() + 1 : 1  : track;
+            
+            mt.setValue(MusicTrack._K_QUALITY, Long.valueOf(musicFile.getBitrate()));
+            mt.setValue(MusicTrack._J_PLAYLENGTH, Long.valueOf(musicFile.getLength()));
+            mt.setValue(MusicTrack._L_ENCODING, musicFile.getEncodingType());
+            mt.setValue(MusicTrack._A_TITLE, musicFile.getTitle());
+            mt.setValue(MusicTrack._C_YEAR, year);
+            mt.setValue(MusicTrack._F_TRACKNUMBER, Long.valueOf(track));
+            
+            mt.setValue(MusicTrack._SYS_FILENAME, filename);
+            Hash.getInstance().calculateHash(mt);
+
+            if (genre != null)
+                DataManager.createReference(mt, MusicTrack._H_GENRES, genre);
+            
+            DataManager.createReference(mt, MusicTrack._G_ARTIST, artist);                
+
+            ma.addChild(mt);
+            
+        } catch (Exception exp) {
+            throw new ParseException(exp);
+        }
+
+        ma.setIDs();
+        return ma;
+    }
+    
+    private DcObject getAlbum(String title, Collection<DcObject> albums) {
+        if (title == null)
+            return null;
+        
+        for (DcObject dco : albums) {
+            String albumName = (String) dco.getValue(MusicAlbum._A_TITLE);
+            if (StringUtils.equals(albumName, title))
+                return dco;
+        }
+        
+        return null;
+    }    
+    
+    private String getDirectoryName(String filename, int pos) {
+        if (pos == 0)
+            return new File(filename).getParentFile().getName();
+        else
+            return new File(filename).getParentFile().getParentFile().getName();
+    }    
+}

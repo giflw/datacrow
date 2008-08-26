@@ -1,0 +1,501 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.core.modules;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.ModuleUpgradeException;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.security.PermissionModule;
+import net.datacrow.core.modules.security.UserModule;
+import net.datacrow.core.modules.xml.XmlModule;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.security.SecurityCentre;
+import net.datacrow.settings.DcSettings;
+import net.datacrow.util.FileNameFilter;
+
+import org.apache.log4j.Logger;
+
+/**
+ * This class registers and manages all modules present within Data Crow. 
+ * 
+ * Things to know:
+ * - Property modules are stored in "propertyBaseModules".
+ *   These modules are used as templates for the actual references.
+ *   (DcPropertyModule.getIndex() + DcModule.getIndex())
+ * - Multi relation references are stored in the same way except they also get a
+ *   mapping module (<ParentModule>.getIndex() + <ReferencedModule>.getIndex() + DcModules._MAPPING)
+ * - If defined, a base property module serves multiple modules (such as the music genres).
+ * 
+ * @author Robert Jan van der Waals
+ */
+public class DcModules {
+    
+    private static Logger logger = Logger.getLogger(DcModules.class.getName());
+
+    public static final int _SOFTWARE = 50;
+    public static final int _MOVIE = 51;
+    public static final int _MUSICALBUM = 52;
+    public static final int _AUDIOCD = 53;
+    public static final int _BOOK = 54;
+    public static final int _IMAGE = 55;
+    public static final int _CONTACTPERSON = 56;
+    public static final int _MEDIA = 57;
+    public static final int _MUSICTRACK = 58;
+    public static final int _AUDIOTRACK = 59;
+    public static final int _PICTURE = 60;
+    public static final int _LOAN = 61;
+    public static final int _USER = 62;
+    public static final int _PERMISSION = 63;
+    public static final int _CONTAINER = 64;
+    public static final int _ITEM = 65;
+    
+    public static final int _CATEGORY = 10000;
+    public static final int _STORAGEMEDIA = 11000;
+    public static final int _PLATFORM = 12000;
+    public static final int _TEMPLATE = 13000;
+    public static final int _MUSICGENRE = 14000;
+    public static final int _STATE = 15000;
+    public static final int _GENRE = 16000;
+    public static final int _CONTAINERTYPE = 17000;
+    
+    public static final int _ACTOR = 30000;
+    public static final int _DIRECTOR = 31000;
+    public static final int _AUTHOR = 32000;
+    public static final int _BOOKPUBLISHER = 33000;
+    public static final int _SOFTWAREPUBLISHER = 34000;
+    public static final int _DEVELOPER = 35000;
+    public static final int _MUSICARTIST = 36000;
+    
+    public static final int _MAPPING = 50000;
+
+    private static final Map<Integer, DcPropertyModule> propertyBaseModules = new HashMap<Integer, DcPropertyModule>();
+    private static final Map<Integer, DcModule> modules = new LinkedHashMap<Integer, DcModule>();
+    
+    public static void load() throws ModuleUpgradeException, InvalidModuleXmlException, ModuleJarException {
+        propertyBaseModules.clear();
+        modules.clear();
+        
+        initReferenceBaseModules();
+        loadSystemModules();
+        loadModuleJars();
+    }
+    
+    /**
+     * Save all module jar files
+     */
+    public static void save() {
+        for (DcModule module : getAllModules()) {
+            try {
+                XmlModule xmlModule = module.getXmlModule();
+                if (xmlModule != null && xmlModule.isChanged()) 
+                    new ModuleJar(module.getXmlModule()).save();
+            } catch (Exception e) {
+                logger.error("An error occurred while saving the module jar for module " +
+                             module.getLabel(), e);
+            }
+        }
+    }
+    
+    /**
+     * Registers the base modules. These modules are used as template.
+     */
+    private static void initReferenceBaseModules() {
+        propertyBaseModules.put(DcModules._CATEGORY, 
+                       new DcPropertyModule(DcModules._CATEGORY, "Category", 
+                                            "category", "cat",
+                                            DcResources.getText("sysCategory"),
+                                            DcResources.getText("sysCategoryPlural")));
+        propertyBaseModules.put(DcModules._STATE, 
+                       new DcPropertyModule(DcModules._STATE, "State", 
+                                            "state", "st",
+                                            DcResources.getText("sysState"),
+                                            DcResources.getText("sysStatePlural")));
+        propertyBaseModules.put(DcModules._PLATFORM, 
+                       new DcPropertyModule(DcModules._PLATFORM, "Platform", 
+                                            "platform", "pf",
+                                            DcResources.getText("sysPlatform"),
+                                            DcResources.getText("sysPlatformPlural")));    
+        propertyBaseModules.put(DcModules._STORAGEMEDIA, 
+                       new DcPropertyModule(DcModules._STORAGEMEDIA, "Storage Medium", 
+                                            "storagemedium", "stme",
+                                            DcResources.getText("sysStorageMedium"),
+                                            DcResources.getText("sysStorageMediumPlural")));      
+        propertyBaseModules.put(DcModules._CONTAINERTYPE, 
+                       new DcPropertyModule(DcModules._CONTAINERTYPE, "Container Type", 
+                                            "containertype", "coty",
+                                            DcResources.getText("sysContainerType"),
+                                            DcResources.getText("sysContainerTypePlural")));  
+        propertyBaseModules.put(DcModules._GENRE, 
+                       new DcPropertyModule(DcModules._GENRE, "Genre", 
+                                            "genre", "gr",
+                                            DcResources.getText("sysGenre"),
+                                            DcResources.getText("sysGenrePlural")));
+        DcPropertyModule musicGenreMod =
+                        new DcPropertyModule(DcModules._MUSICGENRE, "Music Genre", "musicgenre", "musgr",
+                                           DcResources.getText("sysMusicGenre"), 
+                                           DcResources.getText("sysMusicGenrePlural"));
+        
+        musicGenreMod.setServingMultipleModules(true);
+        propertyBaseModules.put(DcModules._MUSICGENRE, musicGenreMod);
+    }
+    
+    /**
+     * Determines the correct index for the mapping module. Note that these indices are
+     * also used to determine the mapped modules indices.
+     */
+    public static int getMappingModIdx(int module, int referenceModIdx) {
+        int baseModIdx = DcModules.get(module) instanceof TemplateModule ? 
+                        ((TemplateModule) DcModules.get(module)).getTemplatedModule().getIndex() : module;
+        
+        return baseModIdx + referenceModIdx + DcModules._MAPPING;
+    }
+
+    /**
+     * Get a new, unused, index. Should only be used by the module wizards
+     */
+    public static int getAvailableIdx(XmlModule module) {
+        int add = module.getModuleClass().equals(DcPropertyModule.class) ? 1000 : 1;
+        int index = module.getModuleClass().equals(DcPropertyModule.class) ? 20000 : 1;
+        while (modules.containsKey(index) || propertyBaseModules.containsKey(index))
+            index += add;
+        
+        return index;
+    }    
+    
+    /**
+     * Retrieves the user defined modules
+     */
+    public static Collection<DcModule> getCustomModules() {
+        Collection<DcModule> modules = new ArrayList<DcModule>();
+        for (DcModule module : getAllModules()) {
+            if (module.isCustomModule())
+                modules.add(module);
+        }
+        return modules;
+    }
+
+    /**
+     * Initializes the system modules such as the picture and the loan module.
+     */
+    private static void loadSystemModules() {
+        register(new PictureModule());
+        register(new LoanModule());
+        register(new UserModule());
+        register(new PermissionModule());
+    }
+    
+    /**
+     * Retrieves and registers the jar files from the modules folder. 
+     * @throws ModuleUpgradeException
+     * @throws InvalidModuleXmlException
+     * @throws ModuleJarException
+     */
+    private static void loadModuleJars() throws ModuleUpgradeException, InvalidModuleXmlException, ModuleJarException  {
+        File file = new File(DataCrow.moduleDir);
+        String[] files = file.list(new FileNameFilter("jar", false));
+        
+        Collection<XmlModule> dependingMods = new ArrayList<XmlModule>();
+        Collection<XmlModule> masterMods = new ArrayList<XmlModule>();
+        
+        for (String filename : files) {
+            ModuleJar mj = new ModuleJar(filename);
+            mj.load();
+                
+            XmlModule xmlModule = mj.getModule();
+            if (xmlModule.getModuleClass().equals(DcPropertyModule.class))
+                registerBasePropertyModule((DcPropertyModule) convert(xmlModule));
+            else if (xmlModule.hasDependingModules()) 
+                masterMods.add(xmlModule);
+            else 
+                dependingMods.add(xmlModule);
+        }
+        
+        // First register the modules on which other modules depend (obviously) 
+        for (XmlModule xmlModule : masterMods)
+            register(convert(xmlModule));
+        
+        for (XmlModule xmlModule : dependingMods)
+            register(convert(xmlModule));
+ 
+        // Lastly, register any property module referenced by the registered modules
+        for (DcModule module : new ArrayList<DcModule>(modules.values())) {
+            if (!(module instanceof DcPropertyModule))
+                registerPropertyModules(module);
+        }
+    }
+    
+    /**
+     * Converters an XmlModule to a real module.
+     */
+    @SuppressWarnings("unchecked")
+    public static DcModule convert(XmlModule xmlModule) {
+        try {
+            Class parent = xmlModule.getModuleClass();
+            return (DcModule) parent.getConstructor(new Class[] {XmlModule.class}).newInstance(new Object[] {xmlModule});
+        } catch (Exception exp) {
+            logger.error("Could not instantiate " + xmlModule.getModuleClass() + " or it is of the wrong type.", exp);
+        }
+        return null;
+    }
+
+    /**
+     * Holds the global property modules. These are used as a template to create
+     * specific referenced modules from.
+     */
+    public static void registerBasePropertyModule(DcPropertyModule module) {
+        propertyBaseModules.put(module.getIndex(), module);
+    }
+    
+    /**
+     * A direct add of the module to the modules list. An error is logged if the module
+     * was already registered.
+     */
+    public static void register(DcModule module) {
+        logger.debug("Registering module [" + module + "]");
+        
+        if (!modules.containsKey(module.getIndex())) {
+            modules.put(module.getIndex(), module);
+        } else if (!module.isServingMultipleModules()){
+            logger.error("Module [" + module + "] has a conflicting index of [" + module.getIndex() + "] or has already been registered." + 
+                        "(Registered module: name [" + modules.get(module.getIndex()) + "])");
+        }
+    }
+
+    /**
+     * Registers the property modules referenced by the given module
+     */
+    public static void registerPropertyModules(DcModule module) {
+        if (module.isAbstract()) // special case
+            return;
+        
+        for (DcField field : module.getFields()) {
+                DcModule mod = module instanceof TemplateModule ? 
+                                   ((TemplateModule) module).getTemplatedModule() : module; 
+       
+            int sourceIdx = field.getSourceModuleIdx();
+            int derivedIdx = sourceIdx;
+
+            if (propertyBaseModules.containsKey(sourceIdx)) {
+                DcPropertyModule propMod = propertyBaseModules.get(sourceIdx);
+                if (propMod.isServingMultipleModules()) {
+                    // A module which serves multiple other modules gets the same table name..
+                    // Also the module will keep its original index. No other magic involved.
+                    
+                    DcPropertyModule pm = new DcPropertyModule(derivedIdx, propMod.getName(),  
+                                                               propMod.getTableName(), propMod.getTableShortName(),
+                                                               propMod.getObjectName(), propMod.getObjectNamePlural());
+                    pm.setServingMultipleModules(true);
+                    addUserDefinedFields(propMod, pm);
+                    register(pm);
+                } else {
+                    // Else.. derive a new index and assign a new and unique tablename.
+                    
+                    derivedIdx = sourceIdx + mod.getIndex();
+                    DcPropertyModule pm = new DcPropertyModule(derivedIdx, propMod.getName(),  
+                                                               mod.getTableName() + "_" + propMod.getTableName(), 
+                                                               mod.getTableShortName() + propMod.getTableShortName(),
+                                                               propMod.getObjectName(), propMod.getObjectNamePlural());
+                    addUserDefinedFields(propMod, pm);
+                    register(pm);
+                }
+            }
+            
+            // register the mapping module using the derived index.
+            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
+                register(new MappingModule(mod, DcModules.get(derivedIdx)));
+        }
+        
+        if (module.isTopModule() || module.isChildModule())
+            register(new TemplateModule(module));
+    }
+    
+    /**
+     * As users can define extra fields for base property modules these fields need to be
+     * added to the property module when assigned (by default a property module has only a name 
+     * and an icon field). 
+     */
+    private static void addUserDefinedFields(DcPropertyModule base, DcPropertyModule pm) {
+        for (DcField fld1 : base.getFields()) {
+            boolean exists = false;
+            for (DcField fld2 : pm.getFields())
+                exists = fld2.getIndex() == fld1.getIndex() ? true : exists;
+            
+            if (!exists) {
+                DcField field = new DcField(fld1.getIndex(), pm.getIndex(), fld1.getLabel(), fld1.isUiOnly(), 
+                                            fld1.isEnabled(), fld1.isReadOnly(), fld1.isSearchable(), 
+                                            fld1.isTechnicalInfo(), fld1.getMaximumLength(), 
+                                            fld1.getFieldType(), pm.getIndex(), fld1.getValueType(), 
+                                            fld1.getDatabaseFieldName());
+                pm.addField(field);
+            }
+        }
+        
+        pm.setIcon16(base.getIcon16());
+        pm.setIcon32(base.getIcon32());
+        pm.setXmlModule(base.getXmlModule());
+        pm.initializeSettings();
+    }
+    
+    /**
+     * Retrieves the property modules used by the specified module.
+     * References are determined by the fields of the module.
+     */
+    public static Collection<DcPropertyModule> getPropertyModules(DcModule module) {
+        Collection<DcPropertyModule> references = new ArrayList<DcPropertyModule>();
+        for (DcField field : module.getFields()) {
+            DcPropertyModule pm = getPropertyModule(field);
+            if (pm != null && !references.contains(pm))
+                references.add(pm);
+        }
+        return references;
+    }
+    
+    /**
+     * Retrieve the referenced module for the given field. This can either be the module
+     * to which the field belongs, the referenced module or null.
+     * @param field
+     */
+    public static DcModule getReferencedModule(DcField field) {
+        int parentModule = DcModules.get(field.getModule()) instanceof TemplateModule ?
+                           ((TemplateModule) DcModules.get(field.getModule())).getTemplatedModule().getIndex() : 
+                           field.getModule();
+        
+        DcModule module = DcModules.get(field.getSourceModuleIdx());
+        return module == null ? DcModules.get(field.getSourceModuleIdx() + parentModule) : module;
+    }
+    
+    /**
+     * Retrieve the referenced property module for the given field. Will return null when
+     * the field does not contain a reference to a property module.
+     *  
+     * @param field
+     */
+    public static DcPropertyModule getPropertyModule(DcField field) {
+        DcModule module = getReferencedModule(field);
+        return module instanceof DcPropertyModule ? (DcPropertyModule) module : null;
+    }
+
+    public static Collection<DcPropertyModule> getPropertyBaseModules() {
+        return propertyBaseModules.values();
+    }
+    
+    public static DcPropertyModule getPropertyBaseModule(int module) {
+        return propertyBaseModules.get(module);
+    }    
+
+    public static DcModule get(String name) {
+        for (DcModule module : modules.values()) {
+            if (module.getName().equalsIgnoreCase(name))
+                return module;
+        }
+        return null; 
+    }
+    
+    public static DcModule get(int key) {
+        return modules.get(key);
+    }
+
+    public static void remove(int key) {
+        modules.remove(key);
+    }    
+    
+    public static DcModule getCurrent() {
+        DcModule current = DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule));
+        if (SecurityCentre.getInstance().getUser().isAuthorized(current))
+            return current;
+        
+        return null;
+    }    
+
+    public static DcObject getObjectForTable(String tableName) {
+        for (DcModule module : modules.values()) {
+            if (module.getTableName().equalsIgnoreCase(tableName))
+                return module.getDcObject();
+        }
+        return null;
+    }
+
+    public static void loadData() {
+        new DataManager();
+    }
+
+    public static boolean isUsedInMapping(int modIdx) {
+        for (DcModule module : getAllModules()) {
+            if (module instanceof MappingModule) {
+                MappingModule mappingMod = (MappingModule) module;
+                if (mappingMod.getReferencedModIdx() == modIdx) 
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public static Collection<DcModule> getReferencingModules(int moduleIdx) {
+        Collection<DcModule> refs = new ArrayList<DcModule>();
+        for (DcModule module : getAllModules()) {
+            if (module.getIndex() != moduleIdx && !(module instanceof TemplateModule)) {
+                if (module.hasReferenceTo(moduleIdx))
+                    refs.add(module);
+            }
+        }
+        return refs;
+    }    
+    
+    public static Collection<DcModule> getAllModules() {
+        List<DcModule> c = new ArrayList<DcModule>();
+        for (Iterator<DcModule> iter = modules.values().iterator(); iter.hasNext(); )
+            c.add(iter.next());
+        
+        Collections.sort(c); 
+        return c;
+    }
+    
+    public static Collection<DcModule> getModules() {
+        Collection<DcModule> c = new ArrayList<DcModule>();
+        
+        for (DcModule module : getAllModules()) {
+            if (module.isEnabled())
+                c.add(module);
+        }
+        
+        return c;
+    }
+}
+
