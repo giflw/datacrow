@@ -181,7 +181,7 @@ public class Query {
         return o == null || o.equals(emptyValue) || o.equals("0") || o.equals("NULL");
     }
 
-    @SuppressWarnings({ "null", "unchecked" })
+    @SuppressWarnings({"unchecked"})
     protected List<PreparedStatement> getInsertQueries(DcObject dco) throws SQLException {
         Collection<Object> values = new ArrayList<Object>();
         StringBuffer columns = new StringBuffer();

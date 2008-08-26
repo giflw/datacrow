@@ -230,7 +230,7 @@ public class DataManager {
             
             if (map != null) map.remove(dco.getID());
         } else if (children.containsKey(dco.getModule().getIndex())) {
-            List<DcObject> c = children.get(dco.getModule().getIndex()).get((String) dco.getValue(dco.getParentReferenceFieldIndex()));
+            List<DcObject> c = children.get(dco.getModule().getIndex()).get(dco.getValue(dco.getParentReferenceFieldIndex()));
             if (c != null) c.remove(dco);
         } else if (module == DcModules._LOAN) {
             Collection<Loan> c = loans.get(getKey(dco));

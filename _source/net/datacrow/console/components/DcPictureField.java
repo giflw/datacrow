@@ -219,7 +219,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     
     private class PicturePane extends JComponent {
         
-        @SuppressWarnings("null")
         @Override
         protected void paintComponent(Graphics g) {
             insets = getInsets(insets);

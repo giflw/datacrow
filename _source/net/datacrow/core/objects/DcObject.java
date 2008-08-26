@@ -853,7 +853,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Copies all values from the specified Data Crow object
      * @param dco source object
      */
-    @SuppressWarnings("unchecked")
     public void copy(DcObject dco, boolean overwrite) {
         int[] fields = dco.getFieldIndices();
         for (int i = 0; i < fields.length; i++) {

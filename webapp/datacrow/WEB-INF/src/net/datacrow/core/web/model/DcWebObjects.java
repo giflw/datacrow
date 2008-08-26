@@ -206,7 +206,7 @@ public class DcWebObjects extends Sortable {
                 } else if (o1 instanceof String) {
                     result = ((String) o1).toLowerCase().compareTo(((String) o2).toLowerCase());
                 } else if (o1 instanceof Comparable) {
-                    result = ((Comparable) o1).compareTo((Comparable) o2);
+                    result = ((Comparable) o1).compareTo(o2);
                 }
                 return ascending ? result : result * -1;
             }

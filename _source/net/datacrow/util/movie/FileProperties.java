@@ -381,7 +381,7 @@ abstract class FileProperties {
      * Returns the decimal value of a specified number of bytes from a specific
      * part of a byte.
      */
-    protected int getDecimalValue(int[] bits, int start, int stop, @SuppressWarnings("unused") boolean printBits) {
+    protected int getDecimalValue(int[] bits, int start, int stop, boolean printBits) {
         String dec = "";
         for (int i = start; i >= stop; i--) {
             dec += bits[i];

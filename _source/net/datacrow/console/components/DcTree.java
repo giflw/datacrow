@@ -45,7 +45,6 @@ public class DcTree extends JTree {
         super(model);
     }    
     
-    @SuppressWarnings("unchecked")
     @Override
     public void removeTreeSelectionListener(TreeSelectionListener tsl) {
         for (TreeSelectionListener listener : getTreeSelectionListeners()) {
@@ -54,7 +53,6 @@ public class DcTree extends JTree {
         }
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public void addTreeSelectionListener(TreeSelectionListener tsl) {
         removeTreeSelectionListener(tsl);

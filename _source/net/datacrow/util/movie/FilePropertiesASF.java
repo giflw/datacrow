@@ -51,7 +51,6 @@ public class FilePropertiesASF extends FileProperties {
 	/**
 	 * This method will read the file and interprets it as an ASF-media-file.<br>
 	 */
-	@SuppressWarnings("null")
     @Override
 	public void process(RandomAccessFile file, String filename) throws Exception {
 	    file.seek(0);

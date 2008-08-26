@@ -164,7 +164,7 @@ public class DcWebObject extends DcSecured {
                         String s = child.getDisplayString(field.getIndex());
                         
                         if (def.getMaxTextLength() != 0 && field.getValueType() != DcRepository.ValueTypes._PICTURE)
-                            s = StringUtils.concatUserFriendly((String) s, def.getMaxTextLength());
+                            s = StringUtils.concatUserFriendly(s, def.getMaxTextLength());
 
                         values.add(s);
                     }

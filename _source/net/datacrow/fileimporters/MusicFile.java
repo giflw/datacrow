@@ -73,7 +73,6 @@ public class MusicFile implements IOnlineSearchClient {
     
     public MusicFile() {}
     
-    @SuppressWarnings("unchecked")
     public MusicFile(String filename) throws CannotReadException {
         AudioFile audioFile;
         try {

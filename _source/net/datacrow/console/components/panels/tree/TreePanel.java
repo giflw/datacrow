@@ -285,7 +285,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         model.insertNodeInto(node, parent, idx);
     }
     
-    @SuppressWarnings("null")
     protected DefaultMutableTreeNode findNode(String key, DefaultMutableTreeNode parentNode) {
         int count = parentNode != null ? parentNode.getChildCount() : 0;
         for (int i = 0; i < count; i++) {

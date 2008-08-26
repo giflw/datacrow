@@ -107,7 +107,6 @@ public class DcMultiLineToolTipUI extends BasicToolTipUI {
         }
     }
     
-    @SuppressWarnings("null")
     private String getHtmlText(String s) {
         String text = s;
         
