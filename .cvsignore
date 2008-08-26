@@ -4,3 +4,5 @@ datacrow.jar
 _build
 _data
 javadoc
+plugins
+services

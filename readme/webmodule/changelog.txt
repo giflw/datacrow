@@ -1,0 +1,17 @@
+-----------------------------------------------------------------------------------------
+Web Module 1.0   [Release on 10/06/2008] [testing: moderate] [target: beta]
+-----------------------------------------------------------------------------------------
+First version of the web module. The web module allows users to connect remotely, 
+at the same time, to same Data Crow instance. The web server can be started from within
+the Data Crow product after installing this web module.
+
+! The web module has to be installed into the Data Crow installation folder.
+
+[New]
+- Multi user environment.
+- Search online for your items.
+- Use the integrated security of the Data Crow product.
+- View, edit and create new items.
+- Define the fields to be displayed in the overview in corporation with the user 
+  permission settings.
+- Use the advanced filtering functionality as is part of the Data Crow product.

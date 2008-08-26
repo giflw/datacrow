@@ -1,0 +1,417 @@
+Module              [Actor]
+xsl reference name  [actor]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Created                 = created
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Photo                   = photo
+  Service                 = service
+  Service URL             = service-url
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+
+
+Module              [musicartist]
+xsl reference name  [musicartist]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Created                 = created
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Photo                   = photo
+  Service                 = service
+  Service URL             = service-url
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+
+
+Module              [audiocd]
+xsl reference name  [audiocd]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Artists                 = artists
+  Available               = available
+  Created                 = created
+  Days Loaned             = days-loaned
+  Description             = description
+  Disc ID                 = disc-id
+  Genres                  = genres
+  ID                      = id
+  Item                    = item
+  Loaned By               = loaned-by
+  Location                = location
+  Modified                = modified
+  Picture Back            = picture-back
+  Picture CD              = picture-cd
+  Picture Front           = picture-front
+  Rating                  = rating
+  Service                 = service
+  Service URL             = service-url
+  State                   = state
+  Title                   = title
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+  Year                    = year
+
+
+Module              [author]
+xsl reference name  [author]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Created                 = created
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Photo                   = photo
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+
+
+Module              [book]
+xsl reference name  [book]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Authors                 = authors
+  Available               = available
+  Category                = category
+  Created                 = created
+  Days Loaned             = days-loaned
+  Description             = description
+  Filename                = filename
+  Filesize                = filesize
+  ID                      = id
+  Isbn 10                 = isbn-10
+  Isbn 13                 = isbn-13
+  Item                    = item
+  Loaned By               = loaned-by
+  Location                = location
+  Modified                = modified
+  Pages                   = pages
+  Picture Front           = picture-front
+  Publishers              = publishers
+  Rating                  = rating
+  Series                  = series
+  Service                 = service
+  Service URL             = service-url
+  State                   = state
+  Storage Medium          = storage-medium
+  Title                   = title
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Volume (nr)             = volume-nr
+  Volume name             = volume-name
+  Webpage                 = webpage
+  Year                    = year
+
+
+Module              [contactperson]
+xsl reference name  [contactperson]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Address                 = address
+  Category                = category
+  Created                 = created
+  Description             = description
+  Email                   = email
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Phone (Home)            = phone-home
+  Phone (Work)            = phone-work
+  Photo                   = photo
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+
+
+Module              [developer]
+xsl reference name  [developer]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Created                 = created
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Photo                   = photo
+  Service                 = service
+  Service URL             = service-url
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+
+
+Module              [director]
+xsl reference name  [director]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Created                 = created
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Photo                   = photo
+  Service                 = service
+  Service URL             = service-url
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+
+
+Module              [image]
+xsl reference name  [image]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Available               = available
+  Camera                  = camera
+  Category                = category
+  Compression (Bits)      = compression-bits
+  Created                 = created
+  Date                    = date
+  Days Loaned             = days-loaned
+  Description             = description
+  Filename                = filename
+  Filesize                = filesize
+  Height                  = height
+  ID                      = id
+  Image                   = image
+  Item                    = item
+  Loaned By               = loaned-by
+  Location                = location
+  Modified                = modified
+  Place                   = place
+  Rating                  = rating
+  State                   = state
+  Storage Medium          = storage-medium
+  Title                   = title
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Width                   = width
+  Year                    = year
+
+
+Module              [media]
+xsl reference name  [media]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Available               = available
+  Created                 = created
+  Days Loaned             = days-loaned
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Loaned By               = loaned-by
+  Location                = location
+  Modified                = modified
+  Rating                  = rating
+  Title                   = title
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Year                    = year
+
+
+Module              [movie]
+xsl reference name  [movie]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ASIN                    = asin
+  Actors                  = actors
+  Audio Bitrate           = audio-bitrate
+  Audio Channels          = audio-channels
+  Audio Codec             = audio-codec
+  Audio Language          = audio-language
+  Audio Sample Rate       = audio-sample-rate
+  Available               = available
+  Certification Language  = certification-language
+  Country                 = country
+  Created                 = created
+  Days Loaned             = days-loaned
+  Description             = description
+  Directors               = directors
+  Episode (nr)            = episode-nr
+  Episode name            = episode-name
+  Filename                = filename
+  Filesize                = filesize
+  Fps                     = fps
+  Frames                  = frames
+  Genres                  = genres
+  Height                  = height
+  ID                      = id
+  Item                    = item
+  Language                = language
+  Loaned By               = loaned-by
+  Location                = location
+  Modified                = modified
+  Picture Back            = picture-back
+  Picture CD              = picture-cd
+  Picture Front           = picture-front
+  Playlength              = playlength
+  Rating                  = rating
+  Season                  = season
+  Series                  = series
+  Service                 = service
+  Service URL             = service-url
+  State                   = state
+  Storage Medium          = storage-medium
+  Subtitle Language       = subtitle-language
+  Title                   = title
+  Title (local)           = title-local
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Video Bitrate           = video-bitrate
+  Video Codec             = video-codec
+  Webpage                 = webpage
+  Width                   = width
+  Year                    = year
+
+
+Module              [musicalbum]
+xsl reference name  [musicalbum]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Artists                 = artists
+  Available               = available
+  Created                 = created
+  Days Loaned             = days-loaned
+  Description             = description
+  Disc ID                 = disc-id
+  Genres                  = genres
+  ID                      = id
+  Item                    = item
+  Loaned By               = loaned-by
+  Location                = location
+  Modified                = modified
+  Picture Back            = picture-back
+  Picture CD              = picture-cd
+  Picture Front           = picture-front
+  Rating                  = rating
+  Service                 = service
+  Service URL             = service-url
+  State                   = state
+  Storage Medium          = storage-medium
+  Title                   = title
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+  Year                    = year
+
+
+Module              [bookpublisher]
+xsl reference name  [bookpublisher]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Created                 = created
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Photo                   = photo
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+
+
+Module              [softwarepublisher]
+xsl reference name  [softwarepublisher]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Created                 = created
+  Description             = description
+  ID                      = id
+  Item                    = item
+  Modified                = modified
+  Name                    = name
+  Photo                   = photo
+  Service                 = service
+  Service URL             = service-url
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+
+
+Module              [Software]
+xsl reference name  [software]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ASIN                    = asin
+  Available               = available
+  Category                = category
+  Created                 = created
+  Days Loaned             = days-loaned
+  Description             = description
+  Developers              = developers
+  Filename                = filename
+  Filesize                = filesize
+  ID                      = id
+  Item                    = item
+  Loaned By               = loaned-by
+  Location                = location
+  Modified                = modified
+  Multiplayer ?           = multiplayer-
+  Picture Back            = picture-back
+  Picture CD              = picture-cd
+  Picture Front           = picture-front
+  Platform                = platform
+  Publishers              = publishers
+  Rating                  = rating
+  Screenshot One          = screenshot-one
+  Screenshot Three        = screenshot-three
+  Screenshot Two          = screenshot-two
+  Serial Key              = serial-key
+  Service                 = service
+  Service URL             = service-url
+  State                   = state
+  Storage Medium          = storage-medium
+  Title                   = title
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+  Webpage                 = webpage
+  Year                    = year
+
+

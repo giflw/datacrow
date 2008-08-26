@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [
+]>
+
+<faces-config>
+    <application>
+        <view-handler>org.apache.myfaces.tomahawk.application.jsp.JspTilesViewHandlerImpl</view-handler>
+    </application>
+
+    <managed-bean>
+        <managed-bean-name>webObjects</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcWebObjects</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+	<managed-bean>
+        <managed-bean-name>itemSearch</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.ItemSearch</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>webObject</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcWebObject</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>   
+
+    <managed-bean>
+        <managed-bean-name>webChildObject</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcWebObject</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>   
+    
+	<managed-bean>
+        <managed-bean-name>itemDetails</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.ItemDetails</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
+
+	<managed-bean>
+        <managed-bean-name>childDetails</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.ChildDetails</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
+
+    
+   <managed-bean>
+        <managed-bean-name>itemRelate</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.ItemRelate</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
+    
+    <managed-bean>
+        <managed-bean-name>itemImage</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.ItemImage</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
+    
+    <managed-bean>
+        <managed-bean-name>references</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcReferences</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
+    
+    <managed-bean>
+        <managed-bean-name>modules</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcWebModules</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>user</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcWebUser</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>image</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcWebImage</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>security</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.Security</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>advancedFind</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.AdvancedFind</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>advancedFilter</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.AdvancedFilter</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>search</from-outcome>
+            <to-view-id>/search.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>details</from-outcome>
+            <to-view-id>/itemdetails.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>childdetails</from-outcome>
+            <to-view-id>/childdetails.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>itemrelate</from-outcome>
+            <to-view-id>/itemrelate.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>itemimage</from-outcome>
+            <to-view-id>/itemimage.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>/login.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>advancedfind</from-outcome>
+            <to-view-id>/advancedfind.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>
