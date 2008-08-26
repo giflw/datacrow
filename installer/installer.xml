@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+    <info>
+        <appname>Data Crow</appname>
+        <appversion>3.4 beta</appversion>
+        <authors>
+            <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
+        </authors>
+        <url>http://www.datacrow.net/</url>
+        <javaversion>1.5</javaversion>
+    </info>
+    
+    <guiprefs width="600" height="400" resizable="no"/>
+    
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+    
+    <resources>
+        <res id="LicencePanel.licence" src="readme/gpl.txt"/>
+        <res id="InfoPanel.info" src="readme/datacrow/readme.txt"/>
+        <res id="InfoPanel.info" src="readme/datacrow/installer.txt"/>
+        <res id="shortcutSpec.xml" src="installer/shortcutSpec.xml"/>
+        <res id="Unix_shortcutSpec.xml" src="installer/Unix_shortcutSpec.xml"/>
+        <res src="installer/images/border.png" id="Installer.image.0"/>
+        <res src="installer/images/border.png" id="Installer.image.1"/>
+        <res src="installer/images/border.png" id="Installer.image.2"/>
+        <res src="installer/images/border.png" id="Installer.image.3"/>
+        <res src="installer/images/border.png" id="Installer.image.4"/>
+        <res src="installer/images/border.png" id="Installer.image.5"/>
+        <res src="installer/images/border.png" id="Installer.image.6"/>
+        <res src="installer/images/border.png" id="Installer.image.7"/>
+    </resources>
+    
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/> 
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+    
+    <packs>
+        <pack name="Core" required="yes">
+            <description>Data Crow base files</description>
+            <file src="log4j.properties" targetdir="$INSTALL_PATH"/>
+            <file src="datacrow.exe" targetdir="$INSTALL_PATH"/>
+            <file src="datacrow.jar" targetdir="$INSTALL_PATH"/>
+            <file src="datacrow.sh" targetdir="$INSTALL_PATH"/>
+            <file src="imagej.properties" targetdir="$INSTALL_PATH"/>
+            <file src="imagej.preferences" targetdir="$INSTALL_PATH"/>
+            <file src="hsqlmanager.sh" targetdir="$INSTALL_PATH"/>
+            <file src="readme" targetdir="$INSTALL_PATH"/>
+            <file src="upgrade" targetdir="$INSTALL_PATH"/>
+            <file src="lib/jacksum.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/avalon-framework-4.2.0.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/browserlauncher2.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/commons-io-1.1.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/commons-logging-1.0.4.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/jaudtiotagger.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/hsqldb.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/imagej_1_39e.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/jebml.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/jhall.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/log4j-1.2.14.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/metadata-extractor-2.3.1.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/openchart_1_2.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/laf" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/xml" targetdir="$INSTALL_PATH/lib"/>
+            <file src="services" targetdir="$INSTALL_PATH"/>
+            <file src="themes" targetdir="$INSTALL_PATH"/>
+            <file src="resources" targetdir="$INSTALL_PATH"/>
+            <file src="plugins" targetdir="$INSTALL_PATH"/>
+            <file src="icons_user" targetdir="$INSTALL_PATH"/>
+            <file src="icons_system" targetdir="$INSTALL_PATH"/>
+            <file src="help" targetdir="$INSTALL_PATH"/>
+        </pack>
+
+        <pack name="Modules" required="no">
+            <description>Data Crow modules</description>
+            <file src="modules" targetdir="$INSTALL_PATH"/>
+        </pack>  
+        
+        <pack name="Reports" required="no">
+            <description>Data Crow report files</description>
+            <file src="reports" targetdir="$INSTALL_PATH"/>
+        </pack>        
+        
+    </packs>
+    
+    <native type="izpack" name="ShellLink.dll"/>    
+    
+</installation>

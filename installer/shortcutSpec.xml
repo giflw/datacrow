@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <skipIfNotSupported />
+
+  <programGroup defaultName="data crow" location="applications"/>
+
+  <shortcut
+     name="Data Crow"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\datacrow.exe"
+     workingDirectory="$INSTALL_PATH"
+     commandLine=""
+     description="Data Crow"
+     iconFile="$INSTALL_PATH\icons_system\datacrow.ico"
+     iconIndex="0">
+   
+     <createForPack name="Core"/>
+     
+   </shortcut>
+
+   <shortcut
+     name="Documentation"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\documentation\data_crow_manual.pdf"
+     commandLine=""
+     description="User documentation (PDF format)">
+     
+     <createForPack name="Documentation" />
+   </shortcut>
+   
+   <shortcut
+     name="Uninstaller"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\Uninstaller\uninstaller.jar"
+     iconFile="$INSTALL_PATH\icons_system\uninstall.ico"
+     commandLine=""
+     description="Data Crow uninstaller">
+     
+     <createForPack name="Core" />
+   </shortcut>   
+   
+</shortcuts>

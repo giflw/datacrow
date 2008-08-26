@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- 
+    Data Crow installation file
+    To compile it :
+    - go in the bin directory where you installed IzPack
+    - call "compile ../sample/install.xml -b ../sample"
+-->
+
+<installation version="1.0">
+
+    <!-- 
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>Data Crow</appname>
+        <appversion>3.2.0.1 patch</appversion>
+        <authors>
+            <author name="Robert jan van der Waals" email="rwaals@datacrow.net"/>
+        </authors>
+        <url>http://www.datacrow.net/</url>
+        <javaversion>1.5</javaversion>
+    </info>
+    
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will not be able to change the size.
+    -->
+    <guiprefs width="600" height="400" resizable="no"/>
+    
+    <!-- 
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+    
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="LicencePanel.licence" src="readme/gpl.txt"/>
+        <res id="InfoPanel.info" src="installer/patch.txt"/>
+        <res id="shortcutSpec.xml" src="installer/shortcutSpec.xml"/>
+        <res id="Unix_shortcutSpec.xml" src="installer/Unix_shortcutSpec.xml"/>
+        <res src="installer/images/border.png" id="Installer.image.0"/>
+        <res src="installer/images/border.png" id="Installer.image.1"/>
+        <res src="installer/images/border.png" id="Installer.image.2"/>
+        <res src="installer/images/border.png" id="Installer.image.3"/>
+        <res src="installer/images/border.png" id="Installer.image.4"/>
+        <res src="installer/images/border.png" id="Installer.image.5"/>
+        <res src="installer/images/border.png" id="Installer.image.6"/>
+        <res src="installer/images/border.png" id="Installer.image.7"/>
+    </resources>
+    
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/> 
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+    
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Core" required="yes">
+            <description>Data Crow base files</description>
+            <file src="datacrow.jar" targetdir="$INSTALL_PATH"/>
+        </pack>
+    </packs>
+    
+     <!-- The native libraries to add -->
+    <native type="izpack" name="ShellLink.dll"/>    
+    
+</installation>

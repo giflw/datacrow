@@ -1,0 +1,2 @@
+javadoc -d "./javadoc" -sourcepath "./_source" -classpath "lib/entagged-audioformats-0.11.jar;lib/toniclf.jar;lib/hsqldb.jar;lib/jhall.jar;lib/jsearch.jar;lib/itext-1.02b.jar" net.datacrow.console -subpackages net -protected -version -author
+pause
