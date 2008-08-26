@@ -22,8 +22,8 @@
         <res id="LicencePanel.licence" src="readme/gpl.txt"/>
         <res id="InfoPanel.info" src="readme/datacrow/readme.txt"/>
         <res id="InfoPanel.info" src="readme/datacrow/installer.txt"/>
-        <res id="shortcutSpec.xml" src="installer/shortcutSpec.xml"/>
-        <res id="Unix_shortcutSpec.xml" src="installer/Unix_shortcutSpec.xml"/>
+        <res id="shortcutSpec.xml" src="D:/development/tools/izpack/shortcutSpec.xml"/>
+        <res id="Unix_shortcutSpec.xml" src="D:/development/tools/izpack/Unix_shortcutSpec.xml"/>
         <res src="installer/images/border.png" id="Installer.image.0"/>
         <res src="installer/images/border.png" id="Installer.image.1"/>
         <res src="installer/images/border.png" id="Installer.image.2"/>

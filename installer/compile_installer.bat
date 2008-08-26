@@ -3,7 +3,7 @@
 @rem DOS Batch file to invoke the compiler
 @rem =====================================
 
-bin/compile.bat installer.xml -b ../
+D:/development/tools/izpack/bin/compile.bat installer.xml -b ../
 
 pause
 @echo on
