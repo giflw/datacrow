@@ -75,6 +75,8 @@ public class DatabaseUpgrade {
 
         try {
             Version version = DatabaseManager.getVersion();
+            removeInvalidImages();
+            convertDates();
             
             if (!isNewDatabase() && !version.equals(DataCrow.getVersion())) {
 
@@ -106,6 +108,98 @@ public class DatabaseUpgrade {
         }
     }
     
+    
+    /************************************************
+     * Invalid images removal
+     ************************************************/
+
+    private void convertDates() throws DatabaseUpgradeException {
+    	Connection conn = null;
+    	Statement stmt = null;
+    	
+    	boolean needsConversion = false;
+    	try {
+    		conn = DatabaseManager.getConnection();
+            stmt = getSqlStatement(conn);
+            try {
+                // If the location column exists the database needs to be upgraded.
+                stmt.execute("SELECT TOP 1 ID FROM SOFTWARE");
+                ResultSet rs = conn.getMetaData().getColumns(null, null, "SOFTWARE", "CREATED");
+                rs.next();
+                
+                String type = rs.getString("COLUMN_TYPE");
+                needsConversion = type.equals("VARCHAR"); 
+                
+            } catch (Exception e) {}
+    		
+            if (!needsConversion) {
+            	closeDbConnection(conn, stmt);
+            	return;
+            }
+            
+            
+//            PreparedStatement ps = conn.prepareStatement("SELECT ")
+            for (DcModule module : DcModules.getAllModules()) {
+
+            	DcField field = module.getField(DcObject._SYS_CREATED);
+            	if (field == null || module.isAbstract()) continue;
+            	
+            	ResultSet rs = stmt.executeQuery("SELECT ID, CREATED FROM " + module.getTableName() +
+            			);
+            	
+            	
+            	
+            }
+
+            
+            
+    	} catch (SQLException se) {
+    		throw new DatabaseUpgradeException("Date conversion failed", se);
+    	}
+    	
+    }
+    
+    /************************************************
+     * Invalid images removal
+     ************************************************/
+
+    private void removeInvalidImages() {
+    	Connection conn = null;
+    	Statement stmt = null;
+    	try {
+            conn = DatabaseManager.getConnection();
+            stmt = getSqlStatement(conn);
+    		
+    		// If the location column exists the database needs to be upgraded.
+            ResultSet rs = stmt.executeQuery("SELECT OBJECTID, FIELD FROM PICTURE WHERE " +
+            		                         "(HEIGHT IS NULL OR HEIGHT < 1) OR " +
+            		                         "(WIDTH IS NULL OR WIDTH < 1)");
+            
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM PICTURE WHERE OBJECTID = ? AND FIELD = ?");
+            while (rs.next()) {
+            	long objectID = rs.getLong("OBJECTID");
+            	String field = rs.getString("FIELD");
+            	
+            	ps.setLong(1, objectID);
+            	ps.setString(2, field);
+            	
+            	ps.execute();
+            	
+            	// reload from the database!
+            	DataManager.setUseCache(false);
+            }
+            
+            
+        } catch (Exception e) {
+        	logger.error("Could not removed incorrect picture references from the database", e);
+        }
+    	
+        try {
+        	closeDbConnection(conn, stmt);
+        } catch (Exception e) {
+        	logger.error("Error while closing the database connection", e);
+        }
+    }
 
     /************************************************
      * Name conversions
@@ -637,8 +731,8 @@ public class DatabaseUpgrade {
     
     private void closeDbConnection(Connection conn, Statement stmt) throws DatabaseUpgradeException {
         try {
-            stmt.close();
-            conn.close();
+        	if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
         } catch (SQLException se) {
             logger.error(se, se);
         }

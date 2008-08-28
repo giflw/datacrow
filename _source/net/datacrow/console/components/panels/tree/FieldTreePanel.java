@@ -156,6 +156,12 @@ public class FieldTreePanel extends TreePanel {
      * This method is called recursively.
      */
     private void removeElement(DcObject dco, DefaultMutableTreeNode parent) {
+    	
+        if (parent.getUserObject() instanceof NodeElement) {
+            NodeElement elem = (NodeElement) parent.getUserObject();
+            elem.removeValue(dco);
+        }
+    	
         int count = parent.getChildCount();
         for (int pos = count; pos > 0; pos--) {
             try {

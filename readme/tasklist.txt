@@ -1,16 +1,17 @@
-3.4
+3.4 Production version
 ---------------------------------------------------------------------------------------------------------
-[X] Fix Discogs.com online search
-[X] Media containers (1989192)
-[X] Skip already imported files (1903034)
-[X] Rewrite file import for music files (remove code duplication)
-[X] Plugin like structure for online services. Right now, providing one single online service requires 
-    a full build of the application to be delivered.
-[X] Search field is not emptied when exact match occurs (1973246)
-[X] Show message when creating multiple users: admin username
-[X] Foreign character support.
-[X] Make the settings clearer; view settings; xx
-[X] Check the web application
+[X] Error when deleting container.
+[X] Missing images.
+[X] Delete does not update root node in tree.
+[ ] Allow the picture to be displayed to be specified from within the view settings.
+    (Remove dependency towards the general field settings).
+[ ] Filtering: less then, greater then for dates (before, after ?)
+[ ] Update reports (location field).
+[X] Error when checking for display value (' in name causes error). 
+
+[ ] Documentation on plugin development. 
+[ ] Documentation on online service development.
+[ ] Update internal help system. 
 
 
 Online services
@@ -21,31 +22,34 @@ Online services
 
 3.5
 ---------------------------------------------------------------------------------------------------------
+[ ] scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
+    It would be nice, if datacrow used only the first part of the entered number. 
 [ ] Show related items in the item form (such as movies for actors)
 [ ] Loan management, Due Date (1941130)
-[ ] Filtering: less then, greater then for dates (before, after ?)
-[ ] scanning those barcodes, some books have the barcodes appended by the
-    price (xxxxxxxx yyyyy). It would be nice, if datacrow used only the
-    first part of the entered number. 
 [ ] Multiple file support (per item)
-[ ] Vector graphics support (1895140)
 [ ] Migration tool. The current migration tool only allows you to import information from CSV files. 
     Other products, Data Crow's competitors of you like, allow migration from other products. 
     The migration tool will be rewritten to allow import of additional data sources.  
-[ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
 [ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
     Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
 [ ] Translations. There are some known issues with the Resource Editor tool such as loss of special 
     character data. The resource editor will be updated to handle special characters correctly. 
     Additionally Data Crow will feature language packs, making it possible to switch between languages.  
+[ ] Exporting a module. Exporting the module definition itself currently requires manually copying the 
+    module jar file and its property files. Functionality will be provided which makes it easy to export 
+    and import a module (definition). This functionality will also allow users to export default/demo data 
+    with their module. This functionality will also be used to provide additional custom modules. 
+[ ] PreparedStatement re-usage.
+[ ] Upgrade of the online services (smaller initial result sets)
+
+
+Unplanned
+---------------------------------------------------------------------------------------------------------
+[ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
 [ ] Per user settings. Settings, such a field settings, quick view settings and others are currently 
     stored on application level. As a result each and every user has the same settings as determined by 
     the administrator. Data Crow 3.4 will allow administrators to specify if the user should have the 
     default settings (current situation) or if this user is allowed to modify its own settings. Tying 
     a database instance to a user is also under consideration. This would allow users to have multiple 
     accounts, for example one per module (data separation). 
-[ ] Exporting a module. Exporting the module definition itself currently requires manually copying the 
-    module jar file and its property files. Functionality will be provided which makes it easy to export 
-    and import a module (definition). This functionality will also allow users to export default/demo data 
-    with their module. This functionality will also be used to provide additional custom modules. 
-[ ] Documentation on plugin development. 
+[ ] Vector graphics support (1895140)

@@ -111,6 +111,7 @@ public class DataCrow {
         }
         
         try {
+        	
             installLafs();
             
             setBaseDir(dir);

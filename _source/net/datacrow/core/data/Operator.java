@@ -43,7 +43,9 @@ public enum Operator {
     STARTS_WITH(6, DcResources.getText("lblStartsWith"), true),
     ENDS_WITH(7, DcResources.getText("lblEndsWith"), true),
     LESS_THEN(8, DcResources.getText("lblLessThen"), true),
-    GREATER_THEN(9, DcResources.getText("lblGreaterThen"), true);    
+    GREATER_THEN(9, DcResources.getText("lblGreaterThen"), true),
+    BEFORE(10, DcResources.getText("lblBefore"), true),
+    AFTER(11, DcResources.getText("lblAfter"), true);
     
     private final int index;  
     private final String name; 
@@ -73,20 +75,24 @@ public enum Operator {
         operators.add(EQUAL_TO);
         operators.add(NOT_EQUAL_TO);
         
-        if (field.getValueType() == DcRepository.ValueTypes._LONG ||
-            field.getValueType() == DcRepository.ValueTypes._DATE) {
-            
+        if (field.getValueType() == DcRepository.ValueTypes._DATE) {
+        	operators.add(BEFORE);
+            operators.add(AFTER);
+    	} else if (field.getValueType() == DcRepository.ValueTypes._LONG) {
             operators.add(LESS_THEN);
             operators.add(GREATER_THEN);
-        
         } else if (field.getValueType() != DcRepository.ValueTypes._BOOLEAN) {
-            
             operators.add(IS_EMPTY);
             operators.add(IS_FILLED);
-            operators.add(0, CONTAINS);
-            operators.add(DOES_NOT_CONTAIN);
-            operators.add(STARTS_WITH);
-            operators.add(ENDS_WITH);
+            
+            if (field.getValueType() != DcRepository.ValueTypes._LONG &&
+            	field.getValueType() != DcRepository.ValueTypes._DATE) {
+
+            	operators.add(0, CONTAINS);
+	            operators.add(DOES_NOT_CONTAIN);
+	            operators.add(STARTS_WITH);
+	            operators.add(ENDS_WITH);
+            }
         }
         
         return operators;

@@ -3,8 +3,11 @@ xsl reference name  [actor]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  Firstname               = firstname
   ID                      = id
   Item                    = item
+  Label                   = label
+  Lastname                = lastname
   Modified                = modified
   Name                    = name
   Photo                   = photo
@@ -23,8 +26,11 @@ xsl reference name  [musicartist]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  Firstname               = firstname
   ID                      = id
   Item                    = item
+  Label                   = label
+  Lastname                = lastname
   Modified                = modified
   Name                    = name
   Photo                   = photo
@@ -42,16 +48,15 @@ Module              [audiocd]
 xsl reference name  [audiocd]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Artists                 = artists
-  Available               = available
+  Container               = container
   Created                 = created
-  Days Loaned             = days-loaned
   Description             = description
   Disc ID                 = disc-id
+  EAN                     = ean
   Genres                  = genres
   ID                      = id
   Item                    = item
-  Loaned By               = loaned-by
-  Location                = location
+  Label                   = label
   Modified                = modified
   Picture Back            = picture-back
   Picture CD              = picture-cd
@@ -75,8 +80,11 @@ xsl reference name  [author]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  Firstname               = firstname
   ID                      = id
   Item                    = item
+  Label                   = label
+  Lastname                = lastname
   Modified                = modified
   Name                    = name
   Photo                   = photo
@@ -92,19 +100,19 @@ Module              [book]
 xsl reference name  [book]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Authors                 = authors
-  Available               = available
   Category                = category
+  Container               = container
   Created                 = created
-  Days Loaned             = days-loaned
   Description             = description
+  Filehash                = filehash
+  Filehash Type           = filehash-type
   Filename                = filename
   Filesize                = filesize
   ID                      = id
   Isbn 10                 = isbn-10
   Isbn 13                 = isbn-13
   Item                    = item
-  Loaned By               = loaned-by
-  Location                = location
+  Label                   = label
   Modified                = modified
   Pages                   = pages
   Picture Front           = picture-front
@@ -132,11 +140,14 @@ xsl reference name  [contactperson]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Address                 = address
   Category                = category
+  City                    = city
+  Country                 = country
   Created                 = created
   Description             = description
   Email                   = email
   ID                      = id
   Item                    = item
+  Label                   = label
   Modified                = modified
   Name                    = name
   Phone (Home)            = phone-home
@@ -149,13 +160,37 @@ xsl reference name  [contactperson]
   User Short Text Field 2 = user-short-text-field-2
 
 
+Module              [container]
+xsl reference name  [container]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Container Type          = container-type
+  Created                 = created
+  Filehash                = filehash
+  Filehash Type           = filehash-type
+  Filename                = filename
+  Filesize                = filesize
+  ID                      = id
+  Item                    = item
+  Label                   = label
+  Modified                = modified
+  Name                    = name
+  User Long Text Field    = user-long-text-field
+  User Numeric Field 1    = user-numeric-field-1
+  User Numeric Field 2    = user-numeric-field-2
+  User Short Text Field 1 = user-short-text-field-1
+  User Short Text Field 2 = user-short-text-field-2
+
+
 Module              [developer]
 xsl reference name  [developer]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  Firstname               = firstname
   ID                      = id
   Item                    = item
+  Label                   = label
+  Lastname                = lastname
   Modified                = modified
   Name                    = name
   Photo                   = photo
@@ -174,8 +209,11 @@ xsl reference name  [director]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  Firstname               = firstname
   ID                      = id
   Item                    = item
+  Label                   = label
+  Lastname                = lastname
   Modified                = modified
   Name                    = name
   Photo                   = photo
@@ -192,22 +230,22 @@ xsl reference name  [director]
 Module              [image]
 xsl reference name  [image]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Available               = available
   Camera                  = camera
   Category                = category
   Compression (Bits)      = compression-bits
+  Container               = container
   Created                 = created
   Date                    = date
-  Days Loaned             = days-loaned
   Description             = description
+  Filehash                = filehash
+  Filehash Type           = filehash-type
   Filename                = filename
   Filesize                = filesize
   Height                  = height
   ID                      = id
   Image                   = image
   Item                    = item
-  Loaned By               = loaned-by
-  Location                = location
+  Label                   = label
   Modified                = modified
   Place                   = place
   Rating                  = rating
@@ -226,14 +264,12 @@ xsl reference name  [image]
 Module              [media]
 xsl reference name  [media]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Available               = available
+  Container               = container
   Created                 = created
-  Days Loaned             = days-loaned
   Description             = description
   ID                      = id
   Item                    = item
-  Loaned By               = loaned-by
-  Location                = location
+  Label                   = label
   Modified                = modified
   Rating                  = rating
   Title                   = title
@@ -255,15 +291,17 @@ xsl reference name  [movie]
   Audio Codec             = audio-codec
   Audio Language          = audio-language
   Audio Sample Rate       = audio-sample-rate
-  Available               = available
   Certification Language  = certification-language
+  Container               = container
   Country                 = country
   Created                 = created
-  Days Loaned             = days-loaned
   Description             = description
   Directors               = directors
+  EAN                     = ean
   Episode (nr)            = episode-nr
   Episode name            = episode-name
+  Filehash                = filehash
+  Filehash Type           = filehash-type
   Filename                = filename
   Filesize                = filesize
   Fps                     = fps
@@ -272,9 +310,8 @@ xsl reference name  [movie]
   Height                  = height
   ID                      = id
   Item                    = item
+  Label                   = label
   Language                = language
-  Loaned By               = loaned-by
-  Location                = location
   Modified                = modified
   Picture Back            = picture-back
   Picture CD              = picture-cd
@@ -306,16 +343,14 @@ Module              [musicalbum]
 xsl reference name  [musicalbum]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Artists                 = artists
-  Available               = available
+  Container               = container
   Created                 = created
-  Days Loaned             = days-loaned
   Description             = description
   Disc ID                 = disc-id
   Genres                  = genres
   ID                      = id
   Item                    = item
-  Loaned By               = loaned-by
-  Location                = location
+  Label                   = label
   Modified                = modified
   Picture Back            = picture-back
   Picture CD              = picture-cd
@@ -340,8 +375,11 @@ xsl reference name  [bookpublisher]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  Firstname               = firstname
   ID                      = id
   Item                    = item
+  Label                   = label
+  Lastname                = lastname
   Modified                = modified
   Name                    = name
   Photo                   = photo
@@ -358,8 +396,11 @@ xsl reference name  [softwarepublisher]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  Firstname               = firstname
   ID                      = id
   Item                    = item
+  Label                   = label
+  Lastname                = lastname
   Modified                = modified
   Name                    = name
   Photo                   = photo
@@ -377,18 +418,19 @@ Module              [Software]
 xsl reference name  [software]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ASIN                    = asin
-  Available               = available
   Category                = category
+  Container               = container
   Created                 = created
-  Days Loaned             = days-loaned
   Description             = description
   Developers              = developers
+  EAN                     = ean
+  Filehash                = filehash
+  Filehash Type           = filehash-type
   Filename                = filename
   Filesize                = filesize
   ID                      = id
   Item                    = item
-  Loaned By               = loaned-by
-  Location                = location
+  Label                   = label
   Modified                = modified
   Multiplayer ?           = multiplayer-
   Picture Back            = picture-back
@@ -413,5 +455,27 @@ xsl reference name  [software]
   User Short Text Field 2 = user-short-text-field-2
   Webpage                 = webpage
   Year                    = year
+
+
+Module              [User]
+xsl reference name  [user]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Address      = address
+  Admin        = admin
+  City         = city
+  Country      = country
+  Created      = created
+  Description  = description
+  Email        = email
+  Enabled      = enabled
+  ID           = id
+  Item         = item
+  Label        = label
+  Login Name   = login-name
+  Modified     = modified
+  Name         = name
+  Phone (Home) = phone-home
+  Phone (Work) = phone-work
+  Photo        = photo
 
 

@@ -679,6 +679,16 @@ public class DataManager {
     private static final int[] cacheTypes =  
         new int[] {CacheJob._OBJECTS, CacheJob._LOANS, CacheJob._PICTURES, CacheJob._REFERENCES, CacheJob._CHILDREN};
     
+    public static void clearCache() {
+    	try {
+    		for (String file : new File(DataCrow.cacheDir).list())
+    			new File(DataCrow.cacheDir + file).delete();
+    	} catch (Exception e) {
+    		logger.error("Could not remove cache", e);
+    	}
+    }
+    
+    
     public static void serialize() {
         try {
             logger.info(DcResources.getText("msgWritingItemCache"));

@@ -196,13 +196,17 @@ public class Query {
                 Picture picture = (Picture) dco.getValue(field.getIndex());
                 ImageIcon image = picture != null ? (ImageIcon) picture.getValue(Picture._D_IMAGE) : null; 
                 if (image != null) {
-                    picture.setValue(Picture._A_OBJECTID, dco.getID());
-                    picture.setValue(Picture._B_FIELD, field.getDatabaseFieldName());
-                    picture.setValue(Picture._C_FILENAME, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
-                    picture.setValue(Picture._E_HEIGHT, image.getIconHeight());
-                    picture.setValue(Picture._F_WIDTH, image.getIconWidth());
-                    picture.isNew(true);
-                    pictures.add(picture);
+                    if (image.getIconHeight() == 0 || image.getIconWidth() == 0) {
+                    	logger.warn("Image " + dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg" + " is invalid and will not be saved");
+                    } else {
+	                    picture.setValue(Picture._A_OBJECTID, dco.getID());
+	                    picture.setValue(Picture._B_FIELD, field.getDatabaseFieldName());
+	                    picture.setValue(Picture._C_FILENAME, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
+	                    picture.setValue(Picture._E_HEIGHT, image.getIconHeight());
+	                    picture.setValue(Picture._F_WIDTH, image.getIconWidth());
+	                    picture.isNew(true);
+	                    pictures.add(picture);
+                    }
                 }
             } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection<DcMapping> c = (Collection<DcMapping>) dco.getValue(field.getIndex());
@@ -296,7 +300,12 @@ public class Query {
                         picture.setValue(Picture._F_WIDTH, Long.valueOf(icon.getIconWidth()));
                     }
                     
-                    pictures.add(picture);
+                    if ((picture.isNew() || picture.isUpdated()) && 
+                        (icon.getIconHeight() == 0 || icon.getIconWidth() == 0)) {
+                    	logger.warn("Image " + picture.getValue(Picture._C_FILENAME) + " is invalid and will not be saved");
+                    } else {
+                    	pictures.add(picture);
+                    }
                 }
             } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection<DcMapping> c = (Collection<DcMapping>) dco.getValue(field.getIndex());
@@ -470,15 +479,22 @@ public class Query {
             queries.add(getPreparedStatement("DELETE FROM " + loan.getTableName() + " WHERE " +
                             loan.getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = " + dco.getID()));
 
-        if (dco.getModule().getChild() != null && !dco.getModule().isAbstract()) {
+        // Delete children. Ignore any abstract module (parent and/or children)
+        if (	dco.getModule().getChild() != null && 
+        	   !dco.getModule().isAbstract() && 
+        	   !dco.getModule().getChild().isAbstract()) {
+        	
             DcModule childModule = dco.getModule().getChild(); 
             queries.add(getPreparedStatement("DELETE FROM " + childModule.getTableName() + " WHERE " + 
                         childModule.getField(childModule.getDcObject().getParentReferenceFieldIndex()).getDatabaseFieldName() + " = " + dco.getID()));
         }
         
-        // remove any references to the to be deleted item.
+        // Remove any references to the to be deleted item.
         if (dco.getModule().hasDependingModules()) {
             for (DcModule m : DcModules.getReferencingModules(dco.getModule().getIndex())) {
+            	
+            	if (m.isAbstract()) continue;
+            	
                 if (m instanceof MappingModule) {
                     DcObject mapping = m.getDcObject();
                     queries.add(getPreparedStatement(
@@ -574,19 +590,22 @@ public class Query {
                                 conditions.append(getEmptyCondition(column, field));
                             } else {
                                 String condition;
-                                
+
+                            	String s = value instanceof String ? ((String) value).toUpperCase() : "";
+                            	s = s.replaceAll("\'", "''");
+
                                 if (queryType == _SELECT || queryType == _SELECTOR) {
                                     if (value instanceof String) {
-                                        condition = "UPPER (" + column + ") LIKE '%" + ((String) value).substring(1, value.toString().length() -1).toUpperCase() + "%'";
+                                        condition = "UPPER (" + column + ") LIKE '%" + s + "%'";
                                     } else { 
                                         condition = column + " = ?";
                                         values.add(value);
                                     }
                                 } else {
                                     if (value instanceof String) {
-                                        condition = "UPPER (" + column + ") = " + ((String) value).toUpperCase();
+                                        condition = "UPPER (" + column + ") = " + s;
                                     } else {
-                                        condition = column + " = " + value;
+                                        condition = column + " = " + s;
                                     }
                                 }
                                 conditions.append(condition);

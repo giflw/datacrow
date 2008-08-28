@@ -1,4 +1,15 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Empty images are stored causing empty pictures to be displayed.
+- Old items are loaded when restoring an old backup. Cache should be cleared after
+  each restore. 
+- Query error when searching for titles (etc) containing a ' character. 
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: beta]
 -----------------------------------------------------------------------------------------
 This is a beta version. Please use with caution.

@@ -160,6 +160,8 @@ public class Restore extends Thread {
                 new MessageBox(DcResources.getText("msgRestoreFinishedRestarting"), MessageBox._WARNING);
                 
                 // do not save settings as the restored settings are used for upgrading purposes.
+                DataManager.clearCache();
+                
                 DataCrow.mainFrame.finish(false, false);
                 System.exit(0);
             }

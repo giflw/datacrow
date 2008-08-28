@@ -128,9 +128,7 @@ public class DataFilterEntry {
             } else { 
                 return input.indexOf(check) > -1 || input.equals(check);
             }
-        }
-        
-        if (operator.getIndex() == Operator.DOES_NOT_CONTAIN.getIndex()) {
+        } else if (operator.getIndex() == Operator.DOES_NOT_CONTAIN.getIndex()) {
             if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection<DcObject> c1 = (Collection<DcObject>) o;
                 Collection<DcObject> c2 = (Collection<DcObject>) value;
@@ -138,13 +136,11 @@ public class DataFilterEntry {
             } else { 
                 return input.indexOf(check) == -1;
             }
-        }        
-         
-        if (operator.getIndex() == Operator.ENDS_WITH.getIndex())
+        } else if (operator.getIndex() == Operator.ENDS_WITH.getIndex()) {
             return input.endsWith(check);
+        } else if (operator.getIndex() == Operator.EQUAL_TO.getIndex()) {
 
-        if (operator.getIndex() == Operator.EQUAL_TO.getIndex()) {
-            if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+        	if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection<DcObject> c1 = (Collection<DcObject>) o;
                 
                 Collection<DcObject> c2;
@@ -159,33 +155,25 @@ public class DataFilterEntry {
             } else { 
                 return input.equals(check);
             }
-        }
-
-        if (operator.getIndex() == Operator.GREATER_THEN.getIndex()) {
-            if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DATE) {
-                return isInputEmpty ? false : ((Date) o).after((Date) value);
-            } else {
-                return isInputEmpty ? false : 
-                    Integer.valueOf(input).intValue() > Integer.valueOf(check).intValue();
-            }
-        }
-
-        if (operator.getIndex() == Operator.IS_EMPTY.getIndex())
+        } else if (operator.getIndex() == Operator.BEFORE.getIndex()) {
+            return isInputEmpty ? false : ((Date) o).before((Date) value);
+        } else if (operator.getIndex() == Operator.AFTER.getIndex()) {
+            return isInputEmpty ? false : ((Date) o).after((Date) value);
+        } else if (operator.getIndex() == Operator.GREATER_THEN.getIndex()) {
+            return isInputEmpty ? false : 
+                Integer.valueOf(input).intValue() > Integer.valueOf(check).intValue();
+        } else if (operator.getIndex() == Operator.IS_EMPTY.getIndex()) {
             return isInputEmpty;
-
-        if (operator.getIndex() == Operator.IS_FILLED.getIndex())
+        } else if (operator.getIndex() == Operator.IS_FILLED.getIndex()) {
             return !isInputEmpty;
-         
-        if (operator.getIndex() == Operator.LESS_THEN.getIndex()) {
+        } else if (operator.getIndex() == Operator.LESS_THEN.getIndex()) {
             if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DATE) {
                 return isInputEmpty ? false : ((Date) o).before((Date) value);
             } else {
                 return isInputEmpty ? false : 
                     Integer.valueOf(input).intValue() < Integer.valueOf(check).intValue();
             }
-        }
-
-        if (operator.getIndex() == Operator.NOT_EQUAL_TO.getIndex()) {
+        } else if (operator.getIndex() == Operator.NOT_EQUAL_TO.getIndex()) {
             if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection c1 = (Collection) o;
                 Collection c2 = (Collection) value;
@@ -193,10 +181,9 @@ public class DataFilterEntry {
             } else { 
                 return !input.equals(check);
             }            
-        }
-
-        if (operator.getIndex() == Operator.STARTS_WITH.getIndex())
+        } else if (operator.getIndex() == Operator.STARTS_WITH.getIndex()) {
             return input.startsWith(check);
+        }
         
         return true;
     }
