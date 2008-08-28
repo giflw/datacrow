@@ -7,6 +7,12 @@ Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
 - Old items are loaded when restoring an old backup. Cache should be cleared after
   each restore. 
 - Query error when searching for titles (etc) containing a ' character. 
+- Created and modified date were stored as strings making it impossible to create 
+  filters (like before and after) on them.
+- Incorrect filter operators for numbers and dates (contains, etc).
+  
+[Changed]
+- Before and after for Dates 
 
 
 -----------------------------------------------------------------------------------------

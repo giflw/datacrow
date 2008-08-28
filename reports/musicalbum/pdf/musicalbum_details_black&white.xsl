@@ -75,8 +75,8 @@
                     </fo:table-row>
 
                     <fo:table-row height="{$rowHeight}">
-                      <fo:table-cell><fo:block font-weight="bold">Location</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block><xsl:value-of select="location"/></fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block font-weight="bold">Container</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block><xsl:value-of select="container"/></fo:block></fo:table-cell>
                     </fo:table-row>
 
                     <fo:table-row height="{$rowHeight}">

@@ -5,7 +5,7 @@
 [X] Delete does not update root node in tree.
 [ ] Allow the picture to be displayed to be specified from within the view settings.
     (Remove dependency towards the general field settings).
-[ ] Filtering: less then, greater then for dates (before, after ?)
+[X] Filtering: less then, greater then for dates (before, after ?)
 [ ] Update reports (location field).
 [X] Error when checking for display value (' in name causes error). 
 

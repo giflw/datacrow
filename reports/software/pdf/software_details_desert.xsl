@@ -95,11 +95,11 @@
 
                 <fo:table-row height="{$rowHeight}">
                   <fo:table-cell  background-color="{$labelColor}" padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
-                    <fo:block font-weight="bold">Location</fo:block>
+                    <fo:block font-weight="bold">Container</fo:block>
                   </fo:table-cell>
 
                   <fo:table-cell padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
-                    <fo:block><xsl:value-of select="location"/></fo:block>
+                    <fo:block><xsl:value-of select="container"/></fo:block>
                   </fo:table-cell>
                 </fo:table-row>
 

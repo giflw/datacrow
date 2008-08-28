@@ -35,8 +35,8 @@
                 <td><xsl:for-each select="publishers/publisher"><xsl:value-of select="name"/>&#160;</xsl:for-each></td></tr>
             <tr><th>Platform</th>
                 <td><xsl:value-of select="platform"/></td></tr>
-            <tr><th>Location</th>
-                <td><xsl:value-of select="location"/></td></tr>
+            <tr><th>Container</th>
+                <td><xsl:value-of select="container"/></td></tr>
             <tr><th>State</th>
                 <td><xsl:value-of select="state"/></td></tr>
             <tr><th>Rating</th>

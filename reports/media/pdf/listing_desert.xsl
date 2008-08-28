@@ -47,7 +47,7 @@
                   </fo:table-cell>
 
                   <fo:table-cell background-color="{$labelColor}" border-bottom-style="solid" border-bottom-color="{$borderBottomColor}" border-before-width="{$borderBottomWidth}" padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
-                    <fo:block font-weight="bold">Location</fo:block>
+                    <fo:block font-weight="bold">Container</fo:block>
                   </fo:table-cell>
                         
                   <fo:table-cell background-color="{$labelColor}" border-bottom-style="solid" border-bottom-color="{$borderBottomColor}" border-before-width="{$borderBottomWidth}" padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
@@ -77,7 +77,7 @@
                     </fo:table-cell>
 
                     <fo:table-cell border-bottom-style="solid" border-bottom-color="{$borderBottomColor}" border-before-width="{$borderBottomWidth}" padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
-                      <fo:block><xsl:value-of select="location"/></fo:block>
+                      <fo:block><xsl:value-of select="container"/></fo:block>
                     </fo:table-cell>
 
                     <fo:table-cell border-bottom-style="solid" border-bottom-color="{$borderBottomColor}" border-before-width="{$borderBottomWidth}" padding-top="{$paddingTop}" padding-left="{$paddingLeft}">

@@ -44,8 +44,8 @@
               <tr><th>State</th>
                   <td><xsl:value-of select="state"/></td></tr>
 
-              <tr><th>Location</th>
-                  <td><xsl:value-of select="location"/></td></tr>
+              <tr><th>Container</th>
+                  <td><xsl:value-of select="container"/></td></tr>
 
               <tr><th>Rating</th>
                   <td><xsl:value-of select="rating"/></td></tr>

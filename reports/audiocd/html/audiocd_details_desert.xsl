@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template match="/">
 
@@ -46,8 +46,8 @@
                             <tr><th>State</th>
                                 <td><xsl:value-of select="state"/></td></tr>
         
-                            <tr><th>Location</th>
-                                <td><xsl:value-of select="location"/></td></tr>
+                            <tr><th>Container</th>
+                                <td><xsl:value-of select="container"/></td></tr>
         
                             <tr><th>Rating</th>
                                 <td><xsl:value-of select="rating"/></td></tr>

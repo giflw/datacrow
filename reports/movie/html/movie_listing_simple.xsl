@@ -20,13 +20,13 @@
     
         <tr>
             <th>Title</th>
-            <th>Location</th>
+            <th>Container</th>
         </tr>
 
         <xsl:for-each select="data-crow-objects/movie">
             <tr>
               <td class="listing"><xsl:value-of select="title"/>&#x00A0;</td>
-              <td class="listing"><xsl:value-of select="location"/>&#x00A0;</td>
+              <td class="listing"><xsl:value-of select="container"/>&#x00A0;</td>
             </tr>
         </xsl:for-each>
     </table>
