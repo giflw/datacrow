@@ -26,7 +26,6 @@
 package net.datacrow.core.objects;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -661,9 +660,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }    
     
-    private String getCurrentDate() {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return df.format(new Date());
+    private Date getCurrentDate() {
+        return new Date();
     }
     
     public void saveNew(boolean queued) throws ValidationException {

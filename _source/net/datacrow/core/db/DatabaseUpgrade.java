@@ -32,6 +32,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -114,21 +117,25 @@ public class DatabaseUpgrade {
      ************************************************/
 
     private void convertDates() throws DatabaseUpgradeException {
+    	
+    	if (isNewDatabase()) return;
+
     	Connection conn = null;
     	Statement stmt = null;
-    	
+
     	boolean needsConversion = false;
     	try {
     		conn = DatabaseManager.getConnection();
             stmt = getSqlStatement(conn);
             try {
                 // If the location column exists the database needs to be upgraded.
-                stmt.execute("SELECT TOP 1 ID FROM SOFTWARE");
                 ResultSet rs = conn.getMetaData().getColumns(null, null, "SOFTWARE", "CREATED");
                 rs.next();
                 
-                String type = rs.getString("COLUMN_TYPE");
+                String type = rs.getString("TYPE_NAME");
                 needsConversion = type.equals("VARCHAR"); 
+                
+                rs.close();
                 
             } catch (Exception e) {}
     		
@@ -136,27 +143,86 @@ public class DatabaseUpgrade {
             	closeDbConnection(conn, stmt);
             	return;
             }
+
+            QuestionBox qb = new QuestionBox("Upgrade for version < 3.4.0: Created and Modified columns will be converted to date columns");
             
+            if (!qb.isAffirmative()) return;
             
-//            PreparedStatement ps = conn.prepareStatement("SELECT ")
+            DataCrow.showSplashScreen(false);
+            LogForm.getInstance().setVisible(true);
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            
             for (DcModule module : DcModules.getAllModules()) {
 
-            	DcField field = module.getField(DcObject._SYS_CREATED);
-            	if (field == null || module.isAbstract()) continue;
-            	
-            	ResultSet rs = stmt.executeQuery("SELECT ID, CREATED FROM " + module.getTableName() +
-            			);
-            	
-            	
-            	
-            }
+            	DcField field1 = module.getField(DcObject._SYS_CREATED);
+            	DcField field2 = module.getField(DcObject._SYS_MODIFIED);
 
-            
-            
+            	if (field1 == null || field2 == null ||
+            	    module.isAbstract() || Utilities.isEmpty(module.getTableName())) continue;
+            	
+                try {
+                    stmt.executeQuery("SELECT TOP 1 * FROM " + module.getTableName());
+                } catch (Exception e) {
+                    continue;
+                }
+            	
+            	logger.info("Converting dates for " + module.getTableName());
+
+            	stmt.execute("ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + field1.getDatabaseFieldName() + " RENAME TO OLD1");
+            	stmt.execute("ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + field2.getDatabaseFieldName() + " RENAME TO OLD2");
+            	
+            	stmt.execute("ALTER TABLE " + module.getTableName() + " ADD COLUMN " + field1.getDatabaseFieldName() + " date");
+            	stmt.execute("ALTER TABLE " + module.getTableName() + " ADD COLUMN " + field2.getDatabaseFieldName() + " date");
+
+            	ResultSet rs = stmt.executeQuery("SELECT ID, OLD1, OLD2 from " + module.getTableName() + " WHERE OLD1 IS NOT NULL OR OLD2 IS NOT NULL");
+            	PreparedStatement ps = conn.prepareStatement("UPDATE " + module.getTableName() +  
+            			                                     " SET " + field1.getDatabaseFieldName() + " = ?, " + 
+            	                                             field2.getDatabaseFieldName() + " = ? WHERE ID = ?");
+            	try {
+	            	while (rs.next()) {
+	            		String s1 = rs.getString("OLD1");
+	            		String s2 = rs.getString("OLD2");
+	            		String ID = rs.getString("ID");
+	            		
+	            		if (s1 != null) {
+		        			try {
+		                        ps.setDate(1, new java.sql.Date(sdf.parse(s1).getTime()));
+		                    } catch (ParseException e) {
+		                        ps.setNull(1, Types.NULL);
+		                    }
+	            		} else {
+	            			ps.setNull(1, Types.NULL);
+	            		}
+	
+	            		if (s2 != null) {
+		        			try {
+		                        ps.setDate(2, new java.sql.Date(sdf.parse(s2).getTime()));
+		                    } catch (ParseException e) {
+		                        ps.setNull(2, Types.NULL);
+		                    }
+	            		} else {
+	            			ps.setNull(2, Types.NULL);
+	            		}
+	
+	            		ps.setString(3, ID);
+	            		ps.execute();
+	            	}
+            	} catch (Exception e) {
+            		logger.error(e, e);
+            	}
+
+            	rs.close();
+            	ps.close();
+            	
+            	stmt.execute("ALTER TABLE " + module.getTableName() + " DROP COLUMN OLD1");
+            	stmt.execute("ALTER TABLE " + module.getTableName() + " DROP COLUMN OLD2");
+            }
     	} catch (SQLException se) {
     		throw new DatabaseUpgradeException("Date conversion failed", se);
     	}
     	
+    	closeDbConnection(conn, stmt);
     }
     
     /************************************************
@@ -234,85 +300,84 @@ public class DatabaseUpgrade {
         
         QuestionBox qb = new QuestionBox("Upgrade for version < 3.4.0: Locations will be converted " +
         		                         "to the new container structure. Continue?");
-        if (qb.isAffirmative()) {
-            LogForm.getInstance().setVisible(true);
+        
+        if (!qb.isAffirmative()) return; 
+        
+        LogForm.getInstance().setVisible(true);
+
+        Collection<DcObject> containers = new ArrayList<DcObject>();
+        for (DcModule module : DcModules.getAllModules()) {
+                            
+            if (!module.isContainerManaged() || module.isAbstract())
+                continue;
             
-            
-            Collection<DcObject> containers = new ArrayList<DcObject>();
-            for (DcModule module : DcModules.getAllModules()) {
-                                
-                if (!module.isContainerManaged() || module.isAbstract())
-                    continue;
+            DcField field = module.getField(DcObject._SYS_CONTAINER);
+                 
+            try {
+                stmt.execute("ALTER TABLE " + module.getTableName() + " ADD COLUMN " + 
+                             field.getDatabaseFieldName() + " " + field.getDataBaseFieldType());
                 
-                DcField field = module.getField(DcObject._SYS_CONTAINER);
-                     
+            } catch (SQLException se) {}
+            
+            try {
+                ResultSet rs = stmt.executeQuery("SELECT ID, LOCATION FROM " + module.getTableName());
+
+                PreparedStatement psIns = conn.prepareStatement(
+                        "INSERT INTO " + cm.getTableName() + " (ID, NAME) VALUES (?, ?)");
+                
+                PreparedStatement psUpd = conn.prepareStatement(
+                        "UPDATE " + module.getTableName() + " SET " + field.getDatabaseFieldName() + " = ? " +
+                        "WHERE ID = ?");
+                
+                while (rs.next()) {
+                    try {
+                        String name = rs.getString("LOCATION");
+                        String ID = rs.getString("ID");
+                        
+                        if (Utilities.isEmpty(name))
+                            continue;
+                        
+                        name = name.trim();
+                        DcObject container = null;
+                        for (DcObject c : containers) {
+                            if (name.equals(c.getValue(Container._A_NAME)))
+                                container = c;
+                        }
+                        
+                        if (container == null) {
+                            container = cm.getDcObject();
+                            container.setIDs();
+                            container.setValue(Container._A_NAME, name);
+                            
+                            psIns.setString(1, container.getID());
+                            psIns.setString(2, name);
+                            psIns.execute();
+                            
+                            containers.add(container);
+                        }
+                        
+                        psUpd.setLong(1, Long.valueOf(container.getID()));
+                        psUpd.setLong(2, Long.valueOf(ID));
+                        psUpd.execute();
+                        
+                    } catch (SQLException se) {
+                        logger.error("Error while creating container for " + module.getName(), se);
+                    }
+                }
+                
                 try {
-                    stmt.execute("ALTER TABLE " + module.getTableName() + " ADD COLUMN " + 
-                                 field.getDatabaseFieldName() + " " + field.getDataBaseFieldType());
+                    stmt.execute("ALTER TABLE " + module.getTableName() + " DROP COLUMN LOCATION");
                     
                 } catch (SQLException se) {}
                 
-                try {
-                    ResultSet rs = stmt.executeQuery("SELECT ID, LOCATION FROM " + module.getTableName());
-    
-                    PreparedStatement psIns = conn.prepareStatement(
-                            "INSERT INTO " + cm.getTableName() + " (ID, NAME) VALUES (?, ?)");
-                    
-                    PreparedStatement psUpd = conn.prepareStatement(
-                            "UPDATE " + module.getTableName() + " SET " + field.getDatabaseFieldName() + " = ? " +
-                            "WHERE ID = ?");
-                    
-                    while (rs.next()) {
-                        try {
-                            String name = rs.getString("LOCATION");
-                            String ID = rs.getString("ID");
-                            
-                            if (Utilities.isEmpty(name))
-                                continue;
-                            
-                            name = name.trim();
-                            DcObject container = null;
-                            for (DcObject c : containers) {
-                                if (name.equals(c.getValue(Container._A_NAME)))
-                                    container = c;
-                            }
-                            
-                            if (container == null) {
-                                container = cm.getDcObject();
-                                container.setIDs();
-                                container.setValue(Container._A_NAME, name);
-                                
-                                psIns.setString(1, container.getID());
-                                psIns.setString(2, name);
-                                psIns.execute();
-                                
-                                containers.add(container);
-                            }
-                            
-                            psUpd.setLong(1, Long.valueOf(container.getID()));
-                            psUpd.setLong(2, Long.valueOf(ID));
-                            psUpd.execute();
-                            
-                        } catch (SQLException se) {
-                            logger.error("Error while creating container for " + module.getName(), se);
-                        }
-                    }
-                    
-                    try {
-                        stmt.execute("ALTER TABLE " + module.getTableName() + " DROP COLUMN LOCATION");
-                        
-                    } catch (SQLException se) {}
-                    
-                    rs.close();
-                    psIns.close();
-                    psUpd.close();
-                } catch (SQLException se) {
-                    String msg = "An error occurred while creating the containers.";
-                    logger.error(msg, se);
-                    new DatabaseUpgradeException(msg, se);
-                }                
-            }
-
+                rs.close();
+                psIns.close();
+                psUpd.close();
+            } catch (SQLException se) {
+                String msg = "An error occurred while creating the containers.";
+                logger.error(msg, se);
+                new DatabaseUpgradeException(msg, se);
+            }                
         }
     }
     
