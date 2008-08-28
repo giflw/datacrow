@@ -637,29 +637,33 @@ public class DcListUI extends BasicListUI {
             //* unless there has been a drop
             // No Selection/Out Selection appear to have the same behavior
         
-            int index = convertXYToIndex(e.getX(), e.getY());
-            if (index != -1) {
-                list.setValueIsAdjusting(true);
-                int anchorIndex = list.getAnchorSelectionIndex();
-                if(anchorIndex == -1) {
-                    anchorIndex = 0;
-                }
-
-                if (e.isShiftDown()) {
-                    //Regardless set from anchor till index
-                    list.setSelectionInterval(anchorIndex, index);
-                    //if(Debug.INFO) Debug.out.println("setSelectionInterval("+anchorIndex+", "+index+")");
-                } else if (e.isControlDown()) {
-                    //We need to toggle the index
-                    if (list.isSelectedIndex(index))
-                        list.removeSelectionInterval(index, index);
-                    else
-                        list.addSelectionInterval(index, index);
-                } else {
-                    //Only action if the index is not Selected!
-                    if (!list.isSelectedIndex(index))
-                        list.setSelectionInterval(index, index);
-                }
+            try {
+	            int index = convertXYToIndex(e.getX(), e.getY());
+	            if (index != -1) {
+	                list.setValueIsAdjusting(true);
+	                int anchorIndex = list.getAnchorSelectionIndex();
+	                if(anchorIndex == -1) {
+	                    anchorIndex = 0;
+	                }
+	
+	                if (e.isShiftDown()) {
+	                    //Regardless set from anchor till index
+	                    list.setSelectionInterval(anchorIndex, index);
+	                    //if(Debug.INFO) Debug.out.println("setSelectionInterval("+anchorIndex+", "+index+")");
+	                } else if (e.isControlDown()) {
+	                    //We need to toggle the index
+	                    if (list.isSelectedIndex(index))
+	                        list.removeSelectionInterval(index, index);
+	                    else
+	                        list.addSelectionInterval(index, index);
+	                } else {
+	                    //Only action if the index is not Selected!
+	                    if (!list.isSelectedIndex(index))
+	                        list.setSelectionInterval(index, index);
+	                }
+	            }
+            } catch (Exception exp) {
+            	logger.error(exp, exp);
             }
         }
 

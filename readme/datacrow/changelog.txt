@@ -10,6 +10,7 @@ Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
 - Created and modified date were stored as strings making it impossible to create 
   filters (like before and after) on them.
 - Incorrect filter operators for numbers and dates (contains, etc).
+- (Beta bug) reports still contained the location field (changed to container)
   
 [Changed]
 - Before and after for Dates 

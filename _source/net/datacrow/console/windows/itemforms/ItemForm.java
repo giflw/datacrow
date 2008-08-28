@@ -385,6 +385,9 @@ public class ItemForm extends DcFrame implements ActionListener {
             DcField field = dcoOrig.getField(index);
             JComponent component = fields.get(field);
             Object o = ComponentFactory.getValue(component);
+            
+            if (index == DcObject._SYS_CREATED || index == DcObject._SYS_MODIFIED)
+            	continue;
 
             if (field.getValueType() == DcRepository.ValueTypes._ICON) {
                 byte[] newValue = o == null ? new byte[0] : ((DcImageIcon) o).getBytes();
