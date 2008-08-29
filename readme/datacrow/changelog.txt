@@ -14,7 +14,8 @@ Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
 - Incorrect filter operators for numbers and dates (contains, etc).
 - (Beta bug) reports still contained the location field (changed to container)
 - Adding a new module does not load the new items (cache should not be used)
-- Nullpointer in the File Renamer 
+- Nullpointer in the File Renamer.
+- Music Album importer creates empy albums.
   
 [Changed]
 - Before and after for Dates

@@ -38,6 +38,7 @@ import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.util.Converter;
 import net.datacrow.util.Hash;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 public class MusicAlbumImporter extends FileImporter {
     
@@ -92,8 +93,11 @@ public class MusicAlbumImporter extends FileImporter {
 
     @Override
     protected void afterImport(IFileImportClient listener) {
-        for (DcObject dco : albums)
-            super.afterParse(listener, dco);
+        for (DcObject dco : albums) {
+        	Collection<DcObject> children = dco.getChildren();
+        	if (children != null && children.size() > 0) 
+        		super.afterParse(listener, dco);
+        }
     }
 
     @Override
@@ -128,7 +132,7 @@ public class MusicAlbumImporter extends FileImporter {
                 break;
             }
 
-            if (album != null) {
+            if (!Utilities.isEmpty(album)) {
                 album = Converter.databaseValueConverter(album);
                 ma = getAlbum(album, albums);
             }
