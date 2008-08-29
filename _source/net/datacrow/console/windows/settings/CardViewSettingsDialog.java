@@ -55,6 +55,7 @@ public class CardViewSettingsDialog extends DcDialog implements ActionListener {
         super();
         
         setTitle(DcResources.getText("lblViewSettings"));
+        setHelpIndex("dc.settings.cardview");
 
         DcModule module = DcModules.getCurrent();
     

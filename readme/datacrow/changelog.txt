@@ -3,7 +3,9 @@ Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Empty images are stored causing empty pictures to be displayed.
+- [2030645] Front picture not shown in card view (sometimes)
+  Empty images are stored causing empty pictures to be displayed (incorrectly fixed in
+  the beta version).
 - Old items are loaded when restoring an old backup. Cache should be cleared after
   each restore. 
 - Query error when searching for titles (etc) containing a ' character. 
@@ -11,10 +13,14 @@ Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
   filters (like before and after) on them.
 - Incorrect filter operators for numbers and dates (contains, etc).
 - (Beta bug) reports still contained the location field (changed to container)
+- Adding a new module does not load the new items (cache should not be used)
+- Nullpointer in the File Renamer 
   
 [Changed]
-- Before and after for Dates 
-
+- Before and after for Dates
+- Picture settings have been added to the Card View Settings. The shown picture no longer
+  depends on the general field settings.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: beta]

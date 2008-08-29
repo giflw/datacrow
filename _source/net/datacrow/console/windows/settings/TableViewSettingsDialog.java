@@ -55,6 +55,7 @@ public class TableViewSettingsDialog extends DcDialog implements ActionListener 
         super();
         
         setTitle(DcResources.getText("lblViewSettings"));
+        setHelpIndex("dc.settings.tableview");
 
         DcModule module = DcModules.getCurrent();
         

@@ -36,6 +36,8 @@
     <mapID target="dc.settings.laf" url="settings/laf.html"/>
     <mapID target="dc.settings.quickview" url="settings/quickview.html"/>
     <mapID target="dc.settings.filehash" url="settings/filehash.html"/>
+    <mapID target="dc.settings.cardview" url="settings/cardview.html"/>
+    <mapID target="dc.settings.tableview" url="settings/tableview.html"/>
 
     <mapID target="dc.modules.create" url="modules/createmodulewizard.html"/>
     <mapID target="dc.modules.alter" url="modules/altermodulewizard.html"/>

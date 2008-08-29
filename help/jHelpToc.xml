@@ -38,6 +38,8 @@
 
     <tocitem target="dc.settings" text="Settings">
       <tocitem target="dc.settings.general" text="General Settings"/>
+      <tocitem target="dc.settings.cardview" text="Card View Settings"/>
+      <tocitem target="dc.settings.tableview" text="Table View Settings"/>
       <tocitem target="dc.settings.fields" text="Field Settings"/>
       <tocitem target="dc.settings.webfields" text="Web Field Settings"/>
       <tocitem target="dc.settings.font" text="Fonts"/>
@@ -58,7 +60,6 @@
       <tocitem target="dc.tools.backup_restore" text="Backup &amp; Restore" />
       <tocitem target="dc.tools.expertuser" text="Expert User Tool"/>
       <tocitem target="dc.tools.updateall" text="Update all"/>
-      <tocitem target="dc.tools.backup_restore" text="Backup and Restore" />
       <tocitem target="dc.tools.autonumbering" text="Auto Numbering" />
       <tocitem target="dc.tools.titlerewriter" text="Title Rewriting" />
       <tocitem target="dc.tools.drivemanager" text="Drive Manager" />
