@@ -46,7 +46,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
@@ -284,11 +284,26 @@ public class Utilities {
      * @throws Exception
      */
     public static byte[] readFile(File file) throws IOException {
-        RandomAccessFile access = new RandomAccessFile(file, "r");
-        byte[] byties = new byte[Long.valueOf(access.length()).intValue()];
-        access.readFully(byties);
-        access.close();
-        return byties;        
+        InputStream is = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(is);
+        
+        long length = file.length();
+        if (length > Integer.MAX_VALUE) 
+            throw new IOException("File is too large to read " + file.getName());
+    
+        byte[] bytes = new byte[(int)length];
+    
+        int offset = 0;
+        int numRead = 0;
+        while (offset < bytes.length && (numRead=bis.read(bytes, offset, bytes.length-offset)) >= 0)
+            offset += numRead;
+    
+        // Ensure all the bytes have been read in
+        if (offset < bytes.length)
+            throw new IOException("Could not completely read file " + file.getName());
+    
+        bis.close();
+        return bytes;    
     }
 
     public static ImageIcon base64ToImage(String base64) {

@@ -147,6 +147,7 @@ public class DataCrow {
             logger.info(DcResources.getText("msgApplicationStarts"));
     
             // Initialize all modules
+            splashScreen.setStatusMsg("Loading modules");
             new ModuleUpgrade().upgrade();
             DcModules.load();
     

@@ -26,6 +26,7 @@
 package net.datacrow.core.modules;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -82,6 +83,7 @@ public class ModuleJar {
         }
         
         zout.closeEntry();
+        bais.close();
     }
     
     public void save() throws ModuleJarException {
@@ -95,7 +97,8 @@ public class ModuleJar {
             icon32 = icon32 == null ? Utilities.getBytes(IconLibrary._icoPicture) : icon32;
 
             FileOutputStream fos = new FileOutputStream(DataCrow.moduleDir + filename);
-            ZipOutputStream zout = new ZipOutputStream(fos);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ZipOutputStream zout = new ZipOutputStream(bos);
             
             module.setIcon16Filename("icon16.png");
             module.setIcon32Filename("icon32.png");
@@ -110,7 +113,7 @@ public class ModuleJar {
         	addEntry(zout, "icon32.png", icon32);
 
             zout.close();
-            fos.close();
+            bos.close();
 
         } catch (Exception exp) {
             throw new ModuleJarException(exp);
