@@ -28,6 +28,7 @@ package net.datacrow.core;
 public abstract class DcRepository {
 
     public static final class ModuleSettings {
+    	public static final String stCardViewPictureOrder = "card_view_picture_order";
         public static final String stTableColumnOrder = "table_column_order";
         public static final String stCardViewItemDescription = "card_view_item_description";
         public static final String stTitleCleanup = "title_cleanup";

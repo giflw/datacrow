@@ -312,15 +312,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         }
 
         public void actionPerformed(ActionEvent ae) {
-            if (ae.getActionCommand().equals("rowUp"))
-                table.moveRowUp();
-            else if (ae.getActionCommand().equals("rowDown"))
-                table.moveRowDown();
-            else if (ae.getActionCommand().equals("rowToTop"))
-                table.moveRowToTop();
-            else if (ae.getActionCommand().equals("rowToBottom"))
-                table.moveRowToBottom();
-            else if (ae.getActionCommand().equals("checkDependencies"))
+            if (ae.getActionCommand().equals("checkDependencies"))
                 checkDependencies();
         }
     }

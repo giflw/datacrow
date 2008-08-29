@@ -172,7 +172,27 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
             order = new int[] {DcMediaObject._A_TITLE, DcMediaObject._C_YEAR, DcMediaObject._E_RATING};
         else
             order = new int[] {DcObject._SYS_DISPLAYVALUE};
-            
+        
+        Collection<DcField> pics = new ArrayList<DcField>();
+        for (DcField field : module.getFields()) {
+        	if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+        		pics.add(field);
+        }
+        
+        int[] picFieldOrder = new int[pics.size()];
+        int i = 0;
+        for (DcField field : pics)
+        	picFieldOrder[i++] = field.getIndex();
+
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._INTEGERARRAY,
+                            DcRepository.ModuleSettings.stCardViewPictureOrder,
+                            picFieldOrder,
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stTableColumnOrder,

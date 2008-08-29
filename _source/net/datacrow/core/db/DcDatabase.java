@@ -35,6 +35,7 @@ import java.sql.Statement;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -208,6 +209,7 @@ public class DcDatabase {
             if (!field.isUiOnly() && !found) {
                 logger.info(DcResources.getText("msgTableUpgradeMissingColumn", new String[] {tableName, field.getLabel()}));
                 executeQuery(connection, "alter table " + tableName + " add column " + column + " " + type);
+                DataManager.setUseCache(false);
             }
         }
     }
@@ -232,6 +234,8 @@ public class DcDatabase {
 
     private void createTable(DcObject dco) {
         try {
+        	DataManager.setUseCache(false);
+        	
             Query query = new Query(Query._CREATE, dco, null, null);
             executeQuery(query.getQuery());
             

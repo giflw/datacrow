@@ -48,8 +48,8 @@ import net.datacrow.settings.DcSettings;
 
 public class CardViewSettingsDialog extends DcDialog implements ActionListener {
     
-    
     private FieldSelectionPanel fsp;
+    private CardViewPictureSettingsPanel cisp;
     
     public CardViewSettingsDialog() {
         super();
@@ -76,6 +76,7 @@ public class CardViewSettingsDialog extends DcDialog implements ActionListener {
         }
         
         module.setSetting(DcRepository.ModuleSettings.stCardViewItemDescription, fields);
+        cisp.save();
         
         if (module.getSearchView() != null)
             module.getSearchView().applySettings();
@@ -89,6 +90,13 @@ public class CardViewSettingsDialog extends DcDialog implements ActionListener {
     @Override
     public void close() {
         DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stCardViewSettingsDialogSize, getSize());
+        
+        if (fsp != null) fsp.clear();
+        if (cisp != null) cisp.clear();
+        
+        fsp = null;
+        cisp = null;
+        
         super.close();
     }
 
@@ -114,7 +122,10 @@ public class CardViewSettingsDialog extends DcDialog implements ActionListener {
         csEven.setValue(DcSettings.getColor(DcRepository.Settings.stEvenRowColor));
         csTextBg.setValue(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
         
+        cisp = new CardViewPictureSettingsPanel(DcModules.getCurrent().getIndex());
+        
         tp.addTab(DcResources.getText("lblDescription"), fsp);
+        tp.addTab(DcResources.getText("lblPictures"), cisp);
         tp.addTab(DcResources.getText("lblEvenColor"), csEven);
         tp.addTab(DcResources.getText("lblOddColor"), csOdd);
         tp.addTab(DcResources.getText("lblBackgroundColor"), csTextBg);
