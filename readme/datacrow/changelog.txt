@@ -1,6 +1,7 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+This is the final release of the 3.4 version.
 
 [Fixed]
 - [2030645] Front picture not shown in card view (sometimes)
@@ -15,7 +16,8 @@ Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
 - (Beta bug) reports still contained the location field (changed to container)
 - Adding a new module does not load the new items (cache should not be used)
 - Nullpointer in the File Renamer.
-- Music Album importer creates empy albums.
+- Music Album importer creates empty albums.
+- Memory leak in the image import.
   
 [Changed]
 - Before and after for Dates

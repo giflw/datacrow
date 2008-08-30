@@ -37,6 +37,7 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Image;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Hash;
+import net.datacrow.util.Utilities;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
@@ -81,12 +82,25 @@ public class ImageImporter extends FileImporter {
             image.setValue(Image._SYS_FILENAME, filename);
             Hash.getInstance().calculateHash(image);
             
+            DcImageIcon icon = new DcImageIcon(filename);
+            
+            java.awt.Image scaledImg = Utilities.getScaledImage(icon);
+            icon.flush();
+
+            icon = new DcImageIcon(scaledImg);
+            icon.setFilename(filename);
+            
             Picture pic = new Picture(); 
             pic.setValue(Picture._A_OBJECTID, image.getID());
             pic.setValue(Picture._B_FIELD, image.getField(Image._I_IMAGE).getDatabaseFieldName());
             pic.setValue(Picture._C_FILENAME, filename);
-            pic.setValue(Picture._D_IMAGE, new DcImageIcon(filename));
+            pic.setValue(Picture._D_IMAGE, icon);
             pic.isNew(true);
+            
+            
+            
+            
+            icon.getImage().flush();
             
             image.setValue(Image._I_IMAGE, pic);
             
