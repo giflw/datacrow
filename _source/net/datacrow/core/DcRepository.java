@@ -216,4 +216,3 @@ public abstract class DcRepository {
             "SELECT * FROM software WHERE category IS NOT NULL \n";
     }
 }
-

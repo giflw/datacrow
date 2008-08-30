@@ -1,35 +1,6 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: production]
+Data Crow 3.4      [Release on 31/08/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-This is the final release of the 3.4 version.
-
-[Fixed]
-- [2030645] Front picture not shown in card view (sometimes)
-  Empty images are stored causing empty pictures to be displayed (incorrectly fixed in
-  the beta version).
-- Old items are loaded when restoring an old backup. Cache should be cleared after
-  each restore. 
-- Query error when searching for titles (etc) containing a ' character. 
-- Created and modified date were stored as strings making it impossible to create 
-  filters (like before and after) on them.
-- Incorrect filter operators for numbers and dates (contains, etc).
-- (Beta bug) reports still contained the location field (changed to container)
-- Adding a new module does not load the new items (cache should not be used)
-- Nullpointer in the File Renamer.
-- Music Album importer creates empty albums.
-- Memory leak in the image import.
-  
-[Changed]
-- Before and after for Dates
-- Picture settings have been added to the Card View Settings. The shown picture no longer
-  depends on the general field settings.
-  
-
------------------------------------------------------------------------------------------
-Data Crow 3.4      [Release on 26/08/2008] [testing: high] [target: beta]
------------------------------------------------------------------------------------------
-This is a beta version. Please use with caution.
-
 This version comes with new functionality, fixes and an improved upgrade process.
 The improvements of the upgrade process are mainly due to the new version management.
 When upgrading a warning will appear stating that the version of your database or
@@ -87,7 +58,10 @@ to ignore the message. After the first startup this message will no longer appea
   Additionally, if needed for any reason), Data Crow can be started without using the cache
   by adding the parameter -nocache. Startup times are improved by 20% due to this change.
   The first startup however will still load the items from the database.
-
+- Before and after for Dates
+- Picture settings have been added to the Card View Settings. The shown picture no longer
+  depends on the general field settings.
+  
 [Fixed]
 - Sometimes items are not added to the view after a different node in the grouping pane
   has been selected.
@@ -100,6 +74,8 @@ to ignore the message. After the first startup this message will no longer appea
 - [2032102] Threading issue with saving IMDB movie actors
 - [2027395] Incorrect label for "manage states" (music album/track)
 - [2030645] Front picture not shown in card view (sometimes)
+  Empty images are stored causing empty pictures to be displayed (incorrectly fixed in
+  the beta version).
 - [2029825] Updating old record empty fields doesn't work
 - [2029628] Online update on actor inside the movie module fails
 - [2029637] Can't cancel changes
@@ -148,7 +124,18 @@ to ignore the message. After the first startup this message will no longer appea
 - Starting a file import multiple times results in the previous items to be added
   to the new tab again. 
 - Barnes & Nobles online search did no longer recover the title.
-  
+- Old items are loaded when restoring an old backup. Cache should be cleared after
+  each restore. 
+- Query error when searching for titles (etc) containing a ' character. 
+- Created and modified date were stored as strings making it impossible to create 
+  filters (like before and after) on them.
+- Incorrect filter operators for numbers and dates (contains, etc).
+- (Beta bug) reports still contained the location field (changed to container)
+- Adding a new module does not load the new items (cache should not be used)
+- Nullpointer in the File Renamer.
+- Music Album importer creates empty albums.
+- Memory leak in the image import. 
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.3      [Release on xx/06/2008] [testing: moderate] [target: production]
