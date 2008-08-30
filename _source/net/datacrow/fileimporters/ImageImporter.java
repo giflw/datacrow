@@ -130,9 +130,9 @@ public class ImageImporter extends FileImporter {
                     image.setValue(Image._P_PLACE, location);
                 }
                 
-                imagePlus.flush();
-                
             } catch (JpegProcessingException jpe) {}
+            
+            imagePlus.flush();
             
         } catch (Exception exp) {
             throw new ParseException(exp);
