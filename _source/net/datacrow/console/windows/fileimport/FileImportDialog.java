@@ -303,12 +303,12 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
 
         textTitleCleanup.setText(settings.getString(DcRepository.ModuleSettings.stTitleCleanup));
         
-        panelTitleCleanup.add(scroller, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+        panelTitleCleanup.add(scroller, Layout.getGBC( 0, 0, 2, 1, 5.0, 5.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(5, 5, 5, 5), 0, 0));  
         
         panel.add(panelTitleCleanup, Layout.getGBC( 0, 1, 1, 1, 5.0, 5.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(10, 0, 0, 0), 0, 0));
         
         
@@ -439,7 +439,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
 
         this.getContentPane().add(
                  tp,      Layout.getGBC( 0, 1, 1, 1, 5.0, 5.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));
         this.getContentPane().add(
                  panelActions, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
@@ -450,7 +450,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));
         this.getContentPane().add(
-                 panelLog, Layout.getGBC( 0, 4, 2, 1, 1.0, 1.0
+                 panelLog, Layout.getGBC( 0, 4, 2, 1, 5.0, 5.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));
 
