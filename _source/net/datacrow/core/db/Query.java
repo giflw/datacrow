@@ -298,13 +298,7 @@ public class Query {
                     if (icon != null) {
                         picture.setValue(Picture._E_HEIGHT, Long.valueOf(icon.getIconHeight()));
                         picture.setValue(Picture._F_WIDTH, Long.valueOf(icon.getIconWidth()));
-                    }
-                    
-                    if ((picture.isNew() || picture.isUpdated()) && 
-                        (icon.getIconHeight() == 0 || icon.getIconWidth() == 0)) {
-                    	logger.warn("Image " + picture.getValue(Picture._C_FILENAME) + " is invalid and will not be saved");
-                    } else {
-                    	pictures.add(picture);
+                        pictures.add(picture);
                     }
                 }
             } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {

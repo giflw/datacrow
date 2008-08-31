@@ -96,7 +96,10 @@ public class DcValue implements Serializable {
 
                 if (currentImage != newImage) {
                 	// prevent empty and incorrect images to be saved
-		        	if (newImage != null && newImage.getIconHeight() != 0 && newImage.getIconWidth() != 0) {
+		        	if (	newImage != null && 
+		        			newImage.getIconHeight() != 0 && 
+		        			newImage.getIconWidth() != 0) {
+		        		
 		                picture.setValue(Picture._D_IMAGE, o);
 		                if (currentImage != null) 
 		                	picture.isUpdated(true);

@@ -183,7 +183,13 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     }
 
     public Object getValue() {
-        return picture;
+    	int width = picture != null ? picture.getIconWidth() : 0;
+    	int height = picture != null ? picture.getIconHeight() : 0;
+    	
+    	if (width == 0 || height == 0)
+    		return null;
+    	else
+    		return picture;
     }
 
     private Image getImage() {

@@ -64,7 +64,7 @@ public class Picture extends DcObject {
     public void loadImage() {
         String filename = (String) getValue(_C_FILENAME);
 
-        if (filename != null ||  getValue(Picture._D_IMAGE) == null) {
+        if (filename != null) {
             try {
                 DcImageIcon image = new DcImageIcon(DataCrow.imageDir + filename);
                 setValue(Picture._D_IMAGE, image);
