@@ -97,11 +97,6 @@ public class ImageImporter extends FileImporter {
             pic.setValue(Picture._D_IMAGE, icon);
             pic.isNew(true);
             
-            
-            
-            
-            icon.getImage().flush();
-            
             image.setValue(Image._I_IMAGE, pic);
             
             File jpegFile = new File(filename); 

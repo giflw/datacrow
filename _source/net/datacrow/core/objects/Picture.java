@@ -25,6 +25,8 @@
 
 package net.datacrow.core.objects;
 
+import java.io.File;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.DcImageIcon;
@@ -66,7 +68,8 @@ public class Picture extends DcObject {
 
         if (filename != null) {
             try {
-                DcImageIcon image = new DcImageIcon(DataCrow.imageDir + filename);
+            	filename = new File(filename).exists() ? filename : DataCrow.imageDir + filename;
+                DcImageIcon image = new DcImageIcon(filename);
                 setValue(Picture._D_IMAGE, image);
             } catch (Exception e) {
                 logger.error("Could not load image " + DataCrow.imageDir + filename, e);

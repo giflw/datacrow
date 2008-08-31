@@ -1,0 +1,4 @@
+This installer is a self executing JAR file. It should start by simply 
+double-clicking it. If this doesn't work you can start the installer manually by
+type "java -jar installer_webapp.jar" from within the console of your operating system.
+Make sure you are in the directory containing the installer JAR file.
