@@ -83,7 +83,7 @@ public class Version {
     }
     
     public String getFullString() {
-        return "Data Crow " + toString() + " beta";
+        return "Data Crow " + toString();
     }
     
     @Override

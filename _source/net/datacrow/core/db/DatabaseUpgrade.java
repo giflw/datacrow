@@ -78,8 +78,6 @@ public class DatabaseUpgrade {
 
         try {
             Version version = DatabaseManager.getVersion();
-            removeInvalidImages();
-            convertDates();
             
             if (!isNewDatabase() && !version.equals(DataCrow.getVersion())) {
 
@@ -101,6 +99,9 @@ public class DatabaseUpgrade {
                 
                 DataManager.setUseCache(false);
             }
+
+            removeInvalidImages();
+            convertDates();
             
         } catch (DatabaseUpgradeException due) {
             String msg = due.getMessage() + ". Upgrade failed. " +
@@ -148,6 +149,7 @@ public class DatabaseUpgrade {
             
             if (!qb.isAffirmative()) return;
             
+            DataManager.setUseCache(false);
             DataCrow.showSplashScreen(false);
             LogForm.getInstance().setVisible(true);
             
@@ -254,7 +256,6 @@ public class DatabaseUpgrade {
             	// reload from the database!
             	DataManager.setUseCache(false);
             }
-            
             
         } catch (Exception e) {
         	logger.error("Could not removed incorrect picture references from the database", e);
