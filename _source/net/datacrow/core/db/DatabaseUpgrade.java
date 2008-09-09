@@ -79,7 +79,7 @@ public class DatabaseUpgrade {
         try {
             Version version = DatabaseManager.getVersion();
             
-            if (!isNewDatabase() && !version.equals(DataCrow.getVersion())) {
+            if (!isNewDatabase() && version.isOlder(DataCrow.getVersion())) {
 
                 if (version.isUndetermined()) {
                     QuestionBox qb = new QuestionBox(DcResources.getText("msgCouldNotDetermineVersion"));

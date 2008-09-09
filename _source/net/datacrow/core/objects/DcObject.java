@@ -453,10 +453,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         Collection<DcObject> objects = DatabaseManager.executeQuery(query, Query._SELECT, false);
         for (DcObject dco : objects) {
             int[] fields = getModule().getFieldIndices();
-            for (int i = 0; i < fields.length; i++) {
-                //if (!dco.getField(fields[i]).isUiOnly())
-                    setValue(fields[i], dco.getValue(fields[i]));
-            }
+            for (int i = 0; i < fields.length; i++)
+                setValue(fields[i], dco.getValue(fields[i]));
+
             break;
         }
         

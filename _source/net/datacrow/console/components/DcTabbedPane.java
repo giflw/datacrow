@@ -40,7 +40,9 @@ public class DcTabbedPane extends JTabbedPane {
     
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    	try {
+    		super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    	} catch (Exception e) {}
     } 
     
     @Override

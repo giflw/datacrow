@@ -176,7 +176,12 @@ public class DataManager {
         updatePictures(dco);
         
         String key = getKey(dco);
-        if (objects.containsKey(dco.getModule().getIndex())) {
+        if (module == DcModules._LOAN) {
+            List<Loan> c = loans.get(key);
+            c = c == null ? new ArrayList<Loan>() : c;
+            c.add((Loan) dco);
+            loans.put(key, c);
+        } else if (objects.containsKey(dco.getModule().getIndex())) {
             Collection<DcObject> c = objects.get(dco.getModule().getIndex());
             c.add(dco);
             
@@ -194,11 +199,6 @@ public class DataManager {
             map = map == null ? new HashMap<String, DcObject>() : map;
             map.put(dco.getID(), dco);
             
-        } else if (module == DcModules._LOAN) {
-            List<Loan> c = loans.get(key);
-            c = c == null ? new ArrayList<Loan>() : c;
-            c.add((Loan) dco);
-            loans.put(key, c);
         } else if (module == DcModules._PICTURE) {
             List<Picture> c = pictures.get(getKey(dco));
             c = c == null ? new ArrayList<Picture>() : c;
@@ -550,7 +550,7 @@ public class DataManager {
     
     public static Collection<Loan> getLoans(String parentID) {
         Collection<Loan> c = loans.get(parentID);
-        return c != null ? c : new ArrayList<Loan>();
+        return c != null ? new ArrayList<Loan>(c) : new ArrayList<Loan>();
     }
     
     public static Loan getCurrentLoan(String parentID) {
@@ -907,14 +907,13 @@ public class DataManager {
 
         // pictures, mappings and loans
         setPictures();
+        setLoans();
         
         for (DcModule module : DcModules.getAllModules()) {
             if (module instanceof MappingModule)
                 setReferences((MappingModule) module);
         }         
 
-        setLoans();
-        
         // supporting modules
         for (DcModule module : DcModules.getAllModules()) {
             if (    !isLoaded(module.getIndex()) && 

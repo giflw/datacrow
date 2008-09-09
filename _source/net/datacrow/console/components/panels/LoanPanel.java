@@ -63,7 +63,7 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
-public class LoanPanel extends JPanel {
+public class LoanPanel extends JPanel implements ActionListener {
 
     private static Logger logger = Logger.getLogger(LoanPanel.class.getName());
     
@@ -76,6 +76,12 @@ public class LoanPanel extends JPanel {
     private DcDateField inputEndDate = ComponentFactory.getDateField();    
     private DcDateField inputStartDate = ComponentFactory.getDateField();
     private JComboBox comboPersons = ComponentFactory.getContactPersonCombo();
+    private DcTable tableLoans = ComponentFactory.getDCTable(DcModules.get(DcModules._LOAN), true, false);
+    private JButton buttonLend = ComponentFactory.getButton(DcResources.getText("lblLendItem"));
+    private JButton buttonReturn = ComponentFactory.getButton(DcResources.getText("lblReturnItem"));
+    private PanelLend panelLend = new PanelLend();
+    private PanelReturn panelReturn = new PanelReturn();
+
     private DcTextPane descriptionPane;
     
     private HTMLEditorKit kit = new HTMLEditorKit();
@@ -233,12 +239,27 @@ public class LoanPanel extends JPanel {
         );
         thread.start();
         
-        removeAll();
-        buildPanel(true);
-        revalidate();    
-        repaint();
+        setLendModus();
     }
-
+    
+    private void setLendModus() {
+        panelLend.setVisible(true);
+        panelReturn.setVisible(false);
+    }
+    
+    private void setReturnModus() {
+        panelReturn.setVisible(true);
+        panelLend.setVisible(false);
+        
+        if (objects.size() == 1) {
+            tableLoans.clear();
+            DcObject dco = (DcObject) objects.toArray()[0];
+            for (Loan loan : DataManager.getLoans(dco.getID())) {
+                if (loan.getValue(Loan._B_ENDDATE) != null) 
+                    tableLoans.add(loan, true);
+            }
+        }
+    }
     
     public void lendItems() {
         ContactPerson contactPerson = comboPersons.getSelectedItem() instanceof ContactPerson ? (ContactPerson) comboPersons.getSelectedItem() : null;
@@ -294,52 +315,12 @@ public class LoanPanel extends JPanel {
         );
         thread.start();    
         
-        removeAll();
-        buildPanel(false);
-        repaint();
-        revalidate();
+        setReturnModus();
     }
     
     private void buildPanel(boolean isAvailable) {
         setLayout(Layout.getGBL());
 
-        //**********************************************************
-        //Input panel
-        //**********************************************************
-        JPanel panelInput = new JPanel();
-        panelInput.setLayout(Layout.getGBL());
-        
-        JLabel labelEndDate = ComponentFactory.getLabel(DcResources.getText("lblEndDate"));
-        JLabel labelStartDate = ComponentFactory.getLabel(DcResources.getText("lblStartDate"));
-        JLabel labelPerson = ComponentFactory.getLabel(DcResources.getText("lblContactPerson"));
-        
-        if (isAvailable) {
-            labelStartDate.setIcon(IconLibrary._icoCalendar);
-            labelPerson.setIcon(IconLibrary._icoPersons);
-            
-            panelInput.add(labelStartDate , Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets(5, 5, 5,  5), 0, 0));
-            panelInput.add(inputStartDate , Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets(5, 5, 5,  5), 0, 0));
-            panelInput.add(labelPerson ,    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets(5, 5, 5,  5), 0, 0));
-            panelInput.add(comboPersons ,   Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets(5, 5, 5,  5), 0, 0));
-        } else {
-            labelEndDate.setIcon(IconLibrary._icoCalendar);
-            
-            panelInput.add(labelEndDate , Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets(5, 5, 5,  5), 0, 0));
-            panelInput.add(inputEndDate , Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets(5, 5, 5,  5), 0, 0));
-        }
-            
         //**********************************************************
         //Description panel
         //**********************************************************
@@ -371,18 +352,8 @@ public class LoanPanel extends JPanel {
         JPanel panelActions = new JPanel();
  
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
-        buttonClose.addActionListener(new CloseButtonAction());
+        buttonClose.addActionListener(this);
         buttonClose.setMnemonic('C');
-
-        if (isAvailable) {
-            JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblLendItem"));
-            buttonSave.addActionListener(new SaveButtonAction());
-            panelActions.add(buttonSave);
-        } else {
-            JButton buttonReturn = ComponentFactory.getButton(DcResources.getText("lblReturnItem"));
-            buttonReturn.addActionListener(new ReturnItemButtonAction());
-            panelActions.add(buttonReturn);
-        }
         
         if (owner != null && objects.size() > 1)
             panelActions.add(buttonClose);
@@ -390,11 +361,13 @@ public class LoanPanel extends JPanel {
         //**********************************************************
         //Main
         //**********************************************************
-        
         add( panelDescription,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets( 5, 5, 5, 5), 0, 0));
-        add( panelInput,        Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+        add( panelLend,        Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        add( panelReturn,        Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));
         add( panelActions,      Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
@@ -402,17 +375,10 @@ public class LoanPanel extends JPanel {
                  new Insets( 5, 5, 5, 5), 0, 0));
         
         if (objects.size() == 1) {
-            DcObject dco = (DcObject) objects.toArray()[0];
             
-            DcTable tableLoans = ComponentFactory.getDCTable(DcModules.get(DcModules._LOAN), true, false);
             JScrollPane scrollHistory = new JScrollPane(tableLoans);
             scrollHistory.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblLoanHistory")));
-            
-            for (Loan loan : DataManager.getLoans(dco.getID())) {
-                if (loan.getValue(Loan._B_ENDDATE) != null) 
-                    tableLoans.add(loan, true);
-            }
-            
+
             add( scrollHistory,   Layout.getGBC( 0, 3, 1, 1, 4.0, 4.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));                
@@ -423,25 +389,12 @@ public class LoanPanel extends JPanel {
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 5, 5, 5, 5), 0, 0)); 
         }
+        
+        if (isAvailable)
+            setLendModus();
+        else 
+            setReturnModus();
     }
-    
-    public class CloseButtonAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            close();
-        }
-    } 
-
-    public class ReturnItemButtonAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            returnItems();
-        }
-    }    
-    
-    public class SaveButtonAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            lendItems();
-        }
-    }  
     
     public void close() {
         this.descriptionPane = null;
@@ -458,8 +411,82 @@ public class LoanPanel extends JPanel {
             owner.setVisible(false);
         }
         
+        panelLend = null;
+        panelReturn = null;
+        
+        this.tableLoans.clear();
+        this.tableLoans = null;
+        
         this.owner = null;
         this.kit = null;
         this.document = null;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        close();
+    }
+    
+    private class PanelLend extends JPanel implements ActionListener {
+        
+        public PanelLend() {
+            setLayout(Layout.getGBL());
+            
+            JLabel labelStartDate = ComponentFactory.getLabel(DcResources.getText("lblStartDate"), IconLibrary._icoCalendar);
+            JLabel labelPerson = ComponentFactory.getLabel(DcResources.getText("lblContactPerson"), IconLibrary._icoPersons);
+            
+            add(labelStartDate , Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));
+            add(inputStartDate , Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));
+            add(labelPerson ,    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));
+            add(comboPersons ,   Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));
+            
+            JPanel panelActions = new JPanel();
+            buttonLend.addActionListener(this);
+            panelActions.add(buttonLend);
+            
+            add(panelActions,    Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+                     new Insets(5, 5, 5,  5), 0, 0));
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+            lendItems();
+        }
+    }
+    
+    private class PanelReturn extends JPanel implements ActionListener {
+        
+        public PanelReturn() {
+            setLayout(Layout.getGBL());
+            
+            JLabel labelEndDate = ComponentFactory.getLabel(DcResources.getText("lblEndDate"), IconLibrary._icoCalendar);
+            
+            add(labelEndDate , Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));
+            add(inputEndDate , Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));
+            
+            buttonReturn.addActionListener(this);
+            
+            JPanel panelActions = new JPanel();
+            panelActions.add(buttonReturn);
+            
+            add(panelActions , Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+                     new Insets(5, 5, 5,  5), 0, 0));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            returnItems();
+        }
     }
 }

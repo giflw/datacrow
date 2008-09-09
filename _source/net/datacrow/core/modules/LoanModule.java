@@ -31,6 +31,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.Settings;
 
 public class LoanModule extends DcModule {
 
@@ -52,7 +53,12 @@ public class LoanModule extends DcModule {
     public boolean isEnabled() {
         return DcModules.get(DcModules._CONTACTPERSON).isEnabled();
     }
-    
+
+    @Override
+    public Settings getSettings() {
+        setSetting(DcRepository.ModuleSettings.stTableColumnOrder, new int[] {Loan._C_CONTACTPERSONID, Loan._A_STARTDATE, Loan._B_ENDDATE});
+        return super.getSettings();
+    }
 
     @Override
     public DcObject getDcObject() {
