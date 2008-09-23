@@ -245,6 +245,15 @@ public class LoanPanel extends JPanel implements ActionListener {
     private void setLendModus() {
         panelLend.setVisible(true);
         panelReturn.setVisible(false);
+        
+        if (objects.size() == 1) {
+            tableLoans.clear();
+            DcObject dco = (DcObject) objects.toArray()[0];
+            for (Loan loan : DataManager.getLoans(dco.getID())) {
+                if (loan.getValue(Loan._B_ENDDATE) != null) 
+                    tableLoans.add(loan, true);
+            }
+        }
     }
     
     private void setReturnModus() {

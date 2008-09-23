@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.0.1  [Release on xx/09/2008] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+This patch fixes the loan functionality.
+
+[Fixed]
+- Nullpointer after lending an item (quick view panel is cleared).
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.0.1  [Release on 08/09/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 This patch fixes the loan functionality.

@@ -211,6 +211,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 } catch (Exception ignore) {}
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("An error occurred while setting the information of " + dco, e);
         }            
     }
@@ -361,6 +362,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     } else {
                         Object o = dco.getValue(index);
                         DcObject reference = o instanceof DcObject ? (DcObject) o : DataManager.getObject(dco.getField(index).getReferenceIdx(), (String) o);
+                        reference = reference == null && o instanceof String ? DataManager.getObjectForDisplayValue(dco.getField(index).getReferenceIdx(), (String) o) : reference;
                         value += descriptionPane.createLink(reference, reference.toString());
                     }
                 } else { // Add simple value
