@@ -30,8 +30,7 @@ public class InvalidModuleXmlException extends Exception {
     private static final long serialVersionUID = 8698000516706015026L;
 
     public InvalidModuleXmlException(String file, Exception e) {
-        super("An error occured while parsing the xml file from the module jar [" + file + "]. " + e);
-        setStackTrace(e.getStackTrace());
+        super("An error occured while parsing the xml file from the module jar [" + file + "]. " + e, e);
     }
     
     public InvalidModuleXmlException(Exception e) {

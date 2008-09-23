@@ -226,6 +226,8 @@ public class DcList extends JList implements ComponentListener {
             }
         }
         
+        increment = increment > 0 && increment < 10 ? 40 : increment;
+        
         applyScrollableUnitIncrement(increment);
         
         return increment;

@@ -233,7 +233,9 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             modules.addAll(DcModules.getPropertyBaseModules());
             for (DcModule module : DcModules.getModules()) {
                 if (  module.isTopModule() && !module.hasDependingModules() &&
-                     !module.isParentModule() && !module.isChildModule())
+                     !module.isParentModule() && !module.isChildModule() &&
+                     !DcModules.isUsedInMapping(module.getIndex()) && 
+                      DcModules.getReferencingModules(module.getIndex()).size() == 0)
                     modules.add(module);
             }
 

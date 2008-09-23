@@ -960,6 +960,14 @@ public class DataManager {
         }        
         
         doFetch(fetchers); 
+        
+        // Check for null values (security issues, etc).
+        for (Integer key : objects.keySet()) {
+            Collection<DcObject> c = objects.get(key);
+            if (c == null)
+                objects.put(key, new ArrayList<DcObject>());
+        }
+
         Templates.refresh();
     }
     
