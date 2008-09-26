@@ -60,6 +60,10 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
     
     public RelatedItemsPanel(DcObject dco) {
         this.dco = dco;
+
+        setIcon(IconLibrary._icoInformation);
+        setTitle(DcResources.getText("lblRelatedItems"));
+
         build();
         loadItems();
     }
@@ -88,40 +92,27 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
     }
     
     public void loadItems() {
-        if (dco.getModule().getIndex() == DcModules._CONTACTPERSON) {
-            DataFilter df = new DataFilter(DcModules._ITEM);
-            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._ITEM, DcObject._SYS_LENDBY, Operator.EQUAL_TO, dco));
-            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._ITEM, DcObject._SYS_AVAILABLE, Operator.EQUAL_TO, Boolean.FALSE));
-            
-            list.clear();
-            list.add(DataManager.get(DcModules._ITEM, df));
-            
-            setIcon(IconLibrary._icoInformation);
-            setTitle(DcResources.getText("lblLendItems"));
-        } else {
-            list.clear();
-            for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
-                if (module.getIndex() != dco.getModule().getIndex() && !(module instanceof TemplateModule)) {
-                    for (DcField field : module.getFields()) {
-                        if (field.getReferenceIdx() == dco.getModule().getIndex()) {
-                            DataFilter df = new DataFilter(module.getIndex());
-                            
-                            if (module instanceof MappingModule) {
-                                Collection<DcObject> c = new ArrayList<DcObject>();
-                                c.add(dco);
-                                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));
-                            } else {
-                                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, dco));
-                            }
-                            
-                            list.add(DataManager.get(DcModules._ITEM, df));
+        list.clear();
+        for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
+            if ( module.getIndex() != dco.getModule().getIndex() && 
+               !(module instanceof TemplateModule)) {
+            	
+                for (DcField field : module.getFields()) {
+                    if (field.getReferenceIdx() == dco.getModule().getIndex()) {
+                        DataFilter df = new DataFilter(module.getIndex());
+                        
+                        if (module instanceof MappingModule) {
+                            Collection<DcObject> c = new ArrayList<DcObject>();
+                            c.add(dco);
+                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));
+                        } else {
+                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, dco));
                         }
+                        
+                        list.add(DataManager.get(DcModules._ITEM, df));
                     }
                 }
             }
-            
-            setIcon(IconLibrary._icoInformation);
-            setTitle(DcResources.getText("lblRelatedItems"));
         }
     }
     

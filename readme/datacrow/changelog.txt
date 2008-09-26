@@ -14,8 +14,6 @@ This patch fixes the loan functionality.
 - Days lend was not correct (introduced by caching mechanism).
 - "Lend by" was not correctly filled (empty in view).
 - Renamed "Loaned by" to "Lend by"
-- Related items are now shown in the item form (artist, contact person, etc).
-- Loan management, Due Date (1941130)
 - Empty operator was broken.
 
 [Changed]
@@ -23,10 +21,17 @@ This patch fixes the loan functionality.
 - Containers can now also be created from within the import dialog.
 - Container view is now able to display the items directly from the grouping
   pane. The table view has been removed (obsolete for this module).
-- Due date for loans. A due date can now be specified. A dialog has been added
+- Loan management, Due Date (1941130)
+  Due date for loans. A due date can now be specified. A dialog has been added
   to show the statuses of loaned items. The overdue date can also be used in views.
   Two new fields are now added for each items: Date overdue and days till overdue.
   These fields can be used for filtering, etc.
+
+[New]
+- The item form now show related items (in a separate tab)
+- The item form now displays lend item information for contact persons
+- A new dialog has been created which shows the current lend items, ordered by due date.
+- On startup, Data Crow will tell you if there are items overdue.
     
 
 -----------------------------------------------------------------------------------------

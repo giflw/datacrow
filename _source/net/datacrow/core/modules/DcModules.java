@@ -495,7 +495,7 @@ public class DcModules {
         for (DcModule module : getAllModules()) {
             if (module.getIndex() != moduleIdx && !(module instanceof TemplateModule) &&
                 !((module instanceof MappingModule) && ( (MappingModule) module).getParentModIdx() == moduleIdx  )) {
-                if (module.hasReferenceTo(moduleIdx))
+                if (module.hasActualReferenceTo(moduleIdx))
                     refs.add(module);
             }
         }

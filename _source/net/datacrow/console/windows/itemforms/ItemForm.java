@@ -56,6 +56,7 @@ import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.panels.LoanPanel;
 import net.datacrow.console.components.panels.RelatedItemsPanel;
 import net.datacrow.console.windows.ItemTypeDialog;
+import net.datacrow.console.windows.loan.LoanInformationPanel;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
@@ -653,12 +654,18 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
     
     protected void addRelationPanel() {
-        if (    moduleIndex == DcModules._CONTACTPERSON || 
-                DcModules.getActualReferencingModules(moduleIndex).size() > 0) { 
-            
-            RelatedItemsPanel rip = new RelatedItemsPanel(dco);
-            tabbedPane.addTab(rip.getTitle(), rip.getIcon(),  rip);
-        }
+    	if (update) {
+	        if (DcModules.getActualReferencingModules(moduleIndex).size() > 0 &&
+	            moduleIndex != DcModules._CONTACTPERSON) {
+	            RelatedItemsPanel rip = new RelatedItemsPanel(dco);
+	            tabbedPane.addTab(rip.getTitle(), rip.getIcon(),  rip);
+	        }
+	        
+	        if (moduleIndex == DcModules._CONTACTPERSON) {
+	        	LoanInformationPanel panel = new LoanInformationPanel(dco);
+	            tabbedPane.addTab(panel.getTitle(), panel.getIcon(),  panel);
+	        }
+    	}
     }
 
     protected void addLoanTab() {

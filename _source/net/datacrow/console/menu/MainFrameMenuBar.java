@@ -55,7 +55,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
     }
     
     private void build() {
-        DcMenu menuTools = new DcModuleToolsMenu(module);
+        DcMenu menuItemInfo = new DcModuleItemInfoMenu(module);
+        DcMenu menuTools = ComponentFactory.getMenu(DcResources.getText("lblTools"));
         DcMenu menuModules = ComponentFactory.getMenu(DcResources.getText("lblModules"));
         DcMenu menuSettings = ComponentFactory.getMenu(DcResources.getText("lblSettings"));
         DcMenu menuFile = ComponentFactory.getMenu(DcResources.getText("lblFile"));
@@ -117,6 +118,10 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         PluginHelper.add(menuFilter, "UndoFilter");
         
         // tools menu
+        
+        if (module.getImporterClass() != null)
+            PluginHelper.add(menuTools, "FileImport");
+        
         if (module.deliversOnlineService()) {
             menuTools.addSeparator();
             PluginHelper.add(menuTools, "OnlineSearch");
@@ -192,9 +197,6 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         }
         
         menuTools.addSeparator();
-        PluginHelper.add(menuTools, "LoanInformation");
-        
-        menuTools.addSeparator();
         PluginHelper.add(menuTools, "BackupAndRestore");
         menuTools.addSeparator();
         PluginHelper.add(menuTools, "ExpertUser");
@@ -205,7 +207,11 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         else if (module.getChild() != null && module.getChild().isFileBacked())
             PluginHelper.add(menuTools, "FileRenamer",module.getChild().getIndex());
         
+        // item information menu
+        menuItemInfo.addSeparator();
+        PluginHelper.add(menuItemInfo, "LoanInformation");
         
+        // user menu
         PluginHelper.add(menuUser, "ChangePassword");
         
         menuWebServer.setEnabled(menuWebServer.getItemCount() > 0);
@@ -230,6 +236,9 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         
         if (menuFilter.isEnabled())
             this.add(menuFilter);
+
+        if (menuItemInfo.isEnabled())
+            this.add(menuItemInfo);
         
         if (menuSettings.isEnabled())
             this.add(menuSettings);

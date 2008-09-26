@@ -27,26 +27,20 @@ package net.datacrow.console.windows.loan;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
-import net.datacrow.console.components.lists.DcObjectList;
+import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemForm;
-import net.datacrow.core.DataCrow;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
@@ -59,22 +53,25 @@ import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcObjectComparator;
 
-public class LoanInformationDialog extends DcDialog implements ActionListener, ISimpleItemView, MouseListener {
-    
+public class LoanInformationPanel extends DcPanel implements ISimpleItemView, MouseListener {
+	
     private DcTable table = new DcTable(DcModules.get(DcModules._ITEM), true, false);
     private DcObject person;
     
+    public LoanInformationPanel() {
+    	this(null);
+    }
     
-    public LoanInformationDialog(DcObject person) {
-        super(DataCrow.mainFrame);
-        
-        this.person = person;
+    public LoanInformationPanel(DcObject person) {
+        super();
 
         setTitle(DcResources.getText("lblLoanInformation"));
+        setIcon(IconLibrary._icoLoan);
+
+        this.person = person;
         
         build();
         loadItems();
-        pack();
     }
     
     public void open() {
@@ -88,6 +85,8 @@ public class LoanInformationDialog extends DcDialog implements ActionListener, I
     }
     
     public void loadItems() {
+    	table.clear();
+    	
         DataFilter df = new DataFilter(DcModules._LOAN);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
         
@@ -113,12 +112,13 @@ public class LoanInformationDialog extends DcDialog implements ActionListener, I
     }
     
     @Override
-    public void close() {
+    public void clear() {
         if (table != null)
             table.clear();
         
+        person = null;
         table = null;
-        super.close();
+        super.clear();
     }
     
     private void build() {
@@ -128,35 +128,18 @@ public class LoanInformationDialog extends DcDialog implements ActionListener, I
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         
-        getContentPane().setLayout(Layout.getGBL());
+        setLayout(Layout.getGBL());
         
-        getContentPane().add(sp,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
+        add(sp,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
+                 new Insets(0, 0, 0, 0), 0, 0));
         
         if (person == null)
             table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LENDBY, Item._SYS_LOANDUEDATE, Item._SYS_LOANDAYSTILLOVERDUE});
         else 
             table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LOANDUEDATE, Item._SYS_LOANDAYSTILLOVERDUE});
-        
-        JButton buttonOk = ComponentFactory.getButton(DcResources.getText("lblOK"));
-        buttonOk.setActionCommand("ok");
-        buttonOk.addActionListener(this);
-        
-        JPanel pActions = new JPanel();
-        pActions.add(buttonOk);
-        
-        getContentPane().add(pActions,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                 new Insets( 5, 5, 5, 5), 0, 0));
-        
     }
 
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("ok"))
-            close();
-    }
-    
     public void mouseReleased(MouseEvent e) {
         DcTable table = (DcTable) e.getSource();
         if (e.getClickCount() == 2 && table.getSelectedIndex() > -1) 
