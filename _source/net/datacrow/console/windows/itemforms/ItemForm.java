@@ -653,7 +653,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             IChildModule m = (IChildModule) childModule;
             childView = m.getItemView(dco, childModule.getIndex(), !update);
             childView.hideDialogActions(true);
-            tabbedPane.addTab(childModule.getObjectNamePlural(), childView.getContentPane());
+            tabbedPane.addTab(childModule.getObjectNamePlural(), childModule.getIcon16(), childView.getContentPane());
         }
     }
     
