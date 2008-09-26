@@ -634,6 +634,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public Object getValue(int index) {
         Object value = null;
         if (getValueDef(index) != null) {
+
+        	// recalculate loan information
+        	if (getModule().canBeLended()) {
+        		Boolean available = (Boolean) getValue(DcObject._SYS_AVAILABLE);
+            	if (available != null && !available.booleanValue())
+            		setLoanInformation();
+        	}
+        	
             if (index == _SYS_DISPLAYVALUE) {
                 value = toString();
             } else {
