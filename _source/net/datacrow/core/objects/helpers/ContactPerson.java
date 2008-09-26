@@ -25,15 +25,15 @@
 
 package net.datacrow.core.objects.helpers;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.wf.WorkFlow;
-import net.datacrow.core.wf.requests.SynchronizeWithManagerRequest;
 
 public class ContactPerson extends DcObject {
 
@@ -63,12 +63,20 @@ public class ContactPerson extends DcObject {
         DcObject[] loans = DataManager.get(DcModules._LOAN, filter);
         
         if (loans == null || loans.length == 0) {
-            if (synchronizeWithDM)
-                addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._DELETE, this));
-            WorkFlow.deleteValues(this);  
+            super.delete();
         } else {
-            getRequests().clear();
-            new MessageBox(DcResources.getText("msgCantBeDeletedDueToLoans"), MessageBox._WARNING);
+            QuestionBox qb = new QuestionBox(DcResources.getText("msgDeletePersonLendItems"));
+            if (qb.isAffirmative()) {
+                DatabaseManager.executeQuery("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
+                                             loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 
+                                             Query._DELETE, false);
+                for (DcObject dco : loans)
+                    DataManager.remove(dco, loan.getModule().getIndex());
+
+                super.delete();
+            } else {
+                getRequests().clear();
+            }
         }
     }    
 }

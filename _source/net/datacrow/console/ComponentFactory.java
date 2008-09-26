@@ -96,6 +96,7 @@ import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcModuleSelector;
 import net.datacrow.console.components.DcNumberField;
+import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.DcPasswordField;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcProgramDefinitionsField;
@@ -195,6 +196,9 @@ public final class ComponentFactory {
             
             if (c instanceof DcTable) 
                 ((DcTable) c).clear();
+            
+            if (c instanceof DcPanel) 
+                ((DcPanel) c).clear();
             
             if (c instanceof IComponent)
                 ((IComponent) c).clear();

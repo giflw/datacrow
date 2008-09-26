@@ -30,16 +30,19 @@ import java.util.Date;
 
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.helpers.ContactPerson;
 
 public class Loan extends DcObject {
 
     private static final long serialVersionUID = 2452738490117020045L;
+    
+    private static final Calendar calDaysLoaned = Calendar.getInstance();
+    private static final Calendar calDaysTillOverdue = Calendar.getInstance();
 
     public static final int _A_STARTDATE = 1;
     public static final int _B_ENDDATE = 2;
     public static final int _C_CONTACTPERSONID = 3;
     public static final int _D_OBJECTID = 4;
+    public static final int _E_DUEDATE = 5;
 
     public Loan() {
         super(DcModules._LOAN);
@@ -66,22 +69,48 @@ public class Loan extends DcObject {
         return available;
     }
     
-    public String getPersonDescription() {
+    public DcObject getPerson() {
         String personID = (String) getValue(Loan._C_CONTACTPERSONID);
-        ContactPerson person = !isAvailable((String) getValue(Loan._D_OBJECTID)) ? (ContactPerson) DataManager.getObject(DcModules._CONTACTPERSON, personID) : null;
-        return person == null ? "" : person.toString();
+        return DataManager.getObject(DcModules._CONTACTPERSON, personID);
     }
     
+    public Date getDueDate() {
+        return (Date) getValue(Loan._E_DUEDATE);
+    }
     
-    public Long getDaysLoaned() {
+    /**
+     * Indicates the days till the loan is overdue. A negative value indicates
+     * the loan is overdue.
+     */
+    public synchronized Long getDaysTillOverdue() {
+        Long daysLoaned = getDaysLoaned();
+        Date overDueDate = getDueDate();
+        
+        Long days = null;
+        if (daysLoaned != null && overDueDate != null) {
+            calDaysTillOverdue.setTime(new java.util.Date());
+            int currentDay = calDaysTillOverdue.get(Calendar.DAY_OF_YEAR);
+            calDaysTillOverdue.setTime(overDueDate);
+            int overdueDate = calDaysTillOverdue.get(Calendar.DAY_OF_YEAR);
+            days = Long.valueOf(overdueDate - currentDay);
+        }
+        
+        return days;
+    }
+    
+    public boolean isOverdue() {
+        Long daysTillOverDue = getDaysTillOverdue();
+        return daysTillOverDue != null && daysTillOverDue.longValue() < 0;
+    }
+    
+    public synchronized Long getDaysLoaned() {
         Date startDate = (Date) getValue(Loan._A_STARTDATE);
         Long days = null;
         if (startDate != null && !isAvailable((String) getValue(Loan._D_OBJECTID))) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new java.util.Date());
-            int currentDay = cal.get(Calendar.DAY_OF_YEAR);
-            cal.setTime(startDate);
-            int startDay = cal.get(Calendar.DAY_OF_YEAR);
+            calDaysLoaned.setTime(new java.util.Date());
+            int currentDay = calDaysLoaned.get(Calendar.DAY_OF_YEAR);
+            calDaysLoaned.setTime(startDate);
+            int startDay = calDaysLoaned.get(Calendar.DAY_OF_YEAR);
             days = Long.valueOf(currentDay - startDay);
         }
         return days;

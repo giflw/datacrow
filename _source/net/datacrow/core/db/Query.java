@@ -741,7 +741,7 @@ public class Query {
     
     protected void addAvailabilityCondition(DcObject dco, StringBuffer conditions) {
         if (dco.getModule().canBeLended()) {
-            ContactPerson loanedBy = (ContactPerson) dco.getValue(DcObject._SYS_LOANEDBY);
+            ContactPerson loanedBy = (ContactPerson) dco.getValue(DcObject._SYS_LENDBY);
             Integer duration = (Integer) dco.getValue(DcObject._SYS_LOANDURATION);
             String s = (String) dco.getValue(DcObject._SYS_AVAILABLE);
 

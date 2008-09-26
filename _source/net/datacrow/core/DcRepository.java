@@ -69,6 +69,7 @@ public abstract class DcRepository {
         public static final String stCardViewSettingsDialogSize = "card_view_settings_dialog_size";
         public static final String stFilterDialogSize = "filter_dialog_size";
         public static final String stQuickFilterDefaultField = "quick_filter_default_field";
+        public static final String stTreePanelShownItems = "tree_panel_shown_items";
     }
     
     public static final class Settings {

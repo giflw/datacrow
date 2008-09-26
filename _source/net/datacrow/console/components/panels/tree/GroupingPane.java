@@ -54,7 +54,10 @@ public class GroupingPane extends JPanel {
         this.module = module;
         this.view = view;
         
-        panels.add(new FieldTreePanel(this));
+        if (module == DcModules._CONTAINER) 
+            panels.add(new ContainerTreePanel(this));
+        else 
+            panels.add(new FieldTreePanel(this));
         
         if (DcModules.get(module).isFileBacked())
             panels.add(new FileTreePanel(this));

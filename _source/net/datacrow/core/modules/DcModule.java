@@ -574,6 +574,14 @@ public class DcModule implements Comparable<DcModule> {
         }
         return false;
     }
+    
+    public boolean hasActualReferenceTo(int module) {
+        for (DcField field : getFields()) {
+            if (field.getReferenceIdx() == module)
+                return true;
+        }
+        return false;
+    }
 
     public Collection<DcField> getFields() {
         if (sortedFields == null || sortedFields.size() < fields.size()) {
@@ -696,8 +704,10 @@ public class DcModule implements Comparable<DcModule> {
             
             if (canBeLended()) {
                 addField(getField(DcObject._SYS_AVAILABLE));
-                addField(getField(DcObject._SYS_LOANEDBY));
+                addField(getField(DcObject._SYS_LENDBY));
                 addField(getField(DcObject._SYS_LOANDURATION));
+                addField(getField(DcObject._SYS_LOANDUEDATE));
+                addField(getField(DcObject._SYS_LOANDAYSTILLOVERDUE));
             }
     
             addField(getField(DcObject._SYS_MODULE));
@@ -738,25 +748,35 @@ public class DcModule implements Comparable<DcModule> {
     
     protected void initializeSystemFields() {
         systemFields.put(DcObject._SYS_MODULE,
-                         new DcField(DcObject._SYS_MODULE, getIndex(), "Item",
-                                     true, true, true, true, false,
-                                     255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-                                     ""));
+                new DcField(DcObject._SYS_MODULE, getIndex(), "Item",
+                            true, true, true, true, false,
+                            255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                            ""));
         systemFields.put(DcObject._SYS_AVAILABLE,
-                         new DcField(DcObject._SYS_AVAILABLE, getIndex(), "Available",
-                                     true, true, true, true, false,
-                                     4, ComponentFactory._AVAILABILITYCOMBO, getIndex(), DcRepository.ValueTypes._BOOLEAN,
-                                     ""));
-        systemFields.put(DcObject._SYS_LOANEDBY,
-                         new DcField(DcObject._SYS_LOANEDBY, getIndex(), "Loaned By",
-                                     true, true, true, true, false,
-                                     255, ComponentFactory._REFERENCEFIELD, DcModules._CONTACTPERSON, DcRepository.ValueTypes._DCOBJECTREFERENCE,
-                                     ""));
+                new DcField(DcObject._SYS_AVAILABLE, getIndex(), "Available",
+                            true, true, true, true, false,
+                            4, ComponentFactory._AVAILABILITYCOMBO, getIndex(), DcRepository.ValueTypes._BOOLEAN,
+                            ""));
+        systemFields.put(DcObject._SYS_LENDBY,
+                new DcField(DcObject._SYS_LENDBY, getIndex(), "Lend By",
+                            true, true, true, true, false,
+                            255, ComponentFactory._REFERENCEFIELD, DcModules._CONTACTPERSON, DcRepository.ValueTypes._DCOBJECTREFERENCE,
+                            ""));
         systemFields.put(DcObject._SYS_LOANDURATION,
-                         new DcField(DcObject._SYS_LOANDURATION, getIndex(), "Days Loaned",
-                                     true, true, true, true, false,
-                                     10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
-                                     ""));
+                new DcField(DcObject._SYS_LOANDURATION, getIndex(), "Days Loaned",
+                            true, true, true, true, false,
+                            10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                            ""));
+        systemFields.put(DcObject._SYS_LOANDUEDATE,
+                new DcField(DcObject._SYS_LOANDUEDATE, getIndex(), "Due Date",
+                            true, true, true, true, false,
+                            10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
+                            "")); 
+        systemFields.put(DcObject._SYS_LOANDAYSTILLOVERDUE,
+                new DcField(DcObject._SYS_LOANDAYSTILLOVERDUE, getIndex(), "Days till overdue",
+                            true, true, true, true, false,
+                            10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                            ""));                
         
         if (isTopModule() && deliversOnlineService()) {
             systemFields.put(Integer.valueOf(DcObject._SYS_SERVICE),

@@ -3,21 +3,36 @@
 [X] Error when deleting container.
 [X] Missing images.
 [X] Delete does not update root node in tree.
-[ ] Allow the picture to be displayed to be specified from within the view settings.
+[X] Allow the picture to be displayed to be specified from within the view settings.
     (Remove dependency towards the general field settings).
 [X] Filtering: less then, greater then for dates (before, after ?)
-[ ] Update reports (location field).
+[X] Update reports (location field).
 [X] Error when checking for display value (' in name causes error). 
 
 [ ] Documentation on plugin development. 
 [ ] Documentation on online service development.
-[ ] Update internal help system. 
+[X] Update internal help system. 
 
 
 Online services
 ---------------------------------------------------------------------------------------------------------
 [ ] MovieMeter.nl online search
 [ ] Book online search in www.isbndb.com (1886661)
+
+
+3.4.1
+---------------------------------------------------------------------------------------------------------
+[ ] scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
+    It would be nice, if datacrow used only the first part of the entered number. 
+[X] Show related items in the item form (such as movies for actors)
+[X] Loan management, Due Date (1941130)
+[ ] Translations. There are some known issues with the Resource Editor tool such as loss of special 
+    character data. The resource editor will be updated to handle special characters correctly. 
+    Additionally Data Crow will feature language packs, making it possible to switch between languages.  
+[ ] Exporting a module. Exporting the module definition itself currently requires manually copying the 
+    module jar file and its property files. Functionality will be provided which makes it easy to export 
+    and import a module (definition). This functionality will also allow users to export default/demo data 
+    with their module. This functionality will also be used to provide additional custom modules. 
 
 
 3.5

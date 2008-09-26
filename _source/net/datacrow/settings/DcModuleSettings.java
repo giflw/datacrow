@@ -162,6 +162,17 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                                 false));
         }
         
+        if (module.getIndex() == DcModules._CONTAINER) {
+            getSettings().addSetting(_General,
+                    new Setting(DcRepository.ValueTypes._LONG,
+                                DcRepository.ModuleSettings.stTreePanelShownItems,
+                                DcModules._ITEM,
+                                -1,
+                                "",
+                                "",
+                                false,
+                                false));
+        }
         
         int[] order;
         if (module.getIndex() == DcModules._CONTAINER)

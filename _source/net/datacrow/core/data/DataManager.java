@@ -1136,7 +1136,7 @@ public class DataManager {
                     if (m instanceof DcMediaModule)
                         modules.add(DcModules.get(DcModules._MEDIA));
                     
-                    modules.add(DcModules.get(DcModules._ITEM));
+                    modules.add(DcModules.get(DcModules._CONTAINER));
                 }
                 
                 if (m.isAbstract())

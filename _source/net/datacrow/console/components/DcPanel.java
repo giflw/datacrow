@@ -46,20 +46,32 @@ public class DcPanel extends JPanel {
 
 	private String helpIndex = "";
 
-    private final TitledBorder border = ComponentFactory.getTitleBorder(DcResources.getText("lblStatus"));
-    private final JLabel labelStatus = ComponentFactory.getLabel("");
-    private final DcProgressBar progress = new DcProgressBar();
-    private final String title;
-    private final ImageIcon icon;
+    private TitledBorder border = ComponentFactory.getTitleBorder(DcResources.getText("lblStatus"));
+    private JLabel labelStatus = ComponentFactory.getLabel("");
+    private DcProgressBar progress = new DcProgressBar();
+    private String title;
+    private ImageIcon icon;
 
     private final JPanel panelStatus = new JPanel();
 
+    public DcPanel() {
+        createStatusPanel();
+    }
+    
     public DcPanel(String title, ImageIcon icon) {
         this.title = title;
         this.icon = icon;
         createStatusPanel();
     }
 
+    public void setTitle(String s) {
+        this.title = s;
+    }
+    
+    public void setIcon(ImageIcon icon) {
+        this.icon = icon;
+    }
+    
     public String getTitle() {
     	return title;
     }
@@ -140,6 +152,15 @@ public class DcPanel extends JPanel {
 
     public JPanel getStatusPanel() {
     	return panelStatus;
+    }
+    
+    public void clear() {
+        helpIndex = null;
+        border = null;
+        labelStatus = null;
+        progress = null;
+        title = null;
+        icon = null;
     }
 
     private void createStatusPanel() {

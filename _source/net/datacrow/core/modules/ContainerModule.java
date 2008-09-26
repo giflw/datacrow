@@ -25,6 +25,9 @@
 
 package net.datacrow.core.modules;
 
+import net.datacrow.console.components.lists.DcObjectList;
+import net.datacrow.console.views.MasterView;
+import net.datacrow.console.views.View;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Container;
@@ -38,7 +41,28 @@ public class ContainerModule extends DcParentModule {
         super(index, topModule, name, description, objectName, objectNamePlural,
               tableName, tableShortName, tableJoin);
     }
+    
+    @Override
+    protected void initializeUI()  {
+        if (searchView == null && hasSearchView() ) {
+            searchView = new MasterView();
+            searchView.setTreePanel(this);
+            
+//            // table view
+//            DcTable table = new DcTable(this, false, true);
+//            View tableView = new View(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
+//            table.setView(tableView);
+            
+            // list view
+            DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
+            View listView = new View(searchView, View._TYPE_SEARCH, list, getObjectNamePlural(), getIcon16(), MasterView._LIST_VIEW);
+            list.setView(listView);
 
+//            searchView.addView(MasterView._TABLE_VIEW, tableView);
+            searchView.addView(MasterView._LIST_VIEW, listView);            
+        }
+    }
+    
     @Override
     public boolean isSelectableInUI() {
         return true;

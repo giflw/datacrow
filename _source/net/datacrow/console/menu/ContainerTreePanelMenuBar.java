@@ -25,80 +25,53 @@
 
 package net.datacrow.console.menu;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcMenu;
-import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.panels.tree.FieldTreePanel;
-import net.datacrow.console.windows.GroupByDialog;
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.settings.Settings;
 
-public class FieldTreePanelMenuBar extends DcMenuBar implements ActionListener {
-    
-    protected final int modIdx;
-    protected final FieldTreePanel treePanel;
-    
-    private DcMenu menuFields = ComponentFactory.getMenu(DcResources.getText("lblGroupBy"));
+public class ContainerTreePanelMenuBar extends FieldTreePanelMenuBar {
 
-    public FieldTreePanelMenuBar(int modIdx, FieldTreePanel treePanel) {
-        this.modIdx = modIdx;
-        this.treePanel = treePanel;
+    public ContainerTreePanelMenuBar(int modIdx, FieldTreePanel treePanel) {
+        super(modIdx, treePanel);
+        
+        DcMenu menuView = ComponentFactory.getMenu(DcResources.getText("lblView"));
+        
+        DcMenuItem menuViewContainers = ComponentFactory.getMenuItem(DcResources.getText("lblViewContainers"));
+        DcMenuItem menuViewItems = ComponentFactory.getMenuItem(DcResources.getText("lblViewItems"));
+        
+        menuView.add(menuViewContainers);
+        menuView.add(menuViewItems);
+        
+        menuViewContainers.setActionCommand("viewContainers");
+        menuViewItems.setActionCommand("viewItems");
+        
+        menuViewContainers.addActionListener(this);
+        menuViewItems.addActionListener(this);
+        
+        hideGroupBy();
+        
+        add(menuView);
+    }
 
-        DcMenu menuEdit = ComponentFactory.getMenu(DcResources.getText("lblEdit"));
-        DcMenuItem menuExpandAll = ComponentFactory.getMenuItem(DcResources.getText("lblExpandAll"));
-        DcMenuItem menuCollapseAll = ComponentFactory.getMenuItem(DcResources.getText("lblCollapseAll"));
-        
-        menuCollapseAll.addActionListener(this);
-        menuCollapseAll.setActionCommand("collapseAll");
-        
-        menuExpandAll.addActionListener(this);
-        menuExpandAll.setActionCommand("expandAll");
-        
-        menuEdit.add(menuCollapseAll);
-        menuEdit.add(menuExpandAll);
-        
-        
-        DcMenuItem miGroupBy = ComponentFactory.getMenuItem("Select Fields");
-        miGroupBy.setActionCommand("groupBy");
-        miGroupBy.addActionListener(this);
-        menuFields.add(miGroupBy);
-        
-        setPreferredSize(new Dimension(100, 22));
-        setMaximumSize(new Dimension(100, 22));
-        setMinimumSize(new Dimension(50, 22));
-        
-        add(menuFields);
-        add(menuEdit);
-    }
-    
-    protected void hideGroupBy() {
-        menuFields.setVisible(false);
-    }
-    
-    private void groupBy(String s) {
-        GroupByDialog dlg = new GroupByDialog(modIdx);
-        dlg.setVisible(true);
-    }
-    
+    @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("collapseAll")) {
-            treePanel.collapseAll();
-        } else if (ae.getActionCommand().equals("expandAll")) {
-            treePanel.expandAll();
+        Settings settings = DcModules.get(DcModules._CONTAINER).getSettings();
+        if (ae.getActionCommand().equals("viewContainers")) {
+            settings.set(DcRepository.ModuleSettings.stTreePanelShownItems, Long.valueOf(DcModules._CONTAINER));
+            DcModules.get(DcModules._CONTAINER).getSearchView().applySettings();
+            
+        } else if (ae.getActionCommand().equals("viewItems")) {
+            settings.set(DcRepository.ModuleSettings.stTreePanelShownItems, Long.valueOf(DcModules._ITEM));
+            DcModules.get(DcModules._CONTAINER).getSearchView().applySettings();
         } else {
-            groupBy(ae.getActionCommand());
+            super.actionPerformed(ae);
         }
     }
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(DcSwingUtilities.setRenderingHint(g));
-    }    
 }
-

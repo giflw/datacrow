@@ -50,6 +50,7 @@ import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.menu.DcPropertyViewPopupMenu;
+import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
@@ -62,7 +63,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.IRequest;
-import net.datacrow.core.wf.requests.RefreshPropertyItemViewRequest;
+import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 import net.datacrow.core.wf.requests.Requests;
 import net.datacrow.core.wf.requests.StatusUpdateRequest;
 import net.datacrow.settings.DcSettings;
@@ -70,7 +71,7 @@ import net.datacrow.settings.Settings;
 import net.datacrow.util.DataTask;
 import net.datacrow.util.DcSwingUtilities;
 
-public class DcMinimalisticItemView extends DcFrame implements ActionListener, MouseListener {
+public class DcMinimalisticItemView extends DcFrame implements ActionListener, MouseListener, ISimpleItemView {
 
     protected DataTask task;
     
@@ -86,7 +87,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     protected DcObjectList list;
     
     private int module;
-    private DcPanel panel = new DcPanel("", null);
+    private DcPanel panel = new DcPanel();
     
     public DcMinimalisticItemView(int module, boolean readonly) {
         super(DcModules.get(module).getObjectNamePlural(), IconLibrary._icoAnchor);
@@ -120,19 +121,19 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         DcObject dco = list.getSelectedItem();
         if (dco != null) {
             dco.markAsUnchanged();
-            DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(true, dco, this);
+            DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, true, dco, this);
             itemForm.setVisible(true);
         }
     }
     
     public void createNew() {
-        DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, getModule().getDcObject(), this);
+        DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, false, getModule().getDcObject(), this);
         itemForm.setVisible(true);
     }
     
     public Requests getAfterDeleteRequests() {
         Requests requests = new Requests();
-        requests.add(new RefreshPropertyItemViewRequest(this));
+        requests.add(new RefreshSimpleViewRequest(this));
         return requests;
     }    
     
@@ -161,7 +162,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     public void setVisible(boolean b) {
         super.setVisible(b);
         if (b)
-            addObjects();
+            loadItems();
     }    
     
     public void clear() {
@@ -179,7 +180,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         panel = null;
     }
     
-    public void addObjects() {
+    public void loadItems() {
         list.clear();
         DcObject dco = getModule().getDcObject();
         DataFilter filter = new DataFilter(dco);

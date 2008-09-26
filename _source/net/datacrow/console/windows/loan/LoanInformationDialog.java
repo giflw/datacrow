@@ -23,66 +23,19 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.itemforms;
+package net.datacrow.console.windows.loan;
 
-import net.datacrow.core.data.DataManager;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.wf.requests.RefreshChildView;
-import net.datacrow.core.wf.requests.Requests;
+import net.datacrow.console.components.DcDialog;
 
-public class ChildForm extends DcMinimalisticItemView {
+public class LoanInformationDialog extends DcDialog {
 
-    private String parentID;
-    private final int parentModuleIdx;
     
-    public ChildForm(DcObject parent, int module, boolean readonly) {
-        super(module, readonly);
+    public LoanInformationDialog() {
         
-        this.parentID = parent.getID();
-        this.parentModuleIdx = parent.getModule().getIndex();
+    }
+    
+    private void build() {
         
-        list.setEnabled(!readonly);
-    }
-    
-    @Override
-    public void clear() {
-        super.clear();
-        parentID = null;
-    }
-
-    @Override
-    public void loadItems() {
-        list.clear();
-        list.add(DataManager.getObject(parentModuleIdx, parentID).getChildren());
-    }
-    
-    @Override
-    public void open() {
-        DcObject dco = list.getSelectedItem();
-        if (dco != null) {
-            dco.markAsUnchanged();
-            ChildItemForm childItemForm = new ChildItemForm(true, dco, this);
-            childItemForm.setVisible(true);            
-        }
-    }
-    
-    @Override
-    public void createNew() {
-        DcObject dco = getModule().getDcObject();
-        dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
         
-        ChildItemForm itemForm = new ChildItemForm(false, dco, this);
-        itemForm.setVisible(true);
     }
-
-    @Override
-    public Requests getAfterDeleteRequests() {
-        Requests requests = new Requests();
-        requests.add(new RefreshChildView(this));
-        return requests;
-    }
-
-    public int getParentModuleIdx() {
-        return parentModuleIdx;
-    }   
 }

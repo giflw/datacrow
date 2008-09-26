@@ -39,16 +39,14 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcDateField;
 import net.datacrow.console.components.DcFrame;
-import net.datacrow.console.components.DcTextPane;
+import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.console.windows.LoanForm;
+import net.datacrow.console.windows.loan.LoanForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
@@ -75,17 +73,18 @@ public class LoanPanel extends JPanel implements ActionListener {
     
     private DcDateField inputEndDate = ComponentFactory.getDateField();    
     private DcDateField inputStartDate = ComponentFactory.getDateField();
+    private DcDateField inputDueDate = ComponentFactory.getDateField();
     private JComboBox comboPersons = ComponentFactory.getContactPersonCombo();
+    
     private DcTable tableLoans = ComponentFactory.getDCTable(DcModules.get(DcModules._LOAN), true, false);
+    
     private JButton buttonLend = ComponentFactory.getButton(DcResources.getText("lblLendItem"));
     private JButton buttonReturn = ComponentFactory.getButton(DcResources.getText("lblReturnItem"));
+    
     private PanelLend panelLend = new PanelLend();
     private PanelReturn panelReturn = new PanelReturn();
 
-    private DcTextPane descriptionPane;
-    
-    private HTMLEditorKit kit = new HTMLEditorKit();
-    private HTMLDocument document = new HTMLDocument();
+    private DcHtmlEditorPane descriptionPane = ComponentFactory.getHtmlEditorPane();
     
     public LoanPanel(DcObject dco, DcFrame owner) {
         objects = new ArrayList<DcObject>();
@@ -122,66 +121,76 @@ public class LoanPanel extends JPanel implements ActionListener {
         setLoanInformation(loan);
     }
     
+    private String getPersonLink(String personID) {
+        DcObject person = DataManager.getObject(DcModules._CONTACTPERSON, personID);
+        return person != null ? descriptionPane.createLink(person, person.toString()) : "";
+    }
+    
+    private String getLoanDescription(Loan loan) {
+        String personID = (String) loan.getValue(Loan._C_CONTACTPERSONID);
+        boolean available = loan.isAvailable(dco.getID());
+        
+        String s;
+        if (!available) {
+            
+            String due = "";
+            if (loan.getDaysTillOverdue() != null) {
+                due = DcResources.getText("msgLoanInformationDue", String.valueOf(loan.getDueDate()));
+            }
+            
+            if (objects.size() == 1) {
+                if (loan.getDaysLoaned().intValue() == 0) {
+                    s = DcResources.getText("msgLoanInformationToday", 
+                            new String[] {dco.toString(), 
+                                          getPersonLink(personID),
+                                          due});
+                } else if (loan.getDaysLoaned().intValue() == 1) {
+                    s = DcResources.getText("msgLoanInformationYesterday", 
+                            new String[] {dco.toString(), 
+                                          getPersonLink(personID),
+                                          due});
+                } else {
+                    s = DcResources.getText("msgLoanInformation", 
+                            new String[] {dco.toString(), 
+                                          getPersonLink(personID), 
+                                          loan.getDaysLoaned().toString(),
+                                          due});
+                }
+            } else {
+                s = DcResources.getText("msgAllItemsLoanInformation", String.valueOf(objects.size()));
+            }
+        } else {
+            s = objects.size() == 1 ? DcResources.getText("msgItemIsAvailable") : DcResources.getText("msgAllItemsAreAvailable", String.valueOf(objects.size()));
+        }
+        
+        return s;
+    }
+    
     private void setLoanInformation(Loan loan) {
+        String personID = (String) loan.getValue(Loan._C_CONTACTPERSONID);
         Date start = (Date) loan.getValue(Loan._A_STARTDATE);
         start = start == null ? new Date() : start;
         inputStartDate.setValue(start); 
         
-        String personID = (String) loan.getValue(Loan._C_CONTACTPERSONID);
+        setDescriptionHtml(getLoanDescription(loan));
 
-        if (!loan.isAvailable(dco.getID())) { 
-            if (objects.size() == 1) {
-                String s;
-                if (loan.getDaysLoaned().intValue() == 0)
-                    s = DcResources.getText("msgLoanInformationToday", new String[] {dco.toString(), 
-                            ((ContactPerson) DataManager.getObject(DcModules._CONTACTPERSON, personID)).toString()});
-                else if (loan.getDaysLoaned().intValue() == 1)
-                    s = DcResources.getText("msgLoanInformationYesterday", new String[] {dco.toString(),
-                            ((ContactPerson) DataManager.getObject(DcModules._CONTACTPERSON, personID)).toString()});
-                else
-                    s = DcResources.getText("msgLoanInformation", new String[] {dco.toString(), 
-                            ((ContactPerson) DataManager.getObject(DcModules._CONTACTPERSON, personID)).toString(), 
-                            loan.getDaysLoaned().toString()});
-                
-                setDescriptionHtml(s);
-            } else {
-                setDescriptionHtml(DcResources.getText("msgAllItemsLoanInformation", "" + objects.size()));
-            }
-        } else {
-            if (objects.size() == 1)
-                setDescriptionHtml(DcResources.getText("msgItemIsAvailable"));
-            else 
-                setDescriptionHtml(DcResources.getText("msgAllItemsAreAvailable", "" + objects.size()));
-        }
+        if (personID == null || personID.length() == 0)
+            return;
         
-        if (personID != null && personID.length() > 0) {
-            for (int i = 0; i < comboPersons.getItemCount(); i++) {
-                Object o =  comboPersons.getItemAt(i);
-                if (o instanceof ContactPerson) {
-                    ContactPerson person = (ContactPerson) comboPersons.getItemAt(i);
-                    if (person != null && person.getID().equals(personID)) {
-                        comboPersons.setSelectedIndex(i);
-                        break;
-                    }
+        for (int i = 0; i < comboPersons.getItemCount(); i++) {
+            Object o =  comboPersons.getItemAt(i);
+            if (o instanceof ContactPerson) {
+                ContactPerson person = (ContactPerson) comboPersons.getItemAt(i);
+                if (person != null && person.getID().equals(personID)) {
+                    comboPersons.setSelectedIndex(i);
+                    break;
                 }
             }
         }
     }
     
     protected void setDescriptionHtml(String s) {
-        try {
-            String html = "<html><body " + Utilities.getHtmlStyle() + ">" + s + "</body></html>";
-            descriptionPane.setText("");
-            
-            try {
-                kit.insertHTML(document, 0, html, 0, 0, null);
-            } catch (Exception exp) {
-                // not a nice workaround..
-                kit.insertHTML(document, 0, html, 0, 0, null);
-            }
-        } catch (Exception e) {
-            logger.error("Could not set the HTML desription", e);
-        }
+        descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle() + ">" + s + "</body></html>");
     }    
     
     public void returnItems() {
@@ -209,6 +218,7 @@ public class LoanPanel extends JPanel implements ActionListener {
                         if (currentLoan.getID() != null) {
                             currentLoan.setValue(Loan._D_OBJECTID, o.getID());
                             currentLoan.setValue(Loan._B_ENDDATE, endDate);
+                            currentLoan.setValue(Loan._E_DUEDATE, null);
                 
                             currentLoan.setPartOfBatch(i == 0);
                             currentLoan.setEndOfBatch(i == objects.size()  - 1);
@@ -219,9 +229,7 @@ public class LoanPanel extends JPanel implements ActionListener {
                             else if (owner == null)
                                 setLoanInformation(currentLoan);
                             
-                            o.setValue(DcObject._SYS_AVAILABLE, currentLoan.isAvailable(o.getID()));
-                            o.setValue(DcObject._SYS_LOANEDBY, currentLoan.getPersonDescription());
-                            o.setValue(DcObject._SYS_LOANDURATION, currentLoan.getDaysLoaned());                
+                            dco.setLoanInformation(currentLoan);
 
                             currentLoan.saveUpdate(true);
                             i++;
@@ -274,12 +282,16 @@ public class LoanPanel extends JPanel implements ActionListener {
         ContactPerson contactPerson = comboPersons.getSelectedItem() instanceof ContactPerson ? (ContactPerson) comboPersons.getSelectedItem() : null;
         final String contactPersonID = contactPerson != null ? contactPerson.getID() : null;
         final Date startDate = (Date) inputStartDate.getValue();
+        final Date dueDate = (Date) inputDueDate.getValue();
         
         if (contactPersonID == null) {
             new MessageBox(DcResources.getText("msgSelectPerson"), MessageBox._WARNING);
             return;
         } else if (startDate == null) {
             new MessageBox(DcResources.getText("msgEnterDate"), MessageBox._WARNING);
+            return;
+        } else if (dueDate != null && dueDate.before(startDate)) {
+            new MessageBox(DcResources.getText("msgDueDateBeforeStartDate"), MessageBox._WARNING);
             return;
         }
         
@@ -292,6 +304,7 @@ public class LoanPanel extends JPanel implements ActionListener {
                         currentLoan.setValue(Loan._D_OBJECTID, o.getID());
                         currentLoan.setValue(Loan._A_STARTDATE, startDate);
                         currentLoan.setValue(Loan._C_CONTACTPERSONID, contactPersonID);
+                        currentLoan.setValue(Loan._E_DUEDATE, dueDate);
                         currentLoan.setSilent(true);
             
                         currentLoan.setPartOfBatch(i == 0);
@@ -302,9 +315,7 @@ public class LoanPanel extends JPanel implements ActionListener {
                         else if (owner == null)
                             setLoanInformation(currentLoan);                        
         
-                        o.setValue(DcObject._SYS_AVAILABLE, currentLoan.isAvailable(o.getID()));
-                        o.setValue(DcObject._SYS_LOANEDBY, currentLoan.getPersonDescription());
-                        o.setValue(DcObject._SYS_LOANDURATION, currentLoan.getDaysLoaned());                
+                        o.setLoanInformation(currentLoan);
                         
                         if (currentLoan.getID() != null && currentLoan.getID().length() > 0) 
                         	currentLoan.saveUpdate(true);
@@ -335,12 +346,6 @@ public class LoanPanel extends JPanel implements ActionListener {
         //**********************************************************
         JPanel panelDescription = new JPanel();
         panelDescription.setLayout(Layout.getGBL());
-        
-        descriptionPane = ComponentFactory.getTextPane();
-        descriptionPane.setEditorKit(kit);
-        descriptionPane.setDocument(document);
-        descriptionPane.setEditable(false);
-        descriptionPane.setBounds(1,1,1,1);
         
         descriptionPane.setEditable(false);
         JScrollPane scroller = new JScrollPane(descriptionPane);
@@ -427,8 +432,6 @@ public class LoanPanel extends JPanel implements ActionListener {
         this.tableLoans = null;
         
         this.owner = null;
-        this.kit = null;
-        this.document = null;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -441,6 +444,7 @@ public class LoanPanel extends JPanel implements ActionListener {
             setLayout(Layout.getGBL());
             
             JLabel labelStartDate = ComponentFactory.getLabel(DcResources.getText("lblStartDate"), IconLibrary._icoCalendar);
+            JLabel labelDueDate = ComponentFactory.getLabel(DcResources.getText("lblDueDate"), IconLibrary._icoCalendar);
             JLabel labelPerson = ComponentFactory.getLabel(DcResources.getText("lblContactPerson"), IconLibrary._icoPersons);
             
             add(labelStartDate , Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
@@ -449,10 +453,18 @@ public class LoanPanel extends JPanel implements ActionListener {
             add(inputStartDate , Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(5, 5, 5,  5), 0, 0));
-            add(labelPerson ,    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+            
+            add(labelDueDate , Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(5, 5, 5,  5), 0, 0));
-            add(comboPersons ,   Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+            add(inputDueDate , Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));            
+            
+            add(labelPerson ,    Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(5, 5, 5,  5), 0, 0));
+            add(comboPersons ,   Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(5, 5, 5,  5), 0, 0));
             
@@ -460,7 +472,7 @@ public class LoanPanel extends JPanel implements ActionListener {
             buttonLend.addActionListener(this);
             panelActions.add(buttonLend);
             
-            add(panelActions,    Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
+            add(panelActions,    Layout.getGBC( 1, 3, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
                      new Insets(5, 5, 5,  5), 0, 0));
         }

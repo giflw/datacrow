@@ -33,11 +33,9 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Media;
 import net.datacrow.core.wf.requests.Requests;
@@ -114,12 +112,8 @@ public class WorkFlow {
                     dco.setValueForColumn(column, value);
                 }
 
-                if (dco.getModule().canBeLended()) {
-                    Loan loan = DataManager.getCurrentLoan(dco.getID());
-                    dco.setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(dco.getID()));
-                    dco.setValue(DcObject._SYS_LOANEDBY, loan.getPersonDescription());
-                    dco.setValue(DcObject._SYS_LOANDURATION, loan.getDaysLoaned());
-                }
+                if (dco.getModule().canBeLended())
+                    dco.setLoanInformation();
 
                 if (!(dco instanceof Picture))
                     dco.initializeImages();

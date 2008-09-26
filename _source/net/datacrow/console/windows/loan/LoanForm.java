@@ -23,53 +23,45 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core.wf.requests;
+package net.datacrow.console.windows.loan;
 
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.util.Collection;
 
-import javax.swing.SwingUtilities;
-
-import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
+import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcFrame;
+import net.datacrow.console.components.panels.LoanPanel;
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 
-public class RefreshPropertyItemViewRequest implements IUpdateUIRequest {
+public class LoanForm extends DcFrame {
 
-    private static final long serialVersionUID = 2482330071457469709L;
-    private boolean executeOnFail = false;
-    private DcMinimalisticItemView view;
+    public LoanForm(Collection<? extends DcObject> objects) throws Exception {
+        super(DcResources.getText("lblLoan"), IconLibrary._icoLoan);
+        setHelpIndex("dc.loans");
+        buildForm(objects); 
+    }    
     
-    public RefreshPropertyItemViewRequest(DcMinimalisticItemView view) {
-        this.view = view;
+    @Override
+    public void close() {
+        DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stLoanFormSize, getSize());
+        super.close();
     }
     
-    public void execute(Collection<DcObject> c) {
-        SwingUtilities.invokeLater(new Updater(view));
-        end();
-    }
-    
-    public void end() {
-        view = null;
-    }
+    private void buildForm(Collection<? extends DcObject> objects) throws Exception {
+        getContentPane().setLayout(Layout.getGBL());
 
-    public boolean getExecuteOnFail() {
-        return executeOnFail;
-    }
-    
-    public void setExecuteOnFail(boolean b) {
-        executeOnFail = b;
-    }
-    
-    private static class Updater implements Runnable {
-        
-        private DcMinimalisticItemView view;
-        
-        public Updater(DcMinimalisticItemView view) {
-            this.view = view;
-        }
-        
-        public void run() {
-            view.addObjects();
-            view = null;
-        }
+        LoanPanel loanPanel = new LoanPanel(objects, this);
+        getContentPane().add( loanPanel,   Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                              new Insets( 5, 5, 5, 5), 0, 0));
+
+        pack();
+        setSize(DcModules.getCurrent().getSettings().getDimension(DcRepository.ModuleSettings.stLoanFormSize));
+        setCenteredLocation();        
     }
 }

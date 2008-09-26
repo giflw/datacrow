@@ -124,7 +124,7 @@ public class DcWebObject extends DcSecured {
                     field.isEnabled() && 
                     field.getIndex() != DcObject._SYS_AVAILABLE &&
                     field.getIndex() != DcObject._SYS_LOANDURATION &&
-                    field.getIndex() != DcObject._SYS_LOANEDBY) {
+                    field.getIndex() != DcObject._SYS_LENDBY) {
                 
                 DcWebField wf = new DcWebField(field);
                 

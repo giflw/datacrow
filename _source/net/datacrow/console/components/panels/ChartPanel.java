@@ -81,7 +81,9 @@ public class ChartPanel extends DcPanel implements ActionListener {
         build();
     }
     
+    @Override
     public void clear() {
+        super.clear();
         comboFields = null;
         comboTypes = null;
         chart = null;

@@ -76,8 +76,12 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         
         // view menu
         DcMenu menuView = ComponentFactory.getMenu(DcResources.getText("lblView"));
-        PluginHelper.add(menuView, "ChangeView", null, null, null, MasterView._TABLE_VIEW, -1);
-        PluginHelper.add(menuView, "ChangeView", null, null, null, MasterView._LIST_VIEW, -1);
+        if (module.getSearchView().get(MasterView._TABLE_VIEW) != null)
+            PluginHelper.add(menuView, "ChangeView", null, null, null, MasterView._TABLE_VIEW, -1);
+        
+        if (module.getSearchView().get(MasterView._LIST_VIEW) != null)
+            PluginHelper.add(menuView, "ChangeView", null, null, null, MasterView._LIST_VIEW, -1);
+        
         menuView.addSeparator();
         PluginHelper.add(menuView, "ToggleQuickFilterBar");
         PluginHelper.add(menuView, "ToggleModuleList");

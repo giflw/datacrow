@@ -25,6 +25,7 @@
 
 package net.datacrow.console.windows.itemforms;
 
+import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
@@ -33,14 +34,14 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
-import net.datacrow.core.wf.requests.RefreshPropertyItemViewRequest;
+import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 
 public class DcMinimalisticItemForm extends ItemForm {
     
-    private DcMinimalisticItemView parent;
+    private ISimpleItemView parent;
     
-    public DcMinimalisticItemForm(boolean update, DcObject o, DcMinimalisticItemView parent) {
-        super(false, update, o, true);
+    public DcMinimalisticItemForm(boolean readonly, boolean update, DcObject o, ISimpleItemView parent) {
+        super(readonly, update, o, true);
         this.parent = parent;
     }
     
@@ -59,7 +60,7 @@ public class DcMinimalisticItemForm extends ItemForm {
         apply();
         
         if (parent != null)
-            dco.addRequest(new RefreshPropertyItemViewRequest(parent));
+            dco.addRequest(new RefreshSimpleViewRequest(parent));
         
         dco.addRequest(new CloseWindowRequest(this));
         
@@ -98,7 +99,7 @@ public class DcMinimalisticItemForm extends ItemForm {
             dco.addRequest(new CloseWindowRequest(this));
             
             if (parent != null)
-                dco.addRequest(new RefreshPropertyItemViewRequest(parent));
+                dco.addRequest(new RefreshSimpleViewRequest(parent));
             
             dco.delete();
         }

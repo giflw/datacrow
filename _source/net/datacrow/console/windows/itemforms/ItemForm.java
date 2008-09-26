@@ -54,12 +54,12 @@ import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.panels.LoanPanel;
+import net.datacrow.console.components.panels.RelatedItemsPanel;
 import net.datacrow.console.windows.ItemTypeDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.IChildModule;
@@ -67,7 +67,6 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.plugin.PluginHelper;
@@ -180,6 +179,8 @@ public class ItemForm extends DcFrame implements ActionListener {
         addInputPanel();
         addChildrenPanel();
         addPictureTabs();
+        addRelationPanel();
+        
         if (	module.canBeLended() && 
                 SecurityCentre.getInstance().getUser().isAuthorized("Loan") && 
         		update && 
@@ -314,7 +315,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             
             if (childView != null) {
                 if (update)
-                    childView.addObjects();
+                    childView.loadItems();
                 else if (object.getChildren() != null)
                     childView.setObjects(object.getChildren());
             }
@@ -497,12 +498,8 @@ public class ItemForm extends DcFrame implements ActionListener {
             }
         }
 
-        if (update && dco.getModule().canBeLended()) {
-            Loan loan = DataManager.getCurrentLoan(dco.getID());
-            dco.setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(dco.getID()));
-            dco.setValue(DcObject._SYS_LOANEDBY, loan.getPersonDescription());
-            dco.setValue(DcObject._SYS_LOANDURATION, loan.getDaysLoaned());
-        }
+        if (update && dco.getModule().canBeLended())
+            dco.setLoanInformation();
     }
 
     private void onlineSearch() {
@@ -652,6 +649,15 @@ public class ItemForm extends DcFrame implements ActionListener {
             childView = m.getItemView(dco, childModule.getIndex(), !update);
             childView.hideDialogActions(true);
             tabbedPane.addTab(childModule.getObjectNamePlural(), childView.getContentPane());
+        }
+    }
+    
+    protected void addRelationPanel() {
+        if (    moduleIndex == DcModules._CONTACTPERSON || 
+                DcModules.getActualReferencingModules(moduleIndex).size() > 0) { 
+            
+            RelatedItemsPanel rip = new RelatedItemsPanel(dco);
+            tabbedPane.addTab(rip.getTitle(), rip.getIcon(),  rip);
         }
     }
 

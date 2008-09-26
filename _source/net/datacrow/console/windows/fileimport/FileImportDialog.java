@@ -47,6 +47,7 @@ import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.fstree.FileSystemTreePanel;
 import net.datacrow.console.components.panels.OnlineServicePanel;
 import net.datacrow.console.components.panels.OnlineServiceSettingsPanel;
+import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
@@ -263,18 +264,27 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         JPanel panelMediaInfo = new JPanel();
         panelMediaInfo.setLayout(Layout.getGBL());
 
-        JLabel labelCDName = ComponentFactory.getLabel(DcResources.getText("lblContainer"));
+        JLabel lblContainer = ComponentFactory.getLabel(DcResources.getText("lblContainer"));
         fldContainer = ComponentFactory.getObjectCombo(DcModules._CONTAINER);
         
         JLabel labelMedium = ComponentFactory.getLabel(DcResources.getText("lblStorageMedium"));
         fldStorageMedium = ComponentFactory.getMediaCombo(DcModules.get(importer.getModule()).getPropertyModule(DcModules._STORAGEMEDIA).getIndex());
 
-        panelMediaInfo.add(labelCDName,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        panelMediaInfo.add(lblContainer,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 5, 5), 0, 0));
         panelMediaInfo.add(fldContainer, Layout.getGBC( 1, 0, 2, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 5, 5), 0, 0));
+
+        JButton btnCreateContainer = ComponentFactory.getIconButton(IconLibrary._icoAdd);
+        btnCreateContainer.setActionCommand("createContainer");
+        btnCreateContainer.addActionListener(this);
+                
+        panelMediaInfo.add(btnCreateContainer, Layout.getGBC( 2, 0, 2, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets(0, 5, 5, 5), 0, 0));
+        
         
         if (module.getPropertyModule(DcModules._STORAGEMEDIA) != null) {
             panelMediaInfo.add(labelMedium,    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
@@ -284,6 +294,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(0, 5, 5, 5), 0, 0));
         }
+        
         panelMediaInfo.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblMediaInfo")));
         
         panel.add(panelMediaInfo, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
@@ -326,6 +337,12 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return panel;
     }
 
+    private void createContainer() {
+        DcObject dco = DcModules.get(DcModules._CONTAINER).getDcObject();
+        ItemForm itemForm = new ItemForm(null, false, false, dco, true);
+        itemForm.setVisible(true);
+    }
+    
     protected void build() {
         //**********************************************************
         //Online search panel
@@ -467,5 +484,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             cancel();
         else if (ae.getActionCommand().equals("import"))
             startImport();
+        else if (ae.getActionCommand().equals("createContainer"))
+            createContainer();
     }    
 }

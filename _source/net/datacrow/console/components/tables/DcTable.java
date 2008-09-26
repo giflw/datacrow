@@ -689,7 +689,7 @@ public class DcTable extends JTable implements IViewComponent  {
             }
 
             if (    field.getIndex() == DcObject._ID ||
-                    field.getIndex() == DcObject._SYS_LOANEDBY ||
+                    field.getIndex() == DcObject._SYS_LENDBY ||
                     field.getIndex() == DcObject._SYS_LOANDURATION ||
                     field.getIndex() == DcObject._SYS_CREATED ||
                     field.getIndex() == DcObject._SYS_MODIFIED){
@@ -790,7 +790,7 @@ public class DcTable extends JTable implements IViewComponent  {
             if (!module.canBeLended() && 
                 (field == DcObject._SYS_AVAILABLE || 
                         field == DcObject._SYS_LOANDURATION ||
-                        field == DcObject._SYS_LOANEDBY))
+                        field == DcObject._SYS_LENDBY))
                 continue;
 
             try {

@@ -1,14 +1,35 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.0.1  [Release on xx/09/2008] [testing: high] [target: production]
+Data Crow 3.4.1 [Release on xx/09/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 This patch fixes the loan functionality.
 
 [Fixed]
-- Nullpointer after lending an item (quick view panel is cleared).
+- Nullpointer exception after lending an item (quick view panel is cleared).
+- [209920]  Unable to log in except in admin. 
+  Preventing a null pointer exception (and the consequences) during startup.
+  (Unconfirmed fix).
+- [2083958] Error after adding a new field.
+  Added new rules for module creation and alteration.
+- [2029808] F8 only works when module pane has focus
+- Days lend was not correct (introduced by caching mechanism).
+- "Lend by" was not correctly filled (empty in view).
+- Renamed "Loaned by" to "Lend by"
+- Related items are now shown in the item form (artist, contact person, etc).
+- Loan management, Due Date (1941130)
 
+[Changed]
+- Contact persons can now be deleted after they have lend and/or returned items.
+- Containers can now also be created from within the import dialog.
+- Container view is now able to display the items directly from the grouping
+  pane. The table view has been removed (obsolete for this module).
+- Due date for loans. A due date can now be specified. A dialog has been added
+  to show the statuses of loaned items. The overdue date can also be used in views.
+  Two new fields are now added for each items: Date overdue and days till overdue.
+  These fields can be used for filtering, etc.
+    
 
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.0.1  [Release on 08/09/2008] [testing: high] [target: production]
+Data Crow 3.4.0.1 [PATCH]  [Release on 08/09/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 This patch fixes the loan functionality.
 

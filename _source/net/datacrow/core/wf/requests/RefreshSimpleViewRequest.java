@@ -23,66 +23,53 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.itemforms;
+package net.datacrow.core.wf.requests;
 
-import net.datacrow.core.data.DataManager;
+import java.util.Collection;
+
+import javax.swing.SwingUtilities;
+
+import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.wf.requests.RefreshChildView;
-import net.datacrow.core.wf.requests.Requests;
 
-public class ChildForm extends DcMinimalisticItemView {
+public class RefreshSimpleViewRequest implements IUpdateUIRequest {
 
-    private String parentID;
-    private final int parentModuleIdx;
+    private static final long serialVersionUID = 2482330071457469709L;
+    private boolean executeOnFail = false;
+    private ISimpleItemView view;
     
-    public ChildForm(DcObject parent, int module, boolean readonly) {
-        super(module, readonly);
+    public RefreshSimpleViewRequest(ISimpleItemView view) {
+        this.view = view;
+    }
+    
+    public void execute(Collection<DcObject> c) {
+        SwingUtilities.invokeLater(new Updater(view));
+        end();
+    }
+    
+    public void end() {
+        view = null;
+    }
+
+    public boolean getExecuteOnFail() {
+        return executeOnFail;
+    }
+    
+    public void setExecuteOnFail(boolean b) {
+        executeOnFail = b;
+    }
+    
+    private static class Updater implements Runnable {
         
-        this.parentID = parent.getID();
-        this.parentModuleIdx = parent.getModule().getIndex();
+        private ISimpleItemView view;
         
-        list.setEnabled(!readonly);
-    }
-    
-    @Override
-    public void clear() {
-        super.clear();
-        parentID = null;
-    }
-
-    @Override
-    public void loadItems() {
-        list.clear();
-        list.add(DataManager.getObject(parentModuleIdx, parentID).getChildren());
-    }
-    
-    @Override
-    public void open() {
-        DcObject dco = list.getSelectedItem();
-        if (dco != null) {
-            dco.markAsUnchanged();
-            ChildItemForm childItemForm = new ChildItemForm(true, dco, this);
-            childItemForm.setVisible(true);            
+        public Updater(ISimpleItemView view) {
+            this.view = view;
+        }
+        
+        public void run() {
+            view.loadItems();
+            view = null;
         }
     }
-    
-    @Override
-    public void createNew() {
-        DcObject dco = getModule().getDcObject();
-        dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
-        
-        ChildItemForm itemForm = new ChildItemForm(false, dco, this);
-        itemForm.setVisible(true);
-    }
-
-    @Override
-    public Requests getAfterDeleteRequests() {
-        Requests requests = new Requests();
-        requests.add(new RefreshChildView(this));
-        return requests;
-    }
-
-    public int getParentModuleIdx() {
-        return parentModuleIdx;
-    }   
 }

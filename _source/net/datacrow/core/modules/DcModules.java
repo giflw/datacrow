@@ -437,6 +437,13 @@ public class DcModules {
     
     public static DcModule getCurrent() {
         DcModule current = DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule));
+        
+        if (current.getIndex() == DcModules._CONTAINER &&
+            current.getSettings().getInt(DcRepository.ModuleSettings.stTreePanelShownItems) == DcModules._ITEM) {
+            
+            current = DcModules.get(DcModules._ITEM);
+        }
+        
         if (SecurityCentre.getInstance().getUser().isAuthorized(current))
             return current;
         
@@ -467,6 +474,11 @@ public class DcModules {
         return false;
     }
     
+    /** 
+     * Retrieves all modules having a reference to the specified modules.
+     * Note: The check is based on the source module index (base mods), not the actual instances.
+     * @param moduleIdx
+     */
     public static Collection<DcModule> getReferencingModules(int moduleIdx) {
         Collection<DcModule> refs = new ArrayList<DcModule>();
         for (DcModule module : getAllModules()) {
@@ -477,6 +489,18 @@ public class DcModules {
         }
         return refs;
     }    
+    
+    public static Collection<DcModule> getActualReferencingModules(int moduleIdx) {
+        Collection<DcModule> refs = new ArrayList<DcModule>();
+        for (DcModule module : getAllModules()) {
+            if (module.getIndex() != moduleIdx && !(module instanceof TemplateModule) &&
+                !((module instanceof MappingModule) && ( (MappingModule) module).getParentModIdx() == moduleIdx  )) {
+                if (module.hasReferenceTo(moduleIdx))
+                    refs.add(module);
+            }
+        }
+        return refs;
+    } 
     
     public static Collection<DcModule> getAllModules() {
         List<DcModule> c = new ArrayList<DcModule>();

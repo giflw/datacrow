@@ -102,6 +102,7 @@ public class View extends DcPanel implements ListSelectionListener {
     protected JPanel panelResult = new JPanel();
     protected JPanel panelStatus = getStatusPanel();
     
+    private JScrollPane spChildView;
     private View childView;
     private View parentView;
 
@@ -179,7 +180,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public boolean isParent() {
-        return childView != null;
+        return childView != null && childView.isVisible();
     }
     
     public boolean isChild() {
@@ -487,6 +488,7 @@ public class View extends DcPanel implements ListSelectionListener {
         }        
     }
 
+    @Override
     public void clear() {
         clear(true);
     }
@@ -514,6 +516,11 @@ public class View extends DcPanel implements ListSelectionListener {
         
         vc.applySettings();
         panelStatus.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
+        
+        if (getModule().getIndex() == DcModules._CONTAINER) {
+            if (groupingPane != null)
+                groupingPane.updateView();
+        }
     }
 
     public int getItemCount() {
@@ -724,6 +731,26 @@ public class View extends DcPanel implements ListSelectionListener {
             afterSelect(vc.getSelectedIndex());
     }
     
+    private void addChildView() {
+        if (childView != null) {
+            childView.setVisible(true);
+            panelResult.add(spChildView,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                           ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                            new Insets(5, 5, 5, 5), 0, 0));
+            revalidate();
+            repaint();
+        }
+    }
+    
+//    private void removeChildView() {
+//        if (childView != null) {
+//            childView.setVisible(false);
+//            panelResult.remove(spChildView);
+//            revalidate();
+//            repaint();
+//        }
+//    }
+    
     private void build() {
         //**********************************************************
         //Search result panel
@@ -737,11 +764,10 @@ public class View extends DcPanel implements ListSelectionListener {
                         new Insets(5, 5, 5, 5), 0, 0));
         
         if (isParent()) {
-            JScrollPane scroller2 = new JScrollPane((Component) childView.getViewComponent());
-            scroller2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            panelResult.add(scroller2,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                           ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                            new Insets(5, 5, 5, 5), 0, 0));
+            spChildView = new JScrollPane((Component) childView.getViewComponent());
+            spChildView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            
+            addChildView();
         }
         
         // only the search view uses view dividers

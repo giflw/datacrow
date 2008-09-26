@@ -32,7 +32,7 @@ import net.datacrow.core.objects.DcTemplate;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
-import net.datacrow.core.wf.requests.RefreshPropertyItemViewRequest;
+import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 import net.datacrow.core.wf.requests.UpdateDefaultTemplate;
 
 public class TemplateItemForm extends ItemForm {
@@ -51,7 +51,7 @@ public class TemplateItemForm extends ItemForm {
         if (((DcTemplate) dco).isDefault())
             dco.addRequest(new UpdateDefaultTemplate((String) dco.getValue(50), dco.getModule().getIndex()));
 
-        dco.addRequest(new RefreshPropertyItemViewRequest(parent));
+        dco.addRequest(new RefreshSimpleViewRequest(parent));
         dco.addRequest(new CloseWindowRequest(this));
         
         if (!update)  {
@@ -87,7 +87,7 @@ public class TemplateItemForm extends ItemForm {
             dco.setSilent(true);
 
             dco.addRequest(new CloseWindowRequest(this));
-            dco.addRequest(new RefreshPropertyItemViewRequest(parent));
+            dco.addRequest(new RefreshSimpleViewRequest(parent));
             dco.delete();
         }
     }

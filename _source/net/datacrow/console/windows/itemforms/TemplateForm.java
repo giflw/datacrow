@@ -29,7 +29,7 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.template.Templates;
-import net.datacrow.core.wf.requests.RefreshPropertyItemViewRequest;
+import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 import net.datacrow.core.wf.requests.Requests;
 
 public class TemplateForm extends DcMinimalisticItemView {
@@ -40,7 +40,7 @@ public class TemplateForm extends DcMinimalisticItemView {
     }
 
     @Override
-    public void addObjects() {
+    public void loadItems() {
         Templates.refresh();
         list.clear();
         list.add(Templates.getTemplates(getModuleIdx()));
@@ -62,7 +62,7 @@ public class TemplateForm extends DcMinimalisticItemView {
     @Override
     public Requests getAfterDeleteRequests() {
         Requests requests = new Requests();
-        requests.add(new RefreshPropertyItemViewRequest(this));
+        requests.add(new RefreshSimpleViewRequest(this));
         return requests;
     }
 

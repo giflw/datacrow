@@ -81,7 +81,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public static final int _ID = 0;
     public static final int _SYS_MODULE = 201;
     public static final int _SYS_AVAILABLE = 202;
-    public static final int _SYS_LOANEDBY = 203;
+    public static final int _SYS_LENDBY = 203;
     public static final int _SYS_LOANDURATION = 204;
     public static final int _SYS_CREATED = 205;
     public static final int _SYS_MODIFIED = 206;
@@ -95,6 +95,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
 
     public static final int _SYS_CONTAINER = 213;
     public static final int _SYS_DISPLAYVALUE = 214;
+    
+    public static final int _SYS_LOANDUEDATE = 215;
+    public static final int _SYS_LOANDAYSTILLOVERDUE = 216;
     
     public DcObject(int module) {
         this.module = module;
@@ -462,15 +465,27 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         for (DcObject dco : objects) 
             dco.unload();
         
-        if (getModule().canBeLended()) {
-            Loan loan = DataManager.getCurrentLoan(getID());
-            setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(getID()));
-            setValue(DcObject._SYS_LOANEDBY, loan.getPersonDescription());
-            setValue(DcObject._SYS_LOANDURATION, loan.getDaysLoaned());
-        }
+        setLoanInformation();
         
         initializeImages();
         markAsUnchanged();
+    }
+    
+    public void setLoanInformation() {
+        if (getModule().canBeLended()) {
+            Loan loan = DataManager.getCurrentLoan(getID());
+            setLoanInformation(loan);
+        }
+    }
+    
+    public void setLoanInformation(Loan loan) {
+        if (getModule().canBeLended()) {
+            setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(getID()));
+            setValue(DcObject._SYS_LENDBY, loan.getPerson());
+            setValue(DcObject._SYS_LOANDUEDATE, loan.getDueDate());
+            setValue(DcObject._SYS_LOANDURATION, loan.getDaysLoaned());
+            setValue(DcObject._SYS_LOANDAYSTILLOVERDUE, loan.getDaysTillOverdue());
+        }
     }
     
     protected void beforeSave() {
@@ -619,10 +634,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public Object getValue(int index) {
         Object value = null;
         if (getValueDef(index) != null) {
-            if (index == _SYS_DISPLAYVALUE)
+            if (index == _SYS_DISPLAYVALUE) {
                 value = toString();
-            else
+            } else {
                 value = getValueDef(index).getValue();
+            }
         }
         return value;
     }

@@ -65,7 +65,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     private boolean listenForSelection = true;
     
     protected GroupingPane gp;
-    private Object currentUserObject;
+    protected Object currentUserObject;
     
     private boolean saveChanges = true;
     
@@ -175,7 +175,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         }
     }
     
-    private void updateView(Collection<DcObject> dcos) {
+    protected void updateView(Collection<DcObject> dcos) {
         getView().getCurrent().cancelCurrentTask();    
         getView().getCurrent().add(dcos);      
     }

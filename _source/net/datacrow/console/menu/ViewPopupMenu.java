@@ -50,7 +50,8 @@ public class ViewPopupMenu extends DcPopupMenu {
         DcModule module = dco.getModule();
         if (viewIdx == View._TYPE_SEARCH && 
             !module.isChildModule() &&
-            !(current.getIndex() == DcModules._CONTAINER && dco.getModule().getIndex() != DcModules._CONTAINER)) {
+            !(current.getIndex() == DcModules._CONTAINER && 
+              dco.getModule().getIndex() != DcModules._CONTAINER)) {
 
             if (module.isAbstract())
                 PluginHelper.add(this, "SaveSelected");
@@ -116,7 +117,10 @@ public class ViewPopupMenu extends DcPopupMenu {
         }
         
         addSeparator();
-        PluginHelper.add(this, "UpdateAll", module.getIndex());
+        
+        if (current.getIndex() != DcModules._ITEM)
+            PluginHelper.add(this, "UpdateAll", module.getIndex());
+        
         PluginHelper.add(this, "FileLauncher", module.getIndex());
         
         addSeparator();
