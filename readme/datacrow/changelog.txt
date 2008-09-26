@@ -16,6 +16,7 @@ This patch fixes the loan functionality.
 - Renamed "Loaned by" to "Lend by"
 - Related items are now shown in the item form (artist, contact person, etc).
 - Loan management, Due Date (1941130)
+- Empty operator was broken.
 
 [Changed]
 - Contact persons can now be deleted after they have lend and/or returned items.

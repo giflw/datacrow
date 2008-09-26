@@ -38,14 +38,14 @@ public enum Operator {
     NOT_EQUAL_TO(2, DcResources.getText("lblNotEqualTo"), true),
     CONTAINS(3, DcResources.getText("lblContains"), true),
     DOES_NOT_CONTAIN(4, DcResources.getText("lblDoesNotContain"), true),
-    IS_EMPTY(4, DcResources.getText("lblIsEmpty"), false),
-    IS_FILLED(5, DcResources.getText("lblIsFilled"), false),
-    STARTS_WITH(6, DcResources.getText("lblStartsWith"), true),
-    ENDS_WITH(7, DcResources.getText("lblEndsWith"), true),
-    LESS_THEN(8, DcResources.getText("lblLessThen"), true),
-    GREATER_THEN(9, DcResources.getText("lblGreaterThen"), true),
-    BEFORE(10, DcResources.getText("lblBefore"), true),
-    AFTER(11, DcResources.getText("lblAfter"), true);
+    IS_EMPTY(5, DcResources.getText("lblIsEmpty"), false),
+    IS_FILLED(6, DcResources.getText("lblIsFilled"), false),
+    STARTS_WITH(7, DcResources.getText("lblStartsWith"), true),
+    ENDS_WITH(8, DcResources.getText("lblEndsWith"), true),
+    LESS_THEN(9, DcResources.getText("lblLessThen"), true),
+    GREATER_THEN(10, DcResources.getText("lblGreaterThen"), true),
+    BEFORE(11, DcResources.getText("lblBefore"), true),
+    AFTER(12, DcResources.getText("lblAfter"), true);
     
     private final int index;  
     private final String name; 

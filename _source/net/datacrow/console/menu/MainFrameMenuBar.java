@@ -192,6 +192,9 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         }
         
         menuTools.addSeparator();
+        PluginHelper.add(menuTools, "LoanInformation");
+        
+        menuTools.addSeparator();
         PluginHelper.add(menuTools, "BackupAndRestore");
         menuTools.addSeparator();
         PluginHelper.add(menuTools, "ExpertUser");

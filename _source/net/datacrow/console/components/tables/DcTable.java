@@ -90,8 +90,8 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
-public class DcTable extends JTable implements IViewComponent  {
-    
+public class DcTable extends JTable implements IViewComponent {
+
     private static Logger logger = Logger.getLogger(DcTable.class.getName());
 
     private final DcModule module;
@@ -100,9 +100,11 @@ public class DcTable extends JTable implements IViewComponent  {
 
     private final boolean caching;
     private final boolean readonly;
-    
+
+    private boolean ignoreSettings = false;
+
     private View view;
-    
+
     private boolean ignoreEdit = false;
 
     private ArrayList<TableColumn> columnsHidden = new ArrayList<TableColumn>();
@@ -112,14 +114,14 @@ public class DcTable extends JTable implements IViewComponent  {
         super(new DcTableModel());
 
         this.readonly = readonly;
-        
+
         module = null;
 
         setProperties();
 
         this.caching = caching;
     }
-    
+
     public DcTable(DcModule module, boolean readonly, boolean caching) {
         super(new DcTableModel());
 
@@ -128,7 +130,7 @@ public class DcTable extends JTable implements IViewComponent  {
         this.readonly = readonly;
 
         buildTable();
-        
+
         setProperties();
         applySettings();
 
@@ -137,24 +139,28 @@ public class DcTable extends JTable implements IViewComponent  {
 
     public int getOptimalItemAdditionBatchSize() {
         return 25;
-    }    
-    
+    }
+
     public boolean allowsHorizontalTraversel() {
         return false;
     }
-    
+
     public boolean allowsVerticalTraversel() {
         return true;
-    }    
-    
+    }
+
     public View getView() {
         return view;
     }
-    
+
+    public void setIgnoreSettings(boolean b) {
+        ignoreSettings = b;
+    }
+
     public void setView(View view) {
         this.view = view;
     }
-    
+
     public boolean isChangesSaved() {
         return cache.size() == 0;
     }
@@ -162,16 +168,16 @@ public class DcTable extends JTable implements IViewComponent  {
     public DcTableModel getDcModel() {
         if (!(getModel() instanceof DcTableModel))
             setModel(new DcTableModel());
-            
+
         DcTableModel model = (DcTableModel) getModel();
         return model;
-    }     
-    
+    }
+
     @Override
     public JToolTip createToolTip() {
         return new DcMultiLineToolTip();
-    }      
-    
+    }
+
     private int getFieldForColumnIndex(int columnIndex) {
         int field = -1;
         for (TableColumn column : columns.values()) {
@@ -203,7 +209,7 @@ public class DcTable extends JTable implements IViewComponent  {
 
         return c;
     }
-    
+
     private int addRow() {
         Object[] row = new Object[module.getFieldCount()];
 
@@ -254,7 +260,7 @@ public class DcTable extends JTable implements IViewComponent  {
 
         setSelected(getRowCount() - 1);
     }
-    
+
     public void add(DcObject[] objects) {
         for (DcObject dco : objects)
             add(dco, false);
@@ -272,8 +278,9 @@ public class DcTable extends JTable implements IViewComponent  {
 
     public void applyHeaders() {
         DcTableHeaderRenderer.getInstance().applySettings();
-        
-        for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e.hasMoreElements(); ) {
+
+        for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e
+                .hasMoreElements();) {
             TableColumn column = e.nextElement();
             column.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
             columns.put(column.getIdentifier(), column);
@@ -288,7 +295,8 @@ public class DcTable extends JTable implements IViewComponent  {
             getDcModel().moveRow(row, row, destination);
             setSelected(destination);
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"), MessageBox._WARNING);
+            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
+                    MessageBox._WARNING);
         }
     }
 
@@ -297,28 +305,30 @@ public class DcTable extends JTable implements IViewComponent  {
 
         if (row > -1) {
             int total = getRowCount();
-            if (row < total -1) {
+            if (row < total - 1) {
                 int destination = total - 1;
                 getDcModel().moveRow(row, row, destination);
                 setSelected(destination);
             }
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"), MessageBox._WARNING);
+            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
+                    MessageBox._WARNING);
         }
     }
-    
+
     public void moveRowDown() {
         int row = getSelectedRow();
 
         if (row > -1) {
             int total = getRowCount();
-            if (row < total -1) {
+            if (row < total - 1) {
                 int destination = row + 1;
                 getDcModel().moveRow(row, row, destination);
                 setSelected(destination);
             }
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"), MessageBox._WARNING);
+            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
+                    MessageBox._WARNING);
         }
     }
 
@@ -332,7 +342,8 @@ public class DcTable extends JTable implements IViewComponent  {
                 setSelected(destination);
             }
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"), MessageBox._WARNING);
+            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
+                    MessageBox._WARNING);
         }
     }
 
@@ -347,7 +358,8 @@ public class DcTable extends JTable implements IViewComponent  {
                 TableColumn column = getColumnModel().getColumn(tableIndex);
                 columnsHidden.add(column);
                 removeColumn(column);
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) {
+            }
         }
     }
 
@@ -367,10 +379,11 @@ public class DcTable extends JTable implements IViewComponent  {
     }
 
     public DcObject getItemAt(int row) {
-        if (row == -1) return null;
-        
+        if (row == -1)
+            return null;
+
         int col = getColumnIndexForField(DcObject._ID);
-        
+
         Object o = getValueAt(row, col, true);
         String id = o != null ? o.toString() : null;
 
@@ -385,14 +398,14 @@ public class DcTable extends JTable implements IViewComponent  {
                 Object value = getValueAt(row, col, true);
                 dco.setValue(field, value);
             }
-                        
-            if (dco != null && view.getType() != View._TYPE_INSERT) 
+
+            if (view != null && dco != null && view.getType() != View._TYPE_INSERT)
                 dco.markAsUnchanged();
-            
+
             return dco;
         }
     }
-    
+
     private boolean isCached(String id) {
         return id != null && cache.containsKey(id);
     }
@@ -419,7 +432,7 @@ public class DcTable extends JTable implements IViewComponent  {
     public String getObjectID(int row) {
         int col = getColumnIndexForField(DcObject._ID);
         Object o = getValueAt(row, col, true);
-        return o == null ? null : o.toString(); 
+        return o == null ? null : o.toString();
     }
 
     public Collection<DcObject> getChangedObjects() {
@@ -445,9 +458,11 @@ public class DcTable extends JTable implements IViewComponent  {
         Object value = null;
         try {
             if (row > -1 && col > -1)
-                value = hidden ? getDcModel().getValueAt(row, col) : super.getValueAt(row, col);
-        } catch (Exception ignore) {}
-                
+                value = hidden ? getDcModel().getValueAt(row, col) : super
+                        .getValueAt(row, col);
+        } catch (Exception ignore) {
+        }
+
         return value;
     }
 
@@ -475,7 +490,7 @@ public class DcTable extends JTable implements IViewComponent  {
 
     public void remove(int[] rows) {
         cancelEdit();
-        for (int i = rows.length -1; i > -1; i--) {
+        for (int i = rows.length - 1; i > -1; i--) {
             if (caching) {
                 int row = rows[i];
                 int col = getColumnIndexForField(DcObject._ID);
@@ -492,49 +507,53 @@ public class DcTable extends JTable implements IViewComponent  {
     public void setRowCount(int count) {
         getDcModel().setRowCount(count);
     }
-    
+
     public void deselect() {
         getSelectionModel().clearSelection();
     }
-    
+
     // not implemented; this is not used for tables
-    public void setSelected(Collection<? extends DcObject> items) {}
-    
-    // not implemented; updating the UI of a single element is not needed for tables
-    public void updateUI(String ID) {}
+    public void setSelected(Collection<? extends DcObject> items) {
+    }
+
+    // not implemented; updating the UI of a single element is not needed for
+    // tables
+    public void updateUI(String ID) {
+    }
 
     public void setSelected(int row) {
         try {
             if (getSelectedRow() > -1) {
-                removeColumnSelectionInterval(0, getColumnCount() -1);
+                removeColumnSelectionInterval(0, getColumnCount() - 1);
                 removeRowSelectionInterval(getSelectedRow(), getSelectedRow());
             }
 
             getSelectionModel().setValueIsAdjusting(true);
-            
+
             addRowSelectionInterval(row, row);
-            addColumnSelectionInterval(0, getColumnCount() -1);
-            
+            addColumnSelectionInterval(0, getColumnCount() - 1);
+
             if (row <= getRowCount()) {
                 Rectangle rect = getCellRect(row, 0, true);
                 scrollRectToVisible(rect);
             }
-            
+
         } catch (Exception e) {
-            logger.debug("Error while trying to set the selected row in the table to " + row, e);
+            logger.debug(
+                    "Error while trying to set the selected row in the table to "
+                            + row, e);
         }
     }
-    
-    public void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
+
+    public void updateItem(String ID, DcObject dco, boolean overwrite,
+            boolean allowDeletes, boolean mark) {
         int index = getIndex(ID);
-        if (index > -1) updateItemAt(index, dco, overwrite, allowDeletes, mark);
+        if (index > -1)
+            updateItemAt(index, dco, overwrite, allowDeletes, mark);
     }
 
-    public void updateItemAt(int row,
-                             DcObject dco,
-                             boolean overwrite,
-                             boolean allowDeletes,
-                             boolean mark) {
+    public void updateItemAt(int row, DcObject dco, boolean overwrite,
+            boolean allowDeletes, boolean mark) {
         cancelEdit();
 
         if (!mark) {
@@ -547,37 +566,44 @@ public class DcTable extends JTable implements IViewComponent  {
         try {
             setSelected(row);
         } catch (Exception e) {
-            logger.error("Error while trying to set the selected row in the table to " + row, e);
+            logger.error(
+                    "Error while trying to set the selected row in the table to "
+                            + row, e);
         }
 
         for (int i = 0; i < indices.length; i++) {
             try {
-                
-                // media module does not have all columns available for specialized objects. Skip if the 
+
+                // media module does not have all columns available for
+                // specialized objects. Skip if the
                 // column is not available.
-                if (module != null && module.isAbstract() && !columns.containsKey(indices[i]))
+                if (module != null && module.isAbstract()
+                        && !columns.containsKey(indices[i]))
                     continue;
-                    
+
                 TableColumn column = columns.get(indices[i]);
                 int col = column.getModelIndex();
 
                 Object oNew = dco.getValue(indices[i]);
                 Object oOld = getDcModel().getValueAt(row, col);
-                oNew = oNew instanceof Picture && ((Picture) oNew).isDeleted() ? null : oNew;
-                
+                oNew = oNew instanceof Picture && ((Picture) oNew).isDeleted() ? null
+                        : oNew;
+
                 String sNewValue = Utilities.getComparableString(oNew);
                 String sOldValue = Utilities.getComparableString(oOld);
                 boolean isNewEmpty = sNewValue.equals("");
                 boolean isOldEmpty = sOldValue.equals("");
-                
-                if (    !sNewValue.equals(sOldValue) && 
-                        (isOldEmpty || (overwrite  && (!isNewEmpty || allowDeletes))))
+
+                if (!sNewValue.equals(sOldValue)
+                        && (isOldEmpty || (overwrite && (!isNewEmpty || allowDeletes))))
                     getDcModel().setValueAt(oNew, row, col);
 
             } catch (Exception e) {
                 Integer key = indices[i];
-                TableColumn column = columns.containsKey(key) ? columns.get(key) : null;
-                logger.error("Error while setting value for column " + column + " module: " + module, e);
+                TableColumn column = columns.containsKey(key) ? columns
+                        .get(key) : null;
+                logger.error("Error while setting value for column " + column
+                        + " module: " + module, e);
             }
         }
 
@@ -586,7 +612,7 @@ public class DcTable extends JTable implements IViewComponent  {
             Object value = dco.getModule();
             getDcModel().setValueAt(value, row, col);
         }
-        
+
         if (!mark)
             setListeningForChanges(true);
     }
@@ -601,42 +627,46 @@ public class DcTable extends JTable implements IViewComponent  {
         try {
             if (row != -1 && column != -1) {
                 int col = getColumnIndexForField(DcObject._ID);
-                
+
                 Object oID = getValueAt(row, col, true);
                 String id = oID == null ? null : oID.toString();
-    
+
                 if (id != null && !id.equals("")) {
                     DcObject dco;
                     if (!cache.containsKey(id)) {
                         dco = getItemAt(row);
-                        
+
                         if (view.getType() != View._TYPE_INSERT)
                             dco.markAsUnchanged();
-                        
-                        DcObject o = DataManager.getObject(module.getIndex(), id);
+
+                        DcObject o = DataManager.getObject(module.getIndex(),
+                                id);
                         if (o != null) {
                             int field = getFieldForColumnIndex(column);
                             Object valueOld = o.getValue(field);
-                            Object valueNew = getDcModel().getValueAt(row, column);
-                            
+                            Object valueNew = getDcModel().getValueAt(row,
+                                    column);
+
                             valueOld = valueOld == null ? "" : valueOld;
                             valueNew = valueNew == null ? "" : valueNew;
-                            
-                            if (valueOld.equals(valueNew)) 
+
+                            if (valueOld.equals(valueNew))
                                 return;
                         }
                     } else {
                         dco = cache.get(id);
-                        
+
                         int field = getFieldForColumnIndex(column);
-                        Object valueOld = dco.getValue(field) == null ? "" : dco.getValue(field);
+                        Object valueOld = dco.getValue(field) == null ? ""
+                                : dco.getValue(field);
                         Object valueNew = getDcModel().getValueAt(row, column);
-                        
+
                         if (valueOld.equals(valueNew))
                             return;
                     }
-    
-                    dco.setValue(getFieldForColumnIndex(column), getDcModel().getValueAt(row, column));
+
+                    dco.setValue(getFieldForColumnIndex(column), getDcModel()
+                            .getValueAt(row, column));
                     cache.put(id, dco);
                 }
             }
@@ -651,13 +681,14 @@ public class DcTable extends JTable implements IViewComponent  {
             for (int i = 0; i < getColumnCount(); i++)
                 try {
                     getCellEditor(selectedRow, i).stopCellEditing();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
         }
     }
 
-    //*************************************************************************
-    //Private methods and classes
-    //*************************************************************************
+    // *************************************************************************
+    // Private methods and classes
+    // *************************************************************************
     private void buildTable() {
         DcObject dco = module.getDcObject();
         getDcModel().setColumnCount(dco.getFields().size());
@@ -669,159 +700,198 @@ public class DcTable extends JTable implements IViewComponent  {
             columnNew.setHeaderValue(field.getLabel());
 
             JComponent comp = ComponentFactory.getComponent(module.getIndex(),
-                                                            field.getReferenceIdx(),
-                                                            field.getFieldType(),
-                                                            field.getLabel(),
-                                                            field.getMaximumLength());
+                    field.getReferenceIdx(), field.getFieldType(), field
+                            .getLabel(), field.getMaximumLength());
             comp.setAutoscrolls(false);
             comp.setBorder(null);
             comp.setIgnoreRepaint(true);
             comp.setVerifyInputWhenFocusTarget(false);
 
-            if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD || 
-                field.getFieldType() == ComponentFactory._URLFIELD) {
-                
-                comp = ComponentFactory.getComponent(module.getIndex(), 
-                                                     field.getReferenceIdx(),
-                                                     ComponentFactory._SHORTTEXTFIELD,
-                                                     field.getLabel(),
-                                                     field.getMaximumLength());
+            if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD
+                    || field.getFieldType() == ComponentFactory._URLFIELD) {
+
+                comp = ComponentFactory.getComponent(module.getIndex(), field
+                        .getReferenceIdx(), ComponentFactory._SHORTTEXTFIELD,
+                        field.getLabel(), field.getMaximumLength());
             }
 
-            if (    field.getIndex() == DcObject._ID ||
-                    field.getIndex() == DcObject._SYS_LENDBY ||
-                    field.getIndex() == DcObject._SYS_LOANDURATION ||
-                    field.getIndex() == DcObject._SYS_CREATED ||
-                    field.getIndex() == DcObject._SYS_MODIFIED){
+            if (field.getIndex() == DcObject._ID
+                    || field.getIndex() == DcObject._SYS_LENDBY
+                    || field.getIndex() == DcObject._SYS_LOANDURATION
+                    || field.getIndex() == DcObject._SYS_CREATED
+                    || field.getIndex() == DcObject._SYS_MODIFIED) {
 
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
-                DcTableCellRenderer renderer = DcTableCellRenderer.getInstance();
+                DcTableCellRenderer renderer = DcTableCellRenderer
+                        .getInstance();
                 renderer.setFont(ComponentFactory.getSystemFont());
                 columnNew.setCellRenderer(renderer);
             } else if (field.getFieldType() == ComponentFactory._REFERENCESFIELD) {
-                columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
+                columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory
+                        .getTextFieldDisabled()));
                 columnNew.setMaxWidth(100);
-                columnNew.setCellRenderer(ReferencesTableCellRenderer.getInstance());
+                columnNew.setCellRenderer(ReferencesTableCellRenderer
+                        .getInstance());
             } else if (field.getIndex() == DcObject._SYS_MODULE) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
-                columnNew.setCellRenderer(ModuleTableCellRenderer.getInstance());
-            } else if (dco instanceof Loan && field.getIndex() == Loan._C_CONTACTPERSONID) {
+                columnNew
+                        .setCellRenderer(ModuleTableCellRenderer.getInstance());
+            } else if (dco instanceof Loan
+                    && field.getIndex() == Loan._C_CONTACTPERSONID) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
-                columnNew.setCellRenderer(ContactPersonTableCellRenderer.getInstance());
+                columnNew.setCellRenderer(ContactPersonTableCellRenderer
+                        .getInstance());
             } else {
                 switch (field.getFieldType()) {
-                    case ComponentFactory._AVAILABILITYCOMBO :
-                        columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
-                        columnNew.setCellRenderer(AvailabilityCheckBoxTableCellRenderer.getInstance());
-                        break;
-                    case ComponentFactory._CHECKBOX:
-                        columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
-                        columnNew.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
-                        break;
-                    case ComponentFactory._FILESIZEFIELD:
-                        columnNew.setCellEditor(new DefaultCellEditor((JTextField) comp));
-                        columnNew.setMaxWidth(100);
-                        columnNew.setCellRenderer(FileSizeTableCellRenderer.getInstance());
-                        break;
-                    case ComponentFactory._NUMBERFIELD:
-                    case ComponentFactory._DECIMALFIELD:
-                        columnNew.setCellEditor(new DefaultCellEditor((JTextField) comp));
-                        columnNew.setMaxWidth(100);
-                        columnNew.setCellRenderer(NumberTableCellRenderer.getInstance());
-                        break;
-                    case ComponentFactory._LONGTEXTFIELD :
-                    case ComponentFactory._SHORTTEXTFIELD :
-                        columnNew.setCellEditor(new DefaultCellEditor((JTextField) comp));
-                        break;
-                    case ComponentFactory._TIMEFIELD :
-                        DcNumberField numberField = ComponentFactory.getNumberField();
-                        columnNew.setCellEditor(new DefaultCellEditor(numberField));
-                        columnNew.setCellRenderer(TimeFieldTableCellRenderer.getInstance());
-                        break;
-                    case ComponentFactory._URLFIELD :
-                        columnNew.setCellEditor(new DefaultCellEditor((JTextField) comp));
-                        DcTableCellRenderer renderer = DcTableCellRenderer.getInstance();
-                        renderer.setForeground(new Color(0, 0, 255));
-                        columnNew.setCellRenderer(renderer);
-                        break;
-                    case ComponentFactory._PICTUREFIELD :
-                        DcShortTextField text = ComponentFactory.getTextFieldDisabled();
-                        text.setEditable(false);
-                        text.setFont(ComponentFactory.getUnreadableFont());
-                        columnNew.setCellEditor(new DefaultCellEditor(text));
-                        columnNew.setCellRenderer(PictureTableCellRenderer.getInstance());
-                        break;
-                    case ComponentFactory._REFERENCEFIELD:
-                        columnNew.setCellRenderer(ComboBoxTableCellRenderer.getInstance());
-                        columnNew.setCellEditor(new DefaultCellEditor((JComboBox) comp));
-                        break;
-                    case ComponentFactory._RATINGCOMBOBOX:
-                        columnNew.setMinWidth(70);
-                        columnNew.setCellRenderer(RatingTableCellRenderer.getInstance());
-                        columnNew.setCellEditor(new DefaultCellEditor((DcRatingComboBox) comp));
-                        break;
-                    case ComponentFactory._YESNOCOMBO:
-                        columnNew.setCellEditor(new DefaultCellEditor((JComboBox) comp));
-                        break;
-                    case ComponentFactory._LOGINNAMEFIELD:
-                        columnNew.setCellEditor(new DefaultCellEditor((DcLoginNameField) comp));
-                        break;                        
+                case ComponentFactory._AVAILABILITYCOMBO:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            ComponentFactory.getTextFieldDisabled()));
+                    columnNew
+                            .setCellRenderer(AvailabilityCheckBoxTableCellRenderer
+                                    .getInstance());
+                    break;
+                case ComponentFactory._CHECKBOX:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            ComponentFactory.getTextFieldDisabled()));
+                    columnNew.setCellRenderer(CheckBoxTableCellRenderer
+                            .getInstance());
+                    break;
+                case ComponentFactory._FILESIZEFIELD:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (JTextField) comp));
+                    columnNew.setMaxWidth(100);
+                    columnNew.setCellRenderer(FileSizeTableCellRenderer
+                            .getInstance());
+                    break;
+                case ComponentFactory._NUMBERFIELD:
+                case ComponentFactory._DECIMALFIELD:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (JTextField) comp));
+                    columnNew.setMaxWidth(100);
+                    columnNew.setCellRenderer(NumberTableCellRenderer
+                            .getInstance());
+                    break;
+                case ComponentFactory._LONGTEXTFIELD:
+                case ComponentFactory._SHORTTEXTFIELD:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (JTextField) comp));
+                    break;
+                case ComponentFactory._TIMEFIELD:
+                    DcNumberField numberField = ComponentFactory
+                            .getNumberField();
+                    columnNew.setCellEditor(new DefaultCellEditor(numberField));
+                    columnNew.setCellRenderer(TimeFieldTableCellRenderer
+                            .getInstance());
+                    break;
+                case ComponentFactory._URLFIELD:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (JTextField) comp));
+                    DcTableCellRenderer renderer = DcTableCellRenderer
+                            .getInstance();
+                    renderer.setForeground(new Color(0, 0, 255));
+                    columnNew.setCellRenderer(renderer);
+                    break;
+                case ComponentFactory._PICTUREFIELD:
+                    DcShortTextField text = ComponentFactory
+                            .getTextFieldDisabled();
+                    text.setEditable(false);
+                    text.setFont(ComponentFactory.getUnreadableFont());
+                    columnNew.setCellEditor(new DefaultCellEditor(text));
+                    columnNew.setCellRenderer(PictureTableCellRenderer
+                            .getInstance());
+                    break;
+                case ComponentFactory._REFERENCEFIELD:
+                    columnNew.setCellRenderer(ComboBoxTableCellRenderer
+                            .getInstance());
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (JComboBox) comp));
+                    break;
+                case ComponentFactory._RATINGCOMBOBOX:
+                    columnNew.setMinWidth(70);
+                    columnNew.setCellRenderer(RatingTableCellRenderer
+                            .getInstance());
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (DcRatingComboBox) comp));
+                    break;
+                case ComponentFactory._YESNOCOMBO:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (JComboBox) comp));
+                    break;
+                case ComponentFactory._LOGINNAMEFIELD:
+                    columnNew.setCellEditor(new DefaultCellEditor(
+                            (DcLoginNameField) comp));
+                    break;
                 }
 
                 comp.setEnabled(!field.isReadOnly() && !readonly);
             }
-            
+
             counter++;
         }
     }
 
     public void applySettings() {
+        if (!ignoreSettings) {
+            int[] fields = module.getSettings().getIntArray(
+                    DcRepository.ModuleSettings.stTableColumnOrder);
+            setVisibleColumns(fields);
+        }
+    }
+
+    public void setVisibleColumns(int[] fields) {
         removeColumns();
         
-        DcFieldDefinitions definitions = (DcFieldDefinitions) module.getSetting(DcRepository.ModuleSettings.stFieldDefinitions);
-        int[] fields = module.getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder);
+        DcFieldDefinitions definitions = (DcFieldDefinitions) module
+                .getSetting(DcRepository.ModuleSettings.stFieldDefinitions);
+
         for (int field : fields) {
 
             DcFieldDefinition definition = definitions.get(field);
-            
-            if (!module.canBeLended() && 
-                (field == DcObject._SYS_AVAILABLE || 
-                        field == DcObject._SYS_LOANDURATION ||
-                        field == DcObject._SYS_LENDBY))
+
+            if (!module.canBeLended()
+                    && (field == DcObject._SYS_AVAILABLE
+                            || field == DcObject._SYS_LOANDURATION
+                            || field == DcObject._SYS_LENDBY
+                            || field == DcObject._SYS_LOANDAYSTILLOVERDUE || field == DcObject._SYS_LOANDUEDATE))
                 continue;
 
             try {
                 TableColumn column = columns.get(Integer.valueOf(field));
-        
+
                 if (column == null)
-                	continue;
-                
+                    continue;
+
                 if (definition.isRequired())
-                    column.setHeaderRenderer(DcTableHeaderRendererRequired.getInstance());
+                    column.setHeaderRenderer(DcTableHeaderRendererRequired
+                            .getInstance());
                 else
-                    column.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
-        
+                    column.setHeaderRenderer(DcTableHeaderRenderer
+                            .getInstance());
+
                 String label = definition.getLabel();
-                
+
                 if (label != null && label.length() > 0) {
                     column.setHeaderValue(label);
                 } else {
-                    column.setHeaderValue(module.getField(definition.getIndex()).getSystemName());
+                    column.setHeaderValue(module
+                            .getField(definition.getIndex()).getSystemName());
                 }
-        
+
                 addColumn(column);
 
             } catch (Exception e) {
                 Integer key = definition.getIndex();
-                TableColumn column = columns.containsKey(key) ? columns.get(key) : null;
-                logger.debug("Error while applying settings to column " + column + 
-                             " for field definition " + definition.getLabel());
+                TableColumn column = columns.containsKey(key) ? columns
+                        .get(key) : null;
+                logger.debug("Error while applying settings to column "
+                        + column + " for field definition "
+                        + definition.getLabel());
             }
         }
-        
+
         applyHeaders();
     }
 
@@ -832,9 +902,11 @@ public class DcTable extends JTable implements IViewComponent  {
 
     public void resetTable() {
         removeColumns();
-        
-        for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-            TableColumn column = columns.get(Integer.valueOf(definition.getIndex()));
+
+        for (DcFieldDefinition definition : module.getFieldDefinitions()
+                .getDefinitions()) {
+            TableColumn column = columns.get(Integer.valueOf(definition
+                    .getIndex()));
             addColumn(column);
         }
     }
@@ -853,12 +925,12 @@ public class DcTable extends JTable implements IViewComponent  {
         getTableHeader().setReorderingAllowed(false);
 
         setBackground(new Color(255, 255, 255));
-        setGridColor(new Color(220,220,200));
+        setGridColor(new Color(220, 220, 200));
 
         setShowHorizontalLines(false);
         setShowVerticalLines(false);
         setIntercellSpacing(new Dimension());
-        
+
         applyHeaders();
 
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -872,7 +944,7 @@ public class DcTable extends JTable implements IViewComponent  {
         }
         return false;
     }
-    
+
     public void setListeningForChanges(boolean b) {
         boolean enable = b && caching;
 
@@ -881,31 +953,32 @@ public class DcTable extends JTable implements IViewComponent  {
             if (listeners[i] instanceof TableValueChangedAction)
                 getDcModel().removeTableModelListener(listeners[i]);
         }
-        
+
         if (enable && getListeners(tableChangeListener.getClass()).length == 0)
             getDcModel().addTableModelListener(tableChangeListener);
     }
 
     private class TableValueChangedAction implements TableModelListener {
         public void tableChanged(TableModelEvent e) {
-            if (    !ignoreEdit &&
-                    (e.getType() == TableModelEvent.INSERT ||
-                     e.getType() == TableModelEvent.UPDATE)) {
+            if (!ignoreEdit
+                    && (e.getType() == TableModelEvent.INSERT || e.getType() == TableModelEvent.UPDATE)) {
 
                 int row = getSelectedRow();
-                
+
                 Component component = null;
-                
+
                 try {
                     component = getEditorComponent();
-                } catch (Exception exp) {}
-                
+                } catch (Exception exp) {
+                }
+
                 if (component == null) {
                     addRowToCache(row, e.getColumn());
                 } else {
-                    int field = getFieldForColumnIndex(e.getColumn());    
+                    int field = getFieldForColumnIndex(e.getColumn());
                     try {
-                        if (component.isEnabled() && !module.getField(field).isUiOnly())
+                        if (component.isEnabled()
+                                && !module.getField(field).isUiOnly())
                             addRowToCache(row, e.getColumn());
                     } catch (Exception whatever) {
                         addRowToCache(row, e.getColumn());
@@ -914,14 +987,15 @@ public class DcTable extends JTable implements IViewComponent  {
             }
         }
     }
-    
-    public void afterUpdate() {}
+
+    public void afterUpdate() {
+    }
 
     public DcObject getItem(String ID) {
         int index = getIndex(ID);
         return index >= 0 ? getItemAt(index) : null;
     }
-    
+
     private int getIndex(String ID) {
         for (int i = 0; i < getItemCount(); i++) {
             String objectID = getObjectID(i);
@@ -971,13 +1045,13 @@ public class DcTable extends JTable implements IViewComponent  {
         removeSelectionListener(lsl);
         getSelectionModel().addListSelectionListener(lsl);
     }
-    
+
     public void removeSelectionListener(ListSelectionListener lsl) {
         getSelectionModel().removeListSelectionListener(lsl);
-    }       
-    
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
-    }    
+    }
 }

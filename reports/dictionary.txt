@@ -48,8 +48,10 @@ Module              [audiocd]
 xsl reference name  [audiocd]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Artists                 = artists
+  Available               = available
   Container               = container
   Created                 = created
+  Days Loaned             = days-loaned
   Description             = description
   Disc ID                 = disc-id
   EAN                     = ean
@@ -57,6 +59,7 @@ xsl reference name  [audiocd]
   ID                      = id
   Item                    = item
   Label                   = label
+  Loaned By               = loaned-by
   Modified                = modified
   Picture Back            = picture-back
   Picture CD              = picture-cd
@@ -100,9 +103,11 @@ Module              [book]
 xsl reference name  [book]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Authors                 = authors
+  Available               = available
   Category                = category
   Container               = container
   Created                 = created
+  Days Loaned             = days-loaned
   Description             = description
   Filehash                = filehash
   Filehash Type           = filehash-type
@@ -113,6 +118,7 @@ xsl reference name  [book]
   Isbn 13                 = isbn-13
   Item                    = item
   Label                   = label
+  Loaned By               = loaned-by
   Modified                = modified
   Pages                   = pages
   Picture Front           = picture-front
@@ -163,8 +169,10 @@ xsl reference name  [contactperson]
 Module              [container]
 xsl reference name  [container]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Available               = available
   Container Type          = container-type
   Created                 = created
+  Days Loaned             = days-loaned
   Filehash                = filehash
   Filehash Type           = filehash-type
   Filename                = filename
@@ -172,6 +180,7 @@ xsl reference name  [container]
   ID                      = id
   Item                    = item
   Label                   = label
+  Loaned By               = loaned-by
   Modified                = modified
   Name                    = name
   User Long Text Field    = user-long-text-field
@@ -230,12 +239,14 @@ xsl reference name  [director]
 Module              [image]
 xsl reference name  [image]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Available               = available
   Camera                  = camera
   Category                = category
   Compression (Bits)      = compression-bits
   Container               = container
   Created                 = created
   Date                    = date
+  Days Loaned             = days-loaned
   Description             = description
   Filehash                = filehash
   Filehash Type           = filehash-type
@@ -246,6 +257,7 @@ xsl reference name  [image]
   Image                   = image
   Item                    = item
   Label                   = label
+  Loaned By               = loaned-by
   Modified                = modified
   Place                   = place
   Rating                  = rating
@@ -264,12 +276,15 @@ xsl reference name  [image]
 Module              [media]
 xsl reference name  [media]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Available               = available
   Container               = container
   Created                 = created
+  Days Loaned             = days-loaned
   Description             = description
   ID                      = id
   Item                    = item
   Label                   = label
+  Loaned By               = loaned-by
   Modified                = modified
   Rating                  = rating
   Title                   = title
@@ -291,10 +306,12 @@ xsl reference name  [movie]
   Audio Codec             = audio-codec
   Audio Language          = audio-language
   Audio Sample Rate       = audio-sample-rate
+  Available               = available
   Certification Language  = certification-language
   Container               = container
   Country                 = country
   Created                 = created
+  Days Loaned             = days-loaned
   Description             = description
   Directors               = directors
   EAN                     = ean
@@ -312,6 +329,7 @@ xsl reference name  [movie]
   Item                    = item
   Label                   = label
   Language                = language
+  Loaned By               = loaned-by
   Modified                = modified
   Picture Back            = picture-back
   Picture CD              = picture-cd
@@ -343,14 +361,17 @@ Module              [musicalbum]
 xsl reference name  [musicalbum]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Artists                 = artists
+  Available               = available
   Container               = container
   Created                 = created
+  Days Loaned             = days-loaned
   Description             = description
   Disc ID                 = disc-id
   Genres                  = genres
   ID                      = id
   Item                    = item
   Label                   = label
+  Loaned By               = loaned-by
   Modified                = modified
   Picture Back            = picture-back
   Picture CD              = picture-cd
@@ -418,9 +439,11 @@ Module              [Software]
 xsl reference name  [software]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ASIN                    = asin
+  Available               = available
   Category                = category
   Container               = container
   Created                 = created
+  Days Loaned             = days-loaned
   Description             = description
   Developers              = developers
   EAN                     = ean
@@ -431,6 +454,7 @@ xsl reference name  [software]
   ID                      = id
   Item                    = item
   Label                   = label
+  Loaned By               = loaned-by
   Modified                = modified
   Multiplayer ?           = multiplayer-
   Picture Back            = picture-back

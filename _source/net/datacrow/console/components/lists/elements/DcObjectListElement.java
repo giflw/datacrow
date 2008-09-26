@@ -211,6 +211,7 @@ public abstract class DcObjectListElement extends DcListElement {
     public void clear() {
     	if (dco != null)
     		dco.freeResources();
+
         super.clear();
     }
 }

@@ -26,16 +26,11 @@
 package net.datacrow.console.components.lists;
 
 import java.awt.Dimension;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JList;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.JViewport;
-import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionListener;
 
 import net.datacrow.console.components.lists.elements.DcAudioCDListHwElement;
@@ -65,7 +60,7 @@ import net.datacrow.core.objects.helpers.MusicTrack;
 
 import org.apache.log4j.Logger;
 
-public class DcObjectList extends DcList implements IViewComponent, MouseWheelListener {
+public class DcObjectList extends DcList implements IViewComponent {
     
     private static Logger logger = Logger.getLogger(DcObjectList.class.getName());
 
@@ -95,7 +90,6 @@ public class DcObjectList extends DcList implements IViewComponent, MouseWheelLi
         this.style = style;
         
         addComponentListener(new ListComponentListener());
-        //addMouseWheelListener(this);
         setCellRenderer(renderer);
         renderer.setEventOddColors(evenOddColors);
         
@@ -409,22 +403,4 @@ public class DcObjectList extends DcList implements IViewComponent, MouseWheelLi
     public void removeSelectionListener(ListSelectionListener lsl) {
         removeListSelectionListener(lsl);
     }      
-    
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        DcObjectList source = (DcObjectList) e.getSource();
-        JViewport viewPort = (JViewport) source.getParent();
-        JScrollPane sp = (JScrollPane) viewPort.getParent();
-        JScrollBar sb = sp.getVerticalScrollBar();
-        
-        int increment = getScrollableUnitIncrement(sp.getVisibleRect(), 
-                                                   SwingConstants.HORIZONTAL, 
-                                                   e.getWheelRotation());
-        if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
-            int newValue =  e.getUnitsToScroll() < 0 ? 
-                            sb.getValue() - (e.getUnitsToScroll() * increment):
-                            sb.getValue() + (e.getUnitsToScroll() * increment);
-            if (newValue <= sb.getMaximum())
-                sb.setValue(newValue);
-        }
-     }
 }
