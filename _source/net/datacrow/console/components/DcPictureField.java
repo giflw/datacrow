@@ -72,13 +72,13 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
 
     private static Logger logger = Logger.getLogger(DcPictureField.class.getName());
     
-    private Image img = null;
-    private DcImageIcon picture;
-    
     private boolean changed = false;
-    
     private boolean scaled = true;
     private boolean thumbnail = false;
+
+    private Image img = null;
+    private DcImageIcon picture;
+
     private Dimension size = null;
     private Insets insets = new Insets(0, 0, 0, 0);
     
@@ -162,10 +162,10 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         
         picture = null;
         size = null;
-        
         insets = null;
         imageJ = null;
         name = null;
+        menu = null;
     } 
     
     private void clearImage() {
@@ -279,9 +279,9 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                 } 
             } catch (Exception e) {
                 logger.error(e, e);
+            } finally {
+            	g.dispose();
             }
-            
-            g.dispose();
         }
     }
     

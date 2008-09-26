@@ -636,7 +636,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (getValueDef(index) != null) {
 
         	// recalculate loan information
-        	if (getModule().canBeLended()) {
+        	if (getModule().canBeLended() && index != DcObject._SYS_AVAILABLE) {
         		Boolean available = (Boolean) getValue(DcObject._SYS_AVAILABLE);
             	if (available != null && !available.booleanValue())
             		setLoanInformation();
