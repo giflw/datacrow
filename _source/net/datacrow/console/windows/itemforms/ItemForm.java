@@ -607,21 +607,25 @@ public class ItemForm extends DcFrame implements ActionListener {
 
                 label.setPreferredSize(new Dimension(100, 20));
                 if (!field.isTechnicalInfo()) {
+                	int ySpace = yInfo == 0 ? 5 : 0; 
+                	
                     panelInfo.add(label, Layout.getGBC(0, yInfo, 1, 1, 1.0, 1.0
                              ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                              new Insets(0, 0, 0, 5), 0, 0));
+                              new Insets(ySpace, 2, 0, 5), 0, 0));
                     panelInfo.add(component,  Layout.getGBC(1, yInfo, 1, 1, factor, factor
                              ,GridBagConstraints.NORTHWEST, stretch,
-                              new Insets(0, 0, 0, 0), 0, 0));
+                              new Insets(ySpace, 0, 0, 2), 0, 0));
                     yInfo++;
                 } else {
+                	int ySpace = yTech == 0 ? 5 : 0; 
+                	
                     technicalInfoPresent = true;
                     panelTech.add(label, Layout.getGBC(0, yTech, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                             new Insets(0, 0, 0, 5), 0, 0));
+                             new Insets(ySpace, 2, 0, 5), 0, 0));
                     panelTech.add(component,  Layout.getGBC(1, yTech, 1, 1, 50, 50
                             ,GridBagConstraints.NORTHWEST, stretch,
-                             new Insets(0, 0, 0, 0), 0, 0));
+                             new Insets(ySpace, 0, 0, 2), 0, 0));
                     yTech++;
                 }
                 
@@ -656,7 +660,9 @@ public class ItemForm extends DcFrame implements ActionListener {
     protected void addRelationPanel() {
     	if (update) {
 	        if (DcModules.getActualReferencingModules(moduleIndex).size() > 0 &&
-	            moduleIndex != DcModules._CONTACTPERSON) {
+	            moduleIndex != DcModules._CONTACTPERSON &&
+	            moduleIndex != DcModules._CONTAINER) {
+	        	
 	            RelatedItemsPanel rip = new RelatedItemsPanel(dco);
 	            tabbedPane.addTab(rip.getTitle(), rip.getIcon(),  rip);
 	        }

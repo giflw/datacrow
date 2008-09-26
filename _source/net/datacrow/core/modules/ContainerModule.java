@@ -48,17 +48,11 @@ public class ContainerModule extends DcParentModule {
             searchView = new MasterView();
             searchView.setTreePanel(this);
             
-//            // table view
-//            DcTable table = new DcTable(this, false, true);
-//            View tableView = new View(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
-//            table.setView(tableView);
-            
             // list view
             DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
             View listView = new View(searchView, View._TYPE_SEARCH, list, getObjectNamePlural(), getIcon16(), MasterView._LIST_VIEW);
             list.setView(listView);
 
-//            searchView.addView(MasterView._TABLE_VIEW, tableView);
             searchView.addView(MasterView._LIST_VIEW, listView);            
         }
     }

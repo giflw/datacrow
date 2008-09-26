@@ -67,7 +67,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 0, 2);
+    private static Version version = new Version(3, 4, 1, 0);
     
     public static String baseDir;
     public static String imageDir;

@@ -422,5 +422,26 @@
             </field> 
        </fields>
     </module>     
+    <module>
+        <module-jar>container.jar</module-jar>
+        <module-index>64</module-index>
+        <fields>
+             <field>
+                <index>3</index>
+                <name>Picture Front</name>
+                <database-column-name>PictureFront</database-column-name>
+                <ui-only>true</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>false</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>0</maximum-length>
+                <field-type>7</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>7</value-type>
+                <overwritable>false</overwritable>
+            </field>
+       </fields>
+    </module>     
 </modules> 
 		
