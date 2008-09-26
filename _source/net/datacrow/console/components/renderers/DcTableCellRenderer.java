@@ -35,7 +35,9 @@ import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
 
 public class DcTableCellRenderer extends DefaultTableCellRenderer {
@@ -85,7 +87,19 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
         
         setForeground(ComponentFactory.getCurrentForegroundColor());
 
-        if (!isSelected) {
+        boolean overdue = false;
+        
+    	int idx = ((DcTable) table).getColumnIndexForField(DcObject._SYS_LOANDAYSTILLOVERDUE);
+    	if (idx != -1) {
+    		Long days = (Long) ((DcTable) table).getValueAt(row, idx, true);
+    		if (days != null && days.longValue() < 0)
+    			overdue = true;
+    	}
+        
+    	if (overdue)
+    		setForeground(Color.RED);
+    	
+    	if (!isSelected) {
             if ((row % 2) == 0) {
         		setBackground(colorEvenRow);
             } else {

@@ -36,6 +36,7 @@ import javax.swing.border.Border;
 
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
 
 public class DcListRenderer extends DefaultListCellRenderer  {
@@ -63,6 +64,15 @@ public class DcListRenderer extends DefaultListCellRenderer  {
         
         component.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
 
+        if (component instanceof DcObjectListElement) {
+        	DcObjectListElement ole = (DcObjectListElement) component;
+        	if (ole.getDcObject().getModule().canBeLended()) {
+        		Long daysTillOverdue = (Long) ole.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
+        		if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
+        			component.setForeground(Color.RED);
+        	}
+        }
+        
         if (evenOddColors) {
             Color colorOddRow = DcSettings.getColor(DcRepository.Settings.stOddRowColor);
             Color colorEvenRow = DcSettings.getColor(DcRepository.Settings.stEvenRowColor);

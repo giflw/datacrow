@@ -26,6 +26,7 @@
 package net.datacrow.console.components.lists.elements;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -119,8 +120,15 @@ public abstract class DcObjectListElement extends DcListElement {
         } 
         return dco.getName();
     }
-
+    
     @Override
+    public void setForeground(Color fg) {
+    	for (Component c : getComponents()) {
+    		c.setForeground(fg);
+    	}
+    }
+
+	@Override
     protected void build() {
         addPicture(getPictures());
         
