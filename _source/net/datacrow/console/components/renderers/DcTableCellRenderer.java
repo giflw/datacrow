@@ -89,12 +89,14 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
 
         boolean overdue = false;
         
-    	int idx = ((DcTable) table).getColumnIndexForField(DcObject._SYS_LOANDAYSTILLOVERDUE);
-    	if (idx != -1) {
-    		Long days = (Long) ((DcTable) table).getValueAt(row, idx, true);
-    		if (days != null && days.longValue() < 0)
-    			overdue = true;
-    	}
+        try {
+	    	int idx = ((DcTable) table).getColumnIndexForField(DcObject._SYS_LOANDAYSTILLOVERDUE);
+	    	if (idx != -1) {
+	    		Long days = (Long) ((DcTable) table).getValueAt(row, idx, true);
+	    		if (days != null && days.longValue() < 0)
+	    			overdue = true;
+	    	}
+        } catch (Exception ignore) {}
         
     	if (overdue)
     		setForeground(Color.RED);

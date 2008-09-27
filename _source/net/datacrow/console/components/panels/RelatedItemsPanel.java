@@ -31,6 +31,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -52,6 +54,7 @@ import net.datacrow.core.modules.TemplateModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcObjectComparator;
 
 public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimpleItemView {
     
@@ -93,6 +96,8 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
     
     public void loadItems() {
         list.clear();
+        
+        List<DcObject> items = new ArrayList<DcObject>();
         for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
             if ( module.getIndex() != dco.getModule().getIndex() && 
                !(module instanceof TemplateModule)) {
@@ -109,11 +114,16 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
                             df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, dco));
                         }
                         
-                        list.add(DataManager.get(DcModules._ITEM, df));
+                        
+                        for (DcObject dco : DataManager.get(DcModules._ITEM, df))
+                        	items.add(dco);
                     }
                 }
             }
         }
+
+        Collections.sort(items, new DcObjectComparator(DcObject._SYS_DISPLAYVALUE));
+        list.add(items);
     }
     
     public void mouseReleased(MouseEvent e) {

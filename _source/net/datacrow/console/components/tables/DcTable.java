@@ -1052,6 +1052,10 @@ public class DcTable extends JTable implements IViewComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    	try {
+    		super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    	} catch(Exception e) {
+    		super.paintComponent(g);
+    	}
     }
 }

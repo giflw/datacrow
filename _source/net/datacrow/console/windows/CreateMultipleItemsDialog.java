@@ -38,25 +38,36 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.tables.DcTable;
+import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.objects.helpers.AudioTrack;
+import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class CreateMultipleItemsDialog extends DcDialog implements ActionListener {
 	
 	private DcTable table;
 	
+	private int moduleIdx;
+	
+	private JButton buttonAdd = ComponentFactory.getButton(DcResources.getText("lblAdd"));
     private JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
     private JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
 	
 	private SavingTask task;
 	
-	public CreateMultipleItemsDialog(int module) {
+	public CreateMultipleItemsDialog(int moduleIdx) {
 		super();
 		
-		this.table = new DcTable(DcModules.get(module), false, false);
+		this.moduleIdx = moduleIdx;
+		this.table = new DcTable(DcModules.get(moduleIdx), false, false);
 		
 		build();
 		
@@ -71,21 +82,52 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 		}
 	}
 	
+	private void add() {
+		DcModule module = DcModules.get(moduleIdx);
+		DcObject dco = module.getDcObject();
+		if (module.isChildModule()) {
+			String parentID;
+			if (DcSwingUtilities.getRootFrame() instanceof ItemForm)
+				parentID = ((ItemForm) DcSwingUtilities.getRootFrame()).getItem().getID();
+			else
+				parentID = module.getParent().getCurrentSearchView().getSelectedItem().getID();
+			
+			dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
+			
+			if (dco instanceof AudioTrack)
+				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(table.getRowCount() + 1));
+			else if (dco instanceof MusicTrack)
+				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(table.getRowCount() + 1));
+		}
+		table.add(dco);
+	}
+	
 	public void setActionsAllowed(boolean b) {
+		buttonAdd.setEnabled(b);
 		buttonSave.setEnabled(b);
 		buttonCancel.setEnabled(b);
 	}
 	
 	@Override
     public void close() {
-		if (task == null || !task.isAlive())
+		if (task == null || !task.isAlive()) {
+			buttonAdd = null;
+			buttonSave = null;
+			buttonCancel = null;
+			task = null;
 			super.close();
+		}
     }
 
 	private void build() {
         JScrollPane sp = new JScrollPane(table);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
+        if (DcModules.get(moduleIdx) instanceof DcPropertyModule) {
+        	table.setIgnoreSettings(true);
+        	table.setVisibleColumns(new int[] {DcProperty._A_NAME});
+        }
         
         getContentPane().setLayout(Layout.getGBL());
         
@@ -95,9 +137,15 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 
         JPanel panelActions = new JPanel();
         
+        buttonAdd.addActionListener(this);
+        buttonSave.addActionListener(this);
+        buttonCancel.addActionListener(this);
+        
+        buttonAdd.setActionCommand("add");
         buttonSave.setActionCommand("save");
         buttonCancel.setActionCommand("cancel");
         
+        panelActions.add(buttonAdd);
         panelActions.add(buttonSave);
         panelActions.add(buttonCancel);
         
@@ -107,11 +155,12 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 	}
 
 	public void actionPerformed(ActionEvent ae) {
-		if (ae.getActionCommand().equals("save")) {
+		if (ae.getActionCommand().equals("save"))
 			save();
-		} else if (ae.getActionCommand().equals("cancel")) {
+		else if (ae.getActionCommand().equals("cancel"))
 			close();
-		}
+		else if (ae.getActionCommand().equals("add"))
+			add();
     }
 	
 	private class SavingTask extends Thread {
@@ -119,9 +168,11 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 		public void run() {
 			for (int row = table.getRowCount(); row > 0; row--) {
 				DcObject dco = table.getItemAt(row - 1);
+				dco.setIDs();
+				
 				try {
 					dco.saveNew(false);
-					table.removeRow(row);
+					table.removeRow(row - 1);
 				} catch (ValidationException e) {
 					new MessageBox(e.getMessage(), MessageBox._WARNING);
 				}
