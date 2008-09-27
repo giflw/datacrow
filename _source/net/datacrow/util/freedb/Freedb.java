@@ -42,12 +42,8 @@ import net.datacrow.core.objects.helpers.AudioTrack;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Utilities;
 
-import org.apache.log4j.Logger;
-
 public class Freedb {
     
-	private static Logger logger = Logger.getLogger(Freedb.class.getName());
-	
     private String userLogin = formatProperty(System.getProperty("user.name"));
     private String userDomain = formatProperty(System.getProperty("os.name"));
     private String clientName = "DataCrow";

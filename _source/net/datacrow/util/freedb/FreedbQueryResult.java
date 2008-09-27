@@ -66,13 +66,4 @@ public class FreedbQueryResult {
     public boolean isExactMatch() {
         return this.exactMatch;
     }
-    
-    public String toString() {
-		String output = "---Free DB Query Result-----------------------\n";
-
-		output += "Genre: " + getCategory() + "\tCD ID: " + getDiscId() + "\n";
-		output += "Album: " + getAlbum() + "\tArtist: " + getArtist();
-		output += "\n----------------------------------------";
-		return output;
-	}
 }

@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 
 import net.datacrow.util.Utilities;
 
+@SuppressWarnings("unchecked")
 public class FreedbReadResult implements Comparable {
     
     private Hashtable fields;
@@ -128,11 +129,11 @@ public class FreedbReadResult implements Comparable {
     public Integer[] getTrackLengths(String[] answers, int startPos, int endPos, int playlength) {
         Integer[] trackLengths = new Integer[50];
         if (startPos < endPos && startPos > 0) {
-            LinkedList offsets = new LinkedList();
+            LinkedList<Integer> offsets = new LinkedList<Integer>();
             for (int i = startPos; i < endPos; i++) {
                 String answer = answers[i];
                 int offset = Utilities.getIntegerValue(answer);
-                if (offset!= 0) offsets.add(new Integer(offset));
+                if (offset!= 0) offsets.add(Integer.valueOf(offset));
             }
             
             Integer lastOffset = new Integer(playlength * 75);
@@ -312,20 +313,6 @@ public class FreedbReadResult implements Comparable {
 		return this.getQuality() - rr.getQuality();
 	}
 	
-	public String toString() {
-		String output = "---Free DB Read Result-----------------------\n";
-
-		output += "Artiste: " + getArtist() + "\tAlbum: " + getAlbum() + "\n";
-		output += "Disc ID: " + getDiscId() + "\tExt.DiscInfo: " + getAlbumComment() + "\n";
-		output += "Ann\ufffde: " + getYear() + "\tGenre: " + getGenre() + "\n";
-		int nb = getTracksNumber();
-		output += " Tracks total: "+nb+"\n";
-		for ( int i = 0; i < nb; i++ )
-			output += "\tTrack " + i + ": " + getTrackTitle(i) + "\tExt.Trackinfo: " + getTrackComment(i) + "\n";
-		output += "----------------------------------------";
-		return output;
-	}
-    
     /**
 	 *  Creates a special data structure that allows to concatenate multiples strings at once. I created this because when the freedb Read query arrives, there are no means of knowing how many fields
 	 *  there will be, how many extd track comments there will be, etc. Here is how it works :<br>
