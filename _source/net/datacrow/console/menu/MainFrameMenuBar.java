@@ -124,6 +124,10 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         
         if (module.deliversOnlineService()) {
             menuTools.addSeparator();
+
+            if (module.getIndex() == DcModules._AUDIOCD)
+            	PluginHelper.add(menuTools, "FreedbDiscImport");
+
             PluginHelper.add(menuTools, "OnlineSearch");
             menuTools.addSeparator();
         }
