@@ -37,6 +37,8 @@ This patch fixes the loan functionality.
 - Overdue items are displayed in red in the views.
 - Quickly create multiple items such as audio tracks, music tracks, genres, 
   categories, .. by using the 'Create multiple' option. 
+- New Field: Days till overdue
+- New Field: Due date
 
 
 -----------------------------------------------------------------------------------------
