@@ -51,6 +51,7 @@ import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.menu.DcPropertyViewPopupMenu;
 import net.datacrow.console.views.ISimpleItemView;
+import net.datacrow.console.windows.CreateMultipleItemsDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
@@ -81,12 +82,14 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     
     private JPanel panelActions = new JPanel();
     private JPanel statusPanel;
-    private JButton buttonNew = ComponentFactory.getButton(DcResources.getText("lblNew"));
+    
+    private JButton buttonCreateMultiple = ComponentFactory.getButton(DcResources.getText("lblAddMultiple"));
+    private JButton buttonCreate = ComponentFactory.getButton(DcResources.getText("lblNew"));
     private JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
     
     protected DcObjectList list;
-    
-    private int module;
+    protected int module;
+
     private DcPanel panel = new DcPanel();
     
     public DcMinimalisticItemView(int module, boolean readonly) {
@@ -126,8 +129,14 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         }
     }
     
+    public void createMultiple() {
+    	CreateMultipleItemsDialog dlg = new CreateMultipleItemsDialog(getModuleIdx());
+    	dlg.setVisible(true);
+    	loadItems();
+    }
+    
     public void createNew() {
-        DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, false, getModule().getDcObject(), this);
+        DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, false, DcModules.get(module).getDcObject(), this);
         itemForm.setVisible(true);
     }
     
@@ -154,8 +163,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         return module;
     }
     
-    protected DcModule getModule() {
-        return DcModules.get(module);
+    public DcModule getModule() {
+        return DcModules.get(getModuleIdx());
     }
     
     @Override
@@ -173,7 +182,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         scroller = null;
         panelActions = null;
         statusPanel = null;
-        buttonNew = null;
+        buttonCreate = null;
+        buttonCreateMultiple = null;
         buttonClose = null;
         list.clear();
         list = null;
@@ -182,10 +192,10 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     
     public void loadItems() {
         list.clear();
-        DcObject dco = getModule().getDcObject();
+        DcObject dco = DcModules.get(module).getDcObject();
         DataFilter filter = new DataFilter(dco);
-        filter.setOrder(new DcField[] {dco.getField(getModule().getDefaultSortFieldIdx())});
-        list.add(DataManager.get(getModule().getIndex(), filter));
+        filter.setOrder(new DcField[] {dco.getField(DcModules.get(module).getDefaultSortFieldIdx())});
+        list.add(DataManager.get(module, filter));
     }    
 
     @Override
@@ -197,7 +207,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         if (panel != null) {
             panel.setFont(fontSystem);
             buttonClose.setFont(fontSystem);
-            buttonNew.setFont(fontSystem);
+            buttonCreate.setFont(fontSystem);
+            buttonCreateMultiple.setFont(fontSystem);
             list.setFont(fontNormal);
         }
     }      
@@ -242,16 +253,21 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         //Action panel
         //**********************************************************
         panelActions.setLayout(new FlowLayout(FlowLayout.LEFT));
-        buttonNew.addActionListener(this);
-        buttonNew.setActionCommand("createNew");
+        
+        buttonCreateMultiple.addActionListener(this);
+        buttonCreateMultiple.setActionCommand("createMultiple");
+        
+        buttonCreate.addActionListener(this);
+        buttonCreate.setActionCommand("createNew");
         
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
         
-        buttonNew.setMnemonic('N');
+        buttonCreate.setMnemonic('N');
         buttonClose.setMnemonic('C');
         
-        panelActions.add(buttonNew);
+        panelActions.add(buttonCreateMultiple);
+        panelActions.add(buttonCreate);
         panelActions.add(buttonClose);
         
         //**********************************************************
@@ -390,5 +406,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             createNew();
         else if (e.getActionCommand().equals("close"))
             close();
+        else if (e.getActionCommand().equals("createMultiple"))
+            createMultiple();
     }
 }

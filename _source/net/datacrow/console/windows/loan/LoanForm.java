@@ -56,9 +56,9 @@ public class LoanForm extends DcFrame {
         getContentPane().setLayout(Layout.getGBL());
 
         LoanPanel loanPanel = new LoanPanel(objects, this);
-        getContentPane().add( loanPanel,   Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        getContentPane().add( loanPanel, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                              ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                              new Insets( 5, 5, 5, 5), 0, 0));
+                              new Insets(5, 5, 5, 5), 0, 0));
 
         pack();
         setSize(DcModules.getCurrent().getSettings().getDimension(DcRepository.ModuleSettings.stLoanFormSize));
