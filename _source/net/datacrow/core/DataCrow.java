@@ -39,13 +39,19 @@ import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.SelectExpienceLevelDialog;
 import net.datacrow.console.windows.SplashScreen;
 import net.datacrow.console.windows.TipOfTheDayDialog;
+import net.datacrow.console.windows.loan.LoanInformationForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
 import net.datacrow.console.windows.security.LoginDialog;
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.data.Operator;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.Loan;
 import net.datacrow.core.plugin.Plugins;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
@@ -211,6 +217,18 @@ public class DataCrow {
 
             Thread splashCloser = new Thread(new SplashScreenCloser());
             splashCloser.start();
+            
+            DataFilter df = new DataFilter(DcModules._LOAN);
+            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
+            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
+            
+            for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
+            	if (((Loan) loan).getDaysTillOverdue().longValue() < 0) {
+            		new MessageBox(DcResources.getText("msgThereAreOverdueItems"), MessageBox._WARNING);
+            		new LoanInformationForm().setVisible(true);
+            		break;
+            	}
+            }
             
         } catch (Exception e) {
             logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
