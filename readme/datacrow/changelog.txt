@@ -15,6 +15,7 @@ This patch fixes the loan functionality.
 - "Lend by" was not correctly filled (empty in view).
 - Renamed "Loaned by" to "Lend by"
 - "Is Empty" operator (used for filtering) was broken.
+- Dates not always displayed in the correct format in the table view.
 
 [Changed]
 - Contact persons can now be deleted after they have lend and/or returned items.
@@ -34,7 +35,9 @@ This patch fixes the loan functionality.
 - The item form now displays lend item information for contact persons
 - A new dialog has been created which shows the current lend items, ordered by due date.
 - Overdue items are displayed in red in the views.
-    
+- Quickly create multiple items such as audio tracks, music tracks, genres, 
+  categories, .. by using the 'Create multiple' option. 
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.0.1 [PATCH]  [Release on 08/09/2008] [testing: high] [target: production]

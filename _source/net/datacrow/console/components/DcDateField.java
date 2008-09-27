@@ -52,6 +52,8 @@ public class DcDateField extends JComponent implements IComponent, ActionListene
 
     private static Logger logger = Logger.getLogger(DcDateField.class.getName());
     
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("EEEEE, d MMMMM yyyy");
+    
     private JTextField text;
     private JButton button;
 
@@ -73,7 +75,7 @@ public class DcDateField extends JComponent implements IComponent, ActionListene
     }
 
     private SimpleDateFormat getDateFormat() {
-        return new SimpleDateFormat("EEEEE, d MMMMM yyyy");
+        return sdf;
     }
     
     public void setEditable(boolean b) {

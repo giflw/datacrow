@@ -60,6 +60,7 @@ import net.datacrow.console.components.renderers.AvailabilityCheckBoxTableCellRe
 import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
 import net.datacrow.console.components.renderers.ComboBoxTableCellRenderer;
 import net.datacrow.console.components.renderers.ContactPersonTableCellRenderer;
+import net.datacrow.console.components.renderers.DateFieldCellRenderer;
 import net.datacrow.console.components.renderers.DcTableCellRenderer;
 import net.datacrow.console.components.renderers.DcTableHeaderRenderer;
 import net.datacrow.console.components.renderers.DcTableHeaderRendererRequired;
@@ -700,15 +701,14 @@ public class DcTable extends JTable implements IViewComponent {
             columnNew.setHeaderValue(field.getLabel());
 
             JComponent comp = ComponentFactory.getComponent(module.getIndex(),
-                    field.getReferenceIdx(), field.getFieldType(), field
-                            .getLabel(), field.getMaximumLength());
+                    field.getReferenceIdx(), field.getFieldType(), field.getLabel(), field.getMaximumLength());
             comp.setAutoscrolls(false);
             comp.setBorder(null);
             comp.setIgnoreRepaint(true);
             comp.setVerifyInputWhenFocusTarget(false);
 
-            if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD
-                    || field.getFieldType() == ComponentFactory._URLFIELD) {
+            if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD || 
+                field.getFieldType() == ComponentFactory._URLFIELD) {
 
                 comp = ComponentFactory.getComponent(module.getIndex(), field
                         .getReferenceIdx(), ComponentFactory._SHORTTEXTFIELD,
@@ -746,12 +746,13 @@ public class DcTable extends JTable implements IViewComponent {
                         .getInstance());
             } else {
                 switch (field.getFieldType()) {
+                case ComponentFactory._DATEFIELD:
+                    columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
+                    columnNew.setCellRenderer(DateFieldCellRenderer.getInstance());
+                    break;
                 case ComponentFactory._AVAILABILITYCOMBO:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            ComponentFactory.getTextFieldDisabled()));
-                    columnNew
-                            .setCellRenderer(AvailabilityCheckBoxTableCellRenderer
-                                    .getInstance());
+                    columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
+                    columnNew.setCellRenderer(AvailabilityCheckBoxTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._CHECKBOX:
                     columnNew.setCellEditor(new DefaultCellEditor(
@@ -763,28 +764,23 @@ public class DcTable extends JTable implements IViewComponent {
                     columnNew.setCellEditor(new DefaultCellEditor(
                             (JTextField) comp));
                     columnNew.setMaxWidth(100);
-                    columnNew.setCellRenderer(FileSizeTableCellRenderer
-                            .getInstance());
+                    columnNew.setCellRenderer(FileSizeTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._NUMBERFIELD:
                 case ComponentFactory._DECIMALFIELD:
                     columnNew.setCellEditor(new DefaultCellEditor(
                             (JTextField) comp));
                     columnNew.setMaxWidth(100);
-                    columnNew.setCellRenderer(NumberTableCellRenderer
-                            .getInstance());
+                    columnNew.setCellRenderer(NumberTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._LONGTEXTFIELD:
                 case ComponentFactory._SHORTTEXTFIELD:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (JTextField) comp));
+                    columnNew.setCellEditor(new DefaultCellEditor((JTextField) comp));
                     break;
                 case ComponentFactory._TIMEFIELD:
-                    DcNumberField numberField = ComponentFactory
-                            .getNumberField();
+                    DcNumberField numberField = ComponentFactory.getNumberField();
                     columnNew.setCellEditor(new DefaultCellEditor(numberField));
-                    columnNew.setCellRenderer(TimeFieldTableCellRenderer
-                            .getInstance());
+                    columnNew.setCellRenderer(TimeFieldTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._URLFIELD:
                     columnNew.setCellEditor(new DefaultCellEditor(

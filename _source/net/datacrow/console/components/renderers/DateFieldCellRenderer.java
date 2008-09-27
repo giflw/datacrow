@@ -26,38 +26,43 @@
 package net.datacrow.console.components.renderers;
 
 import java.awt.Component;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import net.datacrow.util.Utilities;
+public class DateFieldCellRenderer  extends DcTableCellRenderer {
+    
+    private static final DateFieldCellRenderer instance = new DateFieldCellRenderer();
+    private static SimpleDateFormat sdf;
 
-public class FileSizeTableCellRenderer extends DcTableCellRenderer {
+    private DateFieldCellRenderer() {
+        setOpaque(true);
+
+        setHorizontalAlignment(LEFT);
+        setVerticalAlignment(CENTER);
+    }
     
-    private static final FileSizeTableCellRenderer instance = new FileSizeTableCellRenderer();
-    
-    private FileSizeTableCellRenderer() {}   
-    
-    public static FileSizeTableCellRenderer getInstance() {
+    public static DateFieldCellRenderer getInstance() {
         return instance;
     }
     
-    @Override
-    protected String getTipText() {
-        return super.getTipText();
-    }
-
     @Override
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
         Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        setHorizontalAlignment(JLabel.RIGHT); // Reset right justify again
         
-        if (value instanceof Long) {
-            String s = Utilities.toFileSizeString((Long) value); 
+        if (sdf == null)
+			sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        if (value instanceof Date) {
+            String s = sdf.format(((Date) value));
             setText(s);
             setToolTipText(s);
+        } else if (value instanceof String) {
+        	setText((String) value);
+        	setToolTipText((String) value);
         }
         
         return renderer;
