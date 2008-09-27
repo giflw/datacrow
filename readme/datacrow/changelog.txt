@@ -29,6 +29,8 @@ This patch fixes the loan functionality.
   These fields can be used for filtering, etc.
 - A new menu has been added called administration. This menu contains the 
   manage X menu items and the new loan information menu item.
+- [1997333] Name order for authors and publishers. The full name is now displayed
+  as 'last name, first name'.
 
 [New]
 - The item form now show related items (in a separate tab)
@@ -39,6 +41,13 @@ This patch fixes the loan functionality.
   categories, .. by using the 'Create multiple' option. 
 - New Field: Days till overdue
 - New Field: Due date
+- [2069192] FreeDB and CDDB support 
+  Audio CD's inserted in the first drive of the system can now be read and information
+  can be retrieved from Freedb.org. The tool can be found in the tools menu, 
+  "Retrieve CD information". This functionality was present in older versions of Data 
+  Crow (2.12) and was removed as it could no longer be supported. I have added the 
+  functionality as a separate plugin. No additional support will be delivered for 
+  this tool.
 
 
 -----------------------------------------------------------------------------------------
