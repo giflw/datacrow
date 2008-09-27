@@ -32,10 +32,10 @@ import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
 
-public class DcModuleItemInfoMenu extends DcMenu {
+public class AdministrationMenu extends DcMenu {
     
-    public DcModuleItemInfoMenu(DcModule module) {
-        super(DcResources.getText("lblItemInformation"));
+    public AdministrationMenu(DcModule module) {
+        super(DcResources.getText("lblAdministration"));
         
         DcModule child = module.getChild();
         

@@ -192,8 +192,8 @@ public class DriveScannerPanel extends DriveManagerPanel implements ActionListen
             
         } else if (e.getActionCommand().equals("removeExcludedDir")) {
             if (tableSkipDirs.getSelectedRow() != -1) {
-                for (int row : tableSkipDirs.getSelectedRows())
-                    tableSkipDirs.removeRow(row);
+                for (int i = tableSkipDirs.getSelectedRows().length; i > 0; i--)
+                    tableSkipDirs.removeRow(tableSkipDirs.getSelectedRows()[i - 1]);
             } else {
                 new MessageBox(DcResources.getText("msgSelectItemBeforeDelete"), MessageBox._INFORMATION);
             }

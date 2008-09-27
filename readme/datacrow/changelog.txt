@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.1 [Release on xx/09/2008] [testing: high] [target: production]
+Data Crow 3.4.1 [Release on 27/09/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 This patch fixes the loan functionality.
 
@@ -11,10 +11,10 @@ This patch fixes the loan functionality.
 - [2083958] Error after adding a new field.
   Added new rules for module creation and alteration.
 - [2029808] F8 only works when module pane has focus
-- Days lend was not correct (introduced by caching mechanism).
+- Days lend was not correct. It should be recalculated on startup.
 - "Lend by" was not correctly filled (empty in view).
 - Renamed "Loaned by" to "Lend by"
-- Empty operator was broken.
+- "Is Empty" operator (used for filtering) was broken.
 
 [Changed]
 - Contact persons can now be deleted after they have lend and/or returned items.
@@ -26,12 +26,14 @@ This patch fixes the loan functionality.
   to show the statuses of loaned items. The overdue date can also be used in views.
   Two new fields are now added for each items: Date overdue and days till overdue.
   These fields can be used for filtering, etc.
+- A new menu has been added called administration. This menu contains the 
+  manage X menu items and the new loan information menu item.
 
 [New]
 - The item form now show related items (in a separate tab)
 - The item form now displays lend item information for contact persons
 - A new dialog has been created which shows the current lend items, ordered by due date.
-- On startup, Data Crow will tell you if there are items overdue.
+- Overdue items are displayed in red in the views.
     
 
 -----------------------------------------------------------------------------------------

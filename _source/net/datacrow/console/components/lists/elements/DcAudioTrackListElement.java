@@ -71,7 +71,7 @@ public class DcAudioTrackListElement extends DcObjectListElement {
         panelInfo.add(labelTitle);
         panelInfo.add(labelLength);
         
-        panelInfo.setPreferredSize(new Dimension(360, fieldHeight));
+        panelInfo.setPreferredSize(new Dimension(50000, fieldHeight));
         add(panelInfo);
     } 
 }

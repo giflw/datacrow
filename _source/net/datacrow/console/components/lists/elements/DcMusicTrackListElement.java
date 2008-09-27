@@ -71,7 +71,7 @@ public class DcMusicTrackListElement extends DcObjectListElement {
         panelInfo.add(labelTitle);
         panelInfo.add(labelPlaylength);
         
-        panelInfo.setPreferredSize(new Dimension(360, fieldHeight));
+        panelInfo.setPreferredSize(new Dimension(50000, fieldHeight));
         add(panelInfo);
     } 
 }

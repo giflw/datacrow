@@ -55,7 +55,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
     }
     
     private void build() {
-        DcMenu menuItemInfo = new DcModuleItemInfoMenu(module);
+        DcMenu menuAdministration = new AdministrationMenu(module);
         DcMenu menuTools = ComponentFactory.getMenu(DcResources.getText("lblTools"));
         DcMenu menuModules = ComponentFactory.getMenu(DcResources.getText("lblModules"));
         DcMenu menuSettings = ComponentFactory.getMenu(DcResources.getText("lblSettings"));
@@ -208,8 +208,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
             PluginHelper.add(menuTools, "FileRenamer",module.getChild().getIndex());
         
         // item information menu
-        menuItemInfo.addSeparator();
-        PluginHelper.add(menuItemInfo, "LoanInformation");
+        menuAdministration.addSeparator();
+        PluginHelper.add(menuAdministration, "LoanInformation");
         
         // user menu
         PluginHelper.add(menuUser, "ChangePassword");
@@ -226,6 +226,9 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         if (menuFile.isEnabled())
             this.add(menuFile);
         
+        if (menuAdministration.isEnabled())
+            this.add(menuAdministration);
+        
         this.add(menuXp);
         
         if (menuModules.isEnabled())
@@ -237,9 +240,6 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         if (menuFilter.isEnabled())
             this.add(menuFilter);
 
-        if (menuItemInfo.isEnabled())
-            this.add(menuItemInfo);
-        
         if (menuSettings.isEnabled())
             this.add(menuSettings);
         
