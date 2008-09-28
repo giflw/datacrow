@@ -222,7 +222,10 @@ public class DataManager {
     }  
     
     public static void remove(DcObject dco, int module) {
-        if (objects.containsKey(dco.getModule().getIndex())) {
+    	if (module == DcModules._LOAN) {
+            Collection<Loan> c = loans.get(getKey(dco));
+            if (c != null) c.remove(dco);
+    	} else if (objects.containsKey(dco.getModule().getIndex())) {
             Collection<DcObject> c = objects.get(dco.getModule().getIndex());
             if (c != null) c.remove(dco);
             
@@ -231,9 +234,6 @@ public class DataManager {
             if (map != null) map.remove(dco.getID());
         } else if (children.containsKey(dco.getModule().getIndex())) {
             List<DcObject> c = children.get(dco.getModule().getIndex()).get(dco.getValue(dco.getParentReferenceFieldIndex()));
-            if (c != null) c.remove(dco);
-        } else if (module == DcModules._LOAN) {
-            Collection<Loan> c = loans.get(getKey(dco));
             if (c != null) c.remove(dco);
         } else if (module == DcModules._PICTURE) {
             Collection<Picture> c = pictures.get(getKey(dco));
@@ -615,13 +615,13 @@ public class DataManager {
                 }
             }
         } else {
-            if (objects.containsKey(modIdx)) {
+        	if (modIdx == DcModules._LOAN) {
+                for (Collection<Loan> objects : loans.values())
+                    add(c, df, objects);
+        	} else if (objects.containsKey(modIdx)) {
                 add(c, df, new ArrayList<DcObject>(objects.get(modIdx)));
             } else if (references.containsKey(modIdx)) {
                 for (Collection<DcMapping> objects : references.get(modIdx).values())
-                    add(c, df, objects);
-            } else if (modIdx == DcModules._LOAN) {
-                for (Collection<Loan> objects : loans.values())
                     add(c, df, objects);
             } else if (modIdx == DcModules._PICTURE) {
                 for (Collection<Picture> objects : pictures.values())

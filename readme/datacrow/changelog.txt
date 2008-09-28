@@ -1,7 +1,14 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.1 [Release on 27/09/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-This patch fixes the loan functionality.
+This release upgrades the existing loan functionality. A due date has been added and the
+loan information can now be viewed in a specialized dialog.
+Items now show which items are using them; actors have a separate tab to show in which 
+movies they have performed.
+The FreeDB support has been re-added. It was present in older version and has now be 
+delivered as a separate plugin (with limited support).
+The tools menu has been split into an administration and a tools menu. The administration
+menu can be used to maintain genres and the likes and to view the loan information.
 
 [Fixed]
 - Nullpointer exception after lending an item (quick view panel is cleared).
@@ -30,7 +37,9 @@ This patch fixes the loan functionality.
   These fields can be used for filtering, etc.
 - A new menu has been added called administration. This menu contains the 
   manage X menu items and the new loan information menu item.
-- [1997333] Name order for authors and publishers. 
+- [1997333] Name order for authors and publishers. The general settings now
+  contains option for the sorting of persons. The selected setting also effects
+  the way the item is displayed. 
 
 [New]
 - The item form now show related items (in a separate tab)
