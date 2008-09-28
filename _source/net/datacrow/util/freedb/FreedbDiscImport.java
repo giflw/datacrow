@@ -54,11 +54,13 @@ public class FreedbDiscImport {
 	        	discId = util.readDiscID();
 	        	logger.info(DcResources.getText("msgFoundDiscID", discId));
 	        } catch (Exception e) {
+	        	new MessageBox(DcResources.getText("msgErrorDiscID", e.getMessage()), MessageBox._INFORMATION);
 	        	logger.error(DcResources.getText("msgErrorDiscID", e.getMessage()));
 	        	return;
 	        }
 
 	        if (!util.isSuccess()) {
+	        	new MessageBox(DcResources.getText("msgCouldNotReadDiscID"), MessageBox._INFORMATION);
 	        	logger.info(DcResources.getText("msgCouldNotReadDiscID"));
 	            return;
 	        }
@@ -78,6 +80,7 @@ public class FreedbDiscImport {
 	            	DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
 	            }
 	        } catch (Exception e) {
+	        	new MessageBox(DcResources.getText("msgErrorDiscID", e.getMessage()), MessageBox._INFORMATION);
 	            logger.error(DcResources.getText("msgErrorDiscID", e.getMessage()), e);
 	        }
 		}
