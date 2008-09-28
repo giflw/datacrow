@@ -241,9 +241,15 @@ public class Freedb {
      */
     public AudioCD convertToDcObject(FreedbReadResult result) {
         AudioCD audioCD = new AudioCD();
+        audioCD.setIDs();
         
-        audioCD.setValue(AudioCD._A_TITLE, result.getAlbum());
-        audioCD.setValue(AudioCD._F_ARTIST, result.getArtist());
+        String title = result.getAlbum();
+        if (title != null && title.length() > 0)
+        	title = title.endsWith("\r") || title.endsWith("\n") ? title.substring(0, title.length() - 1) : title;
+        
+        audioCD.setValue(AudioCD._A_TITLE, title);
+        
+        DataManager.createReference(audioCD, AudioCD._F_ARTIST, result.getArtist());
         audioCD.setValue(AudioCD._K_DISCID, result.getDiscId());
         setGenres(audioCD, result.getCategory());        
         

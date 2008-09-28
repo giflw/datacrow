@@ -137,7 +137,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
             if (!partOfServer) mode = null;
         } 
         
-        if (mode == null) {
+        if (mode == null && server.getSearchModes() != null) {
             for (SearchMode serverMode : server.getSearchModes())
                 mode = serverMode.keywordSearch() ? serverMode : mode;
         }

@@ -124,7 +124,10 @@ public class DcResources {
     	    } while (escapedPatFound);
 
             StringBuffer sb = new StringBuffer(result);
-    	    sb.replace(index, index+searchPat.length(), params[i -1]);
+            try {
+            	sb.replace(index, index+searchPat.length(), params[i -1]);
+            } catch (Exception e) {}
+            
     	    result = sb.toString();
     	}
     	return result;
