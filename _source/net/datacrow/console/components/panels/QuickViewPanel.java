@@ -211,7 +211,6 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 } catch (Exception ignore) {}
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("An error occurred while setting the information of " + dco, e);
         }            
     }

@@ -78,7 +78,6 @@ public class FreedbDiscImport {
 	            	DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
 	            }
 	        } catch (Exception e) {
-	        	e.printStackTrace();
 	            logger.error(DcResources.getText("msgErrorDiscID", e.getMessage()), e);
 	        }
 		}

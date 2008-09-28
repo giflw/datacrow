@@ -102,6 +102,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._STRING,
+                            DcRepository.Settings.stPersonOrder,
+                            DcResources.getText("lblPersonOrderByLastname"),
+                            ComponentFactory._PERSONORDERCOMBO,
+                            "",
+                            DcResources.getText("lblPersonOrder"),
+                            true,
+                            true));   
         getSettings().addSetting(_FileHashing,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stHashType,

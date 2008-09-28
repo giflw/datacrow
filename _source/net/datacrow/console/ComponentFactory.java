@@ -164,6 +164,7 @@ public final class ComponentFactory {
     public static final int _FILESIZEFIELD = 26;
     public static final int _LOGINNAMEFIELD = 27;
     public static final int _HASHTYPECOMBO = 28;
+    public static final int _PERSONORDERCOMBO = 29;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, 23);
@@ -387,6 +388,9 @@ public final class ComponentFactory {
                 return getLoginNameField();
             case _HASHTYPECOMBO:
                 return getHashTypeComboBox();
+            case _PERSONORDERCOMBO:
+                return getPersonOrderComboBox();
+
             default:
                 return getShortTextField(maxTextLength);
         }
@@ -451,6 +455,14 @@ public final class ComponentFactory {
         for (Object o : JacksumAPI.getAvailableAlgorithms().keySet()) {
             cb.addItem(o);
         }
+        return cb;
+    }
+
+    public static final JComboBox getPersonOrderComboBox() {
+        JComboBox cb = getComboBox();
+        cb.addItem(DcResources.getText("lblPersonOrginalOrder"));
+        cb.addItem(DcResources.getText("lblPersonOrderByLastname"));
+        cb.addItem(DcResources.getText("lblPersonOrderByFirstname"));
         return cb;
     }
     

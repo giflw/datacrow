@@ -27,6 +27,9 @@ package net.datacrow.core.objects;
 
 import java.util.StringTokenizer;
 
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
 public class DcAssociate extends DcObject {
@@ -60,7 +63,7 @@ public class DcAssociate extends DcObject {
         if (!isNameSet && (isLastNameSet || isFirstNameSet)) {
             firstname = firstname == null ? "" : firstname.trim();
             lastname = lastname == null ? "" : lastname.trim();
-            setValue(DcAssociate._A_NAME, lastname + ", " + firstname);
+            setValue(DcAssociate._A_NAME, firstname + " " + lastname);
         } else if (isNameSet && (!isLastNameSet || !isFirstNameSet)) {
             StringTokenizer st = new StringTokenizer(name);
             int i = 0;
@@ -85,12 +88,32 @@ public class DcAssociate extends DcObject {
 
     @Override
     public int getDefaultSortFieldIdx() {
-        return DcAssociate._A_NAME;
+    	String order = DcSettings.getString(DcRepository.Settings.stPersonOrder);
+    	if (order.equals(DcResources.getText("lblPersonOrginalOrder")))
+    		return DcAssociate._ID;
+    	else if (order.equals(DcResources.getText("lblPersonOrderByLastname")))
+    		return DcAssociate._F_LASTTNAME;
+    	else if (order.equals(DcResources.getText("lblPersonOrderByFirstname")))
+    		return DcAssociate._E_FIRSTNAME;
+    	else 
+    		return DcAssociate._A_NAME;
     }    
     
     @Override
     public String toString() {
-        return getValue(DcAssociate._A_NAME) != null  ? (String) getValue(DcAssociate._A_NAME) : "";
+    	String order = DcSettings.getString(DcRepository.Settings.stPersonOrder);
+    	
+    	if (order.equals(DcResources.getText("lblPersonOrderByLastname"))) {
+        	String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
+        	String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
+        	
+        	if (Utilities.isEmpty(firstname) || Utilities.isEmpty(lastname))
+        		return getValue(DcAssociate._A_NAME) != null  ? (String) getValue(DcAssociate._A_NAME) : "";
+    		
+    		return  lastname + ", " + firstname;
+    	} else { 
+    		return getValue(DcAssociate._A_NAME) != null  ? (String) getValue(DcAssociate._A_NAME) : "";
+    	}
     }  
 
     @Override

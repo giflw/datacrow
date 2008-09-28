@@ -120,6 +120,9 @@ public class DataFilterEntry {
         String input = isInputEmpty ? "" : o.toString().toLowerCase();
         String check = isCheckEmpty ? "" : value.toString().toLowerCase();
         
+        if (dco.getField(field) == null)
+        	return false;
+        
         if (operator.getIndex() == Operator.CONTAINS.getIndex()) {
             if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection<DcObject> c1 = (Collection<DcObject>) o;
@@ -139,7 +142,6 @@ public class DataFilterEntry {
         } else if (operator.getIndex() == Operator.ENDS_WITH.getIndex()) {
             return input.endsWith(check);
         } else if (operator.getIndex() == Operator.EQUAL_TO.getIndex()) {
-
         	if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection<DcObject> c1 = (Collection<DcObject>) o;
                 

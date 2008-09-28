@@ -16,6 +16,7 @@ This patch fixes the loan functionality.
 - Renamed "Loaned by" to "Lend by"
 - "Is Empty" operator (used for filtering) was broken.
 - Dates not always displayed in the correct format in the table view.
+- Sample item (Data Crow) was not loaded on startup.
 
 [Changed]
 - Contact persons can now be deleted after they have lend and/or returned items.
@@ -29,8 +30,7 @@ This patch fixes the loan functionality.
   These fields can be used for filtering, etc.
 - A new menu has been added called administration. This menu contains the 
   manage X menu items and the new loan information menu item.
-- [1997333] Name order for authors and publishers. The full name is now displayed
-  as 'last name, first name'.
+- [1997333] Name order for authors and publishers. 
 
 [New]
 - The item form now show related items (in a separate tab)

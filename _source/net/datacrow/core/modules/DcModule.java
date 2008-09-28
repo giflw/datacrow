@@ -948,6 +948,9 @@ public class DcModule implements Comparable<DcModule> {
                     Object value = line[j];
                     if (value != null && !value.equals("")) {
                         for (DcField field : dco.getFields()) {
+                        	
+                        	if (field.isUiOnly() && field.getFieldType() != ComponentFactory._PICTUREFIELD) continue;
+                        	
                             if (field.getSystemName().equalsIgnoreCase(headers[j])) {
                                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                                     Picture picture = new Picture();

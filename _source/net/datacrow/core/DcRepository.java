@@ -73,6 +73,7 @@ public abstract class DcRepository {
     }
     
     public static final class Settings {
+    	public static final String stPersonOrder = "person_order";
         public static final String stQuickViewBackgroundColor = "quick_view_bg_color";
         public static final String stCardViewBackgroundColor = "card_view_background_color";
         public static final String stHashType = "hash_type";
