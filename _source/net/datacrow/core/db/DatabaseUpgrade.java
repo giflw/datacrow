@@ -91,8 +91,8 @@ public class DatabaseUpgrade {
                 convertAssociateNames();
                 moveImages();
                 convertFileSize();
-                repairCrossTables();
-                convertRatings();
+                repairCrossTables(version);
+                convertRatings(version);
                 convertLocations();
 
                 LogForm.getInstance().close();
@@ -572,12 +572,15 @@ public class DatabaseUpgrade {
      * Convert ratings
      ************************************************/
     
-    private void convertRatings() throws DatabaseUpgradeException {
+    private void convertRatings(Version v) throws DatabaseUpgradeException {
         
         Boolean b = getLegacySetting("ratings_converted");
         
         if (b != null && b.booleanValue())
             return;
+        
+        if (!v.isUndetermined())
+        	return;
         
         DataCrow.showSplashScreen(false);
         
@@ -630,12 +633,15 @@ public class DatabaseUpgrade {
      * Cross table fixes
      ************************************************/
 
-    private void repairCrossTables() throws DatabaseUpgradeException {
+    private void repairCrossTables(Version v) throws DatabaseUpgradeException {
         
         Boolean b = getLegacySetting("cross_tables_fixed");
         
         if (b != null && b.booleanValue())
             return;
+        
+        if (!v.isUndetermined())
+        	return;
 
         DataCrow.showSplashScreen(false);
         QuestionBox qb = new QuestionBox("Upgrade for version < 3.1.25. Crosstables for Music Artists and Music Genres need to be fixed. " +
