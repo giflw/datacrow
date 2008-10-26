@@ -37,8 +37,11 @@ import net.datacrow.util.StringUtils;
 import org.apache.log4j.Logger;
 
 public abstract class SearchTask extends Thread {
-    
+
     private static Logger logger = Logger.getLogger(SearchTask.class.getName());
+
+    public static final int _ITEM_MODE_SIMPLE = 0;
+    public static final int _ITEM_MODE_FULL = 1; 
     
     private boolean isCancelled = false;
     
@@ -50,15 +53,17 @@ public abstract class SearchTask extends Thread {
     
     private String address;
     private IServer server;
-    private SearchMode mode;
+    private SearchMode searchMode;
     private Region region;
+    
+    private int itemMode = _ITEM_MODE_FULL;
     
     public SearchTask(IOnlineSearchClient listener, IServer server,
                       Region region, SearchMode mode, String query) {
 
 		this.listener = listener;
 		this.region = region;
-		this.mode = mode;
+		this.searchMode = mode;
 		this.server = server;
 		this.address = region != null ? region.getUrl() : server.getUrl();
 		this.query = StringUtils.normalize(query);
@@ -67,9 +72,17 @@ public abstract class SearchTask extends Thread {
     protected void setServiceInfo(DcObject dco) {
         String service =  server.getName() + " / " + 
                          (region != null ? region.getCode() : "none") + " / " +
-                         (mode != null ? mode.getDisplayName() : "none") + " / " + 
+                         (searchMode != null ? searchMode.getDisplayName() : "none") + " / " + 
                           "value=[" + query + "]";
         dco.setValue(DcObject._SYS_SERVICE, service);
+    }
+
+    public void setItemMode(int mode) {
+        this.itemMode = mode;
+    }
+    
+    public int getItemMode() {
+        return itemMode;
     }
     
     public void setMaximum(int maximum) {
@@ -97,11 +110,11 @@ public abstract class SearchTask extends Thread {
     }
 
     public SearchMode getMode() {
-        return mode;
+        return searchMode;
     }
 
     public void setMode(SearchMode mode) {
-        this.mode = mode;
+        this.searchMode = mode;
     }
 
     public Region getRegion() {
@@ -152,16 +165,16 @@ public abstract class SearchTask extends Thread {
     /**
      * Query for the item(s) using the web key. 
      */
-    protected Collection<DcObject> getItems(String key) throws Exception {
+    protected Collection<DcObject> getItems(String key, boolean full) throws Exception {
         Collection<DcObject> items = new ArrayList<DcObject>();
-        items.add(getItem(key));
+        items.add(getItem(key, full));
         return items;
     }
 
     /**
      * Query for the item using the web key. 
      */
-    protected abstract DcObject getItem(String key) throws Exception;
+    protected abstract DcObject getItem(String key, boolean full) throws Exception;
     
     /**
      * Query for the item via the URL 
@@ -172,11 +185,21 @@ public abstract class SearchTask extends Thread {
      * Get every web ID from the page. With these IDs it should be possible to 
      * get to the detailed item information. 
      */
-    protected abstract Collection<String> getItemKeys();
+    protected abstract Collection<String> getItemKeys() throws Exception ;
     
     @Override
     public void run() {
-        Collection<String> keys = getItemKeys();
+        Collection<String> keys = new ArrayList<String>();
+
+        listener.addMessage(DcResources.getText("msgConnectingToServer", getAddress()));
+
+        try {
+            keys.addAll(getItemKeys());
+        } catch (Exception e) {
+            listener.addError(DcResources.getText("msgCouldNotConnectTo", getServer().getName()));
+            logger.error(e, e);
+        }
+        
         listener.processingTotal(keys.size());
 
         if (keys.size() == 0) {
@@ -194,7 +217,7 @@ public abstract class SearchTask extends Thread {
             if (isCancelled() || counter == getMaximum()) break;
             
             try {
-                for (DcObject dco : getItems(key)) {
+                for (DcObject dco : getItems(key, getItemMode() == _ITEM_MODE_FULL)) {
                     dco.setIDs();
                     setServiceInfo(dco);
                     
