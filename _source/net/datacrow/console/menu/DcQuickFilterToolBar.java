@@ -177,8 +177,11 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     private void applySelectedField() {
         comboCriteria.removeAllItems();
         DcField field = (DcField) comboFields.getSelectedItem();
-        setSearchField(field);
-        module.getSettings().set(DcRepository.ModuleSettings.stQuickFilterDefaultField, field.getIndex());
+        
+        if (field != null) {
+            setSearchField(field);
+            module.getSettings().set(DcRepository.ModuleSettings.stQuickFilterDefaultField, field.getIndex());
+        }
     }
     
     private void applySelectedFilter() {

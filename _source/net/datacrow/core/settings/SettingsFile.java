@@ -25,6 +25,7 @@
 
 package net.datacrow.core.settings;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
@@ -69,9 +70,15 @@ public class SettingsFile {
         Properties properties = new Properties();
         
         try {
-            FileInputStream fis = new FileInputStream(settings.getSettingsFile());
-            properties.load(fis);
-            fis.close();
+            File file = settings.getSettingsFile();
+            
+            if (file.exists()) {
+                FileInputStream fis = new FileInputStream(file);
+                properties.load(fis);
+                fis.close();
+            } else {
+                return;
+            }
         } catch (Exception ignore) {
             logger.debug("Error while loading settings from file " + settings.getSettingsFile());
         } 

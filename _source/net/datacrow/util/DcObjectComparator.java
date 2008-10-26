@@ -46,8 +46,10 @@ public class DcObjectComparator implements Comparator<DcObject> {
 
         if (o1 == null && o2 == null)
             return 0;
-        else if (o1 == null || o2 == null)
+        else if (o1 == null)
             return -1;
+        else if (o2 == null)
+            return 1;
         
         DcField fld = dco1.getField(field);
         if (o1 instanceof Number && o2 instanceof Number &&

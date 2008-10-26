@@ -36,7 +36,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Image;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.Hash;
 import net.datacrow.util.Utilities;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
@@ -80,7 +79,7 @@ public class ImageImporter extends FileImporter {
             image.setValue(Image._G_HEIGHT, height != -1 ? Long.valueOf(height) : null);
             
             image.setValue(Image._SYS_FILENAME, filename);
-            Hash.getInstance().calculateHash(image);
+          //  Hash.getInstance().calculateHash(image);
             
             DcImageIcon icon = new DcImageIcon(filename);
             
@@ -106,37 +105,48 @@ public class ImageImporter extends FileImporter {
                 if (metadata.containsDirectory(ExifDirectory.class)) {
                     Directory exifDirectory = metadata.getDirectory(ExifDirectory.class);
                     
-                    String camera = exifDirectory.getString(ExifDirectory.TAG_MODEL);
-                    int compression = exifDirectory.getInt(ExifDirectory.TAG_COMPRESSION);
-                    Date date = exifDirectory.getDate(ExifDirectory.TAG_DATETIME);
-                    String description = exifDirectory.getString(ExifDirectory.TAG_IMAGE_DESCRIPTION);
-    
-                    if (date != null) {
-                        cal.setTime(date);
-                        cal.set(Calendar.HOUR_OF_DAY, 0);
-                        cal.set(Calendar.MINUTE, 0);
-                        cal.set(Calendar.SECOND, 0);
-                        image.setValue(Image._N_DATE, cal.getTime());
-                    }
-                    
-                    image.setValue(Image._B_DESCRIPTION, description);
-                    image.setValue(Image._Q_CAMERA, camera);
-                    image.setValue(Image._O_COMPRESSION, Long.valueOf(compression));
+                    try {
+                        String camera = exifDirectory.getString(ExifDirectory.TAG_MODEL);
+                        image.setValue(Image._Q_CAMERA, camera);
+                    } catch (Exception me) {}
+
+                    try {
+                        int compression = exifDirectory.getInt(ExifDirectory.TAG_COMPRESSION);
+                        image.setValue(Image._O_COMPRESSION, Long.valueOf(compression));
+                    } catch (Exception me) {}
+
+
+                    try {
+                        String description = exifDirectory.getString(ExifDirectory.TAG_IMAGE_DESCRIPTION);
+                        image.setValue(Image._B_DESCRIPTION, description);
+                    } catch (Exception me) {}
+
+                    try {
+                        Date date = exifDirectory.getDate(ExifDirectory.TAG_DATETIME);
+                        if (date != null) {
+                            cal.setTime(date);
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+                            cal.set(Calendar.MINUTE, 0);
+                            cal.set(Calendar.SECOND, 0);
+                            image.setValue(Image._N_DATE, cal.getTime());
+                        }
+                    } catch (Exception me) {}
                 }
                 
                 if (metadata.containsDirectory(IptcDirectory.class)) {
-                    Directory iptcDirectory = metadata.getDirectory(IptcDirectory.class);
-                    
-                    String city = iptcDirectory.getString(IptcDirectory.TAG_CITY);
-                    String country = iptcDirectory.getString(IptcDirectory.TAG_COUNTRY_OR_PRIMARY_LOCATION);
-                    String state = iptcDirectory.getString(IptcDirectory.TAG_PROVINCE_OR_STATE);
-                    
-                    String location = "";
-                    location += country != null ? country + ", " : "";
-                    location += state != null ? state  + ", " : "";
-                    location += city != null ? city : "";
-                    
-                    image.setValue(Image._P_PLACE, location);
+                    try {
+                        Directory iptcDirectory = metadata.getDirectory(IptcDirectory.class);
+                        String city = iptcDirectory.getString(IptcDirectory.TAG_CITY);
+                        String country = iptcDirectory.getString(IptcDirectory.TAG_COUNTRY_OR_PRIMARY_LOCATION);
+                        String state = iptcDirectory.getString(IptcDirectory.TAG_PROVINCE_OR_STATE);
+                        
+                        String location = "";
+                        location += country != null ? country + ", " : "";
+                        location += state != null ? state  + ", " : "";
+                        location += city != null ? city : "";
+                        
+                        image.setValue(Image._P_PLACE, location);
+                    } catch (Exception me) {}
                 }
                 
             } catch (JpegProcessingException jpe) {}

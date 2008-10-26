@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.2 [Release on 27/09/2008] [testing: high] [target: production]
+Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -7,8 +7,18 @@ Data Crow 3.4.2 [Release on 27/09/2008] [testing: high] [target: production]
 - Service URL not set by some online searches
 - Setting value without override of existing value fails even if the current value is
   empty.
-- Sir name and first names were mixed.
-- 
+- Firstname is set as lastname and lastname as firstname (all person modules).
+- Sorting does no longer work (only string values work). Empty values seem to be the 
+  cause of this malfunction.
+- Cannot re-active module as it is no longer displayed in the module settings.
+- Update all does not work with actors (and so on) (updated in DB but not in UI).
+- Quick filter no longer displayed in the book module.
+- Import of some images does not work! (meta information read exceptions not caught)
+- Add picture field to existing module > items are not opened in item form. 
+  Caching issue: always clear cache if the module has a new field.
+- After altering a module the old cache is still used.
+- Old cache is used after an ungraceful shutdown. 
+- Picture not shown in the card view (view settings does not see the new picture fields).
 
 
 -----------------------------------------------------------------------------------------

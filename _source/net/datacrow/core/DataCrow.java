@@ -230,6 +230,8 @@ public class DataCrow {
             	}
             }
             
+            DcSettings.set(DcRepository.Settings.stGracefulShutdown, Boolean.FALSE);
+            
         } catch (Exception e) {
             logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
             e.printStackTrace();

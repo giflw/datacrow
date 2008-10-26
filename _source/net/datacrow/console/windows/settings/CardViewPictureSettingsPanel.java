@@ -27,6 +27,8 @@ package net.datacrow.console.windows.settings;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -90,8 +92,17 @@ public class CardViewPictureSettingsPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(0, 5, 5, 5), 0, 0));
         
+        Collection<DcField> fields = new ArrayList<DcField>();
         for (int field : DcModules.get(module).getSettings().getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder))
-    		table.addRow(new Object[] {DcModules.get(module).getField(field)});
+            fields.add(DcModules.get(module).getField(field));
+
+        for (DcField field : DcModules.get(module).getFields()) {
+            if (field.getValueType() == DcRepository.ValueTypes._PICTURE && !fields.contains(field))
+                fields.add(field);
+        }
+        
+        for (DcField field : fields)
+            table.addRow(new Object[] {field});
 	}
 	
     protected void clear() {

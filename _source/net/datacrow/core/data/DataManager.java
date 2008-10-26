@@ -74,6 +74,7 @@ import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
@@ -96,6 +97,9 @@ import org.apache.log4j.Logger;
 public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
+    
+    
+    private static boolean saveCache = true;
     
     // objects per module
     private static Map<Integer, List<DcObject>> objects = 
@@ -661,7 +665,9 @@ public class DataManager {
      ***************************************/
     
     public void initialize() {
-        if (!useCache || !deserialize()) {
+        boolean gracefulShutdown = DcSettings.getBoolean(DcRepository.Settings.stGracefulShutdown);
+        
+        if (!gracefulShutdown || !useCache || !deserialize()) {
             long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             loadFromDB();
 
@@ -682,6 +688,7 @@ public class DataManager {
     
     public static void clearCache() {
     	try {
+    	    saveCache = false;
     		for (String file : new File(DataCrow.cacheDir).list())
     			new File(DataCrow.cacheDir + file).delete();
     	} catch (Exception e) {
@@ -689,13 +696,14 @@ public class DataManager {
     	}
     }
     
-    
     public static void serialize() {
         try {
-            logger.info(DcResources.getText("msgWritingItemCache"));
-            CacheWriter writer = new CacheWriter();
-            writer.start();
-            writer.join();
+            if (saveCache) {
+                logger.info(DcResources.getText("msgWritingItemCache"));
+                CacheWriter writer = new CacheWriter();
+                writer.start();
+                writer.join();
+            }
         } catch (InterruptedException e) {
             logger.error(e, e);
         }

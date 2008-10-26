@@ -69,7 +69,10 @@ public class DcModuleSelector extends JComponent implements IComponent {
         int x = 0;
         for (DcModule module : DcModules.getAllModules()) {
 
-            if (module.isSelectableInUI()) {
+            if (module.getIndex() == DcModules._CONTACTPERSON || 
+                module.getIndex() == DcModules._MEDIA ||
+                module.getIndex() == DcModules._CONTAINER || 
+               (module.isTopModule() && !module.hasDependingModules())) {
                 
                 JCheckBox checkBox = ComponentFactory.getCheckBox("");
                 checkBox.setSelected(module.isEnabled());

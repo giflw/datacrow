@@ -17,21 +17,19 @@ Online services
 
 3.4.2
 ---------------------------------------------------------------------------------------------------------
-[ ] Bug: Sorting does no longer work (only string values work)
-[ ] Bug: Cannot re-active module as it is no longer displayed in the module settings.
-[ ] Bug: View settings not saved (check this on Ubuntu and close call). Background settings for the card
-    view are not saved. This should be fixed.
-[ ] Bug: Update all does not work with actors (and so on) (updated in DB but not in UI). Manual changes
+[x] Bug: Sorting does no longer work (only string values work)
+[x] Bug: Cannot re-active module as it is no longer displayed in the module settings.
+[-] Bug: Update all does not work with actors (and so on) (updated in DB but not in UI). Manual changes
     (using the item form) come across and are just fine!
-[ ] Bug: '.properties' file in the data folder.
-[ ] Bug: Quick filter no longer displayed in the book module.
-[ ] Bug: Import of some images does not work!! (see foto's on d:\$backup of my laptop).
+[-] Bug: '.properties' file in the data folder. 
+[x] Bug: Quick filter no longer displayed in the book module.
+[x] Bug: Import of some images does not work!! (see foto's on d:\$backup of my laptop).
 [ ] Bug: New module, field reference to category > not used correctly (does not show related items, 
     does not show its items in the quick filter panel).
-[ ] Bug: Add picture field to existing module > items are not opened in item form 
+[x] Bug: Add picture field to existing module > items are not opened in item form 
    (error: net.datacrow.core.objects.DcObject.isChanged(DcObject.java:556). Refill cache if the module
     has a new field, even when it is a UI field only!!!!
-[ ] Bug: Picture not shown in the card view (view settings does not see the new picture fields).
+[x] Bug: Picture not shown in the card view (view settings does not see the new picture fields).
     (after adding a picture field to an existing module).
 [ ] Bug: "ERROR [Thread-19] (ComponentFactory.java:187) - Not thread-safe; should only 
     remove components from within the Event Dispatching thread" (Search form > Date criteria (after) > Apply.
@@ -45,12 +43,12 @@ Online services
 [ ] Bug: Bol.com no longer works.
 [ ] Bug: Templates isssue; sub menu for new using template is not there after a restart.
 [x] Check web application (method errors? correct modules shown?)
-[ ] Remove the todo.txt file.
+[x] Remove the todo.txt file.
 [ ] Provide the option to revert back to the default settings (per module + general settings).
     Provide this option as a parameter.
 [ ] Document the parameters.
 [ ] Create a new parameter: -help which will display a dialog with the startup information.
-[ ] Update the current online search functionality. Initial result set should be small and only contain
+[x] Update the current online search functionality. Initial result set should be small and only contain
     general information such as name or title.
 [ ] Error handling for defected modules has to be improved. Also it should be possible to skip loading
     a defected module. Additionally it should be checked whether there is an impact on the data manager.
@@ -60,8 +58,8 @@ Online services
     It would be nice, if datacrow used only the first part of the entered number. 
 [ ] Zoom in out for the chart panel.
 [ ] Log (debug) the changed fields for item forms.
-[ ] Are the advanced settings for HSQL still being used?
-[ ] Graceful shutdown settings: set to false after startup and set to true after graceful shutdown.
+[x] Are the advanced settings for HSQL still being used?
+[x] Graceful shutdown settings: set to false after startup and set to true after graceful shutdown.
 
 
 3.4.3
