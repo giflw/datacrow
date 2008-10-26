@@ -404,6 +404,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 oldValue = oldValue == null ? new byte[0] : oldValue;
                 if (!Utilities.sameImage(newValue, oldValue)) {
                     dcoOrig.setChanged(DcObject._ID, true);
+                    logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
                     changed = true;
                 }
             } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
@@ -421,9 +422,11 @@ public class ItemForm extends DcFrame implements ActionListener {
                                 found = true;
                         }
                         changed = !found;
+                        if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldList + ". New: " + newList);
                     }
                 } else {
                     changed = true;
+                    logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldList + ". New: " + newList);
                 }
             } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION || 
                       (!field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._PICTURE)) {
@@ -435,20 +438,24 @@ public class ItemForm extends DcFrame implements ActionListener {
                     if (   (dateOld == null && dateNew != null) || (dateNew == null && dateOld != null) ||
                            (dateOld != null && dateNew != null && dateOld.compareTo(dateNew) != 0)) {
                         changed = true;
+                        logger.debug("Field " + field.getLabel() + " is changed. Old: " + dateOld + ". New: " + dateNew);
                     }
                 } else if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
                     String newValue = Utilities.getComparableString(o);
                     String oldValue = Utilities.getComparableString(dcoOrig.getValue(index));
                     changed = !oldValue.equals(newValue);
+                    if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
                 } else {
                     String newValue = Utilities.getComparableString(o);
                     String oldValue = Utilities.getComparableString(dcoOrig.getValue(index));
                     changed = !oldValue.equals(newValue);
+                    if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
                 } 
             } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) dcoOrig.getValue(index);
                 changed = (picture != null && (picture.isUpdated() || picture.isNew() || picture.isDeleted())) ||
                 		  ((DcPictureField) component).isChanged();
+                if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
             }
             
             if (changed)

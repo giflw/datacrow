@@ -38,10 +38,10 @@ Online services
     java.lang.Boolean cannot be cast to java.lang.Long (QuickFilter, switch between available and category)
 [ ] Bug: Loading Module[] in the log file.
 [ ] Bug: Icons for modules not saved correctly (black instead of transparent).
-[ ] Bug: Error while loading settings from file 
+[x] Bug: Error while loading settings from file 
     C:\Program Files\Data Crow Knowledge Share\data\<category>.properties
 [ ] Bug: Bol.com no longer works.
-[ ] Bug: Templates isssue; sub menu for new using template is not there after a restart.
+[x] Bug: Templates isssue; sub menu for new using template is not there after a restart.
 [x] Check web application (method errors? correct modules shown?)
 [x] Remove the todo.txt file.
 [ ] Provide the option to revert back to the default settings (per module + general settings).
@@ -52,12 +52,10 @@ Online services
     general information such as name or title.
 [ ] Error handling for defected modules has to be improved. Also it should be possible to skip loading
     a defected module. Additionally it should be checked whether there is an impact on the data manager.
-[ ] Update all and mass update functionality: Provide the full collection of items to update. This
-    will remove the need to keep the view active / visible.
 [ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
     It would be nice, if datacrow used only the first part of the entered number. 
 [ ] Zoom in out for the chart panel.
-[ ] Log (debug) the changed fields for item forms.
+[x] Log (debug) the changed fields for item forms.
 [x] Are the advanced settings for HSQL still being used?
 [x] Graceful shutdown settings: set to false after startup and set to true after graceful shutdown.
 

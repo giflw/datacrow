@@ -19,6 +19,8 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
 - After altering a module the old cache is still used.
 - Old cache is used after an ungraceful shutdown. 
 - Picture not shown in the card view (view settings does not see the new picture fields).
+- Container field can be updated using update all.
+- Templates issue; sub menu for new using template is not there after a restart.
 
 
 -----------------------------------------------------------------------------------------

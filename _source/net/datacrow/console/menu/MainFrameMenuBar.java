@@ -142,7 +142,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
                                 DcResources.getText("lblNewItem", module.getObjectName()));
         boolean templatesPresent = false;
         if (module.getTemplateModule() != null) {
-            for (DcTemplate template :Templates.getTemplates(module.getTemplateModule().getIndex())) {
+            Templates.refresh();
+            for (DcTemplate template : Templates.getTemplates(module.getTemplateModule().getIndex())) {
                 templatesPresent = true;
                 PluginHelper.add(menuCreateNew, "CreateNew", null, null, template, -1, module.getIndex());
             }
