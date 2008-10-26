@@ -61,10 +61,11 @@ public class RetrieveItemDetailsDialog extends DcDialog implements ActionListene
         
         this.task = task;
         this.dco = dco;
-
+        
         JButton btStart = ComponentFactory.getIconButton(IconLibrary._icoStart);
         btStart.setActionCommand("start");
         btStart.addActionListener(this);
+        btStart.addKeyListener(this);
 
         getContentPane().setLayout(Layout.getGBL());
         getContentPane().add(bar,  Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
@@ -80,6 +81,8 @@ public class RetrieveItemDetailsDialog extends DcDialog implements ActionListene
         setCenteredLocation();
         setResizable(false);
 
+        setTitle("Retrieving information for " + dco.getName());
+        
         btStart.requestFocusInWindow();
         setModal(true);
         setVisible(true);
