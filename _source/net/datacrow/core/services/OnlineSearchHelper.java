@@ -25,6 +25,7 @@
 
 package net.datacrow.core.services;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -50,11 +51,13 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
     private IServer server;
     private Region region;
     private SearchMode mode;
+    private int itemMode;
     
     private Collection<DcObject> result = new ArrayList<DcObject>();
     
-    public OnlineSearchHelper(int module) {
+    public OnlineSearchHelper(int module, int itemMode) {
         this.module = module;
+        this.itemMode = itemMode;
     }
     
     public void setServer(IServer server) {
@@ -73,11 +76,28 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         this.maximum = maximum;
     }
     
+    public DcObject query(DcObject item) {
+        IServer server = getServer();
+        Region region = getRegion(server);
+        
+        task = server.getSearchTask(this, getSearchMode(server), region, null);
+        task.setItemMode(SearchTask._ITEM_MODE_FULL);
+        
+        try {
+            return task.getItem(new URL((String) item.getValue(DcObject._SYS_SERVICEURL)));
+        } catch (Exception e) {
+            logger.error(e, e);
+            return item;
+        }
+    }
+    
+    
     public DcObject query(DcObject base, String query, int[] matcherFieldIdx) {
         IServer server = getServer();
         Region region = getRegion(server);
         
         task = server.getSearchTask(this, getSearchMode(server), region, query);
+        task.setItemMode(itemMode);
         task.setMaximum(maximum);
         task.run();
         
@@ -89,6 +109,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         Region region = getRegion(server);
         
         task = server.getSearchTask(this, getSearchMode(server), region, query);
+        task.setItemMode(itemMode);
         task.setMaximum(maximum);
         task.run();
         

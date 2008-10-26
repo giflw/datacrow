@@ -22,10 +22,15 @@ Online services
 
 3.4.1
 ---------------------------------------------------------------------------------------------------------
-[ ] scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
-    It would be nice, if datacrow used only the first part of the entered number. 
 [X] Show related items in the item form (such as movies for actors)
 [X] Loan management, Due Date (1941130)
+
+
+3.4.2
+---------------------------------------------------------------------------------------------------------
+[ ] Re-enable modules bug.
+[ ] scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
+    It would be nice, if datacrow used only the first part of the entered number. 
 [ ] Translations. There are some known issues with the Resource Editor tool such as loss of special 
     character data. The resource editor will be updated to handle special characters correctly. 
     Additionally Data Crow will feature language packs, making it possible to switch between languages.  
@@ -33,6 +38,7 @@ Online services
     module jar file and its property files. Functionality will be provided which makes it easy to export 
     and import a module (definition). This functionality will also allow users to export default/demo data 
     with their module. This functionality will also be used to provide additional custom modules. 
+
 
 
 3.5

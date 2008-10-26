@@ -34,6 +34,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
+import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
 
@@ -65,7 +66,7 @@ public class MovieSynchronizer extends DefaultSynchronizer {
             String title = (String) dco.getValue(Movie._A_TITLE);
             if (title.trim().length() == 0) return updated;
             
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex());
+            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
             osh.setServer(server);
             osh.setRegion(region);
             osh.setMode(mode);
@@ -74,7 +75,7 @@ public class MovieSynchronizer extends DefaultSynchronizer {
             for (DcObject movie : movies) {
                 if (StringUtils.equals(title, (String) movie.getValue(Movie._A_TITLE))) {
                     updated = true;
-                    dco.copy(movie, true);
+                    update(dco, movie, osh);
                     break;
                 }
             }

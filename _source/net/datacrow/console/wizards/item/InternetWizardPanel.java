@@ -53,6 +53,7 @@ public class InternetWizardPanel extends ItemWizardPanel implements IWizardPanel
     @Override
     public Object apply() throws WizardException {
         DcObject result = internetSearchForm.getSelectedObject();
+        
         if (result == null) 
             throw new WizardException(DcResources.getText("msgWizardSelectItem"));
 

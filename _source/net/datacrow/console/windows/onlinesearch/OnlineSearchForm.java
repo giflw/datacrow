@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -174,12 +175,18 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
         if (row > -1 && items.size() > 0 && row < items.size()) {
             dco = items.get(row);
+            dco = fill(dco);
             dco.setValue(DcObject._ID, ID);
         }
-
         return dco;
     }
 
+    private DcObject fill(DcObject dco) { 
+        SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
+        new RetrieveItemDetailsDialog(task, dco);
+        return dco;
+    }
+    
     public Collection<DcObject> getSelectedObjects() {
         int row = list.getSelectedIndex();
 
@@ -193,12 +200,12 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         if (ID == null) {
             int[] rows = list.getSelectedIndices();
             for (int i = 0; i < rows.length; i++) {
-                result.add(items.get(rows[i]));
+                DcObject dco = items.get(rows[i]);
+                dco = fill(dco);
+                result.add(dco);
             }
         } else {
-            DcObject o = items.get(row);
-        	o.setValue(DcObject._ID, ID);
-            result.add(o);
+            result.add(getSelectedObject());
         }
         return result;
     }
@@ -208,16 +215,24 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }    
 
     private void open() {
-        int selectedRow = list.getSelectedIndex();
-        if (selectedRow == -1) {
-            new MessageBox(DcResources.getText("msgSelectRowToOpen"), MessageBox._WARNING);
-            return;
-        }
+        try {
+            SwingUtilities.invokeLater(new Thread(new Runnable() {
+                public void run() {
+                    int selectedRow = list.getSelectedIndex();
+                    if (selectedRow == -1) {
+                        new MessageBox(DcResources.getText("msgSelectRowToOpen"), MessageBox._WARNING);
+                        return;
+                    }
 
-        DcObject o = getSelectedObject();
-        if (o != null) {
-        	ItemForm itemForm = new ItemForm(true, false, o, true);
-            itemForm.setVisible(true);
+                    DcObject o = getSelectedObject();
+                    if (o != null) {
+                        ItemForm itemForm = new ItemForm(true, false, o, true);
+                        itemForm.setVisible(true);
+                    }
+                }
+            }));
+        } catch (Exception e) {
+            logger.error(e, e);
         }
     }
     
@@ -255,6 +270,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     public void update() {
+        
         DcObject o = getSelectedObject();
 
         if (o == null) return;
@@ -328,14 +344,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
     
     public void stop() {
-        if (task != null) {
+        if (task != null)
             task.cancelSearch();
-//            try {
-//                task.join();
-//            } catch (Exception e) {
-//                logger.error(e, e);
-//            }
-        }
 
         addMessage(DcResources.getText("msgStoppedSearch"));
         stopped();

@@ -32,6 +32,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
+import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
 
@@ -66,15 +67,12 @@ public class AssociateSynchronizer extends DefaultSynchronizer {
             if (name == null || name.length() == 0) 
                 return updated;
             
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex());
+            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
             osh.setMode(mode);
             DcObject result = osh.query(dco, (String) dco.getValue(DcAssociate._A_NAME), new int[] {DcAssociate._A_NAME});
-            if (result != null) {
-                updated = true;
-                dco.copy(result, true);
-                result.unload();
-            }
+            update(dco, result, osh);
         }
+        
         return updated;
     }
 }

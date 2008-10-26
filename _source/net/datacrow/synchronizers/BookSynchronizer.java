@@ -34,6 +34,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
+import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
 
@@ -67,7 +68,7 @@ public class BookSynchronizer extends DefaultSynchronizer {
             if ((title == null || title.length() == 0)) 
                 return updated;
             
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex());
+            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
             osh.setServer(server);
             osh.setRegion(region);
             osh.setMode(mode);
@@ -82,7 +83,7 @@ public class BookSynchronizer extends DefaultSynchronizer {
                                  StringUtils.equals(titleNew, title);
                 if (match) {
                     updated = true;
-                    dco.copy(book, true);
+                    update(dco, book, osh);
                     break;
                 }
             }

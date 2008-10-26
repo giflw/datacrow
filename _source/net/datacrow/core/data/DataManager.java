@@ -73,6 +73,7 @@ import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
+import net.datacrow.core.services.SearchTask;
 import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
@@ -290,7 +291,7 @@ public class DataManager {
             }
             
             if (onlinesearch) {
-                OnlineSearchHelper osh = new OnlineSearchHelper(module);
+                OnlineSearchHelper osh = new OnlineSearchHelper(module, SearchTask._ITEM_MODE_FULL);
                 DcObject queried = osh.query(ref, name, new int[] {DcAssociate._A_NAME});
                 ref = queried != null ? queried : ref;
                 osh.clear(ref);

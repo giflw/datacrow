@@ -56,7 +56,7 @@ public abstract class SearchTask extends Thread {
     private SearchMode searchMode;
     private Region region;
     
-    private int itemMode = _ITEM_MODE_FULL;
+    private int itemMode = _ITEM_MODE_SIMPLE;
     
     public SearchTask(IOnlineSearchClient listener, IServer server,
                       Region region, SearchMode mode, String query) {

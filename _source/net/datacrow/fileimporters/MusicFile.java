@@ -33,16 +33,8 @@ import java.util.Collection;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcMapping;
-import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.helpers.MusicAlbum;
-import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.core.services.IOnlineSearchClient;
-import net.datacrow.core.services.Region;
-import net.datacrow.core.services.SearchMode;
-import net.datacrow.core.services.SearchTask;
-import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
@@ -116,116 +108,6 @@ public class MusicFile implements IOnlineSearchClient {
                 logger.debug("Could not parse track [" + tag.getTrack() + "]", e);
             }
         }
-    }
-    
-    @SuppressWarnings("unchecked")
-    public boolean onlineUpdate(DcObject dco, IServer server, Region region) {
-        boolean updated = false;
-        
-        String title = (String) dco.getValue(MusicAlbum._A_TITLE);
-        Collection<DcMapping> artists = (Collection<DcMapping>) dco.getValue(MusicAlbum._F_ARTISTS);
-        if ((title == null || title.length() == 0) || (artists == null || artists.size() == 0)) 
-            return updated;
-        
-        for (SearchMode mode : server.getSearchModes()) {
-            SearchTask process = 
-                server.getSearchTask(this, mode, region, (String) dco.getValue(DcMediaObject._A_TITLE));
-            
-            process.setMaximum(10);
-            process.start();
-            
-            try {
-                process.join(30000);
-            } catch (Exception e) {
-                logger.error("Could not join threads", e);
-            }
-            
-            process.cancelSearch();
-            
-            for (DcObject album : new ArrayList<DcObject>(albums)) {
-                String titleNew = (String) album.getValue(MusicAlbum._A_TITLE);
-                Collection<DcMapping> artistsNew = (Collection<DcMapping>) dco.getValue(MusicAlbum._F_ARTISTS);
-                
-                if (titleNew != null && artistsNew != null) {
-                    boolean sameArtists = false;
-                    
-                    for (DcObject artist : artists) {
-                        for (DcObject artistNew : artistsNew) 
-                            sameArtists |=  StringUtils.equals(artist.toString(), artistNew.toString());
-                    }
-                    
-                    if (StringUtils.equals(titleNew, title) && sameArtists) {
-                        if (updateTracks(dco.getChildren(), album.getChildren())) {
-                            updated = true;
-                            dco.copy(album, true);
-                            break;
-                        }
-                    }
-                }
-            }
-            
-            for (DcObject album : albums)
-                album.unload();
-            
-            albums.clear();
-        }
-        return updated;
-    }
-    
-    public void merge(DcObject dco1, DcObject dco2) {
-        dco1.copy(dco2, true);
-        updateTracks(dco1.getChildren(), dco2.getChildren());
-    }
-    
-    private boolean updateTracks(Collection<DcObject> oldTracks, Collection<DcObject> newTracks) {
-        boolean match = false;
-        
-        oldTracks = oldTracks == null ? new ArrayList<DcObject>() : oldTracks;
-        newTracks = newTracks == null ? new ArrayList<DcObject>() : newTracks;
-        
-        for (DcObject oldTrack : oldTracks) {
-
-            String titleOld = (String) oldTrack.getValue(MusicTrack._A_TITLE);
-            Long lengthOld = (Long) oldTrack.getValue(MusicTrack._J_PLAYLENGTH);
-            Long trackOld = (Long) oldTrack.getValue(MusicTrack._F_TRACKNUMBER);
-
-            for (DcObject newTrack : newTracks) {
-                
-                String titleNew = (String) newTrack.getValue(MusicTrack._A_TITLE);
-                Long lengthNew = (Long) newTrack.getValue(MusicTrack._J_PLAYLENGTH);
-                Long trackNew = (Long) newTrack.getValue(MusicTrack._F_TRACKNUMBER);
-
-                if ((titleOld != null && titleNew != null) && 
-                    (StringUtils.equals(titleNew, titleOld))) {
-
-                    match = true;
-                    merge((MusicTrack) newTrack, (MusicTrack) oldTrack);
-                
-                } else if (newTracks.size() == oldTracks.size() && 
-                         ((lengthOld != null && lengthNew != null) && lengthNew.equals(lengthOld)) ||  
-                         ((trackOld != null && trackNew != null) && trackNew.equals(trackOld))) {
-
-                    match = true;
-                    merge((MusicTrack) newTrack, (MusicTrack) oldTrack);
-                }
-            }
-        }
-        return match;
-    }
-    
-    private void merge(MusicTrack mtOld, MusicTrack mt) {
-        setValue(mt, MusicTrack._A_TITLE, mtOld.getValue(MusicTrack._A_TITLE));
-        setValue(mt, MusicTrack._B_DESCRIPTION, mtOld.getValue(MusicTrack._B_DESCRIPTION));
-        setValue(mt, MusicTrack._C_YEAR, mtOld.getValue(MusicTrack._C_YEAR));
-        setValue(mt, MusicTrack._E_RATING, mtOld.getValue(MusicTrack._E_RATING));
-        setValue(mt, MusicTrack._F_TRACKNUMBER, mtOld.getValue(MusicTrack._F_TRACKNUMBER));
-        setValue(mt, MusicTrack._G_ARTIST, mtOld.getValue(MusicTrack._G_ARTIST));
-        setValue(mt, MusicTrack._J_PLAYLENGTH, mtOld.getValue(MusicTrack._J_PLAYLENGTH));
-    }
-    
-    private void setValue(DcObject dco, int field, Object newValue) {
-        if (newValue != null && newValue.toString().length() > 0)
-            dco.setValue(field, newValue);
     }
     
     private String getGenre(String s) {
