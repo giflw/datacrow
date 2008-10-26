@@ -89,6 +89,7 @@ public class DatabaseUpgrade {
                 }
                 
                 convertAssociateNames();
+                convertAssociateNames2();
                 moveImages();
                 convertFileSize();
                 repairCrossTables(version);
@@ -463,60 +464,59 @@ public class DatabaseUpgrade {
         closeDbConnection(conn, stmt);
     }
     
-//    private void convertAssociateNames2() throws DatabaseUpgradeException {
-//
-//        Connection conn = DatabaseManager.getConnection();
-//        Statement stmt = getSqlStatement(conn);
-//        
-//        if (!DatabaseManager.getVersion().isOlder(new Version(3, 4, 1, 0))) {
-//        	return;
-//        } else {
-//            QuestionBox qb = new QuestionBox("Upgrade for version < 3.4.1. Names of persons will be converted. Continue?");
-//            if (!qb.isAffirmative())
-//            	return;
-//        }
-//        
-//    	DcAssociate base = new DcAssociate(DcModules._ACTOR);
-//        for (DcModule module : DcModules.getAllModules()) {
-//            if (module.getDcObject() instanceof DcAssociate) {
-//                try {
-//                	ResultSet rs = stmt.executeQuery("SELECT ID, FIRSTNAME, LASTNAME  FROM " + module.getTableName() + 
-//                		                             " WHERE LASTNAME IS NOT NULL AND FIRSTNAME IS NOT NULL");
-//
-//                    PreparedStatement ps = conn.prepareStatement("UPDATE " + module.getTableName() + " SET NAME = ? WHERE ID = ?");
-//                	while (rs.next()) {
-//                        try {
-//                            base.clearValues();
-//                            String id = rs.getString("ID");
-//                            String lastname = rs.getString("LASTNAME");
-//                            String firstname = rs.getString("FIRSTNAME");
-//                            
-//                            base.setValue(DcAssociate._E_FIRSTNAME, firstname);
-//                            base.setValue(DcAssociate._F_LASTTNAME, lastname);
-//                            base.setName();
-//                            
-//                            String name = (String) base.getValue(DcAssociate._A_NAME);
-//                            ps.setString(1, name);
-//                            ps.setString(2, id);
-//                            
-//                            ps.execute();
-//                        } catch (SQLException se) {
-//                            logger.error("Error while setting the first and lastname for " + module.getName(), se);
-//                        }
-//                    }
-//                    
-//                    rs.close();
-//                    ps.close();
-//                } catch (SQLException se) {
-//                    String msg = "An error occured while splitting the names into first and last name for " + module.getLabel() + ".";
-//                    logger.error(msg, se);
-//                    new DatabaseUpgradeException(msg, se);
-//                }
-//            }
-//        }
-//        
-//        closeDbConnection(conn, stmt);
-//    }
+    private void convertAssociateNames2() throws DatabaseUpgradeException {
+
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = getSqlStatement(conn);
+        
+        if (DatabaseManager.getVersion().equals(new Version(3, 4, 0, 0)) ||  
+            DatabaseManager.getVersion().equals(new Version(3, 4, 1, 0))) {
+
+            QuestionBox qb = new QuestionBox("Upgrade for version < 3.4.2. Names of persons will be converted. " +
+            		                         "Firstname is currently set as lastname and vice versa. Continue?");
+            if (!qb.isAffirmative())
+            	return;
+        } else {
+            return;
+        }
+        
+    	DcAssociate base = new DcAssociate(DcModules._ACTOR);
+        for (DcModule module : DcModules.getAllModules()) {
+            if (module.getDcObject() instanceof DcAssociate) {
+                try {
+                	ResultSet rs = stmt.executeQuery("SELECT ID, FIRSTNAME, LASTNAME  FROM " + module.getTableName() + 
+                		                             " WHERE LASTNAME IS NOT NULL AND FIRSTNAME IS NOT NULL");
+
+                    PreparedStatement ps = conn.prepareStatement("UPDATE " + module.getTableName() + " SET FIRSTNAME = ? AND LASTNAME = ? WHERE ID = ?");
+                	while (rs.next()) {
+                        try {
+                            base.clearValues();
+                            String id = rs.getString("ID");
+                            String lastname = rs.getString("LASTNAME");
+                            String firstname = rs.getString("FIRSTNAME");
+                            
+                            ps.setString(1, lastname);
+                            ps.setString(2, firstname);
+                            ps.setString(3, id);
+                            
+                            ps.execute();
+                        } catch (SQLException se) {
+                            logger.error("Error while setting the first and lastname for " + module.getName(), se);
+                        }
+                    }
+                    
+                    rs.close();
+                    ps.close();
+                } catch (SQLException se) {
+                    String msg = "An error occured while splitting the names into first and last name for " + module.getLabel() + ".";
+                    logger.error(msg, se);
+                    new DatabaseUpgradeException(msg, se);
+                }
+            }
+        }
+        
+        closeDbConnection(conn, stmt);
+    }
     
     
     /************************************************
@@ -573,6 +573,27 @@ public class DatabaseUpgrade {
      ************************************************/
     
     private void convertRatings(Version v) throws DatabaseUpgradeException {
+        // run always!
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = getSqlStatement(conn);
+
+        for (DcModule module : DcModules.getAllModules()) {
+            for (DcField field : module.getFields()) {
+                
+                if (    module.getTableName() != null && module.getTableName().trim().length() > 0 && 
+                        field.getFieldType() == ComponentFactory._RATINGCOMBOBOX) {
+
+                    try {
+                        stmt.execute("update " + module.getTableName() + " set " + field.getDatabaseFieldName() + 
+                                     " = " + field.getDatabaseFieldName() + " / 2 where " + field.getDatabaseFieldName() + " > 10");
+                    } catch (SQLException se) {
+                        logger.error(se, se);
+                    }
+                }
+            }
+        }
+        
+        closeDbConnection(conn, stmt);
         
         Boolean b = getLegacySetting("ratings_converted");
         
@@ -589,8 +610,8 @@ public class DatabaseUpgrade {
         
         if (qb.isAffirmative()) {
             
-            Connection conn = DatabaseManager.getConnection();
-            Statement stmt = getSqlStatement(conn);
+            conn = DatabaseManager.getConnection();
+            stmt = getSqlStatement(conn);
             
             LogForm.getInstance().setVisible(true);
             

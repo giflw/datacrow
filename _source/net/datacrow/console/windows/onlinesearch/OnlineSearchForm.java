@@ -399,7 +399,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     public void addWarning(String warning) {
-        if (!panelService.hasPerfectMatchOccured())
+        if (panelService != null && !panelService.hasPerfectMatchOccured())
             new MessageBox(warning, MessageBox._WARNING);
     }    
     

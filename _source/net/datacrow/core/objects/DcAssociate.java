@@ -69,17 +69,17 @@ public class DcAssociate extends DcObject {
             int i = 0;
             while (st.hasMoreElements()) {
                 if ((i + 1) != st.countTokens()) {
+                    firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
+                    firstname = firstname == null ? "" : firstname;
+                    firstname += firstname.length() > 0 ? " " : "";
+                    firstname += st.nextElement();
+                    setValue(DcAssociate._E_FIRSTNAME, firstname);
+                } else {
                     lastname = (String) getValue(DcAssociate._F_LASTTNAME);
                     lastname = lastname == null ? "" : lastname;
                     lastname += lastname.length() > 0 ? " " : "";
                     lastname += st.nextElement();
                     setValue(DcAssociate._F_LASTTNAME, lastname);
-                } else {
-                	firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
-                    firstname = firstname == null ? "" : firstname;
-                    firstname += firstname.length() > 0 ? " " : "";
-                    firstname += st.nextElement();
-                    setValue(DcAssociate._E_FIRSTNAME, firstname);
                 }
             }
         }

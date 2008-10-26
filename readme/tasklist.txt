@@ -1,17 +1,12 @@
-3.4 Production version
+General
 ---------------------------------------------------------------------------------------------------------
-[X] Error when deleting container.
-[X] Missing images.
-[X] Delete does not update root node in tree.
-[X] Allow the picture to be displayed to be specified from within the view settings.
-    (Remove dependency towards the general field settings).
-[X] Filtering: less then, greater then for dates (before, after ?)
-[X] Update reports (location field).
-[X] Error when checking for display value (' in name causes error). 
+[ ] Build scripts: one script to generate the release files.
 
+
+Documentation
+---------------------------------------------------------------------------------------------------------
 [ ] Documentation on plugin development. 
 [ ] Documentation on online service development.
-[X] Update internal help system. 
 
 
 Online services
@@ -20,39 +15,60 @@ Online services
 [ ] Book online search in www.isbndb.com (1886661)
 
 
-3.4.1
----------------------------------------------------------------------------------------------------------
-[X] Show related items in the item form (such as movies for actors)
-[X] Loan management, Due Date (1941130)
-
-
 3.4.2
 ---------------------------------------------------------------------------------------------------------
-[ ] Re-enable modules bug.
-[ ] scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
+[ ] Bug: Sorting does no longer work (only string values work)
+[ ] Bug: Cannot re-active module as it is no longer displayed in the module settings.
+[ ] Bug: View settings not saved (check this on Ubuntu and close call). Background settings for the card
+    view are not saved. This should be fixed.
+[ ] Bug: Update all does not work with actors (and so on) (updated in DB but not in UI). Manual changes
+    (using the item form) come across and are just fine!
+[ ] Bug: '.properties' file in the data folder.
+[ ] Bug: Quick filter no longer displayed in the book module.
+[ ] Bug: Import of some images does not work!! (see foto's on d:\$backup of my laptop).
+[ ] Bug: New module, field reference to category > not used correctly (does not show related items, 
+    does not show its items in the quick filter panel).
+[ ] Bug: Add picture field to existing module > items are not opened in item form 
+   (error: net.datacrow.core.objects.DcObject.isChanged(DcObject.java:556). Refill cache if the module
+    has a new field, even when it is a UI field only!!!!
+[ ] Bug: Picture not shown in the card view (view settings does not see the new picture fields).
+    (after adding a picture field to an existing module).
+[ ] Bug: "ERROR [Thread-19] (ComponentFactory.java:187) - Not thread-safe; should only 
+    remove components from within the Event Dispatching thread" (Search form > Date criteria (after) > Apply.
+[ ] Bug: There are unsaved changes. Do you want to exit? (No > exit).
+[ ] Bug: Exception in thread "AWT-EventQueue-0" java.lang.ClassCastException: 
+    java.lang.Boolean cannot be cast to java.lang.Long (QuickFilter, switch between available and category)
+[ ] Bug: Loading Module[] in the log file.
+[ ] Bug: Icons for modules not saved correctly (black instead of transparent).
+[ ] Bug: Error while loading settings from file 
+    C:\Program Files\Data Crow Knowledge Share\data\<category>.properties
+[ ] Bug: Bol.com no longer works.
+[ ] Bug: Templates isssue; sub menu for new using template is not there after a restart.
+[x] Check web application (method errors? correct modules shown?)
+[ ] Remove the todo.txt file.
+[ ] Provide the option to revert back to the default settings (per module + general settings).
+    Provide this option as a parameter.
+[ ] Document the parameters.
+[ ] Create a new parameter: -help which will display a dialog with the startup information.
+[ ] Update the current online search functionality. Initial result set should be small and only contain
+    general information such as name or title.
+[ ] Error handling for defected modules has to be improved. Also it should be possible to skip loading
+    a defected module. Additionally it should be checked whether there is an impact on the data manager.
+[ ] Update all and mass update functionality: Provide the full collection of items to update. This
+    will remove the need to keep the view active / visible.
+[ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
     It would be nice, if datacrow used only the first part of the entered number. 
-[ ] Translations. There are some known issues with the Resource Editor tool such as loss of special 
-    character data. The resource editor will be updated to handle special characters correctly. 
-    Additionally Data Crow will feature language packs, making it possible to switch between languages.  
-[ ] Exporting a module. Exporting the module definition itself currently requires manually copying the 
-    module jar file and its property files. Functionality will be provided which makes it easy to export 
-    and import a module (definition). This functionality will also allow users to export default/demo data 
-    with their module. This functionality will also be used to provide additional custom modules. 
+[ ] Zoom in out for the chart panel.
+[ ] Log (debug) the changed fields for item forms.
+[ ] Are the advanced settings for HSQL still being used?
+[ ] Graceful shutdown settings: set to false after startup and set to true after graceful shutdown.
 
 
-
-3.5
+3.4.3
 ---------------------------------------------------------------------------------------------------------
-[ ] scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
-    It would be nice, if datacrow used only the first part of the entered number. 
-[ ] Show related items in the item form (such as movies for actors)
-[ ] Loan management, Due Date (1941130)
-[ ] Multiple file support (per item)
 [ ] Migration tool. The current migration tool only allows you to import information from CSV files. 
     Other products, Data Crow's competitors of you like, allow migration from other products. 
     The migration tool will be rewritten to allow import of additional data sources.  
-[ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
-    Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
 [ ] Translations. There are some known issues with the Resource Editor tool such as loss of special 
     character data. The resource editor will be updated to handle special characters correctly. 
     Additionally Data Crow will feature language packs, making it possible to switch between languages.  
@@ -61,12 +77,22 @@ Online services
     and import a module (definition). This functionality will also allow users to export default/demo data 
     with their module. This functionality will also be used to provide additional custom modules. 
 [ ] PreparedStatement re-usage.
-[ ] Upgrade of the online services (smaller initial result sets)
+
+
+3.5
+---------------------------------------------------------------------------------------------------------
+[ ] Multiple file support (per item)
+[ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
+    Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
+
+
+3.5.1
+---------------------------------------------------------------------------------------------------------
+[ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
 
 
 Unplanned
 ---------------------------------------------------------------------------------------------------------
-[ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
 [ ] Per user settings. Settings, such a field settings, quick view settings and others are currently 
     stored on application level. As a result each and every user has the same settings as determined by 
     the administrator. Data Crow 3.4 will allow administrators to specify if the user should have the 
@@ -74,3 +100,4 @@ Unplanned
     a database instance to a user is also under consideration. This would allow users to have multiple 
     accounts, for example one per module (data separation). 
 [ ] Vector graphics support (1895140)
+[ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
