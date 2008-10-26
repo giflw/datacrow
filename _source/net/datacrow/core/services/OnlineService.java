@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.console.windows.onlinesearch.OnlineSearchForm;
 import net.datacrow.core.DcRepository;
@@ -38,6 +36,8 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.services.plugin.IServer;
+
+import org.apache.log4j.Logger;
 
 public class OnlineService {
 

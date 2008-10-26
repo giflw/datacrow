@@ -25,11 +25,20 @@
 
 package net.datacrow.core.services;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
 
+import org.apache.log4j.Logger;
+
 public abstract class SearchTask extends Thread {
+    
+    private static Logger logger = Logger.getLogger(SearchTask.class.getName());
     
     private boolean isCancelled = false;
     
@@ -44,33 +53,17 @@ public abstract class SearchTask extends Thread {
     private SearchMode mode;
     private Region region;
     
-    public SearchTask(IOnlineSearchClient listener, 
-                      IServer server,
-                      Region region,
-                      SearchMode mode,
-                      String query) {
-        
-        this.listener = listener;
-        this.region = region;
-        this.mode = mode;
-        this.server = server;
-        this.address = region != null ? region.getUrl() : server.getUrl();
-        this.query = StringUtils.normalize(query);        
-    }
+    public SearchTask(IOnlineSearchClient listener, IServer server,
+                      Region region, SearchMode mode, String query) {
 
-//    public SearchTask(IOnlineSearchClient listener, String searchString, int max) {
-//        this.listener = listener;
-//        this.query = StringUtils.normalize(query);
-//        this.maximum = max;
-//    }
+		this.listener = listener;
+		this.region = region;
+		this.mode = mode;
+		this.server = server;
+		this.address = region != null ? region.getUrl() : server.getUrl();
+		this.query = StringUtils.normalize(query);
+	}
 
-    @Override
-    public abstract void run();
-    
-    public abstract String getWhiteSpaceSubst();
-    
-    public abstract DcObject query(DcObject dco) throws Exception;
-    
     protected void setServiceInfo(DcObject dco) {
         String service =  server.getName() + " / " + 
                          (region != null ? region.getCode() : "none") + " / " +
@@ -136,19 +129,89 @@ public abstract class SearchTask extends Thread {
         return s;
     }
 
-//    public String getSearchString() {
-//        return searchString;
-//    }
-//    
-//    public void setSearchString(String searchString) {
-//        this.searchString = searchString;
-//    }
-//
     public IServer getServer() {
         return server;
     }
 
     public int getMaximum() {
         return maximum;
+    }    
+
+    public String getWhiteSpaceSubst() {
+        return "+";
+    }
+
+    public DcObject query(DcObject dco) throws Exception {
+        String link = (String) dco.getValue(DcObject._SYS_SERVICEURL); 
+        if (link != null && link.length() > 0)
+            return getItem(new URL(link));
+
+        return null;
+    }
+
+    /**
+     * Query for the item(s) using the web key. 
+     */
+    protected Collection<DcObject> getItems(String key) throws Exception {
+        Collection<DcObject> items = new ArrayList<DcObject>();
+        items.add(getItem(key));
+        return items;
+    }
+
+    /**
+     * Query for the item using the web key. 
+     */
+    protected abstract DcObject getItem(String key) throws Exception;
+    
+    /**
+     * Query for the item via the URL 
+     */
+    protected abstract DcObject getItem(URL url) throws Exception;
+    
+    /**
+     * Get every web ID from the page. With these IDs it should be possible to 
+     * get to the detailed item information. 
+     */
+    protected abstract Collection<String> getItemKeys();
+    
+    @Override
+    public void run() {
+        Collection<String> keys = getItemKeys();
+        listener.processingTotal(keys.size());
+
+        if (keys.size() == 0) {
+            listener.addWarning(DcResources.getText("msgNoResultsForKeywords", getQuery()));
+            listener.stopped();
+            return;
+        }
+
+        listener.addMessage(DcResources.getText("msgFoundXResults", String.valueOf(keys.size())));
+        listener.addMessage(DcResources.getText("msgStartParsingXResults", String.valueOf(keys.size())));
+        int counter = 0;
+        
+        for (String key : keys) {
+            
+            if (isCancelled() || counter == getMaximum()) break;
+            
+            try {
+                for (DcObject dco : getItems(key)) {
+                    dco.setIDs();
+                    setServiceInfo(dco);
+                    
+                    listener.addMessage(DcResources.getText("msgParsingSuccessfull", dco.toString()));
+                    listener.addObject(dco);
+                }
+                listener.processed(counter);
+            } catch (Exception exp) {
+                listener.addMessage(DcResources.getText("msgParsingError", "" + exp));
+                logger.error(DcResources.getText("msgParsingError", "" + exp), exp);
+                listener.processed(counter);
+            }
+            
+            counter++;
+        }
+        
+        listener.processed(counter);
+        listener.stopped();        
     }
 }

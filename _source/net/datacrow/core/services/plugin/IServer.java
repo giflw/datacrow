@@ -30,8 +30,6 @@ import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.SearchTask;
 
-
-
 public interface IServer {
     
     int getModule();
