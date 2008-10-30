@@ -45,9 +45,8 @@ public class DcSettings {
     
     public static void save() {
         applicationSettings.save();
-        for (DcModule module : DcModules.getAllModules()) {
+        for (DcModule module : DcModules.getAllModules())
             module.getSettings().save();
-        }
     }
 
     public static SettingsView getView() {

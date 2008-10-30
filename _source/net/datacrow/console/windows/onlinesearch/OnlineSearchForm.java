@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -83,7 +84,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private ItemForm itemForm;
     private DcObjectList list;
     
-    private ArrayList<DcObject> items = new ArrayList<DcObject>();
+    private List<DcObject> items = new ArrayList<DcObject>();
 
     private OnlineService os;
     
@@ -182,8 +183,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     private DcObject fill(DcObject dco) { 
-        SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
-        new RetrieveItemDetailsDialog(task, dco);
+        if (!panelSettings.isQueryFullDetails()) {
+            SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
+            new RetrieveItemDetailsDialog(task, dco);
+        }
         return dco;
     }
     
@@ -216,6 +219,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
     private void open() {
         try {
+            saveSettings();
             SwingUtilities.invokeLater(new Thread(new Runnable() {
                 public void run() {
                     int selectedRow = list.getSelectedIndex();
@@ -270,8 +274,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     public void update() {
-        
         DcObject o = getSelectedObject();
+        
+        saveSettings();
 
         if (o == null) return;
             
@@ -309,6 +314,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     public void addNew() {
+        saveSettings();
         Collection<DcObject> selected = getSelectedObjects();
         if (selected != null) {
             clear();
@@ -364,6 +370,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
         task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
         task.setPriority(Thread.NORM_PRIORITY);
+        task.setItemMode(panelSettings.isQueryFullDetails() ? SearchTask._ITEM_MODE_FULL : SearchTask._ITEM_MODE_SIMPLE);
         task.start();
     }     
 
@@ -433,7 +440,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         //**********************************************************
         //Settings
         //**********************************************************
-        panelSettings = new OnlineServiceSettingsPanel(this, ID != null, module, true);
+        panelSettings = new OnlineServiceSettingsPanel(this, true, true, ID != null, module);
 
 
         //**********************************************************

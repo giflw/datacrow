@@ -131,13 +131,14 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         if (references == null)
             return;
         
-        
         List<DcObject> items = new ArrayList<DcObject>();
         for (DcObject dco : references) {
-            if (dco instanceof DcMapping)
-                items.add(((DcMapping) dco).getReferencedObject());
-            else
-                items.add(dco);
+            if (dco instanceof DcMapping) {
+                DcObject ref = ((DcMapping) dco).getReferencedObject();
+                if (ref != null) items.add(ref);
+            } else {
+                if (dco != null) items.add(dco);
+            }
         }
         
         int index = items.size() > 0 ? items.get(0).getDefaultSortFieldIdx() : 0;

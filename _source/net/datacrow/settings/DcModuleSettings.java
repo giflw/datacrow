@@ -249,6 +249,15 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));
+        getSettings().addSetting(_General,        
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially,
+                            Boolean.FALSE,
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stImportLocalArtFrontKeywords,

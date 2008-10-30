@@ -353,7 +353,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         
         if (module.deliversOnlineService()) {
             panelServer = new OnlineServicePanel(module.getOnlineService().getServers(), true, true);
-            panelServerSettings = new OnlineServiceSettingsPanel(module.getIndex(), false, false);
+            panelServerSettings = new OnlineServiceSettingsPanel(null, false, false, false, module.getIndex());
             
             panelOs.add(panelServer,     Layout.getGBC( 0, 3, 3, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,

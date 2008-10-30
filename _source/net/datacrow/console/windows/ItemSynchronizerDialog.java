@@ -243,8 +243,8 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener {
         //**********************************************************
         //Online Server Settings panel
         //**********************************************************
-        panelOnlineServiceSettings = new OnlineServiceSettingsPanel(module, true, false);
-        
+        panelOnlineServiceSettings = new OnlineServiceSettingsPanel(null, false, false, true, module);
+
         //**********************************************************
         //Re-parse panel
         //**********************************************************

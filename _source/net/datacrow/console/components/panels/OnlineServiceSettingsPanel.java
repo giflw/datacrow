@@ -53,31 +53,39 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     private JCheckBox checkAutoCreateSubItems;
     private JCheckBox checkAutoAdd;
     private JCheckBox checkOnlineSearchSubItems;
+    private JCheckBox checkQueryFullDetails;
     
     private JFrame parent;
     
     private int module;
     
-    private boolean autoAddSupported = true;
     private boolean updateMode = false;
 
-    public OnlineServiceSettingsPanel(int module, boolean updateMode, boolean autoAddSupported) {
-        this(null, updateMode, module, autoAddSupported);
-    }
-
-    public OnlineServiceSettingsPanel(JFrame parent, boolean updateMode, int module, boolean autoAddSupported) {
+    private boolean allowAutoAddSelection = true;
+    private boolean allowQueryModeSelection = true;
+    
+    public OnlineServiceSettingsPanel(JFrame parent, 
+                                      boolean allowQueryModeSelection,
+                                      boolean allowAutoAddSelection,
+                                      boolean updateMode, 
+                                      int module) {
         this.module = module;
         this.parent = parent;
         this.updateMode = updateMode;
-        this.autoAddSupported = autoAddSupported;
+        
+        this.allowAutoAddSelection = allowAutoAddSelection;
+        this.allowQueryModeSelection = allowQueryModeSelection;
         
         build(updateMode);
         
         Settings settings = DcModules.get(module).getSettings();
         setOverwrite(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite));
         setAutoCreateSubItems(settings.getBoolean(DcRepository.ModuleSettings.stAutoCreateSubItems));
-        setAutoAdd(settings.getBoolean(DcRepository.ModuleSettings.stAutoAddPerfectMatch));
         setOnlineSearchSubItems(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchSubItems));
+        setQueryFullDetails(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially));
+        
+        if (allowAutoAddSelection)
+            setAutoAdd(settings.getBoolean(DcRepository.ModuleSettings.stAutoAddPerfectMatch));
         
         if (updateMode)
             buttonSettings.setEnabled(isOverwriteAllowed());
@@ -89,6 +97,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         settings.set(DcRepository.ModuleSettings.stAutoCreateSubItems, checkAutoCreateSubItems.isSelected());
         settings.set(DcRepository.ModuleSettings.stAutoAddPerfectMatch, checkAutoAdd.isSelected());
         settings.set(DcRepository.ModuleSettings.stOnlineSearchSubItems, checkOnlineSearchSubItems.isSelected());
+        settings.set(DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially, checkQueryFullDetails.isSelected());
     }
 
     private void setAutoCreateSubItems(boolean b) {
@@ -117,7 +126,15 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     
     public boolean isAutoAddAllowed() {
         return checkAutoAdd.isSelected();
-    }    
+    }   
+    
+    private void setQueryFullDetails(boolean b) {
+        checkQueryFullDetails.setSelected(b);
+    }
+    
+    public boolean isQueryFullDetails() {
+        return checkQueryFullDetails.isSelected();
+    }
     
     public void clear() {
         buttonSettings = null;
@@ -152,6 +169,9 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         checkOnlineSearchSubItems = ComponentFactory.getCheckBox(DcResources.getText("lblOnlineSearchSubItems"));
         checkOnlineSearchSubItems.setToolTipText(DcResources.getText("tpOnlineSearchSubItems"));
         
+        checkQueryFullDetails  = ComponentFactory.getCheckBox(DcResources.getText("lblOnlineSearchQueryFullDetails"));
+        checkOnlineSearchSubItems.setToolTipText(DcResources.getText("tpOnlineSearchQueryFullDetails"));
+        
         buttonSettings.setMnemonic('S');
         buttonSettings.setMaximumSize(new Dimension(25, 22));
         buttonSettings.setMinimumSize(new Dimension(25, 22));
@@ -169,17 +189,25 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         add(panel, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
             new Insets(0, 0, 0, 0), 0, 0));
-        add(checkOnlineSearchSubItems, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+
+        if (allowQueryModeSelection)
+            add(checkQueryFullDetails, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(0, 5, 0, 0), 0, 0));            
+
+        
+        add(checkOnlineSearchSubItems, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
             new Insets(0, 5, 0, 0), 0, 0));
         
-        if (autoAddSupported)
-            add(checkAutoAdd, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+        
+        if (allowAutoAddSelection)
+            add(checkAutoAdd, Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 5, 0, 0), 0, 0));            
         
         
-        add(checkAutoCreateSubItems, Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
+        add(checkAutoCreateSubItems, Layout.getGBC( 0, 4, 1, 1, 1.0, 1.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
             new Insets(0, 5, 0, 0), 0, 0));
 
