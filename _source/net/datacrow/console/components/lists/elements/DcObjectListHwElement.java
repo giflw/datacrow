@@ -64,7 +64,14 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
         ComponentFactory.setBorder(this);
         build();
     }
-
+    
+    @Override
+    public void update() {
+        removeAll();
+        build();
+        revalidate();
+    }  
+    
     protected Color lighter(Color color) {
         int red = color.getRed() > 10 ? color.getRed() - 10 : color.getRed();
         int green = color.getGreen() > 10 ? color.getGreen() - 10 : color.getGreen();
