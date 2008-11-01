@@ -601,7 +601,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                     component = pane;
                 } else {
-                	component.setPreferredSize(new Dimension(300, ComponentFactory.preferredHeight));
+                	component.setPreferredSize(new Dimension(300, ComponentFactory.getPreferredFieldHeight()));
                 }
                 
                 if (field.getFieldType() == ComponentFactory._REFERENCESFIELD) {
@@ -612,7 +612,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 if (component instanceof DcCheckBox)
                     ((DcCheckBox) component).setText("");
 
-                label.setPreferredSize(new Dimension(100, 20));
+                label.setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
                 if (!field.isTechnicalInfo()) {
                 	int ySpace = yInfo == 0 ? 5 : 0; 
                 	

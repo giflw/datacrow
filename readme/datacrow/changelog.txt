@@ -11,7 +11,8 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
   * Improved speed for the Mass Update of items.
   * Improved speed for the Item import when using the Online Services option.
 - Added '-help' parameter which displays information on starting Data Crow in a dialog.
-- Changed the height of the input fields (21 to 23).
+- Changed the height of the input fields (21 to 25). The field height can now also be changed
+  from the Look and Feel Settings Dialog.
 
 [Fixed]
 - Incorrect upgrade proposals on startup.

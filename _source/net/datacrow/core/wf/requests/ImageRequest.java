@@ -70,6 +70,9 @@ public class ImageRequest implements IRequest {
         if (objectID != null && modus == ImageRequest._DELETE) {
             File file = new File(DataCrow.imageDir);
             String[] files = file.list(new Filter(objectID));
+            
+            if (files == null) return;
+            
             for (int i = 0; i < files.length; i++) {
                 String fullPath = DataCrow.imageDir + files[i];
                 File f = new File(fullPath);
