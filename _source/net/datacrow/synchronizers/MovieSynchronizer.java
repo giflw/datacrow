@@ -79,9 +79,6 @@ public class MovieSynchronizer extends DefaultSynchronizer {
                     break;
                 }
             }
-            
-            for (DcObject movie : movies)
-                movie.unload();
         }
 
         return updated;

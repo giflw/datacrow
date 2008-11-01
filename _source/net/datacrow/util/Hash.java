@@ -117,7 +117,7 @@ public class Hash {
             }
         }
         
-        dco.setValue(DcObject._SYS_FILESIZE, Long.valueOf(fileSize));
+        dco.setValue(DcObject._SYS_FILESIZE, fileSize);
         dco.setValue(DcObject._SYS_FILEHASH, hash);
         dco.setValue(DcObject._SYS_FILEHASHTYPE, hashType);
     }

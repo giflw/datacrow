@@ -87,9 +87,6 @@ public class BookSynchronizer extends DefaultSynchronizer {
                     break;
                 }
             }
-            
-            for (DcObject book : books)
-                book.unload();
         }
 
         return updated;
