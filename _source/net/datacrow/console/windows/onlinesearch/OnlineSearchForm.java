@@ -51,6 +51,8 @@ import net.datacrow.console.MainFrame;
 import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.panels.OnlineServiceSettingsPanel;
+import net.datacrow.console.components.tables.DcTable;
+import net.datacrow.console.views.IViewComponent;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
@@ -84,8 +86,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     
     protected SearchTask task;
     
+    private JTabbedPane tpResult;
     private ItemForm itemForm;
     private DcObjectList list;
+    private DcTable table;
     
     private List<DcObject> items = new ArrayList<DcObject>();
     private Map<Integer, Boolean> loadedItems = new HashMap<Integer, Boolean>();
@@ -146,6 +150,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             dco.setValue(DcObject._ID, ID);
             
             list.add(dco);
+            table.add(dco);
             items.add(dco);
             loadedItems.put(items.indexOf(dco), Boolean.valueOf(panelSettings.isQueryFullDetails()));
             
@@ -153,6 +158,14 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             
             checkPerfectMatch(dco);
         }
+    }
+    
+    private IViewComponent getView() {
+        int tab = tpResult.getSelectedIndex();
+        if (tab == 0) 
+            return list;
+        else
+            return table;
     }
     
     private void removeValues(DcObject dco) {
@@ -175,10 +188,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }    
     
     public DcObject getSelectedObject() {
-        int row = list.getSelectedIndex();
-
+        int row = getView().getSelectedIndex();
         DcObject dco = null;
-        
         if (row > -1 && items.size() > 0 && row < items.size()) {
             dco = items.get(row);
             dco = fill(dco);
@@ -206,14 +217,18 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             
             DcObject o = oir.getDcObject();
             loadedItems.put(items.indexOf(dco), Boolean.TRUE);
+            
             list.updateItem(dco.getID(), o.clone(), true, false, false);
+            table.updateItem(dco.getID(), o.clone(), true, false, false);
+
             return o;
         }
+        
         return dco;
     }
     
     public Collection<DcObject> getSelectedObjects() {
-        int row = list.getSelectedIndex();
+        int row = getView().getSelectedIndex();
 
         if (row < 0) {
             new MessageBox(DcResources.getText("msgSelectRowForTransfer"), MessageBox._WARNING);
@@ -223,7 +238,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         // removed the clone option; it somehow managed to make the pictures disappear..
         ArrayList<DcObject> result = new ArrayList<DcObject>();
         if (ID == null) {
-            int[] rows = list.getSelectedIndices();
+            int[] rows = getView().getSelectedIndices();
             for (int i = 0; i < rows.length; i++) {
                 DcObject dco = items.get(rows[i]);
                 result.add(fill(dco));
@@ -242,7 +257,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         saveSettings();
         new Thread(new Runnable() {
             public void run() {
-                int selectedRow = list.getSelectedIndex();
+                int selectedRow = getView().getSelectedIndex();
                 if (selectedRow == -1) {
                     new MessageBox(DcResources.getText("msgSelectRowToOpen"), MessageBox._WARNING);
                     return;
@@ -277,7 +292,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
         if (panelService.hasPerfectMatchOccured()) {
             // set the lastly added item as selected
-            list.setSelected(list.getModel().getSize() - 1);
+            getView().setSelected(getView().getItemCount() - 1);
             if (ID != null) { 
                 update();
             } else { 
@@ -291,6 +306,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     
     protected void saveSettings() {
         getModule().setSetting(DcRepository.ModuleSettings.stOnlineSearchFormSize, getSize());
+        DcSettings.set(DcRepository.Settings.stOnlineSearchSelectedView, Long.valueOf(tpResult.getSelectedIndex()));
+        
         panelService.save();
         panelSettings.save();
     }
@@ -366,13 +383,16 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }    
 
     public void setSelectionMode(int selectionMode) {
-        list.setSelectionMode(selectionMode);        
+        getView().setSelectionMode(selectionMode);        
     }
     
     private void clear() {
         stop();
         panelService.setQuery("");
-    	list.clear();
+    	
+        list.clear();
+    	table.clear();
+    	
         updateProgressBar(0);
         items.clear();
         textLog.setText("");
@@ -430,7 +450,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }    
     
     public int resultCount() {
-        return resultCount;// list.getItems().size();
+        return resultCount;
     }
 
     public void processingTotal(int i) {
@@ -459,6 +479,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     public void addDoubleClickListener(MouseListener ml) {
         list.removeMouseListener(this);
         list.addMouseListener(ml);
+        
+        table.removeMouseListener(this);
+        table.addMouseListener(ml);
     }
     
     private void buildDialog(boolean advanced) {
@@ -470,9 +493,15 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
         panelSettings = new OnlineServiceSettingsPanel(this, true, true, ID != null, module);
         
-        tp.addTab("Search", contentPanel);
-        tp.addTab("Settings", panelSettings);
         
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(Layout.getGBL());
+        panel2.add(panelSettings, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(10, 5, 5, 5), 0, 0));
+        
+        tp.addTab(DcResources.getText("lblSearch"), IconLibrary._icoSearch, contentPanel);
+        tp.addTab(DcResources.getText("lblSettings"), IconLibrary._icoSettings, panel2);
         
         getContentPane().add(tp, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
@@ -520,18 +549,24 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         //**********************************************************
         //Result panel
         //**********************************************************
-        JPanel panelResults = new JPanel();
-        panelResults.setLayout(Layout.getGBL());
+        
+        tpResult = new JTabbedPane();
 
         list = new DcObjectList(DcObjectList._ELABORATE, false, true);
-
-        JScrollPane scrollTable = new JScrollPane(list);
+        JScrollPane sp1 = new JScrollPane(list);
         list.addMouseListener(this);
-        scrollTable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        sp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        
+        table = new DcTable(getModule(), true, false);
+        JScrollPane sp2 = new JScrollPane(table);
+        table.addMouseListener(this);
+        sp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        panelResults.add(scrollTable,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                         new Insets(5, 5, 5, 5), 0, 0));
+        
+        tpResult.addTab(DcResources.getText("lblCardView"), IconLibrary._icoCardView, sp1);
+        tpResult.addTab(DcResources.getText("lblTableView"), IconLibrary._icoTableView, sp2);
+        
+        tpResult.setSelectedIndex(DcSettings.getInt(DcRepository.Settings.stOnlineSearchSelectedView));
 
         //**********************************************************
         //Actions panel
@@ -539,11 +574,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         JPanel panelActions = new JPanel();
         panelActions.setLayout(Layout.getGBL());
 
-        JButton buttonDetails = ComponentFactory.getButton(DcResources.getText("lblDetails"));
-        
+        JButton buttonDetails = ComponentFactory.getButton(DcResources.getText("lblOpen"));
         JButton buttonUpdate = ComponentFactory.getButton(DcResources.getText("lblUpdate"));
         JButton buttonAddNew = ComponentFactory.getButton(DcResources.getText("lblAddNew"));
-
         JButton buttonClear = ComponentFactory.getButton(DcResources.getText("lblClear"));
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
 
@@ -558,7 +591,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         buttonClear.setMnemonic('L');
 
         buttonDetails.addActionListener(this);
-        buttonDetails.setActionCommand("showdetails");
+        buttonDetails.setActionCommand("open");
         buttonUpdate.addActionListener(this);
         buttonUpdate.setActionCommand("update");
         buttonClose.addActionListener(this);
@@ -599,19 +632,17 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         panel.setLayout(Layout.getGBL());
 
         panel.add(panelService, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(5, 5, 5, 5), 0, 0));
-        
-        
-        panel.add(panelResults,  Layout.getGBC( 0, 2, 1, 1, 50.0, 50.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                             new Insets(5, 5, 5, 5), 0, 0));
+        panel.add(tpResult,  Layout.getGBC( 0, 2, 1, 1, 30.0, 30.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0));
         panel.add(panelActions,  Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
-                             new Insets(5, 5, 5, 5), 0, 0));
+                ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+                 new Insets(5, 5, 5, 5), 0, 0));
         panel.add(panelProgress, Layout.getGBC( 0, 4, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                             new Insets(5, 5, 5, 5), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0));
 
         if (advanced)
             panel.add(panelLog,  Layout.getGBC( 0, 5, 1, 1, 10.0, 10.0
@@ -641,6 +672,13 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
         list.removeMouseListener(this);
         list.clear();
+        list = null;
+
+        table.removeMouseListener(this);
+        table.clear();
+        table = null;
+        
+        tpResult = null;
         
         itemForm  = null;
         ID = null;
@@ -670,7 +708,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("stopsearch"))
             stop();
-        else if (e.getActionCommand().equals("showdetails"))
+        else if (e.getActionCommand().equals("open"))
             open();
         else if (e.getActionCommand().equals("update"))
             update();
@@ -694,6 +732,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                 addNew();
         }
     }
+    
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent e) {}

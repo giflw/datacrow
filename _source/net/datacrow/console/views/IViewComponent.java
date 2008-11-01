@@ -54,6 +54,8 @@ public interface IViewComponent {
     void undoChanges();
     boolean isChangesSaved();
     
+    void setSelectionMode(int mode);
+    
     void cancelEdit();
     int locationToIndex(Point point);    
     void setCursor(Cursor cursor);
