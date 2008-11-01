@@ -143,6 +143,8 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
                 	image = (ImageIcon) picture.getValue(Picture._D_IMAGE);
                 }
                 
+                if (image == null) continue;
+                
                 DcPictureField label = ComponentFactory.getPictureField(true, false, false, "");
                 label.setValue(image);
                 panel.add(label, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0

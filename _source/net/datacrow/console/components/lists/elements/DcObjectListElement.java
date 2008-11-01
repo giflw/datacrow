@@ -75,6 +75,7 @@ public abstract class DcObjectListElement extends DcListElement {
         int[] indices = dco.getFieldIndices();
         
         for (int i = 0; i < indices.length; i++) {
+            
             try {
                 if (o.isChanged(indices[i])) {
                     Object newValue = o.getValue(indices[i]);

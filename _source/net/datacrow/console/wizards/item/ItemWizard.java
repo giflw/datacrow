@@ -28,6 +28,8 @@ package net.datacrow.console.wizards.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import net.datacrow.console.windows.ItemTypeDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.IWizardPanel;
@@ -111,25 +113,36 @@ public class ItemWizard extends Wizard {
 
     @Override
     public void next() {
-        try {
-            dco = (DcObject) getCurrent().apply();
+        new Thread(
+            new Runnable() {
+                public void run() {
+                    try {
+                        dco = (DcObject) getCurrent().apply();
 
-            current += 1;
-            if (current <= getStepCount()) {
-                for (int i = 0; i < getStepCount(); i++) {
-                    ItemWizardPanel panel = (ItemWizardPanel) getWizardPanel(i);
-                    panel.setObject(dco);
-                    panel.setVisible(i == current);
+                        
+                        SwingUtilities.invokeLater(
+                                new Thread(new Runnable() { 
+                                    public void run() {
+                                        current += 1;
+                                        if (current <= getStepCount()) {
+                                            for (int i = 0; i < getStepCount(); i++) {
+                                                ItemWizardPanel panel = (ItemWizardPanel) getWizardPanel(i);
+                                                panel.setObject(dco);
+                                                panel.setVisible(i == current);
+                                            }
+                                        } else {
+                                            current -= 1;
+                                        }
+                
+                                        applyPanel();
+                                    }
+                                }));
+                    } catch (WizardException wzexp) {
+                        if (wzexp.getMessage().length() > 1)
+                            new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
+                    }
                 }
-            } else {
-                current -= 1;
-            }
-
-            applyPanel();
-        } catch (WizardException wzexp) {
-            if (wzexp.getMessage().length() > 1)
-                new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
-        }
+            }).start();
     }
 
     @Override

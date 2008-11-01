@@ -185,8 +185,14 @@ public final class ComponentFactory {
      */
     public static final void clean(final Component component) {
         
-        if (!SwingUtilities.isEventDispatchThread())
-            logger.error("Not thread-safe; should only remove components from within the Event Dispatching thread");
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(
+                    new Thread(new Runnable() { 
+                        public void run() {
+                            clean(component);
+                        }
+                    }));
+        }
 
         if (component instanceof JComponent) {
             JComponent c = (JComponent) component;

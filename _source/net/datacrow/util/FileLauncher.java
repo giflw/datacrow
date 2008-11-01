@@ -72,7 +72,7 @@ public class FileLauncher {
             try {
                 try {
                     // use the browser launcer (v2)
-                    BrowserLauncher.openURL("file://" + filename);
+                    BrowserLauncher.openURL("file://" + filename.replaceAll(" ", "%20"));
                 } catch (Exception exp) {
                     // last change: just start it on the command line
                     runCmd(getLaunchableName());

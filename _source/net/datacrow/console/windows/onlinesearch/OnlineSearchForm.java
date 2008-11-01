@@ -185,7 +185,24 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private DcObject fill(DcObject dco) { 
         if (!panelSettings.isQueryFullDetails()) {
             SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
-            new RetrieveItemDetailsDialog(task, dco);
+            
+            OnlineItemRetriever oir = new OnlineItemRetriever(task, dco);
+            
+            if (!SwingUtilities.isEventDispatchThread()) {
+                oir.start();
+                
+                try {
+                    oir.join();
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }
+            } else {
+                oir.run();
+            }
+            
+            DcObject o = oir.getDcObject();
+            list.updateItem(dco.getID(), o.clone(), true, false, false);
+            return o;
         }
         return dco;
     }
@@ -204,8 +221,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             int[] rows = list.getSelectedIndices();
             for (int i = 0; i < rows.length; i++) {
                 DcObject dco = items.get(rows[i]);
-                dco = fill(dco);
-                result.add(dco);
+                result.add(fill(dco));
             }
         } else {
             result.add(getSelectedObject());
@@ -218,26 +234,27 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }    
 
     private void open() {
-        try {
-            saveSettings();
-            SwingUtilities.invokeLater(new Thread(new Runnable() {
-                public void run() {
-                    int selectedRow = list.getSelectedIndex();
-                    if (selectedRow == -1) {
-                        new MessageBox(DcResources.getText("msgSelectRowToOpen"), MessageBox._WARNING);
-                        return;
-                    }
-
-                    DcObject o = getSelectedObject();
-                    if (o != null) {
-                        ItemForm itemForm = new ItemForm(true, false, o, true);
-                        itemForm.setVisible(true);
-                    }
+        saveSettings();
+        new Thread(new Runnable() {
+            public void run() {
+                int selectedRow = list.getSelectedIndex();
+                if (selectedRow == -1) {
+                    new MessageBox(DcResources.getText("msgSelectRowToOpen"), MessageBox._WARNING);
+                    return;
                 }
-            }));
-        } catch (Exception e) {
-            logger.error(e, e);
-        }
+
+                final DcObject o = getSelectedObject();
+                if (o != null) {
+                    SwingUtilities.invokeLater(
+                            new Thread(new Runnable() { 
+                                public void run() {
+                                    ItemForm itemForm = new ItemForm(true, false, o, true);
+                                    itemForm.setVisible(true);
+                                }
+                            }));
+                }
+            }
+        }).start();
     }
     
     private void checkPerfectMatch(DcObject dco) {
@@ -274,53 +291,74 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     public void update() {
-        DcObject o = getSelectedObject();
-        
-        saveSettings();
-
-        if (o == null) return;
-            
-        if (itemForm.isVisible()) {
-            DcModule mod = DcModules.get(module);
-            DcObject dco = mod.getDcObject();
-
-            Settings settings = getModule().getSettings();
-            
-            int[] fields = 
-                settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite) ?
-                settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings) :
-                dco.getModule().getFieldIndices();
-
-            for (int i = 0; i < fields.length; i++) {
-                int field = fields[i];
+        new Thread(new Runnable() {
+            public void run() {
+                DcObject o = getSelectedObject();
                 
-                if (dco.isFilled(field)) {
-                    if (settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite) && 
-                        (o.getValue(fields[i]) != null && !o.getValue(fields[i]).equals("") && !o.getValue(fields[i]).equals("-1"))) {
-                        dco.setValue(field, o.getValue(fields[i]));
-                    }
-                } else {
-                    dco.setValue(field, o.getValue(fields[i]));
-                }
-            }  
-            
-            if (o.getChildren() != null && o.getChildren().size() > 0)
-                dco.setChildren(o.getChildren());
-            
-            itemForm.setData(dco, panelSettings.isOverwriteAllowed());
-        }
+                saveSettings();
         
-        close();
+                if (o == null) return;
+                    
+                if (itemForm.isVisible()) {
+                    DcModule mod = DcModules.get(module);
+                    final DcObject dco = mod.getDcObject();
+        
+                    Settings settings = getModule().getSettings();
+                    
+                    int[] fields = 
+                        settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite) ?
+                        settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings) :
+                        dco.getModule().getFieldIndices();
+        
+                    for (int i = 0; i < fields.length; i++) {
+                        int field = fields[i];
+                        
+                        if (dco.isFilled(field)) {
+                            if (settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite) && 
+                                (o.getValue(fields[i]) != null && !o.getValue(fields[i]).equals("") && !o.getValue(fields[i]).equals("-1"))) {
+                                dco.setValue(field, o.getValue(fields[i]));
+                            }
+                        } else {
+                            dco.setValue(field, o.getValue(fields[i]));
+                        }
+                    }  
+                    
+                    if (o.getChildren() != null && o.getChildren().size() > 0)
+                        dco.setChildren(o.getChildren());
+                    
+                    
+                    SwingUtilities.invokeLater(
+                            new Thread(new Runnable() { 
+                                public void run() {
+                                    itemForm.setData(dco, panelSettings.isOverwriteAllowed());
+                                }
+                            }));
+                }
+
+                SwingUtilities.invokeLater(
+                        new Thread(new Runnable() { 
+                            public void run() {
+                                close();
+                            }
+                        }));
+            }
+        }).start();
     }
 
     public void addNew() {
-        saveSettings();
-        Collection<DcObject> selected = getSelectedObjects();
-        if (selected != null) {
-            clear();
-            getModule().getCurrentInsertView().add(selected);
-            DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
-        }
+        new Thread(
+                new Runnable() {
+                    public void run() {
+                        saveSettings();
+                        Collection<DcObject> selected = getSelectedObjects();
+                        if (selected != null) {
+                           // clear();
+                            getModule().getCurrentInsertView().add(selected);
+                            DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
+                        }
+                        
+                    }
+                }).start();
     }    
 
     public void setSelectionMode(int selectionMode) {

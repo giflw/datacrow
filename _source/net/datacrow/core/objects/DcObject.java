@@ -895,7 +895,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             		
             		icon.setFilename(oldIcon.getFilename());
             	
-            		setValue(field, icon);
+            		setValueLowLevel(field, icon);
             	} else if (getField(field).getValueType() == DcRepository.ValueTypes._PICTURE) {
                     Picture curPic = (Picture) dco.getValue(field);
                     
@@ -906,9 +906,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                     newPic.isDeleted(curPic.isDeleted());
                     newPic.isUpdated(curPic.isUpdated());
                     
-                    setValue(field, newPic);
+                    setValueLowLevel(field, newPic);
                 } else {
-                    setValue(field, o);    
+                    setValueLowLevel(field, o);    
                 }
             }
         }

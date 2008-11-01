@@ -118,10 +118,15 @@ public class ResourceEditorDialog extends DcDialog implements ListSelectionListe
         // current size
         Dimension size = panelInput.getSize();
         
+//        for (JScrollPane scroller : scrollers)
+            //scroller.setVisible(false);
+        
         selected = topicList.getSelectedIndex();
         int counter = 0;
-        for (JScrollPane scroller : scrollers)
+        for (JScrollPane scroller : scrollers) {
             scroller.setVisible(counter == selected);
+            counter++;
+        }
         
         if (size.height != 0 && size.width != 0)
             panelInput.setPreferredSize(size);
