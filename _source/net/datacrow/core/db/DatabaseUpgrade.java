@@ -859,17 +859,18 @@ public class DatabaseUpgrade {
             Statement stmt = getSqlStatement(conn);
             
             for (DcModule module : DcModules.getAllModules()) {
-                for (DcField field : module.getFields()) {
-                    if (module.getTableName() != null && module.getTableName().trim().length() > 0 && 
-                        field.getValueType() == DcRepository.ValueTypes._LONG) {
-                        
-                        try {
-                            String sql = "ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + 
-                                         field.getDatabaseFieldName() + " " +
-                                         field.getDataBaseFieldType();
-                            stmt.execute(sql);
-                        } catch (Exception e) {
-                            logger.error("Could not convert the column type for the filesize for module " + module.getTableName(), e);
+                
+                if (module.getTableName() != null && module.getTableName().trim().length() > 0) {
+                    for (DcField field : module.getFields()) {
+                        if (field.getValueType() == DcRepository.ValueTypes._LONG && !field.isUiOnly()) {
+                            try {
+                                String sql = "ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + 
+                                             field.getDatabaseFieldName() + " " +
+                                             field.getDataBaseFieldType();
+                                stmt.execute(sql);
+                            } catch (Exception e) {
+                                logger.error("Could not convert the column type for the filesize for module " + module.getTableName(), e);
+                            }
                         }
                     }
                 }
