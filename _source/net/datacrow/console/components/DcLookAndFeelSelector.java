@@ -284,8 +284,10 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("changeFieldHeight")) {
             Long value = (Long) cbFieldHeight.getSelectedItem();
-            if (value != null) 
+            if (value != null) { 
                 DcSettings.set(DcRepository.Settings.stInputFieldHeight, value);
+                ComponentFactory.setFieldHeight(value.intValue());
+            }
         } else {
             applyLAF();
         }

@@ -601,7 +601,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                     component = pane;
                 } else {
-                	component.setPreferredSize(new Dimension(300, ComponentFactory.getPreferredFieldHeight()));
+                	component.setPreferredSize(new Dimension(300, ComponentFactory.preferredHeight));
                 }
                 
                 if (field.getFieldType() == ComponentFactory._REFERENCESFIELD) {
