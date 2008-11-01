@@ -572,7 +572,6 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         //Actions panel
         //**********************************************************
         JPanel panelActions = new JPanel();
-        panelActions.setLayout(Layout.getGBL());
 
         JButton buttonDetails = ComponentFactory.getButton(DcResources.getText("lblOpen"));
         JButton buttonUpdate = ComponentFactory.getButton(DcResources.getText("lblUpdate"));
@@ -601,29 +600,18 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         buttonAddNew.addActionListener(this);
         buttonAddNew.setActionCommand("addnew");
 
-        panelActions.add(buttonDetails,    Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                 new Insets(5, 5, 5, 5), 0, 0));
+        panelActions.add(buttonDetails);
         
-        if (ID != null && advanced) {
-            panelActions.add(buttonUpdate,    Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                             new Insets(5, 5, 5, 5), 0, 0));
-        } 
+        if (ID != null && advanced)
+            panelActions.add(buttonUpdate);
 
         if (advanced)
-            panelActions.add(buttonAddNew,    Layout.getGBC( 2, 0, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                             new Insets(5, 5, 5, 5), 0, 0));
+            panelActions.add(buttonAddNew);
 
-        panelActions.add(buttonClear,        Layout.getGBC( 3, 0, 1, 1, 1.0, 1.0
-                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                        new Insets(5, 5, 5, 5), 0, 0));
+        panelActions.add(buttonClear);
 
         if (advanced)
-            panelActions.add(buttonClose,     Layout.getGBC( 4, 0, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                             new Insets(5, 5, 5, 5), 0, 0));
+            panelActions.add(buttonClose);
 
         //**********************************************************
         //Main Panel
@@ -632,9 +620,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         panel.setLayout(Layout.getGBL());
 
         panel.add(panelService, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(5, 5, 5, 5), 0, 0));
-        panel.add(tpResult,  Layout.getGBC( 0, 2, 1, 1, 30.0, 30.0
+        panel.add(tpResult,  Layout.getGBC( 0, 2, 1, 1, 50.0, 50.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(5, 5, 5, 5), 0, 0));
         panel.add(panelActions,  Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
@@ -645,7 +633,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                  new Insets(5, 5, 5, 5), 0, 0));
 
         if (advanced)
-            panel.add(panelLog,  Layout.getGBC( 0, 5, 1, 1, 10.0, 10.0
+            panel.add(panelLog,  Layout.getGBC( 0, 5, 1, 1, 20.0, 20.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                              new Insets(5, 5, 5, 5), 0, 0));
 
