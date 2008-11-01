@@ -356,7 +356,6 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                         saveSettings();
                         Collection<DcObject> selected = getSelectedObjects();
                         if (selected != null) {
-                           // clear();
                             getModule().getCurrentInsertView().add(selected);
                             DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
                         }
