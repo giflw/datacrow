@@ -39,6 +39,7 @@ import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.SelectExpienceLevelDialog;
 import net.datacrow.console.windows.SplashScreen;
 import net.datacrow.console.windows.TipOfTheDayDialog;
+import net.datacrow.console.windows.help.StartupHelpDialog;
 import net.datacrow.console.windows.loan.LoanInformationForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
@@ -103,6 +104,9 @@ public class DataCrow {
                 db = args[i].substring(4, args[i].length());
             } else if (args[i].toLowerCase().startsWith("-nocache")) {
                 nocache = true;        
+            } else if (args[i].toLowerCase().startsWith("-help")) {
+                new StartupHelpDialog().setVisible(true);
+                System.exit(0);
             } else if (dir != null) {
                 dir += " " + args[i];
             } else { 

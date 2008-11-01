@@ -33,10 +33,10 @@ Online services
     (after adding a picture field to an existing module).
 [ ] Bug: "ERROR [Thread-19] (ComponentFactory.java:187) - Not thread-safe; should only 
     remove components from within the Event Dispatching thread" (Search form > Date criteria (after) > Apply.
-[ ] Bug: There are unsaved changes. Do you want to exit? (No > exit).
+[x] Bug: There are unsaved changes. Do you want to exit? (No > exit).
 [ ] Bug: Exception in thread "AWT-EventQueue-0" java.lang.ClassCastException: 
     java.lang.Boolean cannot be cast to java.lang.Long (QuickFilter, switch between available and category)
-[ ] Bug: Loading Module[] in the log file.
+[x] Bug: Loading Module[] in the log file.
 [ ] Bug: Icons for modules not saved correctly (black instead of transparent).
 [x] Bug: Error while loading settings from file 
     C:\Program Files\Data Crow Knowledge Share\data\<category>.properties
@@ -46,7 +46,7 @@ Online services
 [x] Remove the todo.txt file.
 [ ] Provide the option to revert back to the default settings (per module + general settings).
     Provide this option as a parameter.
-[ ] Document the parameters.
+[x] Document the parameters.
 [ ] Create a new parameter: -help which will display a dialog with the startup information.
 [x] Update the current online search functionality. Initial result set should be small and only contain
     general information such as name or title.

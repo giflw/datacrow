@@ -98,6 +98,7 @@ public class View extends DcPanel implements ListSelectionListener {
     
     protected QuickViewPanel quickView;
     protected boolean updateQuickView = true;
+    private boolean checkForChanges = true;
 
     protected JPanel panelResult = new JPanel();
     protected JPanel panelStatus = getStatusPanel();
@@ -328,8 +329,6 @@ public class View extends DcPanel implements ListSelectionListener {
     	super.setVisible(b);
     }
     
-    
-    private boolean checkForChanges = false;
     public void checkForChanges(boolean b) {
         checkForChanges = b;
     }

@@ -287,7 +287,12 @@ public class DcModules {
      * was already registered.
      */
     public static void register(DcModule module) {
-        logger.debug("Registering module [" + module + "]");
+        
+        if (logger.isDebugEnabled()) {
+            String name = module.getName();
+            name = name == null || name.trim().length() == 0 ? module.getTableName() : name;
+            logger.debug("Registering module [" + name + "]");
+        }
         
         if (!modules.containsKey(module.getIndex())) {
             modules.put(module.getIndex(), module);

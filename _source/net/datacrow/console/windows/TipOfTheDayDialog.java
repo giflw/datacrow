@@ -37,33 +37,24 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcButton;
 import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcDialog;
-import net.datacrow.console.components.DcTextPane;
+import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
-import org.apache.log4j.Logger;
-
 public class TipOfTheDayDialog extends DcDialog implements ActionListener {
 
-    private static Logger logger = Logger.getLogger(TipOfTheDayDialog.class.getName());
-    
-    private DcTextPane tipPane = ComponentFactory.getTextPane();
+    private DcHtmlEditorPane tipPane = ComponentFactory.getHtmlEditorPane();
     private DcCheckBox checkShowTips = ComponentFactory.getCheckBox(DcResources.getText("lblShowTipsOnStartup"));
     
-    private HTMLEditorKit kit = new HTMLEditorKit();
-    private HTMLDocument document = new HTMLDocument();
-
     private List<String> tips = new LinkedList<String>();
     
     private int currentTip = 0;
@@ -83,22 +74,12 @@ public class TipOfTheDayDialog extends DcDialog implements ActionListener {
     }    
 
     private void showNextTip(int idx) {
-        try {
-            String tip = tips.get(idx);
-            String html = "<html><body " + Utilities.getHtmlStyle() + ">" + tip + "</body></html>";
-            tipPane.setText("");
-            kit.insertHTML(document, 0, html, 0, 0, null);
-        } catch (Exception e) {
-            logger.error("Could not set the html", e);
-        }
+        String tip = tips.get(idx);
+        String html = "<html><body " + Utilities.getHtmlStyle() + ">" + tip + "</body></html>";
+        tipPane.setHtml(html);
     }    
     
     private void build() {
-        tipPane.setEditorKit(kit);
-        tipPane.setDocument(document);
-        tipPane.setEditable(false);
-        tipPane.setBounds(1,1,1,1);
-        
         getContentPane().setLayout(Layout.getGBL());
         
         DcButton buttonNext = ComponentFactory.getButton(DcResources.getText("lblNext"));
@@ -157,8 +138,6 @@ public class TipOfTheDayDialog extends DcDialog implements ActionListener {
     
     @Override
     public void close() {
-        kit = null;
-        document = null;
         tipPane = null;
         checkShowTips = null;
         

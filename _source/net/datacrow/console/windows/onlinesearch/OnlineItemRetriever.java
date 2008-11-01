@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.SearchTask;
 
 import org.apache.log4j.Logger;
@@ -80,7 +81,7 @@ public class OnlineItemRetriever extends Thread {
         @Override
         public void run() {
             
-            final ProgressDialog dlg = new ProgressDialog(dco.getName());
+            final ProgressDialog dlg = new ProgressDialog(DcResources.getText("msgRetrievingItemDetails", dco.getName()));
             while (thread.isAlive()) {
                 SwingUtilities.invokeLater(
                         new Thread(new Runnable() { 

@@ -21,7 +21,7 @@ Table of Content
  3.0 ------- About the database (HSQL)
  4.0 ------- Upgrading
  5.0 ------- Building the project
- 6.0 ------- Running the project 
+ 6.0 ------- Starting Data Crow 
  7.0 ------- Credits
  8.0 ------- Licenses and 3rd party software
 
@@ -129,10 +129,23 @@ Of course you can also just call ant within the main directory.
 
 
 ----------------------------------------------------------------------------------------
-6.0 Running the project
+6.0 Starting Data Crow
 
 Data Crow can be started by typing "java -Xmx256m -jar datacrow.jar". 
 On Windows platforms the datacrow.exe file can be used to start.
+
+Additional parameters:
+    
+    -db:<database name> 
+     Forces Data Crow to use another database.
+    
+    -dir:<installation directory> 
+     Use this parameter when Data Crow starts incorrectly and complains 
+     about missing directories (non Windows platform only). 
+    
+    -nocache
+     Forces Data Crow to ignore the cached items and load everything fresh from the 
+     database.
 
 
 ----------------------------------------------------------------------------------------

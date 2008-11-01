@@ -2,12 +2,22 @@
 Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
+[Changed]
+- The online search has been changed and optimized:
+  * You know have the option (default) to retrieve only a minimum of information for each 
+    item in the initial search. The item details will be retrieved on request / once the 
+    item has been selected. Ticking the box 'retrieve full details on initial search (slow)'
+    will activate Data Crows old behavior.
+  * Improved speed for the Mass Update of items.
+  * Improved speed for the Item import when using the Online Services option.
+- Added '-help' parameter which displays information on starting Data Crow in a dialog.
+
 [Fixed]
 - Incorrect upgrade proposals on startup.
 - Service URL not set by some online searches
 - Setting value without override of existing value fails even if the current value is
   empty.
-- Firstname is set as lastname and lastname as firstname (all person modules).
+- First name is set as last name and last name as first name (all person modules).
 - Sorting does no longer work (only string values work). Empty values seem to be the 
   cause of this malfunction.
 - Cannot re-active module as it is no longer displayed in the module settings.
@@ -21,6 +31,12 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
 - Picture not shown in the card view (view settings does not see the new picture fields).
 - Container field can be updated using update all.
 - Templates issue; sub menu for new using template is not there after a restart.
+- Pressing escape causes Data Crow to exit without further notice, even when there are
+  unsaved changes.
+- In debug mode the message for which module is being registered does not always contain
+  the module name.
+- The resource editor no longer allows editing system labels and such.
+- Parameter information missing in the readme file.
 
 
 -----------------------------------------------------------------------------------------
