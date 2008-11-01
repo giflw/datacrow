@@ -42,7 +42,7 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
-public class LookAndFeelDialog extends DcDialog implements ActionListener {
+public class LookAndFeelDialog extends DcDialog implements ActionListener  {
     
     public LookAndFeelDialog() {
         super(DataCrow.mainFrame);
@@ -61,11 +61,11 @@ public class LookAndFeelDialog extends DcDialog implements ActionListener {
         buttonClose.setMnemonic('C');
         
         getContentPane().add(lafSelector,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
-           ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-            new Insets( 5, 5, 5, 5), 0, 0));
-        getContentPane().add(buttonClose,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-           ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
-            new Insets( 5, 5, 5, 5), 0, 0));
+             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+              new Insets( 5, 5, 5, 5), 0, 0));
+         getContentPane().add(buttonClose,  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+             ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+              new Insets( 5, 5, 5, 5), 0, 0));
 
         pack();
         

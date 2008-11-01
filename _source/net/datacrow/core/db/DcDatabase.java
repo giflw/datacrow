@@ -41,6 +41,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
@@ -102,6 +103,9 @@ public class DcDatabase {
         
         updateVersion(connection);
 
+        // Set the database privileges for the current user. This avoids errors for upgraded modules and such. 
+        DatabaseManager.setPriviliges(SecurityCentre.getInstance().getUser().getUser());
+        
         try {
             connection.close();
         } catch (Exception e) {
@@ -209,6 +213,7 @@ public class DcDatabase {
             if (!field.isUiOnly() && !found) {
                 logger.info(DcResources.getText("msgTableUpgradeMissingColumn", new String[] {tableName, field.getLabel()}));
                 executeQuery(connection, "alter table " + tableName + " add column " + column + " " + type);
+                //DatabaseManager.setPriviliges(user)
                 DataManager.setUseCache(false);
             }
         }

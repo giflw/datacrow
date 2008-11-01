@@ -11,6 +11,7 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
   * Improved speed for the Mass Update of items.
   * Improved speed for the Item import when using the Online Services option.
 - Added '-help' parameter which displays information on starting Data Crow in a dialog.
+- Changed the height of the input fields (21 to 23).
 
 [Fixed]
 - Incorrect upgrade proposals on startup.
@@ -37,6 +38,16 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
   the module name.
 - The resource editor no longer allows editing system labels and such.
 - Parameter information missing in the readme file.
+- ClassCastException when opening items from the table view after double clicking on a 
+  non-string field.
+- Incorrect "Item changed has changed message" when opening items from the table view 
+  after double clicking on a non-string field.
+- UI only fields and read only fields could be marked as required in the field settings. 
+- Message in log file: "ERROR [Thread-19] (ComponentFactory.java:187) - Not thread-safe; 
+  should only remove components from within the Event Dispatching thread". Cause has been
+  fixed.
+- Items for custom property modules do not show anything in the related items tab.
+- Errors when trying to start with a different user on an upgraded database.
 
 
 -----------------------------------------------------------------------------------------

@@ -39,6 +39,13 @@ public class DcTableModel extends DefaultTableModel {
     public void setValueAt(Object o, int row, int column) {
         if (getRowCount() > 0 && row != -1 && column != -1) {
             Object old = getValueAt(row, column);
+            
+            if (old instanceof Boolean && o instanceof String)
+                o = Boolean.valueOf((String) o);
+
+            if (old instanceof Long && o instanceof String)
+                o = Long.valueOf((String) o);
+            
             if ((old != null && old instanceof List) && o != null && !(o instanceof List)) 
                 return;
             

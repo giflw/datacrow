@@ -112,6 +112,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false,
                             false));
         getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._LONG,
+                            DcRepository.Settings.stInputFieldHeight,
+                            Long.valueOf(25),
+                            -1,
+                            "",
+                            "",
+                            true,
+                            true));             
+        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stPersonOrder,
                             DcResources.getText("lblPersonOrderByLastname"),

@@ -258,10 +258,12 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         private void checkDependencies() {
             table.cancelEdit();
             int row = table.getSelectedRow();
-
             if (row > -1) {
                 DcFieldDefinition definition = getDefinition(row);
-
+                DcField field = (DcField) table.getValueAt(row, _COL_FIELD, true);
+                if (field.isUiOnly())
+                    table.setValueAt(Boolean.FALSE, row, _COL_REQUIRED);
+                
                 if (!definition.isEnabled()) {
                     table.setValueAt(Boolean.FALSE, row, _COL_DESCRIPTIVE);
                     table.setValueAt(Boolean.FALSE, row, _COL_REQUIRED);
@@ -297,6 +299,9 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             boolean descriptive = ((Boolean) table.getValueAt(row, _COL_DESCRIPTIVE, true)).booleanValue();
             
             DcField field = (DcField) table.getValueAt(row, _COL_FIELD, true);
+            
+            if (field.isReadOnly() || field.isUiOnly())
+                required = false;
 
             return new DcFieldDefinition(field.getIndex(), name, enabled, required, descriptive);
         }

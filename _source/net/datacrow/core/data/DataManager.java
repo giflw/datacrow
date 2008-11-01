@@ -611,7 +611,7 @@ public class DataManager {
                 if (!m.isAbstract() && m.isTopModule()) {
                     
                     if ((modIdx == DcModules._MEDIA && m instanceof DcMediaModule) ||
-                        (modIdx == DcModules._ITEM && m.isContainerManaged())) {
+                        (modIdx == DcModules._ITEM && (m.isContainerManaged()))) {
                      
                         DcObject[] objects = get(m.getIndex(), df);
                         for (int i = 0; i < objects.length; i++)

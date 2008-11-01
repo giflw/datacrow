@@ -114,7 +114,7 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
                             df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, dco));
                         }
                         
-                    	for (DcObject dco : DataManager.get(DcModules._ITEM, df)) {
+                    	for (DcObject dco : DataManager.get(module.getIndex(), df)) {
                     		if (!items.contains(dco))
                     			items.add(dco);
                     	}

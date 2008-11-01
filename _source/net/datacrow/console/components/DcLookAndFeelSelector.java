@@ -42,14 +42,18 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
-public class DcLookAndFeelSelector extends JComponent implements IComponent {
+public class DcLookAndFeelSelector extends JComponent implements IComponent, ActionListener {
     
     private static Logger logger = Logger.getLogger(DcLookAndFeelSelector.class.getName());    
+
+    private DcComboBox cbFieldHeight = ComponentFactory.getComboBox();
     
     private JCheckBox checkNoLF = ComponentFactory.getCheckBox(DcResources.getText("lblNoLF"));
     private JCheckBox checkSystemLF = ComponentFactory.getCheckBox(DcResources.getText("lblLaf"));
@@ -133,6 +137,9 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent {
                 checkSystemLF.setSelected(true);
             }
         }
+        
+        cbFieldHeight.setSelectedItem(Long.valueOf(DcSettings.getInt(DcRepository.Settings.stInputFieldHeight)));
+        
         applyModus = true;
     }
     
@@ -163,12 +170,23 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent {
     private void buildComponent() {
         setLayout(Layout.getGBL());
         
+        for (int i = 20; i < 50; i++)
+            cbFieldHeight.addItem(Long.valueOf(i));
+        
+        cbFieldHeight.addActionListener(this);
+        cbFieldHeight.setActionCommand("changeFieldHeight");
+        cbFieldHeight.setToolTipText(DcResources.getText("tpInputFieldHeight"));
+        
+        DcLabel lblFieldHeight = ComponentFactory.getLabel(DcResources.getText("lblInputFieldHeight"));
+        lblFieldHeight.setToolTipText(DcResources.getText("tpInputFieldHeight"));
+        
         checkNoLF.addActionListener(new TypeActionListener(DcLookAndFeel._NONE));
         checkSkinLF.addActionListener(new TypeActionListener(DcLookAndFeel._SKINLF));
         checkSystemLF.addActionListener(new TypeActionListener(DcLookAndFeel._LAF));
         
-        comboSystemLF.addActionListener(new LafSelectionListener());
-        comboSkinLF.addActionListener(new LafSelectionListener());
+        comboSystemLF.addActionListener(this);
+        comboSkinLF.addActionListener(this);
+        
         
         add(checkNoLF,       Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
@@ -183,6 +201,12 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent {
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                              new Insets( 0, 0, 0, 0), 0, 0));
         add(comboSkinLF,     Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                             new Insets( 0, 0, 0, 0), 0, 0));
+        add(lblFieldHeight,  Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                             new Insets( 0, 0, 0, 0), 0, 0));
+        add(cbFieldHeight,   Layout.getGBC( 1, 3, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                              new Insets( 0, 0, 0, 0), 0, 0));
     }
@@ -257,8 +281,12 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent {
         }
     }
     
-    private class LafSelectionListener implements ActionListener {
-        public void actionPerformed(ActionEvent a) {
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getActionCommand().equals("changeFieldHeight")) {
+            Long value = (Long) cbFieldHeight.getSelectedItem();
+            if (value != null) 
+                DcSettings.set(DcRepository.Settings.stInputFieldHeight, value);
+        } else {
             applyLAF();
         }
     }

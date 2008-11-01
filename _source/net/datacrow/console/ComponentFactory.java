@@ -136,7 +136,7 @@ public final class ComponentFactory {
 
     private static Logger logger = Logger.getLogger(ComponentFactory.class.getName());
     
-    public static final int PreferredHeight = 25;
+    public static int preferredHeight = DcSettings.getInt(DcRepository.Settings.stInputFieldHeight);
     
     public static final int _YESNOCOMBO = 1;
     public static final int _LONGTEXTFIELD = 2;
@@ -226,6 +226,10 @@ public final class ComponentFactory {
             c.invalidate();
         }
     }    
+    
+    public static void setFieldHeight(int height) {
+        preferredHeight = height;
+    }
     
     public static void setLookAndFeel() {
         try {
@@ -444,7 +448,7 @@ public final class ComponentFactory {
     
     public static final DcPasswordField getPasswordField() {
         DcPasswordField passwordField = new DcPasswordField();
-        passwordField.setPreferredSize(new Dimension(100, PreferredHeight));
+        passwordField.setPreferredSize(new Dimension(100, preferredHeight));
         return passwordField;
     }
 
@@ -584,14 +588,14 @@ public final class ComponentFactory {
 
     public static final DcNumberField getNumberField() {
         DcNumberField numberField = new DcNumberField();
-        numberField.setPreferredSize(new Dimension(numberField.getWidth(), PreferredHeight));
+        numberField.setPreferredSize(new Dimension(numberField.getWidth(), preferredHeight));
         numberField.setFont(getStandardFont());
         return numberField;
     }
     
     public static final DcDecimalField getDecimalField() {
         DcDecimalField decimalField = new DcDecimalField();
-        decimalField.setPreferredSize(new Dimension(decimalField.getWidth(), PreferredHeight));
+        decimalField.setPreferredSize(new Dimension(decimalField.getWidth(), preferredHeight));
         decimalField.setFont(getStandardFont());
         return decimalField;
     }    
@@ -815,20 +819,20 @@ public final class ComponentFactory {
     public static final DcFilePatternTextField getFilePatternTextField() {
         DcFilePatternTextField fptf = new DcFilePatternTextField();
         fptf.setFont(getStandardFont());
-        fptf.setPreferredSize(new Dimension(50, PreferredHeight));
+        fptf.setPreferredSize(new Dimension(50, preferredHeight));
         return fptf;
     }
 
     public static final DcShortTextField getShortTextField(int maxTextLength) {
         DcShortTextField textField = new DcShortTextField(maxTextLength);
         textField.setFont(getStandardFont());
-        textField.setPreferredSize(new Dimension(50, PreferredHeight));
+        textField.setPreferredSize(new Dimension(50, preferredHeight));
         return textField;
     }
 
     public static final DcShortTextField getTextFieldDisabled() {
         DcShortTextField textField = new DcShortTextField(4000);
-        textField.setPreferredSize(new Dimension(50, PreferredHeight));
+        textField.setPreferredSize(new Dimension(50, preferredHeight));
         textField.setEnabled(false);
         textField.setEditable(false);
         textField.setFont(ComponentFactory.getStandardFont());
@@ -848,7 +852,7 @@ public final class ComponentFactory {
     
     public static final DcNumberField getIdFieldDisabled() {
         DcNumberField textField = new DcNumberField();
-        textField.setPreferredSize(new Dimension(50, PreferredHeight));
+        textField.setPreferredSize(new Dimension(50, preferredHeight));
         textField.setEnabled(false);
         textField.setEditable(false);
         textField.setFont(ComponentFactory.getStandardFont());

@@ -446,9 +446,12 @@ public class DatabaseManager {
             setPriviliges(module, user);
     }
     
-    private static void setPriviliges(DcModule module, User user) {
+    protected static void setPriviliges(DcModule module, User user) {
         Connection c = null;
         Statement stmt = null;
+        
+        if (user == null)
+            return;
         
         try {
             String tablename = module.getTableName();
