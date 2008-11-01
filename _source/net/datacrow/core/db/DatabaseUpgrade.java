@@ -46,11 +46,11 @@ import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.TemplateModule;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -93,7 +93,7 @@ public class DatabaseUpgrade {
                 convertAssociateNames2();
                 moveImages();
                 convertFileSize();
-                convertFileSizeColumns(version);
+                convertNumberColumns(version);
                 repairCrossTables(version);
                 convertRatings(version);
                 convertLocations();
@@ -583,7 +583,7 @@ public class DatabaseUpgrade {
             for (DcField field : module.getFields()) {
                 
                 if (    module.getTableName() != null && module.getTableName().trim().length() > 0 && 
-                        field.getFieldType() == ComponentFactory._RATINGCOMBOBOX && !(module instanceof TemplateModule)) {
+                        field.getFieldType() == ComponentFactory._RATINGCOMBOBOX) {
 
                     String sql = "update " + module.getTableName() + " set " + field.getDatabaseFieldName() + 
                     " = " + field.getDatabaseFieldName() + " / 2 where " + field.getDatabaseFieldName() + " > 10";
@@ -852,27 +852,29 @@ public class DatabaseUpgrade {
     /************************************************
      * Convert File Size Columns
      ************************************************/
-    private void convertFileSizeColumns(Version v) throws DatabaseUpgradeException {
+    private void convertNumberColumns(Version v) throws DatabaseUpgradeException {
 
         if (v.isOlder(new Version(3, 4, 2, 0))) {
             Connection conn = DatabaseManager.getAdminConnection();
             Statement stmt = getSqlStatement(conn);
             
             for (DcModule module : DcModules.getAllModules()) {
-                if (module.isFileBacked()) {
-                    try {
-                        String sql = "ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + 
-                                     module.getField(DcObject._SYS_FILESIZE).getDatabaseFieldName() + " " +
-                                     module.getField(DcObject._SYS_FILESIZE).getDataBaseFieldType();
-                        stmt.execute(sql);
-                    } catch (Exception e) {
-                        logger.error("Could not convert the column type for the filesize for module " + module.getTableName(), e);
+                for (DcField field : module.getFields()) {
+                    if (field.getValueType() == DcRepository.ValueTypes._LONG) {
+                        try {
+                            String sql = "ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + 
+                                         field.getDatabaseFieldName() + " " +
+                                         field.getDataBaseFieldType();
+                            stmt.execute(sql);
+                        } catch (Exception e) {
+                            logger.error("Could not convert the column type for the filesize for module " + module.getTableName(), e);
+                        }
                     }
                 }
             }
         }
     }
-        
+
     
     /************************************************
      * Helper methods
