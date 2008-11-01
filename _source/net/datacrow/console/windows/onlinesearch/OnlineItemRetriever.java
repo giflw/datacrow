@@ -89,7 +89,7 @@ public class OnlineItemRetriever extends Thread {
                             }
                         }));
                 
-                try { sleep(100); } catch (Exception ignore) {}
+                try { sleep(10); } catch (Exception ignore) {}
             }
             
             SwingUtilities.invokeLater(

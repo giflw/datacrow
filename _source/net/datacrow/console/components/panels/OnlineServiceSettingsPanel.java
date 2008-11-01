@@ -142,6 +142,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         checkOnlineSearchSubItems = null;
         checkAutoCreateSubItems = null;
         checkAutoAdd = null;
+        checkQueryFullDetails = null;
         parent = null;
         removeAll();
     }

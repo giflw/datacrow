@@ -33,7 +33,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -85,6 +87,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private DcObjectList list;
     
     private List<DcObject> items = new ArrayList<DcObject>();
+    private Map<Integer, Boolean> loadedItems = new HashMap<Integer, Boolean>();
 
     private OnlineService os;
     
@@ -143,6 +146,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             
             list.add(dco);
             items.add(dco);
+            loadedItems.put(items.indexOf(dco), Boolean.valueOf(panelSettings.isQueryFullDetails()));
             
             resultCount++;
             
@@ -183,24 +187,24 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     private DcObject fill(DcObject dco) { 
-        if (!panelSettings.isQueryFullDetails()) {
+        if (!loadedItems.get(items.indexOf(dco)).booleanValue()) {
             SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
             
             OnlineItemRetriever oir = new OnlineItemRetriever(task, dco);
-            
             if (!SwingUtilities.isEventDispatchThread()) {
                 oir.start();
-                
-                try {
+                try { 
                     oir.join();
                 } catch (Exception e) {
                     logger.error(e, e);
                 }
             } else {
+                logger.debug("Task executed in the GUI thread! The GUI will be locked while executing the task!");
                 oir.run();
             }
             
             DcObject o = oir.getDcObject();
+            loadedItems.put(items.indexOf(dco), Boolean.TRUE);
             list.updateItem(dco.getID(), o.clone(), true, false, false);
             return o;
         }
@@ -646,6 +650,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         // result is a direct clone; other items can safely be removed
         for (DcObject dco : items)
             dco.unload();
+        
+        loadedItems.clear();
+        loadedItems = null;
         
         items.clear();
         items = null;
