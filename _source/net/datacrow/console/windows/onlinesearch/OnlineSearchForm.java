@@ -41,6 +41,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
@@ -464,7 +465,16 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         getContentPane().setLayout(Layout.getGBL());
         
         contentPanel = getContentPanel(advanced);
-        getContentPane().add(contentPanel, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        
+        JTabbedPane tp = ComponentFactory.getTabbedPane();
+        
+        panelSettings = new OnlineServiceSettingsPanel(this, true, true, ID != null, module);
+        
+        tp.addTab("Search", contentPanel);
+        tp.addTab("Settings", panelSettings);
+        
+        
+        getContentPane().add(tp, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                              new Insets(0, 0, 0, 0), 0, 0));
         pack();
@@ -477,12 +487,6 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private JPanel getContentPanel(boolean advanced) {
         setResizable(true);
         getContentPane().setLayout(Layout.getGBL());
-
-        //**********************************************************
-        //Settings
-        //**********************************************************
-        panelSettings = new OnlineServiceSettingsPanel(this, true, true, ID != null, module);
-
 
         //**********************************************************
         //Servers
@@ -599,11 +603,6 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                  new Insets(5, 5, 5, 5), 0, 0));
         
         
-        if (advanced)
-            panel.add(panelSettings, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets(5, 5, 5, 5), 0, 0));
-
         panel.add(panelResults,  Layout.getGBC( 0, 2, 1, 1, 50.0, 50.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                              new Insets(5, 5, 5, 5), 0, 0));

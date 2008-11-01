@@ -860,7 +860,9 @@ public class DatabaseUpgrade {
             
             for (DcModule module : DcModules.getAllModules()) {
                 for (DcField field : module.getFields()) {
-                    if (field.getValueType() == DcRepository.ValueTypes._LONG) {
+                    if (module.getTableName() != null && module.getTableName().trim().length() > 0 && 
+                        field.getValueType() == DcRepository.ValueTypes._LONG) {
+                        
                         try {
                             String sql = "ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + 
                                          field.getDatabaseFieldName() + " " +
