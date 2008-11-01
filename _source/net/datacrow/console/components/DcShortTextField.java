@@ -72,7 +72,12 @@ public class DcShortTextField extends JTextField implements IComponent {
     }
 
     public void setValue(Object o) {
-        setText((String) o);
+        if (o instanceof String)
+            setText((String) o);
+        else if (o != null)
+            setText(o.toString());
+        else
+            setText("");
     }
     
     @Override

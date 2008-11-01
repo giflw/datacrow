@@ -105,6 +105,7 @@ public class DcDatabase {
 
         // Set the database privileges for the current user. This avoids errors for upgraded modules and such. 
         DatabaseManager.setPriviliges(SecurityCentre.getInstance().getUser().getUser());
+        DatabaseManager.setPriviliges("dc_admin", true);
         
         try {
             connection.close();
@@ -212,8 +213,7 @@ public class DcDatabase {
             
             if (!field.isUiOnly() && !found) {
                 logger.info(DcResources.getText("msgTableUpgradeMissingColumn", new String[] {tableName, field.getLabel()}));
-                executeQuery(connection, "alter table " + tableName + " add column " + column + " " + type);
-                //DatabaseManager.setPriviliges(user)
+                executeQuery(DatabaseManager.getAdminConnection(), "alter table " + tableName + " add column " + column + " " + type);
                 DataManager.setUseCache(false);
             }
         }

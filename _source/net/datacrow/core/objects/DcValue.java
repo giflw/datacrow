@@ -142,7 +142,9 @@ public class DcValue implements Serializable {
                              && !Utilities.isEmpty(o)) {
                     try {
                         if (field.getFieldType() == ComponentFactory._FILESIZEFIELD) {
-                            if (o instanceof Number) {
+                            if (o instanceof Long) {
+                                setValueNative(o, field);
+                            } else if (o instanceof Number) {
                                 setValueNative(Long.valueOf(((Number) o).intValue()), field);
                             } else if (o instanceof String && ((String) o).trim().length() > 0) {
                                 String num = "";
@@ -157,7 +159,9 @@ public class DcValue implements Serializable {
                         }
                         
                         if (field.getValueType() == DcRepository.ValueTypes._LONG) {
-                            if (o instanceof Number)
+                            if (o instanceof Long)
+                                setValueNative(o, field);
+                            else if (o instanceof Number)
                                 setValueNative(Long.valueOf(((Number) o).intValue()), field);
                             else if (o instanceof String && ((String) o).trim().length() > 0)
                                 setValueNative(Long.valueOf(((String) o).trim()), field);
@@ -166,7 +170,9 @@ public class DcValue implements Serializable {
                         }
                         
                         if (field.getValueType() == DcRepository.ValueTypes._DOUBLE) {
-                            if (o instanceof Number) {
+                            if (o instanceof Double) {
+                                setValueNative(o, field);
+                            } else if (o instanceof Number) {
                                 setValueNative(new Double(((Number) o).doubleValue()), field);
                             } else if (o instanceof String && ((String) o).trim().length() > 0) {
                                 setValueNative(Double.valueOf(((String) o).trim()), field);

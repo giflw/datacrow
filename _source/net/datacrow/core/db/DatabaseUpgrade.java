@@ -50,6 +50,7 @@ import net.datacrow.core.Version;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.TemplateModule;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -92,6 +93,7 @@ public class DatabaseUpgrade {
                 convertAssociateNames2();
                 moveImages();
                 convertFileSize();
+                convertFileSizeColumns(version);
                 repairCrossTables(version);
                 convertRatings(version);
                 convertLocations();
@@ -127,7 +129,7 @@ public class DatabaseUpgrade {
 
     	boolean needsConversion = false;
     	try {
-    		conn = DatabaseManager.getConnection();
+    		conn = DatabaseManager.getAdminConnection();
             stmt = getSqlStatement(conn);
             try {
                 // If the location column exists the database needs to be upgraded.
@@ -236,7 +238,7 @@ public class DatabaseUpgrade {
     	Connection conn = null;
     	Statement stmt = null;
     	try {
-            conn = DatabaseManager.getConnection();
+            conn = DatabaseManager.getAdminConnection();
             stmt = getSqlStatement(conn);
     		
     		// If the location column exists the database needs to be upgraded.
@@ -274,7 +276,7 @@ public class DatabaseUpgrade {
      ************************************************/
 
     private void convertLocations() throws DatabaseUpgradeException {
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
         try {
             // If the location column exists the database needs to be upgraded.
@@ -390,7 +392,7 @@ public class DatabaseUpgrade {
     
     private void convertAssociateNames() throws DatabaseUpgradeException {
 
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
         
         // perform always
@@ -466,14 +468,14 @@ public class DatabaseUpgrade {
     
     private void convertAssociateNames2() throws DatabaseUpgradeException {
 
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
         
         if (DatabaseManager.getVersion().equals(new Version(3, 4, 0, 0)) ||  
             DatabaseManager.getVersion().equals(new Version(3, 4, 1, 0))) {
 
             QuestionBox qb = new QuestionBox("Upgrade for version < 3.4.2. Names of persons will be converted. " +
-            		                         "Firstname is currently set as lastname and vice versa. Continue?");
+            		                         "Firstname is currently set as lastname and vice versa. Continue? It is safe to skip this upgrade!");
             if (!qb.isAffirmative())
             	return;
         } else {
@@ -487,7 +489,7 @@ public class DatabaseUpgrade {
                 	ResultSet rs = stmt.executeQuery("SELECT ID, FIRSTNAME, LASTNAME  FROM " + module.getTableName() + 
                 		                             " WHERE LASTNAME IS NOT NULL AND FIRSTNAME IS NOT NULL");
 
-                    PreparedStatement ps = conn.prepareStatement("UPDATE " + module.getTableName() + " SET FIRSTNAME = ? AND LASTNAME = ? WHERE ID = ?");
+                    PreparedStatement ps = conn.prepareStatement("UPDATE " + module.getTableName() + " SET FIRSTNAME = ?, LASTNAME = ? WHERE ID = ?");
                 	while (rs.next()) {
                         try {
                             base.clearValues();
@@ -574,18 +576,20 @@ public class DatabaseUpgrade {
     
     private void convertRatings(Version v) throws DatabaseUpgradeException {
         // run always!
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
 
         for (DcModule module : DcModules.getAllModules()) {
             for (DcField field : module.getFields()) {
                 
                 if (    module.getTableName() != null && module.getTableName().trim().length() > 0 && 
-                        field.getFieldType() == ComponentFactory._RATINGCOMBOBOX) {
+                        field.getFieldType() == ComponentFactory._RATINGCOMBOBOX && !(module instanceof TemplateModule)) {
 
+                    String sql = "update " + module.getTableName() + " set " + field.getDatabaseFieldName() + 
+                    " = " + field.getDatabaseFieldName() + " / 2 where " + field.getDatabaseFieldName() + " > 10";
+                    
                     try {
-                        stmt.execute("update " + module.getTableName() + " set " + field.getDatabaseFieldName() + 
-                                     " = " + field.getDatabaseFieldName() + " / 2 where " + field.getDatabaseFieldName() + " > 10");
+                        stmt.execute(sql);
                     } catch (SQLException se) {
                         logger.error(se, se);
                     }
@@ -610,7 +614,7 @@ public class DatabaseUpgrade {
         
         if (qb.isAffirmative()) {
             
-            conn = DatabaseManager.getConnection();
+            conn = DatabaseManager.getAdminConnection();
             stmt = getSqlStatement(conn);
             
             LogForm.getInstance().setVisible(true);
@@ -693,7 +697,7 @@ public class DatabaseUpgrade {
     
     private void repairCrossTables(Collection<Table> tables, Table table) throws DatabaseUpgradeException {
   
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
         
         for (Table t : tables) {
@@ -755,7 +759,7 @@ public class DatabaseUpgrade {
 
     private void convertFileSize() throws DatabaseUpgradeException {
 
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
         try {
             // If the file hash column exists the database does not need to be upgraded.
@@ -785,7 +789,7 @@ public class DatabaseUpgrade {
         
         logger.info("Starting conversion of filesizes for table " + table);
 
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
 
         try {
@@ -846,6 +850,31 @@ public class DatabaseUpgrade {
     
     
     /************************************************
+     * Convert File Size Columns
+     ************************************************/
+    private void convertFileSizeColumns(Version v) throws DatabaseUpgradeException {
+
+        if (v.isOlder(new Version(3, 4, 2, 0))) {
+            Connection conn = DatabaseManager.getAdminConnection();
+            Statement stmt = getSqlStatement(conn);
+            
+            for (DcModule module : DcModules.getAllModules()) {
+                if (module.isFileBacked()) {
+                    try {
+                        String sql = "ALTER TABLE " + module.getTableName() + " ALTER COLUMN " + 
+                                     module.getField(DcObject._SYS_FILESIZE).getDatabaseFieldName() + " " +
+                                     module.getField(DcObject._SYS_FILESIZE).getDataBaseFieldType();
+                        stmt.execute(sql);
+                    } catch (Exception e) {
+                        logger.error("Could not convert the column type for the filesize for module " + module.getTableName(), e);
+                    }
+                }
+            }
+        }
+    }
+        
+    
+    /************************************************
      * Helper methods
      ************************************************/
     
@@ -887,7 +916,7 @@ public class DatabaseUpgrade {
     }
     
     private boolean isNewDatabase() throws DatabaseUpgradeException {
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = getSqlStatement(conn);
         
         boolean isNew = false;

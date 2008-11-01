@@ -442,6 +442,9 @@ public class DcModules {
     public static DcModule getCurrent() {
         DcModule current = DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule));
         
+        if (current == null)
+            current = DcModules.get(DcModules._SOFTWARE);
+        
         if (current.getIndex() == DcModules._CONTAINER &&
             current.getSettings().getInt(DcRepository.ModuleSettings.stTreePanelShownItems) == DcModules._ITEM) {
             

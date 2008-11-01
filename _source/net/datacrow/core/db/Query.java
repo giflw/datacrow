@@ -183,6 +183,7 @@ public class Query {
 
     @SuppressWarnings({"unchecked"})
     protected List<PreparedStatement> getInsertQueries(DcObject dco) throws SQLException {
+        
         Collection<Object> values = new ArrayList<Object>();
         StringBuffer columns = new StringBuffer();
 
@@ -268,7 +269,7 @@ public class Query {
         
         String sql = "CREATE MEMORY TABLE " + dco.getTableName() + "\r\n(" + columns + ");";
         List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
-        queries.add(getPreparedStatement(sql));
+        queries.add(getPreparedStatementAdmin(sql));
         return queries;
     }
 
@@ -433,6 +434,10 @@ public class Query {
         return DatabaseManager.getConnection().prepareStatement(sql);
     }
 
+    private PreparedStatement getPreparedStatementAdmin(String sql) throws SQLException {
+        return DatabaseManager.getAdminConnection().prepareStatement(sql);
+    }
+    
     private void setValues(PreparedStatement ps, Collection<Object> values) throws SQLException {
         int pos = 1;
         

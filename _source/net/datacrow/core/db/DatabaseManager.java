@@ -358,7 +358,7 @@ public class DatabaseManager {
      * Security methods
      *****************************************************************************************/
     
-    private static Connection getAdminConnection() {
+    protected static Connection getAdminConnection() {
     	return DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
     }
     
@@ -446,14 +446,25 @@ public class DatabaseManager {
             setPriviliges(module, user);
     }
     
+    public static void setPriviliges(String user, boolean admin) {
+        for (DcModule module : DcModules.getAllModules())
+            setPriviliges(module, user, admin);
+    }
+    
     protected static void setPriviliges(DcModule module, User user) {
-        Connection c = null;
-        Statement stmt = null;
-        
         if (user == null)
             return;
         
-        try {
+        setPriviliges(module, (String) user.getValue(User._A_LOGINNAME), user.isAdmin());
+    } 
+        
+   protected static void setPriviliges(DcModule module, String user, boolean admin) {
+
+       Connection c = null;
+       Statement stmt = null;
+       
+       try {
+            
             String tablename = module.getTableName();
             
             if (tablename == null || tablename.trim().length() == 0)
@@ -471,29 +482,28 @@ public class DatabaseManager {
                 return;
             }
             
-            String loginname = (String) user.getValue(User._A_LOGINNAME);
-            String sql = "REVOKE ALL ON " + tablename + " FROM " + loginname;
+            String sql = "REVOKE ALL ON " + tablename + " FROM " + user;
             stmt.execute(sql);
             
             if (module.isEnabled()) {
                 
-                if (user.isAdmin()) {
-                    sql = "GRANT ALL ON " + tablename + " TO " + loginname;
+                if (admin) {
+                    sql = "GRANT ALL ON " + tablename + " TO " + user;
                     stmt.execute(sql);
 
                 } else {
-                    sql = "GRANT SELECT ON " + tablename + " TO " + loginname;
+                    sql = "GRANT SELECT ON " + tablename + " TO " + user;
                     stmt.execute(sql);
                     
                     if (module.isEditingAllowd()) {
-                        sql = "GRANT UPDATE ON " + tablename + " TO " + loginname;
+                        sql = "GRANT UPDATE ON " + tablename + " TO " + user;
                         stmt.execute(sql);
-                        sql = "GRANT INSERT ON " + tablename + " TO " + loginname;
+                        sql = "GRANT INSERT ON " + tablename + " TO " + user;
                         stmt.execute(sql);
                     }
                     
-                    if (user.isAdmin()) {
-                        sql = "GRANT DELETE ON " + tablename + " TO " + loginname;
+                    if (admin) {
+                        sql = "GRANT DELETE ON " + tablename + " TO " + user;
                         stmt.execute(sql);
                     }
                 }

@@ -52,7 +52,10 @@ public class DcMediaObject extends DcObject {
     
     @Override
     public String toString() {
-        return getValue(DcMediaObject._A_TITLE) != null ? 
-               (String) getValue(DcMediaObject._A_TITLE) : "";
+        String s = (String) getValue(DcMediaObject._A_TITLE);
+        if (s == null || s.trim().length() == 0)
+            return super.toString();
+        else 
+            return s;
     }    
 }

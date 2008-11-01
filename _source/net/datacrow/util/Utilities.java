@@ -200,7 +200,8 @@ public class Utilities {
         } else {
             fileSize = file.length();
         }
-        return (long) Math.round(fileSize);  
+        
+        return fileSize;  
     }
     
     public static String getSubtitles(String filename) {

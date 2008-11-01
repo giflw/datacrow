@@ -49,6 +49,17 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
   fixed.
 - Items for custom property modules do not show anything in the related items tab.
 - Errors when trying to start with a different user on an upgraded database.
+- Altered modules with a reference to a newly created property module fail to load and
+  give startup errors.
+- Fixed several issues with permissions and newly created and altered modules.
+- Label for newly created Media Modules is always empty.
+- Items from newly created modules, used within another module, show all items of the
+  parent module in the related items tab.
+- Filter uses .toString() to search for corresponding items instead of the ID of the 
+  item.
+- File size columns are of type INT and should be BIGINT. This conversion will be done
+  without further notice!
+- All number fields were still bound to the maximum value of an integer.
 
 
 -----------------------------------------------------------------------------------------
