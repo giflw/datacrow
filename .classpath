@@ -51,5 +51,7 @@
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/tomahawk-1.1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jacksum.jar"/>
 	<classpathentry kind="lib" path="lib/jaudtiotagger.jar"/>
+	<classpathentry kind="lib" path="lib/html/js.jar"/>
+	<classpathentry kind="lib" path="lib/html/cobra.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>
