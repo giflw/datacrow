@@ -24,7 +24,7 @@ Online services
 [-] Bug: '.properties' file in the data folder. 
 [x] Bug: Quick filter no longer displayed in the book module.
 [x] Bug: Import of some images does not work!! (see foto's on d:\$backup of my laptop).
-[ ] Bug: New module, field reference to category > not used correctly (does not show related items, 
+[x] Bug: New module, field reference to category > not used correctly (does not show related items, 
     does not show its items in the quick filter panel).
 [x] Bug: Add picture field to existing module > items are not opened in item form 
    (error: net.datacrow.core.objects.DcObject.isChanged(DcObject.java:556). Refill cache if the module
@@ -37,27 +37,27 @@ Online services
 [-] Bug: Exception in thread "AWT-EventQueue-0" java.lang.ClassCastException: 
     java.lang.Boolean cannot be cast to java.lang.Long (QuickFilter, switch between available and category)
 [x] Bug: Loading Module[] in the log file.
-[ ] Bug: Icons for modules not saved correctly (black instead of transparent).
 [x] Bug: Error while loading settings from file 
     C:\Program Files\Data Crow Knowledge Share\data\<category>.properties
+[ ] Bug: Icons for modules not saved correctly (black instead of transparent).
 [ ] Bug: Bol.com no longer works.
 [x] Bug: Templates isssue; sub menu for new using template is not there after a restart.
 [x] Check web application (method errors? correct modules shown?)
 [x] Remove the todo.txt file.
-[ ] Provide the option to revert back to the default settings (per module + general settings).
-    Provide this option as a parameter.
 [x] Document the parameters.
 [x] Create a new parameter: -help which will display a dialog with the startup information.
 [x] Update the current online search functionality. Initial result set should be small and only contain
     general information such as name or title.
+[x] Log (debug) the changed fields for item forms.
+[x] Are the advanced settings for HSQL still being used?
+[x] Graceful shutdown settings: set to false after startup and set to true after graceful shutdown.
+[ ] Provide the option to revert back to the default settings (per module + general settings).
+    Provide this option as a parameter.
 [ ] Error handling for defected modules has to be improved. Also it should be possible to skip loading
     a defected module. Additionally it should be checked whether there is an impact on the data manager.
 [ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
     It would be nice, if datacrow used only the first part of the entered number. 
 [ ] Zoom in out for the chart panel.
-[x] Log (debug) the changed fields for item forms.
-[x] Are the advanced settings for HSQL still being used?
-[x] Graceful shutdown settings: set to false after startup and set to true after graceful shutdown.
 
 
 3.4.3

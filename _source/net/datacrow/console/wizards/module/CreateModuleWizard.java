@@ -82,6 +82,10 @@ public class CreateModuleWizard extends Wizard {
 
         try {
             module.setFilename(StringUtils.normalize(module.getName()).replaceAll(" ", "") + ".xml");
+            
+            if (module.getModuleClass().equals(DcPropertyModule.class))
+                module.setServingMultipleModules(true);
+            
             new ModuleJar(module).save();
             
             for (XmlField field : module.getFields()) {

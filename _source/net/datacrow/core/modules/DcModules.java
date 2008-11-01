@@ -329,8 +329,7 @@ public class DcModules {
                     addUserDefinedFields(propMod, pm);
                     register(pm);
                 } else {
-                    // Else.. derive a new index and assign a new and unique tablename.
-                    
+                    // Else.. derive a new index and assign a new and unique table name.
                     derivedIdx = sourceIdx + mod.getIndex();
                     DcPropertyModule pm = new DcPropertyModule(derivedIdx, propMod.getName(),  
                                                                mod.getTableName() + "_" + propMod.getTableName(), 
