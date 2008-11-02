@@ -144,6 +144,12 @@ public class DcField implements Serializable{
         if (    SecurityCentre.getInstance().getUser() == null ||
                 SecurityCentre.getInstance().getUser().isAuthorized(this)) {
             
+            if (DcModules.get(getModule()) == null)
+                return enabled;
+
+            if (DcModules.get(getModule()).getSettings() == null)
+                return enabled;
+            
             DcFieldDefinitions definitions = (DcFieldDefinitions) 
                 DcModules.get(getModule()).getSettings().getDefinitions(DcRepository.ModuleSettings.stFieldDefinitions);
             

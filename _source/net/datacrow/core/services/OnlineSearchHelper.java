@@ -147,6 +147,9 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         OnlineService os = DcModules.get(module).getOnlineService();
         SearchMode mode = this.mode == null ? os.getDefaultSearchMode() : this.mode;
         
+        if (server.getSearchModes() == null) 
+            return null;
+        
         if (mode != null) {
             boolean partOfServer = false;
             for (SearchMode serverMode : server.getSearchModes()) {
