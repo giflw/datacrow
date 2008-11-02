@@ -85,24 +85,24 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         checkCanBeLended.setSelected(module.canBeLended());
         
         if (module.getIcon16() != null)
-            pic16.setIcon(new ImageIcon(module.getIcon16()));
+            pic16.setIcon(new DcImageIcon(module.getIcon16()));
         
         if (module.getIcon32() != null)
-            pic32.setIcon(new ImageIcon(module.getIcon32()));
+            pic32.setIcon(new DcImageIcon(module.getIcon32()));
         
         checkCanBeLended.setVisible(!getModule().getModuleClass().equals(DcPropertyModule.class));
         if (getModule().getModuleClass().equals(DcPropertyModule.class))
             checkCanBeLended.setSelected(false);
     }
     
-    private String saveIcon(ImageIcon icon, String suffix) throws WizardException {
+    private String saveIcon(DcImageIcon icon, String suffix) throws WizardException {
         XmlModule module = getModule();
         
         File file = null;
         
         try {
             file = File.createTempFile("module_" + StringUtils.normalize(module.getName()).replaceAll(" ", "") + suffix, ".png");
-            byte[] bytes = Utilities.getBytes(icon);
+            byte[] bytes = icon.getBytes();
             
             FileOutputStream fos = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
@@ -159,13 +159,13 @@ public class PanelBasicInfo extends ModuleWizardPanel {
 
         try {
             if (pic16.isChanged() || getWizard() instanceof CreateModuleWizard) {
-                module.setIcon16(Utilities.getBytes(icon16));
-                module.setIcon16Filename(saveIcon(icon16, "_small"));
+                module.setIcon16(Utilities.getBytes(icon16, DcImageIcon._TYPE_PNG));
+                module.setIcon16Filename(saveIcon(new DcImageIcon(module.getIcon16()), "_small"));
             }
             
             if (pic32.isChanged() || getWizard() instanceof CreateModuleWizard) {
-                module.setIcon32(Utilities.getBytes(icon32));
-                module.setIcon32Filename(saveIcon(icon32, ""));                
+                module.setIcon32(Utilities.getBytes(icon32, DcImageIcon._TYPE_PNG));
+                module.setIcon32Filename(saveIcon(new DcImageIcon(module.getIcon32()), ""));                
             }
         } catch (Exception e) {
         	logger.error("Error while reading the icons", e);

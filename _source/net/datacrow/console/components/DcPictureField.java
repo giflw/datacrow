@@ -404,7 +404,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             if (image != null && imgPlus.changes) {
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgKeepChanges"));
                 if (qb.isAffirmative()) {
-                    picture = new DcImageIcon(Utilities.getBytes(image));
+                    picture = new DcImageIcon(Utilities.getBytes(image, DcImageIcon._TYPE_JPEG));
                     initialize();
                     changed = true;
                     revalidate();

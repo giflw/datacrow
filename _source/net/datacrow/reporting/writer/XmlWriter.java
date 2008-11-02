@@ -210,8 +210,7 @@ public class XmlWriter extends XmlBaseWriter {
                 if (properties.getBoolean(ReportTemplateProperties._SCALE_IMAGES)) {
                     int width = properties.getInt(ReportTemplateProperties._IMAGE_WIDTH);
                     int height = properties.getInt(ReportTemplateProperties._IMAGE_HEIGHT);
-                    
-                    Utilities.writeToFile(new DcImageIcon(Utilities.toBufferedImage(icon, true, width, height)), target);
+                    Utilities.writeToFile(new DcImageIcon(Utilities.toBufferedImage(icon, DcImageIcon._TYPE_JPEG, width, height)), target);
                 } else {
                     Utilities.writeToFile(icon, target);
                 }

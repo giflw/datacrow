@@ -66,6 +66,7 @@ Data Crow 3.4.2 [Release on 02/11/2008] [testing: high] [target: production]
 - All GUI number fields were still bound to the maximum value of an integer.
 - Connection errors while retrieving items from MusicBrainz.com.
 - IMDB Person search: ArrayIndexOutOfBoundsException -1.
+- New module icons have a black background instead of being transparent.
 
 
 -----------------------------------------------------------------------------------------

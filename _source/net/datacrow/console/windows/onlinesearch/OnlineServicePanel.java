@@ -204,7 +204,8 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         if (initialize) {
             fldQuery = ComponentFactory.getShortTextField(255);
             fldQuery.addKeyListener(this);            
-            fldQuery.setMinimumSize(new Dimension(100,19));
+            fldQuery.setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+            fldQuery.setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
         
             buttonStop.addActionListener(osf);
             buttonStop.setActionCommand("stopsearch");

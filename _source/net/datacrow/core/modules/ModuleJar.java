@@ -45,6 +45,7 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.ModuleUpgradeException;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.modules.xml.XmlModuleWriter;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -93,8 +94,8 @@ public class ModuleJar {
             byte[] icon16 = module.getIcon16();
             byte[] icon32 = module.getIcon32();
             
-            icon16 = icon16 == null ? Utilities.getBytes(IconLibrary._icoPicture) : icon16;
-            icon32 = icon32 == null ? Utilities.getBytes(IconLibrary._icoPicture) : icon32;
+            icon16 = icon16 == null ? Utilities.getBytes(IconLibrary._icoIcon16, DcImageIcon._TYPE_PNG) : icon16;
+            icon32 = icon32 == null ? Utilities.getBytes(IconLibrary._icoIcon32, DcImageIcon._TYPE_PNG) : icon32;
 
             FileOutputStream fos = new FileOutputStream(DataCrow.moduleDir + filename);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
