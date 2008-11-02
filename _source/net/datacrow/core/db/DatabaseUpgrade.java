@@ -584,6 +584,12 @@ public class DatabaseUpgrade {
                 
                 if (    module.getTableName() != null && module.getTableName().trim().length() > 0 && 
                         field.getFieldType() == ComponentFactory._RATINGCOMBOBOX) {
+                    
+                    try {
+                        stmt.execute("SELECT TOP 1 * FROM " + module.getTableName());
+                    } catch (Exception e) {
+                        continue;
+                    }
 
                     String sql = "update " + module.getTableName() + " set " + field.getDatabaseFieldName() + 
                     " = " + field.getDatabaseFieldName() + " / 2 where " + field.getDatabaseFieldName() + " > 10";
@@ -861,6 +867,13 @@ public class DatabaseUpgrade {
             for (DcModule module : DcModules.getAllModules()) {
                 
                 if (module.getTableName() != null && module.getTableName().trim().length() > 0) {
+                    
+                    try {
+                        stmt.execute("SELECT TOP 1 * FROM " + module.getTableName());
+                    } catch (Exception e) {
+                        continue;
+                    }
+                    
                     for (DcField field : module.getFields()) {
                         if (field.getValueType() == DcRepository.ValueTypes._LONG && !field.isUiOnly()) {
                             try {
@@ -875,6 +888,8 @@ public class DatabaseUpgrade {
                     }
                 }
             }
+            
+            closeDbConnection(conn, stmt);
         }
     }
 

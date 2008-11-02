@@ -173,7 +173,6 @@ public class ItemForm extends DcFrame implements ActionListener {
         this.getContentPane().setLayout(Layout.getGBL());
 
         initializeComponents();
-
         DcModule module = DcModules.get(moduleIndex);
         JPanel panelActions = getActionPanel(module, readonly);
 

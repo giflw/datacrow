@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
+Data Crow 3.4.2 [Release on 02/11/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Changed]
@@ -16,6 +16,7 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
 
 [Removed]
 - Bol.com search has been removed. This search engine is awaiting a new implementation.
+- Wikipedia search has been removed. This search engine is awaiting a new implementation.
 
 [Fixed]
 - Incorrect upgrade proposals on startup.
@@ -61,8 +62,10 @@ Data Crow 3.4.2 [Release on xx/xx/2008] [testing: high] [target: production]
 - Filter uses .toString() to search for corresponding items instead of the ID of the 
   item.
 - File size columns are of type INT and should be BIGINT. This conversion will be done
-  without further notice!
-- All number fields were still bound to the maximum value of an integer.
+  without further notice.
+- All GUI number fields were still bound to the maximum value of an integer.
+- Connection errors while retrieving items from MusicBrainz.com.
+- IMDB Person search: ArrayIndexOutOfBoundsException -1.
 
 
 -----------------------------------------------------------------------------------------

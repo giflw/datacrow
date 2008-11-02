@@ -198,7 +198,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         return dco;
     }
 
-    private DcObject fill(DcObject dco) { 
+    private DcObject fill(final DcObject dco) { 
         if (!loadedItems.get(items.indexOf(dco)).booleanValue()) {
             SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
             
@@ -215,11 +215,15 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                 oir.run();
             }
             
-            DcObject o = oir.getDcObject();
+            final DcObject o = oir.getDcObject();
             loadedItems.put(items.indexOf(dco), Boolean.TRUE);
-            
-            list.updateItem(dco.getID(), o.clone(), true, false, false);
-            table.updateItem(dco.getID(), o.clone(), true, false, false);
+            SwingUtilities.invokeLater(
+                    new Thread(new Runnable() { 
+                        public void run() {
+                            list.updateItem(dco.getID(), o.clone(), true, false, false);
+                            table.updateItem(dco.getID(), o.clone(), true, false, false);
+                        }
+                    }));
 
             return o;
         }

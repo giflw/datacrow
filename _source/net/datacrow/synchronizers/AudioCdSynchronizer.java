@@ -66,6 +66,7 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
     @SuppressWarnings("unchecked")
     @Override
     public boolean onlineUpdate(DcObject album, IServer server, Region region, SearchMode mode) {
+        addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
         boolean updated = exactSearch(album);
         
         if (!updated) {
@@ -91,9 +92,6 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
                     albumNew2.unload();
                 }
             }
-            
-            for (DcObject dco : c)
-                dco.unload();
             
             c.clear();
         }

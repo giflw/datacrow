@@ -40,7 +40,7 @@ Online services
 [x] Bug: Error while loading settings from file 
     C:\Program Files\Data Crow Knowledge Share\data\<category>.properties
 [ ] Bug: Icons for modules not saved correctly (black instead of transparent).
-[ ] Bug: Bol.com no longer works.
+[x] Bug: Bol.com no longer works.
 [x] Bug: Templates isssue; sub menu for new using template is not there after a restart.
 [x] Check web application (method errors? correct modules shown?)
 [x] Remove the todo.txt file.

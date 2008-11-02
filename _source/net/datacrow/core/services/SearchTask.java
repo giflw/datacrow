@@ -223,6 +223,7 @@ public abstract class SearchTask extends Thread {
                     
                     listener.addMessage(DcResources.getText("msgParsingSuccessfull", dco.toString()));
                     listener.addObject(dco);
+                    sleep(100);
                 }
                 listener.processed(counter);
             } catch (Exception exp) {

@@ -578,8 +578,16 @@ public class DataManager {
         
         try {
             List<DcObject> c = DatabaseManager.executeQuery(dco, false);
+            
+            // precise check
+            for (DcObject o : c) {
+                if (o.toString().toLowerCase().equals(dco.toString().toLowerCase()))
+                    return o;
+            }
+            
             for (DcObject o : c)
                 return o;
+
         } catch (SQLException e) {
             logger.error(e, e);
         }

@@ -544,10 +544,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     public boolean isChanged() {
-        for (DcField field : getFields()) {
-            boolean changed = getValueDef(field.getIndex()).isChanged();
-            if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && changed)
-                return true;
+        try {
+            for (DcField field : getFields()) {
+                boolean changed = getValueDef(field.getIndex()).isChanged();
+                if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && changed)
+                    return true;
+            }
+        } catch (Exception e) {
+            logger.debug("Item was probably already destroyed!", e);
         }
         return false;
     }
@@ -895,7 +899,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             		
             		icon.setFilename(oldIcon.getFilename());
             	
-            		setValueLowLevel(field, icon);
+            		setValue(field, icon);
             	} else if (getField(field).getValueType() == DcRepository.ValueTypes._PICTURE) {
                     Picture curPic = (Picture) dco.getValue(field);
                     
@@ -906,9 +910,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                     newPic.isDeleted(curPic.isDeleted());
                     newPic.isUpdated(curPic.isUpdated());
                     
-                    setValueLowLevel(field, newPic);
+                    setValue(field, newPic);
                 } else {
-                    setValueLowLevel(field, o);    
+                    setValue(field, o);    
                 }
             }
         }

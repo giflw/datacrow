@@ -152,7 +152,7 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
                     }
                     
                     if (useOnlineService())
-                        onlineUpdate(dco, getServer(), getRegion(), getSearchMode());
+                        updated = onlineUpdate(dco, getServer(), getRegion(), getSearchMode());
 
                     updateProgressBar();
                     
@@ -181,6 +181,7 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
     @Override
     @SuppressWarnings("unchecked")
     public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
+        addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
         boolean updated = exactSearch(dco);
         
         if (!updated) {
@@ -207,9 +208,6 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
                     break;
                 }
             }
-    
-            for (DcObject album : albums)
-                album.unload();
             
             albums.clear();
         }
