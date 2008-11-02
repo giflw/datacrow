@@ -64,6 +64,12 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
         ComponentFactory.setBorder(this);
         build();
     }
+
+    @Override
+    public void update(DcObject o, boolean overwrite, boolean allowDeletes, boolean mark) {
+        dco.copy(o, overwrite);
+        update();
+    }  
     
     @Override
     public void update() {
