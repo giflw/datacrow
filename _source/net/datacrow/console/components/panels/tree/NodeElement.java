@@ -82,7 +82,10 @@ public class NodeElement {
 
     @Override
     public String toString() {
-        return values != null ? key + " (" + values.size() + ")" : "";
+        if (values == null || values.size() == 1) 
+            return key;
+        else 
+            return key + " (" + String.valueOf(values.size()) + ")";    
     }
 
     @Override

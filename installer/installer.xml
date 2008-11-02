@@ -72,6 +72,7 @@
             <file src="lib/openchart_1_2.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/laf" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/xml" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/html" targetdir="$INSTALL_PATH/lib"/>
             <file src="services" targetdir="$INSTALL_PATH"/>
             <file src="themes" targetdir="$INSTALL_PATH"/>
             <file src="resources" targetdir="$INSTALL_PATH"/>
