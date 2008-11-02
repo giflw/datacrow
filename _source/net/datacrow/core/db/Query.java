@@ -25,6 +25,7 @@
 
 package net.datacrow.core.db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -435,7 +436,9 @@ public class Query {
     }
 
     private PreparedStatement getPreparedStatementAdmin(String sql) throws SQLException {
-        return DatabaseManager.getAdminConnection().prepareStatement(sql);
+        Connection connection = DatabaseManager.getAdminConnection();
+        connection = connection == null ? DatabaseManager.getConnection() : connection;
+        return connection.prepareStatement(sql);
     }
     
     private void setValues(PreparedStatement ps, Collection<Object> values) throws SQLException {
