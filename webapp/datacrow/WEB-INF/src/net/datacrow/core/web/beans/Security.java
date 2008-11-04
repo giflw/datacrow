@@ -44,12 +44,10 @@ public class Security {
         DcWebUser wu = (DcWebUser) vr.resolveVariable(fc, "user");
         
         try {
-            SecuredUser su = SecurityCentre.getInstance().login(wu.getUsername(), wu.getPassword());
+            SecuredUser su = SecurityCentre.getInstance().login(wu.getUsername(), wu.getPassword(), true);
             wu.setSecuredUser(su);
-            
             DcWebModules modules = (DcWebModules) vr.resolveVariable(fc, "modules");
             modules.load();
-            
         } catch (SecurityException se) {
             fc.addMessage("loginError", new FacesMessage(se.getMessage()));
             return "login";

@@ -78,6 +78,7 @@ import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.settings.definitions.QuickViewFieldDefinition;
 import net.datacrow.settings.definitions.QuickViewFieldDefinitions;
+import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinitions;
 import net.datacrow.synchronizers.Synchronizer;
 import net.datacrow.util.CSVReader;
@@ -604,6 +605,10 @@ public class DcModule implements Comparable<DcModule> {
         return (WebFieldDefinitions) getSetting(DcRepository.ModuleSettings.stWebFieldDefinitions);
     }
     
+    public QuickViewFieldDefinitions getQuickViewFieldDefinitions() {
+        return (QuickViewFieldDefinitions) getSetting(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
+    }
+    
     public int[] getFieldIndices() {
         Set<Integer> keys = fields.keySet();
         int[] indices = new int[keys.size()];
@@ -733,6 +738,16 @@ public class DcModule implements Comparable<DcModule> {
                 newQvDefinitions.add(definition);
         }  
         
+        
+        WebFieldDefinitions webDefinitions = 
+            (WebFieldDefinitions) settings.get(DcRepository.ModuleSettings.stWebFieldDefinitions);
+        
+        WebFieldDefinitions newWebDefinitions = new WebFieldDefinitions();
+        for (WebFieldDefinition definition : webDefinitions.getDefinitions()) {
+            if (getField(definition.getField()) != null)
+                newWebDefinitions.add(definition);
+        }
+        
         DcFieldDefinitions definitions = 
             (DcFieldDefinitions) settings.get(DcRepository.ModuleSettings.stFieldDefinitions);
         
@@ -744,6 +759,7 @@ public class DcModule implements Comparable<DcModule> {
         
         settings.set(DcRepository.ModuleSettings.stQuickViewFieldDefinitions, newQvDefinitions);
         settings.set(DcRepository.ModuleSettings.stFieldDefinitions, newDefinitions);
+        settings.set(DcRepository.ModuleSettings.stWebFieldDefinitions, newWebDefinitions);
     }
     
     protected void initializeSystemFields() {

@@ -277,7 +277,7 @@ public class DataCrow {
                 if (dlg.isCanceled()) break;
                 
                 try {
-                    success = SecurityCentre.getInstance().login(dlg.getLoginName(), dlg.getPassword()) != null;
+                    success = SecurityCentre.getInstance().login(dlg.getLoginName(), dlg.getPassword(), false) != null;
                 } catch (SecurityException se) {
                     new MessageBox(se.getMessage(), MessageBox._INFORMATION);
                     retry ++;

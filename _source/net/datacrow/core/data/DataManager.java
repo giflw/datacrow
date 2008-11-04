@@ -168,9 +168,9 @@ public class DataManager {
         // get the real object
         DcObject o = dco instanceof Loan ? dco : getObject(dco.getModule().getIndex(), dco.getID());
         updatePictures(dco);
-        
-        o.reload();
         updateRelated(dco, false);
+
+        o.reload();
         o.initializeReferences();
         
         updateUiComponents(o.getModule().getIndex());

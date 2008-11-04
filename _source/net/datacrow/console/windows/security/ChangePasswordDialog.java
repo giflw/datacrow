@@ -76,7 +76,7 @@ public class ChangePasswordDialog extends DcDialog implements ActionListener, Ke
         
         try {
             SecurityCentre sc = SecurityCentre.getInstance();
-            SecuredUser su = sc.login(sc.getUser().getUsername(), currentPass);
+            SecuredUser su = sc.login(sc.getUser().getUsername(), currentPass, false);
             if (su != null) {
                 
                 String newPass1 = String.valueOf(fldNewPassword1.getPassword());

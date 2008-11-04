@@ -83,7 +83,7 @@ public class SecurityCentre {
     
     public boolean unsecureLogin() {
         try {
-            return login("sa", "") != null && getUserCount() == 1;
+            return login("sa", "", false) != null && getUserCount() == 1;
         } catch (SecurityException se) {
             return false;
         }
@@ -97,19 +97,25 @@ public class SecurityCentre {
         users.remove(user.getID());
     }
     
-    public SecuredUser login(String username, String password) throws SecurityException {
+    public SecuredUser login(String username, String password, boolean web) throws SecurityException {
         Connection connection = DatabaseManager.getConnection(username, password);
         
         if (connection == null) 
             throw new SecurityException(DcResources.getText("msgUserOrPasswordIncorrect"));
-            
+           
         try {
+            connection.close();
+        } catch (SQLException se) {}
+        
+        try {
+            connection = DatabaseManager.getAdminConnection();
             String sql = "select * from user where lower(loginname) = '" + username.toLowerCase() + "'";
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             
             List<DcObject> users = new WorkFlow().convertToDCObjects(rs);
 
+            User user;
             if (users.size() == 1) {
                 user = (User) users.get(0);
                 sql = "select * from permission where user = " + user.getID();
@@ -132,6 +138,11 @@ public class SecurityCentre {
             
             SecuredUser su = new SecuredUser(user, password);
             this.users.put(user.getID(), su);
+            
+            // web users hold their own reference of the logged in user
+            if (!web)
+                this.user = (User) users.get(0);
+            
             return su;
             
         } catch (Exception e) {

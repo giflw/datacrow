@@ -41,6 +41,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.web.DcSecured;
 import net.datacrow.settings.definitions.WebFieldDefinition;
+import net.datacrow.settings.definitions.WebFieldDefinitions;
 import net.datacrow.util.StringUtils;
 
 public class DcWebObject extends DcSecured {
@@ -119,7 +120,13 @@ public class DcWebObject extends DcSecured {
         
         tab = 1;
         this.module = moduleIdx;
-        for (DcField field : DcModules.get(module).getFields()) {
+        
+        
+        WebFieldDefinitions definitions = (WebFieldDefinitions) DcModules.get(moduleIdx).getSetting(DcRepository.ModuleSettings.stWebFieldDefinitions);
+        
+        for (WebFieldDefinition def : definitions.getDefinitions()) {
+            DcField field = DcModules.get(moduleIdx).getField(def.getField());
+
             if (    getUser().isAuthorized(field) &&
                     field.isEnabled() && 
                     field.getIndex() != DcObject._SYS_AVAILABLE &&

@@ -43,6 +43,7 @@ import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.security.SecuredUser;
@@ -358,7 +359,7 @@ public class DatabaseManager {
      * Security methods
      *****************************************************************************************/
     
-    protected static Connection getAdminConnection() {
+    public static Connection getAdminConnection() {
     	return DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
     }
     
@@ -485,27 +486,24 @@ public class DatabaseManager {
             String sql = "REVOKE ALL ON " + tablename + " FROM " + user;
             stmt.execute(sql);
             
-            if (module.isEnabled()) {
-                
-                if (admin) {
-                    sql = "GRANT ALL ON " + tablename + " TO " + user;
-                    stmt.execute(sql);
+            if (admin) {
+                sql = "GRANT ALL ON " + tablename + " TO " + user;
+                stmt.execute(sql);
 
-                } else {
-                    sql = "GRANT SELECT ON " + tablename + " TO " + user;
+            } else {
+                sql = "GRANT SELECT ON " + tablename + " TO " + user;
+                stmt.execute(sql);
+                
+                if (module.isEditingAllowd()) {
+                    sql = "GRANT UPDATE ON " + tablename + " TO " + user;
                     stmt.execute(sql);
-                    
-                    if (module.isEditingAllowd()) {
-                        sql = "GRANT UPDATE ON " + tablename + " TO " + user;
-                        stmt.execute(sql);
-                        sql = "GRANT INSERT ON " + tablename + " TO " + user;
-                        stmt.execute(sql);
-                    }
-                    
-                    if (admin) {
-                        sql = "GRANT DELETE ON " + tablename + " TO " + user;
-                        stmt.execute(sql);
-                    }
+                    sql = "GRANT INSERT ON " + tablename + " TO " + user;
+                    stmt.execute(sql);
+                }
+                
+                if (admin || module instanceof MappingModule) {
+                    sql = "GRANT DELETE ON " + tablename + " TO " + user;
+                    stmt.execute(sql);
                 }
             }
            
