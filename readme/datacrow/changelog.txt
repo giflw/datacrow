@@ -1,4 +1,19 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.3 [Release on 08/11/2008] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- File launcher does no longer launch filenames containing a space character (replaced by %20).
+- Non admin users cannot save items after changing the multi relate field.
+- Field ordering in item form of the web module does not depend on the web field settings.
+- Cannot edit the multi relate fields using the web module.
+- External links do not work in the web module.
+- New user cannot login after logging in once.
+- Update all does no longer allow updating fields like artists, developers, etc.
+- User mix up when multiple users are logged on (web module).
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.2 [Release on 02/11/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

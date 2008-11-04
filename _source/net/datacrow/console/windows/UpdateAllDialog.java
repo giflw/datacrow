@@ -187,7 +187,7 @@ public class UpdateAllDialog extends DcDialog implements ActionListener {
                 itemForm.hide(field);
             else if (field.getIndex() == DcObject._ID)
                 itemForm.hide(field);
-            else if (field.isUiOnly())
+            else if (field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION)
                 itemForm.hide(field);
         }
         

@@ -26,13 +26,13 @@ Online services
 [x] Bug: Cannot edit the multi relate fields using the web module.
 [x] Bug: External links do not work in the web module.
 [x] Bug: New user cannot login after logging in once.
-[ ] Provide the option to revert back to the default settings (per module + general settings).
-    Provide this option as a parameter.
-[ ] Compile and copy plugins.
+[x] Bug: update all does no longer allow updating fields like artists, developers, etc.
 
 
 3.4.4
 ---------------------------------------------------------------------------------------------------------
+[ ] Provide the option to revert back to the default settings (per module + general settings).
+    Provide this option as a parameter.
 [ ] Error handling for defected modules has to be improved. Also it should be possible to skip loading
     a defected module. Additionally it should be checked whether there is an impact on the data manager.
 [ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
