@@ -63,6 +63,7 @@ import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Directory;
+import net.datacrow.util.MemoryMonitor;
 import net.datacrow.util.logging.TextPaneAppender;
 
 import org.apache.log4j.Appender;
@@ -209,6 +210,7 @@ public class DataCrow {
             FilePatterns.load();
             
             ComponentFactory.setLookAndFeel();
+            
             mainFrame = new MainFrame();
             
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -218,6 +220,9 @@ public class DataCrow {
                     mainFrame.setViews();
                 }
             });
+            
+            MemoryMonitor monitor = new MemoryMonitor();
+            monitor.start();
 
             Thread splashCloser = new Thread(new SplashScreenCloser());
             splashCloser.start();
