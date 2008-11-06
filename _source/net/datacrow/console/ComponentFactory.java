@@ -167,7 +167,7 @@ public final class ComponentFactory {
     public static final int _PERSONORDERCOMBO = 29;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
-    private static final Dimension iconButtonSize = new Dimension(25, 23);
+    private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
     private static final Color colorDisabled = new Color(240,240,240);
     private static final Color colorRequired = new Color(120, 0, 0);
 
@@ -227,6 +227,10 @@ public final class ComponentFactory {
     
     public static int getPreferredFieldHeight() {
         return DcSettings.getInt(DcRepository.Settings.stInputFieldHeight);
+    }
+
+    public static int getPreferredButtonHeight() {
+        return DcSettings.getInt(DcRepository.Settings.stButtonHeight);
     }
     
     public static void setLookAndFeel() {
@@ -560,7 +564,7 @@ public final class ComponentFactory {
     public static final DcDateField getDateField() {
         DcDateField dateField = new DcDateField();
         dateField.setFont(getStandardFont());
-        dateField.setPreferredSize(new Dimension(dateField.getWidth(), 23));
+        dateField.setPreferredSize(new Dimension(dateField.getWidth(), ComponentFactory.getPreferredFieldHeight()));
         return dateField;
     }
 
@@ -741,7 +745,7 @@ public final class ComponentFactory {
         button.setName("bt" + buttonText);
         button.setText(buttonText);
         
-        int height = 25;
+        int height = getPreferredButtonHeight();
         
         button.setPreferredSize(new Dimension(110, height));
         button.setMaximumSize(new Dimension(110, height));
@@ -799,7 +803,7 @@ public final class ComponentFactory {
 
     public static final  JLabel getLabel(String labelText, int length) {
         JLabel label = getLabel(labelText);
-        label.setPreferredSize(new Dimension(length, 23));
+        label.setPreferredSize(new Dimension(length, ComponentFactory.getPreferredFieldHeight()));
         label.setText(labelText);
         return label;
     }

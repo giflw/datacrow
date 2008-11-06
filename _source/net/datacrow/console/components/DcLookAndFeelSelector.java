@@ -54,6 +54,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     private static Logger logger = Logger.getLogger(DcLookAndFeelSelector.class.getName());    
 
     private DcComboBox cbFieldHeight = ComponentFactory.getComboBox();
+    private DcComboBox cbButtonHeight = ComponentFactory.getComboBox();
     
     private JCheckBox checkNoLF = ComponentFactory.getCheckBox(DcResources.getText("lblNoLF"));
     private JCheckBox checkSystemLF = ComponentFactory.getCheckBox(DcResources.getText("lblLaf"));
@@ -107,8 +108,8 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
         for (int i = 0; i < lafs.length; i++) {
             LookAndFeelInfo laf = lafs[i];
-            comboSystemLF.addItem(
-                    new DcLookAndFeel(laf.getName(), laf.getClassName(), null, DcLookAndFeel._LAF));
+            if (laf.getName().toLowerCase().indexOf("nimbus") == -1)
+                comboSystemLF.addItem(new DcLookAndFeel(laf.getName(), laf.getClassName(), null, DcLookAndFeel._LAF));
         }
     }
     
@@ -139,6 +140,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         }
         
         cbFieldHeight.setSelectedItem(Long.valueOf(DcSettings.getInt(DcRepository.Settings.stInputFieldHeight)));
+        cbButtonHeight.setSelectedItem(Long.valueOf(DcSettings.getInt(DcRepository.Settings.stButtonHeight)));
         
         applyModus = true;
     }
@@ -162,6 +164,8 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         checkSkinLF.setEnabled(b);
         comboSkinLF.setEnabled(b);
         comboSystemLF.setEnabled(b);
+        cbButtonHeight.setEnabled(b);
+        cbFieldHeight.setEnabled(b);
     }
     
     /**
@@ -176,9 +180,19 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         cbFieldHeight.addActionListener(this);
         cbFieldHeight.setActionCommand("changeFieldHeight");
         cbFieldHeight.setToolTipText(DcResources.getText("tpInputFieldHeight"));
+
+        for (int i = 20; i < 50; i++)
+            cbButtonHeight.addItem(Long.valueOf(i));
+
+        cbButtonHeight.addActionListener(this);
+        cbButtonHeight.setActionCommand("changeButtonHeight");
+        cbButtonHeight.setToolTipText(DcResources.getText("tpButtonHeight"));
         
         DcLabel lblFieldHeight = ComponentFactory.getLabel(DcResources.getText("lblInputFieldHeight"));
         lblFieldHeight.setToolTipText(DcResources.getText("tpInputFieldHeight"));
+
+        DcLabel lblButtonHeight = ComponentFactory.getLabel(DcResources.getText("lblButtonHeight"));
+        lblButtonHeight.setToolTipText(DcResources.getText("tpButtonHeight"));
         
         checkNoLF.addActionListener(new TypeActionListener(DcLookAndFeel._NONE));
         checkSkinLF.addActionListener(new TypeActionListener(DcLookAndFeel._SKINLF));
@@ -207,6 +221,12 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                              new Insets( 0, 0, 0, 0), 0, 0));
         add(cbFieldHeight,   Layout.getGBC( 1, 3, 1, 1, 1.0, 1.0
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                             new Insets( 0, 0, 0, 0), 0, 0));
+        add(lblButtonHeight, Layout.getGBC( 0, 4, 1, 1, 1.0, 1.0
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                             new Insets( 0, 0, 0, 0), 0, 0));
+        add(cbButtonHeight,  Layout.getGBC( 1, 4, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                              new Insets( 0, 0, 0, 0), 0, 0));
     }
@@ -284,10 +304,13 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("changeFieldHeight")) {
             Long value = (Long) cbFieldHeight.getSelectedItem();
-            if (value != null) { 
+            if (value != null) 
                 DcSettings.set(DcRepository.Settings.stInputFieldHeight, value);
-                ComponentFactory.setFieldHeight(value.intValue());
-            }
+
+        } else if (ae.getActionCommand().equals("changeButtonHeight")) {
+                Long value = (Long) cbButtonHeight.getSelectedItem();
+                if (value != null) 
+                    DcSettings.set(DcRepository.Settings.stButtonHeight, value);
         } else {
             applyLAF();
         }

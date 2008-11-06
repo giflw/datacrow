@@ -25,7 +25,6 @@
 
 package net.datacrow.console.windows;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -164,8 +163,6 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         getContentPane().setLayout(Layout.getGBL());
         
         JTextField txtFilter = ComponentFactory.getShortTextField(255);
-        txtFilter.setPreferredSize(new Dimension(50, 23));
-        txtFilter.setMinimumSize(new Dimension(50, 23));        
         txtFilter.addKeyListener(this);
 
         listLeft = new DcObjectList(DcObjectList._LISTING, false, true);

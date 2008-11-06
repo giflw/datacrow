@@ -26,10 +26,12 @@
 package net.datacrow.console.components.renderers;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Rating;
@@ -52,6 +54,8 @@ public class RatingComboBoxRenderer extends DcLabel implements ListCellRenderer 
             JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         
         setText("");
+        setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+        
         String emptyValue = DcResources.getText("lblEmptySearchValue");
         if (value == null || value.equals(Long.valueOf(-1))) {
             setText(" ");

@@ -195,7 +195,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
             for (int i = 0; objects != null && i < objects.length; i++)
             	((JComboBox) c).addItem(objects[i]);
             
-            ((JComboBox) c).setEditable(false);
+            ((JComboBox) c).setEditable(true);
         } else if (field.getFieldType() == ComponentFactory._FILEFIELD || 
         		   field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
         	c = ComponentFactory.getShortTextField(255);
@@ -205,7 +205,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         
         c = c instanceof DcLongTextField ? ComponentFactory.getShortTextField(field.getMaximumLength()) : c;
         
-        int height = comboAndOr != null && comboAndOr.getHeight() > 0 ? comboAndOr.getHeight() : 23;
+        int height = comboAndOr != null && comboAndOr.getHeight() > 0 ? comboAndOr.getHeight() : ComponentFactory.getPreferredFieldHeight();
         c.setMinimumSize(new Dimension(100, height));
         c.setPreferredSize(new Dimension(100, height));
         if (size != null && size.getWidth() > 0 && size.getHeight() > 0) {

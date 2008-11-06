@@ -33,24 +33,35 @@ import javax.swing.JComboBox;
 import javax.swing.JToolTip;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.renderers.ComboBoxRenderer;
 import net.datacrow.util.DcSwingUtilities;
 
 public class DcComboBox extends JComboBox implements IComponent {
 
+    public DcComboBox(DefaultComboBoxModel model) {
+        super(model);
+         
+        setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+        setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+        setRenderer(ComboBoxRenderer.getInstance());
+    }
+    
     public DcComboBox(Object[] items) {
         super(items);
         
-        setMinimumSize(new Dimension(100, 23));
-        setPreferredSize(new Dimension(100, 23));
+        setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+        setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+        setRenderer(ComboBoxRenderer.getInstance());
         setEditor(new DcComboBoxEditor());
     }  
 	
     public DcComboBox() {
         super();
         
-        setMinimumSize(new Dimension(100, 23));
-        setPreferredSize(new Dimension(100, 23));
+        setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+        setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
         ComponentFactory.setBorder(this);
+        setRenderer(ComboBoxRenderer.getInstance());
         setEditor(new DcComboBoxEditor());
     }
     
@@ -72,13 +83,6 @@ public class DcComboBox extends JComboBox implements IComponent {
         setSelectedItem(value);
     }
 
-    public DcComboBox(DefaultComboBoxModel model) {
-        super(model);
-         
-        setMinimumSize(new Dimension(100, 23));
-        setPreferredSize(new Dimension(100, 23));
-    }
-    
     @Override
     public JToolTip createToolTip() {
         return new DcMultiLineToolTip();

@@ -31,6 +31,7 @@ import java.awt.Dimension;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
@@ -56,6 +57,8 @@ public class AvailabilityComboBoxRenderer extends DcLabel implements ListCellRen
                                        boolean isSelected,
                                        boolean cellHasFocus) {
         
+        setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+        
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
@@ -76,11 +79,6 @@ public class AvailabilityComboBoxRenderer extends DcLabel implements ListCellRen
                 setText(DcResources.getText("lblUnavailable"));
             }
         }
-        
-        Dimension preferred = getPreferredSize();
-        preferred.height = 18;
-        preferred.width = 100;
-        setPreferredSize(preferred);
         
         return this;
     }

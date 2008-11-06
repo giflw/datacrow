@@ -25,8 +25,6 @@
 
 package net.datacrow.console.components;
 
-import java.awt.Dimension;
-
 import net.datacrow.console.components.renderers.RatingComboBoxRenderer;
 
 public class DcRatingComboBox extends DcComboBox  {
@@ -36,8 +34,6 @@ public class DcRatingComboBox extends DcComboBox  {
         
         for (int i = -1; i < 11; i++)
             addItem(Long.valueOf(i));
-        
-        setMinimumSize(new Dimension(50, 18));
     }
     
     @Override

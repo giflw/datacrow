@@ -31,6 +31,7 @@ import java.awt.Dimension;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcObject;
@@ -56,8 +57,8 @@ public class ComboBoxRenderer extends DcLabel implements ListCellRenderer {
                                        boolean isSelected,
                                        boolean cellHasFocus) {
         
-    	setMinimumSize(new Dimension(100, 23));
-    	setPreferredSize(new Dimension(100, 23));
+    	setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+    	setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
     	
         if (isSelected) {
             setBackground(list.getSelectionBackground());

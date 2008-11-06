@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.util.DcSwingUtilities;
 
 public class DcComboBoxEditor extends BasicComboBoxEditor {
@@ -120,7 +121,7 @@ public class DcComboBoxEditor extends BasicComboBoxEditor {
     static class BorderlessTextField extends DcShortTextField {
         public BorderlessTextField(String value,int n) {
             super(500);
-            setMinimumSize(new Dimension(100,23));
+            setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
         }
 
         // workaround for 4530952

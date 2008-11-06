@@ -86,9 +86,9 @@ public class SettingsPanel extends JPanel {
                 
                 boolean simplecomp = false;
                 if (c instanceof JComboBox || c instanceof JTextField || c instanceof DcCheckBox) {
-                    c.setMinimumSize(new Dimension(200, 21));
-                    c.setPreferredSize(new Dimension(200,21));
-                    c.setMaximumSize(new Dimension(200,21));
+                    c.setMinimumSize(new Dimension(200, ComponentFactory.getPreferredFieldHeight()));
+                    c.setPreferredSize(new Dimension(200, ComponentFactory.getPreferredFieldHeight()));
+                    c.setMaximumSize(new Dimension(200, ComponentFactory.getPreferredFieldHeight()));
                     simplecomp = true;
                 }
                 

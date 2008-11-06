@@ -157,7 +157,7 @@ public class FilterDialog extends DcDialog implements ActionListener {
             buttonSave.setActionCommand("save");
 
             JLabel labelName = ComponentFactory.getLabel(DcResources.getText("lblName"));
-            Dimension labelSize = new Dimension(150, 23);
+            Dimension labelSize = new Dimension(150, ComponentFactory.getPreferredFieldHeight());
             labelName.setPreferredSize(labelSize);
             labelName.setMinimumSize(labelSize);
             labelName.setMinimumSize(labelSize);

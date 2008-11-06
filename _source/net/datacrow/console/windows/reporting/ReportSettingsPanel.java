@@ -98,7 +98,7 @@ public class ReportSettingsPanel extends JPanel {
         cbResizeImages.addActionListener(rl);
         cbCopyImages.addActionListener(rl);
 
-        Dimension size = new Dimension(100, 21);
+        Dimension size = new Dimension(100, ComponentFactory.getPreferredFieldHeight());
         nfHeight.setMinimumSize(size);
         nfHeight.setPreferredSize(size);
         nfWidth.setMinimumSize(size);
@@ -131,8 +131,8 @@ public class ReportSettingsPanel extends JPanel {
         panelImages.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblImages")));
 
 
-        nfMaxTextLength.setMinimumSize(new Dimension(40, 21));
-        nfMaxTextLength.setPreferredSize(new Dimension(40, 21));
+        nfMaxTextLength.setMinimumSize(new Dimension(40, ComponentFactory.getPreferredFieldHeight()));
+        nfMaxTextLength.setPreferredSize(new Dimension(40, ComponentFactory.getPreferredFieldHeight()));
         
         JPanel panelText = new JPanel();
         panelText.setLayout(Layout.getGBL());

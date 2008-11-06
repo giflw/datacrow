@@ -25,7 +25,6 @@
 
 package net.datacrow.console.components.panels;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
@@ -128,8 +127,6 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         setLayout(Layout.getGBL());
         
         JTextField txtFilter = ComponentFactory.getShortTextField(255);
-        txtFilter.setPreferredSize(new Dimension(50, 23));
-        txtFilter.setMinimumSize(new Dimension(50, 23));        
         txtFilter.addKeyListener(this);
 
         listLeft = new DcFieldList();
