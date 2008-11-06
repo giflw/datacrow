@@ -54,16 +54,14 @@ public class MemoryMonitor extends Thread {
             
             long available = max - used;
 
-            logger.debug("Maximum Memory: " + max + " MB");
-            logger.debug("Used Memory: " + used + " MB");
-            logger.debug("Available Memory: " + available + " MB");
+            logger.debug("Memory usage (max " + max + " MB) (used " + used + " MB) (available " + available + " MB)");
             
-            if (available <= 64) {
+            if (max <= 65) {
                 new MessageBox("Data Crow has too less memory allocated by Java (" + max + " MB). " +
                                "This will cause Data Crow to become very sluggish! " +
                                "You should consider to allow Data Crow to use more memory. " +
                                "This can be done by starting Data Crow in the following way: " +
-                               "java -Xmx256m -jar datacrow.jar", MessageBox._WARNING);
+                               "\r\njava -Xmx256m -jar datacrow.jar", MessageBox._WARNING);
                 break;
             }
             
