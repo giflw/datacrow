@@ -34,7 +34,11 @@ public class MemoryMonitor extends Thread {
 
     private static Logger logger = Logger.getLogger(MainFrame.class.getName());
     
-    public MemoryMonitor() {}
+    private Runtime runtime;
+    
+    public MemoryMonitor() {
+        runtime = Runtime.getRuntime();
+    }
     
     @Override
     public void run() {
@@ -44,8 +48,6 @@ public class MemoryMonitor extends Thread {
             try {
                 sleep(2000);
             } catch (Exception ignore) {}
-            
-            Runtime runtime = Runtime.getRuntime();
             
             long max = Math.round(Math.round(runtime.maxMemory() / 1024) / 1024) + 1;
             long used = Math.round(Math.round(runtime.totalMemory() / 1024) / 1024) + 1;
