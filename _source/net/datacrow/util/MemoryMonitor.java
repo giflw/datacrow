@@ -64,14 +64,6 @@ public class MemoryMonitor extends Thread {
                                "\r\njava -Xmx256m -jar datacrow.jar", MessageBox._WARNING);
                 break;
             }
-            
-            if (available < 1) {
-                new MessageBox("Only " + available + "MB memory is available (maximum is " + max + " MB)! " +
-                               "You should consider to allow Data Crow to use more memory. " +
-                		       "This can be done by starting Data Crow in the following way: " +
-                		       "java -Xmx2562m -jar datacrow.jar", MessageBox._WARNING);
-                break;
-            }
         }
     }
 }
