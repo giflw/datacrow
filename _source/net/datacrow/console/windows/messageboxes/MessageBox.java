@@ -142,8 +142,8 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
         panel.add(scrollIn,   Layout.getGBC( 1, 0, 6, 3, 90.0, 90.0
                              ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                               new Insets(5, 5, 5, 5), 0, 0));
-        panel.add(buttonOk, Layout.getGBC(0, 3, 2, 1, 0.0, 0.0
-                              ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
+        panel.add(buttonOk, Layout.getGBC(5, 3, 2, 1, 0.0, 0.0
+                              ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                                new Insets(5, 5, 5, 5), 0, 0));
         this.getContentPane().add(panel);
     }

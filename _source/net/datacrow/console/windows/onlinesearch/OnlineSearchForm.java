@@ -427,7 +427,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     	resultCount = 0;
     	
         if (panelService.getQuery() == null || panelService.getQuery().trim().equals("")) {
-            new MessageBox(this, DcResources.getText("msgEnterKeyword"), MessageBox._INFORMATION);
+            new MessageBox(DcResources.getText("msgEnterKeyword"), MessageBox._INFORMATION);
             return;
         }
         

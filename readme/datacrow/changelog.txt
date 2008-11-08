@@ -5,6 +5,8 @@ Data Crow 3.4.3 [Release on 08/11/2008] [testing: high] [target: production]
 [Changed]
 - Button height can now also be set via the look and feel dialog.
 - Containers now can hold a description.
+- The item wizard will now ask to select a container when started from the container 
+  module.
 
 [Fixed]
 - File launcher does no longer launch filenames containing a space character 
@@ -21,7 +23,11 @@ Data Crow 3.4.3 [Release on 08/11/2008] [testing: high] [target: production]
 - Data Crow can become very sluggish when too less memory has been allocated. Data Crow
   now reports memory problems back to the user and offers the solutions for the problem.
 - Sorting issues for persons in the tree panel and the references dialog.
-   
+- "Perform a search first" message in the item wizard when pressing enter in the online
+  search step.
+- Nullpointer exception when closing the module selection for the item wizard in abstract
+  modules.
+     
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.2 [Release on 02/11/2008] [testing: high] [target: production]

@@ -44,6 +44,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.wizards.item.InternetWizardPanel;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 
@@ -263,6 +264,9 @@ public abstract class Wizard extends DcFrame implements ActionListener {
     private class NextOnEnterAction extends AbstractAction {
         public void actionPerformed(ActionEvent arg0) {
             try {
+                if (getCurrent() instanceof InternetWizardPanel)
+                    return;
+                
                 if (!isAtTheEnd())
                     next();
                 else
