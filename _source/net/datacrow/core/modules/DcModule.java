@@ -767,32 +767,32 @@ public class DcModule implements Comparable<DcModule> {
                 new DcField(DcObject._SYS_MODULE, getIndex(), "Item",
                             true, true, true, true, false,
                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-                            ""));
+                            "Item"));
         systemFields.put(DcObject._SYS_AVAILABLE,
                 new DcField(DcObject._SYS_AVAILABLE, getIndex(), "Available",
                             true, true, true, true, false,
                             4, ComponentFactory._AVAILABILITYCOMBO, getIndex(), DcRepository.ValueTypes._BOOLEAN,
-                            ""));
+                            "Available"));
         systemFields.put(DcObject._SYS_LENDBY,
                 new DcField(DcObject._SYS_LENDBY, getIndex(), "Lend By",
                             true, true, true, true, false,
                             255, ComponentFactory._REFERENCEFIELD, DcModules._CONTACTPERSON, DcRepository.ValueTypes._DCOBJECTREFERENCE,
-                            ""));
+                            "LendBy"));
         systemFields.put(DcObject._SYS_LOANDURATION,
                 new DcField(DcObject._SYS_LOANDURATION, getIndex(), "Days Loaned",
                             true, true, true, true, false,
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
-                            ""));
+                            "DaysLoaned"));
         systemFields.put(DcObject._SYS_LOANDUEDATE,
                 new DcField(DcObject._SYS_LOANDUEDATE, getIndex(), "Due Date",
                             true, true, true, true, false,
                             10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
-                            "")); 
+                            "DueDate")); 
         systemFields.put(DcObject._SYS_LOANDAYSTILLOVERDUE,
                 new DcField(DcObject._SYS_LOANDAYSTILLOVERDUE, getIndex(), "Days till overdue",
                             true, true, true, true, false,
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
-                            ""));                
+                            "DaysTillOverDue"));                
         
         if (isTopModule() && deliversOnlineService()) {
             systemFields.put(Integer.valueOf(DcObject._SYS_SERVICE),
@@ -819,7 +819,7 @@ public class DcModule implements Comparable<DcModule> {
                 new DcField(Item._SYS_DISPLAYVALUE, getIndex(), "Label",
                             true, true, true, false, false,
                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-                            ""));
+                            "Label"));
         
         if (isFileBacked) {
             systemFields.put(Integer.valueOf(DcObject._SYS_FILENAME),

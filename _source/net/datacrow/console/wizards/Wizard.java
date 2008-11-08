@@ -70,11 +70,17 @@ public abstract class Wizard extends DcFrame implements ActionListener {
     
     private boolean cancelled = false;
     private boolean restarted = false;
+    
+    protected boolean closed = false;
 
     public Wizard() {
         super("", IconLibrary._icoWizard);
         
         initialize();
+        
+        if (closed) 
+            return;
+        
         wizardPanels = getWizardPanels();
         
         build();

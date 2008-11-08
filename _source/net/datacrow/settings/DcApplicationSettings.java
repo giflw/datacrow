@@ -509,6 +509,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stSelectItemDialogSize,
+                            new Dimension(300, 600),
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stWebServerFrameSize,
                             new Dimension(300, 300),
                             -1,

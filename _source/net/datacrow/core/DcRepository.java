@@ -74,6 +74,7 @@ public abstract class DcRepository {
     }
     
     public static final class Settings {
+        public static final String stSelectItemDialogSize = "select_item_dialog_size";
         public static final String stOnlineSearchSelectedView = "online_search_selected_view";
         public static final String stInputFieldHeight = "input_field_height";
         public static final String stButtonHeight = "button_height";

@@ -57,7 +57,6 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.IChildModule;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcAssociate;
@@ -68,8 +67,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.core.objects.helpers.ContactPerson;
-import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
@@ -645,15 +642,7 @@ public class DataManager {
         if (df == null) {
             DcObject dco = DcModules.get(modIdx).getDcObject();
             df = new DataFilter(dco);
-    
-            if (DcModules.get(modIdx) instanceof DcPropertyModule)
-                df.setOrder(new DcField[] {dco.getField(DcProperty._A_NAME)});
-            if (dco instanceof DcAssociate)
-                df.setOrder(new DcField[] {dco.getField(DcAssociate._A_NAME)});
-            if (modIdx == DcModules._CONTACTPERSON)
-                df.setOrder(new DcField[] {dco.getField(ContactPerson._A_NAME)});
-            if (modIdx == DcModules._CONTAINER)
-                df.setOrder(new DcField[] {dco.getField(Container._A_NAME)});
+            df.setOrder(new DcField[] {dco.getField(DcProperty._SYS_DISPLAYVALUE)});
         }
         
         df.sort(c);

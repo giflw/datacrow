@@ -1,5 +1,26 @@
 <modules>
     <module>
+        <module-jar>container.jar</module-jar>
+        <module-index>64</module-index>
+        <fields>
+            <field>
+                <index>4</index>
+                <name>Description</name>
+                <database-column-name>Description</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>8000</maximum-length>
+                <field-type>2</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>0</value-type>
+                <overwritable>false</overwritable>
+            </field>
+        </fields>
+    </module>
+    <module>
         <module-jar>softwarepublisher.jar</module-jar>
         <module-index>34000</module-index>
         <fields>

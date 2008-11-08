@@ -64,6 +64,10 @@ public class OnlineService {
         servers.add(server);
     }
     
+    public int getModule() {
+        return module;
+    }
+
     public IServer getServer(DcObject dco) {
         return getServer(getService(dco, _SERVICE_NAME));
     }

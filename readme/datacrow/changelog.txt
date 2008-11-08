@@ -2,6 +2,10 @@
 Data Crow 3.4.3 [Release on 08/11/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
+[Changed]
+- Button height can now also be set via the look and feel dialog.
+- Containers now can hold a description.
+
 [Fixed]
 - File launcher does no longer launch filenames containing a space character 
   (replaced by %20).
@@ -16,6 +20,7 @@ Data Crow 3.4.3 [Release on 08/11/2008] [testing: high] [target: production]
 - Nimbus L&F errors. This L&F has been disabled for now.
 - Data Crow can become very sluggish when too less memory has been allocated. Data Crow
   now reports memory problems back to the user and offers the solutions for the problem.
+- Sorting issues for persons in the tree panel and the references dialog.
    
 
 -----------------------------------------------------------------------------------------

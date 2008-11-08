@@ -31,6 +31,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.windows.ItemTypeDialog;
+import net.datacrow.console.windows.SelectItemDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
@@ -48,15 +49,18 @@ public class ItemWizard extends Wizard {
 
     private DcObject dco;
     private DcModule module;
-    private boolean closed = false;
+    private DcObject container;
 
     public ItemWizard() {
         super();
-        setTitle(DcResources.getText("lblItemWizard"));
-        setHelpIndex("dc.items.wizard");
+        
+        if (!closed) {
+            setTitle(DcResources.getText("lblItemWizard"));
+            setHelpIndex("dc.items.wizard");
 
-        setSize(DcSettings.getDimension(DcRepository.Settings.stItemWizardFormSize));
-        setCenteredLocation();
+            setSize(DcSettings.getDimension(DcRepository.Settings.stItemWizardFormSize));
+            setCenteredLocation();
+        }
     }
     
     @Override
@@ -73,7 +77,17 @@ public class ItemWizard extends Wizard {
                 module = DcModules.get(dialog.getSelectedModule());
             }
         }
-        dco = module.getDcObject();
+        
+        if (DcModules.getCurrent().getIndex() == DcModules._ITEM &&
+            DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule)).getIndex() == DcModules._CONTAINER) {
+            
+            SelectItemDialog dlg = new SelectItemDialog(DcModules.get(DcModules._CONTAINER), "Select a container");
+            dlg.setVisible(true);
+            container = dlg.getItem();
+        }
+        
+        if (module != null)
+            dco = module.getDcObject();
     }
     
     @Override
@@ -90,7 +104,7 @@ public class ItemWizard extends Wizard {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b && !closed);
-        if (b && getCurrent() instanceof InternetWizardPanel)
+        if (!closed && b && getCurrent() instanceof InternetWizardPanel)
             ((InternetWizardPanel) getCurrent()).setFocus();
     }
 
@@ -118,7 +132,9 @@ public class ItemWizard extends Wizard {
                 public void run() {
                     try {
                         dco = (DcObject) getCurrent().apply();
-
+                        
+                        if (container != null && dco.getModule().isContainerManaged())
+                            dco.setValue(DcObject._SYS_CONTAINER, container);
                         
                         SwingUtilities.invokeLater(
                                 new Thread(new Runnable() { 

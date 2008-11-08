@@ -113,7 +113,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
         this.ID = dco != null ? dco.getID() : null;
         this.itemForm = itemForm;
-        this.module = dco != null ? dco.getModule().getIndex() : DcSettings.getInt(DcRepository.Settings.stModule);
+        this.module = dco != null ? dco.getModule().getIndex() : os.getModule();
         this.os = os;
         
         buildDialog(advanced);
@@ -554,7 +554,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         //Result panel
         //**********************************************************
         
-        tpResult = new JTabbedPane();
+        tpResult = ComponentFactory.getTabbedPane();
 
         list = new DcObjectList(DcObjectList._ELABORATE, false, true);
         JScrollPane sp1 = new JScrollPane(list);

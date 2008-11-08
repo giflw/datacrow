@@ -108,7 +108,7 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
         int y = 1;
         for (DcModule module : DcModules.getModules()) {
             if (module instanceof DcMediaModule && module.isTopModule() && !module.isAbstract()) {
-                JRadioButton radioButton = ComponentFactory.getRadioButton(module.getName(), module.getIcon32(), "" + module.getIndex());
+                JRadioButton radioButton = ComponentFactory.getRadioButton(module.getLabel(), module.getIcon32(), "" + module.getIndex());
                 
                 radioButton.addActionListener(this);
                 radioButton.addItemListener(new SelectModuleAction());

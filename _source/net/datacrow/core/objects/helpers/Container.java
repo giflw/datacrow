@@ -35,6 +35,7 @@ import net.datacrow.core.objects.DcObject;
 public class Container extends DcObject {
 
     public static final int _A_NAME = 1;
+    public static final int _B_DESCRIPTION = 4;
     
     private boolean isLoading = false;
 
