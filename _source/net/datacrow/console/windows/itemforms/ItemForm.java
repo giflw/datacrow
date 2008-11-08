@@ -221,7 +221,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                                 field.isEnabled() && 
                                 component.isShowing()) {
                             
-                            component.requestFocus();
+                            component.requestFocusInWindow();
                             break;
                         }
                     }
