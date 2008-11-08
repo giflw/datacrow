@@ -7,6 +7,7 @@ Data Crow 3.4.3 [Release on 08/11/2008] [testing: high] [target: production]
 - Containers now can hold a description.
 - The item wizard will now ask to select a container when started from the container 
   module.
+- The item form will not set the first text field as selected.
 
 [Fixed]
 - File launcher does no longer launch filenames containing a space character 

@@ -30,6 +30,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,6 +47,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import net.datacrow.console.ComponentFactory;
@@ -139,6 +142,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             
             if (moduleIndex == -1)
                 return;
+            
             String parentID = dcoOrig.getParentID();
             
             this.dcoOrig = DcModules.get(moduleIndex).getDcObject();
@@ -173,7 +177,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         this.getContentPane().setLayout(Layout.getGBL());
 
         initializeComponents();
-        DcModule module = DcModules.get(moduleIndex);
+        final DcModule module = DcModules.get(moduleIndex);
         JPanel panelActions = getActionPanel(module, readonly);
 
         addInputPanel();
@@ -202,6 +206,30 @@ public class ItemForm extends DcFrame implements ActionListener {
         
         applySettings();
         setCenteredLocation();
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent we) {
+                try {
+                    for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
+                        int index = definition.getIndex();
+                        DcField field = dco.getField(index);
+                        JComponent component = fields.get(field);
+    
+                        if (   !field.isTechnicalInfo() && 
+                                component instanceof JTextField && 
+                                field.isEnabled() && 
+                                component.isShowing()) {
+                            
+                            component.requestFocus();
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }
+            }
+        }); 
     }
 
     private JMenuBar getDcMenuBar() {
