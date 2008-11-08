@@ -5,8 +5,8 @@
       ^    ^ 
     Web Module
 
-Version 1.0
-Created on 10/06/2008
+Version 1.1
+Created on 08/11/2008
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -45,8 +45,8 @@ Features:
 ----------------------------------------------------------------------------------------
 2.0 Requirements
 
-Data Crow 3.3 or higher needs to be installed. The web module needs to be installed 
-into a current Data Crow installation.
+Data Crow 3.4.3 or higher needs to be installed. The web module needs to be installed 
+into a current Data Crow installation folder.
 
 
 ----------------------------------------------------------------------------------------
