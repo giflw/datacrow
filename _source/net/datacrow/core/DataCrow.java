@@ -57,7 +57,7 @@ import net.datacrow.core.plugin.Plugins;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.security.SecurityException;
-import net.datacrow.core.services.Services;
+import net.datacrow.core.services.Servers;
 import net.datacrow.core.settings.upgrade.SettingsConversion;
 import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.filerenamer.FilePatterns;
@@ -142,7 +142,7 @@ public class DataCrow {
             Plugins.getInstance();
             
             // initialize services
-            Services.getInstance();
+            Servers.getInstance();
     
             // Initialize the Component factory
             splashScreen.setStatusMsg("Loading components");
@@ -232,7 +232,8 @@ public class DataCrow {
             df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
             
             for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
-            	if (((Loan) loan).getDaysTillOverdue().longValue() < 0) {
+                Long overdue = ((Loan) loan).getDaysTillOverdue();
+            	if (overdue != null && overdue.longValue() < 0) {
             		new MessageBox(DcResources.getText("msgThereAreOverdueItems"), MessageBox._WARNING);
             		new LoanInformationForm().setVisible(true);
             		break;

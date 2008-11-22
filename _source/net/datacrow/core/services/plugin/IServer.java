@@ -25,23 +25,63 @@
 
 package net.datacrow.core.services.plugin;
 
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.services.IOnlineSearchClient;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.SearchTask;
 
+/**
+ * This interface should be implemented for new (and custom) online services.
+ * The IServer class holds all information for a specific server such as its supported
+ * search modes and regions and the external location (URL).
+ *  
+ * @author Robert Jan van der Waals
+ */
 public interface IServer {
-    
+
+    /**
+     * The module to which this server belongs.
+     * @see DcModules
+     * @see DcModule
+     */
     int getModule();
     
+    /**
+     * The regions belonging to this server. 
+     * @return Collection of regions or an empty collection. 
+     */
     java.util.Collection<Region> getRegions();
     
+    /**
+     * The search modes belonging to this server.
+     * @return Collection of search modes or an empty collection.
+     */
     java.util.Collection<SearchMode> getSearchModes();
     
+    /**
+     * Name of the server (must be unique)
+     * @return Unique name of the server
+     */
     String getName();
     
+    /**
+     * The URL of the main server.
+     */
     String getUrl();
     
+    /**
+     * Retrieves an instance of the search task. This task will be used to perform
+     * the actual search.
+     * @see SearchTask
+     * @see SearchMode
+     * @see Region
+     * @param listener The class which requested the search. This class will be informed of 
+     * errors and events.
+     * @param mode The selected search mode.
+     * @param region The selected region.
+     * @param query The query as specified by the user.
+     */
     SearchTask getSearchTask(IOnlineSearchClient listener, 
                              SearchMode mode, 
                              Region region,

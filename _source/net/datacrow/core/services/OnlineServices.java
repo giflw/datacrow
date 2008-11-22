@@ -32,16 +32,30 @@ import java.util.StringTokenizer;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.console.windows.onlinesearch.OnlineSearchForm;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.services.plugin.IServer;
+import net.datacrow.core.services.plugin.ServiceClassLoader;
 
 import org.apache.log4j.Logger;
 
-public class OnlineService {
 
-    private static Logger logger = Logger.getLogger(OnlineService.class.getName());
+/**
+ * The online services class holds all online service for a specific module.
+ * This class is populated by the module class. A specialized class loader is
+ * capable of detecting custom made server classes. Based on this information this
+ * class gets populated.
+ * 
+ * @see DcModule#getOnlineServices()
+ * @see ServiceClassLoader
+ *  
+ * @author Robert Jan van der Waals
+ */
+public class OnlineServices {
+
+    private static Logger logger = Logger.getLogger(OnlineServices.class.getName());
     
     private static final int _SERVICE_NAME = 0;
     private static final int _REGION_CODE = 1;
@@ -52,53 +66,112 @@ public class OnlineService {
     
     private final int module;
     
-    public OnlineService(int module) {
+    /**
+     * Create an instance for the specified module.
+     * @param module
+     */
+    public OnlineServices(int module) {
         this.module = module;
     }
     
+    /**
+     * Retrieves all registered servers.
+     */
     public Collection<IServer> getServers() {
         return servers;
     }
     
+    /**
+     * Add a server
+     * @param server
+     */
     public void addServer(IServer server) {
         servers.add(server);
     }
     
+    /**
+     * The module to which the services belong 
+     */
     public int getModule() {
         return module;
     }
 
+    /**
+     * Retrieves the service from which the information of the supplied item was retrieved.
+     * @see DcObject#_SYS_SERVICE
+     * @see DcObject#_SYS_SERVICEURL 
+     * @param dco
+     * @return The service used to update the item or null
+     */
     public IServer getServer(DcObject dco) {
         return getServer(getService(dco, _SERVICE_NAME));
     }
     
+    /**
+     * Retrieves the region from which the information of the supplied item was retrieved.
+     * @see DcObject#_SYS_SERVICE
+     * @see DcObject#_SYS_SERVICEURL 
+     * @param dco
+     * @return The region used to update the item or null
+     */
     public Region getRegion(DcObject dco) {
         return getRegion(getService(dco, _REGION_CODE));
     }
 
+    /**
+     * Retrieves the selected search mode used when the information of the supplied item 
+     * was retrieved.
+     * @see SearchMode
+     * @param dco
+     * @return The search mode or null
+     */
     public SearchMode getMode(DcObject dco) {
         return getMode(getService(dco, _MODE_NAME));
     }
     
+    /**
+     * Retrieves the query used for updating or retrieving the item.
+     * @see DcObject#_SYS_SERVICE
+     * @see DcObject#_SYS_SERVICEURL 
+     * @param dco
+     * @return
+     */
     public String getQuery(DcObject dco) {
         return getService(dco, _QUERY);
     }    
     
+    /**
+     * Retrieves the previously used region.
+     * @see Region
+     */
     public Region getDefaultRegion() {
         String code = DcModules.get(module).getSettings().getString(DcRepository.ModuleSettings.stOnlineSearchDefaultRegion);
         return getRegion(code);
     }
     
+    /**
+     * Retrieves the previously used server.
+     * @see IServer
+     */
     public IServer getDefaultServer() {
         String name = DcModules.get(module).getSettings().getString(DcRepository.ModuleSettings.stOnlineSearchDefaultServer);
         return getServer(name);
     }
     
+    /**
+     * Retrieves the previously used search mode.
+     * @see SearchMode
+     */
     public SearchMode getDefaultSearchMode() {
         String name = DcModules.get(module).getSettings().getString(DcRepository.ModuleSettings.stOnlineSearchDefaultMode);
         return getMode(name);       
     }
     
+    /**
+     * Retrieves the server with the given name.
+     * @see IServer
+     * @return The server for the given name or null if not found.
+     */
     public IServer getServer(String name) {
         for (IServer server : getServers()) {
             if (server.getName().equals(name) && server.getModule() == module)
@@ -108,6 +181,11 @@ public class OnlineService {
         return null;
     }
     
+    /**
+     * Retrieves the region for the given code.
+     * @see Region
+     * @return The region for the given code or null if not found.
+     */    
     private Region getRegion(String code) {
         IServer server = getDefaultServer();
         
@@ -120,6 +198,11 @@ public class OnlineService {
         return null;
     }    
 
+    /**
+     * Retrieves the search mode for the display name.
+     * @see SearchMode
+     * @return The search mode for the given display name or null if not found.
+     */       
     private SearchMode getMode(String diplayName) {
         IServer server = getDefaultServer();
         if (server != null && server.getSearchModes() != null) {
@@ -131,7 +214,16 @@ public class OnlineService {
         return null;        
     }
     
-    private String getService(DcObject dco, int level) {
+    /**
+     * Retrieves the service information for the given item.
+     * @param dco
+     * @param type The type indicates which information should be retrieved 
+     * (search mode, region, server or query)
+     * @see DcObject#_SYS_SERVICE
+     * @see DcObject#_SYS_SERVICEURL
+     * @return The service or null of none has been set.
+     */
+    private String getService(DcObject dco, int type) {
         String s = (String) dco.getValue(DcMediaObject._SYS_SERVICE);
         
         if (s == null) return null;
@@ -144,8 +236,8 @@ public class OnlineService {
         
         String value = null;
         try {
-            value = values[level];
-            if (level == _QUERY && value.length() > 0) 
+            value = values[type];
+            if (type == _QUERY && value.length() > 0) 
                 value = value.substring(value.indexOf("[") + 1, value.lastIndexOf("]"));
         } catch (Exception e) {
             logger.error("Error while trying to get online service information from " + dco, e);
@@ -154,6 +246,12 @@ public class OnlineService {
         return value;
     }  
     
+    /**
+     * Retrieves an item (a new instance!) based on the service information of the supplied item.
+     * @param dco The item on which the search is based.
+     * @return The retrieved item (a new instance) or null if no information could be found.
+     * @throws Exception
+     */
     public DcObject query(DcObject dco) throws Exception {
         IServer server = getServer(dco);
         Region region = getRegion(dco);
@@ -166,6 +264,14 @@ public class OnlineService {
         return null;
     }    
     
+    /**
+     * Returns an instance of the online search form. For specific implementations this
+     * method can be overridden to return a specific implementation of the {@link OnlineSearchForm} class.
+     * @see OnlineSearchForm
+     * @param dco The item to be updated or null when searching for new items only.
+     * @param itemForm The item form from which the search is started or null
+     * @param advanced Indicates if the advanced options should be shown.
+     */
     public OnlineSearchForm getUI(DcObject dco, ItemForm itemForm, boolean advanced) {
         return new OnlineSearchForm(this, dco, itemForm, advanced);
     }

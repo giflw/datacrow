@@ -117,7 +117,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
     }    
 
     private IServer getServer() {
-        OnlineService os = DcModules.get(module).getOnlineService();
+        OnlineServices os = DcModules.get(module).getOnlineServices();
         IServer defaultSrv = 
             os.getServer(DcModules.get(module).getSettings().getString(DcRepository.ModuleSettings.stOnlineSearchDefaultServer));
         
@@ -126,7 +126,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
     }
 
     private Region getRegion(IServer server) {
-        OnlineService os = DcModules.get(module).getOnlineService();
+        OnlineServices os = DcModules.get(module).getOnlineServices();
         Region region = this.region != null ? this.region : os.getDefaultRegion();
         if (region != null) {
             boolean partOfServer = false;
@@ -144,7 +144,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
     }
     
     private SearchMode getSearchMode(IServer server) {
-        OnlineService os = DcModules.get(module).getOnlineService();
+        OnlineServices os = DcModules.get(module).getOnlineServices();
         SearchMode mode = this.mode == null ? os.getDefaultSearchMode() : this.mode;
         
         if (server.getSearchModes() == null) 
@@ -213,7 +213,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         if (result != null) {
             result.add(dco);
             if (isPerfectMatch(dco)) 
-                task.cancelSearch();
+                task.cancel();
         }
     }
     

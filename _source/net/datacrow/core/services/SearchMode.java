@@ -25,20 +25,39 @@
 
 package net.datacrow.core.services;
 
+/**
+ * A search mode indicates a specific search such as a title, isbn, ean search.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public abstract class SearchMode {
     
     public SearchMode() {}
 
     public abstract String getDisplayName();
-    
-    public abstract String getSearchCommand(String s);
+
+    /**
+     * Builds the URL / search command. 
+     * @param query The search string or query which needs to be incorporated in the search command.
+     * @return fully qualified URL.
+     */
+    public abstract String getSearchCommand(String query);
     
     @Override
     public String toString() {
         return getDisplayName();
     }
     
+    /**
+     * Indicates if a match should be considered as perfect when only one result is
+     * retrieved. This is useful for ISBN and EAN searches. This is used for the 
+     * 'Automatically add or update the item when a perfect match has occurred' setting. 
+     */
     public abstract boolean singleIsPerfect();
     
+    /**
+     * Indicates whether the search is a free form search (such as a title search).
+     * ISBN, EAN and other specific search modes should set this method to return false. 
+     */
     public abstract boolean keywordSearch();
 }

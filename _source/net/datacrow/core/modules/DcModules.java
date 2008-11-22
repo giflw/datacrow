@@ -261,7 +261,7 @@ public class DcModules {
     }
     
     /**
-     * Converters an XmlModule to a real module.
+     * Converts a XmlModule to a real module.
      */
     @SuppressWarnings("unchecked")
     public static DcModule convert(XmlModule xmlModule) {
@@ -407,7 +407,6 @@ public class DcModules {
     /**
      * Retrieve the referenced property module for the given field. Will return null when
      * the field does not contain a reference to a property module.
-     *  
      * @param field
      */
     public static DcPropertyModule getPropertyModule(DcField field) {
@@ -415,14 +414,26 @@ public class DcModules {
         return module instanceof DcPropertyModule ? (DcPropertyModule) module : null;
     }
 
+    /**
+     * Retrieves the property base modules which are used as templates.
+     */
     public static Collection<DcPropertyModule> getPropertyBaseModules() {
         return propertyBaseModules.values();
     }
     
+    /**
+     * Retrieves the property base module which can be used as template.
+     * @param module The module index
+     */
     public static DcPropertyModule getPropertyBaseModule(int module) {
         return propertyBaseModules.get(module);
     }    
 
+    /**
+     * Get the module based on its internal name.
+     * The internal name differs, in most cases, from the label.
+     * @param name
+     */
     public static DcModule get(String name) {
         for (DcModule module : modules.values()) {
             if (module.getName().equalsIgnoreCase(name))
@@ -430,15 +441,25 @@ public class DcModules {
         }
         return null; 
     }
-    
+
+    /**
+     * Get the module for the specified key. 
+     * @param key
+     */
     public static DcModule get(int key) {
         return modules.get(key);
     }
 
+    /**
+     * Remove the specified module.
+     */
     public static void remove(int key) {
         modules.remove(key);
     }    
     
+    /**
+     * Returns the currently selected main module.
+     */
     public static DcModule getCurrent() {
         DcModule current = DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule));
         
@@ -455,8 +476,21 @@ public class DcModules {
             return current;
         
         return null;
-    }    
+    }   
+    
+    /**
+     * Apply all settings on the item.
+     * @param definitions
+     */
+    public static void applySettings() {
+        for (DcModule module : getModules())
+            module.applySettings();
+    }
 
+    /**
+     * Finds the module based on the table name and creates a new item.
+     * @param tableName The database table name.
+     */
     public static DcObject getObjectForTable(String tableName) {
         for (DcModule module : modules.values()) {
             if (module.getTableName().equalsIgnoreCase(tableName))
@@ -465,6 +499,9 @@ public class DcModules {
         return null;
     }
 
+    /**
+     * Start to load data for all modules
+     */
     public static void loadData() {
         new DataManager();
     }
@@ -508,7 +545,10 @@ public class DcModules {
         }
         return refs;
     } 
-    
+
+    /**
+     * Retrieves all modules
+     */
     public static Collection<DcModule> getAllModules() {
         List<DcModule> c = new ArrayList<DcModule>();
         for (Iterator<DcModule> iter = modules.values().iterator(); iter.hasNext(); )
@@ -518,6 +558,9 @@ public class DcModules {
         return c;
     }
     
+    /**
+     * Retrieves all enabled modules
+     */
     public static Collection<DcModule> getModules() {
         Collection<DcModule> c = new ArrayList<DcModule>();
         

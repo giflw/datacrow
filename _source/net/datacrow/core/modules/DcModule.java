@@ -68,8 +68,8 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
-import net.datacrow.core.services.OnlineService;
-import net.datacrow.core.services.Services;
+import net.datacrow.core.services.OnlineServices;
+import net.datacrow.core.services.Servers;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.fileimporters.FileImporter;
@@ -141,7 +141,7 @@ public class DcModule implements Comparable<DcModule> {
     private Map<Integer, DcField> systemFields = new HashMap<Integer, DcField>();
     private Collection<DcField> sortedFields;
     
-    private OnlineService service;
+    private OnlineServices services;
 
     private KeyStroke keyStroke;
     
@@ -165,11 +165,11 @@ public class DcModule implements Comparable<DcModule> {
 
         this.index = index;
         
-        Collection<IServer> servers = Services.getInstance().getServers(index);
+        Collection<IServer> servers = Servers.getInstance().getServers(index);
         if (servers != null) {
-            this.service = new OnlineService(index);
-            for (IServer server : Services.getInstance().getServers(index)) 
-                service.addServer(server);
+            this.services = new OnlineServices(index);
+            for (IServer server : Servers.getInstance().getServers(index)) 
+                services.addServer(server);
         }
         
         this.tableName = (tableName == null ? "" : tableName).toLowerCase();
@@ -334,12 +334,12 @@ public class DcModule implements Comparable<DcModule> {
         return tableJoin;
     }
 
-    public OnlineService getOnlineService() {
-        return service;
+    public OnlineServices getOnlineServices() {
+        return services;
     }
     
     public boolean deliversOnlineService() {
-        return Services.getInstance().getServers(getIndex()) != null;
+        return Servers.getInstance().getServers(getIndex()) != null;
     }
     
     public boolean isCustomModule() {
@@ -647,6 +647,25 @@ public class DcModule implements Comparable<DcModule> {
     public net.datacrow.settings.Settings getSettings() {
         return settings;
     }
+    
+    public void applySettings() {
+        try {
+            for (DcFieldDefinition definition : getFieldDefinitions().getDefinitions()) {
+               DcField field = getField(definition.getIndex());
+    
+               field.setRequired(definition.isRequired());
+               field.setEnabled(definition.isEnabled());
+    
+               String label = definition.getLabel();
+               if (label != null && label.trim().length() > 0)
+                   field.setLabel(label);
+               else
+                   field.setLabel(field.getSystemName());
+           }
+        } catch (Exception e) {
+            logger.error("Error while applying settings on module " + getName(), e);
+        }
+   }    
     
     public boolean isContainerManaged() {
         return isContainerManaged;

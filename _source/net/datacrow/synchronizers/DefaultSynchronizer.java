@@ -58,7 +58,7 @@ public abstract class DefaultSynchronizer extends Synchronizer {
     
     protected boolean exactSearch(DcObject dco) {
         try {
-            DcObject dcoNew = dco.getModule().getOnlineService().query(dco);
+            DcObject dcoNew = dco.getModule().getOnlineServices().query(dco);
             if (dcoNew != null) {
                 dco.copy(dcoNew, true);
                 dcoNew.unload();

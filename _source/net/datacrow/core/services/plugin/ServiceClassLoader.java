@@ -16,6 +16,10 @@ import net.datacrow.util.Directory;
 
 import org.apache.log4j.Logger;
 
+/**
+ * The class loader used to find custom and standard online services.
+ * @author Robert Jan van der Waals
+ */
 public class ServiceClassLoader extends ClassLoader {
 
     private static Logger logger = Logger.getLogger(ServiceClassLoader.class.getName());

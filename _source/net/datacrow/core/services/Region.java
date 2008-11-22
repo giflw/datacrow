@@ -25,22 +25,41 @@
 
 package net.datacrow.core.services;
 
+/**
+ * A server can have implementations for multiple regions (such as Imdb.com and 
+ * Wikipedia have). This class specifies such a region, holding the region code and the 
+ * URL location of the region.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class Region {
     
     private final String url;
     private final String code;
     private final String displayName;
 
+    /**
+     * Creates a new region.
+     * @param code ISO code for this region.
+     * @param displayName The label, used for displaying the region in the UI.
+     * @param url The URL.
+     */
     public Region(String code, String displayName, String url) {
         this.code = code;
         this.url = url;
         this.displayName = displayName;
     }
     
+    /**
+     * The region code (ISO2)
+     */
     public String getCode() {
         return code;
     }
-    
+
+    /**
+     * The URL 
+     */
     public String getUrl() {
         return url;
     }

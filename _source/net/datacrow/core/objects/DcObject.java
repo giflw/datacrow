@@ -39,6 +39,7 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
+import net.datacrow.core.db.QueryQueue;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.template.Templates;
@@ -48,6 +49,7 @@ import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.Requests;
 import net.datacrow.core.wf.requests.SynchronizeWithManagerRequest;
 import net.datacrow.enhancers.IValueEnhancer;
+import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
@@ -57,6 +59,20 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * This class is what it is all about. Each DcObject represents an item 
+ * within Data Crow. DcObjects are very generic by nature. There are no direct
+ * getters and setters for their values. Instead, values are referenced by indices.
+ * <br>
+ * It's recommended before starting new development of plugins to create so called
+ * helper classes for your new module. Examples of helper classes are {@link Software}
+ * and {@link Movie}.
+ * <br>
+ * DcObjects are managed and maintained by the Data Manager class ({@link DataManager}.
+ * Each DcObject belongs to a (@link {@link DcModule}).
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcObject implements Comparable<DcObject>, Serializable {
     
     private static final long serialVersionUID = -6969856564828155152L;
@@ -112,9 +128,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         values.put(DcObject._SYS_MODULE, new DcValue());
         setValue(DcObject._SYS_MODULE, getModule());
 
-        // apply settings (such field visibility)
-        applySettings(DcModules.get(module).getFieldDefinitions());
-        
         markAsUnchanged();
     }    
     
@@ -122,7 +135,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Educated guess..
      */
     public int getDisplayFieldIdx() {
-        for (DcFieldDefinition definition :  DcModules.get(module).getFieldDefinitions().getDefinitions()) {
+        for (DcFieldDefinition definition : DcModules.get(module).getFieldDefinitions().getDefinitions()) {
             if (definition.isDescriptive())
                 return definition.getIndex();
         }
@@ -130,6 +143,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return getModule().getDefaultSortFieldIdx();
     }
     
+    /**
+     * The default sort field index. In case the user has not specified the field to sort on 
+     * this value will be used. 
+     */
     public int getDefaultSortFieldIdx() {
         return DcObject._ID;
     } 
@@ -171,6 +188,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             requests.clear();
     }
 
+    /**
+     * Retrieves the value objects.
+     */
     public Map<Integer, DcValue> getValues() {
         return values;
     }
@@ -221,6 +241,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     	return requests;
     }
 
+    /**
+     * The database table name.
+     */
     public String getTableName() {
     	return getModule().getTableName();
     }
@@ -391,11 +414,19 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         children.add(child);
     }
 
+    /**
+     * Retrieves the child objects belonging to this item.
+     * @return The children or null of none.
+     */
     public Collection<DcObject> getChildren() {
         loadChildren();
         return children != null ? new ArrayList<DcObject>(children) : null;
     }
     
+    /**
+     * Retrieves the ID of the parent of this object. 
+     * @return The parent ID or null.
+     */
     public String getParentID() {
         Object o = getValue(getParentReferenceFieldIndex());
         
@@ -405,6 +436,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             return (String) o;
     }
 
+    /**
+     * Retrieves the index of the field which is used to hold the link to the parent. 
+     */
     public int getParentReferenceFieldIndex() {
         return getModule().getParentReferenceFieldIndex();
     }
@@ -421,26 +455,42 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             return getField(DcObject._SYS_FILENAME);
         } else {
             for (DcField field : getFields()) {
-                if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD)
+                if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD ||
+                    field.getFieldType() == ComponentFactory._FILEFIELD)
                     return field;
             }
             return null;
         }
     }
-    
+
+    /**
+     * Retrieves the filename value. This will only generate a result if the object
+     * has a file field.
+     * @return The file name or null.
+     */
     public String getFilename() {
         DcField field = getFileField();
         return field != null ? (String) getValue(field.getIndex()) : null;
     }
 
+    /**
+     * Retrieves the module to which this object belongs.
+     */
     public DcModule getModule() {
         return DcModules.get(module);
     }
 
+    /**
+     * Retrieves all fields belonging to this object .
+     */
     public Collection<DcField> getFields() {
         return getModule().getFields();
     }
 
+    /**
+     * Mark all fields as unchanged. This does not reset the values to their
+     * original values! (use {@link #reload()})
+     */
     public void markAsUnchanged() {
         for (DcValue value : values.values())
             value.setChanged(false);
@@ -449,6 +499,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         // this broke saving the permissions (and possibly other item save's).
     }
     
+    /**
+     * Reloads the item directly from the database (!).
+     */
     public void reload() {
         unloadImages();
         
@@ -471,6 +524,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         markAsUnchanged();
     }
     
+    /**
+     * Update the loan information.
+     */
     public void setLoanInformation() {
         if (getModule().canBeLended()) {
             Loan loan = DataManager.getCurrentLoan(getID());
@@ -478,6 +534,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
     
+    /**
+     * Update the loan information based on the supplied loan object.
+     */
     public void setLoanInformation(Loan loan) {
         if (getModule().canBeLended()) {
             setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(getID()));
@@ -487,7 +546,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             setValue(DcObject._SYS_LOANDAYSTILLOVERDUE, loan.getDaysTillOverdue());
         }
     }
-    
+
+    /**
+     * Actions to be performed before saving the object.
+     */
     protected void beforeSave() {
         if (getModule().isFileBacked())
             Hash.getInstance().calculateHash(this);
@@ -521,6 +583,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
     
+    /**
+     * Sets a value on this object.
+     * @param index The field index.
+     * @param o The value to be set.
+     */
     public void setValue(int index, Object o) {
         DcValue value = getValueDef(index);
         if (value != null)
@@ -529,12 +596,17 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     /**
      * Applies the value directly on this item. All checks are bypasses.
+     * @param index The field index.
+     * @param o The value to be set.
      */
     public void setValueLowLevel(int index, Object o) {
         DcValue value = getValueDef(index);
         value.setValueLowLevel(o, getModule().getField(index));
     }
 
+    /**
+     * Marks the object as changed.  
+     */
     public void markAsChanged() {
         for (DcValue value : values.values())
             value.setChanged(true);
@@ -543,6 +615,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             for (DcObject child : children) child.markAsChanged();
     }
 
+    /**
+     * Checks whether the object holds unchanged values.
+     * @see DcValue#isChanged()
+     */
     public boolean isChanged() {
         try {
             for (DcField field : getFields()) {
@@ -556,30 +632,64 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return false;
     }
 
+    /**
+     * Checks whether the specified field holds a changed value.
+     * @see DcValue#isChanged()
+     * @param index The field index
+     */
     public boolean isChanged(int index) {
         return getValueDef(index).isChanged();
     }
 
+    /**
+     * Manually mark a field as changed
+     * @see DcValue#isChanged()
+     * @param index The field index
+     * @param b Changed true / false
+     */
     public void setChanged(int index, boolean b) {
     	getValueDef(index).setChanged(b);
     }
 
+    /**
+     * Indicates whether the field is enabled.
+     * This depends on the field settings which can be altered by the user.
+     * @see DcFieldDefinitions
+     * @see DcField#isEnabled()
+     * @param index
+     */
     public boolean isEnabled(int index) {
         return getModule().getField(index).isEnabled();
     }
 
+    /**
+     * Checks whether the field is marked as required.
+     * This depends on the field settings which can be altered by the user.
+     * @see DcFieldDefinitions
+     * @param index The field index
+     */
     public boolean isRequired(int index) {
         return getModule().getField(index).isRequired();
     }
 
+    /**
+     * Indicates whether the specified field can be searched on.
+     * @param index The field index
+     */
     public boolean isSearchable(int index) {
         return getModule().getField(index).isSearchable();
     }
 
+    /**
+     * The internal ID
+     */
     public String getID() {
         return hasPrimaryKey() ? getValueDef(_ID).getValueAsString() : null;
     }
 
+    /**
+     * Retrieves all fields on which cannot be searched.
+     */
     public Collection<DcField> getNotSearchableFields() {
         Collection<DcField>  notSearchable = new ArrayList<DcField>();
         for (DcField field : getFields()) {
@@ -631,10 +741,18 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
 
+    /**
+     * Retrieves the maximum field / value length.
+     * @param index The field index
+     */
     public int getMaxFieldLength(int index) {
         return getField(index).getMaximumLength();
     }
 
+    /**
+     * Retrieves the value for the specified field.
+     * @param index The field index.
+     */
     public Object getValue(int index) {
         Object value = null;
         if (getValueDef(index) != null) {
@@ -655,6 +773,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return value;
     }
 
+    /**
+     * Gets the display value for the specified field.
+     * @see DcObject#_SYS_DISPLAYVALUE 
+     * @param index The field index
+     */
     public String getDisplayString(int index) {
         if (index == _SYS_DISPLAYVALUE)
             return toString();
@@ -662,14 +785,29 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return  getValueDef(index) != null ? getValueDef(index).getDisplayString() : "";
     }
 
+    /**
+     * Retrieves the field type.
+     * @see ComponentFactory
+     * @param index The field index.
+     */
     public int getFieldType(int index) {
         return getField(index).getFieldType();
     }
 
+    /**
+     * Retrieves the database column name.
+     * @param index The field index.
+     * @return The database field name or null for UI only fields.
+     */
     public String getDatabaseFieldName(int index) {
         return getField(index).getDatabaseFieldName();
     }
 
+    /**
+     * Applies the enhancers on this item.
+     * @see ValueEnhancers 
+     * @param update Indicates if the item is new or existing.
+     */
     public void applyEnhancers(boolean update) {
         for (DcField field : getFields()) {
             Object value = getValue(field.getIndex());
@@ -690,7 +828,15 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     private Date getCurrentDate() {
         return new Date();
     }
-    
+
+    /**
+     * Inserts the item into the database.
+     * @param queued Indicates if the item should be saved using the query queue.
+     * @see Query
+     * @see DatabaseManager
+     * @see QueryQueue
+     * @throws ValidationException
+     */
     public void saveNew(boolean queued) throws ValidationException {
         try {
             markAsChanged();
@@ -720,10 +866,27 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }    
     
+    /**
+     * Save the changed item to the database.
+     * @param queued Indicates if the item should be saved using the query queue.
+     * @see Query
+     * @see DatabaseManager
+     * @see QueryQueue
+     * @throws ValidationException
+     */
     public void saveUpdate(boolean queued) throws ValidationException {
         saveUpdate(queued, true);
     }
     
+    /**
+     * Save the changed item to the database.
+     * @param queued Indicates if the item should be saved using the query queue.
+     * @param validate Indicates if the item should be validated before saving.
+     * @see Query
+     * @see DatabaseManager
+     * @see QueryQueue
+     * @throws ValidationException
+     */
     public void saveUpdate(boolean queued, boolean validate) throws ValidationException {
         try {
             applyEnhancers(true);
@@ -751,6 +914,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
 
+    /**
+     * Permanently deletes the item.
+     */
     public void delete() {
     	if (synchronizeWithDM)
     		addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._DELETE, this));
@@ -758,6 +924,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         WorkFlow.deleteValues(this);
     }
 
+    /**
+     * Indicates if messages should be displayed to the user.
+     * @param b
+     */
     public void setSilent(boolean b) {
         this.silent = b;
         
@@ -781,10 +951,19 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         this.validate = validate;
     }
 
+    /**
+     * Retrieves the field
+     * @param index Field index
+     */
     public DcField getField(int index) {
         return getModule().getField(index);
     }
 
+    /**
+     * Checks the integrity of the item. 
+     * @param update Indicates if the item is new or not.
+     * @throws ValidationException
+     */
     public void checkIntegrity(boolean update) throws ValidationException {
         if (DcSettings.getBoolean(DcRepository.Settings.stCheckRequiredFields))
             validateRequiredFields(update);
@@ -793,29 +972,23 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             isUnique(this, update);
     }
 
-    public void isUnique(DcObject o, boolean bUpdateQuery) throws ValidationException {
-        boolean bUnique = WorkFlow.checkUniqueness(o, bUpdateQuery);
+    /**
+     * Checks if the item is unique.
+     * @param o The item to be checked.
+     * @param update Indicates if the item is new or not.
+     * @throws ValidationException
+     */
+    public void isUnique(DcObject o, boolean update) throws ValidationException {
+        boolean bUnique = WorkFlow.checkUniqueness(o, update);
         if (!bUnique && validate)
         	throw new ValidationException(DcResources.getText("msgItemNotUnique", toString()));
     }
 
+    /**
+     * Retrieves all field indices.
+     */
     public int[] getFieldIndices() {
         return getModule().getFieldIndices();
-    }
-
-    public void applySettings(DcFieldDefinitions definitions) {
-        for (DcFieldDefinition definition :  definitions.getDefinitions()) {
-            DcField field = getField(definition.getIndex());
-
-            field.setRequired(definition.isRequired());
-            field.setEnabled(definition.isEnabled());
-
-            String label = definition.getLabel();
-            if (label != null && label.trim().length() > 0)
-                field.setLabel(label);
-            else
-                field.setLabel(field.getSystemName());
-        }
     }
 
     public void setIDs() {

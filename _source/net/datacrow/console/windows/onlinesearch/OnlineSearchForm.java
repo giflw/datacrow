@@ -65,7 +65,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.IOnlineSearchClient;
-import net.datacrow.core.services.OnlineService;
+import net.datacrow.core.services.OnlineServices;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
@@ -94,7 +94,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private List<DcObject> items = new ArrayList<DcObject>();
     private Map<Integer, Boolean> loadedItems = new HashMap<Integer, Boolean>();
 
-    private OnlineService os;
+    private OnlineServices os;
     
     private OnlineServiceSettingsPanel panelSettings;
     private OnlineServicePanel panelService;
@@ -105,7 +105,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     
     private int resultCount = 0;
 
-    public OnlineSearchForm(OnlineService os, DcObject dco, ItemForm itemForm, boolean advanced) {
+    public OnlineSearchForm(OnlineServices os, DcObject dco, ItemForm itemForm, boolean advanced) {
         super(DcResources.getText("lblOnlineXSearch", DcModules.getCurrent().getObjectName()),
                                   IconLibrary._icoSearchOnline);
 
@@ -417,7 +417,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     
     public void stop() {
         if (task != null)
-            task.cancelSearch();
+            task.cancel();
 
         addMessage(DcResources.getText("msgStoppedSearch"));
         stopped();

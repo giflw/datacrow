@@ -45,7 +45,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.services.OnlineService;
+import net.datacrow.core.services.OnlineServices;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
@@ -66,9 +66,9 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
     private boolean perfectMatchOccured = false;
 
     private OnlineSearchForm osf;
-    private OnlineService os;
+    private OnlineServices os;
     
-    public OnlineServicePanel(OnlineSearchForm osf, OnlineService os) {
+    public OnlineServicePanel(OnlineSearchForm osf, OnlineServices os) {
         this.osf = osf;
         this.os = os;
         build(true);

@@ -36,23 +36,41 @@ import net.datacrow.core.services.plugin.ServiceClassLoader;
 
 import org.apache.log4j.Logger;
 
-public class Services {
+/**
+ * This class is used to register all the found servers in the services folder.
+ * The {@link ServiceClassLoader} is used to located these servers.
+ * @author Robert Jan van der Waals
+ */
+public class Servers {
     
-    private static Logger logger = Logger.getLogger(Services.class.getName());
-    private static Services instance = new Services();
+    private static Logger logger = Logger.getLogger(Servers.class.getName());
+    private static Servers instance = new Servers();
     
     private final Map<Integer, Collection<IServer>> registered = new HashMap<Integer, Collection<IServer>>();
-    
-    public Services() {
+
+    /**
+     * Creates this class and starts the search for the servers.
+     */
+    public Servers() {
         initialize();
     }
     
+    /**
+     * Retrieves all the servers for the given module.
+     * @param module
+     */
     public Collection<IServer> getServers(int module) {
         return registered.get(Integer.valueOf(module));
     }
-    
+
+    /**
+     * Starts the search for the servers using the {@link ServiceClassLoader}. 
+     * The services folder is scanned for both jar and class files. Any class implementing
+     * the {@link IServer} class is registered.
+     */
     private synchronized void initialize() {
         ServiceClassLoader scl = new ServiceClassLoader(DataCrow.servicesDir);
+        registered.clear();
         for (Class<?> clazz : scl.getClasses()) {
             
             IServer server = null;
@@ -78,7 +96,10 @@ public class Services {
         }
     }
 
-    public static Services getInstance() {
+    /**
+     * Returns an instance of this class.
+     */
+    public static Servers getInstance() {
         return instance;
     }
 }

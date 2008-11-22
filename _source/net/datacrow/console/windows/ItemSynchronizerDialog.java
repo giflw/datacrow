@@ -87,7 +87,7 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener {
         setTitle(synchronizer.getTitle());
         setHelpIndex(synchronizer.getHelpIndex());
 
-        buildDialog(module.getOnlineService().getServers());
+        buildDialog(module.getOnlineServices().getServers());
         
         pack();
         

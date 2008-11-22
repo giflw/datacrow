@@ -28,7 +28,6 @@ package net.datacrow.core.objects;
 import javax.swing.ImageIcon;
 
 import net.datacrow.core.data.DataManager;
-import net.datacrow.settings.definitions.DcFieldDefinitions;
 
 public class DcMapping extends DcObject {
     
@@ -90,8 +89,5 @@ public class DcMapping extends DcObject {
         return dco == null ? "" : dco.toString();
     }
     
-    @Override
-    public void applySettings(DcFieldDefinitions definitions) {}
-
     protected void setModuleIndex() {}
 }

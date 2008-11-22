@@ -90,7 +90,7 @@ public class InternetWizardPanel extends ItemWizardPanel implements IWizardPanel
     
     private void build(DcModule module) {
         if (module.deliversOnlineService())
-            internetSearchForm = module.getOnlineService().getUI(null, null, false);
+            internetSearchForm = module.getOnlineServices().getUI(null, null, false);
 
         if (internetSearchForm != null) {
             internetSearchForm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

@@ -177,6 +177,7 @@ public class Restore extends Thread {
             new DcSettings();
             new DcResources();
             
+            DcModules.applySettings();
             DataFilters.load();
             FilePatterns.load();
             

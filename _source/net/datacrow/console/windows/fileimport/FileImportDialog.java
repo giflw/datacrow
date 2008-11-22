@@ -352,7 +352,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         panelOs.setLayout(Layout.getGBL());
         
         if (module.deliversOnlineService()) {
-            panelServer = new OnlineServicePanel(module.getOnlineService().getServers(), true, true);
+            panelServer = new OnlineServicePanel(module.getOnlineServices().getServers(), true, true);
             panelServerSettings = new OnlineServiceSettingsPanel(null, false, false, false, module.getIndex());
             
             panelOs.add(panelServer,     Layout.getGBC( 0, 3, 3, 1, 1.0, 1.0

@@ -539,7 +539,7 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     private void onlineSearch() {
     	apply();
-        DcModules.get(moduleIndex).getOnlineService().getUI(dco, this, true).setVisible(true);
+        DcModules.get(moduleIndex).getOnlineServices().getUI(dco, this, true).setVisible(true);
     }
     
     protected void saveValues() {
