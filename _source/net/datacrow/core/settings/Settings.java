@@ -67,10 +67,6 @@ public class Settings {
      * @param file the settings file
      */
     public void setSettingsFile(File file) {
-        
-        if (file.toString().endsWith("\\.properties") || file.toString().endsWith("/.properties"))
-            System.out.println();
-        
         settingsFile = file;
     }
     

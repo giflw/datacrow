@@ -819,10 +819,9 @@ public class DcModule implements Comparable<DcModule> {
 
     /**
      * Creates a new quick view panel.
-     * @return
+     * @return New quick view panel or null.
      */
     public QuickViewPanel getQuickView() {
-        System.out.println("Creating a new panel!");
         return new QuickViewPanel(true);
     }
 

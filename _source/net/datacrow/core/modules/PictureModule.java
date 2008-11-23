@@ -54,6 +54,12 @@ public class PictureModule extends DcModule {
     public DcObject getDcObject() {
         return new Picture();
     }
+   
+    /**
+     * There are no views or UI components to be initialized for picture modules.
+     */
+    @Override
+    protected void initializeUI() {}
     
     @Override
     protected void initializeFields() {
