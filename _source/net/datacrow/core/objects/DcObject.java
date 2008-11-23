@@ -524,7 +524,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Update the loan information.
      */
     public void setLoanInformation() {
-        if (getModule().canBeLended()) {
+        if (getModule().canBeLend()) {
             Loan loan = DataManager.getCurrentLoan(getID());
             setLoanInformation(loan);
         }
@@ -534,7 +534,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Update the loan information based on the supplied loan object.
      */
     public void setLoanInformation(Loan loan) {
-        if (getModule().canBeLended()) {
+        if (getModule().canBeLend()) {
             setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(getID()));
             setValue(DcObject._SYS_LENDBY, loan.getPerson());
             setValue(DcObject._SYS_LOANDUEDATE, loan.getDueDate());
@@ -754,7 +754,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (getValueDef(index) != null) {
 
         	// recalculate loan information
-        	if (getModule().canBeLended() && index != DcObject._SYS_AVAILABLE) {
+        	if (getModule().canBeLend() && index != DcObject._SYS_AVAILABLE) {
         		Boolean available = (Boolean) getValue(DcObject._SYS_AVAILABLE);
             	if (available != null && !available.booleanValue())
             		setLoanInformation();

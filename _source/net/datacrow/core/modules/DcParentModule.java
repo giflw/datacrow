@@ -46,7 +46,6 @@ public class DcParentModule extends DcModule  {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
     public DcParentModule(int index, 
                           boolean topModule, 
@@ -66,6 +65,10 @@ public class DcParentModule extends DcModule  {
         return true;
     }      
     
+    /**
+     * Indicates if this module is a top module. Top modules are allowed
+     * to be displayed in the module bar and can be enabled or disabled.
+     */
     @Override
     public boolean isTopModule() {
         return true;

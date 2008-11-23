@@ -87,6 +87,30 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A module represents items. The module dictates among other things where the 
+ * items are stored, which views they can be displayed, which fields they have and 
+ * which online services are available to update or search for new items.
+ * The module is where it all comes together. <br>
+ * Modules can have relationships between each other and come in different types. An
+ * important property of the module is the top module boolean which indicates if the
+ * module can be displayed within module bar and if the module can be disabled and or
+ * enabled by the user.<br>
+ * Furthermore is it important to know that modules are generic. They can be created
+ * from an {@link XmlModule} which holds a flexible XML definition of the module.<br>
+ * The {@link DcModules} class creates and holds all modules.
+ * 
+ * @see XmlModule
+ * @see DcModules
+ * @see DcPropertyModule
+ * @see DcMediaModule
+ * @see DcChildModule
+ * @see DcMediaChildModule
+ * @see DcParentModule
+ * @see DcMediaParentModule  
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcModule implements Comparable<DcModule> {
 
     private static Logger logger = Logger.getLogger(DcModule.class.getName());
@@ -161,7 +185,6 @@ public class DcModule implements Comparable<DcModule> {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      * @param topModule Indicates if the module is a top module. Top modules are allowed
      * to be displayed in the module bar and can be enabled or disabled.
      */
@@ -206,7 +229,6 @@ public class DcModule implements Comparable<DcModule> {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
     public DcModule(int index, 
                     boolean topModule, 
@@ -225,6 +247,10 @@ public class DcModule implements Comparable<DcModule> {
         initializeSettings();
     }
     
+    /**
+     * Creates a new module based on a XML definition.
+     * @param module
+     */
     public DcModule(XmlModule module) {
         this(module.getIndex(), module.getName(), module.getDescription(), module.getObjectName(), 
              module.getObjectNamePlural(), module.getTableName(), module.getTableNameShort(),
@@ -275,55 +301,100 @@ public class DcModule implements Comparable<DcModule> {
         if (!module.isEnabled()) isEnabled(false);
     }
 
+    /**
+     * Indicates if the module is abstract. An abstract module represents items belonging
+     * to other modules; it represents items from multiple modules. An abstract module does
+     * not dictate where the items should be stored in the database, this is done by its
+     * actual module. The media module is a good example of an abstract module. 
+     */
     public boolean isAbstract() {
         return getIndex() == DcModules._ITEM ||
                getIndex() == DcModules._MEDIA;
     }
-    
+
+    /**
+     * Indicates if the user is allowed to edit items belonging to this module.
+     */
     public boolean isEditingAllowd() {
         return SecurityCentre.getInstance().getUser().isEditingAllowed(this);
     }
-    
+
+    /**
+     * Indicates if this module is a child of another module.
+     */
     public boolean isChildModule() {
         return getParent() != null;
     }
     
+    /**
+     * Indicates if this module is a parent to another module.
+     */
     public boolean isParentModule() {
         return getChild() != null;
     }    
     
+    /**
+     * Retrieves the index of the module (unique!)
+     */
     public int getIndex() {
         return index;
     }    
-    
+
+    /**
+     * The small icon used to represent the module.
+     */
     public ImageIcon getIcon16() {
         return icon16;
     }
     
+    /**
+     * The large icon used to represent the module.
+     */
     public ImageIcon getIcon32() {
         return icon32;
     }
 
+    /**
+     * The name of the items belonging to this module.
+     */
     public String getObjectName() {
         return objectName;
     }
     
+    /**
+     * The plural name of the items belonging to this module.
+     */
     public String getObjectNamePlural() {
         return objectNamePlural;
     }
     
+    /**
+     * The keys combination associated with this module.
+     */
     public KeyStroke getKeyStroke() {
         return keyStroke;
     }    
-    
+
+    /**
+     * Sets the small icon used to represent this module.
+     * @param icon16
+     */
     public void setIcon16(ImageIcon icon16) {
         this.icon16 = icon16;
     }
 
+    /**
+     * Sets the large icon used to represent this module.
+     * @param icon16
+     */
     public void setIcon32(ImageIcon icon32) {
         this.icon32 = icon32;
     }
     
+    /**
+     * Tells whether the module is enabled.
+     * @see DcModuleSettings
+     */
     public boolean isEnabled() {
         if (    SecurityCentre.getInstance().getUser() == null ||
                 SecurityCentre.getInstance().getUser().isAuthorized(this)) 
@@ -332,41 +403,70 @@ public class DcModule implements Comparable<DcModule> {
             return false;
     }
 
+    /**
+     * Marks the module as enabled or disabled.
+     * @see DcModuleSettings
+     */
     public void isEnabled(boolean b) {
         settings.set(DcRepository.ModuleSettings.stEnabled, b);
     }    
-    
+
+    /**
+     * The name of this module.
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * The description for this module.
+     */
     public  String getDescription() {
         return description;
     }    
 
+    /** 
+     * The name of the table used to store its items. 
+     */
     public String getTableName() {
         return tableName;
     }
 
+    /** 
+     * The short name of the table used to store its items. 
+     */
     public String getTableShortName() {
         return tableShortName;
     }
 
+    /**
+     * The online services available for this module.
+     */
     public OnlineServices getOnlineServices() {
         return services;
     }
-    
+
+    /**
+     * Indicates if this module has online services at its disposal.
+     */
     public boolean deliversOnlineService() {
         return Servers.getInstance().getServers(getIndex()) != null;
     }
-    
+
+    /**
+     * Tells if the module is created by a user.
+     */
     public boolean isCustomModule() {
         return  (getIndex() < 50 || getIndex() >= 20000) &&
                !(this instanceof TemplateModule) && 
                !(this instanceof MappingModule) && 
                !DcModules.isUsedInMapping(getIndex());
     } 
-    
+
+    /**
+     * Creates a new instance of an item belonging to this module.
+     */
     public DcObject getDcObject() {
         try {
             try {
@@ -380,7 +480,15 @@ public class DcModule implements Comparable<DcModule> {
 
         return null;
     }  
-    
+
+    /**
+     * Creates a new item form.
+     * @param template The template to be applied on the item.
+     * @param readonly Indicates if the item form should be opened in read only mode.
+     * @param update Indicates if the item is an existing or a new item.
+     * @param o The item to be displayed in the form.
+     * @param applyTemplate Indicates if the supplied template should be applied.
+     */
     public ItemForm getItemForm(DcTemplate template,
                                 boolean readonly,
                                 boolean update,
@@ -398,7 +506,11 @@ public class DcModule implements Comparable<DcModule> {
 
         return null;
     }  
-    
+
+    /**
+     * The mass updater or synchronizer.
+     * @return A synchronizer or null of not available.
+     */
     public Synchronizer getSynchronizer() {
         if (synchronizerClass != null) {
             try {
@@ -410,30 +522,50 @@ public class DcModule implements Comparable<DcModule> {
         return null;
     }
     
+    /**
+     * The insert view (shown in the new tab)
+     */
     public MasterView getInsertView() {
         initializeUI();
         return insertView;
     }
 
+    /**
+     * Returns the search view.
+     */
     public MasterView getSearchView() {
         initializeUI();
         return searchView;
     }
 
+    /**
+     * Returns the current search view.
+     */
     public View getCurrentSearchView() {
         initializeUI();
         return getSearchView() != null ? getSearchView().getCurrent() : null;
     }
 
+    /**
+     * Returns the current insert view.
+     */
     public View getCurrentInsertView() {
         initializeUI();
         return getInsertView() != null ? getInsertView().getCurrent() : null;
     }    
     
+    /**
+     * Retrieve the property module for the given index used by this module.
+     * @param modIdx
+     */
     public DcPropertyModule getPropertyModule(int modIdx) {
         return (DcPropertyModule) DcModules.get(getIndex() + modIdx);
     }
 
+    /**
+     * Returns the template module.
+     * @return Template module or null.
+     */
     public TemplateModule getTemplateModule() {
         if ((isTopModule() || isChildModule()) && !isAbstract())
             return (TemplateModule) DcModules.get(getIndex() + DcModules._TEMPLATE);
@@ -441,16 +573,26 @@ public class DcModule implements Comparable<DcModule> {
             return null;
     }
     
+    /**
+     * Indicates if the module can be selected from the module bar.
+     */
     public boolean isSelectableInUI() {
         return getIndex() == DcModules._CONTACTPERSON || 
                getIndex() == DcModules._MEDIA || 
               (isTopModule() && isEnabled() && !hasDependingModules());
     }
-    
+
+    /**
+     * Adds a field to this module.
+     * @param field
+     */
     public void addField(DcField field) {
         fields.put(field.getIndex(), field);
     }
     
+    /**
+     * Loads all items belonging to this module.
+     */
     public List<DcObject> loadData() {
         try {
             if (isAbstract()) {
@@ -467,6 +609,9 @@ public class DcModule implements Comparable<DcModule> {
         return null;
     }    
 
+    /**
+     * Returns all views.
+     */
     public MasterView[] getViews() {
         if (getSearchView() != null && getInsertView() != null)
             return new MasterView[] {getSearchView(), getInsertView()};
@@ -478,11 +623,19 @@ public class DcModule implements Comparable<DcModule> {
         	return new MasterView[0];
     }
 
+    /**
+     * Retrieves the field definition for the given index.
+     * @param index The field index.
+     */
     public DcField getField(int index) {
         DcField field = fields.get(index);
         return field == null ? getSystemField(index) : field;
     }
     
+    /**
+     * Retrieves the field definition for the given index.
+     * @param columnName The database column name.
+     */
     public DcField getField(String columnName) {
         for (DcField field : getFields()) {
             if (field.getDatabaseFieldName().equals(columnName))
@@ -491,30 +644,59 @@ public class DcModule implements Comparable<DcModule> {
         return null;
     }
     
+    /**
+     * Registers a value enhancer for a specific field. 
+     * @param enhancer
+     * @param field
+     */
     public void addValueEnhancer(IValueEnhancer enhancer, int field) {
         getField(field).addValueEnhancer(enhancer);
     }
     
+    /**
+     * Retrieves the system field for the given index.
+     * @param index The field index.
+     */
     public DcField getSystemField(int index) {
         return systemFields.get(index);
     }
 
+    /**
+     * Register a child module.
+     * @param module
+     */
     public void setChild(int module) {
     	this.childIdx = module;
     }
     
+    /**
+     * Creates the menu bar for this module.
+     * @return The menu bar or null if not supported.
+     */
     public MainFrameMenuBar getMenuBar() {
         return isTopModule() ? new MainFrameMenuBar(this) : null;
     }
 
+    /**
+     * Retrieves the parent module instance.
+     * @return The parent module or null if not applicable.
+     */
     public DcModule getParent() {
         return parentIdx > 0 ? DcModules.get(parentIdx) : null;
     }
     
+    /**
+     * Retrieves the child module instance.
+     * @return The child module or null if not applicable.
+     */
     public DcModule getChild() {
     	return childIdx > 0 ? DcModules.get(childIdx) : null;
     }
     
+    /**
+     * Retrieves the index for the field holding the reference to the parent item.
+     * @return The field index or -1 if not found.
+     */
     public int getParentReferenceFieldIndex() {
         if (isContainerManaged())
             return DcObject._SYS_CONTAINER;
@@ -527,6 +709,11 @@ public class DcModule implements Comparable<DcModule> {
         return -1;
     }
 
+    /**
+     * Creates the filter form (if not created already).
+     * @param create Indicates if the form should be created when it does not yet exist.
+     * @return The form or null if not available.
+     */
     public FilterDialog getFilterForm(boolean create) {
         if (create)
             filterForm = filterForm == null && isTopModule() ? new FilterDialog(this, getSearchView()) : filterForm;
@@ -534,6 +721,11 @@ public class DcModule implements Comparable<DcModule> {
         return filterForm;
     }
     
+    /**
+     * Creates the file renamer dialog (if not created already).
+     * @param create Indicates if the dialog should be created when it does not yet exist.
+     * @return The dialog or null if not available.
+     */
     public FileRenamerDialog getFileRenamerDialog(boolean create) {
         if (create)
             fileRenamerDialog = fileRenamerDialog == null ? new FileRenamerDialog(getIndex()) : fileRenamerDialog;
@@ -541,6 +733,11 @@ public class DcModule implements Comparable<DcModule> {
         return fileRenamerDialog;
     }    
 
+    /**
+     * Creates the chart panel (if not created already).
+     * @param create Indicates if the panel should be created when it does not yet exist.
+     * @return The panel or null if not available.
+     */
     public ChartPanel getChartPanel(boolean create) {
         if (create)
             chartPanel = chartPanel == null && isTopModule() ? new ChartPanel(getIndex()) : chartPanel;
@@ -548,44 +745,83 @@ public class DcModule implements Comparable<DcModule> {
         return chartPanel;
     }
     
+    /**
+     * Indicates if this module is used by multiple modules.
+     */
     public boolean isServingMultipleModules() {
         return isServingMultipleModules;
     }
 
+    /**
+     * Indicates if this module is used by multiple modules.
+     * @param isServingMultipleModules
+     */
     public void setServingMultipleModules(boolean isServingMultipleModules) {
         this.isServingMultipleModules = isServingMultipleModules;
     }    
     
+    /**
+     * Indicates if this module is a top module. Top modules are allowed
+     * to be displayed in the module bar and can be enabled or disabled.
+     */
     public boolean isTopModule() {
         return topModule;
     }
 
+    /**
+     * The number of fields belonging to this module.
+     */
     public int getFieldCount() {
         return fields.size();
     }
 
-    public boolean canBeLended() {
+    /**
+     * Indicates if items belonging to this module can be lend.
+     */
+    public boolean canBeLend() {
         return canBeLended &&  
               (DcModules.get(DcModules._CONTACTPERSON) == null || 
                DcModules.get(DcModules._CONTACTPERSON).isEnabled());
     }
 
+    /**
+     * Indicates if other modules depend on this module.
+     */
     public boolean hasDependingModules() {
         return hasDependingModules;    
     }
-    
+
+    /**
+     * Retrieves the module setting value.
+     * @param key The setting key {@link DcRepository.ModuleSettings}.
+     */
     public Object getSetting(String key) {
         return settings.get(key);
     }
     
+    /**
+     * Sets the module setting value.
+     * @param key The setting key {@link DcRepository.ModuleSettings}.
+     * @param value The value to set.
+     */
     public void setSetting(String key, Object value) {
         settings.set(key, value);
     }
 
+    /**
+     * Creates a new quick view panel.
+     * @return
+     */
     public QuickViewPanel getQuickView() {
+        System.out.println("Creating a new panel!");
         return new QuickViewPanel(true);
     }
 
+    /**
+     * Tells if the module holds a reference to the given module.
+     * This check is based on the original module index.
+     * @param module The module index. 
+     */
     public boolean hasReferenceTo(int module) {
         for (DcField field : getFields()) {
             if (field.getSourceModuleIdx() == module)
@@ -594,6 +830,11 @@ public class DcModule implements Comparable<DcModule> {
         return false;
     }
     
+    /**
+     * Tells if the module holds a reference to the given module.
+     * This check is based on the calculated module index.
+     * @param module The module index. 
+     */
     public boolean hasActualReferenceTo(int module) {
         for (DcField field : getFields()) {
             if (field.getReferenceIdx() == module)
@@ -602,6 +843,9 @@ public class DcModule implements Comparable<DcModule> {
         return false;
     }
 
+    /**
+     * Retrieves all fields. 
+     */
     public Collection<DcField> getFields() {
         if (sortedFields == null || sortedFields.size() < fields.size()) {
             sortedFields = new ArrayList<DcField>();
@@ -744,7 +988,7 @@ public class DcModule implements Comparable<DcModule> {
                 addField(getField(DcObject._SYS_FILEHASHTYPE));
             }
             
-            if (canBeLended()) {
+            if (canBeLend()) {
                 addField(getField(DcObject._SYS_AVAILABLE));
                 addField(getField(DcObject._SYS_LENDBY));
                 addField(getField(DcObject._SYS_LOANDURATION));

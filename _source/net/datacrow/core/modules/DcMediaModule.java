@@ -35,6 +35,10 @@ public class DcMediaModule extends DcModule {
     
     private static final long serialVersionUID = -4813944714346927458L;
 
+    /**
+     * Creates a new instance based on a XML definition.
+     * @param module
+     */
     public DcMediaModule(XmlModule module) {
         super(module);
     }
@@ -50,7 +54,6 @@ public class DcMediaModule extends DcModule {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
     public DcMediaModule(int index, 
                          boolean topModule,
@@ -65,6 +68,10 @@ public class DcMediaModule extends DcModule {
               tableName, tableShortName);
     }
     
+    /**
+     * Initializes all fields belonging to this module.
+     * @see DcField
+     */
     @Override
     protected void initializeFields() {
     	super.initializeFields();

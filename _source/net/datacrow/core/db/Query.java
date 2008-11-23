@@ -480,7 +480,7 @@ public class Query {
         if (dco.hasPrimaryKey())
             queries.add(getPreparedStatement("DELETE FROM " + dco.getTableName() + " WHERE ID = " + dco.getID()));
 
-        if (dco.getModule().canBeLended())
+        if (dco.getModule().canBeLend())
             queries.add(getPreparedStatement("DELETE FROM " + loan.getTableName() + " WHERE " +
                             loan.getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = " + dco.getID()));
 
@@ -750,7 +750,7 @@ public class Query {
     } 
     
     private void addAvailabilityCondition(DcObject dco, StringBuffer conditions) {
-        if (dco.getModule().canBeLended()) {
+        if (dco.getModule().canBeLend()) {
             ContactPerson loanedBy = (ContactPerson) dco.getValue(DcObject._SYS_LENDBY);
             Integer duration = (Integer) dco.getValue(DcObject._SYS_LOANDURATION);
             String s = (String) dco.getValue(DcObject._SYS_AVAILABLE);

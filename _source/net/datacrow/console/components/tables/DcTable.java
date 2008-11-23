@@ -847,7 +847,7 @@ public class DcTable extends JTable implements IViewComponent {
 
             DcFieldDefinition definition = definitions.get(field);
 
-            if (!module.canBeLended()
+            if (!module.canBeLend()
                     && (field == DcObject._SYS_AVAILABLE
                             || field == DcObject._SYS_LOANDURATION
                             || field == DcObject._SYS_LENDBY

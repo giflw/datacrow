@@ -27,10 +27,22 @@ package net.datacrow.core.modules;
 
 import net.datacrow.core.modules.xml.XmlModule;
 
+/**
+ * A parent module hold a child module. The child module is depending on the existence of 
+ * the parent module.
+ * 
+ * @see DcMediaChildModule
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcMediaParentModule extends DcMediaModule  {
 
     private static final long serialVersionUID = -8859370071966397270L;
 
+    /**
+     * Creates a new instance based on a XML module.
+     * @param xmlModule
+     */
     public DcMediaParentModule(XmlModule xmlModule) {
         super(xmlModule);
     }
@@ -46,7 +58,6 @@ public class DcMediaParentModule extends DcMediaModule  {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
     public DcMediaParentModule(int index, 
                                boolean topModule, 
@@ -61,11 +72,18 @@ public class DcMediaParentModule extends DcMediaModule  {
               tableName, tableShortName);
     }
     
+    /**
+     * Indicates if the module is a parent module.
+     */
     @Override
     public boolean isParentModule() {
         return true;
     } 
-    
+
+    /**
+     * Indicates if this module is a top module. Top modules are allowed
+     * to be displayed in the module bar and can be enabled or disabled.
+     */
     @Override
     public boolean isTopModule() {
         return true;

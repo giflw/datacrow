@@ -90,7 +90,7 @@ public class ViewPopupMenu extends DcPopupMenu {
         PluginHelper.add(this, "Sort");
         
         if (	viewIdx == View._TYPE_SEARCH && 
-        		module.canBeLended() &&
+        		module.canBeLend() &&
         		SecurityCentre.getInstance().getUser().isAuthorized("Loan")) {
         	
             addSeparator();

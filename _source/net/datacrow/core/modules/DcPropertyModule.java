@@ -64,7 +64,6 @@ public class DcPropertyModule extends DcModule {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
     public DcPropertyModule(int index, 
                             String name, 

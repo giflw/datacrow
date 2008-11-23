@@ -34,10 +34,20 @@ import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * Items belonging to a child module are dependent on the existence of a parent item.
+ * Parent items always belong to another module, represented by the {@link DcMediaParentModule} class.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcMediaChildModule extends DcMediaModule implements IChildModule {
 
     private static final long serialVersionUID = 8257159881800394661L;
 
+    /**
+     * Creates a new instance based on a XML definition.
+     * @param xmlModule
+     */
     public DcMediaChildModule(XmlModule xmlModule) {
         super(xmlModule);
     }
@@ -67,10 +77,16 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
               tableName, tableShortName);
     }
     
+    /**
+     * Creates a new item view.
+     */
     public DcMinimalisticItemView getItemView(DcObject parent, int module, boolean readonly) {
         return new ChildForm(parent, module, readonly);
     }
     
+    /**
+     * Initializes the various views.
+     */
     @Override
     protected void initializeUI() {
         if (searchView == null && insertView == null) {
@@ -96,11 +112,18 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
         }
     }   
     
+    /**
+     * Indicates if this module is a child module.
+     */
     @Override
     public boolean isChildModule() {
         return true;
     }
     
+    /**
+     * Indicates if this module is a top module. Top modules are allowed
+     * to be displayed in the module bar and can be enabled or disabled.
+     */
     @Override
     public boolean isTopModule() {
         return false;

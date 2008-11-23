@@ -66,7 +66,7 @@ public class DcListRenderer extends DefaultListCellRenderer  {
 
         if (component instanceof DcObjectListElement) {
         	DcObjectListElement ole = (DcObjectListElement) component;
-        	if (ole.getDcObject().getModule().canBeLended()) {
+        	if (ole.getDcObject().getModule().canBeLend()) {
         		Long daysTillOverdue = (Long) ole.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
         		if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
         			component.setForeground(Color.RED);

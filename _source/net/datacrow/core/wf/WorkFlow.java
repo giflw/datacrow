@@ -112,7 +112,7 @@ public class WorkFlow {
                     dco.setValueForColumn(column, value);
                 }
 
-                if (dco.getModule().canBeLended())
+                if (dco.getModule().canBeLend())
                     dco.setLoanInformation();
 
                 if (!(dco instanceof Picture))

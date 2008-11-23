@@ -34,8 +34,10 @@ import net.datacrow.core.objects.helpers.Container;
 
 /**
  * The container module hold any kind of item as long as the item belongs to a
- * container managed module. 
+ * container managed module. Container managed items are represented by the 
+ * item module.
  * 
+ * @see ItemModule
  * @author Robert Jan van der Waals
  */
 public class ContainerModule extends DcParentModule {
@@ -51,7 +53,6 @@ public class ContainerModule extends DcParentModule {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
     public ContainerModule(int index, 
                            boolean topModule, 
@@ -65,7 +66,18 @@ public class ContainerModule extends DcParentModule {
         super(index, topModule, name, description, objectName, objectNamePlural,
               tableName, tableShortName);
     }
-    
+
+    /**
+     * Creates this module based on an XML module definition.
+     * @param module
+     */
+    public ContainerModule(XmlModule module) {
+        super(module);
+    }
+
+    /**
+     * Initializes the various views.
+     */
     @Override
     protected void initializeUI()  {
         if (searchView == null && hasSearchView() ) {
@@ -80,16 +92,18 @@ public class ContainerModule extends DcParentModule {
             searchView.addView(MasterView._LIST_VIEW, listView);            
         }
     }
-    
+
+    /**
+     * Indicates whether this module be selected from the module bar.
+     */
     @Override
     public boolean isSelectableInUI() {
         return true;
     }
 
-    public ContainerModule(XmlModule module) {
-        super(module);
-    }
-
+    /**
+     * Creates a new instance of an item belonging to this module.
+     */
     @Override
     public DcObject getDcObject() {
         return new Container();

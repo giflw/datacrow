@@ -185,7 +185,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         addPictureTabs();
         addRelationPanel();
         
-        if (	module.canBeLended() && 
+        if (	module.canBeLend() && 
                 SecurityCentre.getInstance().getUser().isAuthorized("Loan") && 
         		update && 
         		!readonly)
@@ -533,7 +533,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             }
         }
 
-        if (update && dco.getModule().canBeLended())
+        if (update && dco.getModule().canBeLend())
             dco.setLoanInformation();
     }
 

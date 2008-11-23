@@ -246,7 +246,7 @@ public class DataManager {
             references.get(dco.getModule().getIndex()).put(key, c);
         }
         
-        if (dco.getModule().canBeLended())
+        if (dco.getModule().canBeLend())
             dco.setValue(DcObject._SYS_AVAILABLE, Boolean.TRUE);
 
         updateRelated(dco, false);
@@ -519,7 +519,7 @@ public class DataManager {
         
         pictures.remove(dco.getID());
 
-        if (dco.getModule().canBeLended())
+        if (dco.getModule().canBeLend())
             loans.remove(dco.getID());
     }
 
@@ -560,7 +560,7 @@ public class DataManager {
             
             for (DcModule module : DcModules.getModules()) {
 
-                if (module.canBeLended())
+                if (module.canBeLend())
                     parent = getObject(module.getIndex(), parentID);
                 
                 if (parent != null)
