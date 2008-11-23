@@ -82,6 +82,12 @@ public class MappingModule extends DcModule {
     } 
 
     /**
+     * This module does not have any views and therefore this method has not having to do.
+     */
+    @Override
+    protected void initializeUI() {}
+
+    /**
      * The parent module index.
      */
     public int getParentModIdx() {

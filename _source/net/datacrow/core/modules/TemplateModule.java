@@ -39,6 +39,12 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 
+/**
+ * The template module represents templates. Templates can be applied when creating new
+ * items. The template module is based on the module which it is serving.
+ *  
+ * @author Robert Jan van der Waals
+ */
 public class TemplateModule extends DcModule {
     
     private static final long serialVersionUID = 5366008689695714729L;
@@ -46,6 +52,11 @@ public class TemplateModule extends DcModule {
     private TemplateForm form;
     private DcModule parent;
     
+    /**
+     * Creates a new instance based on the specified module. The fields of the provided module
+     * are added to this module.
+     * @param parent
+     */
     public TemplateModule(DcModule parent) {
         super(parent.getIndex() + DcModules._TEMPLATE, 
               false, 
@@ -66,10 +77,13 @@ public class TemplateModule extends DcModule {
         }
     }
     
+    /**
+     * Retrieves the module this template module has been created for.
+     */
     public DcModule getTemplatedModule() {
         return parent;
     }
-    
+
     @Override
     public ImageIcon getIcon16() {
         return IconLibrary._icoTemplate;
@@ -80,26 +94,44 @@ public class TemplateModule extends DcModule {
         return IconLibrary._icoTemplate;
     }        
     
+    /**
+     * Creates the simple item  view.
+     * @return
+     */
     public DcMinimalisticItemView getForm() {
         initializeUI();
         return form;    
     }  
-
+    
+    /**
+     * Creates a new template item.
+     * @see DcTemplate
+     */
     @Override
     public DcObject getDcObject() {
         return new DcTemplate(getIndex(), parent.getIndex());
     }    
     
+    /**
+     * The name of the objects.
+     */
     @Override
     public String getObjectName() {
         return DcResources.getText("sysTemplate");
     }
 
+    /**
+     * The plural name of the objects.
+     */
     @Override
     public String getObjectNamePlural() {
         return DcResources.getText("sysTemplatePlural");
     }
     
+    /**
+     * The field settings/definitions.
+     * @see DcModule#getFieldDefinitions()
+     */    
     @Override
     public DcFieldDefinitions getFieldDefinitions() {
         DcFieldDefinitions fds = parent.getFieldDefinitions();
@@ -114,6 +146,9 @@ public class TemplateModule extends DcModule {
         return definitions;
     }      
 
+    /**
+     * Initializes the standard fields.
+     */
     @Override
     protected void initializeFields() {
         super.initializeFields();
@@ -127,6 +162,10 @@ public class TemplateModule extends DcModule {
                              "DefaultTemplate"));        
     }
 
+    /**
+     * Creates (of need be) the template form.
+     * @see TemplateForm
+     */
     @Override
     protected void initializeUI() {
         if (form == null)

@@ -32,13 +32,18 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 
 /**
+ * Holder of picture items.
  * 
+ * @see Picture 
  * @author Robert Jan van der Waals
  */
 public class PictureModule extends DcModule {
     
     private static final long serialVersionUID = 4278200439507269874L;
 
+    /**
+     * Creates a new instance
+     */
     public PictureModule() {
         super(DcModules._PICTURE,
               false,
@@ -50,6 +55,10 @@ public class PictureModule extends DcModule {
               "pic");
     }
     
+    /**
+     * Creates a new picture instance.
+     * @see Picture
+     */
     @Override
     public DcObject getDcObject() {
         return new Picture();
@@ -61,6 +70,9 @@ public class PictureModule extends DcModule {
     @Override
     protected void initializeUI() {}
     
+    /**
+     * Initializes the default fields.
+     */
     @Override
     protected void initializeFields() {
         addField(new DcField(Picture._A_OBJECTID, getIndex(), "ObjectID", 

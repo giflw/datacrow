@@ -83,6 +83,12 @@ public class LoanModule extends DcModule {
     }
 
     /**
+     * This module does not have any views and therefore this method has not having to do.
+     */
+    @Override
+    protected void initializeUI() {}
+    
+    /**
      * Initializes the default fields.
      */
     @Override
