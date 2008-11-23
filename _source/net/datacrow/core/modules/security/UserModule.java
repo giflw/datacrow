@@ -19,10 +19,20 @@ import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 
+/**
+ * The user module represents users.
+ * 
+ * @see User
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class UserModule extends DcParentModule {
     
     private static final long serialVersionUID = 8781289658107612773L;
 
+    /**
+     * Creates a new instance.
+     */
     public UserModule() {
         super(DcModules._USER, 
               true,
@@ -34,66 +44,115 @@ public class UserModule extends DcParentModule {
               "usr");
     }
 
+    /**
+     * The small icon.
+     */
     @Override
     public ImageIcon getIcon16() {
         return IconLibrary._icoUser16;
     }
 
+    /**
+     * The large icon.
+     */
     @Override
     public ImageIcon getIcon32() {
         return IconLibrary._icoUser32;
     }
 
+    /**
+     * Retrieves the insert view.
+     * @return Always null.
+     */
     @Override
     public MasterView getInsertView() {
         return null;
     }
 
+    /**
+     * Indicates if other modules are depending on this module.
+     * @return Always false.
+     */
     @Override
     public boolean hasDependingModules() {
         return false;
     }
 
+    /**
+     * Indicates if this module is enabled.
+     * @return Depends if the user currently logged on is an administrator. 
+     */
     @Override
     public boolean isEnabled() {
         return SecurityCentre.getInstance().getUser() != null ? SecurityCentre.getInstance().getUser().isAdmin() : true;
     }
 
+    /**
+     * Indicates if this module has a search view.
+     * @return Always true.
+     */
     @Override
     public boolean hasSearchView() {
         return true;
     }
     
+    /**
+     * Indicates if this module has an insert view.
+     * @return Always false.
+     */
     @Override
     public boolean hasInsertView() {
         return false;
     }
 
+    /**
+     * Indicates if items belonging to this module are file based.
+     * @return Always false.
+     */
     @Override
     public boolean isFileBacked() {
         return false;
     }
 
+    /**
+     * Creates a new user instance.
+     * @see User
+     */
     @Override
     public DcObject getDcObject() {
         return new User();
     }
     
+    /**
+     * Retrieves the child module
+     * @see PermissionModule
+     */
     @Override
     public DcModule getChild() {
         return DcModules.get(DcModules._PERMISSION);
     }
     
+    /**
+     * Indicates if this module is allowed to be customized.
+     * @return Always false.
+     */
     @Override
     public boolean isCustomFieldsAllowed() {
         return false;
     }
     
+    /**
+     * Indicates if this module is a parent module.
+     * @return Always true
+     */
     @Override
     public boolean isParentModule() {
         return true;
     }
 
+    /**
+     * Initializes all views.
+     */
     @Override
     protected void initializeUI()  {
         if (searchView == null) {
@@ -115,6 +174,9 @@ public class UserModule extends DcParentModule {
         }
     }
     
+    /**
+     * Initializes the default fields.
+     */
     @Override
     protected void initializeFields() {
         super.initializeFields();

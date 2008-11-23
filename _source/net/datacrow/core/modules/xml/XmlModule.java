@@ -44,6 +44,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * A XML representation of a module.
+ * 
+ * @author Robert Jan van der Waals
+ */
 @SuppressWarnings("unchecked")
 public class XmlModule extends XmlObject {
     

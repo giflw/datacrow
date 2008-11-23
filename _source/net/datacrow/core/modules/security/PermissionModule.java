@@ -14,13 +14,27 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Permission;
+import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 
+/**
+ * The permission module holds all permissions as part of the security functionality.
+ * The permission module is a child module of the user module.
+ * 
+ * @see UserModule
+ * @see User
+ * @see Permission
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class PermissionModule extends DcChildModule {
 
     private static final long serialVersionUID = -7129402893574458367L;
 
+    /**
+     * Creates a new instance.
+     */
     public PermissionModule() {
         super(DcModules._PERMISSION, 
               false,
@@ -32,66 +46,115 @@ public class PermissionModule extends DcChildModule {
               "perm");
     }
     
+    /**
+     * Creates a new permission.
+     * @see Permission
+     */
     @Override
     public DcObject getDcObject() {
         return new Permission();
     }
     
+    /**
+     * Retrieves the parent module.
+     * @see UserModule
+     */
     @Override
     public DcModule getParent() {
         return DcModules.get(DcModules._USER);
     }
-    
+
+    /**
+     * The small icon.
+     */
     @Override
     public ImageIcon getIcon16() {
         return IconLibrary._icoPermission16;
     }
 
+    /**
+     * The large icon.
+     */
     @Override
     public ImageIcon getIcon32() {
         return IconLibrary._icoPermission32;
     }
 
+    /**
+     * The insert view.
+     * @return Always null for this module.
+     */
     @Override
     public MasterView getInsertView() {
         return null;
     }
 
+    /**
+     * Indicates of other modules are depending on this module.
+     * @return Always false for this module.
+     */
     @Override
     public boolean hasDependingModules() {
         return false;
     }
 
+    /**
+     * Indicates if this module has a search view.
+     * @return Always true.
+     */
     @Override
     public boolean hasSearchView() {
         return true;
     }
     
+    /**
+     * Indicates if this module has an insert view.
+     * @return Always false.
+     */
     @Override
     public boolean hasInsertView() {
         return false;
     }
 
+    /**
+     * Indicates if items belonging to this module are file based.
+     * @return Always false.
+     */
     @Override
     public boolean isFileBacked() {
         return false;
     }
     
+    /**
+     * Indicates if this module is allowed to be customized.
+     * @return Always false.
+     */
     @Override
     public boolean isCustomFieldsAllowed() {
         return false;
     }
     
+    /**
+     * Indicates if this is a child module.
+     * @return Always true.
+     */
     @Override
     public boolean isChildModule() {
         return true;
     }
     
+    /**
+     * Indicates if this module is enabled.
+     * @return Depends if the user currently logged on is an administrator. 
+     */
     @Override
     public boolean isEnabled() {
         return SecurityCentre.getInstance().getUser() != null ? SecurityCentre.getInstance().getUser().isAdmin() : true;
     }
     
+    /**
+     * Creates all the views.
+     */
     @Override
     protected void initializeUI()  {
         if (searchView == null) {
@@ -106,6 +169,9 @@ public class PermissionModule extends DcChildModule {
         }
     }    
 
+    /**
+     * Creates the default fields.
+     */
     @Override
     protected void initializeFields() {
         super.initializeFields();

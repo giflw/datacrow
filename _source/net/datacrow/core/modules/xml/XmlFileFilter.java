@@ -28,6 +28,11 @@ package net.datacrow.core.modules.xml;
 import java.io.File;
 import java.io.FilenameFilter;
 
+/**
+ * Filters on XML files (.xml).
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class XmlFileFilter implements FilenameFilter {
 
     public boolean accept(File dir, String name) {

@@ -1,4 +1,24 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.4 [Release on 01/12/2008] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+The code has been reviewed and many small improvements have been made. As a result
+of this, this version uses less memory and has once again an improved start up time.
+
+I have been working quite hard to get the code documented. The emphasis for this release
+is again.. quality! I was quite happy with the stability of the 3.4.3 version but not
+with the amount of fixes needed to get there. 
+
+This release also contains documentation on developing plugins and online services.
+Hopefully this will pay off in people in actually starting to create new additions for
+Data Crow!
+
+Finally I dare to say that Data Crow is becoming mature. 
+
+[Fixed]
+- 
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.3 [Release on 08/11/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
