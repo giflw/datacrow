@@ -39,6 +39,19 @@ public class DcMediaModule extends DcModule {
         super(module);
     }
     
+    /**
+     * Creates a new instance.
+     * @param index The module index.
+     * @param topModule Indicates if the module is a top module. Top modules are allowed
+     * to be displayed in the module bar and can be enabled or disabled.
+     * @param name The internal unique name of the module.
+     * @param description The module description
+     * @param objectName The name of the items belonging to this module.
+     * @param objectNamePlural The plural name of the items belonging to this module.
+     * @param tableName The database table name for this module.
+     * @param tableShortName The database table short name for this module.
+     * @param tableJoin The join name.
+     */
     public DcMediaModule(int index, 
                          boolean topModule,
                          String name,
