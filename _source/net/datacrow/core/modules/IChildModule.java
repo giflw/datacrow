@@ -30,7 +30,16 @@ import net.datacrow.core.objects.DcObject;
 
 public interface IChildModule {
 
+    /**
+     * Creates a (if needed) simple item view.
+     * @param parent The parent item.
+     * @param module
+     * @param readonly Indicates if editing is allowed.
+     */
     public DcMinimalisticItemView getItemView(DcObject parent, int module, boolean readonly);
     
+    /**
+     * Retrieves the index of the module (unique!)
+     */    
     public int getIndex();
 }

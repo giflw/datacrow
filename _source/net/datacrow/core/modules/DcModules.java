@@ -59,7 +59,7 @@ import org.apache.log4j.Logger;
  *   These modules are used as templates for the actual references.
  *   (DcPropertyModule.getIndex() + DcModule.getIndex())
  * - Multi relation references are stored in the same way except they also get a
- *   mapping module (<ParentModule>.getIndex() + <ReferencedModule>.getIndex() + DcModules._MAPPING)
+ *   mapping module (&lt;ParentModule&gt;.getIndex() + &lt;ReferencedModule&gt;.getIndex() + DcModules._MAPPING)
  * - If defined, a base property module serves multiple modules (such as the music genres).
  * 
  * @author Robert Jan van der Waals
@@ -107,6 +107,12 @@ public class DcModules {
     private static final Map<Integer, DcPropertyModule> propertyBaseModules = new HashMap<Integer, DcPropertyModule>();
     private static final Map<Integer, DcModule> modules = new LinkedHashMap<Integer, DcModule>();
     
+    /**
+     * Loads all modules.
+     * @throws ModuleUpgradeException
+     * @throws InvalidModuleXmlException
+     * @throws ModuleJarException
+     */
     public static void load() throws ModuleUpgradeException, InvalidModuleXmlException, ModuleJarException {
         propertyBaseModules.clear();
         modules.clear();
@@ -520,7 +526,9 @@ public class DcModules {
     
     /** 
      * Retrieves all modules having a reference to the specified modules.
-     * Note: The check is based on the source module index (base mods), not the actual instances.
+     * Note: The check is based on the source module index (base module), 
+     * not the actual instances.
+     * @see #getActualReferencingModules(int)
      * @param moduleIdx
      */
     public static Collection<DcModule> getReferencingModules(int moduleIdx) {
@@ -534,6 +542,12 @@ public class DcModules {
         return refs;
     }    
     
+    /** 
+     * Retrieves all modules having a reference to the specified modules.
+     * Note: The check is based on the actual module index (the calculated module index).
+     * @see #getReferencingModules(int)
+     * @param moduleIdx
+     */    
     public static Collection<DcModule> getActualReferencingModules(int moduleIdx) {
         Collection<DcModule> refs = new ArrayList<DcModule>();
         for (DcModule module : getAllModules()) {
@@ -572,4 +586,3 @@ public class DcModules {
         return c;
     }
 }
-

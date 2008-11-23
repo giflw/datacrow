@@ -25,6 +25,12 @@
 
 package net.datacrow.core.modules;
 
+/**
+ * Exception thrown when an invalid value is encountered in the XML module
+ * definition.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class InvalidValueException extends Exception {
 
     private static final long serialVersionUID = -2530771839205073601L;

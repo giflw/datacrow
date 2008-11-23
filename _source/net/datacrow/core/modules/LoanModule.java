@@ -33,10 +33,18 @@ import net.datacrow.core.objects.Loan;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.Settings;
 
+/**
+ * Represents loan items.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class LoanModule extends DcModule {
 
     private static final long serialVersionUID = -1777037389578494831L;
 
+    /**
+     * Creates a new instance of this module.
+     */
     public LoanModule() {
         super(DcModules._LOAN, 
               false, 
@@ -48,22 +56,35 @@ public class LoanModule extends DcModule {
               "lo");
     }
     
+    /**
+     * Indicates if this module is enabled.
+     */
     @Override
     public boolean isEnabled() {
         return DcModules.get(DcModules._CONTACTPERSON).isEnabled();
     }
 
+    /**
+     * Retrieves the settings for this module.
+     */
     @Override
     public Settings getSettings() {
         setSetting(DcRepository.ModuleSettings.stTableColumnOrder, new int[] {Loan._C_CONTACTPERSONID, Loan._A_STARTDATE, Loan._B_ENDDATE});
         return super.getSettings();
     }
 
+    /**
+     * Creates a new instance of a loan.
+     * @see Loan
+     */
     @Override
     public DcObject getDcObject() {
         return new Loan();
     }
 
+    /**
+     * Initializes the default fields.
+     */
     @Override
     protected void initializeFields() {
         super.initializeFields();

@@ -31,12 +31,23 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * A mapping module creates a link between two modules. Used for many to many
+ * relationships.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class MappingModule extends DcModule {
 
     private static final long serialVersionUID = 7229196343761371630L;
     private final DcModule parentMod;
     private final DcModule referencedMod;
-    
+   
+    /**
+     * Creates a new mapping module to link the specified modules.
+     * @param parentMod The parent module.
+     * @param referencedMod The child/referenced module. 
+     */
     public MappingModule(DcModule parentMod, DcModule referencedMod) {
         super(referencedMod.getIndex() + DcModules._MAPPING + parentMod.getIndex(), 
               "", "", "", "", 
@@ -52,30 +63,52 @@ public class MappingModule extends DcModule {
         initializeSettings();
     } 
     
+    /**
+     * Creates a new instance of a mapping item.
+     * @see DcMapping
+     */
     @Override
     public DcObject getDcObject() {
         DcMapping mapping = new DcMapping(getIndex());
         return mapping;
     }    
 
+    /**
+     * The referenced module index.
+     * @return
+     */
     public int getReferencedModIdx() {
         return getField(DcMapping._B_REFERENCED_ID).getSourceModuleIdx();
     } 
 
+    /**
+     * The parent module index.
+     */
     public int getParentModIdx() {
         return getField(DcMapping._A_PARENT_ID).getReferenceIdx();
     } 
-    
+
+    /**
+     * A mapping module does not have any views.
+     * @return Always false
+     */
     @Override
     public boolean hasInsertView() {
         return false;
     }
 
+    /**
+     * A mapping module does not have any views.
+     * @return Always false
+     */
     @Override
     public boolean hasSearchView() {
         return false;
     }    
     
+    /**
+     * Creates the default fields.
+     */
     @Override
     protected void initializeFields() {
         addField(new DcField(DcMapping._A_PARENT_ID, getIndex(), "Object ID",
@@ -97,6 +130,11 @@ public class MappingModule extends DcModule {
         return (o instanceof MappingModule ? ((MappingModule) o).getIndex() == getIndex() : false);
     }     
     
+    /**
+     * A mapping module does not have any default data.
+     * @see DcModule#getDefaultData()
+     * @return Always null.
+     */
     @Override
     public DcObject[] getDefaultData() throws Exception  {
         return null;

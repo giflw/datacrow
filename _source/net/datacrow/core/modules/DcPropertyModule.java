@@ -28,6 +28,8 @@ package net.datacrow.core.modules;
 import java.util.List;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.DcComboBox;
+import net.datacrow.console.components.DcReferencesField;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
@@ -40,6 +42,19 @@ import net.datacrow.core.objects.DcProperty;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A property module is the simplest module type. <br>
+ * Examples of property modules are the movie and music genres, the software category, 
+ * the storage media and the platforms. A property module will never show up in the 
+ * module bar. In fact it will not show up anywhere until used within another module. 
+ * Its existence depends on other modules.<br>
+ * Property modules are solely used by reference fields.
+ * 
+ * @see DcReferencesField
+ * @see DcComboBox
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcPropertyModule extends DcModule {
 
     private static final long serialVersionUID = -1481435217423089270L;
@@ -48,6 +63,10 @@ public class DcPropertyModule extends DcModule {
     
     protected DcMinimalisticItemView form;
     
+    /**
+     * Creates a new module based on a XML definition.
+     * @param module
+     */    
     public DcPropertyModule(XmlModule xmlModule) {
         super(xmlModule);
         setServingMultipleModules(xmlModule.isServingMultipleModules());
@@ -75,11 +94,17 @@ public class DcPropertyModule extends DcModule {
         super(index, false, name, "", objectName, objectNamePlural, tableName, tableShortName);
     }    
 
+    /**
+     * Creates (if needed) the simple item view.
+     */
     public DcMinimalisticItemView getForm() {
         initializeUI();
         return form;
     }
     
+    /**
+     * Loads the default data. Default data is inserted for new installation.
+     */
     @Override
     public List<DcObject> loadData() {
         try {
@@ -92,27 +117,45 @@ public class DcPropertyModule extends DcModule {
         return null;
     }    
     
+    /**
+     * Retrieves the index of the field on which is sorted by default.  
+     * Always returns the name field. 
+     * @see DcProperty#_A_NAME
+     */
     @Override
     public int getDefaultSortFieldIdx() {
         return DcProperty._A_NAME;
     }    
     
+    /**
+     * Initializes the simple item view.
+     */
     @Override
     public void initializeUI() {
         if (form == null)
             form = new DcMinimalisticItemView(getIndex(), false);
     }
     
+    /**
+     * Creates a new instance of an item belonging to this module.
+     */
     @Override
     public DcObject getDcObject() {
         return new DcProperty(getIndex());
     }
     
+    /**
+     * Indicates if this module is allowed to be customized. 
+     * Always returns false.
+     */
     @Override
     public boolean isCustomFieldsAllowed() {
         return false;
     }
     
+    /**
+     * Initializes the default fields.
+     */
     @Override
     protected void initializeFields() {
         super.initializeFields();
@@ -128,6 +171,10 @@ public class DcPropertyModule extends DcModule {
         getField(DcObject._ID).setEnabled(false);
     }  
     
+    /**
+     * Returns the template module.
+     * @return Always returns null.
+     */
     @Override
     public TemplateModule getTemplateModule() {
         return null;

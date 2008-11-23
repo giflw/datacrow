@@ -25,6 +25,10 @@
 
 package net.datacrow.core.modules;
 
+/**
+ * Used when encountering errors related to the module jar.
+ * @author Robert Jan van der Waals
+ */
 public class ModuleJarException extends Exception {
 
     private static final long serialVersionUID = 9098579629069397720L;

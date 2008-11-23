@@ -65,6 +65,7 @@ import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
@@ -654,6 +655,14 @@ public class DcModule implements Comparable<DcModule> {
     }
     
     /**
+     * Removes all enhancers.
+     */
+    public void removeEnhancers() {
+        for (DcField field : fields.values())
+            field.removeEnhancers();
+    }       
+    
+    /**
      * Retrieves the system field for the given index.
      * @param index The field index.
      */
@@ -859,18 +868,34 @@ public class DcModule implements Comparable<DcModule> {
         return sortedFields;
     }
 
+    /**
+     * Gets the field definitions. The field definitions contain the user settings such as the
+     * modified label and the enabled setting.
+     * @see DcFieldDefinition
+     */
     public DcFieldDefinitions getFieldDefinitions() {
         return (DcFieldDefinitions) getSetting(DcRepository.ModuleSettings.stFieldDefinitions);
     }
 
+    /**
+     * Retrieves the web field definitions / settings
+     * @see WebFieldDefinition
+     */
     public WebFieldDefinitions getWebFieldDefinitions() {
         return (WebFieldDefinitions) getSetting(DcRepository.ModuleSettings.stWebFieldDefinitions);
     }
     
+    /**
+     * Retrieves the quick view field definitions / settings
+     * @see QuickViewFieldDefinition
+     */    
     public QuickViewFieldDefinitions getQuickViewFieldDefinitions() {
         return (QuickViewFieldDefinitions) getSetting(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
     }
     
+    /**
+     * Retrieves all field indices.
+     */
     public int[] getFieldIndices() {
         Set<Integer> keys = fields.keySet();
         int[] indices = new int[keys.size()];
@@ -881,16 +906,17 @@ public class DcModule implements Comparable<DcModule> {
         return indices;
     }
     
-    public void removeEnhancers() {
-        for (DcField field : fields.values())
-            field.removeEnhancers();
-    }    
-
+    /**
+     * The import class.
+     */
     @SuppressWarnings("unchecked")
     public Class getImporterClass() {
         return importerClass;
     }
     
+    /**
+     * Creates a new instance of the file importer.
+     */
     public FileImporter getImporter() {
         if (importerClass != null) {
             try {
@@ -901,15 +927,25 @@ public class DcModule implements Comparable<DcModule> {
         }
         return null;
     }
-    
+
+    /**
+     * Indicates if this module is allowed to be customized. 
+     */
     public boolean isCustomFieldsAllowed() {
         return true;
     }
     
+    /**
+     * The module settings.
+     * @see DcRepository.ModuleSettings
+     */
     public net.datacrow.settings.Settings getSettings() {
         return settings;
     }
     
+    /**
+     * Applies the field settings on this module.
+     */
     public void applySettings() {
         try {
             for (DcFieldDefinition definition : getFieldDefinitions().getDefinitions()) {
@@ -927,12 +963,20 @@ public class DcModule implements Comparable<DcModule> {
         } catch (Exception e) {
             logger.error("Error while applying settings on module " + getName(), e);
         }
-   }    
+    }    
     
+    /**
+     * Indicates if the module is managed by (can belong to) a container.
+     * @see ContainerModule
+     * @see Container
+     */
     public boolean isContainerManaged() {
         return isContainerManaged;
     }
     
+    /**
+     * Initializes the default fields.
+     */
     protected void initializeFields() {
         try {
             addField(new DcField(DcObject._ID, getIndex(), "ID",
@@ -1043,6 +1087,9 @@ public class DcModule implements Comparable<DcModule> {
         settings.set(DcRepository.ModuleSettings.stWebFieldDefinitions, newWebDefinitions);
     }
     
+    /**
+     * Initializes the system fields.
+     */
     protected void initializeSystemFields() {
         systemFields.put(DcObject._SYS_MODULE,
                 new DcField(DcObject._SYS_MODULE, getIndex(), "Item",
@@ -1126,14 +1173,23 @@ public class DcModule implements Comparable<DcModule> {
         }
     }    
     
+    /**
+     * Indicates if this module has an insert view available.
+     */
     public boolean hasInsertView() {
         return hasInsertView;
     }
 
+    /**
+     * Indicates if this module has a search view available.
+     */
     public boolean hasSearchView() {
         return hasSearchView;
     }
     
+    /**
+     * Creates the various views.
+     */
     protected void initializeUI()  {
         if (insertView == null && hasInsertView()) {
             insertView = new MasterView();
@@ -1175,18 +1231,30 @@ public class DcModule implements Comparable<DcModule> {
         }
     }
 
+    /**
+     * Indicates if the module holds items with a reference to a file.
+     */
     public boolean isFileBacked() {
         return isFileBacked;
     }
-    
+
+    /**
+     * Retrieves the index of the field on which is sorted by default.  
+     */
     public int getDefaultSortFieldIdx() {
         return defaultSortFieldIdx;
     }
 
+    /**
+     * The location of the module in the module bar. 
+     */
     public int getDisplayIndex() {
         return displayIndex;
     }
 
+    /**
+     * The field index holding the title of the item.
+     */
     public int getNameFieldIdx() {
         return nameFieldIdx;
     }
@@ -1209,10 +1277,17 @@ public class DcModule implements Comparable<DcModule> {
         return (o instanceof DcModule ? ((DcModule) o).getIndex() == getIndex() : false);
     }
 
+    /**
+     * Retrieves the XML definition of this module.
+     * @return The XML definition or null. 
+     */
     public XmlModule getXmlModule() {
         return xmlModule;
     }
 
+    /**
+     * Sets the XML definition for this module.
+     */
     public void setXmlModule(XmlModule xmlModule) {
         this.xmlModule = xmlModule;
     }    
@@ -1221,10 +1296,21 @@ public class DcModule implements Comparable<DcModule> {
         return label;
     }
     
+    /**
+     * Compares the supplied module with the current module. The check is performed
+     * by comparing the labels.
+     */
     public int compareTo(DcModule module) {
         return getLabel().toLowerCase().compareTo(module.getLabel().toLowerCase());
     }
 
+    /**
+     * Retrieves the default data for this module.
+     * The default data is inserted on new installations. Default data is located
+     * in the data folder of the modules folder.
+     * @return The default data or null.
+     * @throws Exception
+     */
     public DcObject[] getDefaultData() throws Exception  {
         String filename = getTableName() + ".data";
         File file = new File(DataCrow.moduleDir + "data/" + filename);

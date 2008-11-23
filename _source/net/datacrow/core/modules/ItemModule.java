@@ -27,6 +27,13 @@ package net.datacrow.core.modules;
 
 import net.datacrow.core.modules.xml.XmlModule;
 
+/**
+ * The item module represents container managed items. The container module is
+ * a so called abstract module. This means that this module does not own or manages
+ * any items directly. 
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ItemModule extends DcChildModule {
 
     /**
@@ -40,7 +47,6 @@ public class ItemModule extends DcChildModule {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
     public ItemModule(int index, 
                       boolean topModule, 
@@ -55,6 +61,10 @@ public class ItemModule extends DcChildModule {
               tableName, tableShortName);
     }
     
+    /**
+     * Creates a new module based on a XML definition.
+     * @param module
+     */  
     public ItemModule(XmlModule module) {
         super(module);
     }

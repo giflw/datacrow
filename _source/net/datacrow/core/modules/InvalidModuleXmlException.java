@@ -25,6 +25,11 @@
 
 package net.datacrow.core.modules;
 
+/**
+ * Exception thrown when encountering invalid XML module definitions.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class InvalidModuleXmlException extends Exception {
 
     private static final long serialVersionUID = 8698000516706015026L;

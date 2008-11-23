@@ -27,10 +27,21 @@ package net.datacrow.core.modules;
 
 import net.datacrow.core.modules.xml.XmlModule;
 
+/**
+ * A parent module is a parent to another module. The child module and its items
+ * depend on the existence of this module.
+ * 
+ * @see DcChildModule
+ * @author Robert Jan van der Waals
+ */
 public class DcParentModule extends DcModule  {
 
     private static final long serialVersionUID = 4714961191122806192L;
 
+    /**
+     * Creates a new module based on a XML definition.
+     * @param module
+     */
     public DcParentModule(XmlModule xmlModule) {
         super(xmlModule);
     }
@@ -60,6 +71,10 @@ public class DcParentModule extends DcModule  {
               tableName, tableShortName);
     }
     
+    /**
+     * Indicates if this module is a parent module.
+     * Always returns true.
+     */
     @Override
     public boolean isParentModule() {
         return true;

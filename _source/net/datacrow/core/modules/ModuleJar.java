@@ -50,23 +50,39 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A module jar is used to physically store the module. 
+ * A module jar contains a small icon, a large icon and the XML module definition.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ModuleJar {
 
     private static Logger logger = Logger.getLogger(ModuleJar.class.getName());
     
     private String filename;
-    
     private XmlModule module;
-    
+
+    /**
+     * Initializes the XML module.
+     * @param filename
+     */
     public ModuleJar(String filename) {
         this.filename = filename;
     }
     
+    /**
+     * Initializes the XML module.
+     * @param module
+     */
     public ModuleJar(XmlModule module) {
         this.module = module;
         this.filename = module.getJarFilename();
     }
     
+    /**
+     * Retrieves the XML module definition.
+     */
     public XmlModule getModule() {
         return module;
     }
@@ -86,7 +102,12 @@ public class ModuleJar {
         zout.closeEntry();
         bais.close();
     }
-    
+
+    /**
+     * Physically stores the module jar to disk.
+     * @see #filename
+     * @throws ModuleJarException
+     */
     public void save() throws ModuleJarException {
         try {
             logger.debug("Saving Module JAR " + filename);
@@ -121,10 +142,21 @@ public class ModuleJar {
         }
     }
     
+    /**
+     * Deletes the jar file from the disk (cannot be undone).
+     * @return
+     */
     public boolean delete() {
         return new File(DataCrow.moduleDir + filename).delete();
     }
     
+    /**
+     * Loads the module jar's content into memory. Loads the icons and the XML
+     * definition.
+     * @throws ModuleUpgradeException
+     * @throws ModuleJarException
+     * @throws InvalidModuleXmlException
+     */
     public void load() throws ModuleUpgradeException, ModuleJarException, InvalidModuleXmlException {
         
         try {
