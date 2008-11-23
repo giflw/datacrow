@@ -59,11 +59,10 @@ public class DcMediaModule extends DcModule {
                          String objectName,
                          String objectNamePlural,
                          String tableName,
-                         String tableShortName,
-                         String tableJoin) {
+                         String tableShortName) {
         
         super(index, topModule, name, description, objectName, objectNamePlural, 
-              tableName, tableShortName, tableJoin);
+              tableName, tableShortName);
     }
     
     @Override

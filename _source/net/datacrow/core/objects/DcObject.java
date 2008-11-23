@@ -252,10 +252,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return getModule().getTableShortName();
     }
 
-    public String getTableJoin() {
-        return getModule().getTableJoin();
-    }
-
     /**
      * Retrieves the database column count. This count will differ from the field count as
      * some fields are calculated and not stored in the database.

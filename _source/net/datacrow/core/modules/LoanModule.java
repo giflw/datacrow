@@ -45,8 +45,7 @@ public class LoanModule extends DcModule {
               DcResources.getText("sysLoan"),
               DcResources.getText("sysLoan"),
               "loans", 
-              "lo", 
-              "loans");
+              "lo");
     }
     
     @Override

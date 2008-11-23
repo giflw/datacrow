@@ -551,7 +551,7 @@ public class Query {
             if (dco.getChildren() != null)
                 objects.addAll(dco.getChildren());
             
-            String table = dco.getTableJoin() != null && dco.getTableJoin().trim().length() > 0 ? dco.getTableJoin() : dco.getTableName();
+            String table = dco.getTableName();
             tables.add(table);
         }
 

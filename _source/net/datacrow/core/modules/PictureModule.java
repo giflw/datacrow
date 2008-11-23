@@ -43,8 +43,7 @@ public class PictureModule extends DcModule {
               "",
               "",
               "picture",
-              "pic",
-              "picture");
+              "pic");
     }
     
     @Override

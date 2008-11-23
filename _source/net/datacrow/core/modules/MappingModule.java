@@ -42,7 +42,6 @@ public class MappingModule extends DcModule {
               "", "", "", "", 
               "X_" + parentMod.getTableName() + "_"  + referencedMod.getTableName(), 
               "X" + parentMod.getTableShortName() + referencedMod.getTableShortName(), 
-              "X_" + parentMod.getTableName() + "_"  + referencedMod.getTableName(),
               false);
         
         this.parentMod = parentMod;

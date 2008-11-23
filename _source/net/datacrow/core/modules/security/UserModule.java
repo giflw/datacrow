@@ -31,8 +31,7 @@ public class UserModule extends DcParentModule {
               DcResources.getText("sysUser"), 
               DcResources.getText("sysUserPlural"), 
               "user", 
-              "usr", 
-              "user");
+              "usr");
     }
 
     @Override

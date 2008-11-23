@@ -73,7 +73,7 @@ public class DcPropertyModule extends DcModule {
                             String objectName, 
                             String objectNamePlural) {
         
-        super(index, false, name, "", objectName, objectNamePlural, tableName, tableShortName, "");
+        super(index, false, name, "", objectName, objectNamePlural, tableName, tableShortName);
     }    
 
     public DcMinimalisticItemView getForm() {

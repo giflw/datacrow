@@ -29,8 +29,7 @@ public class PermissionModule extends DcChildModule {
               DcResources.getText("sysPermission"), 
               DcResources.getText("sysPermissionPlural"), 
               "permission", 
-              "perm", 
-              "permission");
+              "perm");
     }
     
     @Override

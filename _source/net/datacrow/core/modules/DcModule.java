@@ -102,7 +102,6 @@ public class DcModule implements Comparable<DcModule> {
     private final String name;
     private final String tableName;
     private final String tableShortName;
-    private final String tableJoin;
     private final String description;
     
     private final String objectName;
@@ -173,7 +172,6 @@ public class DcModule implements Comparable<DcModule> {
                        String objectNamePlural,
                        String tableName, 
                        String tableShortName, 
-                       String tableJoin,
                        boolean topModule) { 
 
         this.index = index;
@@ -187,7 +185,6 @@ public class DcModule implements Comparable<DcModule> {
         
         this.tableName = (tableName == null ? "" : tableName).toLowerCase();
         this.tableShortName  = (tableShortName == null ? "" : tableShortName).toLowerCase();
-        this.tableJoin = tableJoin;
         this.name = name;
         this.label = name;
         this.description = description;
@@ -218,11 +215,10 @@ public class DcModule implements Comparable<DcModule> {
                     String objectName,
                     String objectNamePlural,
                     String tableName, 
-                    String tableShortName, 
-                    String tableJoin) {
+                    String tableShortName) {
 
         this(index, name, description, objectName, objectNamePlural, tableName, 
-             tableShortName, tableJoin, topModule);
+             tableShortName, topModule);
         
         initializeSystemFields();
         initializeFields();
@@ -232,7 +228,7 @@ public class DcModule implements Comparable<DcModule> {
     public DcModule(XmlModule module) {
         this(module.getIndex(), module.getName(), module.getDescription(), module.getObjectName(), 
              module.getObjectNamePlural(), module.getTableName(), module.getTableNameShort(),
-             module.getTableName(), true);
+             true);
 
         this.xmlModule = module;
         
@@ -354,10 +350,6 @@ public class DcModule implements Comparable<DcModule> {
 
     public String getTableShortName() {
         return tableShortName;
-    }
-
-    public String getTableJoin() {
-        return tableJoin;
     }
 
     public OnlineServices getOnlineServices() {

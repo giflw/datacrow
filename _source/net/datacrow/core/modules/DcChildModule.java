@@ -62,11 +62,10 @@ public class DcChildModule extends DcModule implements IChildModule {
                          String objectName, 
                          String objectNamePlural, 
                          String tableName, 
-                         String tableShortName, 
-                         String tableJoin) {
+                         String tableShortName) {
         
         super(index, topModule, name, description, objectName, objectNamePlural,
-              tableName, tableShortName, tableJoin);
+              tableName, tableShortName);
     }
     
     public DcMinimalisticItemView getItemView(DcObject parent, int module, boolean readonly) {

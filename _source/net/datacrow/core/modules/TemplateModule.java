@@ -54,8 +54,7 @@ public class TemplateModule extends DcModule {
               DcResources.getText("sysTemplate"),
               DcResources.getText("sysTemplatePlural"),
               parent.getTableName() + "_template", 
-              parent.getTableShortName() + "temp", 
-              parent.getTableName() + "_template");
+              parent.getTableShortName() + "temp");
         
         this.parent = parent;
         

@@ -53,11 +53,18 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
      * @param objectNamePlural The plural name of the items belonging to this module.
      * @param tableName The database table name for this module.
      * @param tableShortName The database table short name for this module.
-     * @param tableJoin The join name.
      */
-    public DcMediaChildModule(int index, boolean topModule, String name, String description, String objectName, String objectNamePlural, String tableName, String tableShortName, String tableJoin) {
+    public DcMediaChildModule(int index, 
+                              boolean topModule, 
+                              String name, 
+                              String description, 
+                              String objectName, 
+                              String objectNamePlural, 
+                              String tableName, 
+                              String tableShortName) {
+        
         super(index, topModule, name, description, objectName, objectNamePlural,
-              tableName, tableShortName, tableJoin);
+              tableName, tableShortName);
     }
     
     public DcMinimalisticItemView getItemView(DcObject parent, int module, boolean readonly) {

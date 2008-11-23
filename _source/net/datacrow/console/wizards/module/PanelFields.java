@@ -141,7 +141,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         DcModule module = null;
         if (xmlModule.getModuleClass() != null) { 
             if (xmlModule.getModuleClass().equals(DcMediaModule.class))
-                module = new DcMediaModule(10, false, "", "", "", "", "", "", "");
+                module = new DcMediaModule(10, false, "", "", "", "", "", "");
             else if (xmlModule.getModuleClass().equals(DcPropertyModule.class))
                 module = new DcPropertyModule(10, "", "", "", "", "");
         }
