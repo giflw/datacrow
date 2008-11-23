@@ -27,12 +27,23 @@ package net.datacrow.core.db;
 
 import net.datacrow.core.objects.DcField;
 
+/**
+ * Additional query options such as the ordering.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class QueryOptions {
 
     private String[] ordering;
     private boolean bPreciseSelect;
     private boolean bComplyToAllConditions;
 
+    /**
+     * Creates a new instance.
+     * @param ordering The ordering to applied.
+     * @param bComplyToAllConditions All conditions have to be met.
+     * @param bPreciseSelect Only Exact matches only.
+     */
     public QueryOptions(DcField[] ordering, boolean bComplyToAllConditions, boolean bPreciseSelect) {
         if (ordering != null) {
             this.ordering = new String[ordering.length];
@@ -47,14 +58,25 @@ public class QueryOptions {
         this.bPreciseSelect = bPreciseSelect;
     }
 
+    /**
+     * The ordering to be applied when querying for the items.
+     * @return
+     */
     public String[] getOrdering() {
         return ordering;
     }
 
+    /**
+     * Indicates if all the conditions should be matched.
+     * @return
+     */
     public boolean getComplyAllConditions() {
         return bComplyToAllConditions;
     }
 
+    /**
+     * Indicates if matches have to be precise (equals or like condition).
+     */
     public boolean getPreciseSelect() {
         return bPreciseSelect;
     }

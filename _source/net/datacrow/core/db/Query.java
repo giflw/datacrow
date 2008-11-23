@@ -70,6 +70,8 @@ public class Query {
     
     private static Logger logger = Logger.getLogger(Query.class.getName());
 
+    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
     public static final int _UNDEFINED = 0;
     public static final int _UPDATE = 1;
     public static final int _CREATE = 2;
@@ -80,25 +82,22 @@ public class Query {
     protected static final int _SELECTPRECISE = 6;
     protected static final int _SELECTOR = 7;
     protected static final int _SELECTPRECISEOR = 8;
+
+    private final int module;
+    private int queryType;
+
+    private boolean bPreciseSelect = false;
+    private boolean bComplyToAllConditions = true;
+
+    private List<PreparedStatement> queries;
+    private String objectID;
+
+    private Requests requests;
     
-    protected final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-    protected final int module;
-    protected int queryType;
-
-    protected boolean loadRelations = true;
-    protected boolean bPreciseSelect = false;
-    protected boolean bComplyToAllConditions = true;
-
-    protected List<PreparedStatement> queries;
-    protected String objectID;
-
-    protected Requests requests;
-    
-    protected String[] ordering;
-    protected boolean bSilence = false;
-    protected boolean isBatch = false;
-    protected boolean endOfBatch = false;    
+    private String[] ordering;
+    private boolean bSilence = false;
+    private boolean isBatch = false;
+    private boolean endOfBatch = false;    
     
     /**
      * Constructs a new Query object. 
@@ -147,6 +146,10 @@ public class Query {
         }
     } 
     
+    public List<PreparedStatement> getQueries() {
+        return queries;
+    }
+    
     public PreparedStatement getQuery() {
         return getQueries().get(0);
     }
@@ -183,7 +186,7 @@ public class Query {
     }
 
     @SuppressWarnings({"unchecked"})
-    protected List<PreparedStatement> getInsertQueries(DcObject dco) throws SQLException {
+    private List<PreparedStatement> getInsertQueries(DcObject dco) throws SQLException {
         
         Collection<Object> values = new ArrayList<Object>();
         StringBuffer columns = new StringBuffer();
@@ -253,7 +256,7 @@ public class Query {
         return queries;
     }
 
-    protected List<PreparedStatement> getCreateTableQuery(DcObject dco) throws SQLException {
+    private List<PreparedStatement> getCreateTableQuery(DcObject dco) throws SQLException {
         String columns = "";
 
         for (DcField field : dco.getFields()) {
@@ -275,7 +278,7 @@ public class Query {
     }
 
     @SuppressWarnings("unchecked")
-    protected List<PreparedStatement> getUpdateQueries(DcObject dco) throws SQLException {
+    private List<PreparedStatement> getUpdateQueries(DcObject dco) throws SQLException {
         Collection<Picture> pictures = new ArrayList<Picture>();
         Collection<Collection<DcMapping>> references = new ArrayList<Collection<DcMapping>>();
         Collection<Object> values = new ArrayList<Object>();
@@ -469,7 +472,7 @@ public class Query {
         }        
     }
     
-    protected List<PreparedStatement> getDeleteQueries(DcObject dco) throws SQLException {
+    private List<PreparedStatement> getDeleteQueries(DcObject dco) throws SQLException {
         List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
 
         Loan loan = new Loan();
@@ -531,7 +534,7 @@ public class Query {
         return value;
     }    
 
-    protected List<PreparedStatement> getSelectQueries(DcObject dco) throws SQLException {
+    private List<PreparedStatement> getSelectQueries(DcObject dco) throws SQLException {
         List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
         Collection<String> tables = new ArrayList<String>();
         Collection<DcObject> objects = new ArrayList<DcObject>();
@@ -650,15 +653,7 @@ public class Query {
         return queries;
     }
     
-    public List<PreparedStatement> getQueries() {
-        return queries;
-    }
-    
-    protected boolean isBoolean(DcField field) {
-        return  field.getValueType() == DcRepository.ValueTypes._BOOLEAN;
-    }
-    
-    protected boolean isInteger(DcField field) {
+    private boolean isInteger(DcField field) {
         return  field.getValueType() == DcRepository.ValueTypes._LONG ||
                 field.getValueType() == DcRepository.ValueTypes._BIGINTEGER || 
                 field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
@@ -671,6 +666,9 @@ public class Query {
         		request.end();
             requests.clear();
         }
+        
+        if (queries != null)
+            queries.clear();
         
         requests = null;
         queries = null;
@@ -686,23 +684,25 @@ public class Query {
         return ordering;
     }
 
-    public void setLoadRelations(boolean b) {
-        loadRelations = b;
-    }
-
-    public boolean getLoadRelations() {
-        return loadRelations;
-    }
-
+    /**
+     * Indicates that the query is part of a batch and if it is at the end.
+     * @param endOfBatch
+     */
     public void setBatch(boolean endOfBatch) {
         this.isBatch = true;
         this.endOfBatch = endOfBatch;
     }
 
+    /**
+     * Indicates if the query is part of a batch
+     */
     public boolean isBatch() {
         return isBatch;
     }
 
+    /**
+     * Indicates if the query is at the end of a batch
+     */
     public boolean isEndOfBatch() {
         return isBatch() && endOfBatch;
     }
@@ -711,33 +711,35 @@ public class Query {
         return objectID;
     }
 
+    /**
+     * The query type.
+     */
     public int getType() {
         return queryType;
     }
 
+    /**
+     * Indicates if information should be communicated to the user.
+     */
     public boolean getSilence() {
         return bSilence;
     }
 
+    /**
+     * Indicates if information should be communicated to the user.
+     */
     public void setSilence(boolean silence) {
         this.bSilence = silence;
     }
 
-    public Requests getRequestors() {
+    /**
+     * Gets the requests waiting to be executed.
+     */
+    public Requests getRequests() {
         return requests;
     }
     
-    public void clear() {
-        if (queries != null)
-            queries.clear();
-        
-        queries = null;
-        objectID = null;
-        requests = null;
-        ordering = null;
-    }    
-    
-    protected String getEmptyCondition(String column, DcField field) {
+    private String getEmptyCondition(String column, DcField field) {
         String emptyCondition;
         if (isInteger(field)) 
             emptyCondition = "(" + column + " = 0 OR " + column + " IS NULL) ";
@@ -747,7 +749,7 @@ public class Query {
         return emptyCondition;
     } 
     
-    protected void addAvailabilityCondition(DcObject dco, StringBuffer conditions) {
+    private void addAvailabilityCondition(DcObject dco, StringBuffer conditions) {
         if (dco.getModule().canBeLended()) {
             ContactPerson loanedBy = (ContactPerson) dco.getValue(DcObject._SYS_LENDBY);
             Integer duration = (Integer) dco.getValue(DcObject._SYS_LOANDURATION);

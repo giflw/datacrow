@@ -38,14 +38,29 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Base64;
 
+/**
+ * This class wraps a {@link HttpURLConnection} and offers detailed methods for 
+ * retrieving information from an URL. Proxies are supported.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class HttpConnection {
     
     private HttpURLConnection uc;
 
+    /**
+     * Create a new connection.
+     * @param url
+     * @throws HttpConnectionException
+     */
     protected HttpConnection(URL url) throws HttpConnectionException {
         uc = connect(url);
     }
     
+    /**
+     * Checks if the URL is valid.
+     * @return
+     */
     public boolean exists() {
         try {
             uc.getInputStream();
@@ -115,14 +130,27 @@ public class HttpConnection {
         }
     }    
     
+    /**
+     * Retrieves the content length.
+     * @return
+     */
     public int getContentLength() {
     	return uc.getContentLength();
     }
 
+    /**
+     * Set the content length.
+     * @param length
+     */
     public void setContentLength(int length) {
         uc.setRequestProperty("Content-Length", String.valueOf(length));
     }
 
+    /**
+     * Creates a SOAP request.
+     * @param soapAction
+     * @throws Exception
+     */
     public void setToSoapRequest(String soapAction) throws Exception {
         uc.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
         uc.setRequestProperty("SOAPAction", soapAction);
@@ -131,11 +159,18 @@ public class HttpConnection {
         uc.setDoInput(true);
     }
 
+    /**
+     * Create an output stream for uploading purposes.
+     * @throws IOException
+     */
     public OutputStream getOutputStream() throws IOException {
         uc.setDoOutput(true);
         return uc.getOutputStream();
     }
 
+    /**
+     * Disconnect, closes the connection.
+     */
     public void close() {
     	uc.disconnect();
         uc = null;

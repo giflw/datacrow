@@ -43,6 +43,13 @@ import net.datacrow.core.wf.requests.Requests;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Queries are queued here awaiting to be executed. The query queue manages the 
+ * back log of queries and executes the requests tied to the queries. The queue
+ * is based on the FIFO principle.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class QueryQueue extends Thread {
 
     private static Logger logger = Logger.getLogger(QueryQueue.class.getName());
@@ -54,10 +61,17 @@ public class QueryQueue extends Thread {
     
     public QueryQueue() {}
 
+    /**
+     * Indicates the back log.
+     */
     public int getQueueSize() {
     	return lQueryQueue.size();
     }
     
+    /**
+     * Add a query to the end of the queue. 
+     * @param query
+     */
     public void addQuery(Query query) {
         lQueryQueue.addLast(query);
     }
@@ -191,11 +205,6 @@ public class QueryQueue extends Thread {
 
             objects.addAll(new WorkFlow().convertToDCObjects(result));
 
-            if (query.getLoadRelations()) {
-                for (DcObject dco : objects)
-                    dco.loadChildren();
-            }
-
             try {
                 if (result != null)
                     result.close();
@@ -239,7 +248,7 @@ public class QueryQueue extends Thread {
     }
 
     private void handleRequests(Query qry, Collection<DcObject> objects, boolean qryWasSuccess) {
-        Requests requestors = qry.getRequestors();
+        Requests requestors = qry.getRequests();
         if (requestors != null)  {
             Requests uiRequests = new Requests();
             Requests imageRequests = new Requests();
