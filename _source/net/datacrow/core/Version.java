@@ -27,6 +27,11 @@ package net.datacrow.core;
 
 import java.util.StringTokenizer;
 
+/**
+ * A version definition.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class Version {
 
     private int minor = 0;
@@ -34,6 +39,13 @@ public class Version {
     private int build = 0;
     private int patch = 0;
 
+    /**
+     * Creates a new version
+     * @param major
+     * @param minor
+     * @param build
+     * @param patch
+     */
     public Version(int major, int minor, int build, int patch) {
         this.minor = minor;
         this.major = major;
@@ -41,6 +53,10 @@ public class Version {
         this.patch = patch;
     }
     
+    /**
+     * Creates a version based on a string representation.
+     * @param version
+     */
     public Version(String version) {
         String v = version.toLowerCase().startsWith("data crow") ? version.substring(10) : version;
         StringTokenizer st = new StringTokenizer(v, ".");
@@ -70,18 +86,32 @@ public class Version {
         return patch;
     }
     
+    /**
+     * Checks whether the version is valid.
+     */
     public boolean isUndetermined() {
         return hashCode() == 0;
     }
 
+    /**
+     * Checks if this version is newer than the supplied version.
+     * @param v
+     */
     public boolean isNewer(Version v) {
         return v.hashCode() > hashCode();
     }
 
+    /**
+     * Checks if this version is older than the supplied version.
+     * @param v
+     */
     public boolean isOlder(Version v) {
-        return hashCode() < v.hashCode();
+        return v.hashCode() < hashCode();
     }
     
+    /**
+     * Full string representation of the current version. 
+     */
     public String getFullString() {
         return "Data Crow " + toString();
     }

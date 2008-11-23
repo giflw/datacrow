@@ -35,6 +35,11 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Utilities;
 
+/**
+ * A data filter entry belongs to a data filter.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DataFilterEntry {
 
     public static final String _AND = DcResources.getText("lblAnd");
@@ -47,9 +52,20 @@ public class DataFilterEntry {
     private Object value; 
     
     private String andOr;
-    
+
+    /**
+     * Creates an empty filter entry.
+     */
     public DataFilterEntry() {}
     
+    /**
+     * Creates a filter entry.
+     * @param andOr {@link DataFilterEntry#_AND} or {@link DataFilterEntry#_OR} 
+     * @param module The module to which the specified field belongs.
+     * @param field The field to be checked on.
+     * @param operator The operator.
+     * @param value The value used to test against the input.
+     */
     public DataFilterEntry(String andOr, int module, int field, Operator operator, Object value) {
         this.module = module;
         this.field = field;
@@ -58,10 +74,13 @@ public class DataFilterEntry {
         this.andOr = andOr;
     }
     
+    /**
+     * The ID of the filter entry.
+     */
     public int getID() {
         return (module * 1000) + field;
     }
-    
+
     public void setModule(int module) {
         this.module = module;
     }
@@ -74,18 +93,35 @@ public class DataFilterEntry {
         this.operator = operator;
     }
 
+    /**
+     * Specifies if the entry should be treated as an and or an or condition.
+     * @see #_AND
+     * @see #_OR
+     * @param andOr
+     */
     public void setAndOr(String andOr) {
         this.andOr = andOr;
     }
 
+    /**
+     * Indicates if the filter entry should be treated as an and or a or condition.
+     * @see #_AND
+     * @see #_OR
+     */
     public String getAndOr() {
         return andOr;
     }
 
+    /**
+     * Indicates if the filter entry should be treated as an or condition.
+     */
     public boolean isOr() {
         return andOr.equals(_OR);
     }
 
+    /**
+     * Indicates if the filter entry should be treated as an and condition.
+     */
     public boolean isAnd() {
         return andOr.equals(_AND);
     }
@@ -110,6 +146,12 @@ public class DataFilterEntry {
         this.value = value;
     }
 
+    /**
+     * Checks if the supplies item lives up to the filter entry.
+     * @see Operator
+     * @param dco
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public boolean applies(DcObject dco) {
 

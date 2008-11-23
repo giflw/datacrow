@@ -57,18 +57,31 @@ public enum Operator {
         this.needsValue = needsValue;
     }
 
+    /**
+     * The unique index of the filter.
+     */
     public int getIndex() {
         return index;
     }
 
+    /**
+     * The name of the operator.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Indicates if the filter requires a value in order for it to be successful. 
+     */
     public boolean needsValue() {
         return needsValue;
     }
     
+    /**
+     * Get all operators which can be applied on the specific field.
+     * @param field
+     */
     public static Collection<Operator> get(DcField field) {
         ArrayList<Operator> operators = new ArrayList<Operator>();
 

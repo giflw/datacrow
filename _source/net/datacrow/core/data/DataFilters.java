@@ -39,6 +39,11 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Holder of all saved data filters
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DataFilters {
     
     private static Logger logger = Logger.getLogger(DataFilters.class.getName());
@@ -49,7 +54,10 @@ public class DataFilters {
         new HashMap<Integer, DataFilter>();
     
     private static final String filename = DataCrow.baseDir + "data" + File.separator + "filters.xml";
-    
+
+    /**
+     * Creates a new instance.
+     */
     private DataFilters() {}
     
     /**
@@ -81,21 +89,38 @@ public class DataFilters {
         }
     }
     
+    /**
+     * Stores the currently applied filter.
+     * @param module
+     * @param df
+     */
     public static void setCurrent(int module, DataFilter df) {
     	activeFilters.put(module, df);
     }
     
+    /**
+     * Retrieves the default filter. This filter is an empty filter with the default ordering set.
+     * @param module
+     * @return
+     */
     public static DataFilter getDefaultDataFilter(int module) {
         DataFilter filter = new DataFilter(module);
         filter.setOrder(DcModules.get(module).getSettings().getStringArray(DcRepository.ModuleSettings.stSearchOrder));
         return filter;
     }
     
+    /**
+     * Retrieves the currently applied filter for the specified module.
+     * @param module
+     */
     public static DataFilter getCurrent(int module) {
     	DataFilter df = activeFilters.get(module);
     	return df == null ? getDefaultDataFilter(module) : df;
     }
     
+    /**
+     * Save all filters to file for future use.
+     */
     public static void save() {
         String xml = "<FILTERS>\n";
 
@@ -115,16 +140,28 @@ public class DataFilters {
         }         
     }
     
+    /**
+     * Delete a filter.
+     * @param df
+     */
     public static void delete(DataFilter df) {
         Collection<DataFilter> c = get(df.getModule());
         c.remove(df);
     }
     
+    /**
+     * Gets all saved filters for the specified module.
+     * @param module
+     */
     public static Collection<DataFilter> get(int module) {
         Collection<DataFilter> c = filters.get(module);
         return c != null ? c : new ArrayList<DataFilter>();
     }
-    
+
+    /**
+     * Adds a filter. This filter will be saved to file.
+     * @param df
+     */
     public static void add(DataFilter df) {
         Collection<DataFilter> c = filters.get(df.getModule());
         c = c == null ? new ArrayList<DataFilter>() : c;

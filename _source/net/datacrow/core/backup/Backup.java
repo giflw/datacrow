@@ -44,16 +44,30 @@ import net.datacrow.reporting.templates.ReportTemplates;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Directory;
 
+/**
+ * Performs a backup of the Data Crow data, settings, modules and reports.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class Backup extends Thread {
 
     private File directory;
     private IBackupRestoreListener listener;
-    
+ 
+    /**
+     * Creates a new instance.
+     * @param listener The listener which will be informed of events and errors.
+     * @param directory The directory where the backup will be created.
+     */
     public Backup(IBackupRestoreListener listener, File directory) {
         this.directory = directory;
         this.listener = listener;
     }
     
+    /**
+     * Retrieves all the files to be backed up.
+     * @return A collection of fully classified filenames.
+     */
     private Collection<String> getFiles() {
         File dataDir = new File(DataCrow.baseDir + "data" + File.separator);
         String[] list = dataDir.list();
@@ -96,6 +110,9 @@ public class Backup extends Thread {
         return zout;
     }    
     
+    /**
+     * Performs the actual back up and informs the listener on the progress.
+     */
     @Override
     public void run() {
         listener.notifyStarted();

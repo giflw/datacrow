@@ -57,6 +57,9 @@ import net.datacrow.settings.DcSettings;
 import org.apache.log4j.Logger;
 
 /**
+ * The database manager is responsible for all databases.
+ * This class is the only service providing access to the databases.
+ * 
  * @author Robert Jan van der Waals
  */
 public class DatabaseManager {
@@ -65,7 +68,11 @@ public class DatabaseManager {
     
     private static DcDatabase db = new DcDatabase();
     private static boolean isServerClientMode = false;
-    
+   
+    /**
+     * Initializes the database. A connection with the HSQL database engine is established
+     * and the if needed the databases are upgraded.
+     */
     public static void initialize() {
         Connection connection = getAdminConnection();
 
@@ -77,10 +84,19 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Retrieves the original database version (the version before the database was upgraded). 
+     * @return
+     */
     public static Version getOriginalVersion() {
         return db.getOriginalVersion();
     }
     
+    /**
+     * Retrieves the current database version.
+     * @return The current version. If version information could not be found an undetermined
+     * version is returned.
+     */
     public static Version getVersion() {
         Connection connection = getAdminConnection();
         if (connection != null)
@@ -89,10 +105,16 @@ public class DatabaseManager {
             return new Version(0,0,0,0);
     }
     
+    /**
+     * Retrieves the count of currently queued queries. 
+     */
     public static int getQueueSize() {
     	return db.getQueueSize();
     }
     
+    /**
+     * Apply settings on the databases. 
+     */
     public static void applySettings() {
         db.setDbProperies(getConnection());
     }
@@ -104,6 +126,10 @@ public class DatabaseManager {
         return getAdminConnection() == null;
     }
     
+    /**
+     * Closes the database connections.
+     * @param compact Indicates if the database should be compacted.
+     */
     public static void closeDatabases(boolean compact) {
         try {
             if (db != null) {
@@ -125,6 +151,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Returns a new connection to the database based on the logged on user.
+     */
     public static Connection getConnection() {
         SecuredUser su = SecurityCentre.getInstance().getUser();
         if (su == null)
@@ -134,6 +163,12 @@ public class DatabaseManager {
         }
     }
     
+    /**
+     * Returns a connection for the given user credentials.
+     * @param username
+     * @param password
+     * @return
+     */
     public static Connection getConnection(String username, String password) {
         String address = null;
         
@@ -160,6 +195,13 @@ public class DatabaseManager {
         return null;
     }
     
+    /**
+     * Executes a query.
+     * @param sql The SQL statement.
+     * @param type The query type ({@link Query}).
+     * @param log Indicates if information on the query should be logged.
+     * @return The retrieved items or null when an error occurs.
+     */
     public static Collection<DcObject> executeQuery(String sql, int type, boolean log) {
         try {
             return executeQuery(DatabaseManager.getConnection().prepareStatement(sql), type, log);
@@ -169,11 +211,23 @@ public class DatabaseManager {
         return null;
     }     
     
+    /**
+     * Executes a query. The query is created based on the supplied item. 
+     * @param dco
+     * @param log Indicates if information on the query should be logged.
+     * @return The retrieved items or null when an error occurs.
+     */
     public static List<DcObject> executeQuery(DcObject dco, boolean log) throws SQLException {
         Query query = new Query(Query._SELECT, dco, null, null);
         return executeQuery(query.getQuery(), Query._SELECT, log);
     }
     
+    /**
+     * Executes a query.  
+     * @param query.
+     * @param log Indicates if information on the query should be logged.
+     * @return The retrieved items or null when an error occurs.
+     */
     public static List<DcObject> executeQuery(Query query, boolean logQuery) {
         List<DcObject> data = new ArrayList<DcObject>();
         for (PreparedStatement ps : query.getQueries()) {
@@ -181,7 +235,7 @@ public class DatabaseManager {
             if (c != null) data.addAll(c);
         }
         
-        Requests rc = query.getRequestors();
+        Requests rc = query.getRequests();
         if (rc != null) {
             IRequest[] requests = rc.get();
             for (int i = 0; i < requests.length; i++) {
@@ -191,7 +245,13 @@ public class DatabaseManager {
         
         return data;
     }      
-    
+
+    /**
+     * Executes a query. 
+     * @param sql SQL statement.
+     * @param log Indicates if information on the query should be logged.
+     * @return The result set.
+     */
     public static ResultSet executeSQL(String sql, boolean log) throws Exception {
         if (log) logger.info(sql);
         Connection connection = getConnection();
@@ -199,6 +259,13 @@ public class DatabaseManager {
         return stmt.executeQuery(sql);
     }
     
+    /**
+     * Executes a query. 
+     * @param ps The prepared SQL statement.
+     * @param type The query type ({@link Query}.
+     * @param log Indicates if information on the query should be logged.
+     * @return The retrieved items or null when an error occurs.
+     */
     public static List<DcObject> executeQuery(PreparedStatement ps, int type, boolean log) {
         List<DcObject> data = null;
         
@@ -229,15 +296,15 @@ public class DatabaseManager {
         return data;
     }
 
+    /**
+     * Update the item in the database with the values from the specified item.
+     * @param dco
+     */
     public static void updateValues(DcObject dco) {
         try {
             boolean isChanged = dco.isChanged();
             if (isChanged) {
                 Query query = new Query( Query._UPDATE, dco, null, dco.getRequests());
-    
-                if (dco.isPartOfBatch())
-                    query.setBatch(dco.isEndOfBatch());
-    
                 query.setSilence(dco.isSilent());
                 db.addQuery(query);
             }
@@ -270,7 +337,6 @@ public class DatabaseManager {
                         query = new Query(Query._UPDATE, child, null, child.getRequests());
     
                     if (!isChanged) {
-                        query.setBatch(counter == children.size());
                         query.setSilence(counter != children.size());
                     } else {
                         query.setSilence(true);
@@ -283,15 +349,16 @@ public class DatabaseManager {
         }            
     }
 
+    /**
+     * Stores the item in the database.
+     * @param dco
+     */
     public static void insertValues(DcObject dco) {
         try {
             if (dco.getID() == null || dco.getID().equals(""))
                 dco.setIDs();
     
             Query query = new Query(Query._INSERT, dco, null, dco.getRequests());
-            if (dco.isPartOfBatch())
-                query.setBatch(dco.isEndOfBatch());
-    
             query.setSilence(dco.isSilent());
             db.addQuery(query);
     
@@ -316,9 +383,6 @@ public class DatabaseManager {
     public static  void deleteValues(DcObject dco) {
         try {
             Query query = new Query(Query._DELETE, dco, null, dco.getRequests());
-            if (dco.isPartOfBatch())
-                query.setBatch(dco.isEndOfBatch());
-        
             query.setSilence(dco.isSilent());
             db.addQuery(query);
         } catch (SQLException e) {
@@ -326,6 +390,11 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Checks the database to see if the item already exists.
+     * @param o
+     * @param isUpdate Indicates if the check is performed for a new or an existing item.
+     */
     public static boolean isUnique(DcObject o, boolean isUpdate) {
         if (o.hasPrimaryKey() && !o.getModule().isChildModule()) {
             boolean hasRequiredFields = false;
@@ -358,11 +427,19 @@ public class DatabaseManager {
     /*****************************************************************************************
      * Security methods
      *****************************************************************************************/
-    
+
+    /**
+     * Creates an admin connection to the database.
+     */
     public static Connection getAdminConnection() {
     	return DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
     }
     
+    /**
+     * Change the password for the given user.
+     * @param user
+     * @param password
+     */
     public static void changePassword(User user, String password) {
         Connection c = null;
         Statement stmt = null;
@@ -441,12 +518,18 @@ public class DatabaseManager {
     
     /**
      * Updates the privileges of an existing user.
+     * @param user
      */
     public static void setPriviliges(User user) {
         for (DcModule module : DcModules.getAllModules())
             setPriviliges(module, user);
     }
     
+    /**
+     * Updates the privileges of an existing user. 
+     * @param user
+     * @param admin Indicates if the user is an administrator.
+     */
     public static void setPriviliges(String user, boolean admin) {
         for (DcModule module : DcModules.getAllModules())
             setPriviliges(module, user, admin);
@@ -459,7 +542,13 @@ public class DatabaseManager {
         setPriviliges(module, (String) user.getValue(User._A_LOGINNAME), user.isAdmin());
     } 
         
-   protected static void setPriviliges(DcModule module, String user, boolean admin) {
+    /**
+     * Applies the users privileges on the database tables and columns.
+     * @param module
+     * @param user
+     * @param admin
+     */
+    protected static void setPriviliges(DcModule module, String user, boolean admin) {
 
        Connection c = null;
        Statement stmt = null;

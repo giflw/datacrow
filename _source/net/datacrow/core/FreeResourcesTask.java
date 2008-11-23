@@ -31,20 +31,30 @@ import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Responsible for reclaiming used resources.
+ * @author Robert Jan van der Waals.
+ */
 public class FreeResourcesTask {
 
     private static Logger logger = Logger.getLogger(FreeResourcesTask.class.getName());
     private static boolean done = false;
     private static Task instance;
-    
+
+    /**
+     * Initializes this class and starts the monitoring processes.
+     */
     public FreeResourcesTask() {
         int interval = DcSettings.getInt(DcRepository.Settings.stGarbageCollectionIntervalMs);
         scheduleRegularGC(interval);
     }    
 
+    /**
+     * Tries to reclaim memory every x milliseconds.
+     * @param intervalMilliSecs
+     */
     private void scheduleRegularGC(long intervalMilliSecs) {
         if (!done){ 
-//          only schedule one task per application
             if (intervalMilliSecs > 0) {
                 Task task = getInstance();
                 java.util.Timer scheduler = new java.util.Timer();

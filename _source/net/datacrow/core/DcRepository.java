@@ -25,6 +25,11 @@
 
 package net.datacrow.core;
 
+/**
+ * Holder of definitions such as setting keys and static collections.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public abstract class DcRepository {
 
     public static final class ModuleSettings {

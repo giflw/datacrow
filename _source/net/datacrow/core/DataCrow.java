@@ -70,6 +70,11 @@ import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+/**
+ * This is the starting point of the application.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DataCrow {
 
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
@@ -263,10 +268,16 @@ public class DataCrow {
         }  
     }
     
+    /**
+     * The current product version.
+     */
     public static Version getVersion() {
         return version;
     }
-    
+
+    /**
+     * Is the web module installed or not? 
+     */
     public static boolean isWebModuleInstalled() {
         return isWebModuleInstalled; 
     }
@@ -297,6 +308,9 @@ public class DataCrow {
         }        
     }
     
+    /**
+     * Retrieves the platform information (OS).
+     */
     public static Platform getPlatform() {
         return platform;
     }
@@ -320,11 +334,17 @@ public class DataCrow {
         file = new File(servicesDir);
         if (!file.exists()) file.mkdir();
     }    
-    
+
+    /**
+     * Is the splash screen currently being shown?
+     */
     public static boolean isSplashScreenActive() {
         return splashScreen != null;
     }
-    
+
+    /**
+     * Hides or shows the splash screen.
+     */
     public static void showSplashScreen(boolean b) {
         if (splashScreen != null) {
             splashScreen.setVisible(b);
@@ -332,11 +352,17 @@ public class DataCrow {
         }
     }
 
+    /**
+     * Creates and shows the splash screen.
+     */
     public static void showSplashScreen(){
         splashScreen = new SplashScreen();
         splashScreen.splash();
     }
 
+    /**
+     * Closes the splash screen.
+     */
     public static void closeSplashScreen() {
         if (splashScreen != null) {
             splashScreen.dispose();
@@ -344,10 +370,16 @@ public class DataCrow {
         }
     }
 
+    /**
+     * Removes the focus from the splash screen.
+     */
     public static void moveSplashScreenToBack() {
         if (splashScreen != null) splashScreen.toBack();
     }
 
+    /**
+     * Pushes the splash screen to the front. 
+     */
     public static void moveSplashScreenToFront() {
         if (splashScreen != null) splashScreen.toFront();
     }
@@ -361,6 +393,9 @@ public class DataCrow {
         }
     }
 
+    /** 
+     * Determines the current directory.
+     */
     private static void setBaseDir(String s) {
         baseDir = s;
         

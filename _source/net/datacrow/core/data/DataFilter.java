@@ -42,6 +42,13 @@ import net.datacrow.util.DcObjectComparator;
 import net.datacrow.util.DcObjectCompositeComparator;
 import net.datacrow.util.StringUtils;
 
+/**
+ * Used when searching for items. 
+ * A filter is created out of filter entries (see {@link DataFilterEntry}).
+ * Filters can be saved to a file.
+ *  
+ * @author Robert Jan van der Waals
+ */
 public class DataFilter {
 
     private int module;
@@ -52,25 +59,47 @@ public class DataFilter {
     private Collection<DataFilterEntry> entries = new ArrayList<DataFilterEntry>();
     
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-    
+   
+    /**
+     * Creates a filter based on the supplied item.
+     * @param dco
+     */
     public DataFilter(DcObject dco) {
         this.module = dco.getModule().getIndex();
         setEntries(dco);
     }
 
+    /**
+     * Creates a filter based on an xml definition.
+     * @param xml
+     * @throws Exception
+     */
     public DataFilter(String xml) throws Exception {
         parse(xml);
     }
     
+    /**
+     * Creates an empty filter for a specific module.
+     * @param module
+     */
     public DataFilter(int module) {
         this.module = module;
     }    
     
+    /**
+     * Creates a filter using the supplied entries.
+     * @param module
+     * @param entries
+     */
     public DataFilter(int module, Collection<DataFilterEntry> entries) {
         this(module);
         this.entries = entries;
     }    
     
+    /**
+     * Sets the order. Results retrieved will be sorted based on this order.
+     * @param s Array of field names (column names).
+     */
     public void setOrder(String[] s) {
         order = new DcField[s.length];
         DcModule m = DcModules.get(module);
@@ -78,22 +107,44 @@ public class DataFilter {
             order[i] = m.getField(s[i]);
     }
     
+    /**
+     * Sets the order. Results retrieved will be sorted based on this order.
+     * @param order Array of fields.
+     */
     public void setOrder(DcField[] order) {
         this.order = order;
     }
     
+    /**
+     * Adds a single entry to this filter.
+     * @param entry
+     */
     public void addEntry(DataFilterEntry entry) {
         entries.add(entry);
     }
     
+    /**
+     * Sets the entries for this filter.
+     * Existing entries will be overwritten.
+     * @param entries
+     */
     public void setEntries(Collection<DataFilterEntry> entries) {
         this.entries = entries;
     }
 
+    /**
+     * Returns all entries belonging to this filter.
+     * @return
+     */
     public Collection<DataFilterEntry> getEntries() {
         return entries;
     }
     
+    /**
+     * Sets the entries based on the supplied item.
+     * Existing entries will be overridden.
+     * @param dco
+     */
     public void setEntries(DcObject dco) {
         entries.clear();
         for (DcField field : dco.getFields()) {
@@ -107,22 +158,41 @@ public class DataFilter {
         }
     }
     
+    /**
+     * Returns the order information.
+     * @return
+     */
     public DcField[] getOrder() {
         return order;
     }
     
+    /**
+     * Returns the name of this filter.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the name of this filter.
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
     
+    /**
+     * Returns the module for which this filter has been created.
+     */
     public int getModule() {
         return module;
     }
-    
+
+    /**
+     * Test the filter on the specified item.
+     * @param dco
+     * @return Return true if the filter applies.
+     */
     public boolean applies(DcObject dco) {
         boolean filterApplies = true;
 
@@ -151,6 +221,10 @@ public class DataFilter {
         return filterApplies;
     }
     
+    /**
+     * Sorts the supplied collection of items.
+     * @param c
+     */
     public void sort(List<DcObject> c) {
         if (order == null || order.length == 0 || c == null || c.size() == 0 || 
             DcModules.get(module).getTableName() == null || 
@@ -190,11 +264,16 @@ public class DataFilter {
         return name1.equals(name2);
     }
     
-    private void parse(String s) throws Exception {
-        module = Integer.parseInt(StringUtils.getValueBetween("<MODULE>", "</MODULE>", s));
-        name = StringUtils.getValueBetween("<NAME>", "</NAME>", s);
+    /**
+     * Parses the XML filter definition.
+     * @param xml Filter definition
+     * @throws Exception
+     */
+    private void parse(String xml) throws Exception {
+        module = Integer.parseInt(StringUtils.getValueBetween("<MODULE>", "</MODULE>", xml));
+        name = StringUtils.getValueBetween("<NAME>", "</NAME>", xml);
         
-        String sEntries = StringUtils.getValueBetween("<ENTRIES>", "</ENTRIES>", s);
+        String sEntries = StringUtils.getValueBetween("<ENTRIES>", "</ENTRIES>", xml);
         int idx = sEntries.indexOf("<ENTRY>");
         while (idx != -1) {
             String sEntry = StringUtils.getValueBetween("<ENTRY>", "</ENTRY>", sEntries);
@@ -242,7 +321,7 @@ public class DataFilter {
         }
         
         Collection<DcField> fields = new ArrayList<DcField>();
-        String sOrder = StringUtils.getValueBetween("<ORDER>", "</ORDER>", s);
+        String sOrder = StringUtils.getValueBetween("<ORDER>", "</ORDER>", xml);
         idx = sOrder.indexOf("<FIELD>");
         while (idx != -1) {
             int iField = Integer.parseInt(StringUtils.getValueBetween("<FIELD>", "</FIELD>", sOrder));
@@ -254,6 +333,9 @@ public class DataFilter {
         order = fields.toArray(new DcField[0]);
     }
     
+    /**
+     * Creates a xml definition for this filter.
+     */
     public String toStorageString() {
         String storage = "<FILTER>\n";
         

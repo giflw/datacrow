@@ -55,7 +55,13 @@ import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
-
+/**
+ * The restore class is capable of restoring a back up.
+ * Based on the settings either the data, the modules, the modules or all
+ * information is restored.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class Restore extends Thread {
     
     private static Logger logger = Logger.getLogger(Restore.class.getName());
@@ -67,7 +73,12 @@ public class Restore extends Thread {
     private boolean restoreModules = true;
     private boolean restoreDatabase = true;
     private boolean restoreReports = true;
-    
+   
+    /**
+     * Creates a new instance.
+     * @param listener The listener will be updated on events and errors.
+     * @param source The backup file.
+     */
     public Restore(IBackupRestoreListener listener, File source) {
         this.source = source;
         this.listener = listener;
@@ -90,14 +101,26 @@ public class Restore extends Thread {
         return filename.toLowerCase().indexOf("/modules") > -1;
     }    
 
+    /**
+     * Indicate if the database should be restores.
+     * @param b
+     */
     public void setRestoreDatabase(boolean b) {
         this.restoreDatabase = b;
     }
 
+    /**
+     * Indicate if the modules should be restores.
+     * @param b
+     */
     public void setRestoreModules(boolean b) {
         this.restoreModules = b;
     }
 
+    /**
+     * Indicate if the reports should be restores.
+     * @param b
+     */
     public void setRestoreReports(boolean b) {
         this.restoreReports = b;
     }
@@ -223,6 +246,9 @@ public class Restore extends Thread {
         listener = null;
     }
     
+    /**
+     * Performs the actual restore. The listener is updated on errors and events.
+     */
     @Override
     public void run() {
         

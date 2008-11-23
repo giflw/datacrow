@@ -50,7 +50,8 @@ import org.w3c.dom.NodeList;
 
 /**
  * Upgrades the actual module jar file. Fields can be added, removed or altered.
- * @author rj.vanderwaals
+ * 
+ * @author Robert Jan van der Waals
  */
 public class ModuleUpgrade extends XmlObject {
     
@@ -61,6 +62,8 @@ public class ModuleUpgrade extends XmlObject {
     private File remove;
     
     /**
+     * Upgrades the module based on a xml upgrade definition.
+     * 
      * @param xml
      * @return
      * @throws ModuleUpgradeException

@@ -27,6 +27,12 @@ package net.datacrow.core;
 
 import net.datacrow.settings.DcSettings;
 
+/**
+ * The user mode determines which actions are available to the user.
+ * A beginner might feel overwhelmed and therefore less features will be available to him.
+ *  
+ * @author Robert Jan van der Waals
+ */
 public abstract class UserMode {
     
     public static final int _XP_BEGINNER = 0;
@@ -41,11 +47,19 @@ public abstract class UserMode {
             DcSettings.set(DcRepository.Settings.stXpMode, mode);
         }
     }
-    
+
+    /**
+     * @see #_XP_BEGINNER
+     * @see #_XP_EXPERT
+     */
     public static int getUserMode() {
         return current;
     }
     
+    /**
+     * Checks if the supplied user level corresponds with the current user mode.
+     * @param level
+     */
     public static boolean isCorrectXpLevel(int level) {
         if (getUserMode() == _XP_EXPERT)
             return true;

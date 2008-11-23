@@ -69,12 +69,15 @@ import org.apache.log4j.Logger;
  * 
  * The automatic database correction script runs after this manual upgrade.
  * 
- * @author rj.vanderwaals
+ * @author Robert Jan van der Waals
  */
 public class DatabaseUpgrade {
     
     private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName());
-    
+   
+    /**
+     * Performs the upgrade (if needed).
+     */
     public void start() {
 
         try {

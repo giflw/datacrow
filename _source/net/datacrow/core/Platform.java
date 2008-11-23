@@ -25,6 +25,11 @@
 
 package net.datacrow.core;
 
+/**
+ * Describes the platform on which Data Crow is running. 
+ * Based on this information platform dependent tasks can be performed. 
+ * @author Robert Jan van der Waals.
+ */
 public final class Platform {
 	
 	private boolean isWin;
@@ -51,34 +56,58 @@ public final class Platform {
 		isJava16 = version.compareTo("1.5") > 0;
 	}
 
+	/**
+	 * Indicates if the Data Crow is running on a Windows platform.
+	 */
 	public final boolean isWin() {
 		return isWin;
 	}
 
+    /**
+     * Indicates if the Data Crow is running on a Macintosh (Mac OS) platform.
+     */
 	public final boolean isMac() {
 		return isMac;
 	}
 
+    /**
+     * Indicates if the Data Crow is running on a Linux platform.
+     */
 	public final boolean isLinux() {
 		return isLinux;
 	}
 
+    /**
+     * Indicates if the Data Crow is running on a Windows Vista platform.
+     */
 	public final boolean isVista() {
 		return isVista;
 	}
 
+    /**
+     * Indicates if the Data Crow is running on Java 1.2.
+     */
 	public final boolean isJava2() {
 		return isJava2;
 	}
 
+    /**
+     * Indicates if the Data Crow is running on Java 1.4.
+     */
 	public final boolean isJava14() {
 		return isJava14;
 	}
 
+    /**
+     * Indicates if the Data Crow is running on Java 1.5.
+     */
 	public final boolean isJava15() {
 		return isJava15;
 	}
 
+    /**
+     * Indicates if the Data Crow is running on Java 1.6.
+     */
 	public final boolean isJava16() {
 		return isJava16;
 	}

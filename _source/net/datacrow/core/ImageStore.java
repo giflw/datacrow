@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
  * they can be added to this image store. The {@link FreeResourcesTask} will call the clean() method
  * every now and then. 
  * 
- * @author rj.vanderwaals
+ * @author Robert Jan van der Waals
  */
 public class ImageStore {
 
@@ -48,11 +48,19 @@ public class ImageStore {
     
     private static final Collection<WeakReference<Image>> references = new ArrayList<WeakReference<Image>>();
     
+    /**
+     * Adds an image to the store.
+     * @param image
+     */
     public synchronized static void addImage(Image image) {
         if (!exists(image) && image != null)
             references.add(new WeakReference<Image>(image));
     }
-    
+
+    /**
+     * Checks if the specified image is in store.
+     * @param image
+     */
     private synchronized static boolean exists(Image image) {
         for (WeakReference<Image> reference : references) {
             if (reference.get() == image) return true;
@@ -60,6 +68,9 @@ public class ImageStore {
         return false;
     }
     
+    /**
+     * Tries to reclaim memory by disposing images currently in store.
+     */
     public synchronized static void clean() {
         Collection<WeakReference<Image>> remove = new ArrayList<WeakReference<Image>>();
         int collected = 0;

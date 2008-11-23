@@ -87,14 +87,11 @@ import org.apache.log4j.Logger;
  * NOTE: There is no 'smart caching' mechanism implemented as the data sets stored in 
  *       Data Crow are relatively small.
  *       
- * Rewrite: Added caching for quick loading item objects.
- *       
  * @author Robert Jan van der Waals        
  */ 
 public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
-    
     
     private static boolean saveCache = true;
     
@@ -127,20 +124,35 @@ public class DataManager {
     private static boolean initialized = false;
     
     private static boolean useCache = true;
-    
+
+    /**
+     * Creates the data manager and loads all items.
+     */
     public DataManager() {
+        initialized = false;
         initialize();
         initialized = true;
     }
     
+    /**
+     * Indicates if the items have beem loaded.
+     */
     public static boolean isInitialized() {
         return initialized;
     }
-    
+
+    /**
+     * Indicates if the cache should be used when loading the items.
+     * If set to false the items will be loaded directly from the database.
+     * @param b
+     */
     public static void setUseCache(boolean b) {
         useCache = b;
     }
     
+    /**
+     * Clears the items.
+     */
     public static void unload() {
         objects.clear();
         loans.clear();
@@ -149,10 +161,21 @@ public class DataManager {
         children.clear();
     }
 
+    /**
+     * Dispatch the items to the specified view.
+     * @param master View The view to be updated.
+     * @param module The module from which the items should be displayed.
+     * @param df The data filter used to filter the items to be shown.
+     */
     public static void bindData(MasterView masterView, int module, DataFilter df) {
         bindData(masterView, get(module, df));
     }    
-    
+
+    /**
+     * Dispatch the items to the specified view.
+     * @param master View The view to be updated.
+     * @param items The items to be shown in the view.
+     */
     public static void bindData(final MasterView masterView, final DcObject[] items) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -161,6 +184,11 @@ public class DataManager {
         });
     }
     
+    /**
+     * Update the specified cached item.
+     * @param dco The item to update.
+     * @param module The module to which the item belongs.
+     */
     public static void update(DcObject dco, int module) {
         // get the real object
         DcObject o = dco instanceof Loan ? dco : getObject(dco.getModule().getIndex(), dco.getID());
@@ -174,6 +202,11 @@ public class DataManager {
         updateView(o, 0, module, MainFrame._SEARCHTAB);
     }    
     
+    /**
+     * Adds the item to the cache.
+     * @param dco The item to add.
+     * @param module The module to which the item belongs.
+     */
     public static void add(DcObject dco, int module) {
         updatePictures(dco);
         
@@ -223,6 +256,11 @@ public class DataManager {
             updateView(dco, 1, module, MainFrame._INSERTTAB);
     }  
     
+    /**
+     * Remove the item from the cache.
+     * @param dco The item to be removed.
+     * @param module The module to which the item belongs.
+     */
     public static void remove(DcObject dco, int module) {
     	if (module == DcModules._LOAN) {
             Collection<Loan> c = loans.get(getKey(dco));
@@ -247,6 +285,12 @@ public class DataManager {
         updateView(dco, 2, module, MainFrame._SEARCHTAB);
     }
     
+    /**
+     * Retrieves the children for the specified parent.
+     * @param parentId The parent object ID.
+     * @param childIdx The child module index.
+     * @return The children or an empty collection.
+     */
     public static Collection<DcObject> getChildren(String parentId, int childIdx) {
         List<DcObject> c = children.get(childIdx).get(parentId);
         c = c == null ? new ArrayList<DcObject>() : new ArrayList<DcObject>(c);
@@ -265,10 +309,11 @@ public class DataManager {
      * be used to retrieve the DcObject. If no object is found it will be created and
      * saved. The online search is used to retrieve additional information.
      *  
-     * @param dco
-     * @param fieldIdx
-     * @param value
-     * @return
+     * @param dco The item to which the reference will be created.
+     * @param fieldIdx The field index to set the reference on.
+     * @param value The referenced value.
+     * @return If an object has been created for the specified value this object will be
+     * returned. Else null will be returned.
      */
     public static DcObject createReference(DcObject dco, int fieldIdx, Object value) {
         String name = value != null ? StringUtils.toPlainText(value.toString()) : null;
@@ -316,6 +361,12 @@ public class DataManager {
         return ref;
     }
     
+    /**
+     * Adds a referenced item to the specified parent object.
+     * @param parent The item to which the reference will be added.
+     * @param child The to be referenced item.
+     * @param fieldIdx The field holding the reference.
+     */
     @SuppressWarnings("unchecked")
     public static void addMapping(DcObject parent, DcObject child, int fieldIdx) {
         DcMapping mapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(parent.getModule().getIndex(), child.getModule().getIndex())).getDcObject();
@@ -337,6 +388,13 @@ public class DataManager {
         parent.setValue(fieldIdx, mappings);
     }    
     
+    /**
+     * Update the view with the specified object.
+     * @param dco The object used to update the view.
+     * @param mode The mode used to update the view (@link {@link ViewUpdater}).
+     * @param module The module to which the item belongs.
+     * @param tab The tab to update. Either {@link MainFrame#_INSERTTAB} or {@link MainFrame#_SEARCHTAB}.
+     */
     private static void updateView(final DcObject dco, final int mode, final int module, final int tab) {
         if (dco instanceof DcProperty)
             return;
@@ -348,7 +406,7 @@ public class DataManager {
         else
             updater.run();
     }
-    
+
     private static String getKey(DcObject dco) {
         if (dco instanceof Picture)
             return (String) dco.getValue(Picture._A_OBJECTID);
@@ -396,7 +454,7 @@ public class DataManager {
      * Removes references to this object from any other item. This method should only be called
      * when the provided item is about has been deleted from the database as well as the references
      * to this item. 
-     * @param dco the deleted item
+     * @param dco The deleted item
      */
     @SuppressWarnings("unchecked")
     private static void disgardReferences(DcObject dco) {
@@ -516,6 +574,10 @@ public class DataManager {
         }
     }
     
+    /**
+     * Updates components like list boxes holding the module items.
+     * @param module The module for which the registered listeners should be updated.
+     */
     private static void updateUiComponents(int module) {
         Collection<JComboBox> c = listeners.get(module);
         
@@ -537,6 +599,12 @@ public class DataManager {
         }
     }
     
+    /**
+     * Register a combobox. The registered combobox will be updated with the module items.
+     * Changed, removal and additions will be reflected on the registered components. 
+     * @param component
+     * @param module
+     */
     public static void registerUiComponent(JComboBox component, int module) {
         Collection<JComboBox> c = listeners.get(module);
         c = c == null ? new ArrayList<JComboBox>() : c;
@@ -545,16 +613,30 @@ public class DataManager {
         updateUiComponents(module);
     }
     
+    /**
+     * Item count.
+     * @param module
+     * @param df
+     */
     public static int contains(int module, DataFilter df) {
         DcObject[] objects = get(module, df);
         return objects != null ? objects.length : 0;
     }
-    
+
+    /**
+     * Retrieves all the loans (actual and historic).
+     * @param parentID The item ID for which the loans are retrieved.
+     * @return A collection holding loans or an empty collection.
+     */
     public static Collection<Loan> getLoans(String parentID) {
         Collection<Loan> c = loans.get(parentID);
         return c != null ? new ArrayList<Loan>(c) : new ArrayList<Loan>();
     }
     
+    /**
+     * Retrieves the actual loan.
+     * @param parentID The item ID for which the loan is retrieved.
+     */
     public static Loan getCurrentLoan(String parentID) {
         Collection<Loan> loans = getLoans(parentID);
         for (Loan loan : loans) {
@@ -564,6 +646,12 @@ public class DataManager {
         return new Loan();
     }
     
+    /**
+     * Retrieves an item based on its display value.
+     * @param module
+     * @param s The display value.
+     * @return Either the item or null. 
+     */
     public static DcObject getObjectForDisplayValue(int module, String s) {
         DcObject dco = DcModules.get(module).getDcObject();
         if (dco instanceof DcMediaObject)
@@ -592,21 +680,43 @@ public class DataManager {
         return null;
     }    
     
+    /**
+     * Retrieve the item based on its ID.
+     * @param module
+     * @param ID
+     * @return null or the item if found.
+     */
     public static DcObject getObject(int module, String ID) {
         Map<String, DcObject> map = objectsByID.get(Integer.valueOf(module));
         return map != null ? map.get(ID) : null;
     }    
   
+    /**
+     * Retrieve all referenced items for the given parent ID.
+     * @param module
+     * @param parentId
+     */
     public static Collection<DcMapping> getReferences(int module, String parentId) {
         Collection<DcMapping> c = references.get(module).get(parentId);
         return c == null ? new ArrayList<DcMapping>() : c; 
     }
-    
+
+    /**
+     * Retrieves all pictures for the given parent ID. 
+     * @param parentId
+     * @return Either the pictures or an empty collection.
+     */
     public static Collection<Picture> getPictures(String parentId) {
         Collection<Picture> c = pictures.get(parentId);
         return c == null ? new ArrayList<Picture>() : c; 
     }
     
+    /**
+     * Retrieve items using the specified data filter.
+     * @see DataFilter
+     * @param modIdx
+     * @param filter
+     */
     public static DcObject[] get(int modIdx, DataFilter filter) {
         DataFilter df = filter;
         
@@ -648,7 +758,7 @@ public class DataManager {
         df.sort(c);
         return c.toArray(new DcObject[0]);
     }
-    
+
     private static void add(Collection<DcObject> data, DataFilter df, Collection<? extends DcObject> c) {
         for (DcObject dco : c) {
             if (df == null || df.applies(dco)) 
@@ -661,6 +771,10 @@ public class DataManager {
      * Initialization
      ***************************************/
     
+    /**
+     * Initialize the data manager. Loads all items from the database or from the cache.
+     * @see #useCache
+     */
     public void initialize() {
         boolean gracefulShutdown = DcSettings.getBoolean(DcRepository.Settings.stGracefulShutdown);
         

@@ -55,10 +55,18 @@ public class DcDatabase {
 
     public DcDatabase() {}
     
+    /**
+     * The version from before the upgrade.
+     */
     public Version getOriginalVersion() {
         return originalVersion;
     }
 
+    /**
+     * Retrieves the current version of the database. In case the database does not have
+     * a version number asigned an undetermined version number is returned.
+     * @param connection
+     */
     public Version getVersion(Connection connection) {
         int major = 0;
         int minor = 0;
@@ -92,6 +100,13 @@ public class DcDatabase {
                      v.getMajor() + "," + v.getMinor() + "," + v.getBuild() + "," + v.getPatch() + ")");
     }
     
+    /**
+     * Initializes the database. Upgrades are performed automatically; missing columns are added
+     * and missing tables are created.
+     * 
+     * @param connection
+     * @throws Exception
+     */
     public void initiliaze(Connection connection) throws Exception {
         
         new DatabaseUpgrade().start();
@@ -114,6 +129,9 @@ public class DcDatabase {
         }
     }
 
+    /**
+     * Returns the current count of queries waiting in the queue.
+     */
     public int getQueueSize() {
     	return queue.getQueueSize();
     }
@@ -126,14 +144,25 @@ public class DcDatabase {
         queryQueue.start();
     }
 
+    /**
+     * Returns the name of the database.
+     */
     public String getName() {
         return DcSettings.getString(DcRepository.Settings.stConnectionString);
     }
 
+    /**
+     * Adds a query to the query queue of this database.
+     * @param query
+     */
     public void addQuery(Query query) {
         queue.addQuery(query);
     }
 
+    /**
+     * Applies the default settings on the database.
+     * @param connection
+     */
     public void setDbProperies(Connection connection) {
         try {
             

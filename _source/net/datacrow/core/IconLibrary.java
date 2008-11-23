@@ -29,6 +29,12 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+/**
+ * Holder of all icons. This class makes sure that icons are only loaded once.
+ * Images from this class should never be unloaded.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public abstract class IconLibrary {
 
     public static final String picPath = DataCrow.baseDir + "icons_system/";

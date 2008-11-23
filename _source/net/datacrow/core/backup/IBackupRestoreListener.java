@@ -25,6 +25,11 @@
 
 package net.datacrow.core.backup;
 
+/**
+ * A backup listener will be updated on events and errors during the backup process.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public interface IBackupRestoreListener {
 
     void notifyStarted();
