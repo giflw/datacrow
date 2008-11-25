@@ -38,6 +38,8 @@ import net.datacrow.core.ModuleUpgradeException;
 import net.datacrow.core.modules.InvalidModuleXmlException;
 import net.datacrow.core.modules.InvalidValueException;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.fileimporters.FileImporter;
+import net.datacrow.synchronizers.DefaultSynchronizer;
 import net.datacrow.util.XMLParser;
 
 import org.w3c.dom.Document;
@@ -88,7 +90,7 @@ public class XmlModule extends XmlObject {
     private boolean changed = false;
     
     private boolean enabled;
-    private boolean canBeLended;
+    private boolean canBeLend;
     private boolean hasSearchView;
     private boolean hasInsertView;
     private boolean hasDependingModules;
@@ -100,10 +102,18 @@ public class XmlModule extends XmlObject {
     private String tableNameShort;
     
     private Collection<XmlField> fields = new ArrayList<XmlField>();    
-    private String[] services;
-    
+
+    /**
+     * Creates an empty instance.
+     */
     public XmlModule() {}
 
+    /**
+     * Creates a new instance.
+     * @param xml The XML file byte content 
+     * @throws InvalidModuleXmlException
+     * @throws ModuleUpgradeException
+     */
     public XmlModule(byte[] xml) throws InvalidModuleXmlException, ModuleUpgradeException {
         byte[] newXml = new ModuleUpgrade().upgrade(xml);
         
@@ -117,10 +127,18 @@ public class XmlModule extends XmlObject {
         changed = !same;
     }
 
+    /**
+     * Indicates if customizations have been made.
+     */
     public boolean isChanged() {
         return changed;
     }
     
+    /**
+     * Parses the provided XML byte content.
+     * @param xml
+     * @throws InvalidModuleXmlException
+     */
     private void initialize(byte[] xml) throws InvalidModuleXmlException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
@@ -133,6 +151,10 @@ public class XmlModule extends XmlObject {
         }
     }
 
+    /**
+     * Reads the elements of the XML document.
+     * @throws InvalidValueException
+     */
     private void load() throws InvalidValueException {
         Element element = document.getDocumentElement();
         NodeList nodes = element.getElementsByTagName("module");
@@ -169,7 +191,7 @@ public class XmlModule extends XmlObject {
         objectName = XMLParser.getString(module, "object-name");
         objectNamePlural = XMLParser.getString(module, "object-name-plural");
         enabled = XMLParser.getBoolean(module, "enabled");
-        canBeLended = XMLParser.getBoolean(module, "can-be-lended");
+        canBeLend = XMLParser.getBoolean(module, "can-be-lended");
         hasSearchView = XMLParser.getBoolean(module, "has-search-view");
         hasInsertView = XMLParser.getBoolean(module, "has-insert-view");
         nameFieldIdx = XMLParser.getInt(module, "name-field-index");
@@ -183,9 +205,15 @@ public class XmlModule extends XmlObject {
         hasDependingModules = XMLParser.getBoolean(module, "has-depending-modules");
         
         setFields(this, module);
-        setServices(module);
     }
     
+    /**
+     * Creates the XML field definitions.
+     * @param module The XML module.
+     * @param element The element to parse.
+     * @see XmlField
+     * @throws InvalidValueException
+     */
     private void setFields(XmlModule module, Element element) throws InvalidValueException {
         NodeList nodes = element.getElementsByTagName("field");
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -193,297 +221,526 @@ public class XmlModule extends XmlObject {
         }
     }
     
-    private void setServices(Element module) {
-        NodeList nodes = module.getElementsByTagName("online-service");
-        services = new String[nodes.getLength()];
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Element element = (Element) nodes.item(i);
-            services[i] = XMLParser.getString(element, "class");
-        }
-    }      
-
-    public boolean canBeLended() {
-        return canBeLended;
+    /**
+     * Tells if items belonging to this module can be lend.
+     */
+    public boolean canBeLend() {
+        return canBeLend;
     }
 
+    /**
+     * Retrieves the child module index. 
+     * @return The index or -1.
+     */
     public int getChildIndex() {
         return childIndex;
     }
 
+    /**
+     * The description for this module.
+     */    
     public String getDescription() {
         return description;
     }
 
+    /**
+     * The XML document.
+     */
     public Document getDocument() {
         return document;
     }
 
+    /**
+     * Is the module enabled?
+     */
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * Retrieves the XML field definitions.
+     */
     public Collection<XmlField> getFields() {
         return fields;
     }
 
+    /**
+     * Indicates if the module support insert views.
+     */
     public boolean hasInsertView() {
         return hasInsertView;
     }
 
+    /**
+     * Indicates if the module support search views.
+     */
     public boolean hasSearchView() {
         return hasSearchView;
     }
 
+    /**
+     * Retrieves the file importer class.
+     * @see FileImporter
+     */
     public Class getImporter() {
         return importer;
     }
     
+    /**
+     * The unique index of the module.
+     */
     public int getIndex() {
         return index;
     }
 
+    /**
+     * The key combination associated with this module.
+     */
     public KeyStroke getKeyStroke() {
         return keyStroke;
     }
 
+    /**
+     * The display label.
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * The internal name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the items object class.
+     */
     public Class getObject() {
         return object;
     }
 
+    /**
+     * System name for items belonging to this module.
+     */
     public String getObjectName() {
         return objectName;
     }
 
+    /**
+     * System plural name for items belonging to this module.
+     */
     public String getObjectNamePlural() {
         return objectNamePlural;
     }
 
+    /**
+     * The module class.
+     */
     public Class getModuleClass() {
         return moduleClass;
     }
 
-    public String[] getServices() {
-        return services;
-    }
-
+    /**
+     * The synchronize class (or mass update).
+     * @see DefaultSynchronizer
+     * @return The class or null.
+     */
     public Class getSynchronizer() {
         return synchronizer;
     }
 
+    /**
+     * The database table name.
+     */
     public String getTableName() {
         return tableName;
     }
 
+    /**
+     * The database table short name.
+     */
     public String getTableNameShort() {
         return tableNameShort;
     } 
     
+    /**
+     * Indicates if other modules are depending on this module.
+     */
     public boolean hasDependingModules() {
         return hasDependingModules;
     }
 
+    /**
+     * The position of this module as displayed in the module bar. 
+     */
     public int getDisplayIndex() {
         return displayIndex;
     }
 
+    /**
+     * The field to be sorted / ordered on by default.
+     */
     public int getDefaultSortFieldIdx() {
         return defaultSortFieldIdx;
     }
 
+    /**
+     * The parent module index.
+     * @return The index or -1.
+     */
     public int getParentIndex() {
         return parentIndex;
     }
 
+    /**
+     * Retrieves the index for the field which holds the name of an item. 
+     */
     public int getNameFieldIdx() {
         return nameFieldIdx;
     }
 
-    public void setCanBeLended(boolean canBeLended) {
-        this.canBeLended = canBeLended;
+    /**
+     * Indicate if items belonging to this module can be lend.
+     * @param canBeLend
+     */
+    public void setCanBeLend(boolean canBeLend) {
+        this.canBeLend = canBeLend;
     }
 
+    /**
+     * Indicate which module is the child for this module.
+     * @param childIndex The module index of the child.
+     */
     public void setChildIndex(int childIndex) {
         this.childIndex = childIndex;
     }
 
+    /**
+     * Set the default field to sort / order on.
+     * @param defaultSortFieldIdx The field index.
+     */
     public void setDefaultSortFieldIdx(int defaultSortFieldIdx) {
         this.defaultSortFieldIdx = defaultSortFieldIdx;
     }
 
+    /**
+     * Set the description for this module.
+     * @param description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Set the module bar position for this module.
+     * @param displayIndex
+     */
     public void setDisplayIndex(int displayIndex) {
         this.displayIndex = displayIndex;
     }
 
+    /**
+     * Set the XML document.
+     * @param document
+     */
     public void setDocument(Document document) {
         this.document = document;
     }
 
+    /**
+     * Mark the field as enabled.
+     * @param enabled
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    /**
+     * Set the XML field definitions.
+     * @param fields
+     */
     public void setFields(Collection<XmlField> fields) {
         this.fields = fields;
     }
 
+    /**
+     * Indicate if other modules are depending on this module.
+     * @param hasDependingModules
+     */
     public void setHasDependingModules(boolean hasDependingModules) {
         this.hasDependingModules = hasDependingModules;
     }
 
+    /**
+     * Indicate if the insert view is supported.
+     * @param hasInsertView
+     */
     public void setHasInsertView(boolean hasInsertView) {
         this.hasInsertView = hasInsertView;
     }
 
+    /**
+     * Indicate if the search view is supported.
+     * @param hasSearchView
+     */
     public void setHasSearchView(boolean hasSearchView) {
         this.hasSearchView = hasSearchView;
     }
 
+    /**
+     * Sets the file imported class.
+     * @param importer
+     */
     public void setImporter(Class importer) {
         this.importer = importer;
     }
 
+    /**
+     * Set the unique index for this module.
+     * @param index
+     */
     public void setIndex(int index) {
         this.index = index;
     }
 
+    /**
+     * Set the key combination to activate this module.
+     * @param keyStroke
+     */
     public void setKeyStroke(KeyStroke keyStroke) {
         this.keyStroke = keyStroke;
     }
 
+    /**
+     * Sets the display label.
+     * @param label
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     * Set the module class.
+     * @param moduleClass
+     */
     public void setModuleClass(Class moduleClass) {
         this.moduleClass = moduleClass;
     }
 
+    /**
+     * The system name of this module.
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Indicate which field holds the name of an item. 
+     * @param nameFieldIdx The field index.
+     */
     public void setNameFieldIdx(int nameFieldIdx) {
         this.nameFieldIdx = nameFieldIdx;
     }
 
+    /**
+     * Sets the object class.
+     * @param object
+     */
     public void setObject(Class object) {
         this.object = object;
     }
 
+    /**
+     * Sets the system name for items belonging to this module.
+     * @param objectName
+     */
     public void setObjectName(String objectName) {
         this.objectName = objectName;
     }
 
+    /**
+     * Sets the system plural name for items belonging to this module.
+     * @param objectNamePlural
+     */
     public void setObjectNamePlural(String objectNamePlural) {
         this.objectNamePlural = objectNamePlural;
     }
 
+    /**
+     * Indicate which module is the parent of this module.
+     * @param parentIndex The module index.
+     */
     public void setParentIndex(int parentIndex) {
         this.parentIndex = parentIndex;
     }
 
-    public void setServices(String[] services) {
-        this.services = services;
-    }
-
+    /**
+     * Set the synchronize class (or mass update).
+     * @param synchronizer
+     */
     public void setSynchronizer(Class synchronizer) {
         this.synchronizer = synchronizer;
     }
 
+    /**
+     * Sets the database table name.
+     * @param tableName
+     */
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
 
+    /**
+     * Sets the database table short name.
+     * @param tableNameShort
+     */
     public void setTableNameShort(String tableNameShort) {
         this.tableNameShort = tableNameShort;
     }
 
+    /**
+     * Retrieves the small icon file name.
+     */
     public String getIcon16Filename() {
         return icon16Filename;
     }
 
+    /**
+     * Sets the small icon filename.
+     * @param icon16Filename
+     */
     public void setIcon16Filename(String icon16Filename) {
         this.icon16Filename = icon16Filename;
     }
 
+    /**
+     * Retrieves the large icon file name.
+     */
     public String getIcon32Filename() {
         return icon32Filename;
     }
 
+    /**
+     * Sets the large icon filename.
+     * @param icon32Filename
+     */
     public void setIcon32Filename(String icon32Filename) {
         this.icon32Filename = icon32Filename;
     }
 
+    /**
+     * Indicates if items belonging to this module are file based.
+     */
     public boolean isFileBacked() {
         return isFileBacked;
     }
 
+    /**
+     * Indicate if items belonging to this module are file based.
+     * @param isFileBacked
+     */
     public void setFileBacked(boolean isFileBacked) {
         this.isFileBacked = isFileBacked;
     }
     
+    /**
+     * Indicates if items belonging to this module can be part of a container.
+     */
     public boolean isContainerManaged() {
         return isContainerManaged;
     }
 
+    /**
+     * Indicate if items belonging to this module can be part of a container.
+     * @param isContainerManaged
+     */
     public void setContainerManaged(boolean isContainerManaged) {
         this.isContainerManaged = isContainerManaged;
     }
 
+    /**
+     * Indicates if multiple modules are using this module.
+     */
     public boolean isServingMultipleModules() {
         return isServingMultipleModules;
     }
 
+    /**
+     * Indicate if multiple modules are using this module.
+     * @param isServingMultipleModules
+     */
     public void setServingMultipleModules(boolean isServingMultipleModules) {
         this.isServingMultipleModules = isServingMultipleModules;
     }
 
+    /**
+     * Retrieves the filename for this module. 
+     * @see #getJarFilename()
+     */
     public String getFilename() {
         return filename;
     }
 
+    /**
+     * Retrieves the JAR filename in which this module is / will be stored.
+     */
     public String getJarFilename() {
     	return filename.replaceAll(".xml", ".jar");
     }
     
+    /**
+     * The small icon bytes.
+     */
     public byte[] getIcon16() {
         return icon16;
     }
 
+    /**
+     * The large icon bytes.
+     */
     public byte[] getIcon32() {
         return icon32;
     }
     
+    /**
+     * Set the small icon bytes.
+     * @param b The icon.
+     */
     public void setIcon16(byte[] b) {
     	if (b != null && b.length > 10)
     		icon16 = b;
     }
 
+    /**
+     * Set the large icon bytes.
+     * @param b The icon.
+     */
     public void setIcon32(byte[] b) {
     	if (b != null && b.length > 10)
     		icon32 = b;
     }
     
+    /**
+     * Set the filename to which this module will be stored.
+     * @param filename
+     */
     public void setFilename(String filename) {
         this.filename = filename;
     }
 
+    /**
+     * Retrieves the Data Crow version number for which this module has been created.
+     */
     public String getProductVersion() {
         return productVersion;
     }
 
+    /**
+     * Sets the Data Crow version number for which this module has been created.
+     */
     public void setProductVersion(String productVersion) {
         this.productVersion = productVersion;
     }

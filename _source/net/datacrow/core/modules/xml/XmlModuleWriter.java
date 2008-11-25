@@ -62,7 +62,7 @@ public class XmlModuleWriter {
         writeLine("<description>" + getString(module.getDescription()) + "</description>" , level);
         writeLine("<key-stroke>" + module.getKeyStroke() + "</key-stroke>" , level);
         writeLine("<enabled>" + module.isEnabled() + "</enabled>" , level);
-        writeLine("<can-be-lended>" + module.canBeLended() + "</can-be-lended>" , level);
+        writeLine("<can-be-lended>" + module.canBeLend() + "</can-be-lended>" , level);
         writeLine("<icon-16>" + getString(module.getIcon16Filename()) + "</icon-16>" , level);
         writeLine("<icon-32>" + getString(module.getIcon32Filename()) + "</icon-32>" , level);
         writeLine("<object-name>" + getString(module.getObjectName()) + "</object-name>" , level);
