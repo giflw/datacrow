@@ -27,8 +27,10 @@ public class PluginHelper {
         try {
             Plugin plugin = Plugins.getInstance().get(key, null, null, viewIdx, moduleIdx);
             if (plugin != null) {
+                
                 if (    !plugin.isAuthorizable() ||
                         SecurityCentre.getInstance().getUser().isAuthorized(plugin)) {
+                    
                     String name = viewIdx > -1 ? key + "-" + viewIdx : moduleIdx > -1 ? key + "-" + moduleIdx : key;
                     pane.getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(plugin.getKeyStroke(), name);
                     pane.getRootPane().getInputMap(JComponent.WHEN_FOCUSED).put(plugin.getKeyStroke(), name);

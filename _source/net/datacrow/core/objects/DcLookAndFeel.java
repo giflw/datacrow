@@ -25,6 +25,11 @@
 
 package net.datacrow.core.objects;
 
+/**
+ * Represents a look and feel / skin.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcLookAndFeel {
     
     public static final int _SKINLF = 0;
@@ -38,6 +43,13 @@ public class DcLookAndFeel {
     
     private final int type;
     
+    /**
+     * Creates a new instance.
+     * @param name The name of the Look and Feel.
+     * @param className The class name.
+     * @param filename The filename.
+     * @param type The Look and Feel type.
+     */
     public DcLookAndFeel(String name, String className, String filename, int type) {
         this.name = name;
         this.className = className;
@@ -45,22 +57,41 @@ public class DcLookAndFeel {
         this.type = type;
     }
     
+    /**
+     * Creates a disabled look and feel instance.
+     */
     public static DcLookAndFeel getDisabled() {
         return new DcLookAndFeel("None", null, null, _NONE);
     }
     
+    /**
+     * The label of this Look and Feel.
+     */
     public String getName() {
         return name;
     }
-    
+
+    /**
+     * The implementation class name.
+     */
     public String getClassName() {
         return className;
     }
     
+    /**
+     * The physical filename.
+     */
     public String getFileName() {
         return filename;
     }
     
+    /**
+     * The Look and Feel type.
+     * @see #_JTATTOO
+     * @see #_LAF
+     * @see #_NONE
+     * @see #_SKINLF
+     */
     public int getType() {
         return type;
     }

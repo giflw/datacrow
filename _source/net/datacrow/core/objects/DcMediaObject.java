@@ -25,7 +25,18 @@
 
 package net.datacrow.core.objects;
 
+import net.datacrow.core.modules.DcMediaModule;
 
+/**
+ * Media objects come with a set of predefined fields such as a title,
+ * a description, a year and a rating. 
+ * Items of this type are represented by their own modules and the abstract
+ * media module. 
+ * 
+ * @see DcMediaModule
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcMediaObject extends DcObject {
     
     private static final long serialVersionUID = -2320044892640837631L;
@@ -41,10 +52,18 @@ public class DcMediaObject extends DcObject {
     public static final int _U4_USER_NUMERIC1 = 104;
     public static final int _U5_USER_NUMERIC2 = 105;    
     
+    /**
+     * Creates a new instance.
+     * @param module
+     */
     public DcMediaObject(int module) {
         super(module);
     }
     
+    /**
+     * The default field to sort on.
+     * @return {@link #_A_TITLE}
+     */
     @Override
     public int getDefaultSortFieldIdx() {
         return DcMediaObject._A_TITLE;

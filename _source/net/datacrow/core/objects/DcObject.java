@@ -115,6 +115,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public static final int _SYS_LOANDUEDATE = 215;
     public static final int _SYS_LOANDAYSTILLOVERDUE = 216;
     
+    /**
+     * Creates a new instance.
+     * @param module
+     */
     public DcObject(int module) {
         this.module = module;
 

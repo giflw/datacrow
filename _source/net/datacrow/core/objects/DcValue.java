@@ -45,6 +45,12 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * The value class represents a field value.
+ * It knows when it has been changed.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcValue implements Serializable {
 
     private static final long serialVersionUID = 3222707222963657152L;
@@ -56,11 +62,19 @@ public class DcValue implements Serializable {
     
     private String displayString = "";
     private Object value = null;
-    
+
+    /**
+     * Indicates if the value has been changed.
+     * @return
+     */
     public boolean isChanged() {
         return changed;
     }
 
+    /**
+     * Marks the value as changed.
+     * @param b
+     */
     public void setChanged(boolean b) {
         changed = b;
         
@@ -68,6 +82,11 @@ public class DcValue implements Serializable {
             ((Picture) value).markAsUnchanged();
     }
 
+    /**
+     * Bypasses all checks and sets the value directly.
+     * @param newValue The new value to be used.
+     * @param field The field for which the value is set.
+     */
     public void setValueLowLevel(Object newValue, DcField field) {
         if (!field.isUiOnly())
             setChanged(true);
@@ -75,6 +94,11 @@ public class DcValue implements Serializable {
         setValueNative(newValue, field);
     }
     
+    /**
+     * Sets the new value for this object.
+     * @param o The new value.
+     * @param field The field for which the value is set.
+     */
     @SuppressWarnings("unchecked")
     public void setValue(Object o, DcField field) {
         if (!field.isUiOnly()) 
@@ -215,11 +239,17 @@ public class DcValue implements Serializable {
         this.displayString = createDisplayString(field);
         this.changed = true;
     }
-    
+
+    /**
+     * Returns the stored display string.
+     */
     public String getDisplayString() {
         return displayString;
     }
     
+    /**
+     * Clears the value and sets it to null.
+     */
     public void clear() {
         if (value != null && value instanceof Picture)
             ((Picture) value).unload();
@@ -232,6 +262,9 @@ public class DcValue implements Serializable {
         return value;
     }
 
+    /**
+     * Creates a string representation.
+     */
     public String getValueAsString() {
         return value != null ? value.toString() : "";
     }

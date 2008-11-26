@@ -37,6 +37,13 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A property represents a simple item such as a category or a storage medium.
+ * Properties are widely used within Data Crow to allow users to select from 
+ * a predefined set of options.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcProperty extends DcObject {
 
     private static final long serialVersionUID = -936831554081323250L;
@@ -46,10 +53,18 @@ public class DcProperty extends DcObject {
     public static final int _A_NAME = 150;
     public static final int _B_ICON = 151;
     
+    /**
+     * Creates a new instance.
+     * @param module
+     */
     public DcProperty(int module) {
         super(module);
     }
     
+    /**
+     * Retrieve the icon to represent the item.
+     * @return The value of the {@link #_B_ICON} field.
+     */
     @Override
     public ImageIcon getIcon() {
         String value = (String) getValue(_B_ICON);
@@ -60,6 +75,10 @@ public class DcProperty extends DcObject {
         return icon;
     } 
     
+    /**
+     * The filename on which this item is based.
+     * @return Returns always null.
+     */
     @Override
     public String getFilename() {
         return null;
@@ -75,6 +94,9 @@ public class DcProperty extends DcObject {
         return toString();
     }
     
+    /**
+     * Before saving a property its icon is scaled.
+     */
     @Override
     protected void beforeSave() {
         super.beforeSave();

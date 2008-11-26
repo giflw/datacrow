@@ -31,6 +31,11 @@ import java.util.Date;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 
+/**
+ * Represents a loan.
+ *  
+ * @author Robert Jan van der Waals
+ */
 public class Loan extends DcObject {
 
     private static final long serialVersionUID = 2452738490117020045L;
@@ -44,10 +49,17 @@ public class Loan extends DcObject {
     public static final int _D_OBJECTID = 4;
     public static final int _E_DUEDATE = 5;
 
+    /**
+     * Creates a new instance.
+     */
     public Loan() {
         super(DcModules._LOAN);
     }
 
+    /**
+     * Indicates if the given item is available.
+     * @param objectID
+     */
     public boolean isAvailable(String objectID) {
         Loan loan;
         if ((getID() != null && getID().length() > 0) || getValue(_A_STARTDATE) != null)
@@ -69,6 +81,10 @@ public class Loan extends DcObject {
         return available;
     }
     
+    /**
+     * Retrieves information on the person who lend the item.
+     * @return The person or null.
+     */
     public DcObject getPerson() {
         String personID = (String) getValue(Loan._C_CONTACTPERSONID);
         return DataManager.getObject(DcModules._CONTACTPERSON, personID);
@@ -98,11 +114,18 @@ public class Loan extends DcObject {
         return days;
     }
     
+    /**
+     * Calculates the due date against the current date to determine if the loan 
+     * is overdue.
+     */
     public boolean isOverdue() {
         Long daysTillOverDue = getDaysTillOverdue();
         return daysTillOverDue != null && daysTillOverDue.longValue() < 0;
     }
     
+    /**
+     * The duration of the loan.
+     */
     public synchronized Long getDaysLoaned() {
         Date startDate = (Date) getValue(Loan._A_STARTDATE);
         Long days = null;

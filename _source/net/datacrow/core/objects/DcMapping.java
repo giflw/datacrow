@@ -29,6 +29,12 @@ import javax.swing.ImageIcon;
 
 import net.datacrow.core.data.DataManager;
 
+/**
+ * A mapping represents a many to many relationship.
+ * Mappings are stored in cross reference database tables.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcMapping extends DcObject {
     
     private static final long serialVersionUID = 1314886460279316879L;
@@ -39,41 +45,72 @@ public class DcMapping extends DcObject {
     
     private DcObject referencedObj;
     
+    /**
+     * Creates a new instance.
+     * @param module
+     */
     public DcMapping(int module) {
         super(module);
     }
 
+    /**
+     * The icon. 
+     * @return Always returns null.
+     */
     @Override
     public ImageIcon getIcon() {
         return null;
     } 
     
+    /**
+     * The filename to which this module is stored.
+     * @return Always returns null.
+     */
     @Override
     public String getFilename() {
         return null;
     }
     
+    /**
+     * Sets the referenced object (the child).
+     * @param referencedObj
+     */
     public void setReferencedObject(DcObject referencedObj) {
         this.referencedObj = referencedObj;
     }
     
+    /**
+     * Retrieves the referenced object.
+     */
     public DcObject getReferencedObject() {
         return referencedObj == null ? 
                DataManager.getObject(getReferencedModuleIdx(), getReferencedId()) : referencedObj;
     }
     
+    /**
+     * The parent module index.
+     */
     public int getParentModuleIdx() {
         return getField(_A_PARENT_ID).getReferenceIdx();
     }
 
+    /**
+     * The referenced module index.
+     */
     public int getReferencedModuleIdx() {
         return getField(_B_REFERENCED_ID).getSourceModuleIdx();
     }
-    
+
+    /**
+     * The object ID of the parent.
+     */
     public String getParentId() {
         return (String) getValue(_A_PARENT_ID);
     }
 
+    /**
+     * The object ID of the referenced item.
+     */
     public String getReferencedId() {
         return (String) getValue(_B_REFERENCED_ID);
     }
@@ -88,6 +125,4 @@ public class DcMapping extends DcObject {
             
         return dco == null ? "" : dco.toString();
     }
-    
-    protected void setModuleIndex() {}
 }

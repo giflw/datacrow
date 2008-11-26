@@ -34,6 +34,13 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A picture represents a physical picture file.
+ * Every image stored in Data Crow (such as screenshots) is represented by 
+ * a picture object.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class Picture extends DcObject {
 
     private static final long serialVersionUID = 2871103592900195025L;
