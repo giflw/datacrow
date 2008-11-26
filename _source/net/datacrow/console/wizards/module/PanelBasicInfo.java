@@ -82,7 +82,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         textName.setText(module.getLabel());
         textObjectName.setText(module.getObjectName());
         textObjectNamePlural.setText(module.getObjectNamePlural());
-        checkCanBeLended.setSelected(module.canBeLended());
+        checkCanBeLended.setSelected(module.canBeLend());
         
         if (module.getIcon16() != null)
             pic16.setIcon(new DcImageIcon(module.getIcon16()));
@@ -150,7 +150,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         module.setTableName(nameNormalized);
         module.setTableNameShort(nameNormalized);
         module.setLabel(name);
-        module.setCanBeLended(checkCanBeLended.isSelected());
+        module.setCanBeLend(checkCanBeLended.isSelected());
         module.setHasInsertView(true);
         module.setHasSearchView(true);
 

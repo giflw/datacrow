@@ -38,6 +38,13 @@ import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 
+/**
+ * Fields are part of a Data Crow module. A field defines how it is represented in the
+ * UI, which label is used to describe it, if it can be searched on, if it is editable, 
+ * the maximum length of its content and so on.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcField implements Serializable{
 
     private static final long serialVersionUID = -3426157253979375896L;
@@ -60,12 +67,33 @@ public class DcField implements Serializable{
     
     private Collection<IValueEnhancer> enhancers = new ArrayList<IValueEnhancer>();
 
+    /**
+     * Creates a new field based on a XML definition.
+     * @param field XML definition.
+     * @param module The module index to which this field belongs.
+     */
     public DcField(XmlField field, int module) {
         this(field.getIndex(), module, field.getName(), field.isUiOnly(), field.isEnabled(),
              field.isReadonly(), field.isSearchable(), field.isTechinfo(), field.getMaximumLength(),
              field.getFieldType(), field.getModuleReference(), field.getValueType(), field.getColumn());
     }
     
+    /**
+     * Creates a new field.
+     * @param index The unique field index.
+     * @param module The module to which this field belongs.
+     * @param label The display label.
+     * @param uiOnly Indicates if this field is represented by a database column.
+     * @param enabled Indicates if the field will be used. Can be overridden by the user.
+     * @param readonly Indicates if the field can be edited.
+     * @param searchable Tells if the user can search on this field.
+     * @param techinfo Holds technical information?
+     * @param maximumLength The maximum value length.
+     * @param fieldType The (component) field type.
+     * @param modRef The module reference.
+     * @param valueType The value type {@link DcRepository.ValueTypes}
+     * @param databaseFieldName The database column name.
+     */
     public DcField( int index,
                     int module,
                     String label,
@@ -96,50 +124,96 @@ public class DcField implements Serializable{
         setSourceModuleIdx(modRef);
     }
     
+    /**
+     * Sets the source module index.
+     * @param modRef The module index.
+     */
     public void setSourceModuleIdx(int modRef) {
         this.sourceModuleIdx = modRef;
     }
 
+    /**
+     * The source module index.
+     */
     public int getSourceModuleIdx() {
         return sourceModuleIdx;
     }
 
+    /**
+     * The module reference index.
+     */
     public int getReferenceIdx() {
         return DcModules.getReferencedModule(this).getIndex();
     }
     
+    /**
+     * Sets the unique field index.
+     * @param index
+     */
     public void setIndex(int index) {
         this.index = index;
     }
 
+    /**
+     * The unique field index.
+     */
     public int getIndex() {
         return index;
     }
 
+    /**
+     * Set the module to which this field belongs.
+     * @param module The module index.
+     */
     public void setModule(int module) {
         this.module = module;
     }
 
+    /**
+     * The module to which this field belongs.
+     */
     public int getModule() {
         return module;
     }
 
+    /**
+     * Indicates if this field holds technical information.
+     * Only implication is that the field will be displayed in the technical 
+     * information tab of the item form.
+     * @param techinfo
+     */
     public void setTechinfo(boolean techinfo) {
         this.techinfo = techinfo;
     }
 
+    /**
+     * When a field is marked as UI only its value will not be stored in the database.
+     * @param uiOnly
+     */
     public void setUiOnly(boolean uiOnly) {
         this.uiOnly = uiOnly;
     }
 
+    /**
+     * When a field is marked as UI only its value will not be stored in the database.
+     */
     public boolean isUiOnly() {
         return uiOnly;
     }
 
+    /**
+     * Indicates if this field is enabled by default. This setting can be overridden by
+     * the user.
+     * @param enabled
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    /**
+     * Indicates if the field is enabled. Depends on both the settings and the permissions
+     * of the user.
+     */
     public boolean isEnabled() {
         if (    SecurityCentre.getInstance().getUser() == null ||
                 SecurityCentre.getInstance().getUser().isAuthorized(this)) {
@@ -165,38 +239,69 @@ public class DcField implements Serializable{
         }
     }
 
+    /**
+     * Indicate if the user is allowed to search on this field.
+     * @param searchable
+     */
     public void setSearchable(boolean searchable) {
         this.searchable = searchable;
     }
 
+    /**
+     * Set the database column name.
+     */
     public String getDatabaseFieldName() {
         return databaseFieldName;
     }
 
+    /**
+     * The component type.
+     */
     public int getFieldType() {
         return fieldType;
     }
 
+    /**
+     * The value type.
+     * @see DcRepository.ValueTypes
+     */
     public int getValueType() {
         return valueType;
     }
 
+    /**
+     * The display label.
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * The system name of this field.
+     */
     public String getSystemName() {
         return systemName;
     }
 
+    /**
+     * Indicates if this field hold technical information.
+     * @see #setTechinfo(boolean)
+     */
     public boolean isTechnicalInfo() {
         return techinfo;
     }
 
+    /**
+     * Mark the field as required.
+     */
     public boolean isRequired() {
         return required;
     }
 
+    /**
+     * Indicates if the value belonging to this field can be edited.
+     * Depends on both the settings and the permissions of the user.
+     */
     public boolean isReadOnly() {
         if (     SecurityCentre.getInstance().getUser() != null &&
                 !SecurityCentre.getInstance().getUser().isEditingAllowed(this))
@@ -205,6 +310,10 @@ public class DcField implements Serializable{
             return readonly;
     }
 
+    /**
+     * Indicates if the user can search on this field.
+     * @return
+     */
     public boolean isSearchable() {
         return searchable;
     }
@@ -213,7 +322,6 @@ public class DcField implements Serializable{
      * Returns the maximum field length (characters positions).
      * In case the field is of type long text field the maximum value will be
      * the maximum integer (Integer.MAX_VALUE) value (maximum field setting is thus overruled).
-     * @return
      */
     public int getMaximumLength() {
         return getFieldType() == ComponentFactory._LONGTEXTFIELD ? 
@@ -221,34 +329,64 @@ public class DcField implements Serializable{
                maximumLength;
     }
 
+    /**
+     * The display label.
+     */
     public void setLabel(String s) {
         label = s;
     }
 
+    /**
+     * The system name.
+     */
     private void setSystemName(String s) {
         systemName = s;
     }
 
+    /**
+     * Indicate if the value of this field can edited.
+     */
     public void setReadOnly(boolean b) {
         readonly = b;
     }
 
+    /**
+     * Mark the field as required.
+     * @param b
+     */
     public void setRequired(boolean b) {
         required = b;
     }
 
+    /**
+     * The maximum length of the value of this field.
+     * @param i
+     */
     public void setMaximumLength(int i) {
         maximumLength = i;
     }
 
+    /**
+     * Sets the component type.
+     * @param index
+     */
     public void setFieldType(int index) {
         fieldType = index;
     }
 
+    /**
+     * Sets the value type.
+     * @see DcRepository.ValueTypes
+     * @param index
+     */
     public void setValueType(int index) {
         valueType = index;
     }
 
+    /**
+     * Sets the database column name.
+     * @param s
+     */
     public void setDatabaseFieldName(String s) {
         databaseFieldName = s;
     }
@@ -258,18 +396,32 @@ public class DcField implements Serializable{
         return label;
     }
     
+    /**
+     * Remove all the registered value enhancers.
+     */
     public void removeEnhancers() {
         enhancers.clear();
     }
     
+    /**
+     * Register a new value enhancer.
+     * @param enhancer
+     */
     public void addValueEnhancer(IValueEnhancer enhancer) {
         enhancers.add(enhancer);
     }
     
+    /**
+     * Retrieves all the registered value enhancers.
+     * @return
+     */
     public IValueEnhancer[] getValueEnhancers() {
         return enhancers.toArray(new IValueEnhancer[0]);
     }
 
+    /**
+     * Calculates the database field type defition.
+     */
     public String getDataBaseFieldType() {
         String s = "";
         if (getValueType() == DcRepository.ValueTypes._STRING) {

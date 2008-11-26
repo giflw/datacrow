@@ -279,7 +279,7 @@ public class DcModule implements Comparable<DcModule> {
         icon32 = new ImageIcon(module.getIcon32());
         
         nameFieldIdx = module.getNameFieldIdx();
-        canBeLended = module.canBeLended();
+        canBeLended = module.canBeLend();
         
         displayIndex = module.getDisplayIndex();
         defaultSortFieldIdx = module.getDefaultSortFieldIdx();

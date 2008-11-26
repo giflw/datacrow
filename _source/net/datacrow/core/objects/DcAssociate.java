@@ -32,6 +32,11 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
+/**
+ * Represents companies and persons.  
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcAssociate extends DcObject {
 
     private static final long serialVersionUID = 6420907381739662714L;
@@ -43,15 +48,27 @@ public class DcAssociate extends DcObject {
     public static final int _E_FIRSTNAME = 5;
     public static final int _F_LASTTNAME = 6;
     
+    /**
+     * Creates a new instance.
+     * @param module
+     */
     public DcAssociate(int module) {
         super(module);
     }
-    
+
+    /**
+     * Executed before inserting or updating the item.
+     */
     @Override
     protected void beforeSave() {
         setName();
     }
     
+    /**
+     * Sets the various name parts. The last and first name are calculated if only the
+     * full name is available. If only the last and first name are available the full name
+     * is created out of these parts.
+     */
     public void setName() {
         String name = (String) getValue(DcAssociate._A_NAME);
         String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
@@ -86,6 +103,10 @@ public class DcAssociate extends DcObject {
         super.beforeSave();
     }
 
+    /**
+     * Retrieves the field on which associates are sorted. 
+     * This depends on the {@link DcRepository.Settings#stPersonOrder} setting.
+     */
     @Override
     public int getDefaultSortFieldIdx() {
     	String order = DcSettings.getString(DcRepository.Settings.stPersonOrder);

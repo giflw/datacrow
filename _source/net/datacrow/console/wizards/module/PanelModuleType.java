@@ -90,7 +90,7 @@ public class PanelModuleType extends ModuleWizardPanel {
         } else if (type == _PROPERTYMODULE) {
             module.setModuleClass(DcPropertyModule.class);
             module.setObject(DcProperty.class);
-            module.setCanBeLended(false);
+            module.setCanBeLend(false);
             module.setDefaultSortFieldIdx(DcProperty._A_NAME);
             module.setNameFieldIdx(DcProperty._A_NAME);
         }
