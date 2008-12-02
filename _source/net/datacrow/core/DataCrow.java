@@ -232,13 +232,20 @@ public class DataCrow {
                     }
                 });
             } else {
-                Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-                splashScreen.setStatusMsg("Starting the web server");
-                DcWebServer.getInstance().start();
-                if (DcWebServer.getInstance().isRunning())
-                    splashScreen.setStatusMsg("Web server has been started.");
                 
-                System.out.println("Press CTRL-C to, gracefully, bring the server down.");
+                if (!SecurityCentre.getInstance().getUser().isAuthorized("WebServer")) {
+                    new MessageBox("You are not authorized to start the Web Server. Data Crow will now exit", MessageBox._INFORMATION);
+                    new ShutdownThread().run();
+                    return;
+                } else {
+                    Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+                    splashScreen.setStatusMsg("Starting the web server");
+                    DcWebServer.getInstance().start();
+                    if (DcWebServer.getInstance().isRunning())
+                        splashScreen.setStatusMsg("Web server has been started.");
+                    
+                    System.out.println("Press CTRL-C to, gracefully, bring the server down.");
+                }
             }
             
             MemoryMonitor monitor = new MemoryMonitor();

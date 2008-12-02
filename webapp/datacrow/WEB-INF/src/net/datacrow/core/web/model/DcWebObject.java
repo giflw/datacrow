@@ -166,7 +166,7 @@ public class DcWebObject extends DcSecured {
                 List<Object> values = new ArrayList<Object>();
 
                 for (WebFieldDefinition def : childModule.getWebFieldDefinitions().getDefinitions()) {
-                    DcField field = DcModules.get(getModule()).getField(def.getField());
+                    DcField field = child.getModule().getField(def.getField());
                     if (def.isOverview() && getUser().isAuthorized(field) && field.isEnabled()) {
                         String s = child.getDisplayString(field.getIndex());
                         

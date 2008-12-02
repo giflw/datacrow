@@ -133,14 +133,7 @@ public class DcWebField extends DcSecured {
      * Retrieves the value for this field. This is only used for input forms.
      */
     public Object getValue() {
-        if (type == _DATE) {
-            System.out.println(value);
-            if (value != null) 
-                System.out.println(value.getClass());
-            return value;
-        } else  {
-            return value;
-        }
+        return value;
     }
 
     public void setValue(Object value) {
