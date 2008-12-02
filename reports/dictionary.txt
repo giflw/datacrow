@@ -178,6 +178,7 @@ xsl reference name  [container]
   Created                 = created
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
+  Description             = description
   Due Date                = due-date
   Filehash                = filehash
   Filehash Type           = filehash-type

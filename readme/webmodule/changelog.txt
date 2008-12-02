@@ -8,8 +8,8 @@ Web Module 1.2   [Release on xx/xx/2008] [testing: high] [target: production]
 - Upload image was available for every user independent of their permissions.
 
 [Components]
-- Updated Apache Tomahawk to version 1.1.8
-- Updated MyFaces to version 1.1.6 
+- Updated Apache Tomahawk to latest version (1.1.8)
+- Updated MyFaces to version to latest version (1.1.6) 
 
 
 -----------------------------------------------------------------------------------------

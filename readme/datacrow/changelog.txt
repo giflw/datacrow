@@ -21,6 +21,10 @@ Please note that a new version of the web module is available (version 1.2).
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
   application. The parameter to use is: -webserver. 
+  
+[Components]
+- Updated Jetty to the latest version (6.1.14)
+- Updated FOP from Apache to version 0.95. (Libraries used for report generation).
 
 
 -----------------------------------------------------------------------------------------
