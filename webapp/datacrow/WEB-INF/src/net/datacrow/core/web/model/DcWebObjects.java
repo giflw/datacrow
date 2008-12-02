@@ -137,7 +137,11 @@ public class DcWebObjects extends Sortable {
     }
     
     public boolean isText() {
-        return !isImage() && !isUrl() && !isLinkToDetails();
+        return !isImage() && !isUrl() && !isLinkToDetails() && !isFile();
+    }
+
+    public boolean isFile() {
+        return getField().isFile();
     }
     
     @SuppressWarnings("unchecked")
@@ -226,5 +230,4 @@ public class DcWebObjects extends Sortable {
         }
         return columnIndex;
     }
-
 }

@@ -104,11 +104,17 @@ public class Loan extends DcObject {
         
         Long days = null;
         if (daysLoaned != null && overDueDate != null) {
+            calDaysLoaned.setTime(new java.util.Date());
+            calDaysLoaned.setTime(overDueDate);
+
+            long msPerDay = 1000 * 60 * 60 * 24;
+            
             calDaysTillOverdue.setTime(new java.util.Date());
-            int currentDay = calDaysTillOverdue.get(Calendar.DAY_OF_YEAR);
+            long date1Milliseconds = calDaysTillOverdue.getTime().getTime();
+            
             calDaysTillOverdue.setTime(overDueDate);
-            int overdueDate = calDaysTillOverdue.get(Calendar.DAY_OF_YEAR);
-            days = Long.valueOf(overdueDate - currentDay);
+            long date2Milliseconds = calDaysTillOverdue.getTime().getTime();
+            days = Long.valueOf((date2Milliseconds - date1Milliseconds) / msPerDay);            
         }
         
         return days;
@@ -131,11 +137,18 @@ public class Loan extends DcObject {
         Long days = null;
         if (startDate != null && !isAvailable((String) getValue(Loan._D_OBJECTID))) {
             calDaysLoaned.setTime(new java.util.Date());
-            int currentDay = calDaysLoaned.get(Calendar.DAY_OF_YEAR);
             calDaysLoaned.setTime(startDate);
-            int startDay = calDaysLoaned.get(Calendar.DAY_OF_YEAR);
-            days = Long.valueOf(currentDay - startDay);
+
+            long msPerDay = 1000 * 60 * 60 * 24;
+            
+            calDaysLoaned.setTime(new java.util.Date());
+            long date1Milliseconds = calDaysLoaned.getTimeInMillis();
+            
+            calDaysLoaned.setTime(startDate);
+            long date2Milliseconds = calDaysLoaned.getTimeInMillis();
+            days = Long.valueOf((date1Milliseconds - date2Milliseconds) / msPerDay);
         }
+
         return days;
     }
 }

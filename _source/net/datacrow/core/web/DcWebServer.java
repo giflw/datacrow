@@ -112,6 +112,5 @@ public class DcWebServer {
 	    
 	    server.start();
 	    isRunning = true;
-	    //server.join();
 	}
 }

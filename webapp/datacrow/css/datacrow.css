@@ -15,6 +15,7 @@ table, tr, th, td {
 
 tr, td, th {
 	vertical-align: top;
+	
 }
 
 table {
@@ -191,6 +192,12 @@ textarea {
 	border-bottom: solid;
 	border-bottom-color: Black;
 	border-bottom-width: 1px;
+}
+
+.datatable tr td {
+	border-bottom: solid;
+	border-bottom-color: Black;
+	border-bottom-width: 1px;	
 }
 
 .datatable_children_column {

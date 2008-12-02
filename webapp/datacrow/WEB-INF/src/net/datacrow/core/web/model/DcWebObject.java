@@ -240,7 +240,10 @@ public class DcWebObject extends DcSecured {
             Object value = dco.getValue(field.getIndex());
             if (value != null) {
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                    value = ((DcObject) value).getID();
+                    if (!(value instanceof String))
+                        value = ((DcObject) value).getID();
+                    else
+                        value = null;
                 } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                     value = "/mediaimages/" + ((Picture) value).getScaledFilename();
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {

@@ -59,6 +59,7 @@ import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.security.SecurityException;
 import net.datacrow.core.services.Servers;
 import net.datacrow.core.settings.upgrade.SettingsConversion;
+import net.datacrow.core.web.DcWebServer;
 import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.settings.DcSettings;
@@ -101,6 +102,8 @@ public class DataCrow {
     public static void main(String[] args) {
         
         boolean nocache = false;
+        boolean webserverMode = false; 
+        
         String db = null;
         String dir = null;
         for (int i = 0; i < args.length; i++) {
@@ -113,6 +116,8 @@ public class DataCrow {
             } else if (args[i].toLowerCase().startsWith("-help")) {
                 new StartupHelpDialog().setVisible(true);
                 System.exit(0);
+            } else if (args[i].toLowerCase().startsWith("-webserver")) {
+                webserverMode = true;
             } else if (dir != null) {
                 dir += " " + args[i];
             } else { 
@@ -127,7 +132,6 @@ public class DataCrow {
         }
         
         try {
-        	
             installLafs();
             
             setBaseDir(dir);
@@ -208,7 +212,8 @@ public class DataCrow {
             splashScreen.setStatusMsg("Loading items");
             DcModules.loadData();
             
-            splashScreen.setStatusMsg("Loading UI");
+            if (!webserverMode)
+                splashScreen.setStatusMsg("Loading UI");
 
             // load the filters & patterns
             DataFilters.load();
@@ -216,15 +221,25 @@ public class DataCrow {
             
             ComponentFactory.setLookAndFeel();
             
-            mainFrame = new MainFrame();
-            
-            SwingUtilities.invokeAndWait(new Runnable() {
-                public void run() {
-                    DataCrow.mainFrame.initialize();
-                    DataCrow.mainFrame.setVisible(true);
-                    mainFrame.setViews();
-                }
-            });
+            if (!webserverMode) {
+                mainFrame = new MainFrame();
+                
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        DataCrow.mainFrame.initialize();
+                        DataCrow.mainFrame.setVisible(true);
+                        mainFrame.setViews();
+                    }
+                });
+            } else {
+                Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+                splashScreen.setStatusMsg("Starting the web server");
+                DcWebServer.getInstance().start();
+                if (DcWebServer.getInstance().isRunning())
+                    splashScreen.setStatusMsg("Web server has been started.");
+                
+                System.out.println("Press CTRL-C to, gracefully, bring the server down.");
+            }
             
             MemoryMonitor monitor = new MemoryMonitor();
             monitor.start();
@@ -232,17 +247,19 @@ public class DataCrow {
             Thread splashCloser = new Thread(new SplashScreenCloser());
             splashCloser.start();
             
-            DataFilter df = new DataFilter(DcModules._LOAN);
-            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
-            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
-            
-            for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
-                Long overdue = ((Loan) loan).getDaysTillOverdue();
-            	if (overdue != null && overdue.longValue() < 0) {
-            		new MessageBox(DcResources.getText("msgThereAreOverdueItems"), MessageBox._WARNING);
-            		new LoanInformationForm().setVisible(true);
-            		break;
-            	}
+            if (!webserverMode) {
+                DataFilter df = new DataFilter(DcModules._LOAN);
+                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
+                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
+                
+                for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
+                    Long overdue = ((Loan) loan).getDaysTillOverdue();
+                	if (overdue != null && overdue.longValue() < 0) {
+                		new MessageBox(DcResources.getText("msgThereAreOverdueItems"), MessageBox._WARNING);
+                		new LoanInformationForm().setVisible(true);
+                		break;
+                	}
+                }
             }
             
             DcSettings.set(DcRepository.Settings.stGracefulShutdown, Boolean.FALSE);
@@ -257,12 +274,12 @@ public class DataCrow {
         
         new FreeResourcesTask();
 
-        if (DcSettings.getInt(DcRepository.Settings.stXpMode) == -1) {
+        if (!webserverMode && DcSettings.getInt(DcRepository.Settings.stXpMode) == -1) {
             SelectExpienceLevelDialog dlg = new SelectExpienceLevelDialog();
             dlg.setVisible(true);
         }
         
-        if (DcSettings.getBoolean(DcRepository.Settings.stShowTipsOnStartup)) {
+        if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowTipsOnStartup)) {
             TipOfTheDayDialog dlg = new TipOfTheDayDialog();
             dlg.setVisible(true);
         }  
@@ -482,4 +499,24 @@ public class DataCrow {
         UIManager.installLookAndFeel("JTattoo - Noire", "com.jtattoo.plaf.mint.MintLookAndFeel");
         UIManager.installLookAndFeel("JTattoo - Luna", "com.jtattoo.plaf.luna.LunaLookAndFeel");
     }
+    
+    private static class ShutdownThread extends Thread {
+        
+        @Override
+        public void run() {
+            System.out.println("Closing the web server");
+            
+            try {
+                if (DcWebServer.getInstance().isRunning())
+                    DcWebServer.getInstance().stop();
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
+            
+            System.out.println("Closing the database and writing the item cache");
+            DataManager.serialize();
+            DatabaseManager.closeDatabases(false);
+            System.out.println("Shutdown complete!");
+        }
+    }    
 }

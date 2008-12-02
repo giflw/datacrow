@@ -3,9 +3,9 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 
 <t:aliasBeansScope>
-	<t:aliasBean alias="#{item}" value="#{webObject}" />
-	<t:aliasBean alias="#{itemBean}" value="#{itemDetails}" />
-	<f:subview id="itemDetails">
-   		<jsp:include page="form.jsp"/>
-	</f:subview>
+    <t:aliasBean alias="#{item}" value="#{webObject}" />
+    <t:aliasBean alias="#{itemBean}" value="#{itemDetails}" />
+    <f:subview id="itemDetails">
+        <jsp:include page="form.jsp" />
+    </f:subview>
 </t:aliasBeansScope>

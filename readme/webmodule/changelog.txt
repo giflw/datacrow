@@ -1,4 +1,18 @@
 -----------------------------------------------------------------------------------------
+Web Module 1.2   [Release on xx/xx/2008] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Web module: saving of an item was allowed even when the user did not have 
+  the rights to do so.
+- Upload image was available for every user independent of their permissions.
+
+[Components]
+- Updated Apache Tomahawk to version 1.1.8
+- Updated MyFaces to version 1.1.6 
+
+
+-----------------------------------------------------------------------------------------
 Web Module 1.1   [Release on 8/11/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

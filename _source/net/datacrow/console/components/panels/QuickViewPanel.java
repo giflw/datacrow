@@ -398,7 +398,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
 
         scroller = new JScrollPane(descriptionPane);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
         // tabbed pane
         tabbedPane.addTab("Description", IconLibrary._icoInformation ,scroller);

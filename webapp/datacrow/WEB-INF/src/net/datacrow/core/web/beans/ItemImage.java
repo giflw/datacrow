@@ -33,6 +33,7 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.el.VariableResolver;
 
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.ValidationException;
@@ -47,7 +48,6 @@ import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 public class ItemImage extends DcBean {
     
     private UploadedFile uploadedFile;
-    private boolean allowUpload = true;
     
     @Override
     public String back() {
@@ -85,8 +85,6 @@ public class ItemImage extends DcBean {
         Map map = fc.getExternalContext().getRequestParameterMap();
 
         int fieldIdx = Integer.valueOf((String) map.get("fieldIdx"));
-        allowUpload = Boolean.valueOf((String) map.get("allowUpload"));
-        
         Picture picture = (Picture) wo.getDcObject().getValue(fieldIdx);
         DcWebImage wi = (DcWebImage) vr.resolveVariable(fc, "image");
         wi.setFieldIdx(fieldIdx);
@@ -102,7 +100,11 @@ public class ItemImage extends DcBean {
     }
     
     public boolean isAllowUpload() {
-        return allowUpload;
+        FacesContext fc = FacesContext.getCurrentInstance();
+        VariableResolver vr = fc.getApplication().getVariableResolver();
+        DcWebImage wi = (DcWebImage) vr.resolveVariable(fc, "image");
+        DcWebObject wo = (DcWebObject) vr.resolveVariable(fc, "webObject");
+        return getUser().isEditingAllowed(DcModules.get(wo.getModule()).getField(wi.getFieldIdx()));
     }
 
     public UploadedFile getUpFile() {

@@ -52,6 +52,7 @@ public class DcWebField extends DcSecured {
     public static final int _URLFIELD = 5;
     public static final int _MULTIRELATE = 6;
     public static final int _DATE = 7;
+    public static final int _FILE = 8;
     
     private int index;
     private int module;
@@ -88,6 +89,9 @@ public class DcWebField extends DcSecured {
             type = _MULTIRELATE;
         } else if (getDcField().getValueType() == DcRepository.ValueTypes._DATE) {
             type = _DATE;
+        } else if (getDcField().getFieldType() == ComponentFactory._FILEFIELD ||
+                   getDcField().getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
+            type = _FILE;
         } else {
             type = _TEXTFIELD;
         } 
@@ -129,7 +133,14 @@ public class DcWebField extends DcSecured {
      * Retrieves the value for this field. This is only used for input forms.
      */
     public Object getValue() {
-        return value;
+        if (type == _DATE) {
+            System.out.println(value);
+            if (value != null) 
+                System.out.println(value.getClass());
+            return value;
+        } else  {
+            return value;
+        }
     }
 
     public void setValue(Object value) {
@@ -173,8 +184,12 @@ public class DcWebField extends DcSecured {
         return type == _URLFIELD;
     }
     
+    public boolean isFile() {
+        return type == _FILE;
+    }    
+    
     public boolean isTextfield() {
-        return type == _TEXTFIELD;
+        return type == _TEXTFIELD || type == _FILE;
     }
 
     public boolean isLongTextfield() {

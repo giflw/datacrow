@@ -5,7 +5,7 @@
       ^    ^ 
 
 Version 3.4.3
-Created on 08/11/2008
+Created on xx/xx/2008
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -146,6 +146,9 @@ Additional parameters:
     -nocache
      Forces Data Crow to ignore the cached items and load everything fresh from the 
      database.
+     
+    -webserver
+     Starts the web server without starting the actual Data Crow application.
 
 
 ----------------------------------------------------------------------------------------

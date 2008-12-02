@@ -27,8 +27,6 @@ package net.datacrow.core.modules.xml;
 
 import java.lang.reflect.InvocationTargetException;
 
-import javax.xml.crypto.dsig.XMLObject;
-
 import net.datacrow.core.modules.InvalidValueException;
 import net.datacrow.util.XMLParser;
 
@@ -39,7 +37,6 @@ import org.w3c.dom.Element;
  * Delivers additional parsing methods. 
  * 
  * @see XmlModule
- * @see XMLObject
  * 
  * @author Robert Jan van der Waals
  */

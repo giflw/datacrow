@@ -78,9 +78,11 @@ public abstract class ItemBean extends DcBean {
         menu.add(show);
         
         // EDIT MENU
-        NavigationMenuItem edit = getMenuItem("Edit", null, null);
-        edit.add(getMenuItem("Save", "#{" + (wo.isChild() ? "childDetails" : "itemDetails") + ".save}", "save.png"));
-        menu.add(edit);
+        if (getUser().isEditingAllowed(DcModules.get(wo.getModule()))) {
+            NavigationMenuItem edit = getMenuItem("Edit", null, null);
+            edit.add(getMenuItem("Save", "#{" + (wo.isChild() ? "childDetails" : "itemDetails") + ".save}", "save.png"));
+            menu.add(edit);
+        }
         
         addLogoffMenuItem(menu);
         

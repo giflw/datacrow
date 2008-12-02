@@ -4,16 +4,18 @@
 
 <h:panelGroup id="body">
 
-	<h:form rendered="#{security.loggedIn}">
-	    <t:jscookMenu id="menu" layout="hbr" theme="ThemeOffice" styleLocation="css/jscookmenu">
-	        <t:navigationMenuItems id="navitems" value="#{itemRelate.menuItems}" />
-	    </t:jscookMenu>
+    <h:form rendered="#{security.loggedIn}">
+    
+        <t:jscookMenu id="menu" layout="hbr" theme="ThemeOffice" styleLocation="css/jscookmenu">
+            <t:navigationMenuItems id="navitems" value="#{itemRelate.menuItems}" />
+        </t:jscookMenu>
 
-		<t:outputText value="<h1>Select related items</h1>" escape="false" />
-		
-      	<t:selectManyCheckbox id="selone_menu_extras" value="#{references.keys}" layout="pageDirection" styleClass="selectManyCheckbox">
-	      	<f:selectItems value="#{references.listItems}" />
-       	</t:selectManyCheckbox>
-	</h:form>
+        <t:outputText value="<h1>Select related items</h1>" escape="false" />
+        
+        <t:selectManyCheckbox id="selone_menu_extras" value="#{references.keys}" layout="pageDirection" styleClass="selectManyCheckbox">
+            <f:selectItems value="#{references.listItems}" />
+        </t:selectManyCheckbox>
+        
+    </h:form>
 
-</h:panelGroup>		
+</h:panelGroup>        

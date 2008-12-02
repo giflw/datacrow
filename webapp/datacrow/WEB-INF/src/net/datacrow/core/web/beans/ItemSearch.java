@@ -82,10 +82,11 @@ public class ItemSearch extends DcBean {
         VariableResolver vr = fc.getApplication().getVariableResolver();
         DcWebObjects objects = (DcWebObjects) vr.resolveVariable(fc, "webObjects");
         
-        NavigationMenuItem edit = getMenuItem("Edit", null, null);
-        
-        edit.add(getMenuItem("Create new", "#{itemDetails.create}", "modules/" + DcModules.get(objects.getModule()).getName() + "16.png"));
-        menu.add(edit);
+        if (getUser().isEditingAllowed(DcModules.get(objects.getModule()))) {
+            NavigationMenuItem edit = getMenuItem("Edit", null, null);
+            edit.add(getMenuItem("Create new", "#{itemDetails.create}", "modules/" + DcModules.get(objects.getModule()).getName() + "16.png"));
+            menu.add(edit);
+        }
         
         addLogoffMenuItem(menu);
         
