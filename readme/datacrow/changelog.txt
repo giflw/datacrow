@@ -21,7 +21,8 @@ needs to be installed on top of Data Crow in order for the web module to be avai
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
-  application. The parameter to use is: -webserver.
+  application. The parameter to use is: -webserver. The server can be brought down 
+  gracefully using the CTR-C command (as displayed in the console).
 - The display format for person names can now be set using the settings dialog.
   (Settings > General Settings > 'Default display format for the persons name').
   

@@ -45,7 +45,6 @@
         <managed-bean-class>net.datacrow.core.web.beans.ChildDetails</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>    
-
     
    <managed-bean>
         <managed-bean-name>itemRelate</managed-bean-name>
@@ -56,6 +55,12 @@
     <managed-bean>
         <managed-bean-name>itemImage</managed-bean-name>
         <managed-bean-class>net.datacrow.core.web.beans.ItemImage</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
+
+    <managed-bean>
+        <managed-bean-name>itemImages</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.ItemImages</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean> 
     
@@ -80,6 +85,12 @@
     <managed-bean>
         <managed-bean-name>image</managed-bean-name>
         <managed-bean-class>net.datacrow.core.web.model.DcWebImage</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>images</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.model.DcWebImages</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
@@ -110,6 +121,10 @@
         <navigation-case>
             <from-outcome>details</from-outcome>
             <to-view-id>/itemdetails.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>itemimages</from-outcome>
+            <to-view-id>/itemimages.jsp</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>childdetails</from-outcome>

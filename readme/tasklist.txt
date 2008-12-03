@@ -13,27 +13,16 @@ Online services
 ---------------------------------------------------------------------------------------------------------
 [ ] MovieMeter.nl online search
 [ ] Book online search in www.isbndb.com (1886661)
-[ ] Bol.com
+[x] Bol.com
 [ ] Wikipedia
 [ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
-
-
-3.4.3
----------------------------------------------------------------------------------------------------------
-[x] Bug: File launcher does no longer launch filenames containing a space character (replaced by %20).
-[x] Bug: Non admin users cannot save items after changing the multi relate field.
-[x] Bug: Field ordering in item form of the web module does not depend on the web field settings.
-[x] Bug: Cannot edit the multi relate fields using the web module.
-[x] Bug: External links do not work in the web module.
-[x] Bug: New user cannot login after logging in once.
-[x] Bug: update all does no longer allow updating fields like artists, developers, etc.
 
 
 3.4.4
 ---------------------------------------------------------------------------------------------------------
 [x] Nullpointers for child modules in the web interface. 
 [ ] Add images overview in the web interface.
-[ ] Displaying format of names should be configurable. 
+[x] Displaying format of names should be configurable. 
 [ ] Fix the reports (check all!)
 
 

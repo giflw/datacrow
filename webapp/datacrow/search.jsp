@@ -69,11 +69,16 @@
             </t:columns>
 
             <t:column styleClass="datatable_column">
+
+                <h:commandLink action="#{itemImages.open}">
+                    <t:graphicImage url="images/picture.png" />
+                </h:commandLink>
+
                 <h:commandLink action="#{itemDetails.open}">
                     <t:graphicImage url="images/open.png" />
                 </h:commandLink>
-            </t:column>
 
+            </t:column>
         </t:dataTable>
 
         <h:panelGrid rendered="#{webObjects.module != 0}">
