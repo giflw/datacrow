@@ -1,6 +1,8 @@
 -----------------------------------------------------------------------------------------
 Web Module 1.2   [Release on xx/xx/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+Many fixes and improvements have been made, specifically in the security part.
+Note that this web module version needs to run on Data Crow 3.4.4 or higher. 
 
 [Fixed]
 - Web module: saving of an item was allowed even when the user did not have 
@@ -9,6 +11,10 @@ Web Module 1.2   [Release on xx/xx/2008] [testing: high] [target: production]
 
 [Changed]
 - If there is only one user in the system this user name is set in the login screen.
+- A picture overview has been added. This overview can be accessed directly from the
+  search page and from the item details page. A new menu has been added in the item 
+  details page; pictures. From here you can navigate to the picture overview or to the
+  picture editing view.
 
 [Components]
 - Updated Apache Tomahawk to latest version (1.1.8)

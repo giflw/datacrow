@@ -107,7 +107,8 @@ public class DcWebObject extends DcSecured {
     }
 
     public boolean isChildrenTabVisible() {
-        return DcModules.get(getModule()).getChild() != null;
+        return DcModules.get(getModule()).getChild() != null && 
+              !DcModules.get(getModule()).getChild().isAbstract();
     }
     
     public String getChildrenLabel() {

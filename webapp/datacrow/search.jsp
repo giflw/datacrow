@@ -74,6 +74,8 @@
                     <t:graphicImage url="images/picture.png" />
                 </h:commandLink>
 
+                <h:outputText value="&nbsp;" escape="false" />
+
                 <h:commandLink action="#{itemDetails.open}">
                     <t:graphicImage url="images/open.png" />
                 </h:commandLink>
