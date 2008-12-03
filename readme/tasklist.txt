@@ -21,7 +21,7 @@ Online services
 3.4.4
 ---------------------------------------------------------------------------------------------------------
 [x] Nullpointers for child modules in the web interface. 
-[ ] Add images overview in the web interface.
+[x] Add images overview in the web interface.
 [x] Displaying format of names should be configurable. 
 [ ] Fix the reports (check all!)
 
