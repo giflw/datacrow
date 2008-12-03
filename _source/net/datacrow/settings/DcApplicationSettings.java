@@ -147,6 +147,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcResources.getText("lblPersonOrder"),
                             true,
                             true));   
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._STRING,
+                            DcRepository.Settings.stPersonDisplayFormat,
+                            DcResources.getText("lblPersonFirstnameLastName"),
+                            ComponentFactory._PERSONDISPLAYFORMATCOMBO,
+                            "",
+                            DcResources.getText("lblPersonDisplayFormat"),
+                            true,
+                            true));   
         getSettings().addSetting(_FileHashing,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stHashType,

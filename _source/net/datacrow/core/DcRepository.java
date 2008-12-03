@@ -86,6 +86,7 @@ public abstract class DcRepository {
         public static final String stUseCache = "use_cache";
         public static final String stGracefulShutdown = "gracefuk_shutdown";
     	public static final String stPersonOrder = "person_order";
+    	public static final String stPersonDisplayFormat = "person_display_format";
         public static final String stQuickViewBackgroundColor = "quick_view_bg_color";
         public static final String stCardViewBackgroundColor = "card_view_background_color";
         public static final String stHashType = "hash_type";

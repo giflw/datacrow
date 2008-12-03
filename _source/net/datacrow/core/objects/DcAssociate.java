@@ -122,9 +122,9 @@ public class DcAssociate extends DcObject {
     
     @Override
     public String toString() {
-    	String order = DcSettings.getString(DcRepository.Settings.stPersonOrder);
+    	String format = DcSettings.getString(DcRepository.Settings.stPersonDisplayFormat);
     	
-    	if (order.equals(DcResources.getText("lblPersonOrderByLastname"))) {
+    	if (format.equals(DcResources.getText("lblPersonLastNameFirstname"))) {
         	String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
         	String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
         	
