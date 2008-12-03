@@ -14,10 +14,12 @@ Please note that a new version of the web module is available (version 1.2). Thi
 needs to be installed on top of Data Crow in order for the web module to be available.
 
 [Fixed]
-- [2334235] Over Due Bug. 
+- [2334235] Over due bug. 
   Loan administration shows items with a due date for the next year as overdue.
 - [2338017] Missing horizontal scroll bar. 
   The quick view does not have a vertical scroll bar.
+- Nothing happens when selecting 'launch file' after adding a new file launcher field 
+  to a module (in this case the music album module).
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
@@ -28,8 +30,8 @@ needs to be installed on top of Data Crow in order for the web module to be avai
   
 [Components]
 - Updated Jetty to the latest version (6.1.14)
-- Updated FOP from Apache to version 0.95. (Libraries used for report generation).
-- HSQL DB has been upgraded to version 1.8.0.10.
+- Updated FOP from Apache to version 0.95 (Libraries used for report generation).
+- HSQL DB has been upgraded to version 1.8.0.10
 
 
 -----------------------------------------------------------------------------------------
