@@ -7,6 +7,9 @@ Web Module 1.2   [Release on xx/xx/2008] [testing: high] [target: production]
   the rights to do so.
 - Upload image was available for every user independent of their permissions.
 
+[Changed]
+- If there is only one user in the system this user name is set in the login screen.
+
 [Components]
 - Updated Apache Tomahawk to latest version (1.1.8)
 - Updated MyFaces to version to latest version (1.1.6) 

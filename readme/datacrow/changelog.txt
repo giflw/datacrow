@@ -10,7 +10,8 @@ with the amount of fixes needed to get there. This release also contains documen
 on developing plugins and online services. Hopefully this will pay off in people in 
 actually starting to create new additions for Data Crow :-)
 
-Please note that a new version of the web module is available (version 1.2).
+Please note that a new version of the web module is available (version 1.2). This module
+needs to be installed on top of Data Crow in order for the web module to be available.
 
 [Fixed]
 - [2334235] Over Due Bug. 
@@ -25,6 +26,7 @@ Please note that a new version of the web module is available (version 1.2).
 [Components]
 - Updated Jetty to the latest version (6.1.14)
 - Updated FOP from Apache to version 0.95. (Libraries used for report generation).
+- HSQL DB has been upgraded to version 1.8.0.10.
 
 
 -----------------------------------------------------------------------------------------

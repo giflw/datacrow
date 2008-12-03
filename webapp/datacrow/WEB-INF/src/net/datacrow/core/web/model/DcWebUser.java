@@ -25,6 +25,10 @@
 
 package net.datacrow.core.web.model;
 
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.security.SecuredUser;
 
 public class DcWebUser {
@@ -51,6 +55,12 @@ public class DcWebUser {
     }
     
     public String getUsername() {
+        if (username == null || username.length() == 0) {
+            DcObject[] users = DataManager.get(DcModules._USER, null);
+            if (users != null && users.length == 1)
+                username = (String) users[0].getValue(User._A_LOGINNAME);
+        }
+        
         return username;
     }
 

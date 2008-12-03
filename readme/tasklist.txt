@@ -31,6 +31,14 @@ Online services
 
 3.4.4
 ---------------------------------------------------------------------------------------------------------
+[x] Nullpointers for child modules in the web interface. 
+[ ] Add images overview in the web interface.
+[ ] Displaying format of names should be configurable. 
+[ ] Fix the reports (check all!)
+
+
+3.4.5
+---------------------------------------------------------------------------------------------------------
 [ ] Provide the option to revert back to the default settings (per module + general settings).
     Provide this option as a parameter.
 [ ] Error handling for defected modules has to be improved. Also it should be possible to skip loading

@@ -81,7 +81,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 3, 0);
+    private static Version version = new Version(3, 4, 4, 0);
     
     public static String baseDir;
     public static String imageDir;
@@ -236,7 +236,7 @@ public class DataCrow {
                 if (!SecurityCentre.getInstance().getUser().isAuthorized("WebServer")) {
                     new MessageBox("You are not authorized to start the Web Server. Data Crow will now exit", MessageBox._INFORMATION);
                     new ShutdownThread().run();
-                    return;
+                    System.exit(0);
                 } else {
                     Runtime.getRuntime().addShutdownHook(new ShutdownThread());
                     splashScreen.setStatusMsg("Starting the web server");

@@ -104,10 +104,11 @@ public class DatabaseUpgrade {
                 LogForm.getInstance().close();
                 
                 DataManager.setUseCache(false);
+                
+                convertDates();
             }
 
             removeInvalidImages();
-            convertDates();
             
         } catch (DatabaseUpgradeException due) {
             String msg = due.getMessage() + ". Upgrade failed. " +
