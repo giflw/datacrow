@@ -63,6 +63,13 @@
         <managed-bean-class>net.datacrow.core.web.beans.ItemImages</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean> 
+
+    <managed-bean>
+        <managed-bean-name>itemDetailsImages</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.ItemDetailsImages</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
+
     
     <managed-bean>
         <managed-bean-name>references</managed-bean-name>
@@ -125,6 +132,10 @@
         <navigation-case>
             <from-outcome>itemimages</from-outcome>
             <to-view-id>/itemimages.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>itemdetailsimages</from-outcome>
+            <to-view-id>/itemdetailsimages.jsp</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>childdetails</from-outcome>

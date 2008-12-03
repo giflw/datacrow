@@ -55,6 +55,9 @@
     <definition name="/itemimages.tiles" extends="layout.datacrow">
         <put name="body" value="/itemimages.jsp" />
     </definition>
+    <definition name="/itemdetailsimages.tiles" extends="layout.datacrow">
+        <put name="body" value="/itemdetailsimages.jsp" />
+    </definition>
     <definition name="/itemrelate.tiles" extends="layout.datacrow">
         <put name="body" value="/itemrelate.jsp" />
     </definition>

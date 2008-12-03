@@ -72,15 +72,25 @@ public abstract class ItemBean extends DcBean {
         if (wo.isChildrenTabVisible())
             show.add(getMenuItem(wo.getChildrenLabel(), "#{" + itemBeanName + ".switchToChildTab}", "modules/" + DcModules.get(wo.getModule()).getChild().getName() + "16.png"));
 
-        if (wo.isPictureTabVisible())
-            show.add(getMenuItem("Pictures", "#{" + itemBeanName + ".switchToPicTab}", "picture.png"));
-
         menu.add(show);
+        
+        // PICTURE MENU
+        NavigationMenuItem pics = getMenuItem("Pictures", null, null);
+
+        if (wo.isPictureTabVisible()) {
+            pics.add(getMenuItem("View", "#{itemDetailsImages.open}" ,"picture.png"));
+            if (getUser().isEditingAllowed(DcModules.get(wo.getModule())))
+                pics.add(getMenuItem("Edit", "#{" + itemBeanName + ".switchToPicTab}", "picture.png"));
+        }
+        
+        menu.add(pics);
         
         // EDIT MENU
         if (getUser().isEditingAllowed(DcModules.get(wo.getModule()))) {
             NavigationMenuItem edit = getMenuItem("Edit", null, null);
             edit.add(getMenuItem("Save", "#{" + (wo.isChild() ? "childDetails" : "itemDetails") + ".save}", "save.png"));
+            
+            
             menu.add(edit);
         }
         

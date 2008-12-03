@@ -4,9 +4,9 @@
 
 <t:aliasBeansScope>
 
-    <t:aliasBean alias="#{itemBean}" value="#{itemImages}" />
+    <t:aliasBean alias="#{itemBean}" value="#{itemDetailsImages}" />
 
-    <f:subview id="images2">
+    <f:subview id="images">
         <jsp:include page="images.jsp"/>
     </f:subview>
 
