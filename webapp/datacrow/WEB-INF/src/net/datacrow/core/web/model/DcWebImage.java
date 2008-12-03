@@ -58,6 +58,10 @@ public class DcWebImage {
     public String getFilename() {
         return picture != null ? "mediaimages/" + picture.getFilename() : null;
     }
+
+    public String getFilenameScaled() {
+        return picture != null ? "mediaimages/" + picture.getScaledFilename() : null;
+    }
     
     public int getFieldIdx() {
         return fieldIdx;

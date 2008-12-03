@@ -26,24 +26,36 @@
 package net.datacrow.core.web.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 
 public class DcWebImages {
 
     private DcWebImage current;
-    private Collection<DcWebImage> images = new ArrayList<DcWebImage>();
+    private List<DcWebImage> images = new ArrayList<DcWebImage>();
 
     public DcWebImage getCurrent() {
+        if (current == null && images.size() > 0)
+            current = images.get(0);
+        
         return current;
     }
     
     public void clear() {
+        current = null;
         images.clear();
     }
     
     public void add(DcWebImage image) {
         images.add(image);
+    }
+    
+    public int getCount() {
+        return images.size();
+    }
+    
+    public List<DcWebImage> getImages() {
+        return images;
     }
     
     public void setCurrent(int fieldIdx) {

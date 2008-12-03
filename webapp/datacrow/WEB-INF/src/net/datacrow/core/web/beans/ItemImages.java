@@ -32,12 +32,14 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.el.VariableResolver;
 
-import net.datacrow.core.DcRepository;
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.core.web.model.DcWebField;
 import net.datacrow.core.web.model.DcWebImage;
 import net.datacrow.core.web.model.DcWebImages;
-import net.datacrow.core.web.model.DcWebObject;
+import net.datacrow.core.web.model.DcWebObjects;
 
 import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 
@@ -62,12 +64,16 @@ public class ItemImages extends DcBean {
     }
     
     public String open() {
+        
+        if (!isLoggedIn())
+            return redirect();
+        
         loadImages();
         return "itemimages";
     }
     
     @SuppressWarnings("unchecked")
-    public String setCurrent() {
+    public String load() {
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();
         DcWebImages images = (DcWebImages) vr.resolveVariable(fc, "images");
@@ -78,29 +84,32 @@ public class ItemImages extends DcBean {
         return "itemimages";
     }
     
+    @SuppressWarnings("unchecked")
     private void loadImages() {
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();
-        DcWebObject wo = (DcWebObject) vr.resolveVariable(fc, "webObject");
+        DcWebObjects objects = (DcWebObjects) vr.resolveVariable(fc, "webObjects");
+        List<?> data = (List) objects.getData().getRowData();
+        
+        int moduleIdx = objects.getModule();
+        DcObject dco = DataManager.getObject(moduleIdx, (String) data.get(data.size() - 1));
+        
         DcWebImages images = (DcWebImages) vr.resolveVariable(fc, "images");
-
         images.clear();
-        for (DcWebField field : wo.getFields()) {
-            if (field.getDcField().getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) wo.getDcObject().getValue(field.getIndex());
-                if (picture != null) {
-                    picture.loadImage();
-                    if (picture.getValue(Picture._D_IMAGE) != null) {
-                        DcWebImage wi = new DcWebImage();
-                        wi.setFieldIdx(field.getIndex());
-                        wi.setModuleIdx(field.getDcModule().getIndex());
-                        wi.setPicture(picture);
-                        
-                        if (images.getCurrent() == null)
-                            images.setCurrent(field.getIndex());
-                        
-                        images.add(wi);
-                    }
+        
+        for (DcField field : dco.getFields()) {
+            if (field.getFieldType() == ComponentFactory._PICTUREFIELD) {
+                Picture picture = (Picture) dco.getValue(field.getIndex());
+                
+                if (picture == null) continue;
+                
+                picture.loadImage();
+                if (picture.getValue(Picture._D_IMAGE) != null) {
+                    DcWebImage wi = new DcWebImage();
+                    wi.setFieldIdx(field.getIndex());
+                    wi.setModuleIdx(field.getModule());
+                    wi.setPicture(picture);
+                    images.add(wi);
                 }
             }
         }

@@ -78,6 +78,9 @@ public class ItemImage extends DcBean {
     @SuppressWarnings("unchecked")
     public String open() {
         
+        if (!isLoggedIn())
+            return redirect();
+        
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();
         
