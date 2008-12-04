@@ -41,7 +41,7 @@
           <td class="listing">
             <xsl:choose>
               <xsl:when test="image != ''">
-                <img alt=""><xsl:attribute name="src"><xsl:value-of select="image" /></xsl:attribute></img>
+                <img alt=""><xsl:attribute name="src"><xsl:value-of select="image" /></xsl:attribute></img>&#160;
               </xsl:when>
               <xsl:otherwise>&#160;</xsl:otherwise>
             </xsl:choose>

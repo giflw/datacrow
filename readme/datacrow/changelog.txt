@@ -20,6 +20,7 @@ needs to be installed on top of Data Crow in order for the web module to be avai
   The quick view does not have a vertical scroll bar.
 - Nothing happens when selecting 'launch file' after adding a new file launcher field 
   to a module (in this case the music album module).
+- Music Album and Audio CD report (Black&White) did not generated successfully.
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
