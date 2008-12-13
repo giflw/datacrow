@@ -121,7 +121,7 @@ public class Backup extends Thread {
             directory.mkdirs();
         
         listener.sendMessage(DcResources.getText("msgStartBackup"));
-        DatabaseManager.closeDatabases(false);
+        DatabaseManager.closeDatabases(true);
         listener.sendMessage(DcResources.getText("msgClosingDb"));
 
         try {
