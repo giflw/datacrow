@@ -42,8 +42,6 @@ import net.datacrow.settings.definitions.IDefinitions;
  * to add groups, add settings, get settings and get values of settings.
  * 
  * @author Robert Jan van der Waals
- * @since 1.4
- * @version 1.9
  */
 public class Settings {
 
@@ -54,7 +52,7 @@ public class Settings {
      * Adds a group to the hashtable. A group may contain sub-groups.
      * Only the parent, to which a sub-group belongs, should be added.
      * 
-     * @param sKey unique identifier for this group
+     * @param key unique identifier for this group
      * @param group a top-level group (parent)
      */ 
     public void addGroup(String key, SettingsGroup group) {
@@ -90,7 +88,7 @@ public class Settings {
      * Adds a setting to a specified group. A group can be either
      * a parent or a child.
      * 
-     * @param sGroupKey the key of the group
+     * @param key the key of the group
      * @param setting the setting to be added to the specified group
      */
     public void addSetting(String key, Setting setting) {
@@ -197,7 +195,7 @@ public class Settings {
     }
 
     /**
-     * Retrieves all the top-level groups
+     * Retrieves all the top level groups
      */    
     public LinkedHashMap<String, SettingsGroup> getSettingsGroups() {
         return groups;   

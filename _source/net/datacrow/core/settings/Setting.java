@@ -49,12 +49,9 @@ import org.apache.log4j.Logger;
 
 /**
  * A Settings definition. The setting is always added to a file
- * (the settings file) and if specified, the setting is also
- * editable thru the SettingsView.
+ * (the settings file) and if specified, the setting is also editable in the SettingsView.
  * 
  * @author Robert Jan van der Waals
- * @since 1.4
- * @version 1.9
  */
 public class Setting {
     
@@ -140,10 +137,17 @@ public class Setting {
         return ComponentFactory.getComponent(-1, -1, componentType, labelText, 400);
     }
 
+    /**
+     * The value type.
+     * @return {@link DcRepository.ValueTypes}
+     */
     public int getDataType() {
         return dataType;
     }
 
+    /**
+     * The setting key ({@link DcRepository.Settings}, {@link DcRepository.ModuleSettings}).
+     */
     public String getKey() {
         return key;
     }
@@ -156,6 +160,10 @@ public class Setting {
         return helpText;   
     }
 
+    /**
+     * Creates a string representation of the value which can be used to store the value.
+     * @return String representation of the value.
+     */
     public String getValueAsString() {
         String toString = "";
         
@@ -216,10 +224,15 @@ public class Setting {
         return toString;
     }
 
-    public void setValue(Object oValue) {
-        this.value = oValue;
+    public void setValue(Object o) {
+        this.value = o;
     }
 
+    /**
+     * Allows a string representation to be set as a value. The string
+     * will be parsed. The result will be set as the actual value for this setting.
+     * @param s String representation of the value.
+     */
     public void setStringAsValue(String s) {
         String sValue = s;
         try {

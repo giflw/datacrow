@@ -30,6 +30,10 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.util.Hash;
 
+/**
+ * Imports software files.
+ * @author Robert Jan van der Waals
+ */
 public class SoftwareImporter extends FileImporter {
 
     public SoftwareImporter() {

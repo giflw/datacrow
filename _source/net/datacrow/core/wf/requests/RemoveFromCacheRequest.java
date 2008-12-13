@@ -31,6 +31,11 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * Removes and item from the view cache.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class RemoveFromCacheRequest implements IRequest {
 
     private static final long serialVersionUID = -6911519035345853780L;

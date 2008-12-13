@@ -40,6 +40,12 @@ import net.datacrow.util.Hash;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
+/**
+ * Music file importer.
+ * Creates music album for music file collections.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class MusicAlbumImporter extends FileImporter {
     
     private static final int _DONOTUSE = 0;
@@ -49,11 +55,6 @@ public class MusicAlbumImporter extends FileImporter {
     
     protected final Collection<DcObject> albums = new ArrayList<DcObject>();
 
-    @Override
-    public void beforeParse() {
-        albums.clear();
-    }
-    
     public MusicAlbumImporter() {
         super(DcModules._MUSICALBUM);
     }
@@ -65,19 +66,18 @@ public class MusicAlbumImporter extends FileImporter {
     }
 
     @Override
-    public boolean allowDirectoryRegistration() {
-        return false;
-    }  
+    public void beforeParse() {
+        albums.clear();
+    }
     
+    /**
+     * Opens the import dialog.
+     * @see MusicFileImportDialog
+     */
     @Override
     public void showUI() {
         MusicFileImportDialog dlg = new MusicFileImportDialog(this);
         dlg.setVisible(true);
-    }
-    
-    @Override
-    public boolean allowSingleFileParsing() {
-        return false;
     }
     
     @Override

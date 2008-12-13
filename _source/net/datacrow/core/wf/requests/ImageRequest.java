@@ -39,6 +39,11 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Stores or deletes the images (physical disk operation).
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ImageRequest implements IRequest {
     
     private static final long serialVersionUID = 6822123799687000065L;
@@ -52,24 +57,38 @@ public class ImageRequest implements IRequest {
 
     private String filename;
     private DcImageIcon icon;
-    private String objectID;
+    private String ID;
     private int modus;
     
+    /**
+     * Creates a new instance.
+     * @param pic
+     * @param modus Either {@link #_SAVE} or {@link #_DELETE}.
+     */
     public ImageRequest(Picture pic, int modus) {
         this.icon = (DcImageIcon) pic.getValue(Picture._D_IMAGE);
         this.filename = pic.getFilename();
         this.modus = modus;
     }
 
-    public ImageRequest(String objectID, int modus) {
-        this.objectID = objectID;
+    /**
+     * Creates a new instance.
+     * @param ID The Object ID.
+     * @param modus Either {@link #_SAVE} or {@link #_DELETE}.
+     */
+    public ImageRequest(String ID, int modus) {
+        this.ID = ID;
         this.modus = modus;
     }    
     
-    public void execute(Collection<DcObject> objects) {
-        if (objectID != null && modus == ImageRequest._DELETE) {
+    /**
+     * Stores or deletes the images.
+     * @param items Not used for this particular request.
+     */
+    public void execute(Collection<DcObject> items) {
+        if (ID != null && modus == ImageRequest._DELETE) {
             File file = new File(DataCrow.imageDir);
-            String[] files = file.list(new Filter(objectID));
+            String[] files = file.list(new Filter(ID));
             
             if (files == null) return;
             
@@ -106,7 +125,7 @@ public class ImageRequest implements IRequest {
         }
         
         icon.flush();
-        objectID = null;
+        ID = null;
     }
 
     private void saveImage() {
@@ -137,7 +156,7 @@ public class ImageRequest implements IRequest {
             icon.flush();
         
         icon = null;
-        objectID = null;
+        ID = null;
         filename = null;
     }    
     

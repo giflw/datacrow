@@ -29,6 +29,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
+/**
+ * Used for conversion purposes only.
+ * 
+ * @deprecated
+ * @author Robert Jan van der Waals
+ */
+@SuppressWarnings("dep-ann")
 public class LegacyFieldDefinitions {
     
     private java.util.List<LegacyFieldDefinition> definitions = new ArrayList<LegacyFieldDefinition>();

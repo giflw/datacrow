@@ -38,6 +38,11 @@ import net.datacrow.util.Converter;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Creates the report dictionary (dictionary.txt as present in the reports folder),
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ReportDictionaryGenerator {
 
     private static Logger logger = Logger.getLogger(ReportDictionaryGenerator.class.getName());

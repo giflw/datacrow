@@ -29,6 +29,13 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * A file pattern part is part of a file pattern. It represents a field, 
+ * a suffix and a prefix. Based on this information a part of the filename is formed. 
+ * 
+ * @see FilePattern
+ * @author Robert Jan van der Waals
+ */
 public class FilePatternPart {
     
     private DcField field;
@@ -36,10 +43,19 @@ public class FilePatternPart {
     private String suffix;
     private String prefix;
     
+    /**
+     * Creates a new instance.
+     * @param field The field from which the value will be used to create this 
+     * part of the filename.
+     */
     protected FilePatternPart(DcField field) {
         this.field = field;
     }
     
+    /**
+     * Create this part of the filename.
+     * @param dco
+     */
     public String get(DcObject dco) {
         StringBuffer sb = new StringBuffer(prefix);
         
@@ -67,6 +83,10 @@ public class FilePatternPart {
         return sb.toString();
     }
 
+    /**
+     * Remove invalid characters from the string.
+     * @param s
+     */
     private String normalize(String s) {
         return s != null ? s.replaceAll("[,.!@#$%^&{}'~`\\*;:\r\n!\\?\\[\\]\\\\\\/\\(\\)\"]", "").trim() : "";
     }

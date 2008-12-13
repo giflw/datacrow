@@ -35,6 +35,11 @@ import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * Request to close a form.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class CloseWindowRequest implements IRequest {
 
     private static final long serialVersionUID = 1228283059318769182L;

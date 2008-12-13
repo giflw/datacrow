@@ -48,7 +48,11 @@ import net.datacrow.util.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
- * Base for all file importers
+ * Base for all file importers. A file importer is capable of scanning a specific
+ * location for specific file types. These files are parsed and their information
+ * is stored in a {@link DcObject}.
+ * 
+ * @author Robert Jan van der Waals
  */
 public abstract class FileImporter {
 
@@ -56,40 +60,76 @@ public abstract class FileImporter {
     
     private final int module;
     
+    /**
+     * Creates a new instance.
+     * @param module The module to which this importer belongs.
+     */
     public FileImporter(int module) {
         this.module = module;
     }
     
+    /**
+     * The module to which this importer belongs.
+     */
     public int getModule() {
         return module;
     }
     
+    /**
+     * Opens the importer dialog.
+     * @see FileImportDialog
+     */
     public void showUI() {
         FileImportDialog dlg = new FileImportDialog(this);
         dlg.setVisible(true);
     }
     
+    /**
+     * Parses a file and extracts its information.
+     * @param filename The file to check.
+     * @param directoryUsage A free interpretation of the directory usage. 
+     * Depends on a specific implementation.
+     * @throws ParseException
+     */
     public abstract DcObject parse(String filename, int directoryUsage) throws ParseException;
     public abstract String[] getSupportedExtensions();
 
-    public boolean allowSingleFileParsing() {
-        return true;
-    }
-
+    /**
+     * Indicates if a directory can be used instead of a file.
+     * @return false
+     */
     public boolean allowDirectoryRegistration() {
         return false;
     }
     
+    /**
+     * Indicates if files can be parsed again. This useful when you know that the information
+     * of the file can be changed (such as the ID tag content of MP3 files).
+     * @return false
+     */
     public boolean allowReparsing() {
         return false;
     }
     
+    /**
+     * Indicates if local art can be used.
+     * @return false
+     */
     public boolean canImportArt() {
         return false;
     }
     
+    /**
+     * To be executed before a file is parsed.
+     */
     public void beforeParse() {}
     
+    /**
+     * Starts the parsing task.
+     * @param listener The listener to be updated on events and result.
+     * @param sources The files to check.
+     * @throws Exception
+     */
     public void parse(final IFileImportClient listener, 
                       final Collection<String> sources) throws Exception {
         
@@ -126,6 +166,11 @@ public abstract class FileImporter {
         thread.start();
     }
     
+    /**
+     * Parses a single file. The process skips already imported files.
+     * @param listener
+     * @param filename
+     */
     protected void parse(IFileImportClient listener, String filename) {
         int module = listener.getModule();
         
@@ -188,6 +233,12 @@ public abstract class FileImporter {
         DcModules.getCurrent().getCurrentInsertView().add(dco, false);
     }
 
+    /**
+     * Tries to create a name from the specified file.
+     * @param file
+     * @param directoryUsage Either 1 (to use directory information) or 0.
+     * @return The name.
+     */
     protected String getName(String file, int directoryUsage) {
         String name = "";
         if (directoryUsage == 1) {
@@ -230,6 +281,21 @@ public abstract class FileImporter {
         return false;
     }
     
+    /**
+     * Retrieve and use local art.
+     * 
+     * @see DcRepository.ModuleSettings#stImportLocalArt
+     * @see DcRepository.ModuleSettings#stImportLocalArtRecurse
+     * @see DcRepository.ModuleSettings#stImportLocalArtFrontKeywords
+     * @see DcRepository.ModuleSettings#stImportLocalArtBackKeywords
+     * @see DcRepository.ModuleSettings#stImportLocalArtMediaKeywords
+     * 
+     * @param filename The file location for which art will be retrieved.
+     * @param dco
+     * @param front The front image field index.
+     * @param back The back image field index.
+     * @param cd The media image field index.
+     */
     protected void setImages(String filename, DcObject dco, int front, int back, int cd) {
         Settings settings = DcModules.get(module).getSettings();
         if (!settings.getBoolean(DcRepository.ModuleSettings.stImportLocalArt)) 

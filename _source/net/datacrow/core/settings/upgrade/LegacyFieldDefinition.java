@@ -29,6 +29,13 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.Definition;
 
+/**
+ * Used for conversion purposes only.
+ * 
+ * @deprecated
+ * @author Robert Jan van der Waals
+ */
+@SuppressWarnings("dep-ann")
 public class LegacyFieldDefinition extends Definition {
 
     private int index;

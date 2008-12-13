@@ -25,5 +25,17 @@
 
 package net.datacrow.core.wf.requests;
 
-public interface IUpdateUIRequest extends IRequest {
-}
+import net.datacrow.core.db.Query;
+import net.datacrow.core.wf.UIUpdater;
+
+/**
+ * Requests can be added to queries and are executed after the query has been 
+ * performed. A request is in most cases a UI related task which needs to be executed
+ * without locking the GUI. 
+ * 
+ * @see UIUpdater
+ * @see Query
+ * 
+ * @author Robert Jan van der Waals
+ */
+public interface IUpdateUIRequest extends IRequest {}

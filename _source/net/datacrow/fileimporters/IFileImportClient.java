@@ -31,32 +31,85 @@ import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
 
+/**
+ * This client can be updated on events and results form a file import process.
+ * 
+ * @see FileImporter
+ * @author Robert Jan van der Waals
+ */
 public interface IFileImportClient {
     
+    /**
+     * Adds a messages.
+     * @param message
+     */
     public void addMessage(String message);
     
+    /**
+     * Adds an error.
+     * @param e
+     */
     public void addError(Exception e);
     
+    /**
+     * Sets the expected result count.
+     * @param max
+     */
     public void initProgressBar(int max);
     
+    /**
+     * Updates the progress bar to the specified value.
+     * @param value
+     */
     public void updateProgressBar(int value);
     
+    /**
+     * Indicates the process has been canceled.
+     */
     public boolean cancelled();
-    
+
+    /**
+     * Indicates if online services should be used.
+     */
     public boolean useOnlineServices();
-    
+
+    /**
+     * Indicate the process has finished.
+     */
     public void finish();
     
+    /**
+     * The used search mode.
+     * @return The search mode or null.
+     */
     public SearchMode getSearchMode();
     
+    /**
+     * The used server.
+     */
     public IServer getServer();
-    
+
+    /**
+     * The used region.
+     * @return The region or null.
+     */
     public Region getRegion();
     
+    /**
+     * The container to which the resulted items are added.
+     * @return A container or null.
+     */
     public DcObject getContainer();
     
+    /**
+     * The storage medium to apply on the resulted items.
+     * @return A storage medium or null.
+     */
     public DcProperty getStorageMedium();
     
+    /**
+     * The directory usage implementation (free form).
+     */
     public int getDirectoryUsage();
     
     public int getModule();

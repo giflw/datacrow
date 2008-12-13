@@ -30,6 +30,11 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Book;
 import net.datacrow.util.Hash;
 
+/**
+ * E-Book (Electronical Book) file imporerter.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class EbookImport extends FileImporter {
 
     public EbookImport() {

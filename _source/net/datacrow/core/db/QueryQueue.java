@@ -203,7 +203,7 @@ public class QueryQueue extends Thread {
                 }
             }
 
-            objects.addAll(new WorkFlow().convertToDCObjects(result));
+            objects.addAll(new WorkFlow().convert(result));
 
             try {
                 if (result != null)
@@ -234,7 +234,7 @@ public class QueryQueue extends Thread {
             }
         }
 
-        Collection<DcObject> objects = new WorkFlow().convertToDCObjects(result);
+        Collection<DcObject> objects = new WorkFlow().convert(result);
         try {
             if (result != null)
                 result.close();

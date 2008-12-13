@@ -41,6 +41,13 @@ import net.datacrow.core.objects.DcField;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Collection of value enhancers. Value enhancers should be registered here to become
+ * active. 
+ * 
+ * @see IValueEnhancer
+ * @author Robert Jan van der Waals
+ */
 public class ValueEnhancers {
 
     private static Logger logger = Logger.getLogger(ValueEnhancers.class.getName());
@@ -51,6 +58,11 @@ public class ValueEnhancers {
     private static final Map<DcField, Collection<IValueEnhancer>> enhancers = 
         new HashMap<DcField, Collection<IValueEnhancer>>();
     
+    /**
+     * Register a value enhancer for a specific field.
+     * @param field The field which will be enhanced.
+     * @param valueEnhancer The value enhancer.
+     */
     public static void registerEnhancer(DcField field, IValueEnhancer valueEnhancer) {
         Collection<IValueEnhancer> c = enhancers.get(field);
         c = c == null ? new ArrayList<IValueEnhancer>() : c;
@@ -68,16 +80,30 @@ public class ValueEnhancers {
         field.addValueEnhancer(valueEnhancer);
     }
     
+    /**
+     * Loads all value enhancers.
+     */
     public static void initialize() {
         load(_AUTOINCREMENT);
         load(_TITLEREWRITERS);
     }
     
+    /**
+     * Retrieves all value enhancers for the specified field.
+     * @param field
+     * @return Empty or filled collection of enhancers.
+     */
     public static Collection<IValueEnhancer> getEnhancers(DcField field) {
         Collection<IValueEnhancer> c = enhancers.get(field);
         return c == null ? new ArrayList<IValueEnhancer>() : c;
     }
     
+    /**
+     * Retrieves all value enhancers for the specified module.
+     * @param module The module index.
+     * @param idx The enhancer index/type.
+     * @return Empty or filled collection of enhancers.
+     */
     public static Collection<? extends IValueEnhancer> getEnhancers(int module, int idx) {
         Collection<IValueEnhancer> c = new ArrayList<IValueEnhancer>();
         for (DcField field : enhancers.keySet()) {
@@ -107,6 +133,9 @@ public class ValueEnhancers {
         return null;
     }
     
+    /**
+     * Saves the enhancer settings.
+     */
     public static void save() {
         Properties incrementers = new Properties();
         Properties titlerewriters = new Properties();

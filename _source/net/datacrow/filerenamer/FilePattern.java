@@ -35,6 +35,12 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.StringUtils;
 
+/**
+ * A file pattern decides how the filename should be formed, using information
+ * from an item.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class FilePattern {
 
     private final String pattern;
@@ -42,6 +48,11 @@ public class FilePattern {
     
     private Collection<FilePatternPart> parts = new ArrayList<FilePatternPart>();
     
+    /**
+     * Creates a new instance.
+     * @param pattern String representation of the pattern.
+     * @param module The module index.
+     */
     public FilePattern(String pattern, int module) {
         this.pattern = pattern;
         this.module = module;
@@ -61,6 +72,13 @@ public class FilePattern {
         return parts;
     }
 
+    /**
+     * Creates the new filename based on information from the item.
+     * @param dco
+     * @param oldFile The current file.
+     * @param baseDir The current base directory.
+     * @return The new filename.
+     */
     public String getFilename(DcObject dco, File oldFile, File baseDir) {
         StringBuffer sb = new StringBuffer();
         

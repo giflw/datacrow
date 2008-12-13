@@ -26,8 +26,8 @@
 package net.datacrow.core.services;
 
 /**
- * A server can have implementations for multiple regions (such as Imdb.com and 
- * Wikipedia have). This class specifies such a region, holding the region code and the 
+ * A server can have implementations for multiple regions (such as Imdb.com has). 
+ * This class specifies such a region, holding the region code and the  
  * URL location of the region.
  * 
  * @author Robert Jan van der Waals

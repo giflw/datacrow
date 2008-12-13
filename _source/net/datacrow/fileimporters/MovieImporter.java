@@ -31,6 +31,11 @@ import net.datacrow.core.objects.helpers.Movie;
 import net.datacrow.util.Hash;
 import net.datacrow.util.movie.FilePropertiesMovie;
 
+/**
+ * Importer for movie files.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class MovieImporter extends FileImporter {
 
     public MovieImporter() {

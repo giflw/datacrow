@@ -850,7 +850,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             	if (synchronizeWithDM)
             		addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, this));
             	
-            	WorkFlow.insertValues(this);
+            	WorkFlow.insert(this);
             } else {
                 Query query = new Query(Query._INSERT, this, null, null);
             	DatabaseManager.executeQuery(query, false);
@@ -899,7 +899,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             	if (synchronizeWithDM)
             		addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, this));
             	
-            	WorkFlow.updateValues(this);
+            	WorkFlow.update(this);
             } else {
                 Query query = new Query(Query._UPDATE, this, null, null);
                 DatabaseManager.executeQuery(query, false);
@@ -921,7 +921,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     	if (synchronizeWithDM)
     		addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._DELETE, this));
     	
-        WorkFlow.deleteValues(this);
+        WorkFlow.delete(this);
     }
 
     /**

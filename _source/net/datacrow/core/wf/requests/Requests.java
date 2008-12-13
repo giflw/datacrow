@@ -28,33 +28,62 @@ package net.datacrow.core.wf.requests;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Collection of requests.  Requests can be added to queries and are executed after 
+ * the query has been performed. A request is in most cases a UI related task which 
+ * needs to be executed without locking the GUI.
+ *  
+ * @see IRequest
+ * @see IUpdateUIRequest
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class Requests implements Serializable {
 
     private static final long serialVersionUID = 6664749483781565179L;
     
     private ArrayList<IRequest> requests = new ArrayList<IRequest>();
 
-    public Requests() {
-    }
+    /**
+     * Create a new empty instance.
+     */
+    public Requests() {}
 
+    /**
+     * Create a new instance and adds the provided request.
+     */
     public Requests(IRequest request) {
         add(request);
     }
 
+    /**
+     * Total count of requests part of this instance.
+     */
     public int size() {
         return requests.size();
     }
     
+    /**
+     * Adds a request.
+     * @param request
+     */
     public void add(IRequest request) {
     	requests = requests == null ? new ArrayList<IRequest>() : requests;
         requests.add(request);
     }
 
+    /**
+     * Removes the specified request.
+     * @param request
+     */
     public void remove(IRequest request) {
         if (requests != null)
             requests.remove(request);
     }
 
+    /**
+     * Free resources.
+     */
     public void clear() {
     	if (requests != null) {
     		requests.clear();
@@ -62,6 +91,10 @@ public class Requests implements Serializable {
     	}
     }
 
+    /**
+     * Gets the requests as an array.
+     * @return The array (filled or empty)
+     */
     public IRequest[] get() {
         return requests != null ? requests.toArray(new IRequest[0]) : new IRequest[0];
     }

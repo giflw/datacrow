@@ -25,17 +25,43 @@
 
 package net.datacrow.filerenamer;
 
+/**
+ * This listener can be updated on events from the {@link FileRenamer}.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public interface IFileRenamerListener {
-    
+   
+    /**
+     * Notify on a event.
+     * @param msg
+     */
     public void notify(String msg);
     
+    /**
+     * Notify of an exception.
+     * @param e
+     */
     public void notify(Exception e);
     
+    /**
+     * Notify that a file has been renamed.
+     */
     public void notifyProcessed();
     
+    /**
+     * Notify of the amount of files to rename.
+     * @param max
+     */
     public void notifyTaskSize(int max);
     
+    /**
+     * Notify the task has been stopped.
+     */
     public void notifyJobStopped();
     
+    /**
+     * Notify the task has been started.
+     */
     public void notifyJobStarted();
 }

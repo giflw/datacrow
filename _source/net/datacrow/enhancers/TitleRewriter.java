@@ -33,19 +33,36 @@ import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMediaObject;
 
+/**
+ * Transforms a title. Based on a word list the title will be transformed as follows: <br>
+ * &lt;Word in list&gt;,&lt;Value without Word in list&gt;
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class TitleRewriter implements IValueEnhancer {
 
     private boolean enabled = false;
     private String wordList;
     
-    public TitleRewriter() {
-    }    
+    /**
+     * Creates a new instance.
+     */
+    public TitleRewriter() {}    
     
+    /**
+     * Creates a new instances.
+     * @param enabled
+     * @param list The word list. Any value starting with a word in the list will be transformed.
+     */
     public TitleRewriter(boolean enabled, String list) {
         this.enabled = enabled;
         this.wordList = list;
     }
     
+    /**
+     * The field to transform.
+     * @return Either {@link DcAssociate#_A_NAME} or {@link DcMediaObject#_A_TITLE}
+     */
     public int getField() {
         if (DcModules.getCurrent() instanceof DcMediaModule)
             return DcMediaObject._A_TITLE;

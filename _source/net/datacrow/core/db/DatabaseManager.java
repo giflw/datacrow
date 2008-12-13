@@ -277,7 +277,7 @@ public class DatabaseManager {
                 ps.execute();
             } else {
                 ResultSet result = ps.executeQuery();
-                data = new WorkFlow().convertToDCObjects(result);
+                data = new WorkFlow().convert(result);
                 result.close();
             }
         } catch (SQLException e) {
@@ -300,7 +300,7 @@ public class DatabaseManager {
      * Update the item in the database with the values from the specified item.
      * @param dco
      */
-    public static void updateValues(DcObject dco) {
+    public static void update(DcObject dco) {
         try {
             boolean isChanged = dco.isChanged();
             if (isChanged) {
@@ -353,7 +353,7 @@ public class DatabaseManager {
      * Stores the item in the database.
      * @param dco
      */
-    public static void insertValues(DcObject dco) {
+    public static void insert(DcObject dco) {
         try {
             if (dco.getID() == null || dco.getID().equals(""))
                 dco.setIDs();
@@ -380,7 +380,7 @@ public class DatabaseManager {
         }            
     }
 
-    public static  void deleteValues(DcObject dco) {
+    public static  void delete(DcObject dco) {
         try {
             Query query = new Query(Query._DELETE, dco, null, dco.getRequests());
             query.setSilence(dco.isSilent());
@@ -392,10 +392,10 @@ public class DatabaseManager {
 
     /**
      * Checks the database to see if the item already exists.
-     * @param o
-     * @param isUpdate Indicates if the check is performed for a new or an existing item.
+     * @param o The item to check.
+     * @param isExisting Indicates if the check is performed for a new or an existing item.
      */
-    public static boolean isUnique(DcObject o, boolean isUpdate) {
+    public static boolean isUnique(DcObject o, boolean isExisting) {
         if (o.hasPrimaryKey() && !o.getModule().isChildModule()) {
             boolean hasRequiredFields = false;
             DcObject dco = o.getModule().getDcObject();
@@ -415,7 +415,7 @@ public class DatabaseManager {
                 
                 int count = 0;
                 for (int i = 0; i < objects.length; i++)
-                	count = !isUpdate || !objects[i].getID().equals(o.getID()) ? count + 1 : count;
+                	count = !isExisting || !objects[i].getID().equals(o.getID()) ? count + 1 : count;
 
                 if (count > 0)
                     return false;

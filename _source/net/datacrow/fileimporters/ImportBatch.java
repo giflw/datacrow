@@ -32,12 +32,25 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
+/**
+ * The import batch coaches the import process.
+ * This is the class that actually should be used to start a file import. 
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ImportBatch extends Thread {
 
     protected IFileImportClient listener;
     protected FileImporter importer;
     protected Collection<String> sources;
     
+    /**
+     * Creates a new import batch.
+     * @param listener 
+     * @param importer
+     * @param sources
+     * @throws Exception
+     */
     public ImportBatch(IFileImportClient listener, 
                        FileImporter importer, 
                        Collection<String> sources) throws Exception {
@@ -58,6 +71,10 @@ public class ImportBatch extends Thread {
         }
     }    
     
+    /**
+     * Parse the files and pass the resulted items to the listener.
+     * @param files
+     */
     protected void parse(Collection<String> files) {
         try {
             listener.addMessage(DcResources.getText("msgImportFoundXResults", "" + files.size()));
@@ -70,9 +87,6 @@ public class ImportBatch extends Thread {
 
                 DcObject dco = parse(filename);
                 
-                if (dco.toString().length() > 0)
-                    onlineUpdate(dco);
-                
                 DcModules.getCurrent().getCurrentInsertView().add(dco, false);
                 listener.updateProgressBar(counter++);
             }
@@ -83,6 +97,9 @@ public class ImportBatch extends Thread {
         }
     }   
     
+    /**
+     * Free resources.
+     */
     protected void cleanup() {
         listener = null;
         importer = null;
@@ -90,6 +107,12 @@ public class ImportBatch extends Thread {
         sources = null;
     }
     
+    /**
+     * Parse a single file. In case all fails an empty item will be created (only the
+     * filename will be set).
+     * @param filename
+     * @return The result (never null)
+     */
     protected DcObject parse(String filename) {
         listener.addMessage(DcResources.getText("msgProcessingFileX", filename));
         DcObject dco = null; 
@@ -119,9 +142,5 @@ public class ImportBatch extends Thread {
         } catch (Exception e) {}
 
         return dco;
-    }
-    
-    protected void onlineUpdate(DcObject dco) {
-
     }
 }

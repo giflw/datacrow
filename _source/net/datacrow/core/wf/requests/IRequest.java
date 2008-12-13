@@ -28,15 +28,43 @@ package net.datacrow.core.wf.requests;
 import java.io.Serializable;
 import java.util.Collection;
 
+import net.datacrow.core.db.Query;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.wf.UIUpdater;
 
+/**
+ * Requests can be added to queries and are executed after the query has been 
+ * performed. A request is in most cases a UI related task which needs to be executed
+ * without locking the GUI. 
+ * 
+ * @see IUpdateUIRequest
+ * @see UIUpdater
+ * @see Query
+ * 
+ * @author Robert Jan van der Waals
+ */
 public interface IRequest extends Serializable {
 
-    public void execute(Collection<DcObject> objects);
+    /**
+     * Executes this request. 
+     * @param items The items retrieved by the query (if any).
+     */
+    public void execute(Collection<DcObject> items);
 
+    /**
+     * Indicates if the request is allowed to be executed even when the query 
+     * has failed.
+     */
     public boolean getExecuteOnFail();
 
+    /**
+     * Indicate if the request is allowed to be executed even when the query 
+     * has failed.
+     */
     public void setExecuteOnFail(boolean b);
     
+    /**
+     * Free resources.
+     */
     public void end();
 }

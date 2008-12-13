@@ -30,28 +30,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * A settings group contains specific settings. A group can have
- * on child, creating a two level settings hierarchy. Deeper 
- * hierarchies are not supported as yet.
+ * A settings group contains specific settings. A group can have one child, 
+ * creating a two level settings hierarchy. Deeper hierarchies are not supported.
  * 
  * @author Robert Jan van der Waals
- * @since 1.4
- * @version 1.9
  */
 public class SettingsGroup {
     
     private String helpIndex = "";
-    private String sKey = "";
+    private String key = "";
     private LinkedHashMap<String, Setting> htSettings = new LinkedHashMap<String, Setting> ();
     private Hashtable<String, SettingsGroup> htChildren = new Hashtable<String, SettingsGroup>();
     
     /**
      * Creates a new settings group
-     * 
-     * @param sKey a unique identifier of this group
+     * @param key A unique identifier of this group
      */
-    public SettingsGroup(String sKey, String helpIndex) {
-        this.sKey = sKey;
+    public SettingsGroup(String key, String helpIndex) {
+        this.key = key;
         this.helpIndex = helpIndex;
     }
 
@@ -63,7 +59,7 @@ public class SettingsGroup {
     }
     
     public String getKey() {
-        return sKey;   
+        return key;   
     }
     
     public String getHelpIndex() {
@@ -74,8 +70,8 @@ public class SettingsGroup {
         return htChildren;
     }
     
-    public SettingsGroup getChild(String sGroupKey) {
-        return htChildren.get(sGroupKey);
+    public SettingsGroup getChild(String key) {
+        return htChildren.get(key);
     }
     
     public Map<String, Setting> getSettings() {
@@ -103,6 +99,6 @@ public class SettingsGroup {
     
     @Override
     public String toString() {
-        return sKey; 
+        return key; 
     }
 }

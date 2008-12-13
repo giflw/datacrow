@@ -27,13 +27,51 @@ package net.datacrow.enhancers;
 
 import net.datacrow.core.objects.DcField;
 
+/**
+ * A value enhancer changes a value before saving the item to the database.
+ * Value enhancers should be registered in the {@link ValueEnhancers} class.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public interface IValueEnhancer {
 
+    /**
+     * Apply the enhancement.
+     * @param field The field to enhance.
+     * @param value The value.
+     * @return The result of the enhancement.
+     */
     public Object apply(DcField field, Object value);
+    
+    /**
+     * Creates a string representation which can be stored to disk.
+     */
     public String toSaveString();
+
+    /**
+     * Unique ID for this enhancer.
+     * @return
+     */
     public int getIndex();
+    
+    /**
+     * Parses a string representation.
+     * @param s
+     */
     public void parse(String s);
+    
+    /**
+     * Indicates if this enhancer is enabled.
+     */
     public boolean isEnabled();
+    
+    /**
+     * Indicates if the enhancement should be performed after updating an item.
+     */
     public boolean isRunOnUpdating();
+
+    /**
+     * Indicates if the enhancement should be performed after inserting an item.
+     */
     public boolean isRunOnInsert();
 }

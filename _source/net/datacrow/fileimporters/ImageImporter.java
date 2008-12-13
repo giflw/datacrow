@@ -45,14 +45,25 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
 
+/**
+ * Imports image files.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ImageImporter extends FileImporter {
 
     private static final Calendar cal = Calendar.getInstance();
     
+    /**
+     * Creates a new instance.
+     */
     public ImageImporter() {
         super(DcModules._IMAGE);
     }
     
+    /**
+     * The supported file types.
+     */
     @Override
     public String[] getSupportedExtensions() {
         return new String[] {"jpg", "gif", "jpeg", "png"};
@@ -79,7 +90,7 @@ public class ImageImporter extends FileImporter {
             image.setValue(Image._G_HEIGHT, height != -1 ? Long.valueOf(height) : null);
             
             image.setValue(Image._SYS_FILENAME, filename);
-          //  Hash.getInstance().calculateHash(image);
+            // Hash.getInstance().calculateHash(image);
             
             DcImageIcon icon = new DcImageIcon(filename);
             

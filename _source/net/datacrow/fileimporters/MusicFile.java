@@ -46,6 +46,10 @@ import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
+/**
+ * Representation of a physical music file.
+ * @author Robert Jan van der Waals
+ */
 public class MusicFile implements IOnlineSearchClient {
     
     private static Logger logger = Logger.getLogger(MusicFile.class.getName());

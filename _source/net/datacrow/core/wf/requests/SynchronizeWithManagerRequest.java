@@ -35,6 +35,13 @@ import net.datacrow.core.objects.helpers.Media;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Synchronizes the item cache ({@link DataManager}) as to reflect item updates, removal and
+ * creation. This is the most important request type of Data Crow and is part of every item data
+ * related query.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class SynchronizeWithManagerRequest implements IRequest {
     
     private static final long serialVersionUID = -1042270209816565755L;
@@ -49,6 +56,11 @@ public class SynchronizeWithManagerRequest implements IRequest {
     private int module;
     private DcObject dco;
     
+    /**
+     * Creates a new instance.
+     * @param type Either {@link #_UPDATE}, {@link #_DELETE} or {@link #_ADD}.
+     * @param dco The item to synchronize.
+     */
     public SynchronizeWithManagerRequest(int type, DcObject dco) {
         this.type = type;
         this.dco = dco;
@@ -59,7 +71,11 @@ public class SynchronizeWithManagerRequest implements IRequest {
             this.module = dco.getModule().getIndex();
     }
 
-    public void execute(Collection<DcObject> objects) {
+    /**
+     * Execute the synchronization.
+     * @param items The items to synchronize.
+     */
+    public void execute(Collection<DcObject> items) {
         
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
@@ -83,13 +99,23 @@ public class SynchronizeWithManagerRequest implements IRequest {
         }        
     }
 
+    /**
+     * Free resources.
+     */
     public void end() {
         dco = null;
     }
     
+    /**
+     * This request should never be executed when the query failed to execute.
+     */
     public boolean getExecuteOnFail() {
         return false;
     }
 
+    /**
+     * This request should never be executed when the query failed to execute.
+     * Ignores any input.
+     */
     public void setExecuteOnFail(boolean b) {}
 }

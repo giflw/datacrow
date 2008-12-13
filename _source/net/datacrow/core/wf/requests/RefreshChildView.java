@@ -35,6 +35,11 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * Refreshed the child view.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class RefreshChildView implements IUpdateUIRequest {
 
     private static final long serialVersionUID = -781595544545143855L;

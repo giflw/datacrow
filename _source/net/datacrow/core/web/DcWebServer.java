@@ -41,6 +41,11 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
+/**
+ * The web server. This is the wrapper around the Jetty server.  
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcWebServer {
     
     private static final String context = "/datacrow";
@@ -52,10 +57,16 @@ public class DcWebServer {
 
 	private Server server;
 	
+	/**
+	 * Returns the instance of the web server.
+	 */
 	public static DcWebServer getInstance() {
 	    return instance;
 	}
 	
+	/**
+	 * Creates a new instance.
+	 */
 	private DcWebServer() {
 	    try {
 	        copyIcons();
@@ -64,28 +75,17 @@ public class DcWebServer {
 	    }
 	}
 	
+	/**
+	 * Indicates if the server is currently up and running.
+	 */
 	public boolean isRunning() {
         return isRunning;
     }
 
-    private void copyIcons() throws Exception {
-	    File dir = new File(DataCrow.webDir + "images" + File.separator + "modules");
-	    if (!dir.exists())
-	        dir.mkdirs();
-	    
-        for (DcModule module : DcModules.getAllModules()) {
-            XmlModule xm = module.getXmlModule();
-            
-            if (xm == null) continue;
-            
-            if (xm.getIcon16() != null)
-                Utilities.writeToFile(module.getXmlModule().getIcon16(), new File(dir, module.getName() + "16.png"));
-            
-            if (xm.getIcon32() != null)
-                Utilities.writeToFile(module.getXmlModule().getIcon32(), new File(dir, module.getName() + "32.png"));
-        }
-	}
-	
+    /**
+     * Stops the server.
+     * @throws Exception
+     */
 	public void stop() throws Exception {
 	    server.stop();
         isRunning = false;
@@ -113,4 +113,22 @@ public class DcWebServer {
 	    server.start();
 	    isRunning = true;
 	}
+	
+    private void copyIcons() throws Exception {
+        File dir = new File(DataCrow.webDir + "images" + File.separator + "modules");
+        if (!dir.exists())
+            dir.mkdirs();
+        
+        for (DcModule module : DcModules.getAllModules()) {
+            XmlModule xm = module.getXmlModule();
+            
+            if (xm == null) continue;
+            
+            if (xm.getIcon16() != null)
+                Utilities.writeToFile(module.getXmlModule().getIcon16(), new File(dir, module.getName() + "16.png"));
+            
+            if (xm.getIcon32() != null)
+                Utilities.writeToFile(module.getXmlModule().getIcon32(), new File(dir, module.getName() + "32.png"));
+        }
+    }	
 }

@@ -38,6 +38,11 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Holder of saved file patterns. 
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class FilePatterns {
 
     private static Logger logger = Logger.getLogger(FilePatterns.class.getName());
@@ -45,6 +50,9 @@ public class FilePatterns {
     private static final Map<Integer, Collection<FilePattern>> patterns = new HashMap<Integer, Collection<FilePattern>>();
     private static final String filename = DataCrow.baseDir + "data" + File.separator + "filepatterns.xml";
     
+    /**
+     * Loads the file patterns from file (XML format).
+     */
     public static void load() {
         if (!new File(filename).exists())
             return;
@@ -75,10 +83,17 @@ public class FilePatterns {
         }
     }
     
+    /**
+     * Checks if a file pattern is part of this collection.
+     * @param fp
+     */
     public static boolean exists(FilePattern fp) {
         return get(fp.getModule()).contains(fp);
     }
     
+    /**
+     * Save all file patterns to disk (XML format).
+     */
     public static void save() {
         String xml = "<FILE-PATTERNS>\n";
         for (Collection<FilePattern> c : patterns.values()) {
@@ -96,16 +111,29 @@ public class FilePatterns {
         }         
     }
     
+    /**
+     * Removes a file pattern.
+     * @param fp
+     */
     public static void delete(FilePattern fp) {
         Collection<FilePattern> c = get(fp.getModule());
         c.remove(fp);
     }
     
+    /**
+     * Retrieves all file patterns for the specified module.
+     * @param module
+     * @return An empty or fille collection.
+     */
     public static Collection<FilePattern> get(int module) {
         Collection<FilePattern> c = patterns.get(module);
         return c != null ? c : new ArrayList<FilePattern>();
     }
     
+    /**
+     * Adds a file pattern to this collection.
+     * @param fp
+     */
     public static void add(FilePattern fp) {
         Collection<FilePattern> c = patterns.get(fp.getModule());
         c = c == null ? new ArrayList<FilePattern>() : c;

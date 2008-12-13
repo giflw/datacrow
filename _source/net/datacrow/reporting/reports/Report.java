@@ -36,6 +36,10 @@ import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Representation of a report. Is capable of generating itself.
+ * @author Robert Jan van der Waals
+ */
 public abstract class Report {
 
     private static Logger logger = Logger.getLogger(Report.class.getName());
@@ -51,8 +55,17 @@ public abstract class Report {
     
     protected boolean successfull = true;
 
+    /**
+     * Creates a new instance.
+     */
     public Report() {}
     
+    /**
+     * Compiles the report.
+     * @param dialog The dialog to inform about the status of the compilation.
+     * @param objects The items to add to the report.
+     * @param target The target file.
+     */
     public void compile(ReportingDialog dialog, Collection<DcObject>  objects, File target) {
         successfull = true;
         keepOnRunning = true;
@@ -64,16 +77,25 @@ public abstract class Report {
         rt.start();
     }
     
+    /**
+     * Indicates if the report creation process was successful.
+     */
     public boolean isSuccessfull() {
         return successfull;
     }
-    
+
+    /**
+     * Joins the threads.
+     */
     public void join() {
         try {
             rt.join();
         } catch (InterruptedException ignore) {}
     }
     
+    /**
+     * Cancel the report generation.
+     */
     public void cancel() {
         keepOnRunning = false;
     }
@@ -83,7 +105,6 @@ public abstract class Report {
         dialog.initProgressBar(objects.size());
         dialog.addMessage(DcResources.getText("msgCreatingReportForXObjects", String.valueOf(objects.size())));
     }    
-    
     
     private class ReportThread extends Thread {
         @Override
@@ -104,6 +125,15 @@ public abstract class Report {
         }
     }
 
+    /**
+     * Creates a new report.
+     * @throws Exception
+     */
     public abstract void create() throws Exception;
+    
+    /**
+     * The file type.
+     * @return File extension.
+     */
     public abstract String getFileType();
 }

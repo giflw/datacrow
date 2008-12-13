@@ -32,6 +32,11 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * Refreshed a simple item view.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class RefreshSimpleViewRequest implements IUpdateUIRequest {
 
     private static final long serialVersionUID = 2482330071457469709L;

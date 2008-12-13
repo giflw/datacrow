@@ -43,71 +43,98 @@ import net.datacrow.core.wf.requests.Requests;
 import org.apache.log4j.Logger;
 
 /**
- * Separation between the UI and the Data layer; allows the UI to communicate
+ * Separation between the UI and the Data layer; allows the GUI to communicate
  * with the DatabaseManager. 
  * 
- * @author rj.vanderwaals
+ * @author Robert Jan van der Waals
  */
 public class WorkFlow {
 
     private static Logger logger = Logger.getLogger(WorkFlow.class.getName());
     
-    public static void insertValues(DcObject o) {
-        DatabaseManager.insertValues(o);
+    /**
+     * Saves the item to the database.
+     * @param o
+     */
+    public static void insert(DcObject o) {
+        DatabaseManager.insert(o);
     }
 
-    public static void updateValues(DcObject o) {
-        DatabaseManager.updateValues(o);
+    /**
+     * Updates the item in the database.
+     * @param o
+     */
+    public static void update(DcObject o) {
+        DatabaseManager.update(o);
     }
 
-    public static void deleteValues(DcObject o) {
-        DatabaseManager.deleteValues(o);
+    /**
+     * Deletes the item from the database.
+     * @param o
+     */
+    public static void delete(DcObject o) {
+        DatabaseManager.delete(o);
     }
 
+    /**
+     * Handles the requests.
+     * @param objects
+     * @param requests
+     * @param qryWasSuccess
+     */
     public static void handleRequests(Collection<DcObject> objects, Requests requests, boolean qryWasSuccess) {
-        Runnable runMe = new UIUpdater(objects, requests, qryWasSuccess);
-        SwingUtilities.invokeLater(runMe);
+        SwingUtilities.invokeLater(new UIUpdater(objects, requests, qryWasSuccess));
     }
 
-    public static boolean checkUniqueness(DcObject o, boolean bUpdate) {
-        return DatabaseManager.isUnique(o, bUpdate);
+    /**
+     * Checks the database to see if the item already exists.
+     * @param o The item to check.
+     * @param isExisting Indicates if the check is performed for a new or an existing item.
+     */
+    public static boolean checkUniqueness(DcObject o, boolean isExisting) {
+        return DatabaseManager.isUnique(o, isExisting);
     }
 
-    public List<DcObject> convertToDCObjects(ResultSet result) {
+    /**
+     * Converts the result set to a collection of items.
+     * @param rs An unclosed SQL result set.
+     * @return Collection of items.
+     */
+    public List<DcObject> convert(ResultSet rs) {
         List<DcObject> objects = new ArrayList<DcObject>();
 
         try {
-        	result.isLast();
+        	rs.isLast();
         } catch (Exception exp) {
             return objects;
         }
 
         try {
-            int columnCount = result.getMetaData().getColumnCount();
+            int columnCount = rs.getMetaData().getColumnCount();
             String[] columns = new String[columnCount];
 
             int k = 0;
             for (int i = 1; i < columnCount + 1; i++) {
-                columns[k] = result.getMetaData().getColumnName(i);
+                columns[k] = rs.getMetaData().getColumnName(i);
                 k++;
             }
 
-            String sTableName = result.getMetaData().getTableName(1);
+            String sTableName = rs.getMetaData().getTableName(1);
             
-            while (result.next()) {
+            while (rs.next()) {
                 DcObject dco = DcModules.getObjectForTable(sTableName);
 
                 for (int i = 0; i < columns.length; i++) {
-                    int type = result.getMetaData().getColumnType(i + 1);
+                    int type = rs.getMetaData().getColumnType(i + 1);
                     String column = columns[i];
                     Object value = null;
 
                     if (type == Types.BOOLEAN) {
-                        value = result.getBoolean(column);
+                        value = rs.getBoolean(column);
                     } else if (type == Types.DATE) {
-                        value = result.getDate(column);
+                        value = rs.getDate(column);
                     } else {
-                        value = result.getString(column);
+                        value = rs.getString(column);
                     }
                     dco.setValueForColumn(column, value);
                 }
@@ -128,7 +155,7 @@ public class WorkFlow {
         }
         
         try {
-            result.close();
+            rs.close();
         } catch (Exception e) {
             logger.warn("Failed to close the resultset", e);
         }

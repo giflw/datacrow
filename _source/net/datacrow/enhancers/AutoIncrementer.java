@@ -38,6 +38,13 @@ import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Auto numbering functionality. Applies a new number to the indicated number 
+ * field. 
+ * 
+ * @see IValueEnhancer
+ * @author Robert Jan van der Waals
+ */
 public class AutoIncrementer implements IValueEnhancer {
 
     private static Logger logger = Logger.getLogger(AutoIncrementer.class.getName());
@@ -47,10 +54,21 @@ public class AutoIncrementer implements IValueEnhancer {
     private int step = 1;
     private int field;
 
+    /**
+     * Creates a new instance. 
+     * @param field The field to which enhancements will be made.
+     */
     public AutoIncrementer(int field) {
         this.field = field;
     }
 
+    /**
+     * Creates a new instance. 
+     * @param field The field to which enhancements will be made.
+     * @param enabled Indicates if this enhancer is enabled.
+     * @param fillGaps Indicates if gaps in the numbering should be filled.
+     * @param step The step size (amount to increase per number).
+     */
     public AutoIncrementer(int field, boolean enabled, boolean fillGaps, int step) {
         this.field = field;
         this.enabled = enabled;

@@ -33,18 +33,37 @@ import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Utilities;
 
+/**
+ * A file renamer is capable of renaming physical files using file patterns.
+ * 
+ * @see FilePattern
+ * @author Robert Jan van der Waals
+ */
 public class FileRenamer {
 
     private Task task;
     private static FileRenamer instance;
     
+    /**
+     * Returns the instance.
+     */
     public static FileRenamer getInstance() {
         instance = instance == null ? new FileRenamer() : instance;
         return instance;
     }
-    
+
+    /**
+     * Creates a new instance.
+     */
     private FileRenamer() {}
     
+    /**
+     * Start the renaming process.
+     * @param listener The listener to update on events and results.
+     * @param baseDir The base directory.
+     * @param pattern The file pattern to use.
+     * @param objects The items for which the files will be renamed.
+     */
     public void start(IFileRenamerListener listener, File baseDir, FilePattern pattern, DcObject[] objects) {
         if (task == null || !task.isAlive()) {
             task = new Task(listener, baseDir, pattern, objects);
@@ -52,14 +71,26 @@ public class FileRenamer {
         }
     }
     
+    /**
+     * Indicates a task is running.
+     * @return
+     */
     public boolean isRunning() {
         return task != null && task.isAlive();
     }
     
+    /**
+     * Cancels the current task.
+     */
     public void cancel() {
         if (task != null) task.cancel();
     }    
     
+    /**
+     * The actual worker thread.
+     * 
+     * @author Robert Jan van der Waals
+     */
     private static class Task extends Thread {
         
         private boolean keepOnRunning = true;

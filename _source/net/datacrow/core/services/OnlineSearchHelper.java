@@ -34,10 +34,18 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.services.plugin.IServer;
+import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Simple online search which can run completely in the background.
+ * It has implemented the {@link IOnlineSearchClient} interface. This class can
+ * be used by other processes which want to enable online search (such as the {@link FileImporter})
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class OnlineSearchHelper implements IOnlineSearchClient {
     
     private static Logger logger = Logger.getLogger(OnlineSearchHelper.class.getName());
@@ -55,27 +63,54 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
     
     private Collection<DcObject> result = new ArrayList<DcObject>();
     
+    /**
+     * Creates a new instance.
+     * @param module The module index
+     * @param itemMode {@link SearchTask#_ITEM_MODE_FULL} or {@link SearchTask#_ITEM_MODE_SIMPLE} 
+     */
     public OnlineSearchHelper(int module, int itemMode) {
         this.module = module;
         this.itemMode = itemMode;
     }
-    
+
+    /**
+     * The server to be used.
+     * @param server
+     */
     public void setServer(IServer server) {
         this.server = server;
     }
 
+    /**
+     * The region to be used.
+     * @param region
+     */
     public void setRegion(Region region) {
         this.region = region;
     }
 
+    /**
+     * The search mode to be used.
+     * @param mode
+     */
     public void setMode(SearchMode mode) {
         this.mode = mode;
     }
 
+    /**
+     * The maximum search result.
+     * @param maximum
+     */
     public void setMaximum(int maximum) {
         this.maximum = maximum;
     }
     
+    /**
+     * Queries for new information for the supplied item.
+     * Uses the services URL as stored in the item (see {@link DcObject#_SYS_SERVICEURL}).
+     * @param item
+     * @return The supplied item. Either updated or not. 
+     */
     public DcObject query(DcObject item) {
         IServer server = getServer();
         Region region = getRegion(server);
@@ -91,7 +126,15 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         }
     }
     
-    
+    /**
+     * Queries for items and checks if they are similar to the supplied item
+     * the item most similar to the base item will be returned. Similarity is based
+     * on the values of the provided field indices. 
+     * @param base The item to check the results against.
+     * @param query The query to base the search on.
+     * @param matcherFieldIdx The field indices used to check for similarity.
+     * @return The most similar result or null. 
+     */
     public DcObject query(DcObject base, String query, int[] matcherFieldIdx) {
         IServer server = getServer();
         Region region = getRegion(server);
@@ -104,6 +147,11 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         return getMatchingItem(base, matcherFieldIdx);
     }
     
+    /**
+     * Searches for items based on the provided query string.
+     * @param query
+     * @return Collection of results.
+     */
     public Collection<DcObject> query(String query) {
         IServer server = getServer();
         Region region = getRegion(server);
@@ -116,6 +164,11 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         return new ArrayList<DcObject>(result);
     }    
 
+    /**
+     * Retrieves the server to be used. If no server has yet been set the default server
+     * will be used. If no default server is available it will be selected at random.
+     * @return The server to be used.
+     */
     private IServer getServer() {
         OnlineServices os = DcModules.get(module).getOnlineServices();
         IServer defaultSrv = 
@@ -125,6 +178,14 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         return server == null ? (IServer) os.getServers().toArray()[0] : server;
     }
 
+    /**
+     * Retrieves the region to be used. In case a region has already been specified this
+     * region will be used only when the region is part of the provided server.
+     * If not, the default region will be used. If no default region is available it will be selected 
+     * at random or be left empty if the server simply doesn't have any regions.
+     * @param server The server for which a region is being retrieved.
+     * @return The region to be used or null.
+     */
     private Region getRegion(IServer server) {
         OnlineServices os = DcModules.get(module).getOnlineServices();
         Region region = this.region != null ? this.region : os.getDefaultRegion();
@@ -143,6 +204,14 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         return region == null && server.getRegions().size() > 0 ? (Region) server.getRegions().toArray()[0] : region;
     }
     
+    /**
+     * Retrieves the search mode to be used. In case a mode has already been specified this
+     * mode will be used only when the mode is part of the provided server.
+     * If not, the default mode will be used. If no default mode is available it will be selected 
+     * at random or be left empty if the server simply doesn't support search modes.
+     * @param server The server for which a search mode is being retrieved.
+     * @return The search mode to be used or null.
+     */    
     private SearchMode getSearchMode(IServer server) {
         OnlineServices os = DcModules.get(module).getOnlineServices();
         SearchMode mode = this.mode == null ? os.getDefaultSearchMode() : this.mode;
@@ -169,6 +238,13 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         return mode;
     }
     
+    /**
+     * Retrieves the matching result. Each of the results is checked against the provided 
+     * base item. The match field indices indicate which values are to be checked.
+     * @param base The item to check against.
+     * @param matcherFieldIdx The field indices to use for checking for similarities.
+     * @return A matching result or null.
+     */
     private DcObject getMatchingItem(DcObject base, int[] matcherFieldIdx) {
         for (DcObject dco : result) {
             boolean match = true;
@@ -188,6 +264,10 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         return null;
     }
     
+    /**
+     * Free resources.
+     * @param except Do not clear the resources of this item.
+     */
     public void clear(DcObject except) {
         for (DcObject dco : result)
             if (dco != except) dco.unload();

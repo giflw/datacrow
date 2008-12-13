@@ -36,8 +36,6 @@ import org.apache.log4j.Logger;
  * Reads and saves data to the Settings File
  * 
  * @author Robert Jan van der Waals
- * @since 1.4
- * @version 1.9
  */
 public class SettingsFile {
 

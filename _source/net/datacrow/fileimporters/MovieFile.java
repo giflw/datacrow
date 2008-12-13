@@ -29,6 +29,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ * Movie file representation.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class MovieFile {
 
     private RandomAccessFile raf;

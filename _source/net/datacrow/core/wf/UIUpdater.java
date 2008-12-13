@@ -32,21 +32,36 @@ import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.IUpdateUIRequest;
 import net.datacrow.core.wf.requests.Requests;
 
+/**
+ * This class can be used by a Swing Worker implementation.
+ * Executes the UI requests (see {@link IRequest}).
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class UIUpdater implements Runnable {
 
     private Collection<DcObject> objects;
     private Requests requests;
     private boolean qryWasSuccess;
 
+    /**
+     * Creates a new instance.
+     * @param objects The items, if any.
+     * @param requests The requests to be executed.
+     * @param qryWasSuccess Indicates if the task requesting the UI update was successful.
+     */
     public UIUpdater(Collection<DcObject> objects,
-                     Requests requestors,
+                     Requests requests,
                      boolean qryWasSuccess) {
         
         this.qryWasSuccess = qryWasSuccess;
         this.objects = objects;
-        this.requests = requestors;
+        this.requests = requests;
     }
 
+    /**
+     * Free all resources.
+     */
     public void close() {
         objects = null;
 
@@ -56,6 +71,9 @@ public class UIUpdater implements Runnable {
         requests = null;
     }
 
+    /**
+     * Execute the requests.
+     */
     public void run() {
         if (requests != null) {
             IRequest[] requestArray = requests.get();

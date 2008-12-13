@@ -113,7 +113,7 @@ public class SecurityCentre {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             
-            List<DcObject> users = new WorkFlow().convertToDCObjects(rs);
+            List<DcObject> users = new WorkFlow().convert(rs);
 
             User user;
             if (users.size() == 1) {
@@ -121,7 +121,7 @@ public class SecurityCentre {
                 sql = "select * from permission where user = " + user.getID();
                 rs = stmt.executeQuery(sql);
 
-                List<DcObject> permissions = new WorkFlow().convertToDCObjects(rs);
+                List<DcObject> permissions = new WorkFlow().convert(rs);
                 for (DcObject permission : permissions)
                     user.addChild(permission);
                 

@@ -42,10 +42,17 @@ import net.datacrow.settings.DcModuleSettings;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Used to convert settings when needed.
+ * This all non standard stuff and should only be used to upgrade between versions. 
+ * 
+ * @author Robert Jan van der Waals
+ */
 public abstract class SettingsConversion {
     
     private static Logger logger = Logger.getLogger(SettingsConversion.class.getName());
     
+    @SuppressWarnings("deprecation")
     public static void convert() {
         
         for (DcModule module : DcModules.getModules()) {
