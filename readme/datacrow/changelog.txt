@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.4 [Release on 14/12/2008] [testing: high] [target: production]
+Data Crow 3.4.4 [Release on xx/xx/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 The code has been reviewed and many small improvements have been made. As a result
 of this, this version uses less memory and has once again an improved start up time.
@@ -18,12 +18,12 @@ needs to be installed on top of Data Crow in order for the web module to be avai
   Loan administration shows items with a due date for the next year as overdue.
 - [2338017] Missing horizontal scroll bar. 
   The quick view does not have a vertical scroll bar.
-- [2392326]Locked out of Database after creating a backup.
 - Nothing happens when selecting 'launch file' after adding a new file launcher field 
   to a module (in this case the music album module).
 - Music Album and Audio CD report (Black&White) did not generated successfully.
 - Users created using the item wizard cannot log into Data Crow. The wizard will now start
   the item form itself.
+- Unable to log in after creating a backup.
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
