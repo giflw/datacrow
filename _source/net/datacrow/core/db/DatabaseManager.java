@@ -138,9 +138,9 @@ public class DatabaseManager {
                 
                 if (!isServerClientMode) {
                     if (compact)
-                        stmt.executeUpdate("SHUTDOWN COMPACT");
+                        stmt.execute("SHUTDOWN COMPACT");
                     else 
-                        stmt.executeUpdate("SHUTDOWN");
+                        stmt.execute("SHUTDOWN");
                 }
                 
                 stmt.close();
