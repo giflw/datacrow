@@ -78,7 +78,7 @@ public class Security {
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();
         DcWebUser wu = (DcWebUser) vr.resolveVariable(fc, "user");
-        SecurityCentre.getInstance().logoff(wu.getSecuredUser().getUser());
+        
         wu.setPassword(null);
         wu.setUsername(null);
         wu.setSecuredUser(null);

@@ -135,9 +135,9 @@ public class DataCrow {
         
         try {
             installLafs();
-            
             setBaseDir(dir);
             createDirectories();
+            
             PropertyConfigurator.configure(DataCrow.baseDir + "log4j.properties");
 
             // Initialize the resources and settings
@@ -196,12 +196,12 @@ public class DataCrow {
             if (db != null && db.length() > 0)
                 DcSettings.set(DcRepository.Settings.stConnectionString, db);
 
-            File scriptNew = new File(DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script.new");
-            if (scriptNew.exists()) {
-                File script = new File(DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script");
-                script.delete();
-                Utilities.rename(scriptNew, script);
-            }
+//            File scriptNew = new File(DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script.new");
+//            if (scriptNew.exists()) {
+//                File script = new File(DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script");
+//                script.delete();
+//                Utilities.rename(scriptNew, script);
+//            }
             
             SecurityCentre.getInstance().initialize();
             
@@ -217,6 +217,8 @@ public class DataCrow {
             splashScreen.setStatusMsg("Initializing database");
 
             DatabaseManager.initialize();
+            
+            checkDirs();
             
             if (nocache)
                 DataManager.setUseCache(false);
@@ -511,6 +513,17 @@ public class DataCrow {
         
         File file = new File(cacheDir);
         file.mkdirs();
+    }
+    
+    private static void checkDirs() {
+        String dbName = DcSettings.getString(DcRepository.Settings.stConnectionString);
+        
+        File f = new File(DataCrow.dataDir + dbName + ".script");
+        if (!new File(DataCrow.dataDir).exists() || (f.exists() && !f.canWrite())) {
+            new MessageBox(DcResources.getText("msgCannotWrite"), MessageBox._WARNING);
+            if (platform.isVista())
+                new MessageBox(DcResources.getText("msgCannotWriteVista"), MessageBox._INFORMATION);
+        } 
     }
     
     private static void installLafs() {

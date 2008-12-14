@@ -287,7 +287,7 @@ public class Restore extends Thread {
                     boolean isReport = isReport(filename);
                     boolean isModule = isModule(filename);
                     boolean isResource = isResource(filename);
-                    boolean isData = !isImage && !isReport && !isModule; 
+                    boolean isData = !isImage && !isReport && !isModule && !isResource; 
                     
                     boolean restore = true;
                     
