@@ -84,15 +84,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     }
 
     protected void createSettings() {
-        getSettings().addSetting(_General,
+        getSettings().addSetting(_Locale,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stLanguage,
                             "english",
-                            -1,
+                            ComponentFactory._LANGUAGECOMBO,
                             "",
-                            "",
-                            false,
-                            false));          
+                            DcResources.getText("lblLanguage"),
+                            true,
+                            true));          
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stGracefulShutdown,

@@ -97,7 +97,7 @@ public class DcLanguageResource {
 
             int count = 0;
             for (String key : resources.keySet()) {
-                String value = resources.get(key) + "\r\n";
+                String value = key + "=" + resources.get(key) + "\r\n";
                 bos.write(value.getBytes("UTF8"));
                 count++;
                 if (count == 2000) {

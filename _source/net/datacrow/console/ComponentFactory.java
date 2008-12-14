@@ -166,6 +166,7 @@ public final class ComponentFactory {
     public static final int _HASHTYPECOMBO = 28;
     public static final int _PERSONORDERCOMBO = 29;
     public static final int _PERSONDISPLAYFORMATCOMBO = 30;
+    public static final int _LANGUAGECOMBO = 31;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -407,6 +408,8 @@ public final class ComponentFactory {
                 return getPersonOrderComboBox();
             case _PERSONDISPLAYFORMATCOMBO:
                 return getPersonDisplayFormatComboBox();
+            case _LANGUAGECOMBO:
+                return getLanguageCombobox();
 
             default:
                 return getShortTextField(maxTextLength);
@@ -484,6 +487,13 @@ public final class ComponentFactory {
         cb.addItem(DcResources.getText("lblPersonOrderByFirstname"));
         return cb;
     }
+    
+    public static final JComboBox getLanguageCombobox() {
+        JComboBox cb = getComboBox();
+        for (String language : DcResources.getLanguages())
+            cb.addItem(language);
+        return cb;
+    }
 
     public static final JComboBox getPersonDisplayFormatComboBox() {
         JComboBox cb = getComboBox();
@@ -491,7 +501,6 @@ public final class ComponentFactory {
         cb.addItem(DcResources.getText("lblPersonLastNameFirstname"));
         return cb;
     }
-
     
     public static final DcComboBox getMediaCombo(int module) {
         DcModule m = DcModules.get(module);

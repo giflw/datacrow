@@ -145,6 +145,9 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         
         if (size.height != 0 && size.width != 0)
             panelInput.setPreferredSize(size);
+        
+        revalidate();
+        repaint();
     }
     
     private void setTopics() {
