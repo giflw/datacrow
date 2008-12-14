@@ -221,10 +221,10 @@ public class DcModule implements Comparable<DcModule> {
         this.objectName = objectName;
         this.objectNamePlural = objectNamePlural;
         
-        String s = tableName;
+        String s = isAbstract() ? label : tableName;
         if (s != null && s.length() > 1) s = s.substring(0, 1).toUpperCase() + s.substring(1);
         
-        this.moduleResourceKey = "sys" + (isAbstract() ? label : s);
+        this.moduleResourceKey = "sys" + s;
         this.itemResourceKey = moduleResourceKey + "Item";
         this.itemPluralResourceKey = moduleResourceKey + "ItemPlural";
     }

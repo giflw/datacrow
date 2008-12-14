@@ -33,6 +33,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.xml.XmlField;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.settings.definitions.DcFieldDefinition;
@@ -64,6 +65,7 @@ public class DcField implements Serializable{
     private int module;
     private int sourceModuleIdx;
     private String databaseFieldName;
+    private String resourceKey;
     
     private Collection<IValueEnhancer> enhancers = new ArrayList<IValueEnhancer>();
 
@@ -269,11 +271,43 @@ public class DcField implements Serializable{
         return valueType;
     }
 
+    public String getOriginalLabel() {
+        return label;
+    }
+    
     /**
-     * The display label.
+     * The display label. 
+     * - If the field definitions (field settings) have a custom label defined this value will be used.
+     * - If not the field label will be retrieved using the resources.
+     * - Else the original label will be used.
      */
     public String getLabel() {
-        return label;
+        String s = null;
+        DcFieldDefinitions definitions = DcModules.get(module).getFieldDefinitions();
+        if (definitions != null)
+            s = definitions.get(getIndex()).getLabel();
+        
+        if (s != null && s.trim().length() > 0)
+            return s;
+
+        if (DcResources.getText(getResourceKey()) != null &&
+            DcResources.getText(getResourceKey()).length() > 0) {
+            
+            return DcResources.getText(getResourceKey());
+        
+        } else {
+            return label;    
+        }
+    }
+    
+    /**
+     * The key used for setting the value in the resources.
+     */
+    public String getResourceKey() {
+        resourceKey = resourceKey == null ?
+                      DcModules.get(module).getModuleResourceKey() + "Field" + getDatabaseFieldName() : resourceKey;
+
+        return resourceKey;
     }
 
     /**
@@ -332,7 +366,7 @@ public class DcField implements Serializable{
     /**
      * The display label.
      */
-    public void setLabel(String s) {
+    private void setLabel(String s) {
         label = s;
     }
 
@@ -393,7 +427,7 @@ public class DcField implements Serializable{
 
     @Override
     public String toString() {
-        return label;
+        return getLabel();
     }
     
     /**

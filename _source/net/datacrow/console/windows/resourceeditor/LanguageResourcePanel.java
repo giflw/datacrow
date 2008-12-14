@@ -55,6 +55,7 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
+import net.datacrow.core.objects.DcField;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
@@ -103,20 +104,36 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         for (DcModule module : DcModules.getAllModules()) {
             
             if (module.isTopModule() || module.isChildModule() || module instanceof DcPropertyModule || module.isAbstract()) {
-                
-                String tableName = module.getTableName();
-                if (module.isAbstract()) 
-                    tableName = module.getLabel();
-                
-                if (tableName.length() > 1)
-                    tableName = tableName.substring(0, 1).toUpperCase() + tableName.substring(1);
-                
-                String key = "sys" + tableName;
-                String value = module.getSystemLabel();
-                
+                String key = module.getModuleResourceKey();
+                String value = module.getLabel();
                 if ((value != null && value.length() > 0) && 
                     (resources.get(key) == null || resources.get(key).length() == 0)) {
                     tableSystemLabels.addRow(new Object[] {key, value});
+                }
+                
+                key = module.getItemResourceKey();
+                value = module.getObjectName();
+                if ((value != null && value.length() > 0) && 
+                    (resources.get(key) == null || resources.get(key).length() == 0)) {
+                    tableSystemLabels.addRow(new Object[] {key, value});
+                }
+
+                key = module.getItemPluralResourceKey();
+                value = module.getObjectNamePlural();
+                if ((value != null && value.length() > 0) && 
+                    (resources.get(key) == null || resources.get(key).length() == 0)) {
+                    tableSystemLabels.addRow(new Object[] {key, value});
+                }
+                
+                for (DcField field : module.getFields()) {
+                    value = field.getLabel();
+                    key = field.getResourceKey();
+                    
+                    if ((value != null && value.length() > 0) && 
+                        (resources.get(key) == null || resources.get(key).length() == 0)) {
+
+                        tableSystemLabels.addRow(new Object[] {key, value});
+                    }
                 }
             }
         }
