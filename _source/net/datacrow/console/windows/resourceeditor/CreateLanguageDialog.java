@@ -73,7 +73,7 @@ public class CreateLanguageDialog extends DcDialog implements ActionListener{
         } else if (languages.contains(name)) {
             new MessageBox(DcResources.getText("msgLanguageWithNameAlreadyExists"), MessageBox._WARNING);
         } else {
-            language = name;
+            language = name.replaceAll(" ", "");
             DcLanguageResource lr = new DcLanguageResource(name);
             lr.merge(DcResources.getLanguageResource((String) cbLanguages.getSelectedItem()));
             DcResources.addLanguageResource(language, lr);
