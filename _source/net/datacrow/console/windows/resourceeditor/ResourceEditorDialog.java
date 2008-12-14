@@ -61,6 +61,11 @@ public class ResourceEditorDialog extends DcFrame implements ActionListener {
         setCenteredLocation();
     }
     
+    @Override
+    public String getHelpIndex() {
+        return "dc.tools.resourceeditor";
+    }
+
     private void save() {
         for (LanguageResourcePanel panel : panels)
             panel.save();

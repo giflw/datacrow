@@ -63,7 +63,8 @@
       <tocitem target="dc.tools.autonumbering" text="Auto Numbering" />
       <tocitem target="dc.tools.titlerewriter" text="Title Rewriting" />
       <tocitem target="dc.tools.drivemanager" text="Drive Manager" />
-      <tocitem target="dc.tools.filerenamer" text="File Renamer" />      
+      <tocitem target="dc.tools.filerenamer" text="File Renamer" />
+      <tocitem target="dc.tools.resourceeditor" text="Resource Editor" />
     </tocitem> 
     
     <tocitem target="dc.webserver" text="Web Server" />

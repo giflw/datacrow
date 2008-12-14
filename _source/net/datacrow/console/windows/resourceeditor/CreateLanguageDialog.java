@@ -64,6 +64,11 @@ public class CreateLanguageDialog extends DcDialog implements ActionListener{
         return language;
     }
     
+    @Override
+    public String getHelpIndex() {
+        return "dc.tools.resourceeditor";
+    }
+    
     public void save() {
         Collection<String> languages = DcResources.getLanguages();
         

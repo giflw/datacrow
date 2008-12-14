@@ -6,9 +6,7 @@ of this, this version uses less memory and has once again an improved start up t
 
 I have been working quite hard to get the code documented. The emphasis for this release
 is again.. quality! I was quite happy with the stability of the 3.4.3 version but not
-with the amount of fixes needed to get there. This release also contains documentation 
-on developing plugins and online services. Hopefully this will pay off in people in 
-actually starting to create new additions for Data Crow :-)
+with the amount of fixes needed to get there. 
 
 Please note that a new version of the web module is available (version 1.2). This module
 needs to be installed on top of Data Crow in order for the web module to be available.
@@ -26,7 +24,8 @@ I would like to thank Klaus Lassleben for his German translation of the labels!
 - Music Album and Audio CD report (Black&White) did not generated successfully.
 - Users created using the item wizard cannot log into Data Crow. The wizard will now start
   the item form itself.
-- A check has been to see whether Data Crow does have write permission on the database files.
+- A check has been added to see whether Data Crow does have write permission on the 
+  database files.
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
@@ -41,7 +40,7 @@ I would like to thank Klaus Lassleben for his German translation of the labels!
   the settings menu.
 - New languages can now be created from within the resource editor. Fields and modules
   can now also be translated from within this form.
-- German language has been added.
+- German language has been added (created by Klaus Lassleben).
   
 [Components]
 - Updated Jetty to the latest version (6.1.14)
@@ -87,7 +86,7 @@ Data Crow 3.4.2 [Release on 02/11/2008] [testing: high] [target: production]
 
 [Changed]
 - The online search has been changed and optimized:
-  * You know have the option (default) to retrieve only a minimum of information for each 
+  * You now have the option (default) to retrieve only a minimum of information for each 
     item in the initial search. The item details will be retrieved on request / once the 
     item has been selected. Ticking the box 'retrieve full details on initial search (slow)'
     will activate Data Crows old behavior.
