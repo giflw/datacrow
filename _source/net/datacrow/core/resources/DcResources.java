@@ -90,8 +90,12 @@ public class DcResources {
         for (String language : getLanguages()) {
             DcLanguageResource resource = new DcLanguageResource(language);
             resource.merge(english);
-            resources.put(language, resource);
+            addLanguageResource(language, resource);
         }
+    }
+    
+    public static void addLanguageResource(String language, DcLanguageResource lr) {
+        resources.put(language, lr);
     }
     
     /**
@@ -119,7 +123,7 @@ public class DcResources {
             }
         }
         
-        if (languages.size() == 0)
+        if (!languages.contains("english"))
             languages.add("english");
         
         return languages;

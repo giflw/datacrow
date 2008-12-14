@@ -492,6 +492,8 @@ public final class ComponentFactory {
         JComboBox cb = getComboBox();
         for (String language : DcResources.getLanguages())
             cb.addItem(language);
+        
+        cb.setSelectedIndex(0);
         return cb;
     }
 

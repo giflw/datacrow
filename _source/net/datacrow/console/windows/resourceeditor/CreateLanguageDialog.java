@@ -29,95 +29,83 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcFrame;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.IconLibrary;
+import net.datacrow.console.components.DcDialog;
+import net.datacrow.console.components.DcShortTextField;
+import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
 
-public class ResourceEditorDialog extends DcFrame implements ActionListener {
+public class CreateLanguageDialog extends DcDialog implements ActionListener{
     
-    private JTabbedPane tp = ComponentFactory.getTabbedPane();
-    private Collection<LanguageResourcePanel> panels = new ArrayList<LanguageResourcePanel>();
+    private DcShortTextField txtName = ComponentFactory.getShortTextField(25);
+    private JComboBox cbLanguages = ComponentFactory.getLanguageCombobox();
     
-    public ResourceEditorDialog() {
-        super(DcResources.getText("lblResourceEditor"), IconLibrary._icoSettings);
+    private String language; 
+    
+    public CreateLanguageDialog(ResourceEditorDialog frm) {
+        super(frm);
+        setTitle(DcResources.getText("lblAddLanguage"));
         build();
-        
         pack();
-        setSize(DcSettings.getDimension(DcRepository.Settings.stResourcesEditorViewSize));
         setCenteredLocation();
+        setModal(true);
     }
     
-    private void save() {
-        for (LanguageResourcePanel panel : panels)
-            panel.save();
+    public String getSelectedLanguage() {
+        return language;
     }
     
-    @Override
-    public void close() {
-        DcSettings.set(DcRepository.Settings.stResourcesEditorViewSize, getSize());
+    public void save() {
+        Collection<String> languages = DcResources.getLanguages();
         
-        tp.removeAll();
-
-        for (LanguageResourcePanel panel : panels)
-            panel.clear();
-
-        panels.clear();
-        panels = null;
-
-        super.close();
-    }
-    
-    private void addLanguage() {
-        CreateLanguageDialog dlg = new CreateLanguageDialog(this);
-        dlg.setVisible(true);
-        String language = dlg.getSelectedLanguage();
-        if (language != null) {
-            LanguageResourcePanel lrp = new LanguageResourcePanel(language);
-            tp.add(language, lrp);
-            panels.add(lrp);
+        String name = txtName.getText().trim(); 
+        if (name.length() == 0) {
+            new MessageBox(DcResources.getText("msgLanguageNameMustBeFilled"), MessageBox._WARNING);
+        } else if (languages.contains(name)) {
+            new MessageBox(DcResources.getText("msgLanguageWithNameAlreadyExists"), MessageBox._WARNING);
+        } else {
+            language = name;
+            DcLanguageResource lr = new DcLanguageResource(name);
+            lr.merge(DcResources.getLanguageResource((String) cbLanguages.getSelectedItem()));
+            DcResources.addLanguageResource(language, lr);
+            close();
         }
     }
-    
-    private void installMenu() {
-        JMenuBar mb = ComponentFactory.getMenuBar();
-        JMenu menu = ComponentFactory.getMenu(DcResources.getText("lblEdit"));
-        
-        JMenuItem miCreate = ComponentFactory.getMenuItem(IconLibrary._icoAdd, DcResources.getText("lblAddLanguage"));
-        miCreate.setActionCommand("addLanguage");
-        miCreate.addActionListener(this);
-        
-        menu.add(miCreate);
-        mb.add(menu);
-        
-        setJMenuBar(mb);
-    }
-    
+
     private void build() {
-        
         getContentPane().setLayout(Layout.getGBL());
-
+        
         //**********************************************************
-        //Language tabs
+        //Input panel
         //**********************************************************
-        for (String language : DcResources.getLanguages()) {
-            LanguageResourcePanel lrp = new LanguageResourcePanel(language);
-            tp.addTab(language, lrp);
-            panels.add(lrp);
-        }
+        JPanel panelInput = new JPanel();
+        panelInput.setLayout(Layout.getGBL());
+        
+        JLabel lblName = ComponentFactory.getLabel(DcResources.getText("lblName"));
+        JLabel lblBasedOn = ComponentFactory.getLabel(DcResources.getText("lblBasedOn"));
+        
+        panelInput.add(lblName, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        panelInput.add(txtName, Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        panelInput.add(lblBasedOn, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        panelInput.add(cbLanguages, Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        
         
         //**********************************************************
         //Action panel
@@ -137,14 +125,12 @@ public class ResourceEditorDialog extends DcFrame implements ActionListener {
         panelActions.add(buttonSave);
         panelActions.add(buttonClose);
 
-        getContentPane().add(tp, Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
+        getContentPane().add(panelInput, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));
         getContentPane().add(panelActions, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        
-        installMenu();
     }
     
     public void actionPerformed(ActionEvent ae) {
@@ -152,7 +138,5 @@ public class ResourceEditorDialog extends DcFrame implements ActionListener {
             close();
         else if (ae.getActionCommand().equals("save"))
             save();
-        else if (ae.getActionCommand().equals("addLanguage"))
-            addLanguage();
     } 
 }
