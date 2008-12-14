@@ -23,25 +23,21 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows;
+package net.datacrow.console.windows.resourceeditor;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -52,17 +48,16 @@ import javax.swing.table.TableColumn;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcList;
 import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
-public class ResourceEditorDialog extends DcDialog implements ListSelectionListener, ActionListener {
-    
+public class LanguageResourcePanel extends JPanel implements ListSelectionListener {
+
     private int selected = 0;
 
     private DcList topicList = new DcList();
@@ -75,52 +70,72 @@ public class ResourceEditorDialog extends DcDialog implements ListSelectionListe
     private DcTable tableLabels = ComponentFactory.getDCTable(false, false);
     private DcTable tableMessages = ComponentFactory.getDCTable(false, false);
     private DcTable tableTooltips = ComponentFactory.getDCTable(false, false);
+
+    private String language;
     
-    public ResourceEditorDialog() {
-        super(DataCrow.mainFrame);
-        buildDialog();
-        setResources();
-        setTitle(DcResources.getText("lblResourceEditor"));
+    public LanguageResourcePanel(String language) {
+        this.language = language;
+        
+        build();
+        load();
     }
     
-    private void setResources() {
-        Properties properties = DcResources.getResources();
+    private void load() {
+        DcLanguageResource resources = DcResources.getLanguageResource(language);
         
-        Set<Object> keys = properties.keySet();
-        ArrayList<String> list = new ArrayList<String>();
-        for (Object key : keys)
-            list.add(key.toString());
-
+        Set<String> keys = resources.getResourcesMap().keySet();
+        ArrayList<String> list = new ArrayList<String>(keys);
         Collections.sort(list);
         
         for (String key : list) {
-            String value = (String) properties.get(key);
+            String value = resources.get(key);
 
-            if (key.startsWith("lbl"))
-                tableLabels.addRow(new Object[] {key, value});
-            
-            if (key.startsWith("msg"))
-                tableMessages.addRow(new Object[] {key, value});
-
-            if (key.startsWith("tp"))
-                tableTooltips.addRow(new Object[] {key, value});
-            
-            if (key.startsWith("sys"))
-                tableSystemLabels.addRow(new Object[] {key, value});
-            
-            if (key.startsWith("tip"))
-                tableTips.addRow(new Object[] {key, value});            
-            
+            if (key.startsWith("lbl")) tableLabels.addRow(new Object[] {key, value});
+            if (key.startsWith("msg")) tableMessages.addRow(new Object[] {key, value});
+            if (key.startsWith("tp")) tableTooltips.addRow(new Object[] {key, value});
+            if (key.startsWith("sys")) tableSystemLabels.addRow(new Object[] {key, value});
+            if (key.startsWith("tip")) tableTips.addRow(new Object[] {key, value});            
         }
     }
     
+    public void save() {
+        DcLanguageResource resources = DcResources.getLanguageResource(language);
+        
+        for (int i = 0; i < tableLabels.getRowCount(); i++) {
+            String key = (String) tableLabels.getValueAt(i, 0, true);
+            String value = (String) tableLabels.getValueAt(i, 1, true);
+            resources.put(key, value);
+        }
+        
+        for (int i = 0; i < tableMessages.getRowCount(); i++) {
+            String key = (String) tableMessages.getValueAt(i, 0, true);
+            String value = (String) tableMessages.getValueAt(i, 1, true);
+            resources.put(key, value);
+        }
+        
+        for (int i = 0; i < tableTooltips.getRowCount(); i++) {
+            String key = (String) tableTooltips.getValueAt(i, 0, true);
+            String value = (String) tableTooltips.getValueAt(i, 1, true);
+            resources.put(key, value);
+        }  
+        
+        for (int i = 0; i < tableSystemLabels.getRowCount(); i++) {
+            String key = (String) tableSystemLabels.getValueAt(i, 0, true);
+            String value = (String) tableSystemLabels.getValueAt(i, 1, true);
+            resources.put(key, value);
+        }   
+
+        for (int i = 0; i < tableTips.getRowCount(); i++) {
+            String key = (String) tableTips.getValueAt(i, 0, true);
+            String value = (String) tableTips.getValueAt(i, 1, true);
+            resources.put(key, value);
+        }        
+        
+        resources.save();
+    }
+    
     private void setActiveTopic() {
-        // current size
         Dimension size = panelInput.getSize();
-        
-//        for (JScrollPane scroller : scrollers)
-            //scroller.setVisible(false);
-        
         selected = topicList.getSelectedIndex();
         int counter = 0;
         for (JScrollPane scroller : scrollers) {
@@ -130,60 +145,6 @@ public class ResourceEditorDialog extends DcDialog implements ListSelectionListe
         
         if (size.height != 0 && size.width != 0)
             panelInput.setPreferredSize(size);
-        
-        pack();
-    }
-    
-    @Override
-    public void close() {
-        DcSettings.set(DcRepository.Settings.stResourcesEditorViewSize, panelInput.getSize());
-        
-        topicList = null;
-        panelInput = null;
-        scrollers.clear();
-        scrollers = null;
-        
-        tableTips = null;
-        tableSystemLabels = null;
-        tableLabels = null;
-        tableMessages = null;
-        tableTooltips = null;
-        
-        super.close();
-    }
-    
-    private void save() {
-        for (int i = 0; i < tableLabels.getRowCount(); i++) {
-            String key = (String) tableLabels.getValueAt(i, 0, true);
-            String value = (String) tableLabels.getValueAt(i, 1, true);
-            DcResources.setText(key, value);
-        }
-        
-        for (int i = 0; i < tableMessages.getRowCount(); i++) {
-            String key = (String) tableMessages.getValueAt(i, 0, true);
-            String value = (String) tableMessages.getValueAt(i, 1, true);
-            DcResources.setText(key, value);
-        }
-        
-        for (int i = 0; i < tableTooltips.getRowCount(); i++) {
-            String key = (String) tableTooltips.getValueAt(i, 0, true);
-            String value = (String) tableTooltips.getValueAt(i, 1, true);
-            DcResources.setText(key, value);
-        }  
-        
-        for (int i = 0; i < tableSystemLabels.getRowCount(); i++) {
-            String key = (String) tableSystemLabels.getValueAt(i, 0, true);
-            String value = (String) tableSystemLabels.getValueAt(i, 1, true);
-            DcResources.setText(key, value);
-        }   
-
-        for (int i = 0; i < tableTips.getRowCount(); i++) {
-            String key = (String) tableTips.getValueAt(i, 0, true);
-            String value = (String) tableTips.getValueAt(i, 1, true);
-            DcResources.setText(key, value);
-        }        
-        
-        DcResources.save();
     }
     
     private void setTopics() {
@@ -222,10 +183,23 @@ public class ResourceEditorDialog extends DcDialog implements ListSelectionListe
         label.setPreferredSize(new Dimension(50,0));
         
         topicList.setListData(vector);
+    }    
+    
+    public void clear() {
+        topicList = null;
+        panelInput = null;
+        scrollers.clear();
+        scrollers = null;
+        
+        tableTips = null;
+        tableSystemLabels = null;
+        tableLabels = null;
+        tableMessages = null;
+        tableTooltips = null;        
     }
     
-    private void buildDialog() {
-        getContentPane().setLayout(Layout.getGBL());
+    private void build() {
+        setLayout(Layout.getGBL());
         
         //**********************************************************
         //Labels
@@ -338,30 +312,6 @@ public class ResourceEditorDialog extends DcDialog implements ListSelectionListe
         ComponentFactory.setBorder(scrollerSystemLabels);
         
         //**********************************************************
-        //Action panel
-        //**********************************************************
-        JPanel panelActions = new JPanel();
-        panelActions.setLayout(Layout.getGBL());
-        
-        JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
-        JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
-        
-        buttonSave.setMnemonic('S');
-        buttonClose.setMnemonic('C');
-        
-        buttonSave.addActionListener(this);
-        buttonSave.setActionCommand("save");
-        buttonClose.addActionListener(this);
-        buttonClose.setActionCommand("close");
-        
-        panelActions.add(buttonSave,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                        ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-                         new Insets( 0, 0, 0, 0), 0, 0));
-        panelActions.add(buttonClose, Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
-                        ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-                         new Insets( 0, 5, 0, 0), 0, 0));
-                
-        //**********************************************************
         //Topic List Panel
         //**********************************************************
         scrollers.add(scrollerLabels);
@@ -413,33 +363,20 @@ public class ResourceEditorDialog extends DcDialog implements ListSelectionListe
         //**********************************************************
         //Main panel
         //**********************************************************
-        getContentPane().add(panelTopics,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        add(panelTopics,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        getContentPane().add(panelInput,   Layout.getGBC( 1, 0, 1, 1, 10.0, 10.0
+        add(panelInput,   Layout.getGBC( 1, 0, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        getContentPane().add(panelActions, Layout.getGBC( 0, 1, 2, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
-                 new Insets( 5, 5, 5, 5), 0, 0));        
 
         setTopics();
-        setModal(true);
         
         panelInput.setPreferredSize(DcSettings.getDimension(DcRepository.Settings.stResourcesEditorViewSize));
-        topicList.setSelectedIndex(0);
-        
-        setCenteredLocation();
+        topicList.setSelectedIndex(0);        
     }
     
     public void valueChanged(ListSelectionEvent arg0) {
         setActiveTopic();
-    }
-    
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("close"))
-            close();
-        else if (ae.getActionCommand().equals("save"))
-            save();
-    } 
+    }    
 }

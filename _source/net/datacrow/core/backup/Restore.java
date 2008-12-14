@@ -47,6 +47,7 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.enhancers.ValueEnhancers;
@@ -86,6 +87,10 @@ public class Restore extends Thread {
     
     private boolean isImage(String filename) {
         return filename.toLowerCase().endsWith(".jpg");
+    }
+    
+    private boolean isResource(String filename) {
+        return filename.toLowerCase().endsWith(DcLanguageResource.suffix);
     }
     
     private boolean isVersion(String filename) {
@@ -281,12 +286,15 @@ public class Restore extends Thread {
                     boolean isImage = isImage(filename);
                     boolean isReport = isReport(filename);
                     boolean isModule = isModule(filename);
+                    boolean isResource = isResource(filename);
                     boolean isData = !isImage && !isReport && !isModule; 
                     
                     boolean restore = true;
                     
                     if (isImage && restoreDatabase) {
                         filename = DataCrow.imageDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+                    } else if (isResource && restoreDatabase) {
+                        filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
                     } else if (isReport && restoreReports) {
                         filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
                         filename = DataCrow.baseDir + filename;

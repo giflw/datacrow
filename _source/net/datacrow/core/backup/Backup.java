@@ -39,6 +39,7 @@ import java.util.zip.ZipOutputStream;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.reporting.templates.ReportTemplates;
 import net.datacrow.settings.DcSettings;
@@ -77,6 +78,12 @@ public class Backup extends Thread {
             File fl = new File(DataCrow.baseDir + "data" + File.separator + file);
             if (!fl.isDirectory() && !file.endsWith(".log") && !file.equals("images"))
                 files.add(DataCrow.baseDir + "data" + File.separator + file);
+        }
+
+        Collection<String> resources = Directory.read(DataCrow.resourcesDir, true, false, null);
+        for (String resource : resources) {
+            if (resource.toLowerCase().endsWith(DcLanguageResource.suffix))
+                files.add(resource);
         }
         
         files.addAll(

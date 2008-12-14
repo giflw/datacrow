@@ -32,7 +32,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -125,14 +125,12 @@ public class TipOfTheDayDialog extends DcDialog implements ActionListener {
         showNextTip(currentTip);
     }
     
-    
     private void initializeTips() {
-        Properties properties = DcResources.getResources();
-        
-        for (Object o : properties.keySet()) {
+        Map<String, String> map = DcResources.getCurrent().getResourcesMap();
+        for (Object o : map.keySet()) {
             String key = (String) o;
             if (key.startsWith("tip")) 
-                tips.add((String) properties.get(key));
+                tips.add(map.get(key));
         }
     }
     

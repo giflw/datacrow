@@ -93,6 +93,7 @@ public class DataCrow {
     public static String webDir;
     public static String dataDir;
     public static String cacheDir;
+    public static String resourcesDir;
     
     private static boolean isWebModuleInstalled = false;
     
@@ -140,6 +141,16 @@ public class DataCrow {
             PropertyConfigurator.configure(DataCrow.baseDir + "log4j.properties");
 
             // Initialize the resources and settings
+
+            // upgrade purposes (version 3.4.3 and older)
+            if (new File(DataCrow.dataDir + "resources.properties").exists()) {
+                try {
+                    Utilities.rename(new File(DataCrow.dataDir + "resources.properties"), new File(DataCrow.dataDir + "english_resources.properties"));
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }
+            }
+            
             new DcResources();
             new DcSettings();
             
@@ -496,6 +507,7 @@ public class DataCrow {
         pluginsDir = baseDir + "plugins/";
         servicesDir = baseDir + "services/";
         cacheDir = baseDir + "data/cache/";
+        resourcesDir = DataCrow.baseDir + "resources/";
         
         File file = new File(cacheDir);
         file.mkdirs();
