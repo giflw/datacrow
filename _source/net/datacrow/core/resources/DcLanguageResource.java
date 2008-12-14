@@ -61,7 +61,8 @@ public class DcLanguageResource {
     }
     
     public String get(String key) {
-        return resources.get(key);
+        String value = resources.get(key);
+        return value == null ? resources.get(key.toLowerCase()) : value;
     }
     
     /**

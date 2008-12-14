@@ -1291,8 +1291,20 @@ public class DcModule implements Comparable<DcModule> {
         this.xmlModule = xmlModule;
     }    
     
-    public String getLabel() {
+    public String getSystemLabel() {
         return label;
+    }
+    
+    public String getLabel() {
+        String tableName = getTableName();
+        if (isAbstract()) tableName = label;
+        String key = "sys" + tableName;
+        
+        if (DcResources.getText(key) != null) {
+            return DcResources.getText(key);
+        } else {
+            return label;
+        }
     }
     
     /**

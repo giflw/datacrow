@@ -52,6 +52,9 @@ import net.datacrow.console.components.DcList;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
@@ -96,6 +99,27 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
             if (key.startsWith("sys")) tableSystemLabels.addRow(new Object[] {key, value});
             if (key.startsWith("tip")) tableTips.addRow(new Object[] {key, value});            
         }
+        
+        for (DcModule module : DcModules.getAllModules()) {
+            
+            if (module.isTopModule() || module.isChildModule() || module instanceof DcPropertyModule || module.isAbstract()) {
+                
+                String tableName = module.getTableName();
+                if (module.isAbstract()) 
+                    tableName = module.getLabel();
+                
+                if (tableName.length() > 1)
+                    tableName = tableName.substring(0, 1).toUpperCase() + tableName.substring(1);
+                
+                String key = "sys" + tableName;
+                String value = module.getSystemLabel();
+                
+                if ((value != null && value.length() > 0) && 
+                    (resources.get(key) == null || resources.get(key).length() == 0)) {
+                    tableSystemLabels.addRow(new Object[] {key, value});
+                }
+            }
+        }
     }
     
     public void save() {
@@ -129,7 +153,7 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
             String key = (String) tableTips.getValueAt(i, 0, true);
             String value = (String) tableTips.getValueAt(i, 1, true);
             resources.put(key, value);
-        }        
+        } 
         
         resources.save();
     }
