@@ -129,6 +129,10 @@ public class DcModule implements Comparable<DcModule> {
     private final String tableShortName;
     private final String description;
     
+    private final String moduleResourceKey;
+    private final String itemResourceKey;
+    private final String itemPluralResourceKey;
+    
     private final String objectName;
     private final String objectNamePlural;
     
@@ -217,6 +221,12 @@ public class DcModule implements Comparable<DcModule> {
         this.objectName = objectName;
         this.objectNamePlural = objectNamePlural;
         
+        String s = tableName;
+        if (s != null && s.length() > 1) s = s.substring(0, 1).toUpperCase() + s.substring(1);
+        
+        this.moduleResourceKey = "sys" + (isAbstract() ? label : s);
+        this.itemResourceKey = moduleResourceKey + "Item";
+        this.itemPluralResourceKey = moduleResourceKey + "ItemPlural";
     }
     
     /**
@@ -355,18 +365,38 @@ public class DcModule implements Comparable<DcModule> {
         return icon32;
     }
 
+    public String getModuleResourceKey() {
+        return moduleResourceKey;
+    }
+    
+    public String getItemResourceKey() {
+        return itemResourceKey;
+    }
+
+    public String getItemPluralResourceKey() {
+        return itemPluralResourceKey;
+    }
+    
     /**
      * The name of the items belonging to this module.
      */
     public String getObjectName() {
-        return objectName;
+        if (DcResources.getText(getItemResourceKey()) != null) {
+            return DcResources.getText(getItemResourceKey());
+        } else {
+            return objectName;
+        }
     }
     
     /**
      * The plural name of the items belonging to this module.
      */
     public String getObjectNamePlural() {
-        return objectNamePlural;
+        if (DcResources.getText(getItemPluralResourceKey()) != null) {
+            return DcResources.getText(getItemPluralResourceKey());
+        } else {
+            return objectNamePlural;
+        }
     }
     
     /**
@@ -860,7 +890,7 @@ public class DcModule implements Comparable<DcModule> {
             sortedFields.addAll(fields.values());
             Collections.sort((List<DcField>) sortedFields, new Comparator<DcField>() {
                 public int compare(DcField fld1, DcField fld2) {
-                    return fld1.getLabel().compareTo(fld2.getLabel());
+                    return fld1.getOriginalLabel().compareTo(fld2.getOriginalLabel());
                 }
             });
         }
@@ -952,12 +982,6 @@ public class DcModule implements Comparable<DcModule> {
     
                field.setRequired(definition.isRequired());
                field.setEnabled(definition.isEnabled());
-    
-               String label = definition.getLabel();
-               if (label != null && label.trim().length() > 0)
-                   field.setLabel(label);
-               else
-                   field.setLabel(field.getSystemName());
            }
         } catch (Exception e) {
             logger.error("Error while applying settings on module " + getName(), e);
@@ -1290,10 +1314,6 @@ public class DcModule implements Comparable<DcModule> {
     public void setXmlModule(XmlModule xmlModule) {
         this.xmlModule = xmlModule;
     }    
-    
-    public String getSystemLabel() {
-        return label;
-    }
     
     public String getLabel() {
         String tableName = getTableName();
