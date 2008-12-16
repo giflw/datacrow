@@ -6,6 +6,11 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.User;
 
+/**
+ * Creates a new user including all her permissions.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class CreateUserRequest implements IRequest {
 
     private static final long serialVersionUID = -300657035562085171L;

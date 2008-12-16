@@ -44,6 +44,14 @@ import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.settings.definitions.ProgramDefinitions;
 import net.datacrow.synchronizers.Synchronizer;
 
+/**
+ * Holder for application settings.
+ * 
+ * @see DcSettings
+ * @see DcRepository.Settings
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcApplicationSettings extends net.datacrow.settings.Settings {
     
     public static final String _General = DcResources.getText("lblGroupGeneral");
@@ -55,6 +63,9 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     public static final String _HTTP = DcResources.getText("lblHTTPSettings");
     public static final String _Font = DcResources.getText("lblFont");
 
+    /**
+     * Initializes and loads all settings.
+     */
     public DcApplicationSettings() {
         super();
         createSettings();

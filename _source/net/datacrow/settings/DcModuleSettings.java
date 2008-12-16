@@ -50,10 +50,21 @@ import net.datacrow.settings.definitions.QuickViewFieldDefinitions;
 import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinitions;
 
+/**
+ * Module specific settings.
+ *
+ * @see DcRepository.ModuleSettings
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcModuleSettings extends net.datacrow.settings.Settings {
     
     private String _General = DcResources.getText("lblGroupGeneral");
     
+    /**
+     * Initializes and loads all module settings
+     * @param module
+     */
     public DcModuleSettings(DcModule module) {
         super();
         

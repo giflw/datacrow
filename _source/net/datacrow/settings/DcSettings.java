@@ -39,16 +39,27 @@ import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.IDefinitions;
 
+/**
+ * Wrapper for the application settings.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcSettings {
 
     private static final DcApplicationSettings applicationSettings = new DcApplicationSettings();
-    
+
+    /**
+     * Saves all settings to file.
+     */
     public static void save() {
         applicationSettings.save();
         for (DcModule module : DcModules.getAllModules())
             module.getSettings().save();
     }
 
+    /**
+     * Opens the settings view.
+     */
     public static SettingsView getView() {
         SettingsView view = new SettingsView(DcResources.getText("lblDataCrowSettings"), 
                                              applicationSettings.getSettings());

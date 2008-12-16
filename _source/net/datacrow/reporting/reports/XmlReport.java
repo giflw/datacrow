@@ -40,6 +40,12 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Creates a XML extract for a collection of items. The Resulting XML can be used in reports 
+ * and or can be used to migrate information from one system to another.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class XmlReport extends Report {
     
     private static Logger logger = Logger.getLogger(XmlReport.class.getName());
