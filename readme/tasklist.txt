@@ -24,7 +24,10 @@ Online services
 [x] Add images overview in the web interface.
 [x] Displaying format of names should be configurable. 
 [x] Fix the reports (check all!)
-[ ] Update help for online search
+[x] Update help for online search
+[x] Translations. There are some known issues with the Resource Editor tool such as loss of special 
+    character data. The resource editor will be updated to handle special characters correctly. 
+    Additionally Data Crow will feature language packs, making it possible to switch between languages.  
 
 3.4.5
 ---------------------------------------------------------------------------------------------------------
@@ -35,29 +38,27 @@ Online services
 [ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
     It would be nice, if datacrow used only the first part of the entered number. 
 [ ] Zoom in out for the chart panel.
-[ ] Migration tool. The current migration tool only allows you to import information from CSV files. 
+[?] Migration tool. The current migration tool only allows you to import information from CSV files. 
     Other products, Data Crow's competitors of you like, allow migration from other products. 
     The migration tool will be rewritten to allow import of additional data sources.  
-[ ] Translations. There are some known issues with the Resource Editor tool such as loss of special 
-    character data. The resource editor will be updated to handle special characters correctly. 
-    Additionally Data Crow will feature language packs, making it possible to switch between languages.  
 [ ] Exporting a module. Exporting the module definition itself currently requires manually copying the 
     module jar file and its property files. Functionality will be provided which makes it easy to export 
     and import a module (definition). This functionality will also allow users to export default/demo data 
     with their module. This functionality will also be used to provide additional custom modules. 
-[ ] PreparedStatement re-usage.
+[?] PreparedStatement re-usage.
 
 
 3.5
+---------------------------------------------------------------------------------------------------------
+[ ] Polished version of all the things mentioned above. 
+[ ] New web site.
+
+Unplanned
 ---------------------------------------------------------------------------------------------------------
 [ ] Multiple file support (per item)
 [ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
     Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
 [ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
-
-
-Unplanned
----------------------------------------------------------------------------------------------------------
 [ ] Per user settings. Settings, such a field settings, quick view settings and others are currently 
     stored on application level. As a result each and every user has the same settings as determined by 
     the administrator. Data Crow 3.4 will allow administrators to specify if the user should have the 
