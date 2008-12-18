@@ -769,9 +769,9 @@ public final class ComponentFactory {
         
         int height = getPreferredButtonHeight();
         
-        button.setPreferredSize(new Dimension(110, height));
-        button.setMaximumSize(new Dimension(110, height));
-        button.setMinimumSize(new Dimension(110, height));
+        button.setPreferredSize(new Dimension(120, height));
+        button.setMaximumSize(new Dimension(120, height));
+        button.setMinimumSize(new Dimension(120, height));
         button.setFont(getSystemFont());
         return button;
     }

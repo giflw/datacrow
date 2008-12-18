@@ -107,13 +107,13 @@ public class TipOfTheDayDialog extends DcDialog implements ActionListener {
         buttonNext.setMnemonic('N');
         buttonClose.setMnemonic('C');
         
-        getContentPane().add(scroller,      Layout.getGBC( 0, 0, 4, 1, 10.0, 10.0
+        getContentPane().add(scroller,      Layout.getGBC( 0, 0, 4, 1, 30.0, 30.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));
         getContentPane().add(checkShowTips, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        getContentPane().add(panelActions,  Layout.getGBC( 3, 1, 1, 1, 1.0, 1.0
+        getContentPane().add(panelActions,  Layout.getGBC( 0, 2, 3, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 5, 5, 5, 0), 0, 0));
         

@@ -65,7 +65,7 @@ public class DcResources {
         String[] propertyFiles = {"DcLabels.properties", "DcMessages.properties", "DcTooltips.properties",
                                   "DcAudioCodecs.properties", "DcSystem.properties", "DcTips.properties"}; 
         
-        DcLanguageResource english = new DcLanguageResource("english");
+        DcLanguageResource english = new DcLanguageResource("English");
         for (String propertyFile : propertyFiles) {
             Properties p = new Properties();
             try {
@@ -85,7 +85,7 @@ public class DcResources {
             }
         }
         
-        resources.put("english", english);
+        resources.put("English", english);
         
         for (String language : getLanguages()) {
             DcLanguageResource resource = new DcLanguageResource(language);
@@ -123,8 +123,8 @@ public class DcResources {
             }
         }
         
-        if (!languages.contains("english"))
-            languages.add("english");
+        if (!languages.contains("English"))
+            languages.add("English");
         
         return languages;
     }
@@ -133,7 +133,7 @@ public class DcResources {
      * The currently used language resource.
      */
     public static DcLanguageResource getCurrent() {
-        String language = "english";
+        String language = "English";
 
         try {
             language = DcSettings.getString(DcRepository.Settings.stLanguage);
