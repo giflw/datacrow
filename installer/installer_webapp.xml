@@ -4,7 +4,7 @@
 
     <info>
         <appname>Data Crow Web Module</appname>
-        <appversion>1.1</appversion>
+        <appversion>1.2</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
@@ -55,10 +55,13 @@
             <file src="webapp/datacrow/advancedfind.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/childdetails.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/form.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/images.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/index.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/input.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/itemdetails.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/itemdetailsimages.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/itemimage.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/itemimages.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/itemrelate.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/login.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/search.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
