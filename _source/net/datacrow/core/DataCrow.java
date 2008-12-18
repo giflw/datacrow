@@ -37,6 +37,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.SelectExpienceLevelDialog;
+import net.datacrow.console.windows.SelectLanguageDialog;
 import net.datacrow.console.windows.SplashScreen;
 import net.datacrow.console.windows.TipOfTheDayDialog;
 import net.datacrow.console.windows.help.StartupHelpDialog;
@@ -153,6 +154,13 @@ public class DataCrow {
             
             new DcResources();
             new DcSettings();
+            
+            if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
+                DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
+                
+                SelectLanguageDialog dlg = new SelectLanguageDialog();
+                dlg.setVisible(true);
+            }
             
             showSplashScreen();
             

@@ -98,7 +98,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_Locale,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stLanguage,
-                            "english",
+                            "",
                             ComponentFactory._LANGUAGECOMBO,
                             "",
                             DcResources.getText("lblLanguage"),
