@@ -117,14 +117,14 @@ public class ReportSettingsPanel extends JPanel {
         panelImages.add(nfWidth,        Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets( 5, 5, 5, 5), 0, 0));
-        panelImages.add(ComponentFactory.getLabel("Width"), 
+        panelImages.add(ComponentFactory.getLabel(DcResources.getText("lblWidth")), 
                         Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets( 5, 5, 5, 5), 0, 0));
         panelImages.add(nfHeight,       Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets( 5, 5, 5, 5), 0, 0));
-        panelImages.add(ComponentFactory.getLabel("Height"), 
+        panelImages.add(ComponentFactory.getLabel(DcResources.getText("lblHeight")), 
                         Layout.getGBC( 1, 3, 1, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets( 5, 5, 5, 5), 0, 0));

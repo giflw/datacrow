@@ -28,6 +28,10 @@ I would like to thank Klaus Lassleben for his German translation of the labels!
   database files.
 - When the item form asks "there are unsaved changes" and you answer "no: on the question if
   you are sure you want to close the form it's closed anyway.
+- Cannot translate module names + field names using the resource editor.
+- Cannot translate settings.
+- Removed most of the not used messages and labels. 
+- Hardcoded labels.
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
