@@ -38,6 +38,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcColorSelector;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcLookAndFeel;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.settings.definitions.Definition;
 import net.datacrow.settings.definitions.IDefinitions;
@@ -111,7 +112,8 @@ public class Setting {
     }
     
     public String getLabelText() {
-        return labelText;   
+        String s = DcResources.getText(labelText);
+        return s == null ? labelText : s; 
     }
     
     public boolean displayLabel() {
@@ -157,7 +159,8 @@ public class Setting {
     }
     
     public String getHelpText() {
-        return helpText;   
+        String s = DcResources.getText(helpText);
+        return s == null ? helpText : s;
     }
 
     /**

@@ -288,8 +288,8 @@ public class ItemForm extends DcFrame implements ActionListener {
     public void close(boolean aftersave) {
         if (!aftersave && update && dco != null && (!readonly && isChanged())) {
             QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
-        	if (qb.isAffirmative()) {
-        		saveValues();
+        	if (!qb.isAffirmative()) {
+        		//saveValues();
                 return;
             }
         }

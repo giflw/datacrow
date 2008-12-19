@@ -29,6 +29,8 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.datacrow.core.resources.DcResources;
+
 /**
  * A settings group contains specific settings. A group can have one child, 
  * creating a two level settings hierarchy. Deeper hierarchies are not supported.
@@ -99,6 +101,7 @@ public class SettingsGroup {
     
     @Override
     public String toString() {
-        return key; 
+        String s = DcResources.getText(key);
+        return s == null ? key : s;
     }
 }

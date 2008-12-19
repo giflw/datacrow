@@ -26,6 +26,8 @@ I would like to thank Klaus Lassleben for his German translation of the labels!
   the item form itself.
 - A check has been added to see whether Data Crow does have write permission on the 
   database files.
+- When the item form asks "there are unsaved changes" and you answer "no: on the question if
+  you are sure you want to close the form it's closed anyway.
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow

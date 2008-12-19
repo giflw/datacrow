@@ -137,7 +137,9 @@ public class DcResources {
 
         try {
             language = DcSettings.getString(DcRepository.Settings.stLanguage);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         return resources.get(language);
     }
@@ -152,7 +154,7 @@ public class DcResources {
     
     public static String getText(String id, String[] params) {
         String value = getCurrent().get(id);
-        return params == null ? value : insertParams(value, params);
+        return params == null || value == null ? value : insertParams(value, params);
     }
 
     private static String insertParams(String s, String[] params) {

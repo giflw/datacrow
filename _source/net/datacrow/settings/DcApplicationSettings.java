@@ -38,7 +38,6 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcLookAndFeel;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.settings.definitions.ProgramDefinitions;
@@ -54,14 +53,14 @@ import net.datacrow.synchronizers.Synchronizer;
  */
 public class DcApplicationSettings extends net.datacrow.settings.Settings {
     
-    public static final String _General = DcResources.getText("lblGroupGeneral");
-    public static final String _FileHashing = DcResources.getText("lblFileHashing");
-    public static final String _Locale = DcResources.getText("lblGroupLocale");
-    public static final String _Module = DcResources.getText("lblModuleSettings");
-    public static final String _FileHandlers = DcResources.getText("lblProgramDefinitions");
-    public static final String _SelectionColor = DcResources.getText("lblSelectionColor");
-    public static final String _HTTP = DcResources.getText("lblHTTPSettings");
-    public static final String _Font = DcResources.getText("lblFont");
+    public static final String _General = "lblGroupGeneral";
+    public static final String _FileHashing = "lblFileHashing";
+    public static final String _Locale = "lblGroupLocale";
+    public static final String _Module = "lblModuleSettings";
+    public static final String _FileHandlers = "lblProgramDefinitions";
+    public static final String _SelectionColor = "lblSelectionColor";
+    public static final String _HTTP = "lblHTTPSettings";
+    public static final String _Font = "lblFont";
 
     /**
      * Initializes and loads all settings.
@@ -101,7 +100,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             ComponentFactory._LANGUAGECOMBO,
                             "",
-                            DcResources.getText("lblLanguage"),
+                            "lblLanguage",
                             true,
                             true));          
         getSettings().addSetting(_General,
@@ -161,19 +160,19 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stPersonOrder,
-                            DcResources.getText("lblPersonOrderByLastname"),
+                            "lblPersonOrderByLastname",
                             ComponentFactory._PERSONORDERCOMBO,
                             "",
-                            DcResources.getText("lblPersonOrder"),
+                            "lblPersonOrder",
                             true,
                             true));   
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stPersonDisplayFormat,
-                            DcResources.getText("lblPersonFirstnameLastName"),
+                            "lblPersonFirstnameLastName",
                             ComponentFactory._PERSONDISPLAYFORMATCOMBO,
                             "",
-                            DcResources.getText("lblPersonDisplayFormat"),
+                            "lblPersonDisplayFormat",
                             true,
                             true));   
         getSettings().addSetting(_FileHashing,
@@ -182,7 +181,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "md5",
                             ComponentFactory._HASHTYPECOMBO,
                             "",
-                            DcResources.getText("lblFileHashType"),
+                            "lblFileHashType",
                             true,
                             true));
         getSettings().addSetting(_FileHashing,
@@ -191,7 +190,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             Long.valueOf(500000000),
                             ComponentFactory._FILESIZEFIELD,
                             "",
-                            DcResources.getText("lblFileHashMaxFileSize"),
+                            "lblFileHashMaxFileSize",
                             true,
                             true));             
         getSettings().addSetting(_General,
@@ -343,8 +342,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stCheckUniqueness,
                             true,
                             ComponentFactory._CHECKBOX,
-                            DcResources.getText("tpUniqueness"),
-                            DcResources.getText("lblUniqueness"),
+                            "tpUniqueness",
+                            "lblUniqueness",
                             false,
                             true));
         getSettings().addSetting(_General,
@@ -352,8 +351,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stCheckRequiredFields,
                             true,
                             ComponentFactory._CHECKBOX,
-                            DcResources.getText("tpRequiredFields"),
-                            DcResources.getText("lblCheckRequiredFields"),
+                            "tpRequiredFields",
+                            "lblCheckRequiredFields",
                             false,
                             true));
         getSettings().addSetting(_General,
@@ -379,8 +378,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stShowTableTooltip,
                             true,
                             ComponentFactory._CHECKBOX,
-                            DcResources.getText("tpShowTableTooltips"),
-                            DcResources.getText("lblShowTableTooltips"),
+                            "tpShowTableTooltips",
+                            "lblShowTableTooltips",
                             false,
                             true));
         getSettings().addSetting(_General,
@@ -407,7 +406,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             Boolean.TRUE,
                             ComponentFactory._CHECKBOX,
                             "",
-                            "Font Anti-aliasing",
+                            "lblFontAntiAliasing",
                             false,
                             true));        
         getSettings().addSetting(_Font,
@@ -415,8 +414,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stSystemFontNormal,
                             new Font("Arial", Font.PLAIN, 11),
                             ComponentFactory._FONTSELECTOR,
-                            DcResources.getText("tpFont"),
-                            DcResources.getText("lblFontNormal"),
+                            "tpFont",
+                            "lblFontNormal",
                             false,
                             true));
         getSettings().addSetting(_Font,
@@ -424,8 +423,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stSystemFontBold,
                             new Font("Arial", Font.PLAIN, 11),
                             ComponentFactory._FONTSELECTOR,
-                            DcResources.getText("tpFont"),
-                            DcResources.getText("lblFontBold"),
+                            "tpFont",
+                            "lblFontBold",
                             false,
                             true));
         getSettings().addSetting(_General,
@@ -434,7 +433,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             new DcLookAndFeel("JTattoo - Mint", "com.jtattoo.plaf.mint.MintLookAndFeel", null, 1),
                             ComponentFactory._LOOKANDFEELSELECTOR,
                             "",
-                            DcResources.getText("lblLookAndFeel"),
+                            "lblLookAndFeel",
                             false,
                             false));        
         getSettings().addSetting(_HTTP,
@@ -442,8 +441,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stProxyServerName,
                             "",
                             ComponentFactory._SHORTTEXTFIELD,
-                            DcResources.getText("tpProxyServerName"),
-                            DcResources.getText("lblProxyServerName"),
+                            "tpProxyServerName",
+                            "lblProxyServerName",
                             true,
                             true));
         getSettings().addSetting(_HTTP,
@@ -451,8 +450,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stProxyServerPort,
                             0,
                             ComponentFactory._NUMBERFIELD,
-                            DcResources.getText("tpProxyServerPort"),
-                            DcResources.getText("lblProxyServerPort"),
+                            "tpProxyServerPort",
+                            "lblProxyServerPort",
                             true,
                             true));
         getSettings().addSetting(_HTTP,
@@ -460,8 +459,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stProxyUserName,
                             "",
                             ComponentFactory._SHORTTEXTFIELD,
-                            DcResources.getText("tpProxyUserName"),
-                            DcResources.getText("lblProxyUserName"),
+                            "tpProxyUserName",
+                            "lblProxyUserName",
                             true,
                             true));
         getSettings().addSetting(_HTTP,
@@ -469,8 +468,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stProxyPassword,
                             "",
                             ComponentFactory._PASSWORDFIELD,
-                            DcResources.getText("tpProxyPassword"),
-                            DcResources.getText("lblProxyPassword"),
+                            "tpProxyPassword",
+                            "lblProxyPassword",
                             true,
                             true));
         getSettings().addSetting(_HTTP,
@@ -488,7 +487,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             ComponentFactory._FILEFIELD,
                             "",
-                            DcResources.getText("lblBrowserPath"),
+                            "lblBrowserPath",
                             true,
                             true));
         getSettings().addSetting(_General,
@@ -686,8 +685,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stDeleteImageFileAfterImport,
                             Boolean.FALSE,
                             ComponentFactory._CHECKBOX,
-                            DcResources.getText("tpDeleteImageFile"),
-                            DcResources.getText("lblDeleteImageFile"),
+                            "tpDeleteImageFile",
+                            "lblDeleteImageFile",
                             false,
                             true));
         getSettings().addSetting(_General,
@@ -713,7 +712,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stProgramDefinitions,
                             new ProgramDefinitions(),
                             ComponentFactory._PROGRAMDEFINITIONFIELD,
-                            DcResources.getText("tpProgramDefinitions"),
+                            "tpProgramDefinitions",
                             "",
                             false,
                             true));
@@ -787,8 +786,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stDecimalGroupingSymbol,
                             ".",
                             ComponentFactory._CHARACTERFIELD,
-                            DcResources.getText("lblDecimalGroupingSymbol"),
-                            DcResources.getText("lblDecimalGroupingSymbol"),
+                            "lblDecimalGroupingSymbol",
+                            "lblDecimalGroupingSymbol",
                             true,
                             true));
         getSettings().addSetting(_Locale,
@@ -796,8 +795,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             DcRepository.Settings.stDecimalSeparatorSymbol,
                             ",",
                             ComponentFactory._CHARACTERFIELD,
-                            DcResources.getText("lblDecimalSeperatorSymbol"),
-                            DcResources.getText("lblDecimalSeperatorSymbol"),
+                            "lblDecimalSeperatorSymbol",
+                            "lblDecimalSeperatorSymbol",
                             true,
                             true));
         

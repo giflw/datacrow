@@ -59,7 +59,7 @@ import net.datacrow.settings.definitions.WebFieldDefinitions;
  */
 public class DcModuleSettings extends net.datacrow.settings.Settings {
     
-    private String _General = DcResources.getText("lblGroupGeneral");
+    private String _General = "lblGroupGeneral";
     
     /**
      * Initializes and loads all module settings
@@ -106,7 +106,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
 
     @Override
     protected void createGroups() {
-        _General = DcResources.getText("lblGroupGeneral");
+        _General = "lblGroupGeneral";
         
         SettingsGroup generalGroup = new SettingsGroup(_General, "dc.Settings.GeneralSettings");
         getSettings().addGroup(_General, generalGroup);

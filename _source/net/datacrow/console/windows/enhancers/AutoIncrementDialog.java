@@ -142,7 +142,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
         
         explanation.setText(DcResources.getText("lblRenumberExplanation", module.getObjectNamePlural()));
         
-        JLabel labelOrderBy = ComponentFactory.getLabel(DcResources.getText("lblOrderBy"));
+        JLabel labelOrderBy = ComponentFactory.getLabel(DcResources.getText("lblSortOn"));
         comboOrderBy1.addItem("");
         comboOrderBy2.addItem("");
         comboOrderBy3.addItem("");

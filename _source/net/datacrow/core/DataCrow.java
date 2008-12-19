@@ -141,8 +141,6 @@ public class DataCrow {
             
             PropertyConfigurator.configure(DataCrow.baseDir + "log4j.properties");
 
-            // Initialize the resources and settings
-
             // upgrade purposes (version 3.4.3 and older)
             if (new File(DataCrow.dataDir + "resources.properties").exists()) {
                 try {
