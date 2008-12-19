@@ -556,6 +556,7 @@ public final class ComponentFactory {
     
     public static final DcRadioButton getRadioButton(String label, ImageIcon icon) {
         DcRadioButton radioButton = new DcRadioButton(label, icon, false);
+        radioButton.setFont(getSystemFont());
         return radioButton;
     }
 

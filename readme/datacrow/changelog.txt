@@ -41,6 +41,7 @@ I would like to thank Klaus Lassleben for his German translation of the labels!
 - New languages can now be created from within the resource editor. Fields and modules
   can now also be translated from within this form.
 - German language has been added (created by Klaus Lassleben).
+- Dutch language has been added.
   
 [Components]
 - Updated Jetty to the latest version (6.1.14)

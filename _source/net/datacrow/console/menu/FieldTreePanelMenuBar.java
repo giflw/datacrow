@@ -64,7 +64,7 @@ public class FieldTreePanelMenuBar extends DcMenuBar implements ActionListener {
         menuEdit.add(menuExpandAll);
         
         
-        DcMenuItem miGroupBy = ComponentFactory.getMenuItem("Select Fields");
+        DcMenuItem miGroupBy = ComponentFactory.getMenuItem(DcResources.getText("msgSelectFields"));
         miGroupBy.setActionCommand("groupBy");
         miGroupBy.addActionListener(this);
         menuFields.add(miGroupBy);

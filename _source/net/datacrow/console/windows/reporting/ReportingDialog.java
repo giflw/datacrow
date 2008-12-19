@@ -86,8 +86,8 @@ public class ReportingDialog extends DcDialog {
     private JComboBox cbTemplates = ComponentFactory.getComboBox();
     private JComboBox cbTransformer = ComponentFactory.getComboBox();
 
-    private JRadioButton rbReport = ComponentFactory.getRadioButton("Create a presentation report", null);
-    private JRadioButton rbExport = ComponentFactory.getRadioButton("Create a data report / export", null);
+    private JRadioButton rbReport = ComponentFactory.getRadioButton(DcResources.getText("lblPresentationReport"), null);
+    private JRadioButton rbExport = ComponentFactory.getRadioButton(DcResources.getText("lblDataReport"), null);
 
     private JTextArea textLog = ComponentFactory.getTextArea();
     private JProgressBar progressBar = new JProgressBar();
