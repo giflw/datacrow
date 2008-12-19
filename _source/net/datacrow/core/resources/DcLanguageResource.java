@@ -81,8 +81,10 @@ public class DcLanguageResource {
      */
     public void merge(DcLanguageResource resource) {
         for (String key : resource.getResourcesMap().keySet()) {
-            if (!resources.containsKey(key)) 
+            if (!resources.containsKey(key)) {
                 resources.put(key, resource.getResourcesMap().get(key));
+                logger.debug("Text not found for key " + key + " (" + language + ")");
+            }
         }
     }
     
@@ -120,9 +122,11 @@ public class DcLanguageResource {
     private void load() {
         Scanner scanner = null;
         try {
-            scanner = new Scanner(file, "UTF8");
+            
+            scanner = new Scanner(file, "UTF-8");
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+
                 String[] values = line.split("=");
                 if (values != null && values.length >= 2) {
                     String value = values[1];

@@ -1316,12 +1316,8 @@ public class DcModule implements Comparable<DcModule> {
     }    
     
     public String getLabel() {
-        String tableName = getTableName();
-        if (isAbstract()) tableName = label;
-        String key = "sys" + tableName;
-        
-        if (DcResources.getText(key) != null) {
-            return DcResources.getText(key);
+        if (DcResources.getText(moduleResourceKey) != null) {
+            return DcResources.getText(moduleResourceKey);
         } else {
             return label;
         }
