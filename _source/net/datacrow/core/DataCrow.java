@@ -142,9 +142,9 @@ public class DataCrow {
             PropertyConfigurator.configure(DataCrow.baseDir + "log4j.properties");
 
             // upgrade purposes (version 3.4.3 and older)
-            if (new File(DataCrow.dataDir + "resources.properties").exists()) {
+            if (new File(DataCrow.dataDir + "/resources.properties").exists()) {
                 try {
-                    Utilities.rename(new File(DataCrow.dataDir + "resources.properties"), new File(DataCrow.dataDir + "Custom_resources.properties"));
+                    Utilities.rename(new File(DataCrow.dataDir + "/resources.properties"), new File(DataCrow.resourcesDir + "Custom_resources.properties"));
                 } catch (Exception e) {
                     logger.error(e, e);
                 }
