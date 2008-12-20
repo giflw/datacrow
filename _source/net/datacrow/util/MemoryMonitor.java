@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.core.resources.DcResources;
 
 public class MemoryMonitor extends Thread {
 
@@ -57,11 +58,7 @@ public class MemoryMonitor extends Thread {
             logger.debug("Memory usage (max " + max + " MB) (used " + used + " MB) (available " + available + " MB)");
             
             if (max <= 65) {
-                new MessageBox("Data Crow has too less memory allocated by Java (" + max + " MB). " +
-                               "This will cause Data Crow to become very sluggish! " +
-                               "You should consider to allow Data Crow to use more memory. " +
-                               "This can be done by starting Data Crow in the following way: " +
-                               "\r\njava -Xmx256m -jar datacrow.jar", MessageBox._WARNING);
+                new MessageBox(DcResources.getText("msgMemory64MB", String.valueOf(max)), MessageBox._WARNING);
                 break;
             }
         }
