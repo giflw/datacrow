@@ -150,7 +150,10 @@ public class DataCrow {
                 }
             }
             
+            // load resources
             new DcResources();
+            
+            // load the settings
             new DcSettings();
             
             if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
@@ -185,7 +188,7 @@ public class DataCrow {
             logger.info(DcResources.getText("msgApplicationStarts"));
     
             // Initialize all modules
-            splashScreen.setStatusMsg("Loading modules");
+            splashScreen.setStatusMsg(DcResources.getText("msgLoadingModules"));
             new ModuleUpgrade().upgrade();
             DcModules.load();
     
@@ -201,13 +204,6 @@ public class DataCrow {
             DcSettings.set(DcRepository.Settings.stConnectionString, "dc");
             if (db != null && db.length() > 0)
                 DcSettings.set(DcRepository.Settings.stConnectionString, db);
-
-//            File scriptNew = new File(DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script.new");
-//            if (scriptNew.exists()) {
-//                File script = new File(DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script");
-//                script.delete();
-//                Utilities.rename(scriptNew, script);
-//            }
             
             SecurityCentre.getInstance().initialize();
             
@@ -220,7 +216,7 @@ public class DataCrow {
             login();
             
             // Establish a connection to the database / server
-            splashScreen.setStatusMsg("Initializing database");
+            splashScreen.setStatusMsg(DcResources.getText("msgInitializingDB"));
 
             DatabaseManager.initialize();
             
@@ -236,11 +232,11 @@ public class DataCrow {
             if (splashScreen == null)
                 showSplashScreen();
 
-            splashScreen.setStatusMsg("Loading items");
+            splashScreen.setStatusMsg(DcResources.getText("msgLoadingItems"));
             DcModules.loadData();
             
             if (!webserverMode)
-                splashScreen.setStatusMsg("Loading UI");
+                splashScreen.setStatusMsg(DcResources.getText("msgLoadingUI"));
 
             // load the filters & patterns
             DataFilters.load();
@@ -261,17 +257,19 @@ public class DataCrow {
             } else {
                 
                 if (!SecurityCentre.getInstance().getUser().isAuthorized("WebServer")) {
-                    new MessageBox("You are not authorized to start the Web Server. Data Crow will now exit", MessageBox._INFORMATION);
+                    new MessageBox(DcResources.getText("msgWebServerStartUnauthorized"), MessageBox._INFORMATION);
                     new ShutdownThread().run();
                     System.exit(0);
                 } else {
                     Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-                    splashScreen.setStatusMsg("Starting the web server");
+                    
+                    splashScreen.setStatusMsg(DcResources.getText("msgStartingWebServer"));
+                    
                     DcWebServer.getInstance().start();
                     if (DcWebServer.getInstance().isRunning())
-                        splashScreen.setStatusMsg("Web server has been started.");
+                        splashScreen.setStatusMsg(DcResources.getText("msgWebServerStarted"));
                     
-                    System.out.println("Press CTRL-C to, gracefully, bring the server down.");
+                    System.out.println(DcResources.getText("msgCloseWebServerConsole"));
                 }
             }
             

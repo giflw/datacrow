@@ -134,7 +134,7 @@ public class DcLanguageResource {
                         for (int i = 2;i < values.length; i++)
                             value += " " + values[i];
                     }
-                    resources.put(values[0], value);
+                    resources.put(values[0].trim(), value.trim());
                 }
             }
         } catch (Exception e) {
