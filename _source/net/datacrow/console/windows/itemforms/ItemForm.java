@@ -377,11 +377,9 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     private void setRequiredFields() {
-        int[] fields = dco.getFieldIndices();
-        for (int i = 0; i < fields.length; i++) {
-            DcField field = dco.getField(fields[i]);
-            if (field.isRequired()) {
-                JLabel label = labels.get(field);
+        for (DcFieldDefinition def : DcModules.get(moduleIndex).getFieldDefinitions().getDefinitions()) {
+            if (def.isRequired()) {
+                JLabel label = labels.get(DcModules.get(moduleIndex).getField(def.getIndex()));
                 label.setForeground(ComponentFactory.getRequiredColor());
             }
         }

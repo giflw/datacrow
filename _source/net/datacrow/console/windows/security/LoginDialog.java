@@ -52,6 +52,7 @@ public class LoginDialog extends DcDialog implements ActionListener, KeyListener
     
     public LoginDialog() {
         build();
+        setTitle(DcResources.getText("lblLogin"));
         pack();
         toFront();
         setCenteredLocation();

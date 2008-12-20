@@ -26,6 +26,7 @@
 package net.datacrow.settings.definitions;
 
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.resources.DcResources;
 
 public class DcFieldDefinition extends Definition {
     
@@ -81,8 +82,10 @@ public class DcFieldDefinition extends Definition {
     }
     
     public Object[] getDisplayValues(DcModule module) {
-        return new Object[] {module.getField(index).getSystemName(),
-                             label, enabled, required, descriptive,
+        String s = DcResources.getText(module.getField(index).getResourceKey());
+        s = s == null ? module.getField(index).getSystemName() : s;
+        
+        return new Object[] {s, label, enabled, required, descriptive,
                              module.getField(index)};
     }    
     
