@@ -38,7 +38,7 @@ public class PermissionModule extends DcChildModule {
     public PermissionModule() {
         super(DcModules._PERMISSION, 
               false,
-              DcResources.getText("sysPermission"),
+              "Permission",
               "",
               DcResources.getText("sysPermission"), 
               DcResources.getText("sysPermissionPlural"), 

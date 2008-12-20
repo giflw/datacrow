@@ -13,6 +13,14 @@ needs to be installed on top of Data Crow in order for the web module to be avai
 
 I would like to thank Klaus Lassleben for his German translation of the labels!
 
+[New]
+- Multiple languages support. The language can be selected in the locale settings from 
+  the settings menu.
+- New languages can now be created from within the resource editor. Fields and modules
+  can now also be translated from within this form.
+- German language has been added (created by Klaus Lassleben).
+- Dutch language has been added.
+
 [Fixed]
 - [2334235] Over due bug. 
   Loan administration shows items with a due date for the next year as overdue.
@@ -31,7 +39,9 @@ I would like to thank Klaus Lassleben for his German translation of the labels!
 - Cannot translate module names + field names using the resource editor.
 - Cannot translate settings.
 - Removed most of the not used messages and labels. 
-- Hardcoded labels.
+- Hardcoded labels and messages.
+- Descriptive setting was not remembered (field settings).
+  Bug in the version check caused the settings to be converted on each startup.
 
 [Changed]
 - The web server can now be started from the command line without starting the Data Crow
@@ -40,15 +50,7 @@ I would like to thank Klaus Lassleben for his German translation of the labels!
 - The display format for person names can now be set using the settings dialog.
   (Settings > General Settings > 'Default display format for the persons name').
 - UTF8 support for resources (labels, messages, etc).
-
-[New]
-- Multiple languages support. The language can be selected in the locale settings from 
-  the settings menu.
-- New languages can now be created from within the resource editor. Fields and modules
-  can now also be translated from within this form.
-- German language has been added (created by Klaus Lassleben).
-- Dutch language has been added.
-  
+ 
 [Components]
 - Updated Jetty to the latest version (6.1.14)
 - Updated FOP from Apache to version 0.95 (Libraries used for report generation).

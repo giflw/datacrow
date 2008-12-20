@@ -106,7 +106,7 @@ public class Version {
      * @param v
      */
     public boolean isOlder(Version v) {
-        return v.hashCode() < hashCode();
+        return hashCode() < v.hashCode();
     }
     
     /**

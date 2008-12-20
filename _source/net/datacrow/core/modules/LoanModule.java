@@ -48,7 +48,7 @@ public class LoanModule extends DcModule {
     public LoanModule() {
         super(DcModules._LOAN, 
               false, 
-              DcResources.getText("sysLoan"), 
+              "Loan", 
               "", 
               DcResources.getText("sysLoan"),
               DcResources.getText("sysLoan"),

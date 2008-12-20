@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Web Module 1.2   [Release on 14/12/2008] [testing: high] [target: production]
+Web Module 1.2   [Release on 20/12/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 Many fixes and improvements have been made, specifically in the security part.
 Note that this web module version needs to run on Data Crow 3.4.4 or higher. 
