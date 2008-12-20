@@ -497,10 +497,7 @@ public class DataCrow {
                 throw new Exception("Directory " + DataCrow.baseDir + " is not the Data Crow installation directory!");
             
         } catch (Exception exp) {
-            String message = "Data Crow was unable to get a valid location for its data (" + exp.getMessage() + "). \n" +
-                             "Correct the error or specify the installation directory via the parameter '-dir:'\n" +
-                             "(java -jar datacrow.jar -dir:d:/datacrow).";
-            
+            String message = "Data Crow was unable to get a valid location for its data (" + exp.getMessage() + "). Correct the error by changing the user permission on your platform or, if Data Crow is at fault, specify the installation directory via the parameter '-dir:' (java -jar datacrow.jar -dir:d:/datacrow).";
             new NativeMessageBox(message);
             System.out.println(message);
             System.exit(0);

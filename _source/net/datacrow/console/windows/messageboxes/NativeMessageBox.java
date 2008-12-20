@@ -31,17 +31,21 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
+import net.datacrow.core.DataCrow;
+import net.datacrow.util.Utilities;
 
-public class NativeMessageBox extends DcDialog implements ActionListener {
+public class NativeMessageBox extends JDialog implements ActionListener {
 
     private JTextArea textMessage;
     private JButton buttonOk;
@@ -52,24 +56,39 @@ public class NativeMessageBox extends DcDialog implements ActionListener {
     public  static final int _INFORMATION = 3;
 
     public NativeMessageBox(String message) {
-        super();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                close();
+            }
+        });
+        
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
         setTitle("Error");
         init();
+        
         setModal(true);
         display(message);
+        
     }
 
-    @Override
     public void close() {
         textMessage = null;
         buttonOk = null;
         panel = null;
-        super.close();
+        
+        setVisible(false);
+        if (DataCrow.isSplashScreenActive())
+            DataCrow.showSplashScreen(true);
+        
+        dispose();
     }
 
     private void display(String message) {
         textMessage.setText(message);
         pack();
+        setLocation(Utilities.getCenteredWindowLocation(getSize()));
         toFront();
         buttonOk.requestFocus();
         setVisible(true);
