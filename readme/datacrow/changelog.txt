@@ -4,7 +4,10 @@ Data Crow 3.4.5 [Release on xx/01/2008] [testing: high] [target: production]
 
 [Fixed]
 - File renamer does not work for the music album module.
-
+- Online update with only picture fields enabled does not allow to save the updated item
+- Dutch / English translation + incorrect action when closing an item form with unsaved 
+  changed (lost in translation..).
+- Create multiple should be limited to properties and audio tracks only.
 
 
 -----------------------------------------------------------------------------------------

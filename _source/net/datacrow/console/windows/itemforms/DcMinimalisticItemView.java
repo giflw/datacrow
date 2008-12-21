@@ -266,7 +266,9 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         buttonCreate.setMnemonic('N');
         buttonClose.setMnemonic('C');
         
-        panelActions.add(buttonCreateMultiple);
+        if (!getModule().isAbstract())
+            panelActions.add(buttonCreateMultiple);
+        
         panelActions.add(buttonCreate);
         panelActions.add(buttonClose);
         

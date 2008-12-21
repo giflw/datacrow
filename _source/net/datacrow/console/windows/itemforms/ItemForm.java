@@ -479,7 +479,15 @@ public class ItemForm extends DcFrame implements ActionListener {
             } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) dcoOrig.getValue(index);
                 changed = (picture != null && (picture.isUpdated() || picture.isNew() || picture.isDeleted())) ||
-                		  ((DcPictureField) component).isChanged();
+                          ((DcPictureField) component).isChanged();
+
+                // Tricky: mark the item as changed when a new picture has been set.
+                // this is all handled correctly in case of a manual update. When using the online service
+                // to only retrieve images this failed miserably. Therefore the following check has been added.
+                // Simply check if the image has been set (removal is not allowed by services) and if the current
+                // bytes (needed for saving so these should be available) are present.
+                changed = !changed && o instanceof DcImageIcon ? ((DcImageIcon) o).getCurrentBytes() != null : changed;
+                
                 if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
             }
             
