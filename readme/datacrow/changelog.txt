@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.5 [Release on xx/01/2008] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- File renamer does not work for the music album module.
+
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.4 [Release on 20/12/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 The code has been reviewed and many small improvements have been made. As a result

@@ -746,6 +746,9 @@ public class DataManager {
             } else if (modIdx == DcModules._PICTURE) {
                 for (Collection<Picture> objects : pictures.values())
                     add(c, df, objects);                
+            } else if (children.containsKey(modIdx)) {
+                for (Collection<DcObject> objects : children.get(modIdx).values())
+                    add(c, df, objects);
             }
         }
         
