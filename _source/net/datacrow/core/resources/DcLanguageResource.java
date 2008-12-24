@@ -37,7 +37,7 @@ import net.datacrow.core.DataCrow;
 import org.apache.log4j.Logger;
 
 /**
- *  Represents the resources for a language.
+ * Represents the resources for a language (labels and messages).
  * 
  * @author Robert Jan van der Waals
  */

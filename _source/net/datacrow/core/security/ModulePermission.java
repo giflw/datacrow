@@ -31,20 +31,36 @@ import java.util.Map;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.helpers.Permission;
 
+/**
+ * Indicates which permissions the user has for a specific module.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public final class ModulePermission {
 
     private int moduleIdx;
     
     private Map<Integer, Permission> fields = new HashMap<Integer, Permission>();
     
+    /**
+     * Creates a new instance
+     * @param moduleIdx
+     */
     protected ModulePermission(int moduleIdx) {
         this.moduleIdx = moduleIdx;
     }
 
+    /**
+     * The module index.
+     */
     public final int getModuleIdx() {
         return moduleIdx;
     }
 
+    /**
+     * Sets the module index
+     * @param moduleIdx Module index
+     */
     public final void setModuleIdx(int moduleIdx) {
         this.moduleIdx = moduleIdx;
     }
@@ -53,15 +69,28 @@ public final class ModulePermission {
         return fields.get(Integer.valueOf(fieldIdx));
     }
     
+    /**
+     * Sets the permission for a specific field
+     * @param field
+     */
     public final void addPermission(Permission field) {
         fields.put(Integer.valueOf(field.getFieldIdx()), field);
     }
     
+    /**
+     * Indicates if the user is authorized to view the field.
+     * @param field
+     */
     public final boolean isAuthorized(DcField field) {
         Permission permission = fields.get(Integer.valueOf(field.getIndex()));
         return permission != null ? permission.isViewingAllowed() : true;
     }
     
+    /**
+     * Checks if the user is allowed to see the module.
+     * The check is actually based on the field permissions. If the user is not allowed
+     * to view any of the fields the user will not have access to the module.
+     */
     public final boolean isAuthorized() {
         for (Permission permission : fields.values()) {
             if (permission.isViewingAllowed())
@@ -70,6 +99,11 @@ public final class ModulePermission {
         return false;
     }
 
+    /**
+     * Checks if the user is allowed to make changes to items belonging to the module.
+     * The check is actually based on the field permissions. If the user is not allowed
+     * to edit any of the fields the user will not have write access to the module.
+     */
     public final boolean isEditingAllowed() {
         for (Permission permission : fields.values()) {
             if (permission.isEditingAllowed())

@@ -75,6 +75,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 /**
  * This is the starting point of the application.
+ * This class takes care of starting the individual processes in the correct order.  
  * 
  * @author Robert Jan van der Waals
  */
@@ -85,21 +86,40 @@ public class DataCrow {
     private static Platform platform = new Platform();
     private static Version version = new Version(3, 4, 4, 0);
     
+    /** The installation directory */
     public static String baseDir;
+
+    /** The media directory */
     public static String imageDir;
+    
+    /** The modules directory (custom and default modules) */
     public static String moduleDir;
+    
+    /** The report directory (XLS) */
     public static String reportDir;
+    
+    /** The plugins directory */
     public static String pluginsDir;
+    
+    /** The online services directory */
     public static String servicesDir;
+    
+    /** The web application installation directory */
     public static String webDir;
+    
+    /** The data directory (settings and the database) */
     public static String dataDir;
+    
+    /** The item cache directory */
     public static String cacheDir;
+    
+    /** The resources directory (contains UTF8 translation files) */
     public static String resourcesDir;
     
     private static boolean isWebModuleInstalled = false;
+    private static SplashScreen splashScreen;
     
     public static MainFrame mainFrame;
-    private static SplashScreen splashScreen;
     
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {

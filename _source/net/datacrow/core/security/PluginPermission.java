@@ -25,24 +25,42 @@
 
 package net.datacrow.core.security;
 
+/**
+ * Indicates which permissions the user has for a specific plugin.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public final class PluginPermission {
 
     private String key;
     private boolean authorized = true;
     
+    /**
+     * Creates a new instance
+     * @param key The key of the plugin (class name)
+     */
     protected PluginPermission(String key) {
         super();
         this.key = key;
     }
     
+    /**
+     * The key of the plugin
+     */
     public final String getKey() {
         return key;
     }
     
+    /**
+     * Checks if the user is authorized to use the plugin.
+     */
     public final boolean isAuthorized() {
         return authorized;
     }
-    
+
+    /**
+     * Set the permission
+     */
     public final void setAuthorized(boolean authorized) {
         this.authorized = authorized;
     }

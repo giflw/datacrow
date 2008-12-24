@@ -46,6 +46,12 @@ import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Manages the Data Crow database. Is responsible for executing queries and 
+ * database maintenance (upgrading).
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcDatabase {
 
     private static Logger logger = Logger.getLogger(DcDatabase.class.getName());

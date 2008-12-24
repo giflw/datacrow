@@ -27,7 +27,6 @@ package net.datacrow.core;
 
 /**
  * Describes the platform on which Data Crow is running. 
- * Based on this information platform dependent tasks can be performed. 
  * @author Robert Jan van der Waals.
  */
 public final class Platform {

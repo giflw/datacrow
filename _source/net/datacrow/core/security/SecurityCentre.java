@@ -53,6 +53,12 @@ import net.datacrow.core.wf.WorkFlow;
 
 import org.apache.log4j.Logger;
 
+/**
+ * The security center is the access point for all security related information.
+ * Note that the users logged on to the web application are not represented by this class. 
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class SecurityCentre {
     
     private static Logger logger = Logger.getLogger(SecurityCentre.class.getName());
@@ -64,13 +70,21 @@ public class SecurityCentre {
     // the current using, running on this instance
     private User user;
     
-    public static SecurityCentre getInstance() {
+    /**
+     * Retrieves the sole instance of this class
+     */
+    public static synchronized SecurityCentre getInstance() {
         return instance;
     }
+
+    /**
+     * Creates a new instance
+     */
+    private SecurityCentre() {}
     
-    private SecurityCentre() {
-    }
-    
+    /**
+     * Retrieves the currently logged on user.
+     */
     public SecuredUser getUser() {
         return user != null ? users.get(user.getID()) : null;
     }

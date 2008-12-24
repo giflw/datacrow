@@ -42,6 +42,10 @@ import net.datacrow.core.plugin.RegisteredPlugin;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A secured user is a user which has logged on successfully.
+ * @author Robert Jan van der Waals
+ */
 public final class SecuredUser {
     
     private static Logger logger = Logger.getLogger(SecuredUser.class.getName());
@@ -52,28 +56,49 @@ public final class SecuredUser {
     private User user;
     private String password;
     
+    /**
+     * Creates a new instance
+     * @param user The user
+     * @param password An his / her password
+     */
     protected SecuredUser(User user, String password) {
         this.user = user;
         this.password = password;
         setPermissions();
     }
     
+    /**
+     * Retrieves the underlying user.
+     */
     public User getUser() {
         return user;
     }
     
+    /**
+     * The login name of the user
+     */
     public String getUsername() {
         return (String) user.getValue(User._A_LOGINNAME);
     }    
     
+    /**
+     * The password of the user
+     */
     public String getPassword() {
         return password;
     }  
 
+    /**
+     * Indicates if the user is an administrator
+     */
     public boolean isAdmin() {
         return user.isAdmin();
     }
-    
+
+    /**
+     * Checks if the user is allowed to see the specified field
+     * @param field The to be checked field 
+     */
     public boolean isAuthorized(DcField field) {
         if (isAdmin()) return true;
         
@@ -81,18 +106,30 @@ public final class SecuredUser {
         return mp == null ? false : mp.isAuthorized(field);
     }
     
+    /**
+     * Checks if the user is allowed to see the module
+     * @param module The to be checked module
+     */
     public boolean isAuthorized(DcModule module) {
     	if (isAdmin()) return true;
         
     	return modulePermissions.get(Integer.valueOf(module.getIndex())).isAuthorized();
     }
     
+    /**
+     * Indicates if the user is allowed to edit items belonging to the module.
+     * @param module The to be checked module
+     */
     public boolean isEditingAllowed(DcModule module) {
     	if (isAdmin()) return true;
         
         return modulePermissions.get(Integer.valueOf(module.getIndex())).isEditingAllowed();
     }
 
+    /**
+     * Indicates if the user is allowed to edit the specified field.
+     * @param field The to be checked field
+     */
     public boolean isEditingAllowed(DcField field) {
     	if (isAdmin()) return true;
     	
@@ -101,6 +138,10 @@ public final class SecuredUser {
         return permission == null ? false : permission.isEditingAllowed();
     }
     
+    /**
+     * Checks if the user is allowed to use the plugin.
+     * @param plugin The plugin key
+     */
     public boolean isAuthorized(String plugin) {
         try {
             return isAuthorized(Plugins.getInstance().get(plugin));
@@ -110,10 +151,18 @@ public final class SecuredUser {
         }
     }
     
+    /**
+     * Sets the password for this user.
+     * @param password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Checks if the user is allowed to use the plugin.
+     * @param plugin
+     */
     public boolean isAuthorized(Plugin plugin) {
         if (user.isAdmin()) return true;
         

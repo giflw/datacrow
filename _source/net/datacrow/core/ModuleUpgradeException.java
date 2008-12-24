@@ -25,6 +25,10 @@
 
 package net.datacrow.core;
 
+/**
+ * This exception is thrown when an exception occurred during the upgrade of a module.
+ * @author Robert Jan van der Waals
+ */
 public class ModuleUpgradeException extends Exception {
     
     private static final long serialVersionUID = 6632518650764515579L;

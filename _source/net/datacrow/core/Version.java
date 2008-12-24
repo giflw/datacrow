@@ -70,18 +70,30 @@ public class Version {
             patch = Integer.valueOf((String) st.nextElement());
     }
     
+    /**
+     * The minor version number
+     */
     public int getMinor() {
         return minor;
     }
 
+    /**
+     * The major version number
+     */
     public int getMajor() {
         return major;
     }
 
+    /**
+     * The build version number
+     */
     public int getBuild() {
         return build;
     }
 
+    /**
+     * The patch version number
+     */
     public int getPatch() {
         return patch;
     }

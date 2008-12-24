@@ -32,6 +32,10 @@ package net.datacrow.core;
  */
 public abstract class DcRepository {
 
+    /**
+     * The keys for module specific settings.
+     * @author Robert Jan van der Waals
+     */
     public static final class ModuleSettings {
     	public static final String stCardViewPictureOrder = "card_view_picture_order";
         public static final String stTableColumnOrder = "table_column_order";
@@ -78,6 +82,10 @@ public abstract class DcRepository {
         public static final String stTreePanelShownItems = "tree_panel_shown_items";
     }
     
+    /**
+     * The keys for application level settings.
+     * @author Robert Jan van der Waals
+     */
     public static final class Settings {
         public static final String stLanguage = "language";
         public static final String stSelectItemDialogSize = "select_item_dialog_size";
@@ -165,7 +173,15 @@ public abstract class DcRepository {
         public static final String stDriveManagerExcludedDirs = "drive_manager_excluded_directories";
     }
 
+    /**
+     * Contains collections which can be used throughout the application.
+     * @author Robert Jan van der Waals
+     */
     public static final class Collections {
+        
+        /**
+         * Music Genres
+         */
         public static final String[] colMusicGenres = {"A Capela", "Acid Jazz"
             , "Acid Punk", "Acid", "Acoustic", "Alternative", "AlternRock"
             , "Ambient", "Anime", "Avantgarde", "Ballad", "Bass", "Beat"
@@ -195,6 +211,10 @@ public abstract class DcRepository {
             , "Trailer", "Trance", "Tribal", "Trip-Hop", "Vocal"};
     }
 
+    /**
+     * The supported value types.
+     * @author Robert Jan van der Waals
+     */
     public static final class ValueTypes {
         public static final int _STRING = 0;
         public static final int _LONG = 1;
@@ -219,6 +239,10 @@ public abstract class DcRepository {
         public static final int _DOUBLE = 20;
     }
 
+    /**
+     * The supported database value types.
+     * @author Robert Jan van der Waals
+     */
     public static final class Database {
         public static final String _FIELDDATE = "date";
         public static final String _FIELDBIGINT = "bigint";

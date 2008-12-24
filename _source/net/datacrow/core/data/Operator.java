@@ -32,19 +32,50 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.resources.DcResources;
 
+/**
+ * Contains operators which can be used in filters
+ * 
+ * @see DataFilter
+ * @see DataFilterEntry
+ * 
+ * @author Robert Jan van der Waals
+ */
 public enum Operator {
-
+    
+    /** Exact match*/
     EQUAL_TO(1, DcResources.getText("lblEqualTo"), true),
+    
+    /** Does no match */
     NOT_EQUAL_TO(2, DcResources.getText("lblNotEqualTo"), true),
+    
+    /** The string contains a certain value */
     CONTAINS(3, DcResources.getText("lblContains"), true),
+    
+    /** The string does not contains a certain value */
     DOES_NOT_CONTAIN(4, DcResources.getText("lblDoesNotContain"), true),
+    
+    /** The value is empty */
     IS_EMPTY(5, DcResources.getText("lblIsEmpty"), false),
+    
+    /** The value is set */
     IS_FILLED(6, DcResources.getText("lblIsFilled"), false),
+    
+    /** The string starts with a certain value */
     STARTS_WITH(7, DcResources.getText("lblStartsWith"), true),
+    
+    /** The string ends with a certain value */
     ENDS_WITH(8, DcResources.getText("lblEndsWith"), true),
+    
+    /** The number is less then a certain value */
     LESS_THEN(9, DcResources.getText("lblLessThen"), true),
+    
+    /** The number is greater then a certain value */
     GREATER_THEN(10, DcResources.getText("lblGreaterThen"), true),
+    
+    /** The date is before a certain value */
     BEFORE(11, DcResources.getText("lblBefore"), true),
+    
+    /** The date is after a certain value */
     AFTER(12, DcResources.getText("lblAfter"), true);
     
     private final int index;  

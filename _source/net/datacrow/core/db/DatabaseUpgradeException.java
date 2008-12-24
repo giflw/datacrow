@@ -25,6 +25,10 @@
 
 package net.datacrow.core.db;
 
+/**
+ * This exception is thrown when an exception occurs during a database upgrade.
+ * @author Robert Jan van der Waals
+ */
 public class DatabaseUpgradeException extends Exception {
 
     public DatabaseUpgradeException(String message) {
