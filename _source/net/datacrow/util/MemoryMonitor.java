@@ -47,7 +47,7 @@ public class MemoryMonitor extends Thread {
         while (true) {
             
             try {
-                sleep(2000);
+                sleep(20000);
             } catch (Exception ignore) {}
             
             long max = Math.round(Math.round(runtime.maxMemory() / 1024) / 1024) + 1;

@@ -138,7 +138,7 @@ public class DcLanguageResource {
                 }
             }
         } catch (Exception e) {
-            logger.error("Could not load resources for language " + language, e);
+            logger.info("Could not load resources for language " + language);
         } 
     }
 }

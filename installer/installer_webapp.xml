@@ -19,9 +19,7 @@
     </locale>
     
     <resources>
-        <res id="LicencePanel.licence" src="readme/gpl.txt"/>
-        <res id="InfoPanel.info" src="readme/webmodule/readme.txt"/>
-        <res id="InfoPanel.info" src="readme/webmodule/installer.txt"/>
+        <res id="HTMLLicencePanel.licence" src="readme/gpl.html"/>
         <res id="shortcutSpec.xml" src="D:/development/tools/izpack/shortcutSpec.xml"/>
         <res id="Unix_shortcutSpec.xml" src="D:/development/tools/izpack/Unix_shortcutSpec.xml"/>
         <res src="installer/images/border.png" id="Installer.image.0"/>
@@ -36,7 +34,6 @@
     
     <panels>
         <panel classname="HelloPanel"/>
-        <panel classname="InfoPanel"/>
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/> 
         <panel classname="PacksPanel"/>
