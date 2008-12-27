@@ -440,24 +440,7 @@ public class DataCrow {
         DataCrow.installationDir = DataCrow.installationDir.replaceAll("\\\\", "/");
         DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
                 
-        try {
-            dataDir = DataCrow.installationDir + "data/";
-            new File(dataDir).mkdirs();
-            
-            if (!new File(DataCrow.installationDir + "icons_system").exists())
-                throw new Exception("Directory " + DataCrow.installationDir + " is not the Data Crow installation directory!");
-            
-        } catch (Exception exp) {
-            String message = "Data Crow was unable to get a valid location for its data. The following error occured: " + exp.getMessage() + ". " +
-                             "This can indicate that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
-                             "must have full control over the Data Crow folder and its sub folders. It could also be that Data Crow is unable to find the its installation " +
-                             "directory. Specify the path via the environment variables or sypply it via the -dir: parameter.";
-            
-            new NativeMessageBox(message);
-            System.out.println(message);
-            System.exit(0);
-        }
-        
+        dataDir = DataCrow.installationDir + "data/";
         webDir = DataCrow.installationDir + "webapp/datacrow/";
         imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/";
         reportDir = DataCrow.installationDir + "reports/";
@@ -466,13 +449,28 @@ public class DataCrow {
         servicesDir = DataCrow.installationDir + "services/";
         cacheDir = DataCrow.installationDir + "data/cache/";
         resourcesDir = DataCrow.installationDir + "resources/";
+
+        DataCrow.createDirectory(new File(dataDir), "data");
+        DataCrow.createDirectory(new File(cacheDir), "cache");
+        DataCrow.createDirectory(new File(installationDir + "data/temp"), "temp");
+        DataCrow.createDirectory(new File(imageDir), "images");
+        DataCrow.createDirectory(new File(reportDir), "reports");
+        DataCrow.createDirectory(new File(servicesDir), "services");
+    }
+    
+    private static void createDirectory(File dir, String name) {
+        dir.mkdirs();
         
-        new File(cacheDir).mkdirs();
-        new File(installationDir + "data/temp").mkdir();
-        new File(imageDir).mkdirs();
-        new File(reportDir).mkdir();
-        new File(pluginsDir).mkdir();
-        new File(servicesDir).mkdir();
+        if (!dir.exists()) {
+            String message = "Data Crow was unable to find the " + name + " directory. " +
+                             "This can indicate that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
+                             "must have full control over the Data Crow folder and all if its sub directories. It could also be that Data Crow is unable to find  its installation " +
+                             "directory. Specify the path via the system environment variables (DATACROW_HOME) or supply it via the -dir:<directory> parameter.";
+    
+            new NativeMessageBox(message);
+            System.out.println(message);
+            System.exit(0);
+        }
     }
     
     private static void checkDirectories() {
@@ -484,7 +482,7 @@ public class DataCrow {
                     "Data Crow does not have permissions to modify files in the data directory. " +
                     "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. " +
                     "The user running Data Crow must have full control over the Data Crow folder and its sub folders. " +
-                    "Please correct this before starting Data Crow again (refer to your operating system documentation).");
+                    "Please correct this before starting Data Crow again (see the documentation of your operating system).");
             System.exit(0);
         } 
     }
