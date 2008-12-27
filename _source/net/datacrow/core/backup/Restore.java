@@ -297,12 +297,12 @@ public class Restore extends Thread {
                         filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
                     } else if (isReport && restoreReports) {
                         filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
-                        filename = DataCrow.baseDir + filename;
+                        filename = DataCrow.installationDir + filename;
                     } else if (isModule && restoreModules) {
                         filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
-                        filename = DataCrow.baseDir + filename;
+                        filename = DataCrow.installationDir + filename;
                     } else if (isData && restoreDatabase) {
-                        filename = DataCrow.baseDir + "data/" + 
+                        filename = DataCrow.installationDir + "data/" + 
                                    filename.substring(filename.lastIndexOf("/") + 1, filename.length());
                     } else {
                         if (logger.isDebugEnabled())

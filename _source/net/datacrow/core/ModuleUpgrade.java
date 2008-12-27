@@ -229,9 +229,9 @@ public class ModuleUpgrade extends XmlObject {
     public void upgrade() throws ModuleUpgradeException {
         removeDuplicates();
         
-        add = new File(DataCrow.baseDir + "upgrade/add.xml");
-        alter = new File(DataCrow.baseDir + "upgrade/alter.xml");
-        remove = new File(DataCrow.baseDir + "upgrade/remove.xml");
+        add = new File(DataCrow.installationDir + "upgrade/add.xml");
+        alter = new File(DataCrow.installationDir + "upgrade/alter.xml");
+        remove = new File(DataCrow.installationDir + "upgrade/remove.xml");
         
         try {
             

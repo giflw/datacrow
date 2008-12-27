@@ -89,7 +89,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     }    
     
     private void fillSkinLFCombo() {
-        String themeDir = DataCrow.baseDir + File.separator + "themes";
+        String themeDir = DataCrow.installationDir + File.separator + "themes";
         File file = new File(themeDir);
         String [] files = file.exists() && file.isDirectory() ? file.list() : null;
         if (files != null) {

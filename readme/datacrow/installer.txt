@@ -1,6 +1,0 @@
------------------------------------------------------------------------------------
-Upgrading
------------------------------------------------------------------------------------
-
-Before installing this version make a backup of your current Data Crow version.
-Use the "backup & restore" functionality from the "tools" menu of your old version.

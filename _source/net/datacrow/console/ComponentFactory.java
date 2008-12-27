@@ -245,7 +245,7 @@ public final class ComponentFactory {
             
             DcLookAndFeel laf = DcSettings.getLookAndFeel(DcRepository.Settings.stLookAndFeel);
             if (laf.getType() == DcLookAndFeel._SKINLF) {
-                Skin theSkinToUse = SkinLookAndFeel.loadThemePack(DataCrow.baseDir + "/themes/" +  laf.getFileName());
+                Skin theSkinToUse = SkinLookAndFeel.loadThemePack(DataCrow.installationDir + "/themes/" +  laf.getFileName());
                 SkinLookAndFeel.setSkin(theSkinToUse);
                 UIManager.setLookAndFeel(new SkinLookAndFeel());
             } else if (laf.getType() == DcLookAndFeel._LAF) {

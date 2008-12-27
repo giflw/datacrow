@@ -156,7 +156,7 @@ public class XmlReport extends Report {
     	
     	if (stylesheet != null && stylesheet.trim().length() > 0) {
     		stylesheet = stylesheet.startsWith("/") || stylesheet.startsWith("\\") ? stylesheet.substring(1) : stylesheet;
-    		String filename = DataCrow.baseDir + stylesheet;
+    		String filename = DataCrow.installationDir + stylesheet;
     		File file = new File(filename);
     		
     		if (file.exists()) {

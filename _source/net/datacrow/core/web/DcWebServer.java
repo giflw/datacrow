@@ -101,7 +101,7 @@ public class DcWebServer {
 	    connector.setPort(DcSettings.getInt(DcRepository.Settings.stWebServerPort)); 
 	    server.setConnectors(new Connector[]{connector});
 	    
-	    String baseDir = DataCrow.baseDir + "webapp";
+	    String baseDir = DataCrow.installationDir + "webapp";
 	    
 	    WebAppContext webapp = new WebAppContext();
 	    webapp.setContextPath(context);

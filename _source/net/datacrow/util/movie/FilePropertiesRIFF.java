@@ -332,7 +332,7 @@ class FilePropertiesRIFF extends FileProperties {
         }
 
         String codecName = fromByteToAscii(fccHandler, 4).toUpperCase();
-        FileInputStream fis = new FileInputStream(DataCrow.baseDir + "resources/FOURCCvideo.txt");
+        FileInputStream fis = new FileInputStream(DataCrow.installationDir + "resources/FOURCCvideo.txt");
         codecName = findName(fis, codecName);
 
         setVideoCodec(codecName);

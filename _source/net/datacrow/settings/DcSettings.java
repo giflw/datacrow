@@ -64,7 +64,7 @@ public class DcSettings {
         SettingsView view = new SettingsView(DcResources.getText("lblDataCrowSettings"), 
                                              applicationSettings.getSettings());
         
-        ImageIcon icon = new ImageIcon(DataCrow.baseDir + "icons_system/logo.jpg");
+        ImageIcon icon = new ImageIcon(DataCrow.installationDir + "icons_system/logo.jpg");
         view.setDisclaimer(icon);
 
         view.setSize(new Dimension(875, 470));

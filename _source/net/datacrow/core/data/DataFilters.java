@@ -53,7 +53,7 @@ public class DataFilters {
     private static final Map<Integer, DataFilter> activeFilters = 
         new HashMap<Integer, DataFilter>();
     
-    private static final String filename = DataCrow.baseDir + "data" + File.separator + "filters.xml";
+    private static final String filename = DataCrow.installationDir + "data" + File.separator + "filters.xml";
 
     /**
      * Creates a new instance.

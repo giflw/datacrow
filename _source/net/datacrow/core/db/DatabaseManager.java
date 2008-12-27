@@ -181,7 +181,7 @@ public class DatabaseManager {
                 address = "jdbc:hsqldb:hsql:" + name;
             } else {
                 isServerClientMode = false;
-                address = "jdbc:hsqldb:" + DataCrow.baseDir +  "data/" + name;
+                address = "jdbc:hsqldb:" + DataCrow.installationDir +  "data/" + name;
             }
             
             Connection connection = DriverManager.getConnection(address, username, password);

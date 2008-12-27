@@ -53,7 +53,7 @@ public class User extends DcObject {
 
         Picture picture = (Picture) getValue(_E_PHOTO);
         if (picture == null || picture.getValue(Picture._D_IMAGE) == null)
-        	setValue(User._E_PHOTO, new DcImageIcon(DataCrow.baseDir + "icons_system/" + "user.png"));
+        	setValue(User._E_PHOTO, new DcImageIcon(DataCrow.installationDir + "icons_system/" + "user.png"));
         
         String loginname = (String) getValue(_A_LOGINNAME);
         setValue(_A_LOGINNAME, loginname.toLowerCase());

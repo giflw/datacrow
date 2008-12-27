@@ -70,14 +70,14 @@ public class Backup extends Thread {
      * @return A collection of fully classified filenames.
      */
     private Collection<String> getFiles() {
-        File dataDir = new File(DataCrow.baseDir + "data" + File.separator);
+        File dataDir = new File(DataCrow.installationDir + "data" + File.separator);
         String[] list = dataDir.list();
         Collection<String>  files = new ArrayList<String> ();
         for (int i = 0; i < list.length; i++) {
             String file = list[i];
-            File fl = new File(DataCrow.baseDir + "data" + File.separator + file);
+            File fl = new File(DataCrow.installationDir + "data" + File.separator + file);
             if (!fl.isDirectory() && !file.endsWith(".log") && !file.equals("images"))
-                files.add(DataCrow.baseDir + "data" + File.separator + file);
+                files.add(DataCrow.installationDir + "data" + File.separator + file);
         }
 
         Collection<String> resources = Directory.read(DataCrow.resourcesDir, true, false, null);

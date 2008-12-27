@@ -1365,11 +1365,11 @@ public class DcModule implements Comparable<DcModule> {
                                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                                     Picture picture = new Picture();
                                     picture.isNew(true);
-                                    picture.setValue(Picture._C_FILENAME, DataCrow.baseDir + value);
-                                    picture.setValue(Picture._D_IMAGE, new DcImageIcon(DataCrow.baseDir + value));
+                                    picture.setValue(Picture._C_FILENAME, DataCrow.installationDir + value);
+                                    picture.setValue(Picture._D_IMAGE, new DcImageIcon(DataCrow.installationDir + value));
                                     value = picture;
                                 } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
-                                    String s = DataCrow.baseDir + value;
+                                    String s = DataCrow.installationDir + value;
                                     value = Utilities.fileToBase64String(new URL("file://" + s));
                                 }
                                 

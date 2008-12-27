@@ -106,7 +106,7 @@ class FilePropertiesOGM extends FileProperties {
                         skipBytes(dataStream, 4);
                         videoFccHandler = readUnsignedInt32(dataStream);
 
-                        FileInputStream fis = new FileInputStream(DataCrow.baseDir + "resources/FOURCCvideo.txt");
+                        FileInputStream fis = new FileInputStream(DataCrow.installationDir + "resources/FOURCCvideo.txt");
                         String videoCodec = findName(fis, fromByteToAscii(videoFccHandler, 4));
 
                         setVideoCodec(videoCodec);

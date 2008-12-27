@@ -97,7 +97,7 @@ public class LogForm extends DcFrame implements ITextPaneAppenderListener {
         //Logo panel
         //**********************************************************
         panelPicture.setLayout(Layout.getGBL());
-        DcImageLabel logo = ComponentFactory.getImageLabel(new ImageIcon(DataCrow.baseDir + "icons_system/logo.jpg"));
+        DcImageLabel logo = ComponentFactory.getImageLabel(new ImageIcon(DataCrow.installationDir + "icons_system/logo.jpg"));
         ComponentFactory.setBorder(panelPicture);
 
         panelPicture.setPreferredSize(new Dimension(575,200));

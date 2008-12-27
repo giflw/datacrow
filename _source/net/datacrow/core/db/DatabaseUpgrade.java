@@ -531,7 +531,7 @@ public class DatabaseUpgrade {
     
     private void moveImages() throws DatabaseUpgradeException {
         
-        if (new File(DataCrow.baseDir + "data/images").exists()) {
+        if (new File(DataCrow.installationDir + "data/images").exists()) {
             QuestionBox qb = new QuestionBox("The image location has moved and scaled images " +
             		                         "have to be rewritten. It is not recommended to skip this " +
             		                         "conversion. Would you likt to continue with this conversion?");
@@ -545,7 +545,7 @@ public class DatabaseUpgrade {
         
         LogForm.getInstance().setVisible(true);
         
-        for (String file : Directory.read(DataCrow.baseDir + "data/images", false, false, new String[] {"jpg"})) {
+        for (String file : Directory.read(DataCrow.installationDir + "data/images", false, false, new String[] {"jpg"})) {
              File base = new File(file);
              if (file.indexOf("_small") == -1) {
                  
@@ -570,7 +570,7 @@ public class DatabaseUpgrade {
 
              base.delete();
          }
-         new File(DataCrow.baseDir + "data/images").delete();
+         new File(DataCrow.installationDir + "data/images").delete();
     }
     
     
@@ -903,7 +903,7 @@ public class DatabaseUpgrade {
      ************************************************/
     
     private Boolean getLegacySetting(String key) {
-        String filename = DataCrow.baseDir + "data" + File.separator + "data_crow.properties";
+        String filename = DataCrow.installationDir + "data" + File.separator + "data_crow.properties";
         try {
             Properties properties = new Properties();
             FileInputStream fis = new FileInputStream(filename);

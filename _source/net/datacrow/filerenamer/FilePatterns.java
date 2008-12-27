@@ -48,7 +48,7 @@ public class FilePatterns {
     private static Logger logger = Logger.getLogger(FilePatterns.class.getName());
     
     private static final Map<Integer, Collection<FilePattern>> patterns = new HashMap<Integer, Collection<FilePattern>>();
-    private static final String filename = DataCrow.baseDir + "data" + File.separator + "filepatterns.xml";
+    private static final String filename = DataCrow.installationDir + "data" + File.separator + "filepatterns.xml";
     
     /**
      * Loads the file patterns from file (XML format).

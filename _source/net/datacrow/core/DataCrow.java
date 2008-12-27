@@ -26,8 +26,6 @@
 package net.datacrow.core;
 
 import java.io.File;
-import java.io.RandomAccessFile;
-import java.net.URL;
 import java.util.Enumeration;
 
 import javax.swing.SwingUtilities;
@@ -75,7 +73,6 @@ import org.apache.log4j.PropertyConfigurator;
 
 /**
  * This is the starting point of the application.
- * This class takes care of starting the individual processes in the correct order.  
  * 
  * @author Robert Jan van der Waals
  */
@@ -86,46 +83,29 @@ public class DataCrow {
     private static Platform platform = new Platform();
     private static Version version = new Version(3, 4, 4, 0);
     
-    /** The installation directory */
-    public static String baseDir;
-
-    /** The media directory */
+    public static String installationDir;
     public static String imageDir;
-    
-    /** The modules directory (custom and default modules) */
     public static String moduleDir;
-    
-    /** The report directory (XLS) */
     public static String reportDir;
-    
-    /** The plugins directory */
     public static String pluginsDir;
-    
-    /** The online services directory */
     public static String servicesDir;
-    
-    /** The web application installation directory */
     public static String webDir;
-    
-    /** The data directory (settings and the database) */
     public static String dataDir;
-    
-    /** The item cache directory */
     public static String cacheDir;
-    
-    /** The resources directory (contains UTF8 translation files) */
     public static String resourcesDir;
     
     private static boolean isWebModuleInstalled = false;
-    private static SplashScreen splashScreen;
     
     public static MainFrame mainFrame;
+    private static SplashScreen splashScreen;
     
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         
         boolean nocache = false;
         boolean webserverMode = false; 
+
+        installationDir = System.getenv("DATACROW_HOME");
         
         String db = null;
         String dir = null;
@@ -154,12 +134,25 @@ public class DataCrow {
             }
         }
         
+        installationDir = dir != null ? dir : installationDir;
+        if (installationDir == null || installationDir.trim().length() == 0) {
+            new NativeMessageBox("The installation directory could not be determined. " +
+            		             "Please set the DATACROW_HOME system environment property. " +
+            		             "The DATACROW_HOME property should point to the Data Crow intallation directory.");
+            return;
+        }
+        
         try {
             installLafs();
-            setBaseDir(dir);
+            
             createDirectories();
             
-            PropertyConfigurator.configure(DataCrow.baseDir + "log4j.properties");
+            PropertyConfigurator.configure(DataCrow.installationDir + "log4j.properties");
+
+            checkDirectories();
+            
+            logger.info("Using installation directory: " + installationDir);
+            logger.info("Using data directory: " + dataDir);
 
             // upgrade purposes (version 3.4.3 and older)
             if (new File(DataCrow.dataDir + "/resources.properties").exists()) {
@@ -217,7 +210,7 @@ public class DataCrow {
             ValueEnhancers.initialize();
 
             // delete lock file
-            for (String file : Directory.read(baseDir + "data", false, false, new String[] {"lck"}))
+            for (String file : Directory.read(installationDir + "data", false, false, new String[] {"lck"}))
             	new File(file).delete();
             
             // set the database name
@@ -239,8 +232,6 @@ public class DataCrow {
             splashScreen.setStatusMsg(DcResources.getText("msgInitializingDB"));
 
             DatabaseManager.initialize();
-            
-            checkDirs();
             
             if (nocache)
                 DataManager.setUseCache(false);
@@ -384,26 +375,6 @@ public class DataCrow {
         return platform;
     }
     
-    private static void createDirectories() {
-        File file = new File(baseDir + "data");
-        if (!file.exists()) file.mkdir();
-
-        file = new File(baseDir + "data/temp");
-        if (!file.exists()) file.mkdir();
-        
-        file = new File(imageDir);
-        if (!file.exists()) file.mkdirs();
-        
-        file = new File(reportDir);
-        if (!file.exists()) file.mkdir();
-        
-        file = new File(pluginsDir);
-        if (!file.exists()) file.mkdir();
-        
-        file = new File(servicesDir);
-        if (!file.exists()) file.mkdir();
-    }    
-
     /**
      * Is the splash screen currently being shown?
      */
@@ -465,85 +436,56 @@ public class DataCrow {
     /** 
      * Determines the current directory.
      */
-    private static void setBaseDir(String s) {
-        baseDir = s;
-        
-        if (baseDir == null || baseDir.trim().length() == 0) {
-            final URL location;
-            final String classLocation = DataCrow.class.getName().replace('.', '/') + ".class";
-            final ClassLoader loader = DataCrow.class.getClassLoader();
-            if (loader == null)
-                location = ClassLoader.getSystemResource(classLocation);
-            else
-                location = loader.getResource(classLocation);
-    
-            String dir = location.getFile();
-            int index = dir.indexOf("_classes/net/datacrow");
-            if (index > -1) dir = dir.substring(0, index);
-    
-            index = dir.indexOf("_build/net/datacrow");
-            if (index > -1) dir = dir.substring(0, index);
-    
-            index = dir.indexOf("classes/net/datacrow");
-            if (index > -1) dir = dir.substring(0, index);
-    
-            index = dir.indexOf("datacrow.jar");
-            if (index > -1) dir = dir.substring(0, index);
-    
-            if (dir.startsWith("file:"))
-                dir = dir.substring(5, dir.length());
-    
-            dir = dir.replaceAll("%20", " ");
-            baseDir = dir;
-        } else {
-            while (baseDir.indexOf('\\') > -1)
-                baseDir = baseDir.replace('\\', '/');
-            
-            baseDir += baseDir.endsWith("/") ? "" : "/";
-        }
+    private static void createDirectories() {
+        DataCrow.installationDir = DataCrow.installationDir.replaceAll("\\\\", "/");
+        DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
                 
         try {
-            dataDir = DataCrow.baseDir + "data";
-            File file = new File(dataDir);
-            file.mkdirs();
+            dataDir = DataCrow.installationDir + "data/";
+            new File(dataDir).mkdirs();
             
-            file = new File(DataCrow.baseDir + "data/data_crow.log");
-            RandomAccessFile raf = new RandomAccessFile(file, "rw");
-            raf.close();
-            
-            file = new File(DataCrow.baseDir + "icons_system");
-            
-            if (!file.exists())
-                throw new Exception("Directory " + DataCrow.baseDir + " is not the Data Crow installation directory!");
+            if (!new File(DataCrow.installationDir + "icons_system").exists())
+                throw new Exception("Directory " + DataCrow.installationDir + " is not the Data Crow installation directory!");
             
         } catch (Exception exp) {
-            String message = "Data Crow was unable to get a valid location for its data (" + exp.getMessage() + "). Correct the error by changing the user permission on your platform or, if Data Crow is at fault, specify the installation directory via the parameter '-dir:' (java -jar datacrow.jar -dir:d:/datacrow).";
+            String message = "Data Crow was unable to get a valid location for its data. The following error occured: " + exp.getMessage() + ". " +
+                             "This can indicate that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
+                             "must have full control over the Data Crow folder and its sub folders. It could also be that Data Crow is unable to find the its installation " +
+                             "directory. Specify the path via the environment variables or sypply it via the -dir: parameter.";
+            
             new NativeMessageBox(message);
             System.out.println(message);
             System.exit(0);
         }
         
-        webDir = baseDir + "webapp/datacrow/";
-        imageDir = baseDir + "webapp/datacrow/mediaimages/";
-        reportDir = baseDir + "reports/";
-        moduleDir = baseDir + "modules/";
-        pluginsDir = baseDir + "plugins/";
-        servicesDir = baseDir + "services/";
-        cacheDir = baseDir + "data/cache/";
-        resourcesDir = DataCrow.baseDir + "resources/";
+        webDir = DataCrow.installationDir + "webapp/datacrow/";
+        imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/";
+        reportDir = DataCrow.installationDir + "reports/";
+        moduleDir = DataCrow.installationDir + "modules/";
+        pluginsDir = DataCrow.installationDir + "plugins/";
+        servicesDir = DataCrow.installationDir + "services/";
+        cacheDir = DataCrow.installationDir + "data/cache/";
+        resourcesDir = DataCrow.installationDir + "resources/";
         
-        File file = new File(cacheDir);
-        file.mkdirs();
+        new File(cacheDir).mkdirs();
+        new File(installationDir + "data/temp").mkdir();
+        new File(imageDir).mkdirs();
+        new File(reportDir).mkdir();
+        new File(pluginsDir).mkdir();
+        new File(servicesDir).mkdir();
     }
     
-    private static void checkDirs() {
+    private static void checkDirectories() {
         String dbName = DcSettings.getString(DcRepository.Settings.stConnectionString);
         
         File f = new File(DataCrow.dataDir + dbName + ".script");
         if (!new File(DataCrow.dataDir).exists() || (f.exists() && !f.canWrite())) {
-            new MessageBox(DcResources.getText("msgCannotWrite"), MessageBox._WARNING);
-            if (platform.isVista())
-                new MessageBox(DcResources.getText("msgCannotWriteVista"), MessageBox._INFORMATION);
+            new NativeMessageBox(
+                    "Data Crow does not have permissions to modify files in the data directory. " +
+                    "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. " +
+                    "The user running Data Crow must have full control over the Data Crow folder and its sub folders. " +
+                    "Please correct this before starting Data Crow again (refer to your operating system documentation).");
+            System.exit(0);
         } 
     }
     

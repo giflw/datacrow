@@ -114,7 +114,7 @@ public class DcResources {
      * A language file has the following name: &lt;language&gt;_resources.properties.
      */
     public static Collection<String> getLanguages() {
-        String[] files = new File(DataCrow.baseDir + "resources/").list();
+        String[] files = new File(DataCrow.installationDir + "resources/").list();
         Collection<String> languages = new ArrayList<String>();
         if (files != null) {
             for (String file : files) {

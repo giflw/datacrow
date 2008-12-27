@@ -53,7 +53,7 @@ public class HelpDialog {
 		try {
 			ClassLoader cl = HelpDialog.class.getClassLoader();
             
-            URL url = new URL("file://" + DataCrow.baseDir + "help/jHelpSet.hs");
+            URL url = new URL("file://" + DataCrow.installationDir + "help/jHelpSet.hs");
 
             HelpSet hs = new HelpSet(cl, url);
             hs.setTitle(DcResources.getText("lblHelp"));

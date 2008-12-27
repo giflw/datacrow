@@ -45,7 +45,7 @@ public class Directory {
     /**
      * Retrieves all files and directories from the given locations
      *
-     * @param baseDir starting location for reading data
+     * @param installationDir starting location for reading data
      * @param confirm ask for confirmation for each directory
      * @param recurse read sub directories
      * @param includeDirs allow directory names in the result
