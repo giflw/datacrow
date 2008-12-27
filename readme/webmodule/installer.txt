@@ -1,7 +1,0 @@
-----------------------------------------------------------------------------------
-IMPORTANT
-----------------------------------------------------------------------------------
-
-The web module needs to be installed in a current Data Crow 3.4.3 (or higher)
-installation folder. The web module will not be available if the web module is
-installed somewhere else.
