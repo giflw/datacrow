@@ -110,7 +110,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public void updateView() {
         if (currentUserObject instanceof NodeElement) {
-            gp.getView().clear();
+            gp.getView().clear(isSaveChanges());
             NodeElement currentNode = (NodeElement) currentUserObject;
             
             if (currentNode.getValues() != null)

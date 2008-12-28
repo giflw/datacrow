@@ -88,7 +88,15 @@ public class MasterView {
         DataCrow.mainFrame.applyView(index);
         
         if (groupingPane != null)
-            groupingPane.updateView();
+            groupingPane.saveChanges(false);
+        
+        try {
+            if (groupingPane != null)
+                groupingPane.updateView();
+        } finally {
+            if (groupingPane != null)
+                groupingPane.saveChanges(true);
+        }
     }
     
     public View get(int index) {
@@ -154,6 +162,11 @@ public class MasterView {
     public void clear() {
         for (View view : getViews())
             view.clear();
+    }
+
+    public void clear(boolean saveChanges) {
+        for (View view : getViews())
+            view.clear(saveChanges);
     }
     
     public void add(DcObject dco) {

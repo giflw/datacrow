@@ -459,13 +459,24 @@ public class DataCrow {
     }
     
     private static void createDirectory(File dir, String name) {
-        dir.mkdirs();
+        try {
+            dir.mkdirs();
+        } catch (Exception e) {
+
+            String message = "Data Crow was unable to coreate the " + name + " directory. " +
+                "This can indicate that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
+                "must have full control over the Data Crow folder and all if its sub directories.";
+
+            new NativeMessageBox(message);
+            System.out.println(message);
+            System.exit(0);
+        }
         
         if (!dir.exists()) {
             String message = "Data Crow was unable to find the " + name + " directory. " +
-                             "This can indicate that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
-                             "must have full control over the Data Crow folder and all if its sub directories. It could also be that Data Crow is unable to find  its installation " +
-                             "directory. Specify the path via the system environment variables (DATACROW_HOME) or supply it via the -dir:<directory> parameter.";
+                "This can indicate that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
+                "must have full control over the Data Crow folder and all if its sub directories. It could also be that Data Crow is unable to find  its installation " +
+                "directory. Specify the path via the system environment variables (DATACROW_HOME) or supply it via the -dir:<directory> parameter.";
     
             new NativeMessageBox(message);
             System.out.println(message);

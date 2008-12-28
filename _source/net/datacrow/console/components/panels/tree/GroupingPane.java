@@ -105,6 +105,11 @@ public class GroupingPane extends JPanel {
         return new ArrayList<DcObject>(items);
     }
     
+    public void saveChanges(boolean b) {
+        for (TreePanel tp : panels)
+            tp.setSaveChanges(b);
+    }
+    
     public void reset() {
         // avoid filling the view when it isn't visible.
         if (DcModules.getCurrent().getIndex() == getModule()) {
