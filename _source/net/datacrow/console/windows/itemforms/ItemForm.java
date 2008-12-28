@@ -403,7 +403,8 @@ public class ItemForm extends DcFrame implements ActionListener {
     protected boolean isChanged() {
         boolean changed = dcoOrig.isChanged();
         
-        if (dcoOrig.getCurrentChildren().size() != childView.getItems().size())
+        if (dcoOrig.getModule().getChild() != null &&
+            dcoOrig.getCurrentChildren().size() != childView.getItems().size())
             return true;
 
         int[] indices = dcoOrig.getFieldIndices();
