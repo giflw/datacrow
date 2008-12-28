@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.5 [Release on 28/12/2008] [testing: high] [target: production]
+Data Crow 3.4.5 [Release on xx/12/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -16,11 +16,12 @@ Data Crow 3.4.5 [Release on 28/12/2008] [testing: high] [target: production]
 - Headers of tables were not translated.
 - Loan information panel was not translated.
 - Log file is created in a separate data folder.
+- Music Tracks are not added when performing an online update.
 
 [Changed]
 - It is now mandatory to set the DATACROW_HOME system environment variable or to supply
   the -dir: parameter. 
-- You can now add new items to lists from within the item form.
+- You can now add new items to list boxes from within the item form (categories, etc.)
 
 
 -----------------------------------------------------------------------------------------

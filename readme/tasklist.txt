@@ -13,7 +13,6 @@ Online services
 ---------------------------------------------------------------------------------------------------------
 [ ] MovieMeter.nl online search
 [ ] Book online search in www.isbndb.com (1886661)
-[x] Bol.com
 [ ] Wikipedia
 [ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
 
