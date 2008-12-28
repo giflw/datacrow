@@ -222,7 +222,7 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener {
         panelSettings.setLayout(Layout.getGBL());
         panelSettings.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSettings")));
         
-        panelSettings.add(ComponentFactory.getLabel(DcResources.getText("lblItemsToMassUpdate")), 
+        panelSettings.add(ComponentFactory.getLabel(DcResources.getText("lblUpdatingWhichItems")), 
                 Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, 
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(5, 5, 5, 5), 0, 0));

@@ -75,6 +75,9 @@ import org.apache.log4j.Logger;
 
 public class FileRenamerDialog extends DcFrame implements ActionListener, IFileRenamerListener {
 
+    private static final int _ALL = 0;
+    private static final int _SELECTED = 1;
+    
     private static Logger logger = Logger.getLogger(FileRenamerDialog.class.getName());
     
     private final DcFilePatternField patternFld;
@@ -92,6 +95,8 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
     private final JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
     private final JButton buttonStart = ComponentFactory.getButton(DcResources.getText("lblStart"));
     private final JButton buttonStop = ComponentFactory.getButton(DcResources.getText("lblStop"));
+    
+    private final JComboBox cbItemPickMode = ComponentFactory.getComboBox();
     
     private final JRadioButton rbOriginalLoc = 
         ComponentFactory.getRadioButton(DcResources.getText("lblUseOriginalLocation"), null);
@@ -124,6 +129,11 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
     }
     
     private DcObject[] getApplicableObjects(FilePattern pattern) {
+        
+        
+        
+        
+        
         DataFilter df = new DataFilter(module);
         
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
@@ -141,13 +151,24 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         Collection<DcObject> currentItems = new ArrayList<DcObject>(); 
         if (DcModules.get(module).getParent() != null) {
             View view = DcModules.get(module).getParent().getCurrentSearchView();
-            for (DcObject parent : view.getItems()) {
+            
+            Collection<DcObject> items = new ArrayList<DcObject>();
+            if (getItemPickMode() == _ALL)
+                items.addAll(view.getItems());
+            else 
+                items.addAll(view.getSelectedItems());
+            
+            for (DcObject parent : items) {
                 parent.loadChildren();
                 currentItems.addAll(parent.getChildren());
             }
         } else {
             View view = DcModules.get(module).getCurrentSearchView();
-            currentItems.addAll(view.getItems());
+            
+            if (getItemPickMode() == _ALL)
+                currentItems.addAll(view.getItems());
+            else 
+                currentItems.addAll(view.getSelectedItems());
         }
         
         for (DcObject eligibleItem : eligibleItems) {
@@ -156,6 +177,10 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         }
         
         return result.toArray(new DcObject[] {});
+    }
+    
+    public int getItemPickMode() {
+        return cbItemPickMode.getSelectedIndex() < 1 ? _ALL : _SELECTED;
     }
     
     private boolean isValidPattern(String pattern) {
@@ -259,6 +284,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
             fileField.setFont(ComponentFactory.getSystemFont());
             labelPatterms.setFont(ComponentFactory.getSystemFont());
             cbPatterns.setFont(ComponentFactory.getStandardFont());
+            cbItemPickMode.setFont(ComponentFactory.getStandardFont());
         }
     }
 
@@ -336,6 +362,25 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         
         //**********************************************************
         //Config panel
+        JPanel panelSettings = new JPanel();
+        panelSettings.setLayout(Layout.getGBL());
+        panelSettings.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSettings")));
+        
+        panelSettings.add(ComponentFactory.getLabel(DcResources.getText("lblRenameFilesFor")), 
+                Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, 
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(5, 5, 5, 5), 0, 0));
+        panelSettings.add(cbItemPickMode, 
+                Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                new Insets(5, 5, 5, 5), 0, 0));
+        
+        cbItemPickMode.addItem(DcResources.getText("lblAllItemsInView"));
+        cbItemPickMode.addItem(DcResources.getText("lblRenameFilesSelectedItems"));
+        
+        
+        //**********************************************************
+        //Config panel
         //**********************************************************
         JPanel panelConfig = new JPanel();
         panelConfig.setLayout(Layout.getGBL());
@@ -400,16 +445,19 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         this.getContentPane().add(panelTask,     Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        this.getContentPane().add(panelConfig,   Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+        this.getContentPane().add(panelSettings, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHEAST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        this.getContentPane().add(panelConfig,   Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        this.getContentPane().add(panelLog,      Layout.getGBC( 0, 3, 1, 1, 10.0, 10.0
+        this.getContentPane().add(panelLog,      Layout.getGBC( 0, 4, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        this.getContentPane().add(progressBar,   Layout.getGBC( 0, 4, 1, 1, 1.0, 1.0
+        this.getContentPane().add(progressBar,   Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        this.getContentPane().add(panelAction,   Layout.getGBC( 0, 5, 1, 1, 0.0, 0.0
+        this.getContentPane().add(panelAction,   Layout.getGBC( 0, 6, 1, 1, 0.0, 0.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 0, 0, 0, 0), 0, 0));
         
