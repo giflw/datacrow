@@ -137,7 +137,7 @@ public class DataCrow {
         installationDir = dir != null ? dir : installationDir;
         if (installationDir == null || installationDir.trim().length() == 0) {
             new NativeMessageBox("The installation directory could not be determined. " +
-            		             "Please set the DATACROW_HOME system environment property. " +
+            		             "Please set the DATACROW_HOME system environment property or supply the -dir:<installation directory> parameter. " +
             		             "The DATACROW_HOME property should point to the Data Crow intallation directory.");
             return;
         }
@@ -516,7 +516,7 @@ public class DataCrow {
         
         @Override
         public void run() {
-            System.out.println("Closing the web server");
+            System.out.println(DcResources.getText("msgClosingWebServer"));
             
             try {
                 if (DcWebServer.getInstance().isRunning())
@@ -525,10 +525,10 @@ public class DataCrow {
                 logger.error(e, e);
             }
             
-            System.out.println("Closing the database and writing the item cache");
+            System.out.println(DcResources.getText("msgClosingDB"));
             DataManager.serialize();
             DatabaseManager.closeDatabases(false);
-            System.out.println("Shutdown complete!");
+            System.out.println(DcResources.getText("msgShutdownComplete"));
         }
     }    
 }
