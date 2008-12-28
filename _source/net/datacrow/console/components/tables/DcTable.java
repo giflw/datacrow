@@ -713,6 +713,9 @@ public class DcTable extends JTable implements IViewComponent {
                 comp = ComponentFactory.getComponent(module.getIndex(), field
                         .getReferenceIdx(), ComponentFactory._SHORTTEXTFIELD,
                         field.getLabel(), field.getMaximumLength());
+            } else if (field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
+                
+                comp = ComponentFactory.getObjectCombo(field.getReferenceIdx());
             }
 
             if (field.getIndex() == DcObject._ID
@@ -802,8 +805,7 @@ public class DcTable extends JTable implements IViewComponent {
                 case ComponentFactory._REFERENCEFIELD:
                     columnNew.setCellRenderer(ComboBoxTableCellRenderer
                             .getInstance());
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (JComboBox) comp));
+                    columnNew.setCellEditor(new DefaultCellEditor((JComboBox) comp));
                     break;
                 case ComponentFactory._RATINGCOMBOBOX:
                     columnNew.setMinWidth(70);

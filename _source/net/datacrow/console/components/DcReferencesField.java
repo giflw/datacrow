@@ -58,7 +58,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     private DcHtmlEditorPane fld = ComponentFactory.getHtmlEditorPane();
 
     private List<DcObject> references = new ArrayList<DcObject>();
-    private JButton btnOpenNew = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
+    private JButton btOpen = ComponentFactory.getIconButton(IconLibrary._icoOpen);
     
     private final int mappingModIdx;
     
@@ -77,16 +77,16 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         add(scrollIn, Layout.getGBC( 0, 0, 1, 1, 80.0, 80.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));        
-        add(btnOpenNew,     Layout.getGBC( 12, 0, 1, 1, 1.0, 1.0
+        add(btOpen,     Layout.getGBC( 12, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 0, 0, 0, 0), 0, 0));        
         
-        btnOpenNew.addActionListener(this);
-        btnOpenNew.setActionCommand("openDialog");
+        btOpen.addActionListener(this);
+        btOpen.setActionCommand("openDialog");
     }
 
     public void setEditable(boolean b) {
-        btnOpenNew.setEnabled(b);
+        btOpen.setEnabled(b);
     }
     
     public Object getValue() {
@@ -108,7 +108,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         fld = null;
         references.clear();
         references = null;
-        btnOpenNew = null;
+        btOpen = null;
         removeAll();
     }
     

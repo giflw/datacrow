@@ -102,6 +102,7 @@ import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcProgramDefinitionsField;
 import net.datacrow.console.components.DcRadioButton;
 import net.datacrow.console.components.DcRatingComboBox;
+import net.datacrow.console.components.DcReferenceField;
 import net.datacrow.console.components.DcReferencesField;
 import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.DcTabbedPane;
@@ -385,7 +386,7 @@ public final class ComponentFactory {
             case _PASSWORDFIELD:
                 return getPasswordField();
             case _REFERENCEFIELD:
-                return getObjectCombo(minormodule);
+                return getReferenceField(minormodule);
             case _PROGRAMDEFINITIONFIELD:
                 return getProgramDefinitionField();
             case _LOOKANDFEELSELECTOR:
@@ -532,6 +533,11 @@ public final class ComponentFactory {
         DcComboBox comboBox = getComboBox();
         DataManager.registerUiComponent(comboBox, module);
         return comboBox;
+    }
+    
+    public static final DcReferenceField getReferenceField(int module) {
+        DcReferenceField ref = new DcReferenceField(module);
+        return ref;
     }
     
     public static final DcComboBox getAvailabilityCombo() {
