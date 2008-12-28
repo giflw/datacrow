@@ -47,7 +47,6 @@ import net.datacrow.util.DcSwingUtilities;
 public class DcReferenceField extends JComponent implements IComponent, ActionListener {
 
     private JComboBox cb;
-    //private JButton btOpen = ComponentFactory.getIconButton(IconLibrary._icoSearch);
     private JButton btCreate = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
     
     private final int referenceModIdx;
@@ -70,20 +69,12 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
             add(btCreate, Layout.getGBC( 1, 0, 1, 1, 0.0, 0.0
                     ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
                      new Insets( 0, 0, 0, 0), 0, 0));        
-
-        //add(btOpen,   Layout.getGBC( 2, 0, 1, 1, 0.0, 0.0
-          //      ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
-            //     new Insets( 0, 0, 0, 0), 0, 0));        
-        
-        //btOpen.addActionListener(this);
-        //btOpen.setActionCommand("find");
         
         btCreate.addActionListener(this);
         btCreate.setActionCommand("create");
     }
 
     public void setEditable(boolean b) {
-        //btOpen.setEnabled(b);
         btCreate.setEnabled(b);
     }
     
@@ -96,7 +87,6 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
     }
     
     public void clear() {
-        //btOpen = null;
         btCreate = null;
         cb = null;
         
@@ -109,24 +99,8 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         itemForm.setVisible(true);
     }
     
-    private void find() {
-//        MappingModule mappingModule = (MappingModule) DcModules.get(mappingModIdx);
-//        DcReferencesDialog dlg = new DcReferencesDialog(references, mappingModule);
-//        
-//        dlg.setVisible(true);
-//        
-//        if (dlg.isSaved()) {
-//            references.clear();
-//            references.addAll(dlg.getDcObjects());
-//            setDescription();
-//        }
-//        dlg.dispose();        
-    }    
-    
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("find"))
-            find();
-        else if (e.getActionCommand().equals("create"))
+        if (e.getActionCommand().equals("create"))
             create();
     }
     

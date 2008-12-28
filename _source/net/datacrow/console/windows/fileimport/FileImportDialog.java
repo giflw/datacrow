@@ -277,7 +277,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 5, 5), 0, 0));
 
-        JButton btnCreateContainer = ComponentFactory.getIconButton(IconLibrary._icoAdd);
+        JButton btnCreateContainer = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
         btnCreateContainer.setActionCommand("createContainer");
         btnCreateContainer.addActionListener(this);
                 

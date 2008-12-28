@@ -44,6 +44,7 @@ import javax.swing.ScrollPaneConstants;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcReferencesDialog;
+import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.MappingModule;
@@ -59,6 +60,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
 
     private List<DcObject> references = new ArrayList<DcObject>();
     private JButton btOpen = ComponentFactory.getIconButton(IconLibrary._icoOpen);
+    private JButton btCreate = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
     
     private final int mappingModIdx;
     
@@ -74,15 +76,21 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollIn.setPreferredSize(new Dimension(350,50));
         
-        add(scrollIn, Layout.getGBC( 0, 0, 1, 1, 80.0, 80.0
+        add(scrollIn, Layout.getGBC( 0, 0, 1, 2, 80.0, 80.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));        
-        add(btOpen,     Layout.getGBC( 12, 0, 1, 1, 1.0, 1.0
+        add(btCreate, Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 0), 0, 0));        
+        add(btOpen,   Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 0, 0, 0, 0), 0, 0));        
         
         btOpen.addActionListener(this);
         btOpen.setActionCommand("openDialog");
+
+        btCreate.addActionListener(this);
+        btCreate.setActionCommand("create");
     }
 
     public void setEditable(boolean b) {
@@ -109,9 +117,17 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         references.clear();
         references = null;
         btOpen = null;
+        btCreate = null;
         removeAll();
     }
     
+    private void create() {
+        MappingModule mm = (MappingModule) DcModules.get(mappingModIdx);
+        DcObject dco = DcModules.get(mm.getReferencedModIdx()).getDcObject();
+        ItemForm itemForm = new ItemForm(false, false, dco, true);
+        itemForm.setVisible(true);
+    }
+        
     private void openDialog() {
         MappingModule mappingModule = (MappingModule) DcModules.get(mappingModIdx);
         DcReferencesDialog dlg = new DcReferencesDialog(references, mappingModule);
@@ -160,6 +176,8 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("openDialog"))
             openDialog();
+        else if (e.getActionCommand().equals("create"))
+            create();        
     }
     
    
