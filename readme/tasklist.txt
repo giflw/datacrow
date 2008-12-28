@@ -18,7 +18,7 @@ Online services
 [ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
 
 
-3.4.5
+3.4.6
 ---------------------------------------------------------------------------------------------------------
 [ ] Provide the option to revert back to the default settings (per module + general settings).
     Provide this option as a parameter.

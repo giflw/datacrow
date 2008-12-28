@@ -26,7 +26,10 @@
 package net.datacrow.core;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Enumeration;
+import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -147,7 +150,7 @@ public class DataCrow {
             
             createDirectories();
             
-            PropertyConfigurator.configure(DataCrow.installationDir + "log4j.properties");
+            initLog4j();
 
             checkDirectories();
             
@@ -482,6 +485,19 @@ public class DataCrow {
             System.out.println(message);
             System.exit(0);
         }
+    }
+    
+    private static void initLog4j() {
+        try {
+            Properties properties = new Properties();
+            properties.load(new FileInputStream(DataCrow.installationDir + "log4j.properties"));
+            properties.setProperty("log4j.appender.logfile.File", DataCrow.dataDir + "datacrow.log");
+            properties.store(new FileOutputStream(DataCrow.installationDir + "log4j.properties"), "");
+        } catch (Exception e) {
+            logger.error("Could not find the log4j properties file.", e);
+        }
+        
+        PropertyConfigurator.configure(DataCrow.installationDir + "log4j.properties");        
     }
     
     private static void checkDirectories() {
