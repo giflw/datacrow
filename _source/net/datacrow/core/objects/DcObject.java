@@ -420,6 +420,13 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public Collection<DcObject> getChildren() {
         loadChildren();
+        return getCurrentChildren();
+    }
+    
+    /**
+	 * Gets the children as they have been currently set (without reloading them).
+	 */
+    public Collection<DcObject> getCurrentChildren() {
         return children != null ? new ArrayList<DcObject>(children) : null;
     }
     
@@ -931,8 +938,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public void setSilent(boolean b) {
         this.silent = b;
         
-        if (getChildren() != null) {
-            for (DcObject child : getChildren())
+        if (getCurrentChildren() != null) {
+            for (DcObject child : getCurrentChildren())
                 child.setSilent(silent);
         }
     }

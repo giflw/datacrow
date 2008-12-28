@@ -312,15 +312,13 @@ public class DatabaseManager {
             // save children. do not save children when dealing with an abstract module as
             // this: 1. not needed and 2. causes unwanted side-effects (container > audio cd > audio track)
             Collection<DcObject> children = new ArrayList<DcObject>();
-            Collection<DcObject> c = dco.getChildren();
+            Collection<DcObject> c = dco.getCurrentChildren();
             if (!dco.getModule().isAbstract() && c != null)
                 children.addAll(c);
             
             int counter = 1;
             for (DcObject child : children) {
                 if (child.isChanged()) {
-                    child.addRequest(new SynchronizeWithManagerRequest(
-                            SynchronizeWithManagerRequest._UPDATE, child));
                     
                     boolean exists = false;
                     if (child.getID() != null && child.getID().length() > 0) {
@@ -331,16 +329,20 @@ public class DatabaseManager {
                     }
     
                     Query query;
-                    if (!exists)
+                    if (!exists) {
+                        child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
                         query = new Query(Query._INSERT, child, null, child.getRequests());
-                    else
-                        query = new Query(Query._UPDATE, child, null, child.getRequests());
-    
-                    if (!isChanged) {
-                        query.setSilence(counter != children.size());
+                        
                     } else {
-                        query.setSilence(true);
+                        child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, child));
+                        query = new Query(Query._UPDATE, child, null, child.getRequests());
                     }
+
+                    if (!isChanged)
+                        query.setSilence(counter != children.size());
+                    else
+                        query.setSilence(true);
+                    
                     db.addQuery(query);
                 }
             }

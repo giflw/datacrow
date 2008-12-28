@@ -147,7 +147,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             if (ID == null)
                 removeValues(dco);
             
-            dco.setValue(DcObject._ID, ID);
+            //dco.setValue(DcObject._ID, ID);
             
             list.add(dco);
             table.add(dco);
@@ -335,6 +335,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                         settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite) ?
                         settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings) :
                         dco.getModule().getFieldIndices();
+                        
+                    // if all fails, just update all!
+                    if (fields == null || fields.length == 0)
+                        fields = dco.getModule().getFieldIndices();
         
                     for (int i = 0; i < fields.length; i++) {
                         int field = fields[i];
@@ -349,14 +353,13 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                         }
                     }  
                     
-                    if (o.getChildren() != null && o.getChildren().size() > 0)
-                        dco.setChildren(o.getChildren());
-                    
+                    if (o.getCurrentChildren() != null && o.getCurrentChildren().size() > 0)
+                        dco.setChildren(o.getCurrentChildren());
                     
                     SwingUtilities.invokeLater(
                             new Thread(new Runnable() { 
                                 public void run() {
-                                    itemForm.setData(dco, panelSettings.isOverwriteAllowed());
+                                    itemForm.setData(dco, panelSettings.isOverwriteAllowed(), true);
                                 }
                             }));
                 }

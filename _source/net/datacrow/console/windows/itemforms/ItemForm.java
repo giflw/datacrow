@@ -200,7 +200,7 @@ public class ItemForm extends DcFrame implements ActionListener {
 
         setRequiredFields();
         setReadonly(readonly);
-        setData(dco, true);
+        setData(dco, true, false);
 
         pack();
         
@@ -334,7 +334,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         DcModules.get(moduleIndex).setSetting(DcRepository.ModuleSettings.stItemFormSize, getSize());        
     }
 
-    public void setData(DcObject object, boolean overwrite) {
+    public void setData(DcObject object, boolean overwrite, boolean overwriteChildren) {
         try {
             dco.applyEnhancers(update);
             
@@ -342,10 +342,10 @@ public class ItemForm extends DcFrame implements ActionListener {
                 dco.applyTemplate(template);  
             
             if (childView != null) {
-                if (update)
+                if (update && !overwriteChildren)
                     childView.loadItems();
-                else if (object.getChildren() != null)
-                    childView.setObjects(object.getChildren());
+                else 
+                    childView.setObjects(object.getCurrentChildren());
             }
     
             int[] indices = object.getFieldIndices();
@@ -402,6 +402,9 @@ public class ItemForm extends DcFrame implements ActionListener {
     @SuppressWarnings("unchecked")
     protected boolean isChanged() {
         boolean changed = dcoOrig.isChanged();
+        
+        if (dcoOrig.getCurrentChildren().size() != childView.getItems().size())
+            return true;
 
         int[] indices = dcoOrig.getFieldIndices();
         for (int i = 0; i < indices.length && !changed; i++) {

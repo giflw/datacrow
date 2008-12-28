@@ -115,8 +115,26 @@ public class Picture extends DcObject {
     
     public DcImageIcon getScaledPicture() {
         String filename = getScaledFilename();
-        if (filename != null)
+        if (filename != null) {
+            if (!new File(DataCrow.imageDir + filename).exists()) {
+                loadImage();
+                DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
+                
+                if (icon != null) {
+                    
+                    logger.info("Scaled image is missing, creating new");
+
+                    try {
+                        Utilities.writeScaledImageToFile(icon, DataCrow.imageDir + filename);
+                    } catch (Exception e) {
+                        logger.error("Could not create new scaled image!", e);
+                    }
+                }
+            }
+            
             return new DcImageIcon(DataCrow.imageDir + filename);
+            
+        }
 
         return null;
     }

@@ -48,7 +48,7 @@ public class ItemDetailsWizardPanel extends ItemWizardPanel {
 
     @Override
     public void setObject(DcObject dco) {
-        itemForm.setData(dco, true);
+        itemForm.setData(dco, true, false);
     }
 
     @Override
