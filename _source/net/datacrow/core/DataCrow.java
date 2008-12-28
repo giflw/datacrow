@@ -491,7 +491,7 @@ public class DataCrow {
         try {
             Properties properties = new Properties();
             properties.load(new FileInputStream(DataCrow.installationDir + "log4j.properties"));
-            properties.setProperty("log4j.appender.logfile.File", DataCrow.dataDir + "datacrow.log");
+            properties.setProperty("log4j.appender.logfile.File", DataCrow.dataDir + "data_crow.log");
             properties.store(new FileOutputStream(DataCrow.installationDir + "log4j.properties"), "");
         } catch (Exception e) {
             logger.error("Could not find the log4j properties file.", e);

@@ -550,7 +550,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     /**
      * Actions to be performed before saving the object.
      */
-    protected void beforeSave() {
+    protected void beforeSave() throws ValidationException {
         if (getModule().isFileBacked())
             Hash.getInstance().calculateHash(this);
     }

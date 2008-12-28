@@ -55,6 +55,7 @@ import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Directory;
@@ -445,7 +446,10 @@ public class DatabaseUpgrade {
                             String id = rs.getString("ID");
                             String name = rs.getString("NAME");
                             base.setValue(DcAssociate._A_NAME, name);
-                            base.setName();
+                            
+                            try {
+                                base.setName();
+                            } catch (ValidationException ignore) {}
                             
                             ps.setString(1, (String) base.getValue(DcAssociate._E_FIRSTNAME));
                             ps.setString(2, (String) base.getValue(DcAssociate._F_LASTTNAME));

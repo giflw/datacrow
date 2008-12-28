@@ -98,7 +98,7 @@ public class DcProperty extends DcObject {
      * Before saving a property its icon is scaled.
      */
     @Override
-    protected void beforeSave() {
+    protected void beforeSave()  throws ValidationException {
         super.beforeSave();
         
         String value = (String) getValue(_B_ICON);

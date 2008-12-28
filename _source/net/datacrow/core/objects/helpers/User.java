@@ -48,7 +48,7 @@ public class User extends DcObject {
     }      
     
     @Override
-    protected void beforeSave() {
+    protected void beforeSave() throws ValidationException {
         super.beforeSave();
 
         Picture picture = (Picture) getValue(_E_PHOTO);
@@ -56,7 +56,10 @@ public class User extends DcObject {
         	setValue(User._E_PHOTO, new DcImageIcon(DataCrow.installationDir + "icons_system/" + "user.png"));
         
         String loginname = (String) getValue(_A_LOGINNAME);
-        setValue(_A_LOGINNAME, loginname.toLowerCase());
+        if (loginname != null)
+            setValue(_A_LOGINNAME, loginname.toLowerCase());
+        else 
+            throw new ValidationException(DcResources.getText("msgLoginNameNotFilled"));
     }
 
     @Override

@@ -60,7 +60,7 @@ public class DcAssociate extends DcObject {
      * Executed before inserting or updating the item.
      */
     @Override
-    protected void beforeSave() {
+    protected void beforeSave() throws ValidationException {
         setName();
     }
     
@@ -69,7 +69,7 @@ public class DcAssociate extends DcObject {
      * full name is available. If only the last and first name are available the full name
      * is created out of these parts.
      */
-    public void setName() {
+    public void setName()  throws ValidationException {
         String name = (String) getValue(DcAssociate._A_NAME);
         String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
         String lastname = (String) getValue(DcAssociate._F_LASTTNAME);

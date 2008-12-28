@@ -27,6 +27,7 @@ package net.datacrow.core.objects.helpers;
 
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMediaObject;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.util.isbn.InvalidBarCodeException;
 import net.datacrow.util.isbn.Isbn;
 
@@ -57,7 +58,7 @@ public class Book extends DcMediaObject {
     }
 
     @Override
-    protected void beforeSave() {
+    protected void beforeSave() throws ValidationException {
         super.beforeSave();
         
         String s10 = (String) getValue(_J_ISBN10);
