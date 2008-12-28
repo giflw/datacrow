@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.5 [Release on xx/01/2009] [testing: high] [target: production]
+Data Crow 3.4.5 [Release on 28/12/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -9,13 +9,18 @@ Data Crow 3.4.5 [Release on xx/01/2009] [testing: high] [target: production]
   changed (lost in translation..).
 - Create multiple should be limited to properties and audio tracks only.
 - Data Crow is not successful in finding its installation directory (see changes).
-- Data Crow does not report anything when the folder permissions are not set correctly.
+- [2463925] Vista - Incorrect folder permissions
+  Data Crow does not report anything when the folder permissions are not set correctly.
   This results in loss of data.
+- [2461042] Crash: opening card view after changing item in table view.  
+- Headers of tables were not translated.
+- Loan information panel was not translated.
+- Log file is created in a separate data folder.
 
 [Changed]
 - It is now mandatory to set the DATACROW_HOME system environment variable or to supply
   the -dir: parameter. 
-  
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.4 [Release on 20/12/2008] [testing: high] [target: production]

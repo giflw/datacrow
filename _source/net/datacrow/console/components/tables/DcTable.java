@@ -867,7 +867,7 @@ public class DcTable extends JTable implements IViewComponent {
                     column.setHeaderRenderer(DcTableHeaderRenderer
                             .getInstance());
 
-                String label = definition.getLabel();
+                String label = module.getField(field).getLabel();
 
                 if (label != null && label.length() > 0) {
                     column.setHeaderValue(label);
