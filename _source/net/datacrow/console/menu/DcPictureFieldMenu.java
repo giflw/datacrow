@@ -26,6 +26,11 @@ public class DcPictureFieldMenu extends JMenuBar {
         JMenuItem miRotateRight = ComponentFactory.getMenuItem(IconLibrary._icoRotateRight, DcResources.getText("lblRotateRight"));
         JMenuItem miRotateLeft = ComponentFactory.getMenuItem(IconLibrary._icoRotateLeft, DcResources.getText("lblRotateLeft"));
         
+        JMenuItem miGrayscale = ComponentFactory.getMenuItem(IconLibrary._icoGrayscale, DcResources.getText("lblGrayscale"));
+        JMenuItem miSharpen = ComponentFactory.getMenuItem(DcResources.getText("lblSharpen"));
+        JMenuItem miBlur = ComponentFactory.getMenuItem(DcResources.getText("lblBlur"));
+        JMenuItem miBrighten = ComponentFactory.getMenuItem(DcResources.getText("lblBrighten"));
+        
         JMenuItem miDelete = ComponentFactory.getMenuItem(DcResources.getText("lblDelete"));
         
         miRotateRight.setActionCommand("rotate_right");
@@ -33,6 +38,18 @@ public class DcPictureFieldMenu extends JMenuBar {
 
         miRotateLeft.setActionCommand("rotate_left");
         miRotateLeft.addActionListener(pf);
+
+        miGrayscale.setActionCommand("grayscale");
+        miGrayscale.addActionListener(pf);
+
+        miSharpen.setActionCommand("sharpen");
+        miSharpen.addActionListener(pf);
+        
+        miBlur.setActionCommand("blur");
+        miBlur.addActionListener(pf);
+
+        miBrighten.setActionCommand("brighten");
+        miBrighten.addActionListener(pf);
         
         miOpenFromFile.setActionCommand("open_from_file");
         miOpenFromFile.addActionListener(pf);
@@ -53,6 +70,11 @@ public class DcPictureFieldMenu extends JMenuBar {
         
         menuEdit.add(miRotateLeft);
         menuEdit.add(miRotateRight);
+        menuEdit.addSeparator();
+        menuEdit.add(miGrayscale);
+        menuEdit.add(miSharpen);
+        menuEdit.add(miBlur);
+        menuEdit.add(miBrighten);
         menuEdit.addSeparator();
         menuEdit.add(miDelete);
         

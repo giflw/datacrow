@@ -23,10 +23,12 @@ Data Crow 3.4.5 [Release on 31/12/2008] [testing: high] [target: production]
 - It is now mandatory to set the DATACROW_HOME system environment variable or to supply
   the -dir: parameter. 
 - You can now add new items to list boxes from within the item form (categories, etc.)
+- Picture fields now have the ability to rotate image (see the edit menu).
 
 [Components]
 - IZPack (installer) has been updated (4.2) to the latest version. The latest version allows 
   the users to select the correct user when installing Data Crow.
+- Image4J has been removed.
   
 
 -----------------------------------------------------------------------------------------

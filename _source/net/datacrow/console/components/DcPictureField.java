@@ -32,6 +32,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -41,6 +42,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.net.URL;
 
@@ -52,6 +58,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.menu.DcPictureFieldMenu;
 import net.datacrow.console.windows.BrowserDialog;
 import net.datacrow.console.windows.OpenFromUrlDialog;
+import net.datacrow.console.windows.PictureDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.Picture;
@@ -302,7 +309,11 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             dialog.setImage(null);
         }
     }
-
+    
+    private void openImage() {
+        new PictureDialog(picture);
+    }
+    
     private void openImageFromFile() {
         try {
             BrowserDialog dialog = new BrowserDialog("Select a new Image", new PictureFileFilter());
@@ -340,52 +351,49 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         }
     }
     
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        super.paintComponent(g2d);
-    }
-
-    public void setEditable(boolean b) {
-    	setEnabled(b);
-    	if (!b) {
-    		remove(menu);
-    	}
+    private void grayscale() {
+        img = picture.getImage();
+        BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
+        BufferedImageOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null); 
+        update(op, src);
     }
     
+    private void sharpen() {
+        img = picture.getImage();
+        BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
+        BufferedImageOp op = new ConvolveOp(
+                new Kernel(3, 3, new float[] { 0.0f, -0.75f, 0.0f, -0.75f, 4.0f, 
+                                              -0.75f, 0.0f, -0.75f, 0.0f }));
+        update(op, src);
+    }
     
+    private void brighten() {
+        img = picture.getImage();
+        BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
+        update(new RescaleOp(1.25f, 0, null), src);
+    }
     
-    public void actionPerformed(ActionEvent e) {
-    	if (!isEnabled())
-    		return;
-    	
-        String action = e.getActionCommand();
-        if (action.equals("open_from_file")) {
-            openImageFromFile();
-        } else if (action.equals("open_from_url")) {
-            openImageFromURL();
-        } else if (action.equals("Save as")) {
-            saveToFile();
-        } else if (action.equals("delete")) {
-            setValue(null);
-            changed = true;
-        } else if (action.equals("rotate_right")) {
-            rotate(90);
-        } else if (action.equals("rotate_left")) {
-            rotate(90);
-            rotate(90);
-            rotate(90);
-        }
+    private void blur() {
+        img = picture.getImage();
+        BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
+        BufferedImageOp op = new ConvolveOp(
+                new Kernel(3, 3, new float[] {.1111f, .1111f, .1111f, .1111f, .1111f, 
+                                              .1111f, .1111f, .1111f, .1111f, }));
+        update(op, src);
+    }
+    
+    private void update(BufferedImageOp op, BufferedImage src) {
+        picture = new DcImageIcon(Utilities.getBytes(new ImageIcon(op.filter(src, null))));
+        initialize();
+        changed = true;
+        repaint();
+        revalidate();
     }
     
     private void rotate(int degrees) {
         img = picture.getImage();
         
         BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
-        Graphics2D g = (Graphics2D) src.getGraphics();
-        g.drawImage(src, 0, 0, null);
-
         AffineTransform at = new AffineTransform();
         
         at.rotate(Math.toRadians(degrees), src.getWidth() / 2.0, src.getHeight() / 2.0);
@@ -426,6 +434,51 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             imageWidth = -1;
             imageHeight = -1;
         }
+    }    
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        super.paintComponent(g2d);
+    }
+
+    public void setEditable(boolean b) {
+    	setEnabled(b);
+    	if (!b) {
+    		remove(menu);
+    	}
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+    	if (!isEnabled())
+    		return;
+    	
+        String action = e.getActionCommand();
+        if (action.equals("open_from_file")) {
+            openImageFromFile();
+        } else if (action.equals("open_from_url")) {
+            openImageFromURL();
+        } else if (action.equals("Save as")) {
+            saveToFile();
+        } else if (action.equals("delete")) {
+            setValue(null);
+            changed = true;
+        } else if (action.equals("rotate_right")) {
+            rotate(90);
+        } else if (action.equals("rotate_left")) {
+            rotate(90);
+            rotate(90);
+            rotate(90);
+        } else if (action.equals("grayscale")) {
+            grayscale();
+        } else if (action.equals("sharpen")) {
+            sharpen();
+        } else if (action.equals("blur")) {
+            blur();
+        } else if (action.equals("brighten")) {
+            brighten();
+        }
     }
 
     @Override
@@ -445,14 +498,10 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     		return;
     	
         if (e.getClickCount() == 2) {
-//            if (img != null)
-  //              openEditDialog();
-            //else
-            
-            // TODO: show image zoom window
-            
-            if (img == null)
+            if (picture == null)
                 openImageFromFile();
+            else 
+                openImage();
         }
     }
 
