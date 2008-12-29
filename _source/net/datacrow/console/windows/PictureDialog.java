@@ -30,6 +30,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -44,12 +46,21 @@ import net.datacrow.util.Utilities;
 
 public class PictureDialog extends DcDialog implements ActionListener {
     
+    private DcPictureField pf = ComponentFactory.getPictureField(true, true, false);
+    
     public PictureDialog(DcImageIcon ii) {
         super();
  
+        setTitle(DcResources.getText("lblPictureViewer"));
+        
         getContentPane().setLayout(Layout.getGBL());
         
-        DcPictureField pf = ComponentFactory.getPictureField(true, false, false);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                setVisible(false);
+            }
+        });
         
         JPanel panelActions = new JPanel();
         panelActions.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -77,8 +88,22 @@ public class PictureDialog extends DcDialog implements ActionListener {
         setVisible(true);
     }
     
+    @Override
+    public void close() {
+        pf = null;
+        super.close();
+    }
+    
+    public boolean isPictureChanged() {
+        return pf.isChanged();
+    }
+    
+    public DcImageIcon getImage() {
+        return (DcImageIcon) pf.getValue();
+    }
+    
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
-            close();
+            setVisible(false);
     }    
 }

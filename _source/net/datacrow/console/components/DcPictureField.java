@@ -311,7 +311,15 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     }
     
     private void openImage() {
-        new PictureDialog(picture);
+        PictureDialog dlg = new PictureDialog(picture);
+        
+        if (dlg.isPictureChanged()) {
+            picture = dlg.getImage();
+            initialize();
+            changed = true;
+            repaint();
+            revalidate();
+        }
     }
     
     private void openImageFromFile() {
