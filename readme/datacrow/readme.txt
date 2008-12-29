@@ -134,6 +134,11 @@ Of course you can also just call ant within the main directory.
 Data Crow can be started by typing "java -Xmx256m -jar datacrow.jar". 
 On Windows platforms the datacrow.exe file can be used to start.
 
+Data Crow needs to be pointed to its installation directory. This can be done by setting
+the DATACROW_HOME system environment variable. In case you do not know how to do this for 
+your operating system or when you are using multiple installations of Data Crow you can
+also choose to use the -dir: parameter (explained below).  
+
 Additional parameters:
     
     -db:<database name> 

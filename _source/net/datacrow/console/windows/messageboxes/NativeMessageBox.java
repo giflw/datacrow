@@ -68,9 +68,7 @@ public class NativeMessageBox extends JDialog implements ActionListener {
         setTitle("Error");
         init();
         
-        setModal(true);
         display(message);
-        
     }
 
     public void close() {
@@ -79,6 +77,7 @@ public class NativeMessageBox extends JDialog implements ActionListener {
         panel = null;
         
         setVisible(false);
+        
         if (DataCrow.isSplashScreenActive())
             DataCrow.showSplashScreen(true);
         
@@ -86,6 +85,10 @@ public class NativeMessageBox extends JDialog implements ActionListener {
     }
 
     private void display(String message) {
+
+        if (isModal() && DataCrow.isSplashScreenActive())
+            DataCrow.showSplashScreen(false);
+        
         textMessage.setText(message);
         pack();
         setLocation(Utilities.getCenteredWindowLocation(getSize()));

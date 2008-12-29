@@ -58,10 +58,16 @@ public class Picture extends DcObject {
     private boolean isUpdated = false;
     private boolean isDeleted = false;
     
+    /**
+     * Creates a new instance
+     */
     public Picture() {
         super(DcModules._PICTURE);
     }
     
+    /**
+     * Unloads the image (permanently)
+     */
     public void destroy() {
         super.unload();
     }

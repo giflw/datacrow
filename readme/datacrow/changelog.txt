@@ -1,17 +1,18 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.5 [Release on xx/12/2008] [testing: high] [target: production]
+Data Crow 3.4.5 [Release on 31/12/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - File renamer does not work for the music album module.
 - Online update with only picture fields enabled does not allow to save the updated item
-- Dutch / English translation + incorrect action when closing an item form with unsaved 
-  changed (lost in translation..).
+- Incorrect Dutch / English translation resulted in incorrect action when closing an item 
+  form with unsaved changed (lost in translation..).
 - Create multiple should be limited to properties and audio tracks only.
-- Data Crow is not successful in finding its installation directory (see changes).
+- Data Crow is not always successful in finding its installation directory (see changes);
+  Especially on Vista and Linux platforms.
 - [2463925] Vista - Incorrect folder permissions
   Data Crow does not report anything when the folder permissions are not set correctly.
-  This results in loss of data.
+  This results in loss of data (Linux, Vista).
 - [2461042] Crash: opening card view after changing item in table view.  
 - Headers of tables were not translated.
 - Loan information panel was not translated.
@@ -23,6 +24,10 @@ Data Crow 3.4.5 [Release on xx/12/2008] [testing: high] [target: production]
   the -dir: parameter. 
 - You can now add new items to list boxes from within the item form (categories, etc.)
 
+[Components]
+- IZPack (installer) has been updated (4.2) to the latest version. The latest version allows 
+  the users to select the correct user when installing Data Crow.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.4 [Release on 20/12/2008] [testing: high] [target: production]

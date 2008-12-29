@@ -34,25 +34,15 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.swing.SwingUtilities;
-
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.ModuleUpgrade;
 import net.datacrow.core.Version;
-import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
-import net.datacrow.enhancers.ValueEnhancers;
-import net.datacrow.filerenamer.FilePatterns;
-import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
@@ -130,48 +120,6 @@ public class Restore extends Thread {
         this.restoreReports = b;
     }
     
-    private static class InterfaceUpdater implements Runnable {
-        private IBackupRestoreListener listener;
-        
-        public InterfaceUpdater(IBackupRestoreListener listener) {
-            this.listener = listener;
-        }
-        
-        public void run() {
-            DataCrow.mainFrame.applySettings();
-            DataCrow.mainFrame.updateLAF(DcSettings.getLookAndFeel(DcRepository.Settings.stLookAndFeel));
-            listener.notifyProcessed();
-            listener = null;
-        }
-    }
-    
-    private static class ItemLoader implements Runnable {
-        private IBackupRestoreListener listener;
-        
-        public ItemLoader(IBackupRestoreListener listener) {
-            this.listener = listener;
-        }
-        
-        public void run() {
-            listener.sendMessage("Loading items");
-            DcModules.loadData();
-            listener.notifyProcessed();
-            
-            DataCrow.mainFrame.changeModule(DcSettings.getInt(DcRepository.Settings.stModule));
-            DataCrow.mainFrame.setViews();
-            
-            for (DcModule module : DcModules.getAllModules()) {
-                if (module.getSearchView() != null)
-                    module.getSearchView().clear();    
-            }
-            
-            DataManager.bindData(DcModules.getCurrent().getSearchView(), 
-                                 DataManager.get(DcSettings.getInt(DcRepository.Settings.stModule), null));
-            
-            listener = null;
-        }
-    }    
-    
     private void restartApplication() {
 
         try {
@@ -184,33 +132,12 @@ public class Restore extends Thread {
             
             SecurityCentre.getInstance().initialize();
             
-            if (version == null || version.isOlder(DataCrow.getVersion()) || !SecurityCentre.getInstance().unsecureLogin()) {
-                new MessageBox(DcResources.getText("msgRestoreFinishedRestarting"), MessageBox._WARNING);
-                
-                // do not save settings as the restored settings are used for upgrading purposes.
-                DataManager.clearCache();
-                DataCrow.mainFrame.finish(false, false);
-                System.exit(0);
-            }
+            new MessageBox(DcResources.getText("msgRestoreFinishedRestarting"), MessageBox._WARNING);
             
-            new ModuleUpgrade().upgrade();
-            DcModules.load();
-            
-            ValueEnhancers.initialize();
-            DatabaseManager.initialize();
-
-            listener.notifyProcessed();
-            listener.sendMessage(DcResources.getText("msgReapplyingSettings"));
-            
-            new DcSettings();
-            new DcResources();
-            
-            DcModules.applySettings();
-            DataFilters.load();
-            FilePatterns.load();
-            
-            SwingUtilities.invokeLater(new InterfaceUpdater(listener));
-            SwingUtilities.invokeLater(new ItemLoader(listener));        
+            // do not save settings as the restored settings are used for upgrading purposes.
+            DataManager.clearCache();
+            DataCrow.mainFrame.finish(false, false);
+            System.exit(0);
 
         } catch (Exception e) {
             listener.sendError(e);
