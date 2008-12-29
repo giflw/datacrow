@@ -466,7 +466,7 @@ public class DataCrow {
             dir.mkdirs();
         } catch (Exception e) {
 
-            String message = "Data Crow was unable to coreate the " + name + " directory. " +
+            String message = "Data Crow was unable to create the " + name + " directory. " +
                 "This can indicate that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
                 "must have full control over the Data Crow folder and all if its sub directories.";
 
