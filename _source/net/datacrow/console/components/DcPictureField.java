@@ -25,11 +25,6 @@
 
 package net.datacrow.console.components;
 
-import ij.ImageJ;
-import ij.ImagePlus;
-import ij.WindowManager;
-import ij.gui.ImageWindow;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,10 +37,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 
@@ -54,9 +53,7 @@ import net.datacrow.console.menu.DcPictureFieldMenu;
 import net.datacrow.console.windows.BrowserDialog;
 import net.datacrow.console.windows.OpenFromUrlDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.IconLibrary;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
@@ -68,7 +65,7 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
-public class DcPictureField extends JComponent implements IComponent, ActionListener, WindowListener, MouseListener {
+public class DcPictureField extends JComponent implements IComponent, ActionListener, MouseListener {
 
     private static Logger logger = Logger.getLogger(DcPictureField.class.getName());
     
@@ -78,21 +75,21 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
 
     private Image img = null;
     private DcImageIcon picture;
+    
+    private int imageWidth = -1;
+    private int imageHeight = -1;
 
     private Dimension size = null;
     private Insets insets = new Insets(0, 0, 0, 0);
     
     private DcPictureFieldMenu menu;
-    private ImageJ imageJ;
-    private String name;
     
     public DcPictureField() {
-    	this(true, false, false, "");
+    	this(true, false, false);
     }
     
-    public DcPictureField(boolean scaled, boolean allowActions, boolean thumbnail, String name) {
+    public DcPictureField(boolean scaled, boolean allowActions, boolean thumbnail) {
         this.setLayout(Layout.getGBL());
-        this.name = name;
         if (allowActions) {
         	this.menu = new DcPictureFieldMenu(this);
             this.add(menu, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
@@ -163,8 +160,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         picture = null;
         size = null;
         insets = null;
-        imageJ = null;
-        name = null;
         menu = null;
     } 
     
@@ -345,20 +340,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         }
     }
     
-    private void openEditDialog() {
-        img = picture.getImage();
-        imageJ = new ImageJ(IconLibrary._icoMain);
-        imageJ.setVisible(true);
-        ImagePlus imgPlus = new ImagePlus(name, img);
-        imgPlus.setIgnoreFlush(true);
-        ImageWindow imgWindow = new ImageWindow(imgPlus, false);
-        WindowManager.addWindow(imgWindow);
-        
-        imgWindow.addWindowListener(this);
-        imageJ.addWindowListener(this);
-        imgWindow.setVisible(true);
-    }
-    
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -373,6 +354,8 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     	}
     }
     
+    
+    
     public void actionPerformed(ActionEvent e) {
     	if (!isEnabled())
     		return;
@@ -384,50 +367,56 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             openImageFromURL();
         } else if (action.equals("Save as")) {
             saveToFile();
-        } else if (action.equals("edit")) {
-            openEditDialog();
         } else if (action.equals("delete")) {
             setValue(null);
             changed = true;
+        } else if (action.equals("rotate_right")) {
+            rotate(90);
+        } else if (action.equals("rotate_left")) {
+            rotate(90);
+            rotate(90);
+            rotate(90);
         }
     }
     
-    public void windowClosing(WindowEvent e) {
-        ImagePlus imgPlus = WindowManager.getImage(name);
-        WindowManager.closeAllWindows();
+    private void rotate(int degrees) {
+        img = picture.getImage();
         
-        if (imgPlus == null)
-            return;
+        BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
+        Graphics2D g = (Graphics2D) src.getGraphics();
+        g.drawImage(src, 0, 0, null);
+
+        AffineTransform at = new AffineTransform();
         
-        try {
-            Image image = imgPlus.getImage();
-            if (image != null && imgPlus.changes) {
-                QuestionBox qb = new QuestionBox(DcResources.getText("msgKeepChanges"));
-                if (qb.isAffirmative()) {
-                    picture = new DcImageIcon(Utilities.getBytes(image, DcImageIcon._TYPE_JPEG));
-                    initialize();
-                    changed = true;
-                    revalidate();
-                    repaint();
-                }
-            }
-            
-            imgPlus.setIgnoreFlush(false);
-            imgPlus.flush();
-        } catch (Exception exp) {
-            logger.error("Error while releasing image resources", exp);
-        }
-        
-        if (imageJ != null) {
-            imageJ.dispose();
-            imageJ = null;
-        }
-        
-        menu = null;
+        at.rotate(Math.toRadians(degrees), src.getWidth() / 2.0, src.getHeight() / 2.0);
+        AffineTransform translationTransform = findTranslation (at, src);
+        at.preConcatenate(translationTransform);
+        BufferedImage destinationBI = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC).filter(src, null);
+
+        picture = new DcImageIcon(Utilities.getBytes(new ImageIcon(destinationBI)));
+        initialize();
+        changed = true;
+        repaint();
+        revalidate();
     }
     
-    private int imageWidth = -1;
-    private int imageHeight = -1;
+    /*
+     * Find proper translations to keep rotated image correctly displayed
+     */
+    private AffineTransform findTranslation(AffineTransform at, BufferedImage bi) {
+      Point2D p2din = new Point2D.Double (0.0, 0.0);
+      Point2D p2dout = at.transform (p2din, null);
+      double ytrans = p2dout.getY();
+
+      p2din = new Point2D.Double(0, bi.getHeight());
+      p2dout = at.transform(p2din, null);
+      double xtrans = p2dout.getX () ;
+
+      AffineTransform tat = new AffineTransform();
+      tat.translate(-xtrans, -ytrans);
+      
+      return tat;
+    }    
     
     private void initialize() {
         if (picture != null) {
@@ -456,9 +445,13 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     		return;
     	
         if (e.getClickCount() == 2) {
-            if (img != null)
-                openEditDialog();
-            else 
+//            if (img != null)
+  //              openEditDialog();
+            //else
+            
+            // TODO: show image zoom window
+            
+            if (img == null)
                 openImageFromFile();
         }
     }

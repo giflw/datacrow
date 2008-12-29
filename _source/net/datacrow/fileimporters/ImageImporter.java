@@ -25,8 +25,6 @@
 
 package net.datacrow.fileimporters;
 
-import ij.ImagePlus;
-
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,20 +77,16 @@ public class ImageImporter extends FileImporter {
         Image image = new Image();
         
         try {
-            ImagePlus imagePlus = new ImagePlus(filename);
             image.setIDs();
             image.setValue(Image._A_TITLE, getName(filename, directoryUsage));
             
-            int width = imagePlus.getWidth();
-            int height = imagePlus.getHeight();
+            DcImageIcon icon = new DcImageIcon(filename);
+            int width = icon.getIconWidth();
+            int height = icon.getIconHeight();
             
             image.setValue(Image._F_WIDTH, width != -1 ? Long.valueOf(width) : null);
             image.setValue(Image._G_HEIGHT, height != -1 ? Long.valueOf(height) : null);
-            
             image.setValue(Image._SYS_FILENAME, filename);
-            // Hash.getInstance().calculateHash(image);
-            
-            DcImageIcon icon = new DcImageIcon(filename);
             
             java.awt.Image scaledImg = Utilities.getScaledImage(icon);
             icon.flush();
@@ -161,8 +155,6 @@ public class ImageImporter extends FileImporter {
                 }
                 
             } catch (JpegProcessingException jpe) {}
-            
-            imagePlus.flush();
             
         } catch (Exception exp) {
             throw new ParseException(exp);

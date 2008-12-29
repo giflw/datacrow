@@ -370,9 +370,9 @@ public final class ComponentFactory {
             case _URLFIELD:
                 return getURLField(maxTextLength);
             case _SIMPLEPICTUREFIELD:
-                return getPictureField(true, false, false, label);
+                return getPictureField(true, false, false);
             case _PICTUREFIELD:
-                return getPictureField(true, true, false, label);
+                return getPictureField(true, true, false);
             case _FONTSELECTOR:
                 return getFontSelector();
             case _TIMEFIELD:
@@ -599,9 +599,8 @@ public final class ComponentFactory {
 
     public static final DcPictureField getPictureField(boolean scaled,
                                                        boolean allowActions,
-                                                       boolean thumbnail,
-                                                       String name) {
-        DcPictureField pictureField = new DcPictureField(scaled, allowActions, thumbnail, name);
+                                                       boolean thumbnail) {
+        DcPictureField pictureField = new DcPictureField(scaled, allowActions, thumbnail);
         return pictureField;
     }
 

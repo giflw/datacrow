@@ -161,10 +161,10 @@ public abstract class DcObjectListElement extends DcListElement {
             DcPictureField pictureFld = null;
 
             if (scaledImage != null) { 
-                pictureFld = new DcPictureField(false, false, false, "");
+                pictureFld = new DcPictureField(false, false, false);
                 pictureFld.setValue(scaledImage);
             } else if (image != null) {
-                pictureFld = new DcPictureField(true, false, false, "");
+                pictureFld = new DcPictureField(true, false, false);
                 pictureFld.setValue(new DcImageIcon(image.getImage()));
             }                
             

@@ -36,6 +36,9 @@ import javax.swing.ImageIcon;
 public abstract class IconLibrary {
 
     public static final String picPath = DataCrow.installationDir + "icons_system/";
+    
+    public static final ImageIcon _icoRotateLeft = new ImageIcon(picPath + "rotate_left.png");
+    public static final ImageIcon _icoRotateRight = new ImageIcon(picPath + "rotate_right.png");
     public static final ImageIcon _icoMain = new ImageIcon(picPath + "datacrow.png");
     public static final ImageIcon _icoIcon16 = new ImageIcon(picPath + "icon16.png");
     public static final ImageIcon _icoIcon32 = new ImageIcon(picPath + "icon32.png");

@@ -158,7 +158,7 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
                 
                 if (image == null) continue;
                 
-                DcPictureField label = ComponentFactory.getPictureField(true, false, false, "");
+                DcPictureField label = ComponentFactory.getPictureField(true, false, false);
                 label.setValue(image);
                 panel.add(label, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                          ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
