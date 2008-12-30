@@ -210,7 +210,6 @@ public class UpdateAllDialog extends DcDialog implements ActionListener {
         //Action panel
         //**********************************************************
         JPanel panelActions = new JPanel();
-        panelActions.setLayout(Layout.getGBL());
 
         buttonApply = ComponentFactory.getButton(DcResources.getText("lblApply"));
         buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
@@ -224,13 +223,8 @@ public class UpdateAllDialog extends DcDialog implements ActionListener {
         buttonApply.setMnemonic(KeyEvent.VK_A);
         buttonClose.setMnemonic(KeyEvent.VK_C);
 
-        panelActions.add(buttonApply    , Layout.getGBC(0, 0, 1, 1, 0.0, 0.0
-                                        , GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                                          new Insets(5, 5, 5, 5), 0, 0));
-        panelActions.add(buttonClose   , Layout.getGBC(1, 0, 1, 1, 0.0, 0.0
-                                        , GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                                          new Insets(5, 5, 5, 5), 0, 0));
-
+        panelActions.add(buttonApply);
+        panelActions.add(buttonClose);
         
         //**********************************************************
         //Progress panel
@@ -252,7 +246,7 @@ public class UpdateAllDialog extends DcDialog implements ActionListener {
                                               ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
                                                new Insets(10, 5, 10, 5), 0, 0));
         this.getContentPane().add(panelActions,Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
-                                              ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
+                                              ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                                                new Insets(5, 5, 5, 5), 0, 0));
         this.getContentPane().add(panelProgress, Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
                                               ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,

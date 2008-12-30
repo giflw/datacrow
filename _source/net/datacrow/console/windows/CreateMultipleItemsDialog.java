@@ -59,7 +59,7 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 	
 	private JButton buttonAdd = ComponentFactory.getButton(DcResources.getText("lblAdd"));
     private JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
-    private JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
+    private JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblClose"));
 	
 	private SavingTask task;
 	
