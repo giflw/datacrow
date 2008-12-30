@@ -66,7 +66,6 @@
             <file src="lib/commons-logging-1.0.4.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jaudtiotagger.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/hsqldb.jar" targetdir="$INSTALL_PATH/lib"/>
-            <file src="lib/imagej_1_39e.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jebml.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jhall.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/log4j-1.2.14.jar" targetdir="$INSTALL_PATH/lib"/>
