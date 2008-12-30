@@ -596,6 +596,8 @@ public class DataManager {
                 cb.setSelectedItem(o);
             else
                 cb.setSelectedIndex(0);
+            
+            cb.revalidate();
         }
     }
     
