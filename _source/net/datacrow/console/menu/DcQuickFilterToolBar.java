@@ -48,6 +48,7 @@ import javax.swing.JToolBar;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcEditableComboBox;
+import net.datacrow.console.components.DcReferenceField;
 import net.datacrow.console.components.renderers.ComboBoxRenderer;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
@@ -145,6 +146,10 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
 
     private void setSearchField(DcField field) {
         JComponent c = ComponentFactory.getComponent(field.getModule(), field.getReferenceIdx(), field.getFieldType(), field.getLabel(), 255);
+        
+        if (c instanceof DcReferenceField) 
+            c = ((DcReferenceField) c).getComboBox();
+        
         comboCriteria.removeAllItems();
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {

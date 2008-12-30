@@ -82,6 +82,10 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         return cb.getSelectedItem();
     }
     
+    public JComboBox getComboBox() {
+        return cb;
+    }
+    
     public void setValue(Object o) {
         cb.setSelectedItem(o);
     }
