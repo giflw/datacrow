@@ -62,7 +62,26 @@
 		go to <a href="http://www.java.com">the Java homepage</a> and download the latest version.
 		If Java is installed, type (in the folder where Data Crow is located): java -jar &lt;filename&gt;
 		</p>
-		
+
+        <h2>A get a message saying Data Crow need full control over its folders..</h2>
+        <p>
+        Data Crow needs to be able to create and alter files such as the database and the module files.
+        Some platforms have a solid security layer in place and will require you to change the permissions
+        for the user running Data Crow or to start Data Crow with a user having the correct privileges.
+        Windows Vista is especially restrictive to programs installed in the program files folder. I would
+        advise to install Data Crow in your user folder, saving you the hassle of having to change folder / user
+        permissions.
+        </p>
+
+        <h2>Why can't Data Crow determine the installation directory by itself?</h2>
+        <p>
+        This is due to Data Crow's platform independent nature. In the past I had some tricks in place to determine
+        from which folder Data Crow was running from but this did not work for all platforms (as it turned out).
+        To specify the installation folder you have to set the DATACROW_HOME environment variable or supply the
+        -dir: parameter.
+        </p>
+
+
 		<h2>What is the "new" tab about?</h2>
 		<p>
 		The new item tab holds items eligible to be saved to the database. It's Data Crow waiting room.
