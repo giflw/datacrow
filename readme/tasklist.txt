@@ -19,6 +19,7 @@ Online services
 
 3.4.6
 ---------------------------------------------------------------------------------------------------------
+[ ] Bug: Service information not stored for movies (Amazon search).. or for all??
 [ ] Provide the option to revert back to the default settings (per module + general settings).
     Provide this option as a parameter.
 [ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
