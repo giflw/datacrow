@@ -55,7 +55,7 @@ public class NativeMessageBox extends JDialog implements ActionListener {
     public  static final int _WARNING = 2;
     public  static final int _INFORMATION = 3;
 
-    public NativeMessageBox(String message) {
+    public NativeMessageBox(String title, String message) {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -65,7 +65,7 @@ public class NativeMessageBox extends JDialog implements ActionListener {
         
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
-        setTitle("Error");
+        setTitle(title);
         init();
         
         display(message);

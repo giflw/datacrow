@@ -89,12 +89,20 @@ public class SecurityCentre {
         return user != null ? users.get(user.getID()) : null;
     }
     
+    /**
+     * Changes the password for the specified user.
+     * @param user
+     * @param password The new password
+     */
     public void changePassword(User user, String password) {
         DatabaseManager.changePassword(user, password);
         if (users.containsKey(user.getID()))
             users.get(user.getID()).setPassword(password);    
     }
     
+    /**
+     * Try to log in with the default user credentials (sa, empty password).
+     */
     public boolean unsecureLogin() {
         try {
             return login("sa", "", false) != null && getUserCount() == 1;
@@ -166,8 +174,8 @@ public class SecurityCentre {
     }   
     
     /**
-     * Creates the default user; this user reflect the default SA account of
-     * HSQL DB. No additional priviliges need to be set.
+     * Creates the default user. This user reflects the default SA account of the
+     * HSQL database. No additional privileges need to be set.
      */
     private void createDefaultUser() {
         // default system administrator

@@ -139,9 +139,9 @@ public class DataCrow {
         
         installationDir = dir != null ? dir : installationDir;
         if (installationDir == null || installationDir.trim().length() == 0) {
-            new NativeMessageBox("The installation directory could not be determined. " +
-            		             "Please set the DATACROW_HOME system environment property or supply the -dir:<installation directory> parameter. " +
-            		             "The DATACROW_HOME property should point to the Data Crow intallation directory.");
+            new NativeMessageBox("Warning", "The installation directory could not be determined. " +
+            		             "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
+            		             "The DATACROW_HOME variable should point to the Data Crow intallation directory.");
             return;
         }
         
@@ -314,7 +314,7 @@ public class DataCrow {
         } catch (Exception e) {
             logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
             e.printStackTrace();
-            new NativeMessageBox(e.getMessage());
+            new NativeMessageBox("Error", e.getMessage());
             System.exit(0);
         }
         
@@ -470,7 +470,7 @@ public class DataCrow {
                 "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
                 "must have full control over the Data Crow folder and all if its sub directories.";
 
-            new NativeMessageBox(message);
+            new NativeMessageBox("Warning", message);
             System.out.println(message);
             System.exit(0);
         }
@@ -480,7 +480,7 @@ public class DataCrow {
                 "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
                 "must have full control over the Data Crow folder and all if its sub directories.";
     
-            new NativeMessageBox(message);
+            new NativeMessageBox("Warning", message);
             System.out.println(message);
             System.exit(0);
         }
@@ -504,7 +504,7 @@ public class DataCrow {
         
         File f = new File(DataCrow.dataDir + dbName + ".script");
         if (!new File(DataCrow.dataDir).exists() || (f.exists() && !f.canWrite())) {
-            new NativeMessageBox(
+            new NativeMessageBox("Warning", 
                     "Data Crow does not have permissions to modify files in the data directory. " +
                     "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. " +
                     "The user running Data Crow must have full control over the Data Crow folder and its sub folders. " +
