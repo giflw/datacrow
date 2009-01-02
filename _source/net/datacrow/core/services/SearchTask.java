@@ -224,8 +224,11 @@ public abstract class SearchTask extends Thread {
      */
     public DcObject query(DcObject dco) throws Exception {
         String link = (String) dco.getValue(DcObject._SYS_SERVICEURL); 
-        if (link != null && link.length() > 0)
-            return getItem(new URL(link));
+        if (link != null && link.length() > 0) {
+            DcObject item = getItem(new URL(link));
+            setServiceInfo(item);
+            return item;
+        }
 
         return null;
     }

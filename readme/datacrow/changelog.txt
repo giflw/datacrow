@@ -19,7 +19,7 @@ Pierre-Yves DANTEC!
   it will fall back on the DATACROW_HOME environment variable or on the -dir: parameter.
   The environment variable and -dir: parameter overrule this behavior (if supplied, these
   will be used instead). Many users had problems with specifying the environment variable
-  and this changed is meant to take the pain away (for most users).  
+  and this changed is meant to take the pain away.  
 
 
 -----------------------------------------------------------------------------------------
