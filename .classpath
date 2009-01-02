@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="lib/jaudtiotagger.jar"/>
 	<classpathentry kind="lib" path="lib/html/js.jar"/>
 	<classpathentry kind="lib" path="lib/html/cobra.jar"/>
+	<classpathentry kind="lib" path="help"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

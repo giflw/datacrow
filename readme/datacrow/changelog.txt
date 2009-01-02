@@ -1,9 +1,17 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.6 [Release on xx/xx/2009] [testing: high] [target: production]
+Data Crow 3.4.6 [Release on 02/01/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+Due to the overwhelming response and complaints about having to set the DATACROW_HOME
+directory or to supply the -dir: parameter I have decided to change this with this early
+release. Oh, and there's something new as well; a French translation! Big thanks to
+Pierre-Yves DANTEC!
+
+[New]
+- French translation, with many thanks too Pierre-Yves DANTEC!
 
 [Fixed]
 - NullpointerException when closing the user form.
+- Help cannot be shown.
 
 [Changed]
 - Data Crow will now try to determine the installation directory itself. If this fails

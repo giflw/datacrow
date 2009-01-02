@@ -26,7 +26,6 @@
 package net.datacrow.console.windows.help;
 
 import java.awt.Window;
-import java.net.URL;
 
 import javax.help.DefaultHelpBroker;
 import javax.help.HelpSet;
@@ -34,28 +33,31 @@ import javax.swing.JFrame;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
+import org.apache.log4j.Logger;
+
 public class HelpDialog {
 
     private static String helpIndex = "dc.general.introduction";
 
+    private static Logger logger = Logger.getLogger(HelpDialog.class.getName());
+    
     public static void setHelpIndex(String helpIndex) {
     	HelpDialog.helpIndex = helpIndex;
     }
 
 	public HelpDialog(Window window) {
 		try {
+		    
 			ClassLoader cl = HelpDialog.class.getClassLoader();
+            java.net.URL hsURL = javax.help.HelpSet.findHelpSet(cl, "jHelpSet.hs");
             
-            URL url = new URL("file://" + DataCrow.installationDir + "help/jHelpSet.hs");
-
-            HelpSet hs = new HelpSet(cl, url);
+            HelpSet hs = new HelpSet(cl, hsURL);
             hs.setTitle(DcResources.getText("lblHelp"));
             
             DefaultHelpBroker hb = new DefaultHelpBroker();
@@ -75,6 +77,7 @@ public class HelpDialog {
             }
 
         } catch (Exception e) {
+            logger.error(DcResources.getText("msgErrorOpeningHelp"), e);
             new MessageBox(DcResources.getText("msgErrorOpeningHelp"), MessageBox._ERROR);
             return;
 		}
