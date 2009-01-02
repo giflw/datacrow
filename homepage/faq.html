@@ -2,7 +2,7 @@
 
 <html>
 <head>
-	<title>data crow -news-</title>
+	<title>data crow -FAQ-</title>
 	<link href="datacrow.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -18,31 +18,31 @@
 		</div>
 	</div>
 
-	<div id="menu" style="position:absolute;top:200px;left:15%;width:70%;height:30px;">
+	<div id="menu" style="position: absolute; top: 200px; left: 15%; width: 70%; height: 30px;">
 		<center>
 			<table>
-			<tr>
-                <td><a href="index.html">Home</a></td>
+			<tbody><tr>
+                <td><a href="http://www.datacrow.net/index.html">Home</a></td>
                 <td> | </td>
-                <td><a href="donate.html">Donate</a></td>
+                <td><a href="http://www.datacrow.net/donate.html">Donate</a></td>
                 <td> | </td>
-                <td><a href="download.html">Download</a></td>
+                <td><a href="http://www.datacrow.net/download.html">Download</a></td>
                 <td> | </td>
-                <td><a href="screenshots.html">Screenshots</a></td>
+                <td><a href="http://www.datacrow.net/screenshots.html">Screenshots</a></td>
                 <td> | </td>
-                <td><a href="faq.html">FAQ</a></td>
+                <td><a href="http://www.datacrow.net/faq.html">FAQ</a></td>
                 <td> | </td>
-                <td><a href="history.html">History</a></td>
+                <td><a href="http://www.datacrow.net/history.html">History</a></td>
                 <td> | </td>
-                <td><a href="links.html">Links</a></td>
+                <td><a href="http://www.datacrow.net/links.html">Links</a></td>
                 <td> | </td>
-                <td><a href="news.html">News</a></td>
+                <td><a href="http://www.datacrow.net/news.html">News</a></td>
                 <td> | </td>
-                <td><a href="contact.html">Contact</a></td>
+                <td><a href="http://www.datacrow.net/contact.html">Contact</a></td>
                 <td> | </td>
-                <td><a href="reviews.html">Reviews</a></td>
+                <td><a href="http://www.datacrow.net/reviews.html">Reviews</a></td>
 			</tr>
-			</table>
+			</tbody></table>
 		</center>
 	</div>
 
@@ -59,7 +59,7 @@
 		Try a "double-click" first. The jar file is a self-executing file.
 		If that didn't help at all it means you either you have no Java Runtime Environment
 		installed or Java is not correctly setup. If Java is not installed
-		go to <a href="http://www.java.com">the Java homepage</a> and download the latest version.
+		go to <a href="http://www.java.com/">the Java homepage</a> and download the latest version.
 		If Java is installed, type (in the folder where Data Crow is located): java -jar &lt;filename&gt;
 		</p>
 
@@ -72,6 +72,27 @@
         advise to install Data Crow in your user folder, saving you the hassle of having to change folder / user
         permissions.
         </p>
+
+        <h2>How do I supply the -dir: parameter?</h2>
+        <p>
+        To supply the -dir: parameter you have to start Data Crow in the following way:<br>
+        java -Xmx256m -jar datacrow.jar -dir:&lt;installation directory&gt;. or (when using the datacrow.exe)<br>
+        datacrow.exe -dir:&lt;installation directory&gt;.<br><br>
+		<i>
+		The installation directory is the directory where Data Crow has been installed
+        (for example c:\program files\datacrow).
+        </i>
+        </p>
+
+		<h2>How do I set the DATACROW_HOME environment variable?</h2>
+		<p>
+		This differs per operating system. Try google to find out how you should do this for your operating system.<br />
+		Some references:
+		<a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519" />Windows XP</a>,
+		<a href="http://www.chem.gla.ac.uk/~louis/software/faq/q1.html#winXP" />Windows</a>,
+		<a href="http://www.zolved.com/synapse/view_content/28157/How_to_set_environment_variables_on_Ubuntu_" />Ubuntu</a>,
+		<a href="http://ranjankumar.com/2008/05/24/how-to-set-environment-variables-in-linux/" />Linux</a>
+		</p>
 
         <h2>Why can't Data Crow determine the installation directory by itself?</h2>
         <p>
@@ -111,9 +132,8 @@
 
 		<h2>How do I .. ?</h2>
 		<p>
-		Don't forget the internal help system, which is activated by pressing the F1 key. <br />
+		Don't forget the internal help system, which is activated by pressing the F1 key. <br>
 		Use the wizards to add new items.
 		</p>
 	</div>
-</body>
-</html>
+</body></html>
