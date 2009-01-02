@@ -427,7 +427,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
 	 * Gets the children as they have been currently set (without reloading them).
 	 */
     public Collection<DcObject> getCurrentChildren() {
-        return children != null ? new ArrayList<DcObject>(children) : null;
+        return children != null ? new ArrayList<DcObject>(children) : new ArrayList<DcObject>();
     }
     
     /**

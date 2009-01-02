@@ -107,7 +107,7 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
 
                     boolean updated = false;
                     
-                    if (isReparseFiles() && dco.getChildren() != null) {
+                    if (isReparseFiles()) {
                         for (DcObject child : dco.getChildren()) {
                             
                             if (isCancelled()) break;

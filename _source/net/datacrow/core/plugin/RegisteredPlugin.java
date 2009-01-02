@@ -6,6 +6,11 @@ import java.util.Collection;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
 
+/**
+ * A plugin which has been loaded by Data Crow.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class RegisteredPlugin {
     
     private Class<?> clazz;
@@ -15,6 +20,11 @@ public class RegisteredPlugin {
     
     private Collection<Plugin> cache = new ArrayList<Plugin>();
 
+    /**
+     * Creates a new instance.
+     * @param clazz
+     * @param base
+     */
     public RegisteredPlugin(Class<?> clazz, Plugin base) {
         super();
         this.clazz = clazz;

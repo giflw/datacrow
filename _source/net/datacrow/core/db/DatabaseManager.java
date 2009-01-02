@@ -313,7 +313,7 @@ public class DatabaseManager {
             // this: 1. not needed and 2. causes unwanted side-effects (container > audio cd > audio track)
             Collection<DcObject> children = new ArrayList<DcObject>();
             Collection<DcObject> c = dco.getCurrentChildren();
-            if (!dco.getModule().isAbstract() && c != null)
+            if (!dco.getModule().isAbstract())
                 children.addAll(c);
             
             int counter = 1;

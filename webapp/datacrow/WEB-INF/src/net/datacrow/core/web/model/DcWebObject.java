@@ -162,7 +162,7 @@ public class DcWebObject extends DcSecured {
         List<DcWebField> woFields = new ArrayList<DcWebField>();
         getDcObject().setChildren(new ArrayList<DcObject>());
         getDcObject().loadChildren();
-        if (getDcObject().getChildren() != null && getDcObject().getModule().getChild() != null) {
+        if (getDcObject().getModule().getChild() != null) {
             for (DcObject child : getDcObject().getChildren()) {
                 List<Object> values = new ArrayList<Object>();
 

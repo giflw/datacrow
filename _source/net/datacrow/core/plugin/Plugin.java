@@ -39,18 +39,32 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
 
+/**
+ * The Plugin class should be extended by every plugin.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public abstract class Plugin extends AbstractAction {
 
     protected static final int _SEARCHTAB = 0;
     protected static final int _INSERTTAB = 1;
     protected static final int _NOTETAB = 2;
     
-    private String label = null;
     private final int viewIdx;
     private final int moduleIdx;
+    
     private DcObject dco;
     private DcTemplate template;
 
+    private String label = null;
+    
+    /**
+     * Creates a new instance
+     * @param dco The item for which the plugin is being created (or null)
+     * @param template The template to be used (or null)
+     * @param viewIdx The view index from which this plugin is being called / created
+     * @param moduleIdx The module index to which this plugin belongs
+     */
     protected Plugin(DcObject dco, 
                      DcTemplate template, 
                      int viewIdx, 
@@ -62,14 +76,24 @@ public abstract class Plugin extends AbstractAction {
         this.dco = dco;
     }
     
+    /**
+     * The required user experience level.
+     * @see UserMode
+     */
     public int getXpLevel() {
         return UserMode._XP_BEGINNER;
     }
-    
+
+    /**
+     * Indicates if this plugin can only be used by an administrator.
+     */
     public boolean isAdminOnly() {
         return false;
     }
     
+    /**
+     * Retrieves the view index from which this plugin was called / created.
+     */
     public int getViewIdx() {
         return viewIdx;
     }
@@ -81,6 +105,9 @@ public abstract class Plugin extends AbstractAction {
             return getModule().getInsertView().get(viewIdx);
     }    
 
+    /**
+     * Retrieves the item for which this plugin was called / created.
+     */
     public DcObject getItem() {
         return dco;
     }
@@ -88,7 +115,10 @@ public abstract class Plugin extends AbstractAction {
     public DcTemplate getTemplate() {
         return template;
     }
-    
+
+    /**
+     * The short name of this plugin
+     */
     public String getLabelShort() {
         return getLabel();
     }
@@ -97,30 +127,52 @@ public abstract class Plugin extends AbstractAction {
         return DataCrow.mainFrame.getSelectedTab();
     }
     
+    /**
+     * Retrieves the module index for which this plugin was called / created.
+     */    
     public final int getModuleIdx() {
 		return moduleIdx;
 	}
 
-	public final DcModule getModule() {
+    /**
+     * Retrieves the module for which this plugin was called / created.
+     */  
+    public final DcModule getModule() {
         return moduleIdx != -1 ? DcModules.get(moduleIdx) : DcModules.getCurrent();
     }
     
+    /**
+     * The help text.
+     */
     public String getHelpText() {
         return null;
     }
 
+    /**
+     * The key combination to active the plugin.
+     */
     public KeyStroke getKeyStroke() {
         return null;
     }
     
+    /**
+     * Sets the label for this plugin.
+     * @param label
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     * The display label for this plugin.
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * Free all resources.
+     */
     public void clear() {
         if (dco != null) {
             // only clear when the action is item specific 
@@ -129,30 +181,51 @@ public abstract class Plugin extends AbstractAction {
         }
     }
     
+    /**
+     * The unique key by which this plugin is referenced.
+     */
     public final String getKey() {
         return getClass().getSimpleName();
     }
-    
+
+    /**
+     * Indicates if this plugin is part of the core Data Crow product.
+     */
     public boolean isSystemPlugin() {
         return false;
     }
 
+    /**
+     * Indicates if the plugin should be shown on the toolbar.
+     */
     public boolean isShowOnToolbar() {
         return true;
     }
     
+    /**
+     * Indicates if the plugin should be shown in the popup menu of the view.
+     */
     public boolean isShowInPopupMenu() {
         return true;
     }
 
+    /**
+     * Indicates if the plugin should be shown in the menu bar.
+     */
     public boolean isShowInMenu() {
         return true;
     }
     
+    /**
+     * Indicates if a user can get special permissions in order to use this plugin.
+     */
     public boolean isAuthorizable() {
         return true;
     }
     
+    /**
+     * Indicates if the plugin is enabled.
+     */
     @Override
     public boolean isEnabled() {
         return true;

@@ -96,24 +96,22 @@ public class DcAudioCDListHwElement extends DcObjectListHwElement {
         String description = ""; 
         int counter = 0;
         
-        if (dco.getChildren() != null) {
-            for (DcObject audioTrack : dco.getChildren()) {
-                
-                if (counter > 0) description += " / ";
-                
-                String title = (String) audioTrack.getValue(AudioTrack._A_TITLE);
-                title = title == null ? "" : title; 
-                
-                Long i = (Long) audioTrack.getValue(AudioTrack._H_PLAYLENGTH);
-                String length = i == null || i.equals(Long.valueOf(0)) ? "" : " " + audioTrack.getDisplayString(AudioTrack._H_PLAYLENGTH);
-                
-                if (audioTrack.getValue(AudioTrack._F_TRACKNUMBER) != null)
-                    description += audioTrack.getValue(AudioTrack._F_TRACKNUMBER) + " - ";
-                
-                description += title;
-                description += length;
-                counter++;
-            }
+        for (DcObject audioTrack : dco.getChildren()) {
+            
+            if (counter > 0) description += " / ";
+            
+            String title = (String) audioTrack.getValue(AudioTrack._A_TITLE);
+            title = title == null ? "" : title; 
+            
+            Long i = (Long) audioTrack.getValue(AudioTrack._H_PLAYLENGTH);
+            String length = i == null || i.equals(Long.valueOf(0)) ? "" : " " + audioTrack.getDisplayString(AudioTrack._H_PLAYLENGTH);
+            
+            if (audioTrack.getValue(AudioTrack._F_TRACKNUMBER) != null)
+                description += audioTrack.getValue(AudioTrack._F_TRACKNUMBER) + " - ";
+            
+            description += title;
+            description += length;
+            counter++;
         }
 
         JTextArea textField = ComponentFactory.getTextArea();

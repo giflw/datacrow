@@ -15,6 +15,12 @@ import net.datacrow.core.security.SecurityCentre;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Helps in placing plugins in menus and on toolbars. Is capable on deciding, with the
+ * help of the user permissions, if a plugin should be displayed or not.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class PluginHelper {
     
     private static Logger logger = Logger.getLogger(PluginHelper.class.getName());

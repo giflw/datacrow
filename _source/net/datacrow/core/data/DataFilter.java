@@ -207,7 +207,7 @@ public class DataFilter {
                    (DcModules.get(entry.getModule()).isAbstract() && 
                     dco instanceof DcMediaObject)) {
                 entryApplies = entry.applies(dco);
-            } else if (dco.getChildren() != null) {
+            } else {
                 for (DcObject child : dco.getChildren())
                     entryApplies |= entry.applies(child); 
             }

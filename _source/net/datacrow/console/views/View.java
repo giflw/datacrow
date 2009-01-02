@@ -285,7 +285,7 @@ public class View extends DcPanel implements ListSelectionListener {
     public void add(final DcObject dco, final boolean select) {
         vc.add(dco);
         
-        if (getType() == View._TYPE_INSERT && isParent() && dco.getChildren() != null)  {
+        if (getType() == View._TYPE_INSERT && isParent())  {
             // add the children to the cached child view..
             childView.add(dco.getChildren());
             // and load them

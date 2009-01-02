@@ -1,4 +1,19 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.6 [Release on xx/xx/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- NullpointerException when closing the user form.
+
+[Changed]
+- Data Crow will now try to determine the installation directory itself. If this fails
+  it will fall back on the DATACROW_HOME environment variable or on the -dir: parameter.
+  The environment variable and -dir: parameter overrule this behavior (if supplied, these
+  will be used instead). Many users had problems with specifying the environment variable
+  and this changed is meant to take the pain away (for most users).  
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.5 [Release on 31/12/2008] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

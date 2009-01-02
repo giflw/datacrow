@@ -548,8 +548,7 @@ public class Query {
             }
         } else {
             objects.add(dco);
-            if (dco.getChildren() != null)
-                objects.addAll(dco.getChildren());
+            objects.addAll(dco.getChildren());
             
             String table = dco.getTableName();
             tables.add(table);
@@ -762,7 +761,7 @@ public class Query {
                 if (conditions.length() > 0)
                     conditions.append(" AND");
 
-                boolean hasChildren = dco.getChildren() != null && dco.getChildren().size() > 0;
+                boolean hasChildren = dco.getChildren().size() > 0;
                 String column = hasChildren ? " " + dco.getTableShortName() + ".ID" : " ID";
                 String tablename = hasChildren ? dco.getTableShortName() : dco.getTableName();
 

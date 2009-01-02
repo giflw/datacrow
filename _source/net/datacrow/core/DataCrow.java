@@ -101,7 +101,7 @@ public class DataCrow {
     
     public static MainFrame mainFrame;
     private static SplashScreen splashScreen;
-    
+
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         
@@ -109,6 +109,9 @@ public class DataCrow {
         boolean webserverMode = false; 
 
         installationDir = System.getenv("DATACROW_HOME");
+        
+        if (installationDir == null || installationDir.length() == 0)
+            installationDir = System.getProperty("user.dir");
         
         String db = null;
         String dir = null;
@@ -128,11 +131,22 @@ public class DataCrow {
                 dir += " " + args[i];
             } else { 
                 System.out.println("The following optional parameters can be used:");
+                System.out.println("");
                 System.out.println("-dir:<installdir>");
-                System.out.println("example: java -jar datacrow.jar -dir:d:/datacrow");
+                System.out.println("Specifies the installation directory.");
+                System.out.println("Example: java -jar datacrow.jar -dir:d:/datacrow");
                 System.out.println("");
                 System.out.println("-db:<databasename>");
-                System.out.println("example: java -jar datacrow.jar -db:testdb");
+                System.out.println("Forces Data Crow to use an alternative database.");
+                System.out.println("Example: java -jar datacrow.jar -db:testdb");
+                System.out.println("");
+                System.out.println("-webserver");
+                System.out.println("Starts the web server without starting the Data Crow GUI.");
+                System.out.println("Example: java -jar datacrow.jar -webserver");
+                System.out.println("");
+                System.out.println("-nocache");
+                System.out.println("Starts Data Crow without loading the items from the cache. This will cause the items to be loaded from the database (slow).");
+                System.out.println("Example: java -jar datacrow.jar -nocache");                
                 System.exit(0);
             }
         }
@@ -140,27 +154,29 @@ public class DataCrow {
         installationDir = dir != null ? dir : installationDir;
         if (installationDir == null || installationDir.trim().length() == 0) {
             new NativeMessageBox("Warning", "The installation directory could not be determined. " +
-            		             "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
-            		             "The DATACROW_HOME variable should point to the Data Crow intallation directory.");
+                    "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
+                    "The DATACROW_HOME variable value should point to the Data Crow intallation directory.");
             return;
         }
         
+        DataCrow.installationDir = DataCrow.installationDir.replaceAll("\\\\", "/");
+        DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
+        
         try {
-            installLafs();
-            
+            checkCurrentDir();
             createDirectories();
+            checkFolderPermissions();
             
+            installLafs();
             initLog4j();
-
-            checkDirectories();
             
             logger.info("Using installation directory: " + installationDir);
             logger.info("Using data directory: " + dataDir);
 
             // upgrade purposes (version 3.4.3 and older)
-            if (new File(DataCrow.dataDir + "/resources.properties").exists()) {
+            if (new File(DataCrow.dataDir + "resources.properties").exists()) {
                 try {
-                    Utilities.rename(new File(DataCrow.dataDir + "/resources.properties"), new File(DataCrow.resourcesDir + "Custom_resources.properties"));
+                    Utilities.rename(new File(DataCrow.dataDir + "resources.properties"), new File(DataCrow.resourcesDir + "Custom_resources.properties"));
                 } catch (Exception e) {
                     logger.error(e, e);
                 }
@@ -435,14 +451,27 @@ public class DataCrow {
             splashScreen = null;
         }
     }
+    
+    /**
+     * Checks whether the specified installation directory is valid.
+     */
+    private static void checkCurrentDir() {
+        if (!new File(DataCrow.installationDir + "plugins").exists() ||
+            !new File(DataCrow.installationDir + "modules").exists()) {
+            
+            new NativeMessageBox("Warning", 
+                    "The installation directory could not be determined. " +
+                    "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
+                    "The DATACROW_HOME variable value should point to the Data Crow intallation directory.");
+            
+            System.exit(0);
+        }
+    }
 
     /** 
      * Determines the current directory.
      */
     private static void createDirectories() {
-        DataCrow.installationDir = DataCrow.installationDir.replaceAll("\\\\", "/");
-        DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
-                
         dataDir = DataCrow.installationDir + "data/";
         webDir = DataCrow.installationDir + "webapp/datacrow/";
         imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/";
@@ -462,26 +491,16 @@ public class DataCrow {
     }
     
     private static void createDirectory(File dir, String name) {
-        try {
-            dir.mkdirs();
-        } catch (Exception e) {
 
-            String message = "Data Crow was unable to create the " + name + " directory. " +
-                "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
-                "must have full control over the Data Crow folder and all if its sub directories.";
-
-            new NativeMessageBox("Warning", message);
-            System.out.println(message);
-            System.exit(0);
-        }
+        dir.mkdirs();
         
         if (!dir.exists()) {
-            String message = "Data Crow was unable to create and find the " + name + " directory. " +
-                "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. The user running Data Crow " +
-                "must have full control over the Data Crow folder and all if its sub directories.";
+            String message = "Data Crow was unable to create the " + name + " directory. " +
+                "This indicates that the user running Data Crow has insufficient permissions. " +
+                "The user running Data Crow must have full control over the Data Crow folder " +
+                "and all if its sub directories.";
     
             new NativeMessageBox("Warning", message);
-            System.out.println(message);
             System.exit(0);
         }
     }
@@ -499,14 +518,14 @@ public class DataCrow {
         PropertyConfigurator.configure(DataCrow.installationDir + "log4j.properties");        
     }
     
-    private static void checkDirectories() {
+    private static void checkFolderPermissions() {
         String dbName = DcSettings.getString(DcRepository.Settings.stConnectionString);
         
         File f = new File(DataCrow.dataDir + dbName + ".script");
         if (!new File(DataCrow.dataDir).exists() || (f.exists() && !f.canWrite())) {
             new NativeMessageBox("Warning", 
                     "Data Crow does not have permissions to modify files in the data directory. " +
-                    "This indicates that the user running Data Crow has insufficient permissions to run Data Crow. " +
+                    "This indicates that the user running Data Crow has insufficient permissions. " +
                     "The user running Data Crow must have full control over the Data Crow folder and its sub folders. " +
                     "Please correct this before starting Data Crow again (see the documentation of your operating system).");
             System.exit(0);

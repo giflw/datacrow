@@ -108,7 +108,7 @@ public class XmlReport extends Report {
                 xmlWriter.writeAttribute(dco, field.getIndex());
             }
 
-            if (dco.getChildren() == null || dco.getChildren().size() == 0)
+            if (dco.getChildren().size() == 0)
                 dco.loadChildren();
             
             if (dco.getModule().getChild() != null) {
@@ -116,18 +116,16 @@ public class XmlReport extends Report {
                 xmlWriter.startRelations(dco.getModule().getChild());
                 xmlWriter.setIdent(2);
 
-                if (dco.getChildren() != null) {
-                    for (DcObject child : dco.getChildren()) {
-                        if (!keepOnRunning) break;
-                        
-                        xmlWriter.startEntity(child);
-                        xmlWriter.writeAttribute(child, DcObject._SYS_MODULE);
-                        int[] fields = child.getFieldIndices();
-                        for (int i = 0; i < fields.length; i++)
-                            xmlWriter.writeAttribute(child, fields[i]);
-                        
-                        xmlWriter.endEntity(child);
-                    }
+                for (DcObject child : dco.getChildren()) {
+                    if (!keepOnRunning) break;
+                    
+                    xmlWriter.startEntity(child);
+                    xmlWriter.writeAttribute(child, DcObject._SYS_MODULE);
+                    int[] fields = child.getFieldIndices();
+                    for (int i = 0; i < fields.length; i++)
+                        xmlWriter.writeAttribute(child, fields[i]);
+                    
+                    xmlWriter.endEntity(child);
                 }
                 
                 xmlWriter.resetIdent();

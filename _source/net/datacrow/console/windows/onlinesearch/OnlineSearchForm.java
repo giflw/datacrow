@@ -353,7 +353,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                         }
                     }  
                     
-                    if (o.getCurrentChildren() != null && o.getCurrentChildren().size() > 0)
+                    if (o.getCurrentChildren().size() > 0)
                         dco.setChildren(o.getCurrentChildren());
                     
                     SwingUtilities.invokeLater(
