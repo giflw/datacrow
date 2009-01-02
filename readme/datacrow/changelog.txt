@@ -12,6 +12,7 @@ Pierre-Yves DANTEC!
 [Fixed]
 - NullpointerException when closing the user form.
 - Help cannot be shown.
+- Service information is not set.
 
 [Changed]
 - Data Crow will now try to determine the installation directory itself. If this fails
