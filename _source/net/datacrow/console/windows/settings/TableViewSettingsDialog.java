@@ -59,10 +59,10 @@ public class TableViewSettingsDialog extends DcDialog implements ActionListener 
 
         DcModule module = DcModules.getCurrent();
         
-        fspParent = new FieldSelectionPanel(module);
+        fspParent = new FieldSelectionPanel(module, true);
         fspParent.setSelectedFields((int[]) module.getSetting(DcRepository.ModuleSettings.stTableColumnOrder));
         if (module.getChild() != null) {
-            fspChild = new FieldSelectionPanel(module.getChild());
+            fspChild = new FieldSelectionPanel(module.getChild(), true);
             fspChild.setSelectedFields((int[]) module.getChild().getSetting(DcRepository.ModuleSettings.stTableColumnOrder));
         }
         

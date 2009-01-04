@@ -109,7 +109,7 @@ public class FilterDialog extends DcDialog implements ActionListener {
         getContentPane().setLayout(Layout.getGBL());
         
         defineFilterPanel = new DefineFilterEntryPanel(module);
-        sortingPanel = new FieldSelectionPanel(module);
+        sortingPanel = new FieldSelectionPanel(module, false);
         sortingPanel.setSelectedFields(module.getSettings().getStringArray(DcRepository.ModuleSettings.stSearchOrder));
         
         manageFiltersPanel = new ManageFiltersPanel(); 

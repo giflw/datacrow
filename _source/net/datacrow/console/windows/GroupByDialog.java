@@ -55,7 +55,7 @@ public class GroupByDialog extends DcDialog implements ActionListener {
         setTitle(DcResources.getText("lblGrouping"));
         
         this.module = module;
-        this.panelSorting = new FieldSelectionPanel(DcModules.get(module));
+        this.panelSorting = new FieldSelectionPanel(DcModules.get(module), true);
         
         int[] groupBy = DcModules.get(module).getSettings().getIntArray(DcRepository.ModuleSettings.stGroupedBy);
         if (groupBy != null)

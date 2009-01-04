@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.7 [Release on xx/01/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Picture fields could not be added to the table view. In previous versions this was
+  possible.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.6 [Release on 02/01/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 Due to the overwhelming response and complaints about having to set the DATACROW_HOME
