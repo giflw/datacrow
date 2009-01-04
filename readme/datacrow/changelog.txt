@@ -5,6 +5,7 @@ Data Crow 3.4.7 [Release on xx/01/2009] [testing: high] [target: production]
 [Fixed]
 - Picture fields could not be added to the table view. In previous versions this was
   possible.
+- Pictures are not correctly added to the reports (since Apache FOP 0.95). 
 
 
 -----------------------------------------------------------------------------------------

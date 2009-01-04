@@ -179,11 +179,14 @@ public class XmlWriter extends XmlBaseWriter {
             Picture picture = (Picture) o;
 
             String filename = (String) picture.getValue(Picture._C_FILENAME);
-            if (properties.getBoolean(ReportTemplateProperties._COPY_IMAGES)) {
+            
+            if (filename == null) {
+                filename = "";
+            } else if (properties.getBoolean(ReportTemplateProperties._COPY_IMAGES)) {
                 copyImage((Picture) o, getImageDir() + filename);
                 filename = "./" + reportName +  "_images/" + filename;
             } else {
-                filename = "file://" + DataCrow.imageDir + picture.getValue(Picture._C_FILENAME);
+                filename = "file:///" + DataCrow.imageDir + picture.getValue(Picture._C_FILENAME);
             }
             
             write(filename);

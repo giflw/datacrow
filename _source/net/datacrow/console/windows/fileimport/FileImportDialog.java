@@ -164,7 +164,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     }    
     
     public DcObject getContainer() {
-        return  fldContainer.getSelectedIndex() > 0 ? (DcObject) fldContainer.getSelectedItem() : null;
+        return fldContainer != null && fldContainer.getSelectedIndex() > 0 ? (DcObject) fldContainer.getSelectedItem() : null;
     }
 
     public Region getRegion() {
