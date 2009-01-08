@@ -45,6 +45,7 @@ import javax.swing.JScrollPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.lists.DcFilterEntryList;
 import net.datacrow.console.components.lists.elements.DcFilterEntryListElement;
@@ -195,7 +196,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
             for (int i = 0; objects != null && i < objects.length; i++)
             	((JComboBox) c).addItem(objects[i]);
             
-            ((JComboBox) c).setEditable(false);
+            ((DcComboBox) c).setUneditable();
         } else if (field.getFieldType() == ComponentFactory._FILEFIELD || 
         		   field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
         	c = ComponentFactory.getShortTextField(255);

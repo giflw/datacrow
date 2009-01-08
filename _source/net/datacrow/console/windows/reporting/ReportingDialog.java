@@ -36,6 +36,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -54,6 +55,8 @@ import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.reporting.ReportDictionaryGenerator;
@@ -95,15 +98,18 @@ public class ReportingDialog extends DcDialog {
     
     private ReportFileSelectionListener reportFileSelectionListener = new ReportFileSelectionListener();
     
-    private Collection<DcObject> objects;
+    private List<DcObject> objects;
 
-    public ReportingDialog(Collection<DcObject> objects) {
+    public ReportingDialog(List<DcObject> objects) {
         super(DataCrow.mainFrame);
 
         new ReportDictionaryGenerator().generate();
         
         try {
             this.objects = objects;
+            
+            DataFilters.getDefaultDataFilter(DcModules.getCurrent().getIndex()).sort(objects);
+            
             setHelpIndex("dc.reports");
     
             fileField = ComponentFactory.getFileField(true, false, null);

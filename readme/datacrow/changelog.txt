@@ -1,11 +1,20 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.7 [Release on xx/01/2009] [testing: high] [target: production]
+Data Crow 3.4.7 [Release on 08/01/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
+[Changed]
+- French translation has been updated (thanks Pierre-Yves DANTEC).
+
 [Fixed]
-- Picture fields could not be added to the table view. In previous versions this was
-  possible.
-- Pictures are not correctly added to the reports (since Apache FOP 0.95). 
+- Picture fields column can not be added to the table view. 
+  In previous versions this was possible.
+- [2485347] Malformed URL syntax for pictures break reports. 
+  Pictures are not correctly added to the reports (since Apache FOP 0.95). 
+- [2464760] Inability to work with Cyrillic author names 
+  Filter dialog allowed free form input for multi-relation fields 
+  (which is not supported).
+- [2487958] Report sort order after import 
+  Items are not always correctly sorted when added to the reports.
 
 
 -----------------------------------------------------------------------------------------

@@ -73,6 +73,12 @@ public class DcComboBox extends JComboBox implements IComponent {
         return getSelectedItem();
     }
     
+    public void setUneditable() {
+        try {
+            ((DcComboBoxEditor) getEditor()).editor.setEditable(false);
+        } catch (Exception ignore) {}
+    }
+    
     @Override
     public void setEditable(boolean b) {
         super.setEditable(b);

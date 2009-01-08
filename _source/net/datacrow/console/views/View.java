@@ -34,6 +34,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -593,7 +594,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }
 
     public void createReport() {
-        Collection<DcObject> objects = new ArrayList<DcObject>();
+        List<DcObject> objects = new ArrayList<DcObject>();
         if (groupingPane != null && groupingPane.isActive())
             objects.addAll(groupingPane.getItems());
         else
