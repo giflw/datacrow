@@ -215,7 +215,12 @@ public class DcWebObjects extends Sortable {
                 return ascending ? result : result * -1;
             }
         };
-        Collections.sort((List) data.getWrappedData(), comparator);
+        
+        // as old sorting column is being remembered..
+        // do not removed this!!
+        try {
+            Collections.sort((List) data.getWrappedData(), comparator);
+        } catch (Exception ignore) {}
     }
     
     @SuppressWarnings("unchecked")
