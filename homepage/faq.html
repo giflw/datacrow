@@ -1,139 +1,52 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
 <html>
 <head>
-	<title>data crow -FAQ-</title>
-	<link href="datacrow.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>DataCrow - FAQ</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+<link href="css/menu.css" rel="stylesheet" type="text/css" />
 </head>
-
-<body>
-
-	<!-- cataloguer,cataloger,cataloging,collection,collections,books,movies,software,games,organiser,organising,organizer,organizing,mp3,ogg,divx,xvid,database -->
-
-	<div id="top" style="position: absolute; left: 15%; top: 0px; width: 70%; height: 200px; background-color: Black;">
-	<img src="images/weblogo.jpg" alt="Data Crow cataloguer software logo" border="0">
-		<div align="right" style="position:absolute;right:5px;top:5px;background-color: Black;">
-			<a href="http://sourceforge.net" target="information"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=84631&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> <br />
-			<a href="http://sourceforge.net/donate/index.php?group_id=84631" target="information"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /></a>
-		</div>
-	</div>
-
-	<div id="menu" style="position: absolute; top: 200px; left: 15%; width: 70%; height: 30px;">
-		<center>
-			<table>
-			<tbody><tr>
-                <td><a href="http://www.datacrow.net/index.html">Home</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/donate.html">Donate</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/download.html">Download</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/screenshots.html">Screenshots</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/faq.html">FAQ</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/history.html">History</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/links.html">Links</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/news.html">News</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/contact.html">Contact</a></td>
-                <td> | </td>
-                <td><a href="http://www.datacrow.net/reviews.html">Reviews</a></td>
-			</tr>
-			</tbody></table>
-		</center>
-	</div>
-
-
-	<div class="information">
-
-		<h1>Frequently asked questions</h1>
-		<p>
-		This page should cover most of the commonly asked questions about Data Crow cataloguer software.
-		</p>
-
-		<h2>I downloaded the installation and now I got myself a jar file .. ??</h2>
-		<p>
-		Try a "double-click" first. The jar file is a self-executing file.
-		If that didn't help at all it means you either you have no Java Runtime Environment
-		installed or Java is not correctly setup. If Java is not installed
-		go to <a href="http://www.java.com/">the Java homepage</a> and download the latest version.
-		If Java is installed, type (in the folder where Data Crow is located): java -jar &lt;filename&gt;
-		</p>
-
-        <h2>A get a message saying Data Crow need full control over its folders..</h2>
-        <p>
-        Data Crow needs to be able to create and alter files such as the database and the module files.
-        Some platforms have a solid security layer in place and will require you to change the permissions
-        for the user running Data Crow or to start Data Crow with a user having the correct privileges.
-        Windows Vista is especially restrictive to programs installed in the program files folder. I would
-        advise to install Data Crow in your user folder, saving you the hassle of having to change folder / user
-        permissions.
-        </p>
-
-        <h2>How do I supply the -dir: parameter?</h2>
-        <p>
-        To supply the -dir: parameter you have to start Data Crow in the following way:<br>
-        java -Xmx256m -jar datacrow.jar -dir:&lt;installation directory&gt;. or (when using the datacrow.exe)<br>
-        datacrow.exe -dir:&lt;installation directory&gt;.<br><br>
-		<i>
-		The installation directory is the directory where Data Crow has been installed
-        (for example c:\program files\datacrow).
-        </i>
-        </p>
-
-		<h2>How do I set the DATACROW_HOME environment variable?</h2>
-		<p>
-		This differs per operating system. Try google to find out how you should do this for your operating system.<br />
-		Some references:
-		<a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519" />Windows XP</a>,
-		<a href="http://www.chem.gla.ac.uk/~louis/software/faq/q1.html#winXP" />Windows</a>,
-		<a href="http://www.zolved.com/synapse/view_content/28157/How_to_set_environment_variables_on_Ubuntu_" />Ubuntu</a>,
-		<a href="http://ranjankumar.com/2008/05/24/how-to-set-environment-variables-in-linux/" />Linux</a>
-		</p>
-
-        <h2>Why can't Data Crow determine the installation directory by itself?</h2>
-        <p>
-        This is due to Data Crow's platform independent nature. In the past I had some tricks in place to determine
-        from which folder Data Crow was running from but this did not work for all platforms (as it turned out).
-        To specify the installation folder you have to set the DATACROW_HOME environment variable or supply the
-        -dir: parameter.
-        </p>
-
-
-		<h2>What is the "new" tab about?</h2>
-		<p>
-		The new item tab holds items eligible to be saved to the database. It's Data Crow waiting room.
-		Items found by services such as the Online Search and the import are put in this waiting room so you
-		can check and correct them. You can save them by pressing the "save" button.
-		</p>
-
-		<h2>I want to find non English information</h2>
-		<p>
-		The Amazon online services allow for German and French texts to be found. When you use the online
-		search, select an Amazon server (if available for the selected module) and the preferred language.
-		</p>
-
-		<h2>I would like to have feature X in Data Crow</h2>
-		<p>
-		Please go to the contact page and follow the directions from there
-		</p>
-
-		<h2>Java programs are known for high memory usage and low performance. How's Data Crow performing ?</h2>
-		<p>
-		First of all the amount of memory used and the performance of the application is
-		for the largest part in the hands of the developer. Sloppy programming can kill any
-		product or service. Data Crow is a product which potentially deals with huge amounts of data and needs to present
-		this data in a nice way and fast. Given the type of product Data Crow's memory usage
-		is low and its performance is excellent.
-		</p>
-
-		<h2>How do I .. ?</h2>
-		<p>
-		Don't forget the internal help system, which is activated by pressing the F1 key. <br>
-		Use the wizards to add new items.
-		</p>
-	</div>
-</body></html>
+<body bgcolor="#000000" marginwidth="0" marginheight="0" leftmargin="0" rightmargin="0" topmargin="0" bottommargin="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td rowspan="4" style="background-image: url('pics/bg.jpg'); background-repeat: repeat-x; background-color: black;">&nbsp;</td>
+    <td width="800" height="200" align="center" valign="top" background="pics/FAQ_header.jpg" onClick=window.top.location.href='index.html' style="cursor:pointer"></td>
+    <td rowspan="4" style="background-image: url('pics/bg.jpg'); background-repeat: repeat-x; background-color: black;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="20" valign="top" style="background-image: url('pics/FAQ_menu.jpg'); background-color: black;"><table width="800" border="0" cellspacing="0" cellpadding="0">
+  <tr height="16">
+    <td width="80" class="menu1" onClick=window.top.location.href='index.html' onmouseover=this.className='menu1o' onMouseOut=this.className='menu1'>Home</td>
+    <td width="80" class="menu2" onClick=window.top.location.href='donate.html' onmouseover=this.className='menu2o' onMouseOut=this.className='menu2'>Donate</td>
+    <td width="80" class="menu3" onClick=window.top.location.href='download.html' onmouseover=this.className='menu3o' onMouseOut=this.className='menu3'>Download</td>
+    <td width="80" class="menu4" onClick=window.top.location.href='screenshots.html' onmouseover=this.className='menu4o' onMouseOut=this.className='menu4'>Screenshots</td>
+    <td width="80" class="menu5o">FAQ</td>
+    <td width="80" class="menu6" onClick=window.top.location.href='history.html' onmouseover=this.className='menu6o' onMouseOut=this.className='menu6'>History</td>
+    <td width="80" class="menu7" onClick=window.top.location.href='links.html' onmouseover=this.className='menu7o' onMouseOut=this.className='menu7'>Links</td>
+    <td width="80" class="menu8" onClick=window.top.location.href='news.html' onmouseover=this.className='menu8o' onMouseOut=this.className='menu8'>News</td>
+    <td width="80" class="menu9" onClick=window.top.location.href='contact.html' onmouseover=this.className='menu9o' onMouseOut=this.className='menu9'>Contact</td>
+    <td width="80" class="menu10" onClick=window.top.location.href='reviews.html' onmouseover=this.className='menu10o' onMouseOut=this.className='menu10'>Reviews</td>
+  </tr>
+  <tr height="4">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="menu5o"></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+    </table>
+</td>
+  </tr>
+  <tr>
+    <td class="bg5"><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /></td>
+  </tr>
+  <tr>
+    <td height="65" background="pics/FAQ_footer.jpg"></td>
+  </tr>
+</table>
+</body>
+</html>

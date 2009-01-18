@@ -1,227 +1,52 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
 <html>
 <head>
-    <title>data crow -news-</title>
-    <link href="datacrow.css" rel="stylesheet" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>DataCrow - News</title>
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <link href="css/menu.css" rel="stylesheet" type="text/css" />
 </head>
-
-<body>
-
-	<!-- cataloguer,cataloger,cataloging,collection,collections,books,movies,software,games,organiser,organising,organizer,organizing,mp3,ogg,divx,xvid,database -->
-
-	<div id="top" style="position: absolute; left: 15%; top: 0px; width: 70%; height: 200px; background-color: Black;">
-	<img src="images/weblogo.jpg" alt="Data Crow cataloguer software logo" border="0">
-		<div align="right" style="position:absolute;right:5px;top:5px;background-color: Black;">
-			<a href="http://sourceforge.net" target="information"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=84631&amp;type=3" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a> <br />
-			<a href="http://sourceforge.net/donate/index.php?group_id=84631" target="information"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /></a>
-		</div>
-	</div>
-
-	<div id="menu" style="position:absolute;top:200px;left:15%;width:70%;height:30px;">
-		<center>
-			<table>
-			<tr>
-                <td><a href="index.html">Home</a></td>
-                <td> | </td>
-                <td><a href="donate.html">Donate</a></td>
-                <td> | </td>
-                <td><a href="download.html">Download</a></td>
-                <td> | </td>
-                <td><a href="screenshots.html">Screenshots</a></td>
-                <td> | </td>
-                <td><a href="faq.html">FAQ</a></td>
-                <td> | </td>
-                <td><a href="history.html">History</a></td>
-                <td> | </td>
-                <td><a href="links.html">Links</a></td>
-                <td> | </td>
-                <td><a href="news.html">News</a></td>
-                <td> | </td>
-                <td><a href="contact.html">Contact</a></td>
-                <td> | </td>
-                <td><a href="reviews.html">Reviews</a></td>
-			</tr>
-			</table>
-		</center>
-	</div>
-
-	<div class="information">
-		<h1>News</h1>
-		<p>
-			This section contains news about new releases and other Data Crow related news. The change log text file, which is always updated for every release, can be found <a href="changelog.txt" target="new">here</a>.
-		</p>
-
-        <h2>08/01/2009 ~ Data Crow 3.4.7 has been released</h2>
-        <p>
-        This release fixes the reporting functionality and contains fixes for other minor issues.
-        </p>
-
-
-        <h2>02/01/2009 ~ Data Crow 3.4.6 has been released</h2>
-        <p>
-        Due to the overwhelming response and complaints about having to set the DATACROW_HOME
-        directory or to supply the -dir: parameter I have decided to change this with this early
-        release. Oh, and there's something new as well; a French translation! Big thanks to
-        Pierre-Yves DANTEC!
-        </p>
-
-
-        <h2>31/12/2008 ~ Data Crow 3.4.5 has been released</h2>
-        <p>
-        This version contains bug fixes for platform security issues. Data Crow did not detect whether the folder and file permissions
-        were set correctly. This could result in loss of data as information could not be written to the database. On startup Data Crow will check these
-        files for their permissions and report back to the user in case of problems.
-        </p>
-
-
-        <h2>20/12/2008 ~ Data Crow 3.4.4 has been released</h2>
-        <p>
-        The product has been translated to German (thanks to Klaus Lassleben) and Dutch. Improvements have been made
-        to the resource editor (better UTF8 support and the ability to translate module names and fields).
-        Of course there are again the necessary bug fixes. Please note that a new version of the web module has been made available (1.2). This
-        version contains bug fixes and contains improvements for showing images.<br>
-        I have invested a lot of my time in documenting the code. This is in preparation of the plugin and online services development documentation.
-        </p>
-
-
-        <h2>08/10/2008 ~ Data Crow 3.4.3 has been released</h2>
-        <p>
-        This release contains for the most part bug fixes but also some minor changes.</p>
-
-        <h2>02/10/2008 ~ Data Crow 3.4.2 has been released</h2>
-        <p>
-        This version of Data Crow improves the online search capabilities and the Data Crow framework as a whole;
-        bugs have been fixed and minor improvements have been made where needed.
-        </p>
-
-
-        <h2>28/09/2008 ~ Data Crow 3.4.1 has been released</h2>
-        <p>
-Data Crow 3.4.1 upgrades the existing loan functionality. A due date has been added and the loan information can now be viewed in a specialized dialog.
-Relationships to an item are now shown in the item tab. For example: the actor form has a separate tab to show in which movies they have performed.
-The FreeDB support has been re-added. It was present in older versions and has now been delivered as a separate plugin (with limited support).
-The tools menu has been split into an administration and a tools menu. The administration menu can be used to maintain genres and the likes and to view the loan information.
-        </p>
-
-
-        <h2>08/09/2008 ~ Patch 3.4.0.1 has been released</h2>
-        <p>
-        This patch fixes the loan functionality.
-        </p>
-
-        <h2>31/08/2008 ~ Data Crow 3.4 has been released</h2>
-        <p>
-        This is the production release of the 3.4 beta version.
-        </p>
-
-
-        <h2>26/08/2008 ~ Data Crow 3.4 beta has been released</h2>
-        <p>
-        The new version does contain less new functionality then originally planned. There were a couple of performance issues which needed to be addressed. With this release the startup time,  online search and saving of items has been increased dramatically for large databases. The performance for filling the card and table view has also also increased.
-        The upgrade process has been changed. It will now check for the version of Data Crow on startup. The same functionality is used for the backup and restore tool.
-        The location field has been replaced by a container field. These containers are managed from within the container module. This module will be expanded for the next version. Furthermore has new tree become available which shows the file structure of the items.
-        And last but not least a lot of bugs have been fixed. <br />
-        The change log will tell you what exactly has been fixed and implemented. Please help with the testing of this version!
-        </p>
-
-
-        <h2>10/06/2008 ~ Data Crow 3.3 has been released</h2>
-        <p>
-        The web module has been finished! It's available as a separate, optional, package. It needs to be installed on top of
-        a Data Crow 3.3 installation. The web module allows multiple users to connect to one Data Crow instance, remotely, at the
-        same time. <br />
-        The Data Crow software has been bug fixed, a new online search has been added and improvements were made to the
-        file import.
-        </p>
-
-
-
-		<h2>05/05/2008 ~ Data Crow 3.2.2.1 has been released</h2>
-		<p>
-		This release contains small bug fixes for the tree panel and the quick view layout.
-		</p>
-
-		<h2>04/05/2008 ~  This website has been updated</h2>
-		<p>
-		The website for this media organiser has been updated.
-		</p>
-
-
-		<h2>04/05/2008 ~ Data Crow 3.2.2 has been released</h2>
-		<p>
-		This versions contains the following new features:
-		</p>
-
-		<li>Improved file import; ability to use local art and added online service selection for the software, book and movie module.</li>
-		<li>Grouping / tree panel has been rewritten to allow deep level grouping and to improve performance.</li>
-		<li>User experience modes; a distinction has been made between beginner and expert users. To the beginning users only the basic option are available. At any time users can switch between experiences modes.</li>
-
-		<p>
-		This version allows more control when organizing / organising your collections.
-		</p>
-
-
-		<h2>29/04/2008 ~ Data Crow 3.2.1.2 has been released</h2>
-		<p>
-		It might seem I am moving in the direction of release early and release often.. Well, yes. But I assure you this is just for the time being. I am consolidating the 3.2 version and am anxious to start working on the 3.3 version. However, duty comes first. I want to get this 3.2 version as stable as can be. I think I am almost there, I think most of the bugs have been fixed and I think the next version will not be another pesky 3.2.1.x version but a (glorious) 3.3 version. We'll see!
-		</p>
-
-		<h2>25/04/2008 ~ Data Crow 3.2.1.1 has been released</h2>
-		<p>
-		One of the reasons for this early release is that the Amazon cover search implementation was no longer supported. This service was used by the MusicBrainz online search. The cover search has been re-implemented and is fixed for this version.
-		<br />
-		Other fixes focus on the Mass Update and the Migration tool.
-		</p>
-
-		<h2>20/04/2008 ~ Data Crow 3.2.1 has been released</h2>
-		<p>
-		Many fixes and improved sorting.
-		</p>
-
-		<h2>30/03/2008 ~ Data Crow 3.2.0.2 has been released</h2>
-		<p>
-		The 3.2 release of this cataloging product broke the image editing functionality, denied access to certain fields and broke the quick filter
-		functionality. This release resolves these issues. The changes from the 3.2.0.1 patch are also included in this release.
-		</p>
-
-		<h2>25/03/2008 ~ Data Crow 3.2.0.1 has been released</h2>
-		<p>
-		Unfortunately two serious bugs in the 3.2 version made it necessary to release this patch.
-		</p>
-
-		<h2>24/03/2008 ~ Data Crow 3.2 has been released</h2>
-		<p>
-		This latest release introduces a security module, two new online searches and allows for plugin development!
-		</p>
-
-		<h2>12/02/2008 ~ Data Crow 3.1.30 has been released</h2>
-		<p>
-		A new version? So soon? Although I am against releasing version after version within a short span of time here
-		is the brand new 3.1.30 version two weeks after the previous release.
-		The product is slowly recovering from the high impact changes of the 3.1 version.
-		This version again contains crucial fixes. Data Crow is slowly but surely maturing. I have again chosen to create
-		an in between release (this is the 3.1.30 version instead of the 3.2 version) as I want you to benefit as soon as
-		possible from these bug fixes. <br /><br />
-		There are also a few changes and new functionality to be found in this version. The File Renaming functionality is the biggest addition and is the first tool which manipulates data outside of Data Crow.
-		</p>
-
-		<h2>29/01/2008 ~ Data Crow 3.1.25 has been released</h2>
-		<p>
-		Unfortunately the 3.1 cataloging software version contained a couple of bugs which could not be fixed in a patch.
-		Beside the necessary bug fixes the 3.1.25 release contains exciting new functionality such as the
-		Drive Manager and two new online book searches.
-		<br/><br/>
-		Please create a backup before you upgrade to this version! Use the 'backup &amp; restore' tool from your old version.
-		</p>
-
-		<h2>21/01/2008 ~ Data Crow 3.1 has been released</h2>
-		<p>
-		This latest production version is a major overhaul of the internal system of Data Crow.
-		The changes will not be immediately apparent to the average user however it has caused
-		noticeable positive side effects: increased startup performance, lower memory usage,
-		better performing views. This version will allow you to catalog your collection more quickly.
-		</p>
-	</div>
+<body bgcolor="#000000" marginwidth="0" marginheight="0" leftmargin="0" rightmargin="0" topmargin="0" bottommargin="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td rowspan="5" style="background-image: url('pics/bg.jpg'); background-repeat: repeat-x; background-color: black;">&nbsp;</td>
+    <td width="800" height="200" align="center" valign="top" background="pics/NEWS_header.jpg" onClick=window.top.location.href='index.html' style="cursor:pointer"></td>
+    <td rowspan="5" style="background-image: url('pics/bg.jpg'); background-repeat: repeat-x; background-color: black;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="20" valign="top" style="background-image: url('pics/NEWS_menu.jpg'); background-color: black;"><table width="800" border="0" cellspacing="0" cellpadding="0">
+  <tr height="16">
+    <td width="80" class="menu1" onClick=window.top.location.href='index.html' onmouseover=this.className='menu1o' onMouseOut=this.className='menu1'>Home</td>
+    <td width="80" class="menu2" onClick=window.top.location.href='donate.html' onmouseover=this.className='menu2o' onMouseOut=this.className='menu2'>Donate</td>
+    <td width="80" class="menu3" onClick=window.top.location.href='download.html' onmouseover=this.className='menu3o' onMouseOut=this.className='menu3'>Download</td>
+    <td width="80" class="menu4" onClick=window.top.location.href='screenshots.html' onmouseover=this.className='menu4o' onMouseOut=this.className='menu4'>Screenshots</td>
+    <td width="80" class="menu5" onClick=window.top.location.href='faq.html' onmouseover=this.className='menu5o' onMouseOut=this.className='menu5'>FAQ</td>
+    <td width="80" class="menu6" onClick=window.top.location.href='history.html' onmouseover=this.className='menu6o' onMouseOut=this.className='menu6'>History</td>
+    <td width="80" class="menu7" onClick=window.top.location.href='links.html' onmouseover=this.className='menu7o' onMouseOut=this.className='menu7'>Links</td>
+    <td width="80" class="menu8o">News</td>
+    <td width="80" class="menu9" onClick=window.top.location.href='contact.html' onmouseover=this.className='menu9o' onMouseOut=this.className='menu9'>Contact</td>
+    <td width="80" class="menu10" onClick=window.top.location.href='reviews.html' onmouseover=this.className='menu10o' onMouseOut=this.className='menu10'>Reviews</td>
+  </tr>
+  <tr height="4">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="menu8o"></td>
+    <td></td>
+    <td></td>
+  </tr>
+    </table>
+</td>
+  </tr>
+  <tr>
+    <td class="bg8"><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /></td>
+  </tr>
+  <tr>
+    <td height="65" background="pics/NEWS_footer.jpg"></td>
+  </tr>
+</table>
 </body>
 </html>

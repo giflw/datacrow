@@ -2,6 +2,9 @@
 Web Module 1.x   [Release on xx/xx/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
+[Fixed]
+- Errors after setting a column to sort on and switching to another module.
+
 
 -----------------------------------------------------------------------------------------
 Web Module 1.2   [Release on 20/12/2008] [testing: high] [target: production]
