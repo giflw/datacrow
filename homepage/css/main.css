@@ -84,3 +84,10 @@ h1,h2,h3 {
     overflow:auto;
     padding-right:5;
 }
+a {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 11px;
+    padding:10px;
+    text-decoration:underline;
+    color: Black;
+}
