@@ -77,3 +77,10 @@ h1,h2,h3 {
 .content_img {
 	filter: DropShadow(Color=#000000, OffX=10, OffY=10);
 }
+.scrollable_div {
+    border: 0;
+    width:550;
+    height:400;
+    overflow:auto;
+    padding-right:5;
+}
