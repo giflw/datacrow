@@ -65,9 +65,9 @@
 
             <span class="content_main_bold">Frequently asked questions</span><br><br>
 
-            This page should cover most of the commonly asked questions about Data Crow cataloguer software.
-            <br><br>
+            This page should cover most of the commonly asked questions about Data Crow cataloger software.
 
+            <br><br><br>
             <span class="content_main_bold">I downloaded the installation and now I got myself a jar file .. ??</span><br><br>
 
             Try a "double-click" first. The jar file is a self-executing file.
@@ -75,8 +75,8 @@
             installed or Java is not correctly setup. If Java is not installed
             go to <a href="http://www.java.com/">the Java homepage</a> and download the latest version.
             If Java is installed, type (in the folder where Data Crow is located): java -jar &lt;filename&gt;
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">A get a message saying Data Crow need full control over its folders..</span><br><br>
 
             Data Crow needs to be able to create and alter files such as the database and the module files.
@@ -85,37 +85,38 @@
             Windows Vista is especially restrictive to programs installed in the program files folder. I would
             advise to install Data Crow in your user folder, saving you the hassle of having to change folder / user
             permissions.
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">How do I supply the -dir: parameter?</span><br><br>
 
-            To supply the -dir: parameter you have to start Data Crow in the following way:<br>
-            java -Xmx256m -jar datacrow.jar -dir:&lt;installation directory&gt;. or (when using the datacrow.exe)<br>
+            To supply the -dir: parameter you have to start Data Crow in the following way:<br><br>
+            java -Xmx256m -jar datacrow.jar -dir:&lt;installation directory&gt;<br><br>
+            or (when using the datacrow.exe)<br><br>
             datacrow.exe -dir:&lt;installation directory&gt;.<br><br>
             <i>
             The installation directory is the directory where Data Crow has been installed
             (for example c:\program files\datacrow).
             </i>
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">How do I set the DATACROW_HOME environment variable?</span><br><br>
 
-            This differs per operating system. Try google to find out how you should do this for your operating system.<br />
+            This differs per operating system. Try google to find out how you should do this for your operating system.
             Some references:
             <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519" />Windows XP</a>,
             <a href="http://www.chem.gla.ac.uk/~louis/software/faq/q1.html#winXP" />Windows</a>,
             <a href="http://www.zolved.com/synapse/view_content/28157/How_to_set_environment_variables_on_Ubuntu_" />Ubuntu</a>,
             <a href="http://ranjankumar.com/2008/05/24/how-to-set-environment-variables-in-linux/" />Linux</a>
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">Why can't Data Crow determine the installation directory by itself?</span><br><br>
 
             This is due to Data Crow's platform independent nature. In the past I had some tricks in place to determine
             from which folder Data Crow was running from but this did not work for all platforms (as it turned out).
             To specify the installation folder you have to set the DATACROW_HOME environment variable or supply the
             -dir: parameter.
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">How do I run the web module?</span><br><br>
             The web module needs to be installed into the same folder as the Data Crow software. If it is installed anywhere else
             it will fail to start. Another thing to check is the firewall and virus scanner settings and permissions.
@@ -123,25 +124,25 @@
             The web module can be started from within Data Crow from the web server menu. Alternatively it can be started from the
             console by using the webserver.sh or the webserver.bat files or by entering the following command manually:<br>
             java -Xmx512m -jar datacrow.jar -webserver
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">What is the "new" tab about?</span><br><br>
 
             The new item tab holds items eligible to be saved to the database. It's Data Crow waiting room.
             Items found by services such as the Online Search and the import are put in this waiting room so you
             can check and correct them. You can save them by pressing the "save" button.
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">I want to find non English information</span><br><br>
 
             The Amazon online services allow for German and French texts to be found. When you use the online
             search, select an Amazon server (if available for the selected module) and the preferred language.
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">I would like to have feature X in Data Crow</span><br><br>
             Please go to the contact page and follow the directions from there
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">Java programs are known for high memory usage and low performance.
             <br>How's Data Crow performing ?</span><br><br>
             First of all the amount of memory used and the performance of the application is
@@ -149,8 +150,8 @@
             product or service. Data Crow is a product which potentially deals with huge amounts of data and needs to present
             this data in a nice way and fast. Given the type of product Data Crow's memory usage
             is low and its performance is excellent.
-            <br><br>
 
+            <br><br><br>
             <span class="content_main_bold">How do I .. ?</span><br><br>
             Don't forget the internal help system, which is activated by pressing the F1 key. <br>
             Use the wizards to add new items.
