@@ -11,23 +11,8 @@
 	<classpathentry kind="lib" path="lib/jetty/jsp-api-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/laf/jtattoo.jar"/>
 	<classpathentry kind="lib" path="lib/laf/skinlf.jar"/>
-	<classpathentry kind="lib" path="lib/xml/avalon-framework-4.2.0.jar"/>
-	<classpathentry kind="lib" path="lib/xml/batik-all-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/xml/commons-io-1.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/xml/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/xml/fop.jar"/>
-	<classpathentry kind="lib" path="lib/xml/serializer-2.7.0.jar"/>
-	<classpathentry kind="lib" path="lib/xml/xalan-2.7.0.jar"/>
-	<classpathentry kind="lib" path="lib/xml/xercesImpl-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/xml/xml-apis-1.3.04.jar"/>
-	<classpathentry kind="lib" path="lib/xml/xml-apis-ext-1.3.04.jar"/>
-	<classpathentry kind="lib" path="lib/xml/xmlgraphics-commons-1.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/xml/xsltc.jar"/>
 	<classpathentry kind="lib" path="lib/openchart_1_2.jar"/>
-	<classpathentry kind="lib" path="lib/avalon-framework-4.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/browserlauncher2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib/jebml.jar"/>
 	<classpathentry kind="lib" path="lib/jhall.jar"/>
@@ -53,9 +38,20 @@
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/struts-1.2.8.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/tomahawk-1.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/jacksum.jar"/>
-	<classpathentry kind="lib" path="lib/jaudtiotagger.jar"/>
 	<classpathentry kind="lib" path="lib/html/js.jar"/>
 	<classpathentry kind="lib" path="lib/html/cobra.jar"/>
-	<classpathentry kind="lib" path="help"/>
+	<classpathentry kind="lib" path="lib/xml/xsltc.jar"/>
+	<classpathentry kind="lib" path="lib/xml/avalon-framework-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml/batik-all-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/xml/commons-io-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/xml/fop.jar"/>
+	<classpathentry kind="lib" path="lib/xml/serializer-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xalan-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xml-apis-1.3.02.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xml-apis-ext-1.3.04.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xmlgraphics-commons-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jaudiotagger_1.0.9.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

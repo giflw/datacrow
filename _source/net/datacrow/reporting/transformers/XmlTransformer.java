@@ -69,6 +69,8 @@ public abstract class XmlTransformer {
         this.template = new File(reportFile.getFilename());
         this.properties = reportFile.getProperties();
         
+        setSettings(properties);
+        
         String s = target.toString();
         s = s.substring(0, s.lastIndexOf(".")) + ".xml";
         this.source = new File(s);
@@ -86,6 +88,8 @@ public abstract class XmlTransformer {
     public abstract int getType();
     public abstract void transform() throws Exception ;
     public abstract String getFileType();
+    
+    protected void setSettings(ReportTemplateProperties properties) {}
     
     private class Transformer extends Thread {
         

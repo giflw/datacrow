@@ -28,6 +28,7 @@ package net.datacrow.util.movie;
 import java.io.RandomAccessFile;
 
 import org.jaudiotagger.audio.asf.data.AsfHeader;
+import org.jaudiotagger.audio.asf.data.Chunk;
 import org.jaudiotagger.audio.asf.data.StreamBitratePropertiesChunk;
 import org.jaudiotagger.audio.asf.data.VideoStreamChunk;
 import org.jaudiotagger.audio.asf.io.AsfHeaderReader;
@@ -58,10 +59,9 @@ public class FilePropertiesASF extends FileProperties {
 		AsfHeader header = AsfHeaderReader.readHeader(file);
 
 		VideoStreamChunk video = null;
-		int streamCount = header.getStreamChunkCount();
-		for (int i = 0; i < streamCount; i++) {
-			if (header.getStreamChunk(i) instanceof VideoStreamChunk)
-				video = (VideoStreamChunk) header.getStreamChunk(i);
+		for (Chunk chunk : header.getChunks()) {
+            if (chunk instanceof VideoStreamChunk)
+                video = (VideoStreamChunk) chunk;
 		}
 		
 		this.videoStreamPresent = video != null;

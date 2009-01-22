@@ -35,6 +35,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
+import net.datacrow.reporting.templates.ReportTemplateProperties;
+
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
@@ -65,6 +67,15 @@ public class Xml2PdfTransformer extends XmlTransformer implements ErrorListener 
         }
     }
     
+    
+    
+    @Override
+    protected void setSettings(ReportTemplateProperties properties) {
+        properties.set(ReportTemplateProperties._ALLOWRELATIVEIMAGEPATHS, Boolean.FALSE);
+    }
+
+
+
     @Override
     public int getType() {
         return XmlTransformers._PDF;

@@ -184,7 +184,11 @@ public class XmlWriter extends XmlBaseWriter {
                 filename = "";
             } else if (properties.getBoolean(ReportTemplateProperties._COPY_IMAGES)) {
                 copyImage((Picture) o, getImageDir() + filename);
-                filename = "./" + reportName +  "_images/" + filename;
+                
+                if (properties.getBoolean(ReportTemplateProperties._ALLOWRELATIVEIMAGEPATHS))
+                    filename = "./" + reportName +  "_images/" + filename;
+                else 
+                    filename = "file:///" + getImageDir() + filename;
             } else {
                 filename = "file:///" + DataCrow.imageDir + picture.getValue(Picture._C_FILENAME);
             }

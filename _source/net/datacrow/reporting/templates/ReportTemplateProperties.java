@@ -43,6 +43,7 @@ public class ReportTemplateProperties {
     public static final String _IMAGE_HEIGHT = "image_height";
     public static final String _MAX_TEXT_LENGTH = "max_text_length";
     public static final String _STYLESHEET = "stylesheet";
+    public static final String _ALLOWRELATIVEIMAGEPATHS = "allowrelativeimagespaths";
     
     private final String filename;
     private final Properties properties;
