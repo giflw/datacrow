@@ -25,42 +25,13 @@
 
 package net.datacrow.core.web.beans;
 
-import java.util.List;
-
-import javax.faces.event.ActionEvent;
+import java.util.Map;
 
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.web.DcSecured;
 
-import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
-import org.apache.myfaces.custom.navmenu.jscookmenu.HtmlCommandJSCookMenu;
+public class Resources {
 
-public abstract class DcBean extends DcSecured {
-    
-    public abstract String current();
-    public abstract String back();
-    
-    public abstract List<NavigationMenuItem> getMenuItems();
-    public abstract String getActionListener();
-    
-    protected void addLogoffMenuItem(List<NavigationMenuItem> menu) {
-        NavigationMenuItem user = getMenuItem(DcResources.getText("lblUser"), null, null);
-        user.add(getMenuItem(DcResources.getText("lblLogoff"), "#{security.logoff}", "logoff.png"));
-        menu.add(user);
-    }
-
-    protected NavigationMenuItem getMenuItem(String label, String action, String icon) {
-        NavigationMenuItem item = new NavigationMenuItem(label, action);
-        item.setActionListener(getActionListener());
-        item.setValue(label);
-        
-        if (icon != null)
-            item.setIcon("images/" + icon);
-        
-        return item;
-    }
-    
-    public String actionListener(ActionEvent event) {
-        return (String) ((HtmlCommandJSCookMenu) event.getComponent()).getValue();
+    public Map<String, String> getMap() {
+        return DcResources.getCurrent().getResourcesMap();
     }
 }

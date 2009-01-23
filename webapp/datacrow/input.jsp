@@ -11,7 +11,7 @@
 <t:panelGroup rendered="#{field.multiRelate}">
     <t:inputTextarea rows="1" value="#{field.value}" readonly="true" styleClass="relationfield" />
     <t:commandLink action="#{itemRelate.open}" rendered="#{not webObject.new and not field.readonly}">
-        <t:outputText value="edit"  />
+        <t:outputText value="#{resources.map['lblEdit']}"  />
         <f:param value="#{field.index}" name="fieldIdx" />
         <f:param value="#{item.child}" name="isChild" />
     </t:commandLink>

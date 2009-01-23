@@ -37,6 +37,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.model.DcWebImage;
 import net.datacrow.core.web.model.DcWebObject;
 import net.datacrow.core.web.model.DcWebObjects;
@@ -63,7 +64,7 @@ public class ItemImage extends DcBean {
     public List<NavigationMenuItem> getMenuItems() {
         List<NavigationMenuItem> menu = new ArrayList<NavigationMenuItem>();
         
-        menu.add(getMenuItem("Back", "#{itemImage.back}", null));
+        menu.add(getMenuItem(DcResources.getText("lblBack"), "#{itemImage.back}", null));
         
         addLogoffMenuItem(menu);
         

@@ -62,6 +62,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
     
     private DcLongTextField textDesc;
     private DcShortTextField textName;
+    private DcShortTextField textTableName;
     private DcShortTextField textObjectName;
     private DcShortTextField textObjectNamePlural;
     private DcCheckBox checkCanBeLended;
@@ -205,6 +206,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         scollDesc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         textName = ComponentFactory.getShortTextField(25);
+        textTableName = ComponentFactory.getISO9001ShortTextField(20);
         textObjectName = ComponentFactory.getShortTextField(25);
         checkCanBeLended = ComponentFactory.getCheckBox(DcResources.getText("lblCanBeLended"));
         textObjectNamePlural = ComponentFactory.getShortTextField(25);
@@ -218,36 +220,44 @@ public class PanelBasicInfo extends ModuleWizardPanel {
                     Layout.getGBC(1, 0, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
-            add(ComponentFactory.getLabel(DcResources.getText("lblItemName")), 
+            add(ComponentFactory.getLabel(DcResources.getText("lblTableName")),         
                     Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
-                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets( 5, 5, 5, 5), 0, 0));  
-            add(textObjectName,         
+                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets( 5, 5, 5, 5), 0, 0));
+            add(textTableName,         
                     Layout.getGBC(1, 1, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
-            add(ComponentFactory.getLabel(DcResources.getText("lblItemNamePlural")), 
+            add(ComponentFactory.getLabel(DcResources.getText("lblItemName")), 
                     Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets( 5, 5, 5, 5), 0, 0));  
-            add(textObjectNamePlural,         
+            add(textObjectName,         
                     Layout.getGBC(1, 2, 1, 1, 1.0, 1.0
+                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets( 5, 5, 5, 5), 0, 0));
+            add(ComponentFactory.getLabel(DcResources.getText("lblItemNamePlural")), 
+                    Layout.getGBC(0, 3, 1, 1, 1.0, 1.0
+                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets( 5, 5, 5, 5), 0, 0));  
+            add(textObjectNamePlural,         
+                    Layout.getGBC(1, 3, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
         }
         
         add(checkCanBeLended, 
-                Layout.getGBC(1, 3, 1, 1, 1.0, 1.0
+                Layout.getGBC(1, 4, 1, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets( 5, 5, 5, 5), 0, 0));
         
         
         add(ComponentFactory.getLabel(DcResources.getText("lblDescription")), 
-                Layout.getGBC(0, 4, 1, 1, 1.0, 1.0
+                Layout.getGBC(0, 5, 1, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets( 5, 5, 5, 5), 0, 0));  
         add(scollDesc,        
-                Layout.getGBC(1, 4, 1, 1, 2.0, 2.0
+                Layout.getGBC(1, 5, 1, 1, 2.0, 2.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets( 5, 5, 5, 5), 0, 0));  
 

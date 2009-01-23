@@ -239,7 +239,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     private void clearImages() {
         removeTabs();
-        tabbedPane.addTab("Description", IconLibrary._icoInformation ,scroller);
+        tabbedPane.addTab(DcResources.getText("lblDescription"), IconLibrary._icoInformation ,scroller);
         
         for (JPanel panel : imagePanels) {
             Component[] components = panel.getComponents();

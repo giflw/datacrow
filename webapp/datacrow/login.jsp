@@ -11,7 +11,7 @@
             <t:column><t:outputText value="&nbsp;" escape="false" /></t:column>
 
             <t:column width="">
-                <t:outputText value="Username" />
+                <t:outputText value="#{resources.map['lblUsername']}" />
             </t:column>
 
             <t:column>
@@ -20,7 +20,7 @@
             </t:column>
 
             <t:column>
-                <t:outputText value="Password" />
+                <t:outputText value="#{resources.map['lblPassword']}" />
             </t:column>
 
             <t:column>
@@ -29,7 +29,7 @@
 
         </t:panelGrid>
     
-        <h:commandButton styleClass="button" value="Login" action="#{security.login}"/>
+        <h:commandButton styleClass="button" value="#{resources.map['lblLogin']}" action="#{security.login}"/>
 
     </h:form>
 

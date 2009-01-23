@@ -10,7 +10,7 @@
             <t:navigationMenuItems id="navitems" value="#{itemBean.menuItems}" />
         </t:jscookMenu>
     
-        <t:outputText value="<h1>Information</h1>" escape="false" rendered="#{item.tab == 1}" />
+        <t:outputText value="<h1>#{resources.map['lblInformation']}</h1>" escape="false" rendered="#{item.tab == 1}" />
         
         <t:dataTable rendered="#{item.tab == 1}" value="#{item.fields}" 
                      var="field" columnClasses="columnLabels,columnFields">
@@ -27,7 +27,7 @@
             
         </t:dataTable>
         
-        <t:outputText value="<h1>Technical Information</h1>" escape="false" rendered="#{item.tab == 2}" />
+        <t:outputText value="<h1>#{resources.map['lblTechnicalInfo']}</h1>" escape="false" rendered="#{item.tab == 2}" />
         
         <t:dataTable value="#{item.technicalFields}" rendered="#{item.tab == 2}" 
                      var="field" columnClasses="columnLabels,columnFields">
@@ -99,7 +99,7 @@
         </t:dataTable>
         
         
-        <t:outputText value="<h1>Pictures</h1>" escape="false" rendered="#{item.tab == 4}" />
+        <t:outputText value="<h1>#{resources.map['lblPictures']}</h1>" escape="false" rendered="#{item.tab == 4}" />
         
         <t:dataTable value="#{item.pictureFields}"
                      rendered="#{item.tab == 4}" 
@@ -134,7 +134,7 @@
     
         <h:outputText value="<br>" escape="false" />
     
-        <h:commandButton styleClass="button" value="Create new" action="#{childDetails.create}" rendered="#{item.tab == 3}" />
+        <h:commandButton styleClass="button" value="#{resources.map['lblCreateNew']}" action="#{childDetails.create}" rendered="#{item.tab == 3}" />
         
     </h:form>
 </h:panelGroup>

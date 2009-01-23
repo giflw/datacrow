@@ -55,13 +55,13 @@
 
     <h:commandButton styleClass="button" 
                      rendered="#{webObjects.module != 0 and security.loggedIn}" 
-                     value="Search" 
+                     value="#{resources.map['lblSearch']}" 
                      action="#{itemSearch.search}"/>
 
     <h:outputText value="&nbsp;" escape="false" />
 
     <h:commandLink action="#{advancedFind.open}" rendered="#{webObjects.module != 0 and security.loggedIn}">
-        <h:outputText value="advanced" />
+        <h:outputText value="#{resources.map['lblAdvanced']}" />
     </h:commandLink>
 
     <h:outputText value="<br><br>" escape="false" />
@@ -69,9 +69,9 @@
     <t:panelGrid rendered="#{security.loggedIn}" columns="1" styleClass="menupart">                     
         <t:column width="10%" style="border-bottom:1px;border-bottom:solid;border-color:Black;"
                   rendered="#{security.loggedIn}" >
-            <h:outputText value="Welcome #{security.username}! " />
+            <h:outputText value="#{resources.map['lblWelcome']} #{security.username}! " />
             <t:commandLink action="#{security.logoff}">
-                <h:outputText value="logoff" />
+                <h:outputText value="#{resources.map['lblLogoff']}" />
             </t:commandLink>
         </t:column>
     </t:panelGrid>

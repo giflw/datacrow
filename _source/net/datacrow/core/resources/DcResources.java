@@ -145,6 +145,9 @@ public class DcResources {
     }
     
     public static String getText(String id) {
+        if (id.equals("HALLO"))
+            return "HALLO";
+        
     	return getText(id, (String[]) null);
     }
 

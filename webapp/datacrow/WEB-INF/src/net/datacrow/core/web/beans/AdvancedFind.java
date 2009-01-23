@@ -34,6 +34,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.VariableResolver;
 
 import net.datacrow.core.data.DataFilterEntry;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.model.AdvancedFilter;
 import net.datacrow.core.web.model.DcWebObjects;
 
@@ -55,7 +56,7 @@ public class AdvancedFind extends DcBean {
     public List<NavigationMenuItem> getMenuItems() {
         List<NavigationMenuItem> menu = new ArrayList<NavigationMenuItem>();
         
-        menu.add(getMenuItem("Back", "#{advancedFind.back}", null));
+        menu.add(getMenuItem(DcResources.getText("lblBack"), "#{advancedFind.back}", null));
         
         addLogoffMenuItem(menu);
         

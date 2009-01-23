@@ -39,6 +39,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.model.DcWebField;
 import net.datacrow.core.web.model.DcWebObject;
 import net.datacrow.util.Utilities;
@@ -58,16 +59,16 @@ public abstract class ItemBean extends DcBean {
         DcWebObject wo = getItem();
         String itemBeanName =  wo.isChild() ? "webChildObject" : "webObject";
         
-        menu.add(getMenuItem("Back", "#{" + (wo.isChild() ? "childDetails" : "itemDetails") + ".back}", null));
+        menu.add(getMenuItem(DcResources.getText("lblBack"), "#{" + (wo.isChild() ? "childDetails" : "itemDetails") + ".back}", null));
         
         // SHOW MENU
-        NavigationMenuItem show = getMenuItem("Show", null, null);
+        NavigationMenuItem show = getMenuItem(DcResources.getText("lblShow"), null, null);
         
         if (wo.isInformationTabVisible())
-            show.add(getMenuItem("Information", "#{" + itemBeanName + ".switchToInfoTab}", "information.png"));
+            show.add(getMenuItem(DcResources.getText("lblInformation"), "#{" + itemBeanName + ".switchToInfoTab}", "information.png"));
         
         if (wo.isTechnicalTabVisible())
-            show.add(getMenuItem("Technical Information", "#{" + itemBeanName + ".switchToTechTab}", "informationtechnical.png"));
+            show.add(getMenuItem(DcResources.getText("lblTechnicalInfo"), "#{" + itemBeanName + ".switchToTechTab}", "informationtechnical.png"));
 
         if (wo.isChildrenTabVisible())
             show.add(getMenuItem(wo.getChildrenLabel(), "#{" + itemBeanName + ".switchToChildTab}", "modules/" + DcModules.get(wo.getModule()).getChild().getName() + "16.png"));
@@ -76,8 +77,8 @@ public abstract class ItemBean extends DcBean {
         
         // PICTURE MENU
         if (wo.isPictureTabVisible()) {
-            NavigationMenuItem pics = getMenuItem("Pictures", null, null);
-            pics.add(getMenuItem("View", "#{itemDetailsImages.open}" ,"picture.png"));
+            NavigationMenuItem pics = getMenuItem(DcResources.getText("lblPictures"), null, null);
+            pics.add(getMenuItem(DcResources.getText("lblShow"), "#{itemDetailsImages.open}" ,"picture.png"));
             //if (getUser().isEditingAllowed(DcModules.get(wo.getModule())))
               //  pics.add(getMenuItem("Edit", "#{" + itemBeanName + ".switchToPicTab}", "picture.png"));
             menu.add(pics);
@@ -86,8 +87,8 @@ public abstract class ItemBean extends DcBean {
         
         // EDIT MENU
         if (getUser().isEditingAllowed(DcModules.get(wo.getModule()))) {
-            NavigationMenuItem edit = getMenuItem("Edit", null, null);
-            edit.add(getMenuItem("Save", "#{" + (wo.isChild() ? "childDetails" : "itemDetails") + ".save}", "save.png"));
+            NavigationMenuItem edit = getMenuItem(DcResources.getText("lblEdit"), null, null);
+            edit.add(getMenuItem(DcResources.getText("lblSave"), "#{" + (wo.isChild() ? "childDetails" : "itemDetails") + ".save}", "save.png"));
             
             
             menu.add(edit);

@@ -20,7 +20,7 @@ Online services
 3.4.8
 ---------------------------------------------------------------------------------------------------------
 [x] Re-test ASF for movies
-[ ] Translate the web module
+[x] Translate the web module
 [ ] Refresh of screen for the module wizard after adding fields.
 [ ] Module name; special characters?
 [ ] Image from clipboard (+ CTRL-V)

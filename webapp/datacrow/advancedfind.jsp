@@ -10,7 +10,7 @@
             <t:navigationMenuItems id="navitems" value="#{advancedFind.menuItems}" />
         </t:jscookMenu>
         
-        <h:outputText value="<h1>Advanced Find</h1>" escape="false" />
+        <h:outputText value="<h1>#{resources.map['lblAdvancedFind']}</h1>" escape="false" />
         
         <t:panelGrid styleClass="filterentriespanel"> 
         
@@ -51,23 +51,23 @@
         <t:panelGrid columns="6">
         
             <t:column>
-                <h:outputText value="And / or" />
+				<h:outputText value="#{resources.map['lblAndOr']}" />
             </t:column>
 
             <t:column>
-                <h:outputText value="Module" />
+                <h:outputText value="#{resources.map['lblModule']}" />
             </t:column>    
 
             <t:column>
-                <h:outputText value="Field" />
+                <h:outputText value="#{resources.map['lblField']}" />
             </t:column>    
 
             <t:column>
-                <h:outputText value="Operator" />
+                <h:outputText value="#{resources.map['lblOperator']}" />
             </t:column>    
 
             <t:column>
-                <h:outputText value="Value" rendered="#{advancedFilter.needsValue}"/>
+                <h:outputText value="#{resources.map['lblValue']}" rendered="#{advancedFilter.needsValue}"/>
             </t:column>    
 
             <t:column />
@@ -121,7 +121,7 @@
         
         <h:outputText value="<br>" escape="false" />
         
-        <h:commandButton value="Search" action="#{advancedFind.search}" styleClass="button" />
+        <h:commandButton value="#{resources.map['lblSearch']}" action="#{advancedFind.search}" styleClass="button" />
         
     </h:form>
 </t:panelGroup>    

@@ -15,6 +15,12 @@
         <managed-bean-class>net.datacrow.core.web.model.DcWebObjects</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>resources</managed-bean-name>
+        <managed-bean-class>net.datacrow.core.web.beans.Resources</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
 
 	<managed-bean>
         <managed-bean-name>itemSearch</managed-bean-name>

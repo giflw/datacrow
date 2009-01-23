@@ -19,7 +19,7 @@
         
             <t:outputText value="<br>" escape="false" />
     
-            <h:outputText value="Upload image" />
+            <h:outputText value="#{resources.map['lblUploadImage']}" />
             <t:inputFileUpload id="fileupload"
                                accept="image/*"
                                value="#{itemImage.upFile}"
@@ -30,7 +30,7 @@
     
             <h:message for="fileupload" showDetail="true" />
             <h:outputText value="&nbsp;" escape="false"   />
-            <h:commandButton value="Load" action="#{itemImage.upload}" styleClass="button" />
+            <h:commandButton value="#{resources.map['lblLoad']}" action="#{itemImage.upload}" styleClass="button" />
         </t:panelGroup>
 
         <t:panelGrid rendered="#{not empty image.filename}">

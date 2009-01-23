@@ -39,6 +39,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.model.DcReferences;
 import net.datacrow.core.web.model.DcWebObject;
 
@@ -67,11 +68,11 @@ public class ItemRelate extends DcBean {
     public List<NavigationMenuItem> getMenuItems() {
         List<NavigationMenuItem> menu = new ArrayList<NavigationMenuItem>();
         
-        menu.add(getMenuItem("Back", "#{itemRelate.back}", null));
+        menu.add(getMenuItem(DcResources.getText("lblBack"), "#{itemRelate.back}", null));
         
         // EDIT MENU
-        NavigationMenuItem edit = getMenuItem("Edit", null, null);
-        edit.add(getMenuItem("Save", "#{itemRelate.save}", "save.png"));
+        NavigationMenuItem edit = getMenuItem(DcResources.getText("lblEdit"), null, null);
+        edit.add(getMenuItem(DcResources.getText("lblSave"), "#{itemRelate.save}", "save.png"));
         menu.add(edit);
         
         addLogoffMenuItem(menu);

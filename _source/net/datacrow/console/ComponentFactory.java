@@ -860,6 +860,13 @@ public final class ComponentFactory {
         return textField;
     }
 
+    public static final DcShortTextField getISO9001ShortTextField(int maxTextLength) {
+        DcShortTextField textField = new DcShortTextField(maxTextLength);
+        textField.setFont(getStandardFont());
+        textField.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));
+        return textField;
+    }
+    
     public static final DcShortTextField getTextFieldDisabled() {
         DcShortTextField textField = new DcShortTextField(4000);
         textField.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));

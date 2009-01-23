@@ -41,6 +41,7 @@ import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.WebUtilities;
 import net.datacrow.core.web.model.AdvancedFilter;
 import net.datacrow.core.web.model.DcWebField;
@@ -83,8 +84,8 @@ public class ItemSearch extends DcBean {
         DcWebObjects objects = (DcWebObjects) vr.resolveVariable(fc, "webObjects");
         
         if (getUser().isEditingAllowed(DcModules.get(objects.getModule()))) {
-            NavigationMenuItem edit = getMenuItem("Edit", null, null);
-            edit.add(getMenuItem("Create new", "#{itemDetails.create}", "modules/" + DcModules.get(objects.getModule()).getName() + "16.png"));
+            NavigationMenuItem edit = getMenuItem(DcResources.getText("lblEdit"), null, null);
+            edit.add(getMenuItem(DcResources.getText("lblCreateNew"), "#{itemDetails.create}", "modules/" + DcModules.get(objects.getModule()).getName() + "16.png"));
             menu.add(edit);
         }
         

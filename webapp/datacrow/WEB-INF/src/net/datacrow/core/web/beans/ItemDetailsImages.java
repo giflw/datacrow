@@ -34,6 +34,7 @@ import javax.faces.el.VariableResolver;
 import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.model.DcWebObject;
 
 public class ItemDetailsImages extends ItemImages {
@@ -51,7 +52,7 @@ public class ItemDetailsImages extends ItemImages {
     @Override
     public List<NavigationMenuItem> getMenuItems() {
         List<NavigationMenuItem> menu = new ArrayList<NavigationMenuItem>();
-        menu.add(getMenuItem("Back", "#{itemBean.back}", null));
+        menu.add(getMenuItem(DcResources.getText("lblBack"), "#{itemBean.back}", null));
         addLogoffMenuItem(menu);
         return menu;
     }
