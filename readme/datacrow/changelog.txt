@@ -11,6 +11,7 @@ Data Crow 3.4.8 [Release on 08/01/2009] [testing: high] [target: production]
 [Fixed]
 - Reporting for PDF does not images and/or fails completely.
 - Music importer stopped processing files not containing any tags. 
+- Screen refresh errors in the module wizards; wizards are unusable.
 
 [Components]
 - Downgraded Apache FOP to version 0.94 (Libraries used for report generation).

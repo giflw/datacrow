@@ -134,6 +134,9 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         XmlField field = dlg.getField();
         if (field != null)
             table.addRow(new Object[] {field});
+        
+        revalidate();
+        repaint();
     }
     
     private Collection<DcField> getDefaultFields() {

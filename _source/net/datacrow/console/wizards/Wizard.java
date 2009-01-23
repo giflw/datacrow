@@ -131,6 +131,13 @@ public abstract class Wizard extends DcFrame implements ActionListener {
             buttonNext.requestFocus();
 
         setTitle(getWizardName());
+        
+        repaint();
+        
+        if (getCurrent() != null) {
+            getCurrent().revalidate();
+            getCurrent().repaint();
+        }
     }
 
     protected boolean isRestarted() {

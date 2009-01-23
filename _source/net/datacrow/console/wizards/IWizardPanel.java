@@ -37,4 +37,8 @@ public interface IWizardPanel {
     public void destroy();
     
     public void setVisible(boolean b);
+    
+    public void revalidate();
+    
+    public void repaint();
 }

@@ -283,14 +283,18 @@ public class DcField implements Serializable{
      */
     public String getLabel() {
         String s = null;
-        DcFieldDefinitions definitions = DcModules.get(module).getFieldDefinitions();
-        if (definitions != null)
-            s = definitions.get(getIndex()).getLabel();
+        
+        if (DcModules.get(module) != null) {
+            DcFieldDefinitions definitions = DcModules.get(module).getFieldDefinitions();
+            if (definitions != null)
+                s = definitions.get(getIndex()).getLabel();
+        }
         
         if (s != null && s.trim().length() > 0)
             return s;
 
-        if (DcResources.getText(getResourceKey()) != null &&
+        if (DcModules.get(module) != null &&
+            DcResources.getText(getResourceKey()) != null &&
             DcResources.getText(getResourceKey()).length() > 0) {
             
             return DcResources.getText(getResourceKey());
