@@ -141,6 +141,9 @@ public class MusicAlbumImporter extends FileImporter {
                 ma = new MusicAlbum();
                 ma.setValue(MusicAlbum._A_TITLE, album);
                 
+                if (musicFile.getImage() != null)
+                    ma.setValue(MusicAlbum._J_PICTUREFRONT, musicFile.getImage());
+                
                 setImages(filename, ma, MusicAlbum._J_PICTUREFRONT, 
                                         MusicAlbum._K_PICTUREBACK, 
                                         MusicAlbum._L_PICTURECD);
@@ -148,12 +151,16 @@ public class MusicAlbumImporter extends FileImporter {
                 DataManager.createReference(ma, MusicAlbum._F_ARTISTS, artist);
             } 
             
-            DcObject genre = DataManager.createReference(ma, MusicAlbum._G_GENRES, musicFile.getGenre());
+            DcObject genre = null;
+            if (musicFile.getGenre() != null)
+                genre = DataManager.createReference(ma, MusicAlbum._G_GENRES, musicFile.getGenre());
 
             MusicTrack mt = new MusicTrack();
             
             String year = musicFile.getYear();
-            year = year.indexOf("-") > -1 ? year.substring(0, year.indexOf("-")) : year;
+            
+            if (year != null)
+                year = year.indexOf("-") > -1 ? year.substring(0, year.indexOf("-")) : year;
             
             int track = musicFile.getTrack();
             track = track == 0 ? ma.getChildren() != null ?  ma.getChildren().size() + 1 : 1  : track;

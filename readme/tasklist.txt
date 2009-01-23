@@ -17,9 +17,11 @@ Online services
 [ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
 
 
-3.4.7
+3.4.8
 ---------------------------------------------------------------------------------------------------------
-[ ] Re-test ASF for movies!
+[x] Re-test ASF for movies
+[ ] Refresh of screen for the module wizard after adding fields.
+[ ] Module name; special characters?
 [ ] Image from clipboard
 [ ] Provide the option to revert back to the default settings (per module + general settings).
     Provide this option as a parameter.

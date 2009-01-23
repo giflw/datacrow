@@ -22,6 +22,7 @@ public class DcPictureFieldMenu extends JMenuBar {
         JMenuItem miSaveAs = ComponentFactory.getMenuItem(DcResources.getText("lblSaveAs"));
         JMenuItem miOpenFromFile = ComponentFactory.getMenuItem(DcResources.getText("lblOpenFromFile"));
         JMenuItem miOpenFromURL = ComponentFactory.getMenuItem(DcResources.getText("lblOpenFromURL"));
+        JMenuItem miOpenFromClipboard = ComponentFactory.getMenuItem(DcResources.getText("lblOpenFromClipboard"));
         
         JMenuItem miRotateRight = ComponentFactory.getMenuItem(IconLibrary._icoRotateRight, DcResources.getText("lblRotateRight"));
         JMenuItem miRotateLeft = ComponentFactory.getMenuItem(IconLibrary._icoRotateLeft, DcResources.getText("lblRotateLeft"));
@@ -56,6 +57,9 @@ public class DcPictureFieldMenu extends JMenuBar {
 
         miOpenFromURL.setActionCommand("open_from_url");
         miOpenFromURL.addActionListener(pf);
+
+        miOpenFromClipboard.setActionCommand("open_from_clipboard");
+        miOpenFromClipboard.addActionListener(pf);
         
         miDelete.setActionCommand("delete");
         miDelete.addActionListener(pf);
@@ -65,6 +69,7 @@ public class DcPictureFieldMenu extends JMenuBar {
         
         menuFile.add(miOpenFromFile);
         menuFile.add(miOpenFromURL);
+        menuFile.add(miOpenFromClipboard);
         menuFile.addSeparator();
         menuFile.add(miSaveAs);
         

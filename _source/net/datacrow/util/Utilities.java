@@ -38,6 +38,9 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Transparency;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -82,6 +85,8 @@ public class Utilities {
     private static final GraphicsDevice gs = ge.getDefaultScreenDevice();
     private static final GraphicsConfiguration gc = gs.getDefaultConfiguration();
     
+    private static final Clipboard clipboard = tk.getSystemClipboard();
+    
     private static final Properties languages = new Properties();
     
     private static final FileSystemView fsv = new JFileChooser().getFileSystemView();
@@ -94,6 +99,19 @@ public class Utilities {
         } catch (Exception e) {
             logger.error("Could not load languages file", e);
         }
+    }
+    
+    public static DcImageIcon getImageFromClipboard() {
+        Transferable clipData = clipboard.getContents(clipboard);
+        if (clipData != null) {
+            if (clipData.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                try {
+                    Image image = (Image) clipData.getTransferData(DataFlavor.imageFlavor);
+                    return new DcImageIcon(Utilities.getBytes(new ImageIcon(image)));
+                } catch (Exception ignore) {}
+            }
+        }
+        return null;
     }
     
     public static String getLanguage(String iso) {

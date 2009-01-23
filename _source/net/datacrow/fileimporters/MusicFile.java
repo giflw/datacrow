@@ -35,6 +35,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.services.IOnlineSearchClient;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
@@ -45,6 +46,7 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.datatype.Artwork;
 
 /**
  * Representation of a physical music file.
@@ -60,6 +62,7 @@ public class MusicFile implements IOnlineSearchClient {
     private String year;
     private String title;
     private String encodingType;
+    private DcImageIcon image;
     
     private int track;
     private int bitrate;
@@ -74,16 +77,12 @@ public class MusicFile implements IOnlineSearchClient {
         try {
         	audioFile = AudioFileIO.read(new File(filename));
         } catch (IOException e1) {
-            // Will not be thrown for now (by AudioFileIO.read)
             throw new CannotReadException(e1);
         } catch (TagException e1) {
-            // Will not be thrown for now (by AudioFileIO.read)
             throw new CannotReadException(e1);
         } catch (ReadOnlyFileException e1) {
-            // Will not be thrown for now (by AudioFileIO.read)
             throw new CannotReadException(e1);
         } catch (InvalidAudioFrameException e1) {
-            // Will not be thrown for now (by AudioFileIO.read)
             throw new CannotReadException(e1);
         }
         
@@ -94,6 +93,9 @@ public class MusicFile implements IOnlineSearchClient {
             genre = getGenre(tag.getFirstGenre());
             year = tag.getFirstYear();
             title = tag.getFirstTitle();
+            
+            for (Artwork aw : tag.getArtworkList())
+                image = new DcImageIcon(aw.getBinaryData());
             
             bitrate = (int)audioFile.getAudioHeader().getBitRateAsNumber();
             length = audioFile.getAudioHeader().getTrackLength();
@@ -128,6 +130,10 @@ public class MusicFile implements IOnlineSearchClient {
         return genre;
     }    
         
+    public DcImageIcon getImage() {
+        return image;
+    }
+
     public String getAlbum() {
         return album;
     }

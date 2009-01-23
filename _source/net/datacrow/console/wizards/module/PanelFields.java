@@ -130,6 +130,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     private void createField() {
         DefineFieldDialog dlg = new DefineFieldDialog(getWizard(), getCurrentFieldNames(), canHaveReferences);
         dlg.setVisible(true);
+        
         XmlField field = dlg.getField();
         if (field != null)
             table.addRow(new Object[] {field});

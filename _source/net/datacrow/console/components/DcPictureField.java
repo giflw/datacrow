@@ -435,6 +435,9 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     }    
     
     private void initialize() {
+        
+        repaint();
+        
         if (picture != null) {
             imageWidth = picture.getIconWidth();
             imageHeight = picture.getIconHeight();
@@ -456,6 +459,15 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     	if (!b) {
     		remove(menu);
     	}
+    }
+    
+    private void paste() {
+        DcImageIcon icon = Utilities.getImageFromClipboard();
+        if (icon != null) {
+            picture = icon;
+            initialize();
+            changed = true;
+        }
     }
     
     public void actionPerformed(ActionEvent e) {
@@ -486,6 +498,8 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             blur();
         } else if (action.equals("brighten")) {
             brighten();
+        } else if (action.equals("open_from_clipboard")) {
+            paste();
         }
     }
 
@@ -516,5 +530,5 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}     
+    public void mouseReleased(MouseEvent e) {}
 }
