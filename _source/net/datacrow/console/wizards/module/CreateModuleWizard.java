@@ -42,7 +42,6 @@ import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.StringUtils;
 
 public class CreateModuleWizard extends Wizard {
 
@@ -81,8 +80,6 @@ public class CreateModuleWizard extends Wizard {
         module.setProductVersion(DataCrow.getVersion().getFullString());
 
         try {
-            module.setFilename(StringUtils.normalize(module.getName()).replaceAll(" ", "") + ".xml");
-            
             if (module.getModuleClass().equals(DcPropertyModule.class))
                 module.setServingMultipleModules(true);
             

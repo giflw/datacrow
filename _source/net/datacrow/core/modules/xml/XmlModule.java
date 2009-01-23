@@ -72,7 +72,7 @@ public class XmlModule extends XmlObject {
     private String description;
     private KeyStroke keyStroke;
     
-    private String filename;
+    //private String filename;
     
     private String productVersion;
     
@@ -676,19 +676,19 @@ public class XmlModule extends XmlObject {
         this.isServingMultipleModules = isServingMultipleModules;
     }
 
-    /**
-     * Retrieves the filename for this module. 
-     * @see #getJarFilename()
-     */
-    public String getFilename() {
-        return filename;
-    }
+//    /**
+//     * Retrieves the filename for this module. 
+//     * @see #getJarFilename()
+//     */
+//    public String getFilename() {
+//        return filename;
+//    }
 
     /**
      * Retrieves the JAR filename in which this module is / will be stored.
      */
     public String getJarFilename() {
-    	return filename.replaceAll(".xml", ".jar");
+    	return getTableName() + ".jar";
     }
     
     /**
@@ -723,13 +723,13 @@ public class XmlModule extends XmlObject {
     		icon32 = b;
     }
     
-    /**
-     * Set the filename to which this module will be stored.
-     * @param filename
-     */
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
+//    /**
+//     * Set the filename to which this module will be stored.
+//     * @param filename
+//     */
+//    public void setFilename(String filename) {
+//        this.filename = filename;
+//    }
 
     /**
      * Retrieves the Data Crow version number for which this module has been created.

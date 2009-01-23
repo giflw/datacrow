@@ -1397,7 +1397,7 @@ public class DcModule implements Comparable<DcModule> {
     public void delete() throws Exception {
         if (getXmlModule() != null && !new ModuleJar(getXmlModule()).delete())
             throw new Exception("Module file could not be deleted. " +
-                                "Please check the access rights for file: " + getXmlModule().getFilename()); 
+                                "Please check the access rights for file: " + getXmlModule().getJarFilename()); 
 
         
         if (this instanceof DcPropertyModule && getXmlModule() != null && !getXmlModule().isServingMultipleModules()) {

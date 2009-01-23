@@ -130,7 +130,7 @@ public class ModuleJar {
             
             writer.close();
             
-            addEntry(zout, module.getFilename(), xml);
+            addEntry(zout, "module.xml", xml);
         	addEntry(zout, "icon16.png", icon16);
         	addEntry(zout, "icon32.png", icon32);
 
@@ -182,10 +182,8 @@ public class ModuleJar {
             
             // first get the XML file
             for (String filename : content.keySet()) {
-                if (filename.toLowerCase().endsWith("xml")) {
+                if (filename.toLowerCase().endsWith("xml"))
                     module = new XmlModule(content.get(filename));
-                    module.setFilename(filename);
-                }
             }
             
             byte[] icon16 = content.get(module.getIcon16Filename());
