@@ -28,6 +28,7 @@ package net.datacrow.core;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -84,7 +85,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 7, 0);
+    private static Version version = new Version(3, 4, 8, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -111,7 +112,7 @@ public class DataCrow {
         installationDir = System.getenv("DATACROW_HOME");
         
         if (installationDir == null || installationDir.length() == 0)
-            installationDir = System.getProperty("user.dir");
+            installationDir = getInstallationDirDeprecated();
         
         String db = null;
         String dir = null;
@@ -161,6 +162,8 @@ public class DataCrow {
         
         DataCrow.installationDir = DataCrow.installationDir.replaceAll("\\\\", "/");
         DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
+        
+        System.out.println("AFTER SLASHES CHECK: " + installationDir);
         
         try {
             checkCurrentDir();
@@ -458,7 +461,7 @@ public class DataCrow {
     private static void checkCurrentDir() {
         if (!new File(DataCrow.installationDir + "plugins").exists() ||
             !new File(DataCrow.installationDir + "modules").exists()) {
-            
+        
             new NativeMessageBox("Warning", 
                     "The installation directory could not be determined. " +
                     "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
@@ -466,6 +469,30 @@ public class DataCrow {
             
             System.exit(0);
         }
+    }
+    
+    private static String getInstallationDirDeprecated() {
+       String classLocation = DataCrow.class.getName().replace('.', '/') + ".class";
+        ClassLoader loader = DataCrow.class.getClassLoader();
+        
+        URL location;
+        if (loader == null)
+            location = ClassLoader.getSystemResource(classLocation);
+        else
+            location = loader.getResource(classLocation);
+
+        String dir = location.getFile();
+
+        dir = dir.substring(0, dir.indexOf("/net/"));
+        dir = dir.endsWith("_build") ? dir.substring(0, dir.indexOf("_build")) : dir;
+        dir = dir.endsWith("_classes") ? dir.substring(0, dir.indexOf("_classes")) : dir;
+        dir = dir.endsWith("classes") ? dir.substring(0, dir.indexOf("classes")) : dir;
+        dir = dir.indexOf("webapp") > 0 ? dir.substring(0, dir.indexOf("webapp")) : dir;
+        dir = dir.indexOf("datacrow.jar") > 0 ? dir.substring(0, dir.indexOf("datacrow.jar")) : dir;
+        dir = dir.replaceAll("%20", " ");
+        dir = dir.startsWith("file:") ? dir.substring(5) : dir;
+        
+        return dir;
     }
 
     /** 
