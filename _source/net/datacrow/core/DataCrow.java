@@ -113,6 +113,8 @@ public class DataCrow {
         
         if (installationDir == null || installationDir.length() == 0)
             installationDir = getInstallationDirDeprecated();
+        else 
+            logger.info("DATACROW_HOME directory: " + installationDir);
         
         String db = null;
         String dir = null;
@@ -153,6 +155,10 @@ public class DataCrow {
         }
         
         installationDir = dir != null ? dir : installationDir;
+        
+        if (dir != null)
+            logger.info("-dir: directory: " + installationDir);
+        
         if (installationDir == null || installationDir.trim().length() == 0) {
             new NativeMessageBox("Warning", "The installation directory could not be determined. " +
                     "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
@@ -162,8 +168,6 @@ public class DataCrow {
         
         DataCrow.installationDir = DataCrow.installationDir.replaceAll("\\\\", "/");
         DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
-        
-        System.out.println("AFTER SLASHES CHECK: " + installationDir);
         
         try {
             checkCurrentDir();
@@ -469,6 +473,8 @@ public class DataCrow {
             
             System.exit(0);
         }
+        
+        logger.info("Installation directory: " + installationDir);
     }
     
     private static String getInstallationDirDeprecated() {
@@ -491,6 +497,8 @@ public class DataCrow {
         dir = dir.indexOf("datacrow.jar") > 0 ? dir.substring(0, dir.indexOf("datacrow.jar")) : dir;
         dir = dir.replaceAll("%20", " ");
         dir = dir.startsWith("file:") ? dir.substring(5) : dir;
+        
+        logger.info("Calculated installation directory: " + dir);
         
         return dir;
     }

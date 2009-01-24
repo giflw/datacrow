@@ -676,19 +676,11 @@ public class XmlModule extends XmlObject {
         this.isServingMultipleModules = isServingMultipleModules;
     }
 
-//    /**
-//     * Retrieves the filename for this module. 
-//     * @see #getJarFilename()
-//     */
-//    public String getFilename() {
-//        return filename;
-//    }
-
     /**
      * Retrieves the JAR filename in which this module is / will be stored.
      */
     public String getJarFilename() {
-    	return getTableName() + ".jar";
+    	return getName() + ".jar";
     }
     
     /**
