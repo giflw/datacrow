@@ -162,6 +162,7 @@ Additional parameters:
 This piece of software would not have succeeded (or even existed) with help
 from other development teams and information providers:
 
+* Bas Uildriks for designing creating the web site (http://www.datacrow.net).
 * ImageJ: A very powerful image editor.
   http://rsb.info.nih.gov/ij/
 * HSQL: This product includes Hypersonic SQL.
