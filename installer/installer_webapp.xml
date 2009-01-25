@@ -20,6 +20,7 @@
     
     <resources>
         <res id="HTMLLicencePanel.licence" src="readme/gpl.html"/>
+        <res id="HTMLInfoPanel.info" src="installer/donate.html"/>
         <res id="shortcutSpec.xml" src="D:/development/tools/izpack/shortcutSpec.xml"/>
         <res id="Unix_shortcutSpec.xml" src="D:/development/tools/izpack/Unix_shortcutSpec.xml"/>
         <res src="installer/images/border.png" id="Installer.image.0"/>
@@ -34,7 +35,8 @@
     
     <panels>
         <panel classname="HelloPanel"/>
-        <panel classname="LicencePanel"/>
+        <panel classname="HTMLLicencePanel"/>
+        <panel classname="HTMLInfoPanel"/>
         <panel classname="TargetPanel"/> 
         <panel classname="PacksPanel"/>
         <panel classname="InstallPanel"/>
