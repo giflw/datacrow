@@ -62,7 +62,6 @@ public class PanelBasicInfo extends ModuleWizardPanel {
     
     private DcLongTextField textDesc;
     private DcShortTextField textName;
-    private DcShortTextField textTableName;
     private DcShortTextField textObjectName;
     private DcShortTextField textObjectNamePlural;
     private DcCheckBox checkCanBeLended;
@@ -206,7 +205,6 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         scollDesc.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         textName = ComponentFactory.getShortTextField(25);
-        textTableName = ComponentFactory.getISO9001ShortTextField(20);
         textObjectName = ComponentFactory.getShortTextField(25);
         checkCanBeLended = ComponentFactory.getCheckBox(DcResources.getText("lblCanBeLended"));
         textObjectNamePlural = ComponentFactory.getShortTextField(25);
@@ -222,10 +220,6 @@ public class PanelBasicInfo extends ModuleWizardPanel {
                     new Insets( 5, 5, 5, 5), 0, 0));
             add(ComponentFactory.getLabel(DcResources.getText("lblTableName")),         
                     Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
-                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets( 5, 5, 5, 5), 0, 0));
-            add(textTableName,         
-                    Layout.getGBC(1, 1, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
             add(ComponentFactory.getLabel(DcResources.getText("lblItemName")), 
