@@ -110,6 +110,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         PluginHelper.add(menuInformation, "TipOfTheDay");
         menuInformation.addSeparator();
         PluginHelper.add(menuInformation, "About");
+        PluginHelper.add(menuInformation, "Donate");
         
         // filter menu
         PluginHelper.add(menuFilter, "Filter");

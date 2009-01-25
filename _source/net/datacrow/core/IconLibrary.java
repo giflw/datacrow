@@ -58,6 +58,7 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoMassUpdate = new ImageIcon(picPath + "massupdate.png");
     public static final ImageIcon _icoWebServer = new ImageIcon(picPath + "webserver.png");
     public static final ImageIcon _icoAccept = new ImageIcon(picPath + "accept.png");
+    public static final ImageIcon _icoDonate = new ImageIcon(picPath + "donate.png");
     public static final ImageIcon _icoLAF = new ImageIcon(picPath + "laf.png");
     public static final ImageIcon _icoFilter = new ImageIcon(picPath + "filter.png");
     public static final ImageIcon _icoCut = new ImageIcon(picPath + "cut.png");
