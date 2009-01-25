@@ -41,6 +41,8 @@ public final class Platform {
 	private boolean isJava15;
 	private boolean isJava16; 
 	
+	private boolean isJavaSun;
+	
 	protected Platform() {
 		String os = System.getProperty("os.name");
 		isWin = os.startsWith("Windows");
@@ -48,6 +50,7 @@ public final class Platform {
 		isLinux = os.startsWith("Linux");
 		isVista = isWin && os.indexOf("Vista")!=-1;
 		String version = System.getProperty("java.version").substring(0,3);
+		isJavaSun = System.getProperty("java.vendor").indexOf("Sun") > -1;
 		
 		isJava2  = version.compareTo("1.1") > 0;
 		isJava14 = version.compareTo("1.3") > 0;
@@ -75,6 +78,13 @@ public final class Platform {
 	public final boolean isLinux() {
 		return isLinux;
 	}
+	
+	/**
+	 * Indicates if the Java version is from Sun
+	 */
+    public final boolean isJavaSun() {
+        return isJavaSun;
+    }
 
     /**
      * Indicates if the Data Crow is running on a Windows Vista platform.

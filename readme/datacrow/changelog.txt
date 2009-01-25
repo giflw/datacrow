@@ -1,12 +1,13 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.8 [Release on 24/01/2009] [testing: high] [target: production]
+Data Crow 3.4.8 [Release on 25/01/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Changed]
 - Updated the default settings.
 - The music album importer now also reads the artwork information from MP3 files 
   (cover images).
-- Images can now also be added via the menu option 'Open From Memory'.
+- Images can now also be added via the menu option 'Add From Memory'.
+- Check on startup for the Java version (Java from Sun must be used).
 
 [Fixed]
 - Reporting for PDF does not images and/or fails completely.

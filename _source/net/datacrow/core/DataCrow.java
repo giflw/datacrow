@@ -113,8 +113,6 @@ public class DataCrow {
         
         if (installationDir == null || installationDir.length() == 0)
             installationDir = getInstallationDirDeprecated();
-        else 
-            logger.info("DATACROW_HOME directory: " + installationDir);
         
         String db = null;
         String dir = null;
@@ -156,9 +154,6 @@ public class DataCrow {
         
         installationDir = dir != null ? dir : installationDir;
         
-        if (dir != null)
-            logger.info("-dir: directory: " + installationDir);
-        
         if (installationDir == null || installationDir.trim().length() == 0) {
             new NativeMessageBox("Warning", "The installation directory could not be determined. " +
                     "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
@@ -174,8 +169,11 @@ public class DataCrow {
             createDirectories();
             checkFolderPermissions();
             
-            installLafs();
             initLog4j();
+            
+            checkPlatform();
+            
+            installLafs();
             
             logger.info("Using installation directory: " + installationDir);
             logger.info("Using data directory: " + dataDir);
@@ -473,8 +471,6 @@ public class DataCrow {
             
             System.exit(0);
         }
-        
-        logger.info("Installation directory: " + installationDir);
     }
     
     private static String getInstallationDirDeprecated() {
@@ -497,8 +493,6 @@ public class DataCrow {
         dir = dir.indexOf("datacrow.jar") > 0 ? dir.substring(0, dir.indexOf("datacrow.jar")) : dir;
         dir = dir.replaceAll("%20", " ");
         dir = dir.startsWith("file:") ? dir.substring(5) : dir;
-        
-        logger.info("Calculated installation directory: " + dir);
         
         return dir;
     }
@@ -551,6 +545,18 @@ public class DataCrow {
         }
         
         PropertyConfigurator.configure(DataCrow.installationDir + "log4j.properties");        
+    }
+    
+    private static void checkPlatform() {
+        logger.info("Java version: " + System.getProperty("java.version"));
+        logger.info("Java vendor: " + System.getProperty("java.vendor"));
+        logger.info("Operating System: " + System.getProperty("os.name"));
+        
+        if (!getPlatform().isJavaSun()) {
+            new NativeMessageBox("Warning", "Data Crow can only operate on Java from Sun (version 1.5 or higher). " +
+            		"Please install and use the latest Java version from Sun. Currently you are using: " + System.getProperty("java.vendor"));
+            System.exit(0);
+        }
     }
     
     private static void checkFolderPermissions() {

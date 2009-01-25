@@ -5,8 +5,8 @@
       ^    ^ 
     Web Module
 
-Version 1.x
-Created on xx/xx/2009
+Version 1.3
+Created on 25/01/2009
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net

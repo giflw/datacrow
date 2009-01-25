@@ -129,7 +129,7 @@ public class DcModules {
         for (DcModule module : getAllModules()) {
             try {
                 XmlModule xmlModule = module.getXmlModule();
-                if (xmlModule != null && xmlModule.isChanged()) 
+                if (xmlModule != null && xmlModule.isChanged() && !module.isAbstract()) 
                     new ModuleJar(module.getXmlModule()).save();
             } catch (Exception e) {
                 logger.error("An error occurred while saving the module jar for module " +

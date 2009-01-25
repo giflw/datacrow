@@ -138,7 +138,7 @@ public class DcLanguageResource {
                 }
             }
         } catch (Exception e) {
-            if (language != null && language.equals("English"))
+            if (!"English".equals(language))
                 logger.info("Could not load resources for language " + language);
         } 
     }
