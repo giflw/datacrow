@@ -56,8 +56,8 @@ public class ReportDictionaryGenerator {
         StringBuffer sb = new StringBuffer();
         for (DcModule module : DcModules.getAllModules()) {
             if (module.isTopModule()) {
-                sb.append("Module              [" + module.getName() + "]" + lf);
-                sb.append("xsl reference name  [" + Converter.getValidXmlTag(module.getName()) + "]" + lf);
+                sb.append("Module              [" + module.getLabel() + "]" + lf);
+                sb.append("xsl reference name  [" + Converter.getValidXmlTag(module.getSystemObjectName()) + "]" + lf);
                 
                 for (int i = 0; i < 80; i++)
                     sb.append("~");
