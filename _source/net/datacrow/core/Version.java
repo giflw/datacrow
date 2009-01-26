@@ -130,7 +130,7 @@ public class Version {
     
     @Override
     public String toString() {
-        return major + "." + minor + "." + build + (patch > 0 ? String.valueOf(patch) : "");
+        return major + "." + minor + "." + build + (patch > 0 ? "." + String.valueOf(patch) : "");
     }
     
     @Override

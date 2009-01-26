@@ -118,8 +118,8 @@ public class DcResources {
         Collection<String> languages = new ArrayList<String>();
         if (files != null) {
             for (String file : files) {
-                if (file.endsWith("resources.properties") && file.length() > "resources.properties".length())
-                    languages.add(file.substring(0, file.indexOf("resources.properties") - 1));
+                if (file.toLowerCase().endsWith("resources.properties") && file.length() > "resources.properties".length() + 1)
+                    languages.add(file.substring(0, file.toLowerCase().indexOf("resources.properties") - 1));
             }
         }
         
