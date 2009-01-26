@@ -113,13 +113,13 @@ public class XmlWriter extends XmlBaseWriter {
     
     public void startEntity(DcObject dco) throws IOException {
 		ident(tagIdent);
-		writeTag("<" + getValidTag(dco.getModule().getObjectName()) + ">");
+		writeTag("<" + getValidTag(dco.getModule().getSystemObjectName()) + ">");
 		newLine();
     }
 
     public void endEntity(DcObject dco) throws IOException {
         ident(tagIdent);
-        writeTag("</" + getValidTag(dco.getModule().getObjectName()) + ">");
+        writeTag("</" + getValidTag(dco.getModule().getSystemObjectName()) + ">");
         newLine();
     }
     

@@ -75,11 +75,11 @@ public class XmlSchemaWriter extends XmlBaseWriter {
                 DcModule sm = DcModules.get(field.getReferenceIdx());
                 DcObject so = sm.getDcObject();
 
-                if (!handled.contains(so.getModule().getObjectName())) {
+                if (!handled.contains(so.getModule().getSystemObjectName())) {
                     writeDco(so);
                     newLine();
                 }
-                handled.add(so.getModule().getObjectName());
+                handled.add(so.getModule().getSystemObjectName());
             }
         }
         
@@ -87,11 +87,11 @@ public class XmlSchemaWriter extends XmlBaseWriter {
             writeDco(dco.getModule().getChild().getDcObject());
             newLine();
             
-            handled.add(dco.getModule().getChild().getObjectName());
+            handled.add(dco.getModule().getChild().getSystemObjectName());
         }
         
         writeDco(dco);
-        handled.add(dco.getModule().getObjectName());
+        handled.add(dco.getModule().getSystemObjectName());
     }
     
     private void addReference(String name, String reference) {
@@ -106,7 +106,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
             DcModule sm = DcModules.get(field.getReferenceIdx());
             String name = getValidTag(field.getSystemName());
-            String reference = getValidTag(sm.getObjectName());
+            String reference = getValidTag(sm.getSystemObjectName());
 
             writeLine("<xsd:element name=\"" + name + "\"/>", 3);
             addReference(name, reference);
@@ -134,7 +134,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
     }
     
     private void writeDco(DcObject dco) throws IOException {
-        String baseName = getValidTag(dco.getModule().getObjectName());
+        String baseName = getValidTag(dco.getModule().getSystemObjectName());
         
         newLine();
         writeLine("<xsd:element name=\"" + baseName + "\" type=\"type-" + baseName + "\"/>", 1);
@@ -154,8 +154,8 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         }
         
         if (dco.getModule().getChild() != null) {
-            String name = getValidTag(dco.getModule().getChild().getObjectNamePlural());
-            String reference = getValidTag(dco.getModule().getChild().getObjectName());
+            String name = getValidTag(dco.getModule().getChild().getSystemObjectNamePlural());
+            String reference = getValidTag(dco.getModule().getChild().getSystemObjectName());
             
             writeLine("<xsd:element name=\"" + name + "\"/>", 3);
             addReference(name, reference);
@@ -172,7 +172,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         writeLine("<xsd:complexType>", 1);
         writeLine("<xsd:sequence>", 2);
         writeLine("<xsd:element maxOccurs=\"unbounded\" ref=\"" + 
-                    getValidTag(dco.getModule().getObjectName())  + 
+                    getValidTag(dco.getModule().getSystemObjectName())  + 
                   "\"/>", 3);
         writeLine("</xsd:sequence>", 2);
         writeLine("</xsd:complexType>", 1);

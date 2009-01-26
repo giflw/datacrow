@@ -389,6 +389,13 @@ public class DcModule implements Comparable<DcModule> {
     }
     
     /**
+     * The name of the items belonging to this module without translating it.
+     */
+    public String getSystemObjectName() {
+        return objectName;
+    }    
+    
+    /**
      * The plural name of the items belonging to this module.
      */
     public String getObjectNamePlural() {
@@ -398,6 +405,14 @@ public class DcModule implements Comparable<DcModule> {
             return objectNamePlural;
         }
     }
+
+    /**
+     * The plural name of the items belonging to this module without translating it.
+     */
+    public String getSystemObjectNamePlural() {
+        return objectNamePlural;
+    }
+    
     
     /**
      * The keys combination associated with this module.
