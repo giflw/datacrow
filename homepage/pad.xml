@@ -34,10 +34,10 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>Data Crow</Program_Name>
-		<Program_Version>3.4.6</Program_Version>
-		<Program_Release_Month>12</Program_Release_Month>
-		<Program_Release_Day>20</Program_Release_Day>
-		<Program_Release_Year>2008</Program_Release_Year>
+		<Program_Version>3.4.8</Program_Version>
+		<Program_Release_Month>01</Program_Release_Month>
+		<Program_Release_Day>25</Program_Release_Day>
+		<Program_Release_Year>2009</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
 		<Program_Cost_Other_Code />
 		<Program_Cost_Other />
@@ -45,15 +45,15 @@
 		<Program_Release_Status>New Release</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
 		<Program_OS_Support>Win95,Win98,WinME,WinNT 3.x,WinNT 4.x,Windows2000,WinXP,Windows2003,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64,Linux,Linux Gnome,Linux GPL,Linux Open Source,Mac OS 9,Mac OS X,Mac OS X 10.1,Mac OS X 10.2,Mac OS X 10.3,Mac OS X 10.4,Mac OS X 10.5,Java</Program_OS_Support>
-		<Program_Language>English,Dutch,German</Program_Language>
+		<Program_Language>English,Dutch,French,German</Program_Language>
 		<Program_Change_Info>New languages / Update of the web module</Program_Change_Info>
 		<Program_Specific_Category>Home/Hobby</Program_Specific_Category>
 		<Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
 		<Program_System_Requirements>256MB of memory / P3 800MHZ</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>21000000</File_Size_Bytes>
-			<File_Size_K>20507</File_Size_K>
-			<File_Size_MB>20.03</File_Size_MB>
+			<File_Size_Bytes>20000000</File_Size_Bytes>
+			<File_Size_K>19531</File_Size_K>
+			<File_Size_MB>19.07</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -71,33 +71,33 @@
 			<Char_Desc_45>The Ultimate Cataloger for anything</Char_Desc_45>
 			<Char_Desc_80>The Ultimate Cataloger for anything. Highly customizable.</Char_Desc_80>
 			<Char_Desc_250>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here!</Char_Desc_250>
-			<Char_Desc_450>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.</Char_Desc_450>
-			<Char_Desc_2000>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself. Don't strain yourself in organizing your items and trying to keep track of their location, start using the best cataloging software today. Start using Data Crow.
+			<Char_Desc_450>Data Crow is the ultimate media cataloger and media organiser. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.</Char_Desc_450>
+			<Char_Desc_2000>Data Crow is the ultimate media cataloger and media organiser. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.
 
-# Out of the box experience
-# Audio, software, book, movie and photo collections organizer
-# Customizable UI: select a skin, change the fonts, customize views and much more
-# Create your own module from within Data Crow!
-# Optional web module; web interface + integrated web server
-# Everything in Data Crow can be modified to your own needs! Add your own categories, genres, states, ..
-# Rename your files based on the item information in Data Crow
-# Advanced user management
-# Keep track of loaned items using the simple loan management system
-# Use online services like Amazon.com, Imdb.com, Musicbrainz.org, and many others, to retrieve information
-# The internal powerful image editor enables you to manipulate any image
-# Create pdf and html reports. Create your own reports by supplying new XSLT documents
-# Use templates to fill your default values
-# Mass update your items
-# Auto number your items using the auto numbering functionality
-# Create a backup of your items and settings by using the "backup &amp; restore" functionality
-# Easily upgrade to newer versions of Data Crow</Char_Desc_2000>
+Don't strain yourself in organizing your items and trying to keep track of their location, start using
+the best cataloger
+today. Start using Data Crow.
+
+# Highly customizable and feature rich.
+# Audio, software, book, movie and photo
+collection cataloger.
+# Retrieve information from services like Amazon.com and Imdb.com.
+# Optional web module; a web interface and an integrated web server.
+# Rename your files based on the item information in Data Crow.
+# Loan management.
+# PDF and HTML reporting.
+# Create new modules to, for example, maintain your stamp collection.
+# Easily upgrade to newer versions.
+
+Data Crow is 100% free and 100% free of ads, viruses and spyware.
+Data Crow runs on any system where Java from Sun is installed.</Char_Desc_2000>
 		</English>
 	</Program_Descriptions>
 	<Web_Info>
 		<Application_URLs>
 			<Application_Info_URL>http://www.datacrow.net</Application_Info_URL>
 			<Application_Order_URL>http://www.datacrow.net</Application_Order_URL>
-			<Application_Screenshot_URL>http://www.datacrow.net/images/screenshots/mainscreen1.png</Application_Screenshot_URL>
+			<Application_Screenshot_URL>http://www.datacrow.net/pics/screenshots/software_small.png</Application_Screenshot_URL>
 			<Application_Icon_URL>http://www.datacrow.net/datacrow.ico</Application_Icon_URL>
 			<Application_XML_File_URL>http://www.datacrow.net/pad.xml</Application_XML_File_URL>
 		</Application_URLs>
