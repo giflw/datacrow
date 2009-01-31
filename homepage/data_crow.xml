@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_DIZ_INFO>
+  <MASTER_PAD_VERSION_INFO>
+    <MASTER_PAD_VERSION>3.01</MASTER_PAD_VERSION>
+    <MASTER_PAD_EDITOR>PADManager 1.0.35</MASTER_PAD_EDITOR>
+    <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
+  </MASTER_PAD_VERSION_INFO>
+  <RoboSoft>
+    <Company_UIN>CMP-00911F2D9ED</Company_UIN>
+    <Product_UIN>APP-00911FB8E0B</Product_UIN>
+    <Search_String>Data Crow Cataloger</Search_String>
+    <Search_String_Unique>Data AND Crow AND Cataloger</Search_String_Unique>
+    <Publish_on_CD>TRUE</Publish_on_CD>
+    <Company_Description>Robert Jan van der Waals</Company_Description>
+    <Press_Release_Search_String>Data Crow Cataloger</Press_Release_Search_String>
+    <NewsFeed_Search_String>Data Crow Cataloger</NewsFeed_Search_String>
+    <Search_Engine_Search_String>Data Crow Cataloger</Search_Engine_Search_String>
+    <Comments_For_Reviewer>Thank you!</Comments_For_Reviewer>
+    <Backlink>http://www.datacrow.net</Backlink>
+    <Web_Directories_Search_String></Web_Directories_Search_String>
+    <Additional_Categories></Additional_Categories>
+  </RoboSoft>
+  <Company_Info>
+    <Company_Name>Robert Jan van der Waals</Company_Name>
+    <Address_1>Zoeterwoudsesingel 99</Address_1>
+    <Address_2></Address_2>
+    <City_Town>Leiden</City_Town>
+    <State_Province>ZH</State_Province>
+    <Zip_Postal_Code>2313 EN</Zip_Postal_Code>
+    <Country></Country>
+    <Company_WebSite_URL>http://www.datacrow.net</Company_WebSite_URL>
+    <Contact_Info>
+      <Contact_First_Name>Robert Jan</Contact_First_Name>
+      <Contact_Last_Name>van der Waals</Contact_Last_Name>
+      <Contact_Email>info@datacrow.net</Contact_Email>
+      <Author_First_Name>Robert Jan</Author_First_Name>
+      <Author_Last_Name>van der Waals</Author_Last_Name>
+      <Author_Email>info@datacrow.net</Author_Email>
+    </Contact_Info>
+    <Support_Info>
+      <Sales_Email>info@datacrow.net</Sales_Email>
+      <Support_Email>support@datacrow.net</Support_Email>
+      <General_Email>info@datacrow.net</General_Email>
+      <Sales_Phone></Sales_Phone>
+      <Support_Phone></Support_Phone>
+      <General_Phone></General_Phone>
+      <Fax_Phone></Fax_Phone>
+    </Support_Info>
+  </Company_Info>
+  <ASP>
+    <ASP_FORM>Y</ASP_FORM>
+    <ASP_Member>N</ASP_Member>
+    <ASP_Member_Number></ASP_Member_Number>
+  </ASP>
+  <OISV>
+    <OISV_FORM>Y</OISV_FORM>
+    <OISV_Member>N</OISV_Member>
+    <OISV_Member_Number></OISV_Member_Number>
+  </OISV>
+  <Program_Info>
+    <Program_Name>Data Crow</Program_Name>
+    <Program_Version>3.4.8</Program_Version>
+    <Program_Release_Month>1</Program_Release_Month>
+    <Program_Release_Day>18</Program_Release_Day>
+    <Program_Release_Year>2009</Program_Release_Year>
+    <Program_Cost_Dollars>0</Program_Cost_Dollars>
+    <Program_Type>Freeware</Program_Type>
+    <Program_Release_Status>New Release</Program_Release_Status>
+    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
+    <Program_OS_Support>Win95,Win98,WinME,WinNT 3.x,WinNT 4.x,WinXP,Windows2000,Windows2003,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64,Linux,Linux Gnome,Linux GPL,Linux Open Source,Mac OS 9,Mac OS X,Mac OS X 10.1,Mac OS X 10.2,Mac OS X 10.3,Mac OS X 10.4,Mac OS X 10.5,Java</Program_OS_Support>
+    <Program_Language>English,Dutch,French,German</Program_Language>
+    <Program_Change_Info>Multiple fixes</Program_Change_Info>
+    <Program_Specific_Category>Home/Hobby</Program_Specific_Category>
+    <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
+    <Program_System_Requirements>256MB of memory / P3 800MHZ</Program_System_Requirements>
+    <File_Info>
+      <File_Size_Bytes>21000000</File_Size_Bytes>
+      <File_Size_K>20507</File_Size_K>
+      <File_Size_MB>20.03</File_Size_MB>
+      <Filename_Versioned>datacrow.exe</Filename_Versioned>
+      <Filename_Previous></Filename_Previous>
+      <Filename_Generic></Filename_Generic>
+      <Filename_Long></Filename_Long>
+    </File_Info>
+    <Expire_Info>
+      <Has_Expire_Info>N</Has_Expire_Info>
+      <Expire_Based_On>Days</Expire_Based_On>
+      <Expire_Count></Expire_Count>
+      <Expire_Other_Info></Expire_Other_Info>
+      <Expire_Month></Expire_Month>
+      <Expire_Day></Expire_Day>
+      <Expire_Year></Expire_Year>
+    </Expire_Info>
+    <Includes_JAVA_VM>N</Includes_JAVA_VM>
+    <Includes_VB_Runtime>N</Includes_VB_Runtime>
+    <Includes_DirectX>N</Includes_DirectX>
+    <Program_Cost_Other_Code></Program_Cost_Other_Code>
+    <Program_Cost_Other></Program_Cost_Other>
+    <Limitations></Limitations>
+    <Awards></Awards>
+    <Program_Categories></Program_Categories>
+  </Program_Info>
+  <Web_Info>
+    <Application_URLs>
+      <Application_Info_URL>http://www.datacrow.net</Application_Info_URL>
+      <Application_Order_URL>http://www.datacrow.net</Application_Order_URL>
+      <Application_Screenshot_URL>http://www.datacrow.net/images/screenshots/mainscreen1.png</Application_Screenshot_URL>
+      <Application_Icon_URL>http://www.datacrow.net/datacrow.gif</Application_Icon_URL>
+      <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
+    </Application_URLs>
+    <Download_URLs>
+      <Primary_Download_URL>http://ovh.dl.sourceforge.net/sourceforge/datacrow/datacrow_3_4_8_installer.zip</Primary_Download_URL>
+      <Secondary_Download_URL>http://ovh.dl.sourceforge.net/sourceforge/datacrow/datacrow_3_4_8_installer.exe</Secondary_Download_URL>
+      <Additional_Download_URL_1></Additional_Download_URL_1>
+      <Additional_Download_URL_2></Additional_Download_URL_2>
+    </Download_URLs>
+  </Web_Info>
+  <Permissions>
+    <Distribution_Permissions>This product can be freely distributed through the
+Internet. To put it onto a CD, contact rwaals@datacrow.net</Distribution_Permissions>
+    <EULA>Data Crow: The Ultimate Cataloger
+Copyright (C) 2009 Robert Jan van der Waals
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses.</EULA>
+  </Permissions>
+  <Affiliates>
+    <Affiliates_FORM>Y</Affiliates_FORM>
+    <Affiliates_VERSION>1.4</Affiliates_VERSION>
+    <Affiliates_URL>http://www.asp-shareware.org/pad/extensions/Affiliates.htm</Affiliates_URL>
+    <Affiliates_FORM_VER></Affiliates_FORM_VER>
+    <Affiliates_Information_Page></Affiliates_Information_Page>
+    <Affiliates_BMTMicro_Order_Page></Affiliates_BMTMicro_Order_Page>
+    <Affiliates_BMTMicro_Vendor_ID></Affiliates_BMTMicro_Vendor_ID>
+    <Affiliates_BMTMicro_Product_ID></Affiliates_BMTMicro_Product_ID>
+    <Affiliates_BMTMicro_Maximum_Commission_Rate></Affiliates_BMTMicro_Maximum_Commission_Rate>
+    <Affiliates_DigiBuy_Order_Page></Affiliates_DigiBuy_Order_Page>
+    <Affiliates_DigiBuy_Vendor_ID></Affiliates_DigiBuy_Vendor_ID>
+    <Affiliates_DigiBuy_Product_ID></Affiliates_DigiBuy_Product_ID>
+    <Affiliates_DigiBuy_Maximum_Commission_Rate></Affiliates_DigiBuy_Maximum_Commission_Rate>
+    <Affiliates_DigitalCandle_Order_Page></Affiliates_DigitalCandle_Order_Page>
+    <Affiliates_DigitalCandle_Vendor_ID></Affiliates_DigitalCandle_Vendor_ID>
+    <Affiliates_DigitalCandle_Product_ID></Affiliates_DigitalCandle_Product_ID>
+    <Affiliates_DigitalCandle_Maximum_Commission_Rate></Affiliates_DigitalCandle_Maximum_Commission_Rate>
+    <Affiliates_Emetrix_Order_Page></Affiliates_Emetrix_Order_Page>
+    <Affiliates_Emetrix_Vendor_ID></Affiliates_Emetrix_Vendor_ID>
+    <Affiliates_Emetrix_Product_ID></Affiliates_Emetrix_Product_ID>
+    <Affiliates_Emetrix_Maximum_Commission_Rate></Affiliates_Emetrix_Maximum_Commission_Rate>
+    <Affiliates_eSellerate_Order_Page></Affiliates_eSellerate_Order_Page>
+    <Affiliates_eSellerate_Vendor_ID></Affiliates_eSellerate_Vendor_ID>
+    <Affiliates_eSellerate_Product_ID></Affiliates_eSellerate_Product_ID>
+    <Affiliates_eSellerate_Maximum_Commission_Rate></Affiliates_eSellerate_Maximum_Commission_Rate>
+    <Affiliates_Kagi_Order_Page></Affiliates_Kagi_Order_Page>
+    <Affiliates_Kagi_Vendor_ID></Affiliates_Kagi_Vendor_ID>
+    <Affiliates_Kagi_Product_ID></Affiliates_Kagi_Product_ID>
+    <Affiliates_Kagi_Maximum_Commission_Rate></Affiliates_Kagi_Maximum_Commission_Rate>
+    <Affiliates_NorthStarSol_Order_Page></Affiliates_NorthStarSol_Order_Page>
+    <Affiliates_NorthStarSol_Vendor_ID></Affiliates_NorthStarSol_Vendor_ID>
+    <Affiliates_NorthStarSol_Product_ID></Affiliates_NorthStarSol_Product_ID>
+    <Affiliates_NorthStarSol_Maximum_Commission_Rate></Affiliates_NorthStarSol_Maximum_Commission_Rate>
+    <Affiliates_Order1_Order_Page></Affiliates_Order1_Order_Page>
+    <Affiliates_Order1_Vendor_ID></Affiliates_Order1_Vendor_ID>
+    <Affiliates_Order1_Product_ID></Affiliates_Order1_Product_ID>
+    <Affiliates_Order1_Maximum_Commission_Rate></Affiliates_Order1_Maximum_Commission_Rate>
+    <Affiliates_Osolis_Order_Page></Affiliates_Osolis_Order_Page>
+    <Affiliates_Osolis_Vendor_ID></Affiliates_Osolis_Vendor_ID>
+    <Affiliates_Osolis_Product_ID></Affiliates_Osolis_Product_ID>
+    <Affiliates_Osolis_Maximum_Commission_Rate></Affiliates_Osolis_Maximum_Commission_Rate>
+    <Affiliates_Regnet_Order_Page></Affiliates_Regnet_Order_Page>
+    <Affiliates_Regnet_Vendor_ID></Affiliates_Regnet_Vendor_ID>
+    <Affiliates_Regnet_Product_ID></Affiliates_Regnet_Product_ID>
+    <Affiliates_Regnet_Maximum_Commission_Rate></Affiliates_Regnet_Maximum_Commission_Rate>
+    <Affiliates_Regnow_Order_Page></Affiliates_Regnow_Order_Page>
+    <Affiliates_Regnow_Vendor_ID></Affiliates_Regnow_Vendor_ID>
+    <Affiliates_Regnow_Product_ID></Affiliates_Regnow_Product_ID>
+    <Affiliates_Regnow_Maximum_Commission_Rate></Affiliates_Regnow_Maximum_Commission_Rate>
+    <Affiliates_Regsoft_Order_Page></Affiliates_Regsoft_Order_Page>
+    <Affiliates_Regsoft_Vendor_ID></Affiliates_Regsoft_Vendor_ID>
+    <Affiliates_Regsoft_Product_ID></Affiliates_Regsoft_Product_ID>
+    <Affiliates_Regsoft_Maximum_Commission_Rate></Affiliates_Regsoft_Maximum_Commission_Rate>
+    <Affiliates_ShareIt_Order_Page></Affiliates_ShareIt_Order_Page>
+    <Affiliates_ShareIt_Vendor_ID></Affiliates_ShareIt_Vendor_ID>
+    <Affiliates_ShareIt_Product_ID></Affiliates_ShareIt_Product_ID>
+    <Affiliates_ShareIt_Maximum_Commission_Rate></Affiliates_ShareIt_Maximum_Commission_Rate>
+    <Affiliates_SWReg_Order_Page></Affiliates_SWReg_Order_Page>
+    <Affiliates_SWReg_Vendor_ID></Affiliates_SWReg_Vendor_ID>
+    <Affiliates_SWReg_Product_ID></Affiliates_SWReg_Product_ID>
+    <Affiliates_SWReg_Maximum_Commission_Rate></Affiliates_SWReg_Maximum_Commission_Rate>
+    <Affiliates_V-Share_Order_Page></Affiliates_V-Share_Order_Page>
+    <Affiliates_V-Share_Vendor_ID></Affiliates_V-Share_Vendor_ID>
+    <Affiliates_V-Share_Product_ID></Affiliates_V-Share_Product_ID>
+    <Affiliates_V-Share_Maximum_Commission_Rate></Affiliates_V-Share_Maximum_Commission_Rate>
+    <Affiliates_VFree_Order_Page></Affiliates_VFree_Order_Page>
+    <Affiliates_VFree_Vendor_ID></Affiliates_VFree_Vendor_ID>
+    <Affiliates_VFree_Product_ID></Affiliates_VFree_Product_ID>
+    <Affiliates_VFree_Maximum_Commission_Rate></Affiliates_VFree_Maximum_Commission_Rate>
+    <Affiliates_Yaskifo_Order_Page></Affiliates_Yaskifo_Order_Page>
+    <Affiliates_Yaskifo_Vendor_ID></Affiliates_Yaskifo_Vendor_ID>
+    <Affiliates_Yaskifo_Product_ID></Affiliates_Yaskifo_Product_ID>
+    <Affiliates_Yaskifo_Maximum_Commission_Rate></Affiliates_Yaskifo_Maximum_Commission_Rate>
+  </Affiliates>
+  <Simtel>
+    <Simtel_FORM>Y</Simtel_FORM>
+    <SIMTEL_FORM_VER>1.6 11/26/2002</SIMTEL_FORM_VER>
+    <Simtel_Platform>win95 - Win95/Win98/WinME</Simtel_Platform>
+    <Simtel_Category>Hobbies</Simtel_Category>
+  </Simtel>
+  <Delphi>
+    <D1>FALSE</D1>
+    <D2>FALSE</D2>
+    <D3>FALSE</D3>
+    <D4>FALSE</D4>
+    <D5>FALSE</D5>
+    <D6>FALSE</D6>
+    <D7>FALSE</D7>
+    <BCB1>FALSE</BCB1>
+    <BCB3>FALSE</BCB3>
+    <BCB4>FALSE</BCB4>
+    <BCB5>FALSE</BCB5>
+    <BCB6>FALSE</BCB6>
+    <K1>FALSE</K1>
+    <K2></K2>
+    <K3></K3>
+    <D1_URL></D1_URL>
+    <D2_URL></D2_URL>
+    <D3_URL></D3_URL>
+    <D4_URL></D4_URL>
+    <D5_URL></D5_URL>
+    <D6_URL></D6_URL>
+    <D7_URL></D7_URL>
+    <BCB1_URL></BCB1_URL>
+    <BCB3_URL></BCB3_URL>
+    <BCB4_URL></BCB4_URL>
+    <BCB5_URL></BCB5_URL>
+    <BCB6_URL></BCB6_URL>
+    <K1_URL></K1_URL>
+    <K2_URL></K2_URL>
+    <K3_URL></K3_URL>
+    <Type></Type>
+    <Price></Price>
+    <Source></Source>
+    <File_Location></File_Location>
+    <Link_URL></Link_URL>
+    <Download_URL></Download_URL>
+    <Version></Version>
+    <Notes></Notes>
+  </Delphi>
+  <PADRING>
+    <PADRING_FORM>N</PADRING_FORM>
+    <PADRING></PADRING>
+  </PADRING>
+  <NewsFeed>
+    <NewsFeed_FORM>Y</NewsFeed_FORM>
+    <NewsFeed_VERSION>1.0</NewsFeed_VERSION>
+    <NewsFeed_URL>http://Submit-Everywhere.com/extensions/NewsFeed.htm</NewsFeed_URL>
+    <NewsFeed_DESCRIPTION>This PAD extension allows you to add your RSS and Atom news feeds info into your PAD file. This info can be used by RSS feed submission software or by feed directories themselves.</NewsFeed_DESCRIPTION>
+    <NewsFeed_Type>RSS 0.90</NewsFeed_Type>
+    <NewsFeed_Language>English</NewsFeed_Language>
+    <NewsFeed_Purpose>News</NewsFeed_Purpose>
+    <NewsFeed_Feed_URL>https://sourceforge.net/export/rss2_projnews.php?group_id=84631&amp;rss_fulltext=1</NewsFeed_Feed_URL>
+    <NewsFeed_Site_Name>Sourceforge.net</NewsFeed_Site_Name>
+    <NewsFeed_Site_URL>http://sourceforge.net/projects/datacrow</NewsFeed_Site_URL>
+    <NewsFeed_Author_First_Name>Robert Jan</NewsFeed_Author_First_Name>
+    <NewsFeed_Author_Last_Name>van der Waals</NewsFeed_Author_Last_Name>
+    <NewsFeed_Author_Email>info@datacrow.net</NewsFeed_Author_Email>
+    <NewsFeed_Title>Data Crow new releases</NewsFeed_Title>
+    <NewsFeed_Description_70>SF.net Project News: Data Crow (datacrow project)</NewsFeed_Description_70>
+    <NewsFeed_Description_250>SF.net Project News: Data Crow (datacrow project). Detailed information on new releases.</NewsFeed_Description_250>
+  </NewsFeed>
+  <OnlineShops>
+    <OnlineShops_FORM>Y</OnlineShops_FORM>
+    <OnlineShops_VERSION>1.0</OnlineShops_VERSION>
+    <OnlineShops_URL>http://Submit-Everywhere.com/extensions/OnlineShops.htm</OnlineShops_URL>
+    <OnlineShops_DESCRIPTION>This PAD extension allows you to check these sites distribution agreements and decide wether you wish to sell your product through them</OnlineShops_DESCRIPTION>
+    <OnlineShops_PalmGear></OnlineShops_PalmGear>
+    <OnlineShops_PocketLand></OnlineShops_PocketLand>
+    <OnlineShops_PDAssi></OnlineShops_PDAssi>
+    <OnlineShops_PDATopSoft></OnlineShops_PDATopSoft>
+    <OnlineShops_PocketGear></OnlineShops_PocketGear>
+    <OnlineShops_Softonic></OnlineShops_Softonic>
+    <OnlineShops_Winowin></OnlineShops_Winowin>
+    <OnlineShops_Handango_Agreement></OnlineShops_Handango_Agreement>
+    <OnlineShops_Handango></OnlineShops_Handango>
+  </OnlineShops>
+  <Press_Release>
+    <Press_Release></Press_Release>
+    <Headline></Headline>
+    <Summary></Summary>
+  </Press_Release>
+  <Article>
+    <Article_FORM></Article_FORM>
+    <Article_VERSION></Article_VERSION>
+    <Article_Title></Article_Title>
+    <Article_URL></Article_URL>
+    <Article_Summary></Article_Summary>
+    <Article_Keywords></Article_Keywords>
+    <Article_Author_Info></Article_Author_Info>
+    <Article_Photo_URL></Article_Photo_URL>
+    <Article_Photo_Local></Article_Photo_Local>
+    <Article_Text></Article_Text>
+    <Article_Text_Plain></Article_Text_Plain>
+  </Article>
+  <ESC>
+    <ESC_FORM></ESC_FORM>
+  </ESC>
+  <Program_Descriptions>
+    <English>
+      <Keywords>Cataloging,Software,Audio,Books,Movies,Music,Games,Images</Keywords>
+      <Char_Desc_45>The Ultimate Cataloger for anything</Char_Desc_45>
+      <Char_Desc_80>The Ultimate Cataloger for anything. Highly customizable.</Char_Desc_80>
+      <Char_Desc_250>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here!</Char_Desc_250>
+      <Char_Desc_450>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.</Char_Desc_450>
+      <Char_Desc_2000>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself. Don't strain yourself in organizing your items and trying to keep track of their location, start using the best cataloging software today. Start using Data Crow.
+
+# Out of the box experience
+# Audio, software, book, movie and photo collections organizer
+# Customizable UI: select a skin, change the fonts, customize views and much more
+# Create your own module from within Data Crow!
+# Optional web module; web interface + integrated web server
+# Everything in Data Crow can be modified to your own needs! Add your own categories, genres, states, ..
+# Rename your files based on the item information in Data Crow
+# Advanced user management
+# Keep track of loaned items using the simple loan management system
+# Use online services like Amazon.com, Imdb.com, Musicbrainz.org, and many others, to retrieve information
+# The internal powerful image editor enables you to manipulate any image
+# Create pdf and html reports. Create your own reports by supplying new XSLT documents
+# Use templates to fill your default values
+# Mass update your items
+# Auto number your items using the auto numbering functionality
+# Create a backup of your items and settings by using the "backup &amp; restore" functionality
+# Easily upgrade to newer versions of Data Crow</Char_Desc_2000>
+    </English>
+  </Program_Descriptions>
+</XML_DIZ_INFO>
