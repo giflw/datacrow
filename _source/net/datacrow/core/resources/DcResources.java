@@ -145,8 +145,10 @@ public class DcResources {
     }
     
     public static String getText(String id) {
-        if (id.equals("HALLO"))
-            return "HALLO";
+        if (id == null) {
+            logger.debug("Empty message passed to the DcResources class! Returning empty String!");
+            return "";
+        }
         
     	return getText(id, (String[]) null);
     }
