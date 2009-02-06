@@ -85,7 +85,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 8, 1);
+    private static Version version = new Version(3, 4, 8, 2);
     
     public static String installationDir;
     public static String imageDir;
@@ -559,6 +559,7 @@ public class DataCrow {
     }
     
     private static void checkPlatform() {
+        logger.info(version.getFullString());
         logger.info("Java version: " + System.getProperty("java.version"));
         logger.info("Java vendor: " + System.getProperty("java.vendor"));
         logger.info("Operating System: " + System.getProperty("os.name"));

@@ -218,10 +218,6 @@ public class PanelBasicInfo extends ModuleWizardPanel {
                     Layout.getGBC(1, 0, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
-            add(ComponentFactory.getLabel(DcResources.getText("lblTableName")),         
-                    Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
-                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets( 5, 5, 5, 5), 0, 0));
             add(ComponentFactory.getLabel(DcResources.getText("lblItemName")), 
                     Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

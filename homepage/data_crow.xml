@@ -27,7 +27,7 @@
     <City_Town>Leiden</City_Town>
     <State_Province>ZH</State_Province>
     <Zip_Postal_Code>2313 EN</Zip_Postal_Code>
-    <Country></Country>
+    <Country>Netherlands</Country>
     <Company_WebSite_URL>http://www.datacrow.net</Company_WebSite_URL>
     <Contact_Info>
       <Contact_First_Name>Robert Jan</Contact_First_Name>
@@ -39,7 +39,7 @@
     </Contact_Info>
     <Support_Info>
       <Sales_Email>info@datacrow.net</Sales_Email>
-      <Support_Email>support@datacrow.net</Support_Email>
+      <Support_Email>info@datacrow.net</Support_Email>
       <General_Email>info@datacrow.net</General_Email>
       <Sales_Phone></Sales_Phone>
       <Support_Phone></Support_Phone>
@@ -60,7 +60,7 @@
   <Program_Info>
     <Program_Name>Data Crow</Program_Name>
     <Program_Version>3.4.8</Program_Version>
-    <Program_Release_Month>1</Program_Release_Month>
+    <Program_Release_Month>01</Program_Release_Month>
     <Program_Release_Day>18</Program_Release_Day>
     <Program_Release_Year>2009</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
@@ -74,9 +74,9 @@
     <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
     <Program_System_Requirements>256MB of memory / P3 800MHZ</Program_System_Requirements>
     <File_Info>
-      <File_Size_Bytes>21000000</File_Size_Bytes>
-      <File_Size_K>20507</File_Size_K>
-      <File_Size_MB>20.03</File_Size_MB>
+      <File_Size_Bytes>20341760</File_Size_Bytes>
+      <File_Size_K>19865</File_Size_K>
+      <File_Size_MB>19.40</File_Size_MB>
       <Filename_Versioned>datacrow.exe</Filename_Versioned>
       <Filename_Previous></Filename_Previous>
       <Filename_Generic></Filename_Generic>
@@ -94,17 +94,17 @@
     <Includes_JAVA_VM>N</Includes_JAVA_VM>
     <Includes_VB_Runtime>N</Includes_VB_Runtime>
     <Includes_DirectX>N</Includes_DirectX>
+    <Program_Categories>Education :: Collecting,Multimedia and Design :: Organizers,Utilities :: File &amp; Disk Management,Multimedia and Design :: Cataloging,Multimedia and Design :: Image Viewers,Home &amp; Hobby :: Hobbies,Home &amp; Hobby :: Home Inventory,Home &amp; Hobby :: Entertainment,MP3 &amp; Audio :: Music Management,MP3 &amp; Audio :: Organizers</Program_Categories>
+    <Limitations>None</Limitations>
     <Program_Cost_Other_Code></Program_Cost_Other_Code>
     <Program_Cost_Other></Program_Cost_Other>
-    <Limitations></Limitations>
     <Awards></Awards>
-    <Program_Categories></Program_Categories>
   </Program_Info>
   <Web_Info>
     <Application_URLs>
       <Application_Info_URL>http://www.datacrow.net</Application_Info_URL>
       <Application_Order_URL>http://www.datacrow.net</Application_Order_URL>
-      <Application_Screenshot_URL>http://www.datacrow.net/images/screenshots/mainscreen1.png</Application_Screenshot_URL>
+      <Application_Screenshot_URL>http://www.datacrow.net/pics/screenshots/software.png</Application_Screenshot_URL>
       <Application_Icon_URL>http://www.datacrow.net/datacrow.gif</Application_Icon_URL>
       <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
     </Application_URLs>
@@ -203,8 +203,8 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
   <Simtel>
     <Simtel_FORM>Y</Simtel_FORM>
     <SIMTEL_FORM_VER>1.6 11/26/2002</SIMTEL_FORM_VER>
-    <Simtel_Platform>win95 - Win95/Win98/WinME</Simtel_Platform>
     <Simtel_Category>Hobbies</Simtel_Category>
+    <Simtel_Platform></Simtel_Platform>
   </Simtel>
   <Delphi>
     <D1>FALSE</D1>
@@ -284,9 +284,27 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
     <OnlineShops_Handango></OnlineShops_Handango>
   </OnlineShops>
   <Press_Release>
-    <Press_Release></Press_Release>
-    <Headline></Headline>
-    <Summary></Summary>
+    <Press_Release>&lt;big&gt;Data Crow&lt;/big&gt; 
+Data Crow is the ultimate media cataloger and media organiser. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself. 
+
+Don't strain yourself in organizing your items and trying to keep track of their location, start using the best cataloger today. Start using Data Crow.
+
+&lt;big&gt;Features&lt;/big&gt;
+&lt;li&gt;Highly customizable and feature rich.&lt;/li&gt;
+&lt;li&gt;Audio, software, book, movie and photo collection cataloger.&lt;/li&gt;
+&lt;li&gt;Retrieve information from services like Amazon.com and Imdb.com.&lt;/li&gt;
+&lt;li&gt;Optional web module; a web interface and an integrated web server.&lt;/li&gt;
+&lt;li&gt;Rename your files based on the item information in Data Crow.&lt;/li&gt;
+&lt;li&gt;Loan management.&lt;/li&gt;
+&lt;li&gt;PDF and HTML reporting.&lt;/li&gt;
+&lt;li&gt;Create new modules to, for example, maintain your stamp collection.&lt;/li&gt;
+&lt;li&gt;Easily upgrade to newer versions.&lt;/li&gt;
+
+&lt;big&gt;General Information&lt;/big&gt;
+Data Crow is 100% free and 100% free of ads, viruses and spyware.
+Data Crow runs on any system where Java from Sun is installed.</Press_Release>
+    <Summary>A new version of Data Crow, the ultimate cataloger, is available.</Summary>
+    <Headline>Data Crow 3.4.8 has been released</Headline>
   </Press_Release>
   <Article>
     <Article_FORM></Article_FORM>
@@ -306,7 +324,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
   </ESC>
   <Program_Descriptions>
     <English>
-      <Keywords>Cataloging,Software,Audio,Books,Movies,Music,Games,Images</Keywords>
+      <Keywords>Cataloging, Software, Audio,Books, Movies,Music, Games, Images</Keywords>
       <Char_Desc_45>The Ultimate Cataloger for anything</Char_Desc_45>
       <Char_Desc_80>The Ultimate Cataloger for anything. Highly customizable.</Char_Desc_80>
       <Char_Desc_250>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here!</Char_Desc_250>

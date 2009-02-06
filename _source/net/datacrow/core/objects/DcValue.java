@@ -220,7 +220,7 @@ public class DcValue implements Serializable {
                         setValueNative(o, field);
                     } else if (o instanceof String) {
                         try {
-                            Date date = formatter.parse((String) o);
+                            Date date = !o.equals("") ? formatter.parse((String) o) : null;
                             setValueNative(date, field);
                         } catch (java.text.ParseException e) {
                             logger.error("Could not parse date for field " + field.getLabel(), e);

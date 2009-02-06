@@ -246,6 +246,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             int[] rows = getView().getSelectedIndices();
             for (int i = 0; i < rows.length; i++) {
                 DcObject dco = items.get(rows[i]);
+                
+                
+                
+                
                 result.add(fill(dco));
             }
         } else {
@@ -378,8 +382,15 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                     public void run() {
                         saveSettings();
                         Collection<DcObject> selected = getSelectedObjects();
+                        
                         if (selected != null) {
-                            getModule().getCurrentInsertView().add(selected);
+                            // Create clones to prevent the cleaning task from clearing the items..
+                            // This is to fix an unconfirmed bug (NullPointerException on saving new items). 
+                            Collection<DcObject> clones = new ArrayList<DcObject>();
+                            for (DcObject o : selected)
+                                clones.add(o.clone());
+                            
+                            getModule().getCurrentInsertView().add(clones);
                             DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
                         }
                         

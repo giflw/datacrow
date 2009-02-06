@@ -47,6 +47,7 @@ import net.datacrow.console.components.lists.elements.DcListElement;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.resources.DcResources;
 
 public class FieldSelectionPanel extends JPanel implements KeyListener {
     
@@ -150,10 +151,16 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         add(txtFilter,     Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));
-        add(scrollerLeft,  Layout.getGBC( 0, 1, 1, 1, 20.0, 20.0
+        add(ComponentFactory.getLabel(DcResources.getText("lblAvailableFields")),  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 5, 0, 0, 0), 0, 0));
+        add(ComponentFactory.getLabel(DcResources.getText("lblSelectedFields")), Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 5, 0, 0, 0), 0, 0));
+        add(scrollerLeft,  Layout.getGBC( 0, 2, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));
-        add(scrollerRight, Layout.getGBC( 1, 1, 1, 1, 20.0, 20.0
+        add(scrollerRight, Layout.getGBC( 1, 2, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));
     }

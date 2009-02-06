@@ -8,10 +8,11 @@ Data Crow 3.4.8 Patch 2 [Release on xx/02/2009] [testing: high] [target: product
 - Author information was not retrieved for the Barnes & Nobles online search.
 - Year not always retrieved for Imdb.com (errors).
 - Alapage did no longer retrieve detailed information.
+- Create module wizard shows a label "table name".
 
 [Changed]
 - Added new command line option: -nosplash. This option hides the splashscreen.
-
+- Added 
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.8 Patch 1 [Release on 26/01/2009] [testing: high] [target: production]

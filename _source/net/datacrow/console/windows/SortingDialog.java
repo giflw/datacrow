@@ -52,6 +52,7 @@ public class SortingDialog extends DcDialog implements ActionListener {
     public SortingDialog(int module) {
         super(DataCrow.mainFrame);
         
+        setHelpIndex("dc.items.sort");
         setTitle(DcResources.getText("lblSort"));
         
         this.module = module;

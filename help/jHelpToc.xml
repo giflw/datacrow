@@ -19,6 +19,7 @@
       <tocitem target="dc.items.itemform" text="The Item Form"/>
       <tocitem target="dc.items.templates" text="Using Templates"/>
       <tocitem target="dc.items.wizard" text="New Item Wizard"/>
+      <tocitem target="dc.items.sort" text="Sorting"/>
     </tocitem>   
 
     <tocitem target="dc.charts" text="Charts" />
