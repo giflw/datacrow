@@ -72,6 +72,7 @@ import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -331,8 +332,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
                     Settings settings = getModule().getSettings();
                     
-                    int[] fields = 
-                        settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite) ?
+                    boolean overwrite = dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite);
+                    
+                    int[] fields = overwrite ?
                         settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings) :
                         dco.getModule().getFieldIndices();
                         
@@ -342,14 +344,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
                     for (int i = 0; i < fields.length; i++) {
                         int field = fields[i];
-                        
-                        if (dco.isFilled(field)) {
-                            if (settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite) && 
-                                (o.getValue(fields[i]) != null && !o.getValue(fields[i]).equals("") && !o.getValue(fields[i]).equals("-1"))) {
-                                dco.setValue(field, o.getValue(fields[i]));
-                            }
-                        } else {
-                            dco.setValue(field, o.getValue(fields[i]));
+
+                        if (!Utilities.isEmpty(o.getValue(fields[i]))) {
+                            if ((dco.isFilled(field) && overwrite) || !dco.isFilled(field))
+                                dco.setValue(field, o.getValue(fields[i])); 
                         }
                     }  
                     

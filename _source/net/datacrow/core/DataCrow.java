@@ -98,6 +98,7 @@ public class DataCrow {
     public static String cacheDir;
     public static String resourcesDir;
     
+    private static boolean noSplash = false;
     private static boolean isWebModuleInstalled = false;
     
     public static MainFrame mainFrame;
@@ -108,6 +109,7 @@ public class DataCrow {
         
         boolean nocache = false;
         boolean webserverMode = false; 
+        
 
         installationDir = System.getenv("DATACROW_HOME");
         
@@ -126,6 +128,8 @@ public class DataCrow {
             } else if (args[i].toLowerCase().startsWith("-help")) {
                 new StartupHelpDialog().setVisible(true);
                 System.exit(0);
+            } else if (args[i].toLowerCase().startsWith("-nosplash")) {
+                noSplash = true;
             } else if (args[i].toLowerCase().startsWith("-webserver")) {
                 webserverMode = true;
             } else if (dir != null) {
@@ -212,7 +216,7 @@ public class DataCrow {
             Servers.getInstance();
     
             // Initialize the Component factory
-            splashScreen.setStatusMsg("Loading components");
+            showSplashMsg("Loading components");
             new ComponentFactory();
             
             Enumeration en = Logger.getRootLogger().getAllAppenders();
@@ -225,7 +229,7 @@ public class DataCrow {
             logger.info(DcResources.getText("msgApplicationStarts"));
     
             // Initialize all modules
-            splashScreen.setStatusMsg(DcResources.getText("msgLoadingModules"));
+            showSplashMsg(DcResources.getText("msgLoadingModules"));
             new ModuleUpgrade().upgrade();
             DcModules.load();
     
@@ -253,7 +257,7 @@ public class DataCrow {
             login();
             
             // Establish a connection to the database / server
-            splashScreen.setStatusMsg(DcResources.getText("msgInitializingDB"));
+            showSplashMsg(DcResources.getText("msgInitializingDB"));
 
             DatabaseManager.initialize();
             
@@ -267,11 +271,11 @@ public class DataCrow {
             if (splashScreen == null)
                 showSplashScreen();
 
-            splashScreen.setStatusMsg(DcResources.getText("msgLoadingItems"));
+            showSplashMsg(DcResources.getText("msgLoadingItems"));
             DcModules.loadData();
             
             if (!webserverMode)
-                splashScreen.setStatusMsg(DcResources.getText("msgLoadingUI"));
+                showSplashMsg(DcResources.getText("msgLoadingUI"));
 
             // load the filters & patterns
             DataFilters.load();
@@ -298,11 +302,11 @@ public class DataCrow {
                 } else {
                     Runtime.getRuntime().addShutdownHook(new ShutdownThread());
                     
-                    splashScreen.setStatusMsg(DcResources.getText("msgStartingWebServer"));
+                    showSplashMsg(DcResources.getText("msgStartingWebServer"));
                     
                     DcWebServer.getInstance().start();
                     if (DcWebServer.getInstance().isRunning())
-                        splashScreen.setStatusMsg(DcResources.getText("msgWebServerStarted"));
+                        showSplashMsg(DcResources.getText("msgWebServerStarted"));
                     
                     System.out.println(DcResources.getText("msgCloseWebServerConsole"));
                 }
@@ -352,6 +356,11 @@ public class DataCrow {
         }  
     }
     
+    private static void showSplashMsg(String msg) {
+        if (!noSplash)
+            splashScreen.setStatusMsg(DcResources.getText("msgInitializingDB"));
+    }
+    
     /**
      * The current product version.
      */
@@ -371,7 +380,7 @@ public class DataCrow {
             boolean success = false;
             int retry = 0;
             while (!success && retry < 3) {
-                splashScreen.setVisible(false);
+                showSplashScreen(false);
                 LoginDialog dlg = new LoginDialog();
                 dlg.setVisible(true);
                 
@@ -388,7 +397,7 @@ public class DataCrow {
             if (!success) 
                 System.exit(0);
             else
-                splashScreen.setVisible(true);
+                showSplashScreen(true);
         }        
     }
     
@@ -420,8 +429,10 @@ public class DataCrow {
      * Creates and shows the splash screen.
      */
     public static void showSplashScreen(){
-        splashScreen = new SplashScreen();
-        splashScreen.splash();
+        if (!noSplash) {
+            splashScreen = new SplashScreen();
+            splashScreen.splash();
+        }
     }
 
     /**

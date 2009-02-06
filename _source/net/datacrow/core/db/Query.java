@@ -416,6 +416,10 @@ public class Query {
                 for (DcMapping mapping : (Collection<DcMapping>) value) {
                     DcObject reference = mapping.getReferencedObject();
                     try { 
+                        
+                        if (reference == null)
+                            continue;
+                        
                         DcObject existing = DataManager.getObject(reference.getModule().getIndex(), reference.getID());
                         existing = existing == null ? 
                                        DataManager.getObjectForDisplayValue(reference.getModule().getIndex(), reference.toString()) : 

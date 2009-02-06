@@ -1,4 +1,19 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.8 Patch 2 [Release on xx/02/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Bol.com book search did no longer work in combination with author information retrieval.
+- Updated images disappeared (rare occurrence).
+- Author information was not retrieved for the Barnes & Nobles online search.
+- Year not always retrieved for Imdb.com (errors).
+- Alapage did no longer retrieve detailed information.
+
+[Changed]
+- Added new command line option: -nosplash. This option hides the splashscreen.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.8 Patch 1 [Release on 26/01/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

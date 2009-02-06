@@ -37,6 +37,7 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
+import net.datacrow.util.Utilities;
 
 public abstract class Synchronizer {
     
@@ -128,36 +129,39 @@ public abstract class Synchronizer {
     
     @SuppressWarnings("unchecked")
     protected void setValue(DcObject dco, int field, Object value) {
+        
+        // empty value, no need to update
+        if (Utilities.isEmpty(value))
+            return;
+        
         boolean overwrite = dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite);
         int[] fields = overwrite ?
                        dco.getModule().getSettings().getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings) :
                        dco.getModule().getFieldIndices();
             
+       // if all fails, just update all!
+       if (fields == null || fields.length == 0)
+           fields = dco.getModule().getFieldIndices();
+                       
         boolean allowed = false;
         for (int i = 0;i < fields.length; i++)
             allowed |= fields[i] == field;
         
         if (allowed) {
-            if (dco.isFilled(field)) {
-                if (overwrite && 
-                    (value != null && !value.equals("") && !value.toString().equals("-1"))) {
-                    
-                    if (value instanceof Collection) {
-                        for (Iterator iter = ((Collection) value).iterator(); iter.hasNext(); ) {
-                            DcObject o = (DcObject) iter.next();
-                            if (o instanceof DcMapping)
-                                o.setValue(DcMapping._A_PARENT_ID, dco.getID());
-                            else
-                                DataManager.createReference(dco, field, o);
-                        }
-                    } else if (value instanceof Picture) {
-                        dco.setValue(field, ((Picture) value).getValue(Picture._D_IMAGE));
-                    } else {
-                        dco.setValue(field, value);    
+            if ((dco.isFilled(field) && overwrite) || !dco.isFilled(field)) {
+                if (value instanceof Collection) {
+                    for (Iterator iter = ((Collection) value).iterator(); iter.hasNext(); ) {
+                        DcObject o = (DcObject) iter.next();
+                        if (o instanceof DcMapping)
+                            o.setValue(DcMapping._A_PARENT_ID, dco.getID());
+                        else
+                            DataManager.createReference(dco, field, o);
                     }
-                }
-            } else {
-                dco.setValue(field, value);
+                } else if (value instanceof Picture) {
+                    dco.setValue(field, ((Picture) value).getBytes());
+                } else {
+                    dco.setValue(field, value);    
+                }                
             }
         }
     }

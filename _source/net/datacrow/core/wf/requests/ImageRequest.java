@@ -95,10 +95,8 @@ public class ImageRequest implements IRequest {
             for (int i = 0; i < files.length; i++) {
                 String fullPath = DataCrow.imageDir + files[i];
                 File f = new File(fullPath);
-                if (f.exists()) {
-                    f.deleteOnExit();
+                if (f.exists())
                     f.delete();
-                }
             }
         } else {
             if (modus == ImageRequest._SAVE) 
@@ -110,19 +108,14 @@ public class ImageRequest implements IRequest {
     
     private void deleteImage() {
         String filename1 = DataCrow.imageDir + filename;
+
         File file1 = new File(filename1);
-        if (file1.exists()) {
-            file1.deleteOnExit();
-            file1.delete();
-        }
+        if (file1.exists()) file1.delete();
         
         String filename2 = new Picture().getScaledFilename(DataCrow.imageDir + filename);
         
         File file2 = new File(filename2);
-        if (file2.exists()) {
-            file2.deleteOnExit();
-            file2.delete();
-        }
+        if (file2.exists()) file2.delete();
         
         icon.flush();
         ID = null;
