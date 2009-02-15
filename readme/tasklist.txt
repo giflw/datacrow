@@ -17,6 +17,12 @@ Online services
 [ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
 
 
+3.4.9
+---------------------------------------------------------------------------------------------------------
+[ ] Import Dialog; directories are not added even when they are selected (software module) +
+    Add files to description when only dir is selected.
+
+
 3.4.8
 ---------------------------------------------------------------------------------------------------------
 [x] Re-test ASF for movies
