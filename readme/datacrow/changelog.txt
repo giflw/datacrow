@@ -5,8 +5,12 @@ Data Crow 3.4.8 Patch 3 [Release on 04/03/2009] [testing: high] [target: product
 [Fixed]
 - [2576366] "AWT-EventQueue-0" NullPointerException after restoring a database.
 - [2580766] Update all issue (screen locks when trying to add a new container).
-- [2582797] JTatoo errors under JDK 1.6.0_12 (modified the JTattoo distribution).
+- [2582797] JTatoo errors under JDK 1.6.0_12 (modified the JTattoo distribution, third
+  party coding).
 - [2617165] NPE during IMDB movie import
+- Due to the check for Java version Data Crow does not run on Mac systems anymore.
+  The check has been changed to a warning (which will only be shown once) after 
+  which Data Crow will (try to) start normally. 
 
 
 -----------------------------------------------------------------------------------------

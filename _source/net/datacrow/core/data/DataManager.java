@@ -195,6 +195,7 @@ public class DataManager {
         updatePictures(dco);
         updateRelated(dco, false);
 
+        o.removeRequests();
         o.reload();
         o.initializeReferences();
         
@@ -208,6 +209,9 @@ public class DataManager {
      * @param module The module to which the item belongs.
      */
     public static void add(DcObject dco, int module) {
+        
+        dco.removeRequests();
+        
         updatePictures(dco);
         
         String key = getKey(dco);
