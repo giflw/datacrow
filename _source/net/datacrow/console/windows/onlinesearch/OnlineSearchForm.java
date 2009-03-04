@@ -44,6 +44,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -76,7 +78,7 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
-public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, ActionListener, MouseListener {
+public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, ActionListener, MouseListener, ChangeListener {
 
     private static Logger logger = Logger.getLogger(OnlineSearchForm.class.getName());
     
@@ -584,6 +586,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
         tpResult.setSelectedIndex(DcSettings.getInt(DcRepository.Settings.stOnlineSearchSelectedView));
 
+        tpResult.addChangeListener(this);
+        
         //**********************************************************
         //Actions panel
         //**********************************************************
@@ -736,6 +740,20 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                 addNew();
         }
     }
+    
+    public void stateChanged(ChangeEvent e) {
+        if (list == null || table == null)
+            return;
+        
+        int tab = ((JTabbedPane) e.getSource()).getSelectedIndex();
+        if (tab == 0) {
+            if (table.getSelectedIndex() != -1) 
+                list.setSelected(table.getSelectedIndex());
+        } else {
+            if (list.getSelectedIndex() != -1) 
+                table.setSelected(list.getSelectedIndex());
+        }
+    }    
     
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}

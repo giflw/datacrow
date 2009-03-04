@@ -545,12 +545,10 @@ public class DataCrow {
             System.exit(0);
         }
         
-        String db = DcSettings.getString(DcRepository.Settings.stConnectionString);
-        File file = name.equals("data") ? new File(DataCrow.dataDir + db + ".script") : new File(dir, "temp.txt");
-        
+        File file = new File(dir, "temp.txt");
         try {
         
-            if (!file.exists() && !name.equals("data"))
+            if (!file.exists())
                 file.createNewFile();
             
             if (!file.exists() || !file.canWrite()) 
