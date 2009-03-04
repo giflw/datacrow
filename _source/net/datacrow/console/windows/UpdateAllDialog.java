@@ -39,11 +39,11 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
+import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -52,7 +52,7 @@ import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
-public class UpdateAllDialog extends DcDialog implements ActionListener {
+public class UpdateAllDialog extends DcFrame implements ActionListener {
 
     private static Logger logger = Logger.getLogger(UpdateAllDialog.class.getName());
     
@@ -69,14 +69,14 @@ public class UpdateAllDialog extends DcDialog implements ActionListener {
     private JCheckBox checkSelectedItemsOnly;
 
     public UpdateAllDialog(View view) {
-        super(DataCrow.mainFrame);
 
+        super(DcResources.getText("lblUpdateAll"), IconLibrary._icoUpdateAll);
+        
         this.view = view;
         this.module = view.getModule();
 
         setHelpIndex("dc.tools.updateall");
 
-        setTitle(DcResources.getText("lblUpdateAll"));
         buildDialog(module);
 
         setSize(DcSettings.getDimension(

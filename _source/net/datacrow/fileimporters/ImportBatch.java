@@ -130,8 +130,8 @@ public class ImportBatch extends Thread {
             }
         }
 
-        if (listener.getContainer() != null && dco.getField(DcObject._SYS_CONTAINER) != null) {
-            dco.setValue(DcObject._SYS_CONTAINER, listener.getContainer());
+        if (listener.getDcContainer() != null && dco.getField(DcObject._SYS_CONTAINER) != null) {
+            dco.setValue(DcObject._SYS_CONTAINER, listener.getDcContainer());
         }
         
         dco.applyTemplate();

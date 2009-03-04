@@ -23,56 +23,40 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.expertuser;
+package net.datacrow.core.wf.requests;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Collection;
 
-import javax.swing.JButton;
+import net.datacrow.console.windows.itemformsettings.ItemFormSettingsDialog;
+import net.datacrow.core.objects.DcObject;
 
-import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.core.DataCrow;
-import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.resources.DcResources;
+/**
+ * Request to close a form.
+ * 
+ * @author Robert Jan van der Waals
+ */
+public class UpdateItemFormSettingsWindow implements IRequest {
 
-public class MaintenancePanel extends DcPanel implements ActionListener {
+    private ItemFormSettingsDialog wdw;
+    private boolean executeOnFail = false;
 
-    public MaintenancePanel() {
-        super(null, null);
-        buildPanel();
+    public UpdateItemFormSettingsWindow(ItemFormSettingsDialog wdw) {
+        this.wdw = wdw;
+    }
+
+    public void execute(Collection<DcObject> objects) {
+        wdw.refresh();
+    }
+
+    public boolean getExecuteOnFail() {
+        return executeOnFail;
+    }
+
+    public void setExecuteOnFail(boolean b) {
+        executeOnFail = b;
     }
     
-    private void buildPanel() {
-        setLayout(Layout.getGBL());
-        
-        JButton buttonCompact = ComponentFactory.getButton(DcResources.getText("lblCompactAndShutdown"));
-        buttonCompact.setToolTipText(DcResources.getText("tpCompactAndShutdown"));
-        buttonCompact.addActionListener(this);
-        buttonCompact.setActionCommand("compact");
-        buttonCompact.setMinimumSize(new Dimension(250, 25));
-        buttonCompact.setMaximumSize(new Dimension(250, 25));
-        buttonCompact.setPreferredSize(new Dimension(250, 25));
-        buttonCompact.setMnemonic('C');
-        
-        add(buttonCompact);
-    }
-    
-    private void compactAndShutDown() {
-        try {
-        	DatabaseManager.executeSQL("SHUTDOWN COMPACT", false);
-        	DataCrow.mainFrame.setOnExitCheckForChanges(false);
-            DataCrow.mainFrame.close();
-        } catch (Exception exp) {
-        	new MessageBox(exp.getMessage(), MessageBox.ERROR);
-        }
-    }
-    
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("compact"))
-            compactAndShutDown();
+    public void end() {
+        wdw = null;
     }
 }

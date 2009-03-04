@@ -28,6 +28,7 @@ package net.datacrow.core;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -171,17 +172,15 @@ public class DataCrow {
         try {
             checkCurrentDir();
             createDirectories();
-            checkFolderPermissions();
-            
             initLog4j();
-            
-            checkPlatform();
             
             installLafs();
             
             logger.info("Using installation directory: " + installationDir);
             logger.info("Using data directory: " + dataDir);
-
+            logger.info("Using images directory: " + imageDir);
+            logger.info("Using cache directory: " + cacheDir);
+            
             // upgrade purposes (version 3.4.3 and older)
             if (new File(DataCrow.dataDir + "resources.properties").exists()) {
                 try {
@@ -196,6 +195,8 @@ public class DataCrow {
             
             // load the settings
             new DcSettings();
+            
+            checkPlatform();
             
             if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
                 DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
@@ -521,7 +522,7 @@ public class DataCrow {
         servicesDir = DataCrow.installationDir + "services/";
         cacheDir = DataCrow.installationDir + "data/cache/";
         resourcesDir = DataCrow.installationDir + "resources/";
-
+        
         DataCrow.createDirectory(new File(dataDir), "data");
         DataCrow.createDirectory(new File(cacheDir), "cache");
         DataCrow.createDirectory(new File(installationDir + "data/temp"), "temp");
@@ -542,6 +543,28 @@ public class DataCrow {
     
             new NativeMessageBox("Warning", message);
             System.exit(0);
+        }
+        
+        String db = DcSettings.getString(DcRepository.Settings.stConnectionString);
+        File file = name.equals("data") ? new File(DataCrow.dataDir + db + ".script") : new File(dir, "temp.txt");
+        
+        try {
+        
+            if (!file.exists() && !name.equals("data"))
+                file.createNewFile();
+            
+            if (!file.exists() || !file.canWrite()) 
+                throw new IOException("File cannot be created in directory " + dir);
+
+        } catch (IOException e) {
+            new NativeMessageBox("Warning", 
+                    "Data Crow does not have permissions to modify files in the " + name + " directory. " +
+                    "This indicates that the user running Data Crow has insufficient permissions. " +
+                    "The user running Data Crow must have full control over the Data Crow folder and all of its sub folders. " +
+                    "Please correct this before starting Data Crow again (see the documentation of your operating system).");
+        } finally {
+            if (!name.equals("data"))
+                file.delete();
         }
     }
     
@@ -564,25 +587,15 @@ public class DataCrow {
         logger.info("Java vendor: " + System.getProperty("java.vendor"));
         logger.info("Operating System: " + System.getProperty("os.name"));
         
-        if (!getPlatform().isJavaSun()) {
-            new NativeMessageBox("Warning", "Data Crow can only operate on Java from Sun (version 1.5 or higher). " +
-            		"Please install and use the latest Java version from Sun. Currently you are using: " + System.getProperty("java.vendor"));
-            System.exit(0);
+        boolean alreadyChecked = DcSettings.getBoolean(DcRepository.Settings.stCheckedForJavaVersion);
+        if (!getPlatform().isJavaSun() && !alreadyChecked) {
+            new NativeMessageBox("Warning", "Data Crow has only been tested on Java from Sun (version 1.5 or higher). " +
+            		"Make sure the latest Java version from Sun has been installed. You are currently using the Java version from " + System.getProperty("java.vendor") + " " +
+            		"Data Crow will now continue and will not display this message again. Upgrade your Java version in case Data Crow does not continue (hangs) or " +
+            		"if you experience any other kind of malfunction.");
+            
+            DcSettings.set(DcRepository.Settings.stCheckedForJavaVersion, Boolean.TRUE);
         }
-    }
-    
-    private static void checkFolderPermissions() {
-        String dbName = DcSettings.getString(DcRepository.Settings.stConnectionString);
-        
-        File f = new File(DataCrow.dataDir + dbName + ".script");
-        if (!new File(DataCrow.dataDir).exists() || (f.exists() && !f.canWrite())) {
-            new NativeMessageBox("Warning", 
-                    "Data Crow does not have permissions to modify files in the data directory. " +
-                    "This indicates that the user running Data Crow has insufficient permissions. " +
-                    "The user running Data Crow must have full control over the Data Crow folder and its sub folders. " +
-                    "Please correct this before starting Data Crow again (see the documentation of your operating system).");
-            System.exit(0);
-        } 
     }
     
     private static void installLafs() {

@@ -88,6 +88,7 @@ public abstract class DcRepository {
      */
     public static final class Settings {
         public static final String stLanguage = "language";
+        public static final String stCheckedForJavaVersion = "checked_for_java_version";
         public static final String stSelectItemDialogSize = "select_item_dialog_size";
         public static final String stOnlineSearchSelectedView = "online_search_selected_view";
         public static final String stInputFieldHeight = "input_field_height";
@@ -132,6 +133,7 @@ public abstract class DcRepository {
         public static final String stDeleteImageFileAfterImport = "delete_images_after_import";
         public static final String stShowQuickView = "show_quick_view";
         public static final String stBackupDialogSize = "backup_dialog_size";
+        public static final String stItemFormSettingsDialogSize = "item_form_dialog_size";
         public static final String stReportingDialogSize = "reporting_dialog_size";
         public static final String stModuleWizardFormSize = "module_wizard_form_size";
         public static final String stItemWizardFormSize = "item_wizard_form_size";

@@ -77,6 +77,7 @@ import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
+import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.Base64;
@@ -162,6 +163,9 @@ public class ItemForm extends DcFrame implements ActionListener {
         } else {
             this.dco = o.clone();
             this.moduleIndex = dco.getModule().getIndex();
+            
+            for (IRequest request : o.getRequests().get())
+                dco.addRequest(request);
         }
         
         setTitle(!update && !readonly ?
@@ -508,7 +512,9 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     public void apply() {
-        dco.removeRequests();
+        // do not remove requests
+        // dco.removeRequests();
+        
         dco.removeChildren();
         if (DcModules.get(moduleIndex).getChild() != null && childView != null) {
             for (DcObject child : childView.getItems())

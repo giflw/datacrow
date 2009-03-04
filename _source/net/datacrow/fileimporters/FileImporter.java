@@ -204,8 +204,8 @@ public abstract class FileImporter {
                 }
             }
     
-            if (listener.getContainer() != null && dco.getModule().isContainerManaged())
-                dco.setValue(DcObject._SYS_CONTAINER, listener.getContainer());
+            if (listener.getDcContainer() != null && dco.getModule().isContainerManaged())
+                dco.setValue(DcObject._SYS_CONTAINER, listener.getDcContainer());
             
             dco.applyTemplate();
             dco.setIDs();

@@ -1190,6 +1190,7 @@ public class DataManager {
                 objects.put(Integer.valueOf(module.getIndex()), items);
                 
                 Map<String, DcObject> map = new HashMap<String, DcObject>();
+                
                 for (DcObject dco : items)
                     map.put(dco.getID(), dco);
 

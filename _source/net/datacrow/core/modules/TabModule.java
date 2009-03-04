@@ -23,56 +23,47 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.expertuser;
-
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
+package net.datacrow.core.modules;
 
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.core.DataCrow;
-import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.Tab;
 
-public class MaintenancePanel extends DcPanel implements ActionListener {
+public class TabModule extends DcPropertyModule {
 
-    public MaintenancePanel() {
-        super(null, null);
-        buildPanel();
+    public TabModule() {
+        super(DcModules._TAB, "Tab", "Tab", "Tab", "Tab", "Tabs");
     }
-    
-    private void buildPanel() {
-        setLayout(Layout.getGBL());
+
+    @Override
+    public DcObject getDcObject() {
+        return new Tab();
+    }
+
+    @Override
+    public int getDefaultSortFieldIdx() {
+        return Tab._C_ORDER;
+    }
+
+    /**
+     * Initializes the default fields.
+     */
+    @Override
+    protected void initializeFields() {
+        super.initializeFields();
+        addField(new DcField(Tab._C_ORDER, getIndex(), "Order", 
+                             false, true, false, false, false,
+                             4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                             "SortOrder"));
         
-        JButton buttonCompact = ComponentFactory.getButton(DcResources.getText("lblCompactAndShutdown"));
-        buttonCompact.setToolTipText(DcResources.getText("tpCompactAndShutdown"));
-        buttonCompact.addActionListener(this);
-        buttonCompact.setActionCommand("compact");
-        buttonCompact.setMinimumSize(new Dimension(250, 25));
-        buttonCompact.setMaximumSize(new Dimension(250, 25));
-        buttonCompact.setPreferredSize(new Dimension(250, 25));
-        buttonCompact.setMnemonic('C');
-        
-        add(buttonCompact);
-    }
+        getField(DcObject._ID).setEnabled(false);
+        getField(Tab._C_ORDER).setEnabled(false);
+    }      
     
-    private void compactAndShutDown() {
-        try {
-        	DatabaseManager.executeSQL("SHUTDOWN COMPACT", false);
-        	DataCrow.mainFrame.setOnExitCheckForChanges(false);
-            DataCrow.mainFrame.close();
-        } catch (Exception exp) {
-        	new MessageBox(exp.getMessage(), MessageBox.ERROR);
-        }
-    }
-    
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("compact"))
-            compactAndShutDown();
+    @Override
+    public DcObject[] getDefaultData() throws Exception {
+        return super.getDefaultData();
     }
 }

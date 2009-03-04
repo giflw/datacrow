@@ -31,6 +31,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -76,6 +77,16 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         elements.addAll(listLeft.getElements());
     }
 
+    public void remove(Collection<DcField> fields) {
+        for (DcField field : fields)
+            remove(field);
+    }
+    
+    public void remove(DcField field) {
+        listLeft.remove(field);
+        listRight.remove(field);
+    }
+    
     public DcField[] getSelectedFields() {
         return listRight.getFields().toArray(new DcField[0]);
     }

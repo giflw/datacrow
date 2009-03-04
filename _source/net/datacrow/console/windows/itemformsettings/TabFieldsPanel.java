@@ -23,56 +23,61 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.expertuser;
+package net.datacrow.console.windows.itemformsettings;
 
-import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import javax.swing.JButton;
+import javax.swing.JPanel;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.core.DataCrow;
-import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.resources.DcResources;
+import net.datacrow.console.components.panels.FieldSelectionPanel;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 
-public class MaintenancePanel extends DcPanel implements ActionListener {
+public class TabFieldsPanel extends JPanel implements ActionListener {
 
-    public MaintenancePanel() {
-        super(null, null);
-        buildPanel();
+    private FieldSelectionPanel fld = new FieldSelectionPanel(DcModules.getCurrent(), false); 
+    private DcObject tab;
+    
+    public TabFieldsPanel(DcObject tab) {
+        this.tab = tab;
+        build();
     }
     
-    private void buildPanel() {
-        setLayout(Layout.getGBL());
+    protected void remove(Collection<DcField> fields) {
+        fld.remove(fields);
+    }
+    
+    protected DcObject getTab() {
+        return tab;
+    }
+    
+    protected Collection<DcField> getFields() {
+        Collection<DcField> fields = new ArrayList<DcField>();
         
-        JButton buttonCompact = ComponentFactory.getButton(DcResources.getText("lblCompactAndShutdown"));
-        buttonCompact.setToolTipText(DcResources.getText("tpCompactAndShutdown"));
-        buttonCompact.addActionListener(this);
-        buttonCompact.setActionCommand("compact");
-        buttonCompact.setMinimumSize(new Dimension(250, 25));
-        buttonCompact.setMaximumSize(new Dimension(250, 25));
-        buttonCompact.setPreferredSize(new Dimension(250, 25));
-        buttonCompact.setMnemonic('C');
+        for (DcField field : fld.getSelectedFields())
+            fields.add(field);
         
-        add(buttonCompact);
+        return fields;
     }
     
-    private void compactAndShutDown() {
-        try {
-        	DatabaseManager.executeSQL("SHUTDOWN COMPACT", false);
-        	DataCrow.mainFrame.setOnExitCheckForChanges(false);
-            DataCrow.mainFrame.close();
-        } catch (Exception exp) {
-        	new MessageBox(exp.getMessage(), MessageBox.ERROR);
-        }
+    private void build() {
+        
+        //**********************************************************
+        //Main Panel
+        //**********************************************************
+        add(fld,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets( 5, 5, 5, 5), 0, 0));
     }
     
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("compact"))
-            compactAndShutDown();
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
     }
 }

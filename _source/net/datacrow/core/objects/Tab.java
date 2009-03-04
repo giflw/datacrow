@@ -23,56 +23,15 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.expertuser;
+package net.datacrow.core.objects;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import net.datacrow.core.modules.DcModules;
 
-import javax.swing.JButton;
+public class Tab extends DcProperty {
 
-import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.core.DataCrow;
-import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.resources.DcResources;
-
-public class MaintenancePanel extends DcPanel implements ActionListener {
-
-    public MaintenancePanel() {
-        super(null, null);
-        buildPanel();
-    }
+    public static final int _C_ORDER = 152;
     
-    private void buildPanel() {
-        setLayout(Layout.getGBL());
-        
-        JButton buttonCompact = ComponentFactory.getButton(DcResources.getText("lblCompactAndShutdown"));
-        buttonCompact.setToolTipText(DcResources.getText("tpCompactAndShutdown"));
-        buttonCompact.addActionListener(this);
-        buttonCompact.setActionCommand("compact");
-        buttonCompact.setMinimumSize(new Dimension(250, 25));
-        buttonCompact.setMaximumSize(new Dimension(250, 25));
-        buttonCompact.setPreferredSize(new Dimension(250, 25));
-        buttonCompact.setMnemonic('C');
-        
-        add(buttonCompact);
-    }
-    
-    private void compactAndShutDown() {
-        try {
-        	DatabaseManager.executeSQL("SHUTDOWN COMPACT", false);
-        	DataCrow.mainFrame.setOnExitCheckForChanges(false);
-            DataCrow.mainFrame.close();
-        } catch (Exception exp) {
-        	new MessageBox(exp.getMessage(), MessageBox.ERROR);
-        }
-    }
-    
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("compact"))
-            compactAndShutDown();
+    public Tab() {
+        super(DcModules._TAB);
     }
 }

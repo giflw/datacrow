@@ -163,7 +163,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return panelServer != null ? panelServer.useOnlineService() : false;
     }    
     
-    public DcObject getContainer() {
+    public DcObject getDcContainer() {
         return fldContainer != null && fldContainer.getSelectedIndex() > 0 ? (DcObject) fldContainer.getSelectedItem() : null;
     }
 

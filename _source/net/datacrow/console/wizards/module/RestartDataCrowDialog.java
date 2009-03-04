@@ -106,10 +106,12 @@ public class RestartDataCrowDialog extends DcDialog implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("restart"))
-            DataCrow.mainFrame.finish(false, true);
-        else if (e.getActionCommand().equals("close"))
+        if (e.getActionCommand().equals("restart")) {
+            DataCrow.mainFrame.setOnExitCheckForChanges(false);
+            DataCrow.mainFrame.close();
+        } else if (e.getActionCommand().equals("close")) {
             close();
+        }
     }      
 }
         

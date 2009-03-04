@@ -136,7 +136,10 @@ public class Restore extends Thread {
             
             // do not save settings as the restored settings are used for upgrading purposes.
             DataManager.clearCache();
-            DataCrow.mainFrame.finish(false, false);
+            
+            DataCrow.mainFrame.setOnExitCheckForChanges(false);
+            DataCrow.mainFrame.setOnExitSaveSettings(false);
+            DataCrow.mainFrame.close();
             System.exit(0);
 
         } catch (Exception e) {

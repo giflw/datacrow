@@ -102,7 +102,16 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             "lblLanguage",
                             true,
-                            true));          
+                            true));   
+        getSettings().addSetting(_Locale,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stCheckedForJavaVersion,
+                            Boolean.FALSE,
+                            -1,
+                            "",
+                            "lblLanguage",
+                            false,
+                            false));            
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stGracefulShutdown,
@@ -493,6 +502,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stExpertFormSize,
+                            new Dimension(700, 600),
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stItemFormSettingsDialogSize,
                             new Dimension(700, 600),
                             -1,
                             "",

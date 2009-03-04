@@ -99,7 +99,7 @@ public interface IFileImportClient {
      * The container to which the resulted items are added.
      * @return A container or null.
      */
-    public DcObject getContainer();
+    public DcObject getDcContainer();
     
     /**
      * The storage medium to apply on the resulted items.
