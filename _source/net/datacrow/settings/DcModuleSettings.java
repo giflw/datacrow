@@ -120,7 +120,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
         QuickViewFieldDefinitions qvDefinitions = new QuickViewFieldDefinitions();
         
         for (DcField field : module.getFields()) {
-            fldDefinitions.add(new DcFieldDefinition(field.getIndex(), null, true, false, false));
+            fldDefinitions.add(new DcFieldDefinition(field.getIndex(), field.getModule(), null, true, false, false, false, null));
             boolean enabled = field.getValueType() == DcRepository.ValueTypes._STRING ||
                               field.getValueType() == DcRepository.ValueTypes._LONG;
             

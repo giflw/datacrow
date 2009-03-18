@@ -67,11 +67,13 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.Tab;
 import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
@@ -363,6 +365,60 @@ public class DataManager {
         }
         
         return ref;
+    }
+    
+    /**
+     * Retrieves the tab. In case it does not yet exists the tab is created and stored
+     * to the database.
+     * 
+     * @param module
+     * @param name
+     * @param create
+     * 
+     * @return Existing or newly created tab
+     */
+    public static boolean checkTab(int module, String name) {
+        boolean exists = true;
+        
+        DataFilter df = new DataFilter(DcModules._TAB);
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
+        
+        DcObject[] tabs = get(DcModules._TAB, df);
+        if (tabs == null || tabs.length == 0) {
+            try {
+                Tab tab = new Tab();
+                tab.setIDs();
+                tab.setValue(Tab._A_NAME, name);
+                tab.setValue(Tab._D_MODULE, Long.valueOf(module));
+                
+                if (name.equalsIgnoreCase(DcResources.getText("lblInformation")))
+                    tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons_system" + File.separator + "information.png"));
+                else if (name.equalsIgnoreCase(DcResources.getText("lblTechnicalInfo")))
+                    tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons_system" + File.separator + "informationtechnical.png"));
+                
+                tab.saveNew(false);
+            } catch (Exception e) {
+                logger.error(e, e);
+                exists = false;
+            }
+        }
+        
+        return exists; 
+    }
+    
+    public static DcObject getTab(int module, String name) {
+        DataFilter df = new DataFilter(DcModules._TAB);
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
+        DcObject[] tabs = get(DcModules._TAB, df);
+        return tabs != null && tabs.length > 0 ? tabs[0] : null;
+    }
+    
+    public static DcObject[] getTabs(int module) {
+        DataFilter df = new DataFilter(DcModules._TAB);
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
+        return get(DcModules._TAB, df);
     }
     
     /**

@@ -137,11 +137,11 @@ public class TemplateModule extends DcModule {
         DcFieldDefinitions fds = parent.getFieldDefinitions();
         DcFieldDefinitions definitions = new DcFieldDefinitions();
         
-        definitions.add(new DcFieldDefinition(DcTemplate._SYS_TEMPLATENAME, null, true, true, true));
-        definitions.add(new DcFieldDefinition(DcTemplate._SYS_DEFAULT, null, true, true, true));
+        definitions.add(new DcFieldDefinition(DcTemplate._SYS_TEMPLATENAME, getIndex(), null, true, true, true, true, null));
+        definitions.add(new DcFieldDefinition(DcTemplate._SYS_DEFAULT, getIndex(), null, true, true, true, false, null));
         
         for (DcFieldDefinition fd : fds.getDefinitions())
-            definitions.add(new DcFieldDefinition(fd.getIndex(), fd.getLabel(), fd.isEnabled(), false, false));
+            definitions.add(new DcFieldDefinition(fd.getIndex(), getIndex(), fd.getLabel(), fd.isEnabled(), false, false, false, null));
         
         return definitions;
     }      

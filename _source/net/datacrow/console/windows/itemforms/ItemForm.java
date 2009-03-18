@@ -24,6 +24,7 @@
 
 package net.datacrow.console.windows.itemforms;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -35,6 +36,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +49,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
@@ -56,6 +59,7 @@ import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcPictureField;
+import net.datacrow.console.components.DcReferencesField;
 import net.datacrow.console.components.panels.LoanPanel;
 import net.datacrow.console.components.panels.RelatedItemsPanel;
 import net.datacrow.console.windows.ItemTypeDialog;
@@ -64,6 +68,7 @@ import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.IChildModule;
@@ -72,6 +77,7 @@ import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.Tab;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
@@ -94,7 +100,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     protected DcObject dco;
     // the original item (for comparison of entered value; workaround for failed save issue)
     protected DcObject dcoOrig;
-    protected final int moduleIndex;
+    protected final int moduleIdx;
 
     protected Map<DcField, JLabel> labels = new HashMap<DcField, JLabel>();
     protected Map<DcField, JComponent> fields = new HashMap<DcField, JComponent>();
@@ -139,15 +145,15 @@ public class ItemForm extends DcFrame implements ActionListener {
         if (!update && !readonly && o.getModule().isAbstract()) {
             ItemTypeDialog dialog = new ItemTypeDialog(this);
             dialog.setVisible(true);
-            this.moduleIndex = dialog.getSelectedModule();
+            this.moduleIdx = dialog.getSelectedModule();
             
-            if (moduleIndex == -1)
+            if (moduleIdx == -1)
                 return;
             
             String parentID = dcoOrig.getParentID();
             
-            this.dcoOrig = DcModules.get(moduleIndex).getDcObject();
-            this.dco = DcModules.get(moduleIndex).getDcObject();
+            this.dcoOrig = DcModules.get(moduleIdx).getDcObject();
+            this.dco = DcModules.get(moduleIdx).getDcObject();
             
             if (DcModules.getCurrent().getIndex() == DcModules._CONTAINER) {
                 if (this.template == null) 
@@ -162,7 +168,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             
         } else {
             this.dco = o.clone();
-            this.moduleIndex = dco.getModule().getIndex();
+            this.moduleIdx = dco.getModule().getIndex();
             
             for (IRequest request : o.getRequests().get())
                 dco.addRequest(request);
@@ -181,10 +187,10 @@ public class ItemForm extends DcFrame implements ActionListener {
         this.getContentPane().setLayout(Layout.getGBL());
 
         initializeComponents();
-        final DcModule module = DcModules.get(moduleIndex);
+        final DcModule module = DcModules.get(moduleIdx);
         JPanel panelActions = getActionPanel(module, readonly);
 
-        addInputPanel();
+        addInputPanels();
         addChildrenPanel();
         addPictureTabs();
         addRelationPanel();
@@ -239,9 +245,9 @@ public class ItemForm extends DcFrame implements ActionListener {
     private JMenuBar getDcMenuBar() {
         JMenuBar mb = null;
         
-        FileImporter importer = DcModules.get(moduleIndex).getImporter();
+        FileImporter importer = DcModules.get(moduleIdx).getImporter();
         if (    importer != null && importer.allowReparsing() && 
-                DcModules.get(moduleIndex).getDcObject().getFileField() != null) {
+                DcModules.get(moduleIdx).getDcObject().getFileField() != null) {
 
             mb = ComponentFactory.getMenuBar();
             JMenu menuEdit = ComponentFactory.getMenu(DcResources.getText("lblFile"));
@@ -274,7 +280,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
     
     protected void applySettings() {
-        setSize(DcModules.get(moduleIndex).getSettings().getDimension(DcRepository.ModuleSettings.stItemFormSize));
+        setSize(DcModules.get(moduleIdx).getSettings().getDimension(DcRepository.ModuleSettings.stItemFormSize));
     }
     
     public JTabbedPane getTabbedPane() {
@@ -335,7 +341,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
     
     protected void saveSettings() {
-        DcModules.get(moduleIndex).setSetting(DcRepository.ModuleSettings.stItemFormSize, getSize());        
+        DcModules.get(moduleIdx).setSetting(DcRepository.ModuleSettings.stItemFormSize, getSize());        
     }
 
     public void setData(DcObject object, boolean overwrite, boolean overwriteChildren) {
@@ -381,9 +387,9 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     private void setRequiredFields() {
-        for (DcFieldDefinition def : DcModules.get(moduleIndex).getFieldDefinitions().getDefinitions()) {
+        for (DcFieldDefinition def : DcModules.get(moduleIdx).getFieldDefinitions().getDefinitions()) {
             if (def.isRequired()) {
-                JLabel label = labels.get(DcModules.get(moduleIndex).getField(def.getIndex()));
+                JLabel label = labels.get(DcModules.get(moduleIdx).getField(def.getIndex()));
                 label.setForeground(ComponentFactory.getRequiredColor());
             }
         }
@@ -516,7 +522,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         // dco.removeRequests();
         
         dco.removeChildren();
-        if (DcModules.get(moduleIndex).getChild() != null && childView != null) {
+        if (DcModules.get(moduleIdx).getChild() != null && childView != null) {
             for (DcObject child : childView.getItems())
                 dco.addChild(child);
         }
@@ -555,7 +561,7 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     private void onlineSearch() {
     	apply();
-        DcModules.get(moduleIndex).getOnlineServices().getUI(dco, this, true).setVisible(true);
+        DcModules.get(moduleIdx).getOnlineServices().getUI(dco, this, true).setVisible(true);
     }
     
     protected void saveValues() {
@@ -597,22 +603,36 @@ public class ItemForm extends DcFrame implements ActionListener {
         }
     }
 
-    protected void addInputPanel() {
-        JPanel panelInfo = new JPanel();
-        JPanel panelTech = new JPanel();
-        panelInfo.setLayout(Layout.getGBL());
-        panelTech.setLayout(Layout.getGBL());
-
-        DcModule module = DcModules.get(moduleIndex);
-
-        int yTech = 0;
-        int yInfo = 0;
-        boolean technicalInfoPresent = false;
+    protected void addInputPanels() {
+        Map<String, Integer> positions = new HashMap<String, Integer>();
+        Map<String, JPanel> panels = new LinkedHashMap<String, JPanel>();
         
+        DcModule module = DcModules.get(moduleIdx);
+        
+        // get the tabs (sorted) and initialize the panels
+        for (DcObject tab : DataManager.getTabs(moduleIdx)) {
+            String name = tab.getDisplayString(Tab._A_NAME);
+            JPanel panel = new JPanel();
+            panel.setLayout(Layout.getGBL());
+            panels.put(name, panel);
+        }
+        
+        // add the fields to the panels
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-            int index = definition.getIndex();
+            
+            String name = definition.getTab();
+            if (name == null || name.trim().length() == 0)
+                continue;
 
-            DcField field = dco.getField(index);
+            JPanel panel = panels.get(name);
+
+            if (!positions.containsKey(name))
+                positions.put(name, new Integer(0));
+            
+            int y = positions.get(definition.getTab()).intValue();
+            
+            int fieldIdx = definition.getIndex();
+            DcField field = dco.getField(fieldIdx);
             JLabel label = labels.get(field);
             JComponent component = fields.get(field);
             
@@ -620,8 +640,8 @@ public class ItemForm extends DcFrame implements ActionListener {
         	      field.isEnabled() && 
                   field.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
                   field.getValueType() != DcRepository.ValueTypes._ICON &&
-                 (index != dco.getParentReferenceFieldIndex() || 
-                  index == DcObject._SYS_CONTAINER )) { // not a reference field
+                 (fieldIdx != dco.getParentReferenceFieldIndex() || 
+                  fieldIdx == DcObject._SYS_CONTAINER )) { // not a reference field
 
                 int stretch = GridBagConstraints.HORIZONTAL;
                 int factor = 1;
@@ -656,47 +676,47 @@ public class ItemForm extends DcFrame implements ActionListener {
                     ((DcCheckBox) component).setText("");
 
                 label.setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
-                if (!field.isTechnicalInfo()) {
-                	int ySpace = yInfo == 0 ? 5 : 0; 
-                	
-                    panelInfo.add(label, Layout.getGBC(0, yInfo, 1, 1, 1.0, 1.0
-                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                              new Insets(ySpace, 2, 0, 5), 0, 0));
-                    panelInfo.add(component,  Layout.getGBC(1, yInfo, 1, 1, factor, factor
-                             ,GridBagConstraints.NORTHWEST, stretch,
-                              new Insets(ySpace, 0, 0, 2), 0, 0));
-                    yInfo++;
-                } else {
-                	int ySpace = yTech == 0 ? 5 : 0; 
-                	
-                    technicalInfoPresent = true;
-                    panelTech.add(label, Layout.getGBC(0, yTech, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                             new Insets(ySpace, 2, 0, 5), 0, 0));
-                    panelTech.add(component,  Layout.getGBC(1, yTech, 1, 1, 50, 50
-                            ,GridBagConstraints.NORTHWEST, stretch,
-                             new Insets(ySpace, 0, 0, 2), 0, 0));
-                    yTech++;
-                }
+                
+                int space = y == 0 ? 5 : 0; 
+                panel.add(label,     Layout.getGBC(0, y, 1, 1, 1.0, 1.0
+                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                         new Insets(space, 2, 0, 5), 0, 0));
+                panel.add(component, Layout.getGBC(1, y, 1, 1, factor, factor
+                        ,GridBagConstraints.NORTHWEST, stretch,
+                         new Insets(space, 0, 0, 2), 0, 0));
+                
+                positions.put(definition.getTab(), Integer.valueOf(y + 1));
                 
                 if (field.isReadOnly())
                     ComponentFactory.setUneditable(component);
             }
         }
         
-        tabbedPane.addTab(DcResources.getText("lblDescription"), IconLibrary._icoInformation, panelInfo);
-        if (technicalInfoPresent) {
-            JPanel dummy = new JPanel();
-            dummy.setLayout(Layout.getGBL());
-            dummy.add(panelTech,  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-                      ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                      new Insets(2, 0, 0, 0), 0, 0));
-            tabbedPane.addTab(DcResources.getText("lblTechnicalInfo"), IconLibrary._icoInformationTechnical, dummy);
+        for (String tab : panels.keySet()) {
+            
+            JPanel panel = panels.get(tab);
+            
+            // check if we have vertical stretching fields.
+            boolean containsLongFields = false;
+            for (Component c : panel.getComponents()) 
+                if (c instanceof JScrollPane || c instanceof JTextArea || c instanceof DcReferencesField)
+                    containsLongFields = true;
+            
+            if (containsLongFields) {
+                tabbedPane.addTab(tab, DataManager.getTab(moduleIdx, tab).getIcon(), panel);
+            } else {
+                JPanel dummy = new JPanel();
+                dummy.setLayout(Layout.getGBL());
+                dummy.add(panel,  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+                       ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                        new Insets(2, 0, 0, 0), 0, 0));
+                tabbedPane.addTab(tab, DataManager.getTab(moduleIdx, tab).getIcon(), dummy);
+            }
         }
     }
 
     protected void addChildrenPanel() {
-        DcModule module = DcModules.get(moduleIndex);
+        DcModule module = DcModules.get(moduleIdx);
         DcModule childModule = module.getChild();
         
         if (childModule != null) {
@@ -709,15 +729,15 @@ public class ItemForm extends DcFrame implements ActionListener {
     
     protected void addRelationPanel() {
     	if (update) {
-	        if (DcModules.getActualReferencingModules(moduleIndex).size() > 0 &&
-	            moduleIndex != DcModules._CONTACTPERSON &&
-	            moduleIndex != DcModules._CONTAINER) {
+	        if (DcModules.getActualReferencingModules(moduleIdx).size() > 0 &&
+	            moduleIdx != DcModules._CONTACTPERSON &&
+	            moduleIdx != DcModules._CONTAINER) {
 	        	
 	            RelatedItemsPanel rip = new RelatedItemsPanel(dco);
 	            tabbedPane.addTab(rip.getTitle(), rip.getIcon(),  rip);
 	        }
 	        
-	        if (moduleIndex == DcModules._CONTACTPERSON) {
+	        if (moduleIdx == DcModules._CONTACTPERSON) {
 	        	LoanInformationPanel panel = new LoanInformationPanel(dco);
 	            tabbedPane.addTab(panel.getTitle(), panel.getIcon(),  panel);
 	        }
@@ -729,7 +749,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     protected void addPictureTabs() {
-        DcModule module = DcModules.get(moduleIndex);
+        DcModule module = DcModules.get(moduleIdx);
 
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
             int index = definition.getIndex();

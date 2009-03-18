@@ -66,7 +66,9 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
     private static final int _COL_ENABLED = 2;
     private static final int _COL_REQUIRED = 3;
     private static final int _COL_DESCRIPTIVE = 4;
-    private static final int _COL_FIELD = 5;
+    private static final int _COL_UNIQUE = 5;
+    private static final int _COL_FIELD = 6;
+    private static final int _COL_TAB = 7;
 
     private DefinitionPanel panelDefinitionsParent = null;
     private DefinitionPanel panelDefinitionsChild = null;
@@ -143,8 +145,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
 
         JTabbedPane tp = ComponentFactory.getTabbedPane();
 
-        DcModule module = DcModules.get(DcSettings
-                .getInt(DcRepository.Settings.stModule));
+        DcModule module = DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule));
         panelDefinitionsParent = new DefinitionPanel(module);
 
         tp.addTab(DcResources.getText("lblXFields", module.getLabel()),
@@ -156,22 +157,17 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
                     .getLabel()), panelDefinitionsChild);
         }
 
-        getContentPane().add(
-                tp,
-                Layout.getGBC(0, 0, 1, 1, 10.0, 10.0,
+        getContentPane().add(tp, Layout.getGBC(0, 0, 1, 1, 10.0, 10.0,
                         GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                         new Insets(5, 5, 5, 5), 0, 0));
-        getContentPane().add(
-                panelActions,
-                Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
+        getContentPane().add(panelActions, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
                         GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
                         new Insets(5, 5, 5, 5), 0, 0));
 
         pack();
 
         Settings settings = DcModules.getCurrent().getSettings();
-        Dimension dim = settings
-                .getDimension(DcRepository.ModuleSettings.stFieldSettingsDialogSize);
+        Dimension dim = settings.getDimension(DcRepository.ModuleSettings.stFieldSettingsDialogSize);
         setSize(dim);
 
         setCenteredLocation();
@@ -184,8 +180,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             save();
     }
 
-    protected static class DefinitionPanel extends JPanel implements
-            ActionListener {
+    protected static class DefinitionPanel extends JPanel implements ActionListener {
 
         private DcTable table;
         private DcModule module;
@@ -210,9 +205,12 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         private void buildPanel() {
             setLayout(Layout.getGBL());
 
-            table.setColumnCount(6);
+            table.setColumnCount(8);
 
-            TableColumn c = table.getColumnModel().getColumn(_COL_FIELD);
+            TableColumn c = table.getColumnModel().getColumn(_COL_TAB);
+            table.removeColumn(c);
+
+            c = table.getColumnModel().getColumn(_COL_FIELD);
             table.removeColumn(c);
 
             c = table.getColumnModel().getColumn(_COL_ORIG_LABEL);
@@ -248,7 +246,15 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             c.setCellEditor(new DefaultCellEditor(checkDescriptive));
             c.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
             c.setHeaderValue(DcResources.getText("lblDescriptive"));
-
+            
+            c = table.getColumnModel().getColumn(_COL_UNIQUE);
+            JCheckBox checkUnique = new JCheckBox();
+            checkUnique.addActionListener(this);
+            checkUnique.setActionCommand("checkDependencies");
+            c.setCellEditor(new DefaultCellEditor(checkUnique));
+            c.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
+            c.setHeaderValue(DcResources.getText("lblUnique"));
+            
             applyDefinitions();
 
             JScrollPane scroller = new JScrollPane(table);
@@ -273,14 +279,17 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             int row = table.getSelectedRow();
             if (row > -1) {
                 DcFieldDefinition definition = getDefinition(row);
-                DcField field = (DcField) table.getValueAt(row, _COL_FIELD,
-                        true);
-                if (field.isUiOnly())
+                DcField field = (DcField) table.getValueAt(row, _COL_FIELD, true);
+                
+                if (field.isUiOnly()) {
                     table.setValueAt(Boolean.FALSE, row, _COL_REQUIRED);
+                    table.setValueAt(Boolean.FALSE, row, _COL_UNIQUE);
+                }
 
                 if (!definition.isEnabled()) {
                     table.setValueAt(Boolean.FALSE, row, _COL_DESCRIPTIVE);
                     table.setValueAt(Boolean.FALSE, row, _COL_REQUIRED);
+                    table.setValueAt(Boolean.FALSE, row, _COL_UNIQUE);
                 }
             }
         }
@@ -309,28 +318,37 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         public void applyDefinitions() {
             table.clear();
 
-            for (DcFieldDefinition definition : module.getFieldDefinitions()
-                    .getDefinitions())
-                table.addRow(definition.getDisplayValues(module));
+            for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
+                
+                Object[] row = new Object[8];
+                row[_COL_ORIG_LABEL] = module.getField(definition.getIndex()).getSystemName();
+                row[_COL_CUSTOM_LABEL] = definition.getLabel();
+                row[_COL_ENABLED] = Boolean.valueOf(definition.isEnabled());
+                row[_COL_REQUIRED] = Boolean.valueOf(definition.isRequired());
+                row[_COL_DESCRIPTIVE] = Boolean.valueOf(definition.isDescriptive());
+                row[_COL_UNIQUE] = Boolean.valueOf(definition.isUnique());
+                row[_COL_FIELD] = module.getField(definition.getIndex());
+                row[_COL_TAB] = definition.getTab();
+                
+                table.addRow(row);
+            }
         }
 
         private DcFieldDefinition getDefinition(int row) {
-            String name = (String) table.getValueAt(row, _COL_CUSTOM_LABEL,
-                    true);
-            boolean enabled = ((Boolean) table.getValueAt(row, _COL_ENABLED,
-                    true)).booleanValue();
-            boolean required = ((Boolean) table.getValueAt(row, _COL_REQUIRED,
-                    true)).booleanValue();
-            boolean descriptive = ((Boolean) table.getValueAt(row,
-                    _COL_DESCRIPTIVE, true)).booleanValue();
-
+            String name = (String) table.getValueAt(row, _COL_CUSTOM_LABEL, true);
+            boolean enabled = ((Boolean) table.getValueAt(row, _COL_ENABLED, true)).booleanValue();
+            boolean required = ((Boolean) table.getValueAt(row, _COL_REQUIRED, true)).booleanValue();
+            boolean descriptive = ((Boolean) table.getValueAt(row, _COL_DESCRIPTIVE, true)).booleanValue();
+            boolean unique = ((Boolean) table.getValueAt(row,_COL_UNIQUE, true)).booleanValue();
+            String tab = ((String) table.getValueAt(row, _COL_TAB, true));
+            
             DcField field = (DcField) table.getValueAt(row, _COL_FIELD, true);
 
             if (field.isReadOnly() || field.isUiOnly())
                 required = false;
 
-            return new DcFieldDefinition(field.getIndex(), name, enabled,
-                    required, descriptive);
+            return new DcFieldDefinition(
+                    field.getIndex(), module.getIndex(), name, enabled, required, descriptive, unique, tab);
         }
 
         public DcFieldDefinitions getDefinitions() {

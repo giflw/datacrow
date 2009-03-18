@@ -30,6 +30,7 @@ import net.datacrow.core.modules.DcModules;
 public class Tab extends DcProperty {
 
     public static final int _C_ORDER = 152;
+    public static final int _D_MODULE = 153;
     
     public Tab() {
         super(DcModules._TAB);

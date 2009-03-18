@@ -140,7 +140,7 @@ public class DcValue implements Serializable {
        } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
     	   if (o instanceof DcImageIcon) {
     		   byte[] bytes = ((DcImageIcon) o).getBytes();
-    		   setValueNative(new String(Base64.encode(bytes)), field);
+		       setValueNative(bytes != null ? new String(Base64.encode(bytes)) : null, field);
     	   } else if (o != null && o instanceof byte[] && ((byte[]) o).length > 0)
                setValueNative(new String(Base64.encode((byte[]) o)), field);
            else 

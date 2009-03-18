@@ -57,68 +57,89 @@ public abstract class SettingsConversion {
         
         for (DcModule module : DcModules.getModules()) {
             
-            if (DatabaseManager.getOriginalVersion().isOlder(new Version(3, 4, 0, 0))) {
+            Properties properties = new Properties();
+            File file = null;
+            if (DatabaseManager.getOriginalVersion().isOlder(new Version(3, 4, 9, 0))) {
                 try {
                     DcModuleSettings settings = new DcModuleSettings(module);
-                    File file = settings.getSettings().getSettingsFile();
                     
-                    Properties properties = new Properties();
+                    file = settings.getSettings().getSettingsFile();
                     FileInputStream fis = new FileInputStream(file);
                     properties.load(fis);
                     fis.close();
                     
-                    // get the old field definitions
-                    String value = (String) properties.get(DcRepository.ModuleSettings.stFieldDefinitions);
-                    LegacyFieldDefinitions definitions = new LegacyFieldDefinitions();
-                    
-                    int group = value.indexOf("}");
-                    while (group > -1) {
-                        String s = value.substring(1, group);
-                        definitions.add(s);
-                        if (value.length() > group + 1) {
-                            value = value.substring(group + 1);
-                            group = value.indexOf("}");
-                        } else {
-                            group = -1;
-                        }
+                } catch (Exception e) {
+                    logger.debug("Could not convert settings for module " + module.getLabel(), e);
+                } 
+            }
+            
+            if (DatabaseManager.getOriginalVersion().isOlder(new Version(3, 4, 9, 0))) {
+                
+                LegacyFieldDefinitions definitions = new LegacyFieldDefinitions();
+                
+                // create the table column order
+                Collection<Integer> c = new ArrayList<Integer>();
+                for (LegacyFieldDefinition definition : definitions.getDefinitions()) {
+                    if (definition.isVisible())
+                        c.add(Integer.valueOf(definition.getIndex()));
+                }
+                
+                int[] order = new int[c.size()];
+                int idx = 0;
+                for (Integer i : c)
+                    order[idx++] = i.intValue();
+                
+                if (order.length > 0) {
+                    String s = new Setting(DcRepository.ValueTypes._INTEGERARRAY, 
+                            DcRepository.ModuleSettings.stTableColumnOrder,
+                            order, -1, "", "", false, false).getValueAsString();
+                    properties.put(DcRepository.ModuleSettings.stTableColumnOrder, s);
+                    continue;
+                }
+            }
+            
+            if (DatabaseManager.getOriginalVersion().isOlder(new Version(3, 4, 0, 0))) {
+                // get the old field definitions
+                String value = (String) properties.get(DcRepository.ModuleSettings.stFieldDefinitions);
+                LegacyFieldDefinitions definitions = new LegacyFieldDefinitions();
+                
+                int group = value.indexOf("}");
+                while (group > -1) {
+                    String s = value.substring(1, group);
+                    definitions.add(s);
+                    if (value.length() > group + 1) {
+                        value = value.substring(group + 1);
+                        group = value.indexOf("}");
+                    } else {
+                        group = -1;
                     }
+                }
+                
+                // create the new field definitions
+                net.datacrow.settings.definitions.DcFieldDefinitions newDefs = new net.datacrow.settings.definitions.DcFieldDefinitions();
+                for (LegacyFieldDefinition definition : definitions.getDefinitions()) {
+                    newDefs.add(new net.datacrow.settings.definitions.DcFieldDefinition(
+                            definition.getIndex(),
+                            module.getIndex(),
+                            definition.getLabel(),
+                            definition.isEnabled(),
+                            definition.isRequired(),
+                            definition.isDescriptive(),
+                            false,
+                            null));
+                }
+                
+                String s = new Setting(DcRepository.ValueTypes._DEFINITIONGROUP, 
+                        DcRepository.ModuleSettings.stFieldDefinitions,
+                        newDefs, -1, "", "", false, false).getValueAsString();
+                properties.put(DcRepository.ModuleSettings.stFieldDefinitions, s);
                     
-                    // create the table column order
-                    Collection<Integer> c = new ArrayList<Integer>();
-                    for (LegacyFieldDefinition definition : definitions.getDefinitions()) {
-                        if (definition.isVisible())
-                            c.add(Integer.valueOf(definition.getIndex()));
-                    }
-                    
-                    int[] order = new int[c.size()];
-                    int idx = 0;
-                    for (Integer i : c)
-                        order[idx++] = i.intValue();
-                    
-                    if (order.length > 0) {
-                        String s = new Setting(DcRepository.ValueTypes._INTEGERARRAY, 
-                                DcRepository.ModuleSettings.stTableColumnOrder,
-                                order, -1, "", "", false, false).getValueAsString();
-                        properties.put(DcRepository.ModuleSettings.stTableColumnOrder, s);
-                    }
-                    
-                    // create the new field definitions
-                    net.datacrow.settings.definitions.DcFieldDefinitions newDefs = new net.datacrow.settings.definitions.DcFieldDefinitions();
-                    for (LegacyFieldDefinition definition : definitions.getDefinitions()) {
-                        newDefs.add(new net.datacrow.settings.definitions.DcFieldDefinition(
-                                definition.getIndex(),
-                                definition.getLabel(),
-                                definition.isEnabled(),
-                                definition.isRequired(),
-                                definition.isDescriptive()));
-                    }
-                    
-                    String s = new Setting(DcRepository.ValueTypes._DEFINITIONGROUP, 
-                            DcRepository.ModuleSettings.stFieldDefinitions,
-                            newDefs, -1, "", "", false, false).getValueAsString();
-                    properties.put(DcRepository.ModuleSettings.stFieldDefinitions, s);
-                    
-                    // and store the new settings to the module settings file
+            }
+            
+            if (DatabaseManager.getOriginalVersion().isOlder(new Version(3, 4, 9, 0)) && file != null) {
+                
+                try {
+                    //  and store the new settings to the module settings file
                     FileOutputStream fos = new FileOutputStream(file);
                     properties.store(fos, "");
                     fos.close();
@@ -128,6 +149,7 @@ public abstract class SettingsConversion {
                 } catch (Exception e) {
                     logger.debug("Could not convert settings for module " + module.getLabel(), e);
                 } 
+
             }
         }
     }

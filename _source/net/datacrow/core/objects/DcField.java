@@ -304,6 +304,10 @@ public class DcField implements Serializable{
         }
     }
     
+    public DcFieldDefinition getDefinition() {
+        return DcModules.get(module).getFieldDefinitions().get(getIndex());
+    }
+    
     /**
      * The key used for setting the value in the resources.
      */

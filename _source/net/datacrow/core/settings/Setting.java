@@ -340,7 +340,7 @@ public class Setting {
                     value = sValue;
             }
         } catch (Exception e) {
-            logger.error("An error occurredw while converting [" + s + "] to a valid " +
+            logger.error("An error occurred while converting [" + s + "] to a valid " +
                          "settings value", e);
         }
     }

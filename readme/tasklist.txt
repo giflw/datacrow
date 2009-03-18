@@ -21,6 +21,15 @@ Online services
 ---------------------------------------------------------------------------------------------------------
 [ ] Import Dialog; directories are not added even when they are selected (software module) +
     Add files to description when only dir is selected.
+[ ] Check the sort order in the web module; is it still broken or is this because of the old version?
+[ ] Import functionality: log content of the folder in the description field.
+[ ] Import functionality: directory selection is broken. Directories should be logged when selected.
+[ ] Silent strart of the web server: -password -username = hides log screens.
+[x] The Java from Sun check should only be a warnign after which the user can continue (setting is saved).
+    (perform check twice and update settings).
+[ ] Mass update functionality: allow update by ISBN.
+
+
 
 
 3.4.8

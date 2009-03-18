@@ -225,7 +225,7 @@ public class DcModules {
         register(new LoanModule());
         register(new UserModule());
         register(new PermissionModule());
-        //register(new TabModule());
+        register(new TabModule());
     }
     
     /**

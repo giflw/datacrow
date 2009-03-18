@@ -117,15 +117,17 @@ public class DcFieldDefinitions implements IDefinitions {
             c.add((String) st.nextElement());
         
         String[] values = c.toArray(new String[0]);
-        int field = Integer.valueOf(values[0]).intValue();
-        String name = values[1] == null || values[1].toLowerCase().equals("null") ? "" : values[1];
-        boolean enabled = Boolean.valueOf(values[2]).booleanValue();
-        boolean required = Boolean.valueOf(values[3]).booleanValue();
         
-        boolean descriptive = values.length > 5 ? Boolean.valueOf(values[5]).booleanValue() : 
-                              values.length > 4 ? Boolean.valueOf(values[4]).booleanValue() : false;
+        int field = Integer.valueOf(values[0]).intValue();
+        int module = Integer.valueOf(values[1]).intValue();
+        String name = values[2] == null || values[2].toLowerCase().equals("null") ? "" : values[2];
+        boolean enabled = Boolean.valueOf(values[3]).booleanValue();
+        boolean required = Boolean.valueOf(values[4]).booleanValue();
+        boolean descriptive = Boolean.valueOf(values[5]).booleanValue();
+        boolean unique = Boolean.valueOf(values[6]).booleanValue();
+        String tab = values[7] == null || values[7].toLowerCase().equals("null") ? "" : values[7];
         
         removeDefinition(field);
-    	add(new DcFieldDefinition(field, name, enabled, required, descriptive));	
+    	add(new DcFieldDefinition(field, module, name, enabled, required, descriptive, unique, tab));	
     }
 }

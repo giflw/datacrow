@@ -31,7 +31,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -77,16 +76,6 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         elements.addAll(listLeft.getElements());
     }
 
-    public void remove(Collection<DcField> fields) {
-        for (DcField field : fields)
-            remove(field);
-    }
-    
-    public void remove(DcField field) {
-        listLeft.remove(field);
-        listRight.remove(field);
-    }
-    
     public DcField[] getSelectedFields() {
         return listRight.getFields().toArray(new DcField[0]);
     }
@@ -159,9 +148,20 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         scrollerRight.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollerRight.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
-        add(txtFilter,     Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
+        JPanel panelFilter = new JPanel();
+        panelFilter.setLayout(Layout.getGBL());
+        
+        panelFilter.add(ComponentFactory.getLabel(DcResources.getText("lblFilter")), 
+                 Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 0), 0, 0));
+        panelFilter.add(txtFilter,     Layout.getGBC( 1, 0, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));
+        
+        add(panelFilter,  Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 5, 0, 0, 0), 0, 0));
         add(ComponentFactory.getLabel(DcResources.getText("lblAvailableFields")),  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                  new Insets( 5, 0, 0, 0), 0, 0));

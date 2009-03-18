@@ -25,23 +25,48 @@
 
 package net.datacrow.settings.definitions;
 
-import net.datacrow.core.modules.DcModule;
+import org.apache.log4j.Logger;
+
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.Utilities;
 
 public class DcFieldDefinition extends Definition {
     
+    private static Logger logger = Logger.getLogger(DcFieldDefinition.class.getName());
+    
     private int index;
+    private int module;
+    
     private boolean required;
     private boolean enabled;
+    private boolean unique;
     private boolean descriptive;
-    private String label;
     
-    public DcFieldDefinition(int index, String label, boolean enabled, boolean required, boolean descriptive) {
+    private String label;
+    private String tab;
+    
+    public DcFieldDefinition(int index, 
+                             int module,
+                             String label, 
+                             boolean enabled, 
+                             boolean required, 
+                             boolean descriptive, 
+                             boolean unique,
+                             String tab) {
+        
         this.index = index;
+        this.module = module;
         this.required = required;
         this.enabled = enabled;
         this.descriptive = descriptive;
-        this.label = label;
+        this.label = label == null || "null".equalsIgnoreCase(label) ? "" : label;
+        this.unique = unique;
+        this.tab = tab;
     }
     
     public void setIndex(int index) {
@@ -51,7 +76,15 @@ public class DcFieldDefinition extends Definition {
     public int getIndex() {
         return index;
     }
-    
+
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public void setUnique(boolean unique) {
+        this.unique = unique;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }    
@@ -60,6 +93,40 @@ public class DcFieldDefinition extends Definition {
         this.enabled = b;
     }  
     
+    public String getTabNative() {
+        return tab;
+    }
+    
+    public String getTab() {
+        if (Utilities.isEmpty(tab)) {
+            DcField field = DcModules.get(module).getField(index);
+            
+            if (field.isTechnicalInfo()) {
+                tab = DcResources.getText("lblTechnicalInfo"); 
+            } else if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
+                  field.isEnabled() && 
+                  field.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
+                  field.getValueType() != DcRepository.ValueTypes._ICON &&
+                 (index != DcModules.get(module).getParentReferenceFieldIndex() || 
+                  index == DcObject._SYS_CONTAINER )) { // not a reference field
+                
+                tab = DcResources.getText("lblInformation");
+            }
+        }
+        
+        if (tab != null && tab.length() > 0) {
+            // check if the tab exists. If not it will be created.
+            if (!DataManager.checkTab(module, tab))
+                logger.error("Tab with name " + tab + " does not exist and could not be created. Field with " + label + " will not be shown!");
+        }
+        
+        return tab;
+    }
+
+    public void setTab(String tab) {
+        this.tab = tab;
+    }
+
     public boolean isRequired() {
         return required;
     }
@@ -81,17 +148,12 @@ public class DcFieldDefinition extends Definition {
         this.label = label;
     }
     
-    public Object[] getDisplayValues(DcModule module) {
-        String s = DcResources.getText(module.getField(index).getResourceKey());
-        s = s == null ? module.getField(index).getSystemName() : s;
-        
-        return new Object[] {s, label, enabled, required, descriptive,
-                             module.getField(index)};
-    }    
-    
     @Override
     public String toSettingValue() {
-        return index + "/&/" + (label == null || label.length() == 0 ? "null" : label) + "/&/" + enabled + "/&/" + required + "/&/" + descriptive;
+        return index + "/&/" + module + 
+               "/&/" + (label == null || label.length() == 0 ? "null" : label) + 
+               "/&/" + enabled + "/&/" + required + "/&/" + descriptive + 
+               "/&/" + unique + "/&/" + (getTab() == null || getTab().length() == 0 ? "null" : getTab());
     }
     
     @Override

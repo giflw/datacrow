@@ -53,6 +53,7 @@ import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.Requests;
 import net.datacrow.core.wf.requests.SynchronizeWithManagerRequest;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.definitions.DcFieldDefinition;
 
 import org.apache.log4j.Logger;
 
@@ -399,19 +400,17 @@ public class DatabaseManager {
      */
     public static boolean isUnique(DcObject o, boolean isExisting) {
         if (o.hasPrimaryKey() && !o.getModule().isChildModule()) {
-            boolean hasRequiredFields = false;
+            boolean hasUniqueFields = false;
             DcObject dco = o.getModule().getDcObject();
 
-            int[] fields = o.getFieldIndices();
-            for (int i = 0 ; i < fields.length; i++) {
-                int field = fields[i];
-                if (o.isRequired(field)) {
-                    hasRequiredFields = true;
-                    dco.setValue(field, o.getValue(field));
+            for (DcFieldDefinition def : o.getModule().getFieldDefinitions().getDefinitions()) {
+                if (def.isUnique()) {
+                    dco.setValue(def.getIndex(), o.getValue(def.getIndex()));
+                    hasUniqueFields = true;
                 }
             }
-
-            if (hasRequiredFields) {
+                
+            if (hasUniqueFields) {
                 DataFilter df = new DataFilter(dco);
                 DcObject[] objects = DataManager.get(o.getModule().getIndex(), df);
                 
@@ -419,8 +418,7 @@ public class DatabaseManager {
                 for (int i = 0; i < objects.length; i++)
                 	count = !isExisting || !objects[i].getID().equals(o.getID()) ? count + 1 : count;
 
-                if (count > 0)
-                    return false;
+                if (count > 0) return false;
             }
         }
         return true;

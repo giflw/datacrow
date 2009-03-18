@@ -35,6 +35,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.NavigationPanel;
@@ -45,12 +47,14 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Tab;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.UpdateItemFormSettingsWindow;
 
 public class TabPanel extends JPanel implements ActionListener {
     
-
+    private static Logger logger = Logger.getLogger(TabPanel.class.getName());
+    
     private ItemFormSettingsDialog dlg;
     private DcTable tblTabs = ComponentFactory.getDCTable(DcModules.get(DcModules._TAB), true, false);
     
@@ -67,11 +71,24 @@ public class TabPanel extends JPanel implements ActionListener {
     
     public void refresh() {
         tblTabs.clear();
-        tblTabs.add(DataManager.get(DcModules._TAB, null));
+        tblTabs.add(DataManager.getTabs(dlg.getModule()));
+    }
+    
+    public void save() {
+        int order = 0;
+        for (DcObject dco : tblTabs.getItems()) {
+            try {
+                dco.setValue(Tab._C_ORDER, Integer.valueOf(order++));
+                dco.saveUpdate(false);
+            } catch (ValidationException ve) {
+                logger.error("Could not set the order for tab " + dco, ve);
+            }
+        }
     }
     
     private void addTab() {
         Tab tab = new Tab();
+        tab.setValue(Tab._D_MODULE, Long.valueOf(dlg.getModule()));
         tab.addRequest(new UpdateItemFormSettingsWindow(dlg));
         ItemForm frm = new ItemForm(null, false, false, tab, true);
         frm.setVisible(true);
@@ -83,10 +100,11 @@ public class TabPanel extends JPanel implements ActionListener {
             return;
         }
         
-        for (int row = tblTabs.getSelectedIndices().length; row > 0; row--) {
-            DcObject dco = tblTabs.getItemAt(row - 1);
+        int[] rows = tblTabs.getSelectedIndices();
+        for (int i = rows.length - 1; i > -1; i--) {
+            DcObject dco = tblTabs.getItemAt(rows[i]);
             dco.delete();
-            tblTabs.removeRow(row - 1);
+            tblTabs.removeRow(rows[i]);
         }
     }
     
@@ -108,7 +126,7 @@ public class TabPanel extends JPanel implements ActionListener {
         
         NavigationPanel panelNav = new NavigationPanel(tblTabs);
         
-        panelTable.add(sp,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        panelTable.add(sp,  Layout.getGBC( 0, 0, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));
         panelTable.add(panelNav, Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,

@@ -54,16 +54,16 @@ public class TabModule extends DcPropertyModule {
     protected void initializeFields() {
         super.initializeFields();
         addField(new DcField(Tab._C_ORDER, getIndex(), "Order", 
-                             false, true, false, false, false,
-                             4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
-                             "SortOrder"));
+                false, true, false, false, false,
+                4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                "SortOrder"));
+        
+        addField(new DcField(Tab._D_MODULE, getIndex(), "Module", 
+                false, true, false, false, false,
+                4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                "Module"));        
         
         getField(DcObject._ID).setEnabled(false);
         getField(Tab._C_ORDER).setEnabled(false);
     }      
-    
-    @Override
-    public DcObject[] getDefaultData() throws Exception {
-        return super.getDefaultData();
-    }
 }

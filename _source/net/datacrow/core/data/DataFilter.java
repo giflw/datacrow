@@ -345,6 +345,8 @@ public class DataFilter {
         storage += "<ENTRIES>\n";
         
         for (DataFilterEntry entry : entries) {
+            
+            if (entry == null) continue;
 
             storage += "<ENTRY>\n";
             
