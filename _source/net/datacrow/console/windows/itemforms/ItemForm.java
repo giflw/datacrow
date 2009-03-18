@@ -59,7 +59,6 @@ import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcPictureField;
-import net.datacrow.console.components.DcReferencesField;
 import net.datacrow.console.components.panels.LoanPanel;
 import net.datacrow.console.components.panels.RelatedItemsPanel;
 import net.datacrow.console.windows.ItemTypeDialog;
@@ -644,11 +643,11 @@ public class ItemForm extends DcFrame implements ActionListener {
                   fieldIdx == DcObject._SYS_CONTAINER )) { // not a reference field
 
                 int stretch = GridBagConstraints.HORIZONTAL;
-                int factor = 1;
+                int factor = 10;
 
                 if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD) {
                     stretch = GridBagConstraints.BOTH;
-                    factor = 50;
+                    factor = 200;
 
                     DcLongTextField longText = (DcLongTextField) component;
                     longText.setMargin(new Insets(1, 1, 1, 5));
@@ -663,9 +662,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                     pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                     component = pane;
-                } else {
-                	component.setPreferredSize(new Dimension(300, ComponentFactory.getPreferredFieldHeight()));
-                }
+                } 
                 
                 if (field.getFieldType() == ComponentFactory._REFERENCESFIELD) {
                     stretch = GridBagConstraints.BOTH;
@@ -675,8 +672,6 @@ public class ItemForm extends DcFrame implements ActionListener {
                 if (component instanceof DcCheckBox)
                     ((DcCheckBox) component).setText("");
 
-                label.setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
-                
                 int space = y == 0 ? 5 : 0; 
                 panel.add(label,     Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                         ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
@@ -699,7 +694,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             // check if we have vertical stretching fields.
             boolean containsLongFields = false;
             for (Component c : panel.getComponents()) 
-                if (c instanceof JScrollPane || c instanceof JTextArea || c instanceof DcReferencesField)
+                if (c instanceof JScrollPane || c instanceof JTextArea)
                     containsLongFields = true;
             
             if (containsLongFields) {

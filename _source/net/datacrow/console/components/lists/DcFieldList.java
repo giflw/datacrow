@@ -54,7 +54,7 @@ public class DcFieldList extends DcList {
     
     public DcField getSelected() {
         DcFieldListElement element = (DcFieldListElement) getSelectedValue();
-        return element.getField();
+        return element != null ? element.getField() : null;
     }
     
     public void add(DcField field) {

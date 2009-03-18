@@ -53,6 +53,7 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
@@ -258,18 +259,12 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             applyDefinitions();
 
             JScrollPane scroller = new JScrollPane(table);
-            scroller
-                    .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             scroller.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
-
-            panelNav = new NavigationPanel(table);
 
             add(scroller, Layout.getGBC(0, 0, 1, 1, 50.0, 50.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
-            add(panelNav, Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                    new Insets(0, 5, 5, 5), 0, 0));
 
             table.applyHeaders();
         }
@@ -281,7 +276,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
                 DcFieldDefinition definition = getDefinition(row);
                 DcField field = (DcField) table.getValueAt(row, _COL_FIELD, true);
                 
-                if (field.isUiOnly()) {
+                if (field.isUiOnly() || field.getIndex() == DcObject._ID) {
                     table.setValueAt(Boolean.FALSE, row, _COL_REQUIRED);
                     table.setValueAt(Boolean.FALSE, row, _COL_UNIQUE);
                 }

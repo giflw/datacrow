@@ -90,6 +90,35 @@ public class DcList extends JList implements ComponentListener {
         return columnsPerRow;
     }
     
+    public void moveRowUp() {
+        moveSelectedRow(getSelectedIndex() > 0 ? getSelectedIndex() - 1 : 0);
+    }
+    
+    public void moveRowDown() {
+        moveSelectedRow(getSelectedIndex() < getDcModel().getSize() -1 ? getSelectedIndex() + 1 : 0);
+    }
+
+    public void moveRowToTop() {
+        moveSelectedRow(0);
+    }
+
+    public void moveRowToBottom() {
+        moveSelectedRow(getDcModel().getSize() -1);
+    }
+
+    private void moveSelectedRow(int toIdx) {
+        Vector<Object> v = new Vector<Object>();
+        for (int i = 0; i < getDcModel().getSize(); i++) {
+            v.add(getDcModel().get(i));
+        }
+
+        Object o = getSelectedValue();
+        v.remove(o);
+        v.add(toIdx, o);
+        setListData(v);
+        setSelectedIndex(toIdx);
+    }
+    
     public void setColumnsPerRow(int columnsPerRow) {
         int oldValue = this.columnsPerRow;
         this.columnsPerRow = Math.max(1, columnsPerRow);

@@ -35,17 +35,19 @@ import net.datacrow.core.objects.DcObject;
  * 
  * @author Robert Jan van der Waals
  */
-public class UpdateItemFormSettingsWindow implements IRequest {
+public class UpdateItemFormSettingsWindow implements IUpdateUIRequest {
 
     private ItemFormSettingsDialog wdw;
     private boolean executeOnFail = false;
+    private boolean tabDeleted;
 
-    public UpdateItemFormSettingsWindow(ItemFormSettingsDialog wdw) {
+    public UpdateItemFormSettingsWindow(ItemFormSettingsDialog wdw, boolean tabDeleted) {
         this.wdw = wdw;
+        this.tabDeleted = tabDeleted;
     }
 
     public void execute(Collection<DcObject> objects) {
-        wdw.refresh();
+        wdw.refresh(tabDeleted);
     }
 
     public boolean getExecuteOnFail() {

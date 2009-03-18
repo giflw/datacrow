@@ -987,8 +987,18 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public void isUnique(DcObject o, boolean update) throws ValidationException {
         boolean bUnique = WorkFlow.checkUniqueness(o, update);
-        if (!bUnique && validate)
-        	throw new ValidationException(DcResources.getText("msgItemNotUnique", toString()));
+        if (!bUnique && validate) {
+            
+            String fields = "";
+            for (DcFieldDefinition definition : getModule().getFieldDefinitions().getDefinitions()) {
+                if (definition.isUnique()) {
+                    fields += fields.length() > 0 ? ", " : "";
+                    fields += definition.getLabel();
+                }
+            }
+                
+        	throw new ValidationException(DcResources.getText("msgItemNotUnique", new String[] {toString(), fields}));
+        }
     }
 
     /**

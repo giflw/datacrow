@@ -191,11 +191,17 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
             if (e.getClickCount() == 2) {
                 if (direction == _LEFT) {
                     DcField field = listRight.getSelected();
+                    
+                    if (field == null) return;
+                    
                     listLeft.add(field);
                     listRight.remove();
                     listRight.clearSelection();
                 } else {
                     DcField field =  listLeft.getSelected();
+                    
+                    if (field == null) return;
+                    
                     listRight.add(field);
                     listLeft.remove();
                     listLeft.clearSelection();

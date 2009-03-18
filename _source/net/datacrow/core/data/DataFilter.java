@@ -226,11 +226,17 @@ public class DataFilter {
      * @param c
      */
     public void sort(List<DcObject> c) {
+        DcModule mod = DcModules.get(module);
+        if (mod.getDefaultSortFieldIdx() > 0) {
+            order = new DcField[1];
+            order[0] = mod.getField(mod.getDefaultSortFieldIdx());
+        }
+        
         if (order == null || order.length == 0 || c == null || c.size() == 0 || 
             DcModules.get(module).getTableName() == null || 
-            DcModules.get(module).getTableName().equals(""))
+            DcModules.get(module).getTableName().equals("")) {
             return;
-        
+        }
         
         if (order.length == 1) {
             Collections.sort(c, new DcObjectComparator(order[0].getIndex()));

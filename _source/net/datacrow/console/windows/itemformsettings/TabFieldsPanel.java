@@ -30,26 +30,24 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.lists.DcFieldList;
-import net.datacrow.console.components.lists.elements.DcFieldListElement;
-import net.datacrow.console.components.lists.elements.DcListElement;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcField;
@@ -57,10 +55,9 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Tab;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.settings.definitions.DcFieldDefinitions;
 
-public class TabFieldsPanel extends JPanel implements KeyListener, ActionListener {
-    
-    private Vector<DcListElement> elements;
+public class TabFieldsPanel extends JPanel implements ActionListener {
     
     private DcFieldList listLeft;
     private JComboBox cbTabs = ComponentFactory.getComboBox();
@@ -77,10 +74,21 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
     }
     
     protected void save() {
+        DcFieldDefinitions definitions = new DcFieldDefinitions();
         for (String key : listsRight.keySet()) {
-            for (DcField field : listsRight.get(key).getFields())
-                field.getDefinition().setTab(key);
+            for (DcField field : listsRight.get(key).getFields()) {
+                DcFieldDefinition definition = field.getDefinition(); 
+                definition.setTab(key);
+                definitions.add(definition);
+            }
         }
+        
+        for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
+            if (definitions.get(definition.getIndex()) == null)
+                definitions.add(definition);
+        }
+        
+        module.setSetting(DcRepository.ModuleSettings.stFieldDefinitions, definitions);
     }
     
     private void applyTab(String tab) {
@@ -93,14 +101,57 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
         repaint();
     }
     
-    public void refresh() {
+    public void refresh(boolean tabDelete) {
+        Collection<String> previous = new ArrayList<String>();
+        for (int i = 0; i < cbTabs.getItemCount(); i++)
+            previous.add((String) cbTabs.getItemAt(i));
+        
         cbTabs.removeActionListener(this);
         cbTabs.removeAllItems();
         
-        for (DcObject tab : DataManager.getTabs(module.getIndex()))
-            cbTabs.addItem(tab.getDisplayString(Tab._A_NAME));
+        for (DcObject tab : DataManager.getTabs(module.getIndex())) {
+            String name = tab.getDisplayString(Tab._A_NAME);
+            cbTabs.addItem(name);
+            
+            if (!scrollersRight.containsKey(name)) {
+                createTabPanel(name);
+                revalidate();
+                repaint();
+            }
+        }
+        
+        if (tabDelete) {
+            Collection<String> current = new ArrayList<String>();
+            for (int j = 0; j < cbTabs.getItemCount(); j++)
+                current.add((String) cbTabs.getItemAt(j));
+
+            for (String prev : previous) {
+                if (!current.contains(prev)) {
+                    for (DcField field : listsRight.get(prev).getFields()) {
+                        field.getDefinition().setTab(null);
+                        listLeft.add(field);
+                    }
+                }
+            }
+        }
         
         cbTabs.addActionListener(this);
+    }
+    
+    private void createTabPanel(String tab) {
+        DcFieldList listRight = new DcFieldList();
+        listRight.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listRight.addMouseListener(new ListMouseListener(ListMouseListener._LEFT));
+        listsRight.put(tab, listRight);
+        
+        JScrollPane scrollerRight = new JScrollPane(listRight);
+        scrollerRight.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollerRight.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollersRight.put(tab, scrollerRight);
+        
+        add(scrollerRight, Layout.getGBC( 1, 3, 1, 1, 40.0, 40.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets( 0, 0, 0, 0), 0, 0));
     }
 
     public void clear() {
@@ -117,10 +168,6 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
             listsRight = null;
         }
         
-        if (elements != null)
-            elements.clear();
-        
-        elements = null;
         module = null;
     }    
     
@@ -133,16 +180,17 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
             
             DcField field = module.getField(definition.getIndex());
-            if (field.isEnabled() && 
-               (field.getValueType() != DcRepository.ValueTypes._PICTURE &&
-                field.getValueType() != DcRepository.ValueTypes._ICON)) {
+            
+            if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
+                field.isEnabled() && 
+                field.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
+                field.getValueType() != DcRepository.ValueTypes._ICON &&
+               (field.getIndex() != module.getDcObject().getParentReferenceFieldIndex() || 
+                field.getIndex() == DcObject._SYS_CONTAINER )) {
 
                 listLeft.add(field);
             }
         }
-        
-        elements = new Vector<DcListElement>();
-        elements.addAll(listLeft.getElements());
         
         for (DcField field : listLeft.getFields()) {
             String tab = field.getDefinition().getTab();
@@ -157,26 +205,53 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
     private void build() {
         setLayout(Layout.getGBL());
         
+        /*****************************************************************************
+         * Navigation panel
+         *****************************************************************************/
+        JPanel panelNav = new JPanel();
+        panelNav.setLayout(Layout.getGBL());
+        
+        JButton buttonTop = ComponentFactory.getIconButton(IconLibrary._icoArrowTop);
+        JButton buttonUp = ComponentFactory.getIconButton(IconLibrary._icoArrowUp);
+        JButton buttonDown = ComponentFactory.getIconButton(IconLibrary._icoArrowDown);
+        JButton buttonBottom = ComponentFactory.getIconButton(IconLibrary._icoArrowBottom);
+
+        buttonTop.addActionListener(this);
+        buttonTop.setActionCommand("rowToTop");
+        buttonUp.addActionListener(this);
+        buttonUp.setActionCommand("rowUp");
+        buttonDown.addActionListener(this);
+        buttonDown.setActionCommand("rowDown");
+        buttonBottom.addActionListener(this);
+        buttonBottom.setActionCommand("rowToBottom");
+        
+        panelNav.add(buttonTop, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        panelNav.add(buttonUp,  Layout.getGBC(0, 2, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        panelNav.add(buttonDown,Layout.getGBC(0, 3, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        panelNav.add(buttonBottom,Layout.getGBC(0, 4, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+        
+        /*****************************************************************************
+         * Input panel
+         *****************************************************************************/
+        
         for (DcObject tab : DataManager.getTabs(module.getIndex())) {
-            cbTabs.addItem(tab.getDisplayString(Tab._A_NAME));
-            
-            DcFieldList listRight = new DcFieldList();
-            listRight.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-            listRight.addMouseListener(new ListMouseListener(ListMouseListener._LEFT));
-            listsRight.put(tab.getDisplayString(Tab._A_NAME), listRight);
-            
-            JScrollPane scrollerRight = new JScrollPane(listRight);
-            scrollerRight.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            scrollerRight.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            scrollersRight.put(tab.getDisplayString(Tab._A_NAME), scrollerRight);
+            String name = tab.getDisplayString(Tab._A_NAME);
+            cbTabs.addItem(name);
+            createTabPanel(name);
         }
         
         cbTabs.setActionCommand("tabSelect");
         cbTabs.addActionListener(this);
         
-        JTextField txtFilter = ComponentFactory.getShortTextField(255);
-        txtFilter.addKeyListener(this);
-
         listLeft = new DcFieldList();
         listLeft.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listLeft.addMouseListener(new ListMouseListener(ListMouseListener._RIGHT));
@@ -194,15 +269,13 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
         panelInput.add(cbTabs,     Layout.getGBC( 1, 0, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));
-        panelInput.add(ComponentFactory.getLabel(DcResources.getText("lblFilter")), 
-                 Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                 new Insets( 0, 0, 0, 0), 0, 0));
-        panelInput.add(txtFilter,     Layout.getGBC( 1, 1, 1, 1, 20.0, 20.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 0, 0, 0), 0, 0));
+
         
-        add(panelInput, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
+        /*****************************************************************************
+         * Main panel
+         *****************************************************************************/
+
+        add(panelInput, Layout.getGBC( 0, 0, 3, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));
         add(ComponentFactory.getLabel(DcResources.getText("lblAvailableFields")),  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
@@ -214,12 +287,9 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
         add(scrollerLeft,  Layout.getGBC( 0, 3, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));
-        
-        for (JScrollPane scroller : scrollersRight.values()) {
-            add(scroller, Layout.getGBC( 1, 3, 1, 1, 40.0, 40.0
-               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                new Insets( 0, 0, 0, 0), 0, 0));
-        }
+        add(panelNav, Layout.getGBC(2, 3, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                new Insets(0, 5, 5, 5), 0, 0));
         
         initialize();
         cbTabs.setSelectedIndex(0);
@@ -267,22 +337,13 @@ public class TabFieldsPanel extends JPanel implements KeyListener, ActionListene
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("tabSelect"))
             applyTab((String) cbTabs.getSelectedItem());
-    }
-
-    public void keyReleased(KeyEvent e) {
-        DcShortTextField txtFilter = (DcShortTextField) e.getSource();
-        String filter = txtFilter.getText();
-        
-        if (filter.trim().length() == 0) {
-            listLeft.setListData(elements);
-        } else {
-            Vector<DcListElement> newElements = new Vector<DcListElement>();
-            for (DcListElement element : elements) {
-                String displayValue = ((DcFieldListElement) element).getField().getLabel();
-                if (displayValue.toLowerCase().startsWith(filter.toLowerCase()))
-                    newElements.add(element);
-            }
-            listLeft.setListData(newElements);
-        }
+        else if (ae.getActionCommand().equals("rowUp"))
+            getList().moveRowUp();
+        else if (ae.getActionCommand().equals("rowDown"))
+            getList().moveRowDown();
+        else if (ae.getActionCommand().equals("rowToTop"))
+            getList().moveRowToTop();
+        else if (ae.getActionCommand().equals("rowToBottom"))
+            getList().moveRowToBottom();
     }
 }

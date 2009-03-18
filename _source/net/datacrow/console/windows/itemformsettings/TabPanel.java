@@ -35,8 +35,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.NavigationPanel;
@@ -50,6 +48,8 @@ import net.datacrow.core.objects.Tab;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.UpdateItemFormSettingsWindow;
+
+import org.apache.log4j.Logger;
 
 public class TabPanel extends JPanel implements ActionListener {
     
@@ -89,7 +89,7 @@ public class TabPanel extends JPanel implements ActionListener {
     private void addTab() {
         Tab tab = new Tab();
         tab.setValue(Tab._D_MODULE, Long.valueOf(dlg.getModule()));
-        tab.addRequest(new UpdateItemFormSettingsWindow(dlg));
+        tab.addRequest(new UpdateItemFormSettingsWindow(dlg, false));
         ItemForm frm = new ItemForm(null, false, false, tab, true);
         frm.setVisible(true);
     }
@@ -103,8 +103,8 @@ public class TabPanel extends JPanel implements ActionListener {
         int[] rows = tblTabs.getSelectedIndices();
         for (int i = rows.length - 1; i > -1; i--) {
             DcObject dco = tblTabs.getItemAt(rows[i]);
+            dco.addRequest(new UpdateItemFormSettingsWindow(dlg, true));
             dco.delete();
-            tblTabs.removeRow(rows[i]);
         }
     }
     

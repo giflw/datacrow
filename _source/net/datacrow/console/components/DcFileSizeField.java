@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JTextField;
@@ -34,6 +35,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
@@ -43,6 +45,9 @@ public class DcFileSizeField extends JTextField implements IComponent {
 
     public DcFileSizeField() {
         super();
+        
+        setPreferredSize(new Dimension(50, ComponentFactory.getPreferredFieldHeight()));
+        setPreferredSize(new Dimension(50, ComponentFactory.getPreferredFieldHeight()));
     }
 
     @Override

@@ -248,32 +248,23 @@ public class QueryQueue extends Thread {
     }
 
     private void handleRequests(Query qry, Collection<DcObject> objects, boolean qryWasSuccess) {
-        Requests requestors = qry.getRequests();
-        if (requestors != null)  {
+        Requests requests = qry.getRequests();
+        if (requests != null)  {
             Requests uiRequests = new Requests();
-            Requests imageRequests = new Requests();
-            
-            IRequest[] requests = requestors.get();
-            for (int i = 0; i < requests.length; i++) {
-                if (requests[i] instanceof ImageRequest) {
-                    requestors.remove(requests[i]);
-                    imageRequests.add(requests[i]);
+
+            for (IRequest request : requests.get()) {
+                if (request instanceof ImageRequest) {
+                    requests.remove(request);
+                    request.execute(objects);
                 }
             }
             
-	        IRequest[] imgRequests = imageRequests.get();
-	        for (int i = 0; i < imgRequests.length; i++) {
-	        	requestors.remove(imgRequests[i]);
-	            imgRequests[i].execute(objects);
-	        }
-	        
-	        requests = requestors.get();
-            for (int i = 0; i < requests.length; i++) {
-                requestors.remove(requests[i]);
-                if (requests[i] instanceof IUpdateUIRequest)
-                    uiRequests.add(requests[i]);
+            for (IRequest request : requests.get()) {
+                requests.remove(request);
+                if (request instanceof IUpdateUIRequest)
+                    uiRequests.add(request);
                 else 
-                    requests[i].execute(objects);
+                    request.execute(objects);
             }
 
             WorkFlow.handleRequests(objects, uiRequests, qryWasSuccess);

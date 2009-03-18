@@ -66,9 +66,9 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
         build();
     }
     
-    public void refresh() {
+    public void refresh(boolean tabDelete) {
         panelTab.refresh();
-        panelTabFields.refresh();
+        panelTabFields.refresh(tabDelete);
     }
     
     public int getModule() {
@@ -126,7 +126,7 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
         setSize(size);
         setCenteredLocation();
 
-        refresh();
+        refresh(false);
     }
 
     @Override

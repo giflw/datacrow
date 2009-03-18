@@ -1,6 +1,23 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.9 [Release on 04/03/2009] [testing: high] [target: beta]
+Data Crow 3.4.9 [Release on 04/03/2009] [testing: moderate] [target: beta]
 -----------------------------------------------------------------------------------------
+
+[New]
+
+- The item form has it's own settings dialog. From here you can define tabs (such as 
+  the current information and technical information), assign fields to tabs and set
+  the order of the fields. The general field settings has lost the ability to set
+  the field order as this was only used by the item form.
+- In the previous versions the uniqueness of an item was determined by checking the
+  combination of the required fields. Now this behavior can be managed by marking fields
+  as key fields. By default, none of the fields is marked as a key field.
+
+[Changed]
+-
+
+[Fixed]
+- Nullpointer exception when clicking in an empty space of the field selection dialog.
+- 
 
 
 -----------------------------------------------------------------------------------------
