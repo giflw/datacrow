@@ -323,7 +323,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
                 row[_COL_DESCRIPTIVE] = Boolean.valueOf(definition.isDescriptive());
                 row[_COL_UNIQUE] = Boolean.valueOf(definition.isUnique());
                 row[_COL_FIELD] = module.getField(definition.getIndex());
-                row[_COL_TAB] = definition.getTab();
+                row[_COL_TAB] = definition.getTab(module.getIndex());
                 
                 table.addRow(row);
             }
@@ -342,8 +342,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             if (field.isReadOnly() || field.isUiOnly())
                 required = false;
 
-            return new DcFieldDefinition(
-                    field.getIndex(), module.getIndex(), name, enabled, required, descriptive, unique, tab);
+            return new DcFieldDefinition(field.getIndex(), name, enabled, required, descriptive, unique, tab);
         }
 
         public DcFieldDefinitions getDefinitions() {

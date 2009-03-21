@@ -193,7 +193,7 @@ public class TabFieldsPanel extends JPanel implements ActionListener {
         }
         
         for (DcField field : listLeft.getFields()) {
-            String tab = field.getDefinition().getTab();
+            String tab = field.getDefinition().getTab(field.getModule());
             
             if (tab != null && !tab.trim().equals("")) {
                 listsRight.get(tab).add(field);

@@ -228,7 +228,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
         buttonBack = ComponentFactory.getButton(DcResources.getText("lblBack"));
         buttonRestart = ComponentFactory.getButton(DcResources.getText("lblFinishRestart"));
         buttonFinish = ComponentFactory.getButton(DcResources.getText("lblFinish"));
-        buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
+        buttonClose = ComponentFactory.getButton(DcResources.getText("lblCancel"));
         
         buttonNext.addActionListener(this);
         buttonNext.setActionCommand("next");

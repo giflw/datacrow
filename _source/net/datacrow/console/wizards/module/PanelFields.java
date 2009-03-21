@@ -25,7 +25,6 @@
 
 package net.datacrow.console.wizards.module;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -36,7 +35,6 @@ import java.util.Collection;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -51,7 +49,6 @@ import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.console.wizards.Wizard;
-import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcPropertyModule;
@@ -62,9 +59,8 @@ import net.datacrow.core.resources.DcResources;
 
 public class PanelFields extends ModuleWizardPanel implements ActionListener {
 
-    private JButton buttonUp = ComponentFactory.getButton(IconLibrary._icoArrowUp);
-    private JButton buttonDown = ComponentFactory.getButton(IconLibrary._icoArrowDown);
     private JButton buttonAdd = ComponentFactory.getButton(DcResources.getText("lblAddField"));
+    private JButton buttonAlter = ComponentFactory.getButton(DcResources.getText("lblAlterField"));
     private JButton buttonRemove = ComponentFactory.getButton(DcResources.getText("lblRemoveField"));
     
     private boolean canHaveReferences;
@@ -128,7 +124,10 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     }
     
     private void createField() {
-        DefineFieldDialog dlg = new DefineFieldDialog(getWizard(), getCurrentFieldNames(), canHaveReferences);
+        DefineFieldDialog dlg = new DefineFieldDialog(getWizard(), 
+                                                      null, 
+                                                      getCurrentFieldNames(), 
+                                                      canHaveReferences);
         dlg.setVisible(true);
         
         XmlField field = dlg.getField();
@@ -137,6 +136,34 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         
         revalidate();
         repaint();
+    }
+
+    private void alterField() {
+        int row = table.getSelectedRow(); 
+        if (row == -1) return;
+        
+        XmlField oldField = (XmlField) table.getValueAt(table.getSelectedRow(), 0);
+        
+        if (oldField.isOverwritable()) {
+            DefineFieldDialog dlg = new DefineFieldDialog(getWizard(), 
+                                                          oldField,
+                                                          getCurrentFieldNames(), 
+                                                          canHaveReferences);
+            dlg.setVisible(true);
+            
+            XmlField newField = dlg.getField();
+            if (newField != null) {
+                table.removeRow(table.getSelectedIndex());
+                table.addRow(new Object[] {newField});
+                table.setSelected(row);
+            }
+            
+            revalidate();
+            repaint();
+        } else {
+            new MessageBox(DcResources.getText("msgFieldCannotBeRemoved"), MessageBox._INFORMATION);
+            return;
+        }
     }
     
     private Collection<DcField> getDefaultFields() {
@@ -160,10 +187,9 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     }
 
     public void destroy() {
-        buttonUp = null;
-        buttonDown = null;
         buttonAdd = null;
         buttonRemove = null;
+        buttonAlter = null;
         
         if (table != null) {
             table.clear();
@@ -206,8 +232,12 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         buttonAdd.setActionCommand("createField");
         buttonRemove.addActionListener(this);
         buttonRemove.setActionCommand("delete");
+        buttonAlter.addActionListener(this);
+        buttonAlter.setActionCommand("alterField");
+        
         panelActions.add(buttonRemove);
         panelActions.add(buttonAdd);
+        panelActions.add(buttonAlter);
         
         // Fields
         JPanel panelFields = new JPanel();
@@ -236,21 +266,6 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroller.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         
-        JLabel labelNav = ComponentFactory.getLabel("");
-
-        buttonUp.addActionListener(this);
-        buttonUp.setActionCommand("moveUp");
-        buttonDown.addActionListener(this);
-        buttonDown.setActionCommand("moveDown");
-
-        buttonUp.setPreferredSize(new Dimension(25, 22));
-        buttonUp.setMaximumSize(new Dimension(25, 22));
-        buttonUp.setMinimumSize(new Dimension(25, 22));
-        
-        buttonDown.setPreferredSize(new Dimension(25, 22));
-        buttonDown.setMaximumSize(new Dimension(25, 22));
-        buttonDown.setMinimumSize(new Dimension(25, 22));
-
         panelFields.add(labelPredefined, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -263,15 +278,6 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         panelFields.add(scroller, Layout.getGBC(0, 3, 1, 4, 50.0, 50.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panelFields.add(labelNav, Layout.getGBC(1, 3, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 5, 5, 5), 0, 0));
-        panelFields.add(buttonUp, Layout.getGBC(1, 4, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 5, 0, 5), 0, 0));
-        panelFields.add(buttonDown, Layout.getGBC(1, 5, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(5, 5, 0, 5), 0, 0));
 
         table.applyHeaders();
         tableSysFields.applyHeaders();
@@ -288,6 +294,8 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("createField"))
             createField();
+        else if (ae.getActionCommand().equals("alterField"))
+            alterField();
         else if (ae.getActionCommand().equals("delete"))
             delete();
         else if (ae.getActionCommand().equals("moveUp"))

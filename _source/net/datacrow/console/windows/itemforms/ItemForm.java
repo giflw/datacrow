@@ -608,6 +608,12 @@ public class ItemForm extends DcFrame implements ActionListener {
         
         DcModule module = DcModules.get(moduleIdx);
         
+        for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
+            String name = definition.getTab(module.getIndex());
+            if (name != null && name.trim().length() > 0)
+                DataManager.checkTab(module.getIndex(), name);
+        }
+        
         // get the tabs (sorted) and initialize the panels
         for (DcObject tab : DataManager.getTabs(moduleIdx)) {
             String name = tab.getDisplayString(Tab._A_NAME);
@@ -619,16 +625,15 @@ public class ItemForm extends DcFrame implements ActionListener {
         // add the fields to the panels
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
             
-            String name = definition.getTab();
+            String name = definition.getTab(module.getIndex());
             if (name == null || name.trim().length() == 0)
                 continue;
 
             JPanel panel = panels.get(name);
-
             if (!positions.containsKey(name))
                 positions.put(name, new Integer(0));
             
-            int y = positions.get(definition.getTab()).intValue();
+            int y = positions.get(name).intValue();
             
             int fieldIdx = definition.getIndex();
             DcField field = dco.getField(fieldIdx);
@@ -680,7 +685,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                         ,GridBagConstraints.NORTHWEST, stretch,
                          new Insets(space, 0, 0, 2), 0, 0));
                 
-                positions.put(definition.getTab(), Integer.valueOf(y + 1));
+                positions.put(definition.getTab(moduleIdx), Integer.valueOf(y + 1));
                 
                 if (field.isReadOnly())
                     ComponentFactory.setUneditable(component);
@@ -690,6 +695,9 @@ public class ItemForm extends DcFrame implements ActionListener {
         for (String tab : panels.keySet()) {
             
             JPanel panel = panels.get(tab);
+            
+            if (panel.getComponents().length == 0)
+                continue;
             
             // check if we have vertical stretching fields.
             boolean containsLongFields = false;

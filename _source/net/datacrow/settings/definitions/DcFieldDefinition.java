@@ -40,7 +40,6 @@ public class DcFieldDefinition extends Definition {
     private static Logger logger = Logger.getLogger(DcFieldDefinition.class.getName());
     
     private int index;
-    private int module;
     
     private boolean required;
     private boolean enabled;
@@ -51,7 +50,6 @@ public class DcFieldDefinition extends Definition {
     private String tab;
     
     public DcFieldDefinition(int index, 
-                             int module,
                              String label, 
                              boolean enabled, 
                              boolean required, 
@@ -60,7 +58,6 @@ public class DcFieldDefinition extends Definition {
                              String tab) {
         
         this.index = index;
-        this.module = module;
         this.required = required;
         this.enabled = enabled;
         this.descriptive = descriptive;
@@ -97,7 +94,7 @@ public class DcFieldDefinition extends Definition {
         return tab;
     }
     
-    public String getTab() {
+    public String getTab(int module) {
         if (Utilities.isEmpty(tab)) {
             DcField field = DcModules.get(module).getField(index);
             
@@ -150,10 +147,10 @@ public class DcFieldDefinition extends Definition {
     
     @Override
     public String toSettingValue() {
-        return index + "/&/" + module + 
+        return index +  
                "/&/" + (label == null || label.length() == 0 ? "null" : label) + 
                "/&/" + enabled + "/&/" + required + "/&/" + descriptive + 
-               "/&/" + unique + "/&/" + (getTab() == null || getTab().length() == 0 ? "null" : getTab());
+               "/&/" + unique + "/&/" + (tab == null || tab.length() == 0 ? "null" : tab);
     }
     
     @Override

@@ -86,13 +86,12 @@ public class AlterModuleWizard extends Wizard {
                                  DcModules.get(field.getModuleReference() + module.getIndex()) : 
                                  DcModules.get(field.getModuleReference());
                     
-                    if (m != null && m.getXmlModule() != null) {
-                        DataManager.clearCache();
+                    if (m != null && m.getXmlModule() != null)
                         new ModuleJar(m.getXmlModule()).save();
-                    }
                 }
             }
-            
+
+            DataManager.clearCache();
             close();
             
         } catch (Exception e) {

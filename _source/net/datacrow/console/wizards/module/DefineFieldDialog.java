@@ -40,7 +40,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
@@ -50,6 +49,7 @@ import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcNumberField;
 import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
@@ -72,21 +72,64 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     
     private Collection<String> excludedNames;
     private XmlField field;
+
+    boolean existingField = true;
     
-    public DefineFieldDialog(JFrame parent, Collection<String> excludedNames, boolean canHaveReferences) {
+    public DefineFieldDialog(Wizard parent,
+                             XmlField oldField,
+                             Collection<String> excludedNames, 
+                             boolean canHaveReferences) {
+        
         super(parent);
+        
         this.canHaveReferences = canHaveReferences;
         this.setModal(true);
         this.excludedNames = excludedNames;
         this.setTitle(DcResources.getText("lblDefineField"));
+        this.field = oldField;
+        this.existingField = parent instanceof AlterModuleWizard;
         
         build();
+        applyField();
+        
         setResizable(false);
         pack();
         setSize(new Dimension(400,300));
         setCenteredLocation();
     }
 
+    private void applyField() {
+        
+        if (field == null) return;
+
+        textName.setText(field.getName());
+        
+        checkSearchable.setSelected(field.isSearchable());
+        checkTechinfo.setSelected(field.isTechinfo());
+        numberMaxLength.setValue(field.getMaximumLength());
+        
+        for (int i = 0; i < comboFieldType.getItemCount(); i++) {
+            FieldType ft = (FieldType) comboFieldType.getItemAt(i);
+            if (ft.getIndex() == field.getFieldType()) {
+                comboFieldType.setSelectedItem(ft);
+                break;
+            }
+        }
+
+        if (field.getFieldType() == ComponentFactory._REFERENCESFIELD ||
+            field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
+            
+            for (int i = 0; i < comboReference.getItemCount(); i++) {
+                DcModule m = (DcModule) comboReference.getItemAt(i);
+                if (m.getIndex() == field.getModuleReference())
+                    comboReference.setSelectedIndex(i);
+            }
+        }
+        
+        if (existingField)
+            textName.setEditable(false);
+    }
+    
     public XmlField getField() {
         return field;
     }
@@ -104,10 +147,12 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             
             String column = StringUtils.normalize(name).replaceAll(" ", "").replaceAll("[\\-]", "");
             
-            for (String excludedName : excludedNames) {
-                if (excludedName != null && 
-                    excludedName.toLowerCase().equals(column.toLowerCase()))
-                    throw new WizardException(DcResources.getText("msgFieldWithSameNameExists"));
+            if (!existingField) {
+                for (String excludedName : excludedNames) {
+                    if (excludedName != null && 
+                        excludedName.toLowerCase().equals(column.toLowerCase()))
+                        throw new WizardException(DcResources.getText("msgFieldWithSameNameExists"));
+                }
             }
             
             field.setColumn(column);
@@ -157,7 +202,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         numberMaxLength = null;
         comboReference = null;
         comboFieldType = null;
-        //field = null;
         super.close();
     }
     
@@ -334,8 +378,10 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 numberMaxLength.setEnabled(true);
             }
             
-            if (type.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                type.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+            if ((type.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                 type.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) &&
+                !existingField) {
+                
                 comboReference.setEnabled(true);
             } else {
                 comboReference.setEnabled(false);

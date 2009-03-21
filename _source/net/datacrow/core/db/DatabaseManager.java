@@ -79,6 +79,8 @@ public class DatabaseManager {
 
         try {
             db.initiliaze(connection);
+            db.getConversions().load();
+            db.getConversions().execute();
         } catch (Exception e) {
             logger.error("Could not find and connect to the database!", e);
             new MessageBox("Could not find or connect to the database!", MessageBox._ERROR);
@@ -134,6 +136,12 @@ public class DatabaseManager {
     public static void closeDatabases(boolean compact) {
         try {
             if (db != null) {
+                
+                // calculates the conversions based on the alter module wizard
+                Conversions conversions = db.getConversions();
+                conversions.calculate();
+                conversions.save();
+                
                 Connection connection = getAdminConnection();
                 Statement stmt = connection.createStatement();
                 

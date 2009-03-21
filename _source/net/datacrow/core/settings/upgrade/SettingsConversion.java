@@ -96,12 +96,11 @@ public abstract class SettingsConversion {
                     properties.put(DcRepository.ModuleSettings.stTableColumnOrder, s);
                     continue;
                 }
-            }
-            
-            if (DatabaseManager.getOriginalVersion().isOlder(new Version(3, 4, 0, 0))) {
+
                 // get the old field definitions
                 String value = (String) properties.get(DcRepository.ModuleSettings.stFieldDefinitions);
-                LegacyFieldDefinitions definitions = new LegacyFieldDefinitions();
+                
+                if (value == null) continue;
                 
                 int group = value.indexOf("}");
                 while (group > -1) {
@@ -120,7 +119,6 @@ public abstract class SettingsConversion {
                 for (LegacyFieldDefinition definition : definitions.getDefinitions()) {
                     newDefs.add(new net.datacrow.settings.definitions.DcFieldDefinition(
                             definition.getIndex(),
-                            module.getIndex(),
                             definition.getLabel(),
                             definition.isEnabled(),
                             definition.isRequired(),

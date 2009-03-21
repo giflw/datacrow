@@ -31,6 +31,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -55,11 +56,17 @@ import org.apache.log4j.Logger;
 public class DcDatabase {
 
     private static Logger logger = Logger.getLogger(DcDatabase.class.getName());
-    private QueryQueue queue;
     
+    private QueryQueue queue;
     private Version originalVersion;
 
+    private Conversions conversions = new Conversions();
+    
     public DcDatabase() {}
+    
+    public Conversions getConversions() {
+        return conversions;
+    }
     
     /**
      * The version from before the upgrade.
@@ -225,9 +232,31 @@ public class DcDatabase {
             }
         }
     }
-
+    
+    private boolean isCorrectColumnType(String dcType, int dbType) {
+        if (dbType == Types.BIGINT && 
+           (!dcType.startsWith(DcRepository.Database._FIELDBIGINT) &&
+            !dcType.startsWith(DcRepository.Database._FIELDNUMERIC))) {
+            return false;
+        } else if (dbType == Types.VARCHAR && !dcType.startsWith(DcRepository.Database._FIELDSTRING)) {
+            return false;
+        } else if (dbType == Types.LONGVARCHAR && 
+                (!dcType.equals(DcRepository.Database._FIELDOBJECT) && 
+                 !dcType.equals(DcRepository.Database._FIELDLONGSTRING))) {
+            return false;
+        } else if (dbType == Types.DATE && !dcType.equals(DcRepository.Database._FIELDDATE)) {
+            return false;
+        } else if (dbType == Types.BOOLEAN && !dcType.equals(DcRepository.Database._FIELDBOOLEAN)) {
+            return false;
+        } else if (dbType == Types.NUMERIC && !dcType.startsWith(DcRepository.Database._FIELDNUMERIC)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     private void initializeColumns(Connection connection, ResultSetMetaData metaData, DcObject dco) throws SQLException {
-        String tableName = dco.getTableName();
+        String tablename = dco.getTableName();
         
         for (DcField field : dco.getFields()) {
             String column = field.getDatabaseFieldName();
@@ -240,15 +269,20 @@ public class DcDatabase {
                     int dbSize = metaData.getColumnDisplaySize(i);
                     if (    dbSize < field.getMaximumLength() && 
                             field.getValueType() == DcRepository.ValueTypes._STRING) {
-                        logger.info(DcResources.getText("msgTableUpgradeIncorrectColumn", new String[] {tableName, field.getLabel()}));
-                        executeQuery(connection, "alter table " + tableName + " alter column " + column + " " + type);
+                        logger.info(DcResources.getText("msgTableUpgradeIncorrectColumn", new String[] {tablename, field.getLabel()}));
+                        executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
+                    }
+                    
+                    if (!isCorrectColumnType(field.getDataBaseFieldType(), metaData.getColumnType(i))) {
+                        executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
+                        DataManager.setUseCache(false);
                     }
                 }
             }
             
             if (!field.isUiOnly() && !found) {
-                logger.info(DcResources.getText("msgTableUpgradeMissingColumn", new String[] {tableName, field.getLabel()}));
-                executeQuery(DatabaseManager.getAdminConnection(), "alter table " + tableName + " add column " + column + " " + type);
+                logger.info(DcResources.getText("msgTableUpgradeMissingColumn", new String[] {tablename, field.getLabel()}));
+                executeQuery(DatabaseManager.getAdminConnection(), "alter table " + tablename + " add column " + column + " " + type);
                 DataManager.setUseCache(false);
             }
         }
