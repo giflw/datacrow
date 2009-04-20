@@ -135,7 +135,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     }
     
     private void createField() {
-        field =  new XmlField();
+        field = field == null ? new XmlField() : field;
         
         String name = textName.getText();
         

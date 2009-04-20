@@ -27,7 +27,6 @@ package net.datacrow.util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.datacrow.core.resources.DcResources;
@@ -52,13 +51,13 @@ public class Directory {
      * @param vExtensions extensions to filter on
      * @param logInformation write messages to the screen and the log
      */
-    public static Collection<String> read(String dir,
+    public static List<String> read(String dir,
                                           boolean recurse,
                                           boolean includeDirs,
                                           String[] extensions) {
 
         String baseDir = dir;
-        Collection<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<String>();
         File directory = new File(baseDir);
         baseDir = directory.toString();
 

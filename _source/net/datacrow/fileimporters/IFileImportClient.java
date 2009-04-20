@@ -25,6 +25,7 @@
 
 package net.datacrow.fileimporters;
 
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.services.Region;
@@ -112,5 +113,5 @@ public interface IFileImportClient {
      */
     public int getDirectoryUsage();
     
-    public int getModule();
+    public DcModule getModule();
 }

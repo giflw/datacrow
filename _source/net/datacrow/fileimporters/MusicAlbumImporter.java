@@ -35,6 +35,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.MusicAlbum;
 import net.datacrow.core.objects.helpers.MusicTrack;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Converter;
 import net.datacrow.util.Hash;
 import net.datacrow.util.StringUtils;
@@ -60,7 +61,7 @@ public class MusicAlbumImporter extends FileImporter {
     }
 
     @Override
-    public String[] getSupportedExtensions() {
+    public String[] getDefaultSupportedFileTypes() {
         return new String[] {"mp3", "ogg", "mp4", "mp4a", "m4p", "flac", 
                              "flc", "ape", "asf", "wav", "mpc", "ra", "wma"};
     }
@@ -101,7 +102,7 @@ public class MusicAlbumImporter extends FileImporter {
     }
 
     @Override
-    public DcObject parse(String filename, int directoryUsage) throws ParseException {
+    public DcObject parse(IFileImportClient listener,  String filename, int directoryUsage) {
         DcObject ma = new MusicAlbum();
 
         try {
@@ -156,6 +157,10 @@ public class MusicAlbumImporter extends FileImporter {
                 genre = DataManager.createReference(ma, MusicAlbum._G_GENRES, musicFile.getGenre());
 
             MusicTrack mt = new MusicTrack();
+            mt.setValue(MusicTrack._SYS_FILENAME, filename);
+            Hash.getInstance().calculateHash(mt);
+            
+            mt.setValue(MusicTrack._A_TITLE, getName(filename, directoryUsage));
             
             String year = musicFile.getYear();
             
@@ -172,9 +177,6 @@ public class MusicAlbumImporter extends FileImporter {
             mt.setValue(MusicTrack._C_YEAR, year);
             mt.setValue(MusicTrack._F_TRACKNUMBER, Long.valueOf(track));
             
-            mt.setValue(MusicTrack._SYS_FILENAME, filename);
-            Hash.getInstance().calculateHash(mt);
-
             if (genre != null)
                 DataManager.createReference(mt, MusicTrack._H_GENRES, genre);
             
@@ -183,7 +185,7 @@ public class MusicAlbumImporter extends FileImporter {
             ma.addChild(mt);
             
         } catch (Exception exp) {
-            throw new ParseException(exp);
+            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
 
         ma.setIDs();

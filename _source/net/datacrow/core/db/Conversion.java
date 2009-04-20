@@ -26,6 +26,8 @@
 package net.datacrow.core.db;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -36,11 +38,13 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 
 import org.apache.log4j.Logger;
 
 /**
- * Manages table conversions when
+ * Manages table conversions based on the module definition.
+ * 
  * @author Robert Jan van der Waals
  */
 public class Conversion {
@@ -80,19 +84,68 @@ public class Conversion {
                 getReferencingModuleIdx();
     }
 
-    public void execute() {
+    /**
+     * Checks whether the conversion is actually needed. This check is in place to make
+     * sure older backups can still be restored. 
+     */
+    public boolean isNeeded() {
+        boolean needed = false;
+        
+        String sql = "select top 1 * from " + DcModules.get(moduleIdx).getTableName();
+        try {
+            ResultSet result = DatabaseManager.executeSQL(sql, false);
+            ResultSetMetaData meta = result.getMetaData();
+            
+            if (getNewFieldType() == ComponentFactory._REFERENCESFIELD) {
+                boolean exists = false;
+                for (int i = 1; i < meta.getColumnCount() + 1; i++)
+                    exists |= meta.getColumnName(i).equalsIgnoreCase(columnName);
+                
+                // column should no longer be there after a successful conversion..
+                // else the conversion still needs to (re-) occur.
+                needed = exists;
+            } else if (getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
+                // Check: check if there are items stored in the targeted module and if it exists.
+
+                DcModule reference = DcModules.get(referencingModuleIdx);
+                sql = "select top 1 " + columnName + " from " + reference.getTableName();
+                
+                try {
+                    ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                    rs.close();
+                    
+                    // check the column type.. if not BIGINT a conversion is still needed.
+                    needed = meta.getColumnType(1) != Types.BIGINT;
+                } catch (Exception ignore) {
+                    needed = true;
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+        
+        return needed;
+    }
+    
+    /**
+     * Handles complex conversions. Simple conversions are executed directly on the database.
+     * @see DatabaseManager#initialize()
+     * @return
+     */
+    public boolean execute() {
+        // Converting a reference field to a multi-reference field
         if (getOldFieldType() == ComponentFactory._REFERENCEFIELD &&
             getNewFieldType() == ComponentFactory._REFERENCESFIELD) {
             
             logger.info("Starting to convert reference field [" + columnName + "] to a multi references field");
 
-            // load data from the database!
+            // load data from the database:
             DataManager.setUseCache(false);
             String sql = "SELECT ID, " + getColumnName() + " FROM " + DcModules.get(getModuleIdx()).getTableName() + " " +
                          "WHERE " + getColumnName() + " IS NOT NULL";
             try {
                 ResultSet rs = DatabaseManager.executeSQL(sql, true);
-                DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, getReferencingModuleIdx()));
+                DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, DcModules.get(getModuleIdx()).getField(columnName).getReferenceIdx()));
             
                 DcObject mapping = mappingMod.getDcObject();
                 while (rs.next()) {
@@ -105,9 +158,75 @@ public class Conversion {
                     DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null), true);
                 }
             } catch (Exception e) {
-                logger.error("Failed to create reference. Conversion has failed.", e);
+                logger.error("Failed to create reference. Conversion has failed. Restart Data Crow to try again.", e);
+                return false;
+            }
+         
+        // Converting any kind of field to a reference field
+        } else if (getNewFieldType() == ComponentFactory._REFERENCESFIELD ||
+                   getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
+            
+            logger.info("Starting to convert field [" + columnName + "] to a multi references field");
+            
+            String sql = "select distinct " + columnName + " from " + DcModules.get(getModuleIdx()).getTableName();
+            
+            try {
+                ResultSet rs = DatabaseManager.executeSQL(sql, true);
+                
+                DcModule refMod = DcModules.get(referencingModuleIdx);
+                
+                while (rs.next()) {
+                    String name = rs.getString(1);
+                    DcObject reference = refMod.getDcObject();
+                    reference.setValue(DcProperty._A_NAME, name);
+                    DatabaseManager.executeQuery(new Query(Query._INSERT, reference, null, null), true);
+                    
+                    String sql2 = "select item.ID, property.ID from " + refMod.getTableName() + " property " +
+                                   "inner join " + DcModules.get(getModuleIdx()).getTableName() + " item " +
+                                   "on property." + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + "=" +
+                                   "item." + columnName;
+                    ResultSet rs2 = DatabaseManager.executeSQL(sql2, true);
+                    
+                    while (rs2.next()) {
+                        String itemID = rs2.getString(1);
+                        String propertyID = rs2.getString(2);
+                        
+                        if (getNewFieldType() == ComponentFactory._REFERENCESFIELD) {
+                            DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, getReferencingModuleIdx()));
+                            
+                            DcObject mapping = mappingMod.getDcObject();
+                            mapping.setValue(DcMapping._A_PARENT_ID, itemID);
+                            mapping.setValue(DcMapping._B_REFERENCED_ID, propertyID);
+                            
+                            DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null), true);
+                        } else {
+                            String sql3 = "update " + DcModules.get(getModuleIdx()).getTableName() +
+                                          " set " + columnName + "=" + propertyID;
+                            DatabaseManager.executeSQL(sql3, true);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Failed to create reference. Conversion has failed. Restart Data Crow to try again.", e);
+                return false;
             }
         }
+        
+        try {
+            
+            if (getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
+                DatabaseManager.executeSQL(
+                        "alter table " + DcModules.get(getModuleIdx()).getTableName() + 
+                        " alter column " + columnName + " " + DcModules.get(getModuleIdx()).getField(columnName).getDataBaseFieldType(), true);
+            } 
+            
+            // note that column removal is performed by the cleanup method of the database
+            
+        } catch (Exception e) {
+            logger.error("Failed to clean up after doing the field type conversion.", e);
+        }        
+        
+        return true;
     }
     
     public int getReferencingModuleIdx() {

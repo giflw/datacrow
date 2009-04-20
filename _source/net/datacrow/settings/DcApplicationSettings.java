@@ -33,7 +33,6 @@ import java.io.File;
 import javax.swing.JFrame;
 
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
@@ -481,15 +480,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblProxyPassword",
                             true,
                             true));
-        getSettings().addSetting(_HTTP,
-                new Setting(DcRepository.ValueTypes._LONG,
-                            DcRepository.Settings.stSelectedView,
-                            MasterView._LIST_VIEW,
-                            -1,
-                            "",
-                            "",
-                            false,
-                            false));
         getSettings().addSetting(_HTTP,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stBrowserPath,

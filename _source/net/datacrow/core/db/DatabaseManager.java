@@ -75,12 +75,12 @@ public class DatabaseManager {
      * and the if needed the databases are upgraded.
      */
     public static void initialize() {
-        Connection connection = getAdminConnection();
-
+        
         try {
-            db.initiliaze(connection);
+            db.initiliaze();
             db.getConversions().load();
             db.getConversions().execute();
+            db.cleanup();
         } catch (Exception e) {
             logger.error("Could not find and connect to the database!", e);
             new MessageBox("Could not find or connect to the database!", MessageBox._ERROR);

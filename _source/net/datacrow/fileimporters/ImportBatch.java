@@ -115,13 +115,7 @@ public class ImportBatch extends Thread {
      */
     protected DcObject parse(String filename) {
         listener.addMessage(DcResources.getText("msgProcessingFileX", filename));
-        DcObject dco = null; 
-        try {
-            dco = importer.parse(filename, listener.getDirectoryUsage());
-        } catch (ParseException pe) {
-            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
-            dco = DcModules.get(listener.getModule()).getDcObject();
-        }
+        DcObject dco = importer.parse(listener, filename, listener.getDirectoryUsage()); 
             
         if (listener.getStorageMedium() != null) { 
             for (DcField  field : dco.getFields()) {

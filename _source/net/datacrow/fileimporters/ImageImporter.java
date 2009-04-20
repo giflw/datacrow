@@ -33,6 +33,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Image;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
@@ -60,10 +61,10 @@ public class ImageImporter extends FileImporter {
     }
     
     /**
-     * The supported file types.
+     * The default supported file types.
      */
     @Override
-    public String[] getSupportedExtensions() {
+    public String[] getDefaultSupportedFileTypes() {
         return new String[] {"jpg", "gif", "jpeg", "png"};
     }
     
@@ -73,12 +74,13 @@ public class ImageImporter extends FileImporter {
     }    
     
     @Override
-    public DcObject parse(String filename, int directoryUsage) throws ParseException {
+    public DcObject parse(IFileImportClient listener, String filename, int directoryUsage) {
         Image image = new Image();
         
         try {
             image.setIDs();
             image.setValue(Image._A_TITLE, getName(filename, directoryUsage));
+            image.setValue(Image._SYS_FILENAME, filename);
             
             DcImageIcon icon = new DcImageIcon(filename);
             int width = icon.getIconWidth();
@@ -86,7 +88,6 @@ public class ImageImporter extends FileImporter {
             
             image.setValue(Image._F_WIDTH, width != -1 ? Long.valueOf(width) : null);
             image.setValue(Image._G_HEIGHT, height != -1 ? Long.valueOf(height) : null);
-            image.setValue(Image._SYS_FILENAME, filename);
             
             java.awt.Image scaledImg = Utilities.getScaledImage(icon);
             icon.flush();
@@ -157,7 +158,7 @@ public class ImageImporter extends FileImporter {
             } catch (JpegProcessingException jpe) {}
             
         } catch (Exception exp) {
-            throw new ParseException(exp);
+            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
         
         return image;

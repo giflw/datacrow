@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComboBox;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -46,13 +47,25 @@ import net.datacrow.console.components.DcTree;
 import net.datacrow.util.FileNameFilter;
 import net.datacrow.util.Utilities;
 
-public class FileSystemTreePanel extends JPanel implements ActionListener {
+public abstract class FileSystemTreePanel extends JPanel implements ActionListener {
     
     private Map<File, JScrollPane> scrollers = new HashMap<File, JScrollPane>();
     private Map<File, FileSystemTreeModel> models = new HashMap<File, FileSystemTreeModel>();
     private FileNameFilter filter;
     
     public FileSystemTreePanel(FileNameFilter filter) {
+        setFilter(filter);
+    }
+    
+    protected void setFilter(FileNameFilter filter) {
+        if (scrollers.size() > 0) {
+            scrollers.clear();
+            models.clear();
+            removeAll();
+            revalidate();
+            repaint();
+        }
+        
         this.filter = filter;
         build();
     }
@@ -66,6 +79,8 @@ public class FileSystemTreePanel extends JPanel implements ActionListener {
         revalidate();
         repaint();
     }
+    
+    protected abstract JMenuBar getMenu();
     
     public Collection<String> getFiles(boolean includeDirs) {
         Collection<String> selected = new ArrayList<String>();
@@ -97,11 +112,18 @@ public class FileSystemTreePanel extends JPanel implements ActionListener {
         }
     }
     
-    private void build() {
+    protected void build() {
         setLayout(Layout.getGBL());
         
+        JMenuBar menu = getMenu();
+        if (menu != null) {
+            add(menu, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                      new Insets(5, 5, 0, 5), 0, 0));
+        }
+        
         JComboBox cbDrives = ComponentFactory.getComboBox();
-        add(cbDrives, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        add(cbDrives, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(15, 5, 5, 5), 0, 0));     
         
@@ -114,7 +136,7 @@ public class FileSystemTreePanel extends JPanel implements ActionListener {
             
             JScrollPane scroller = new JScrollPane(tree);
             scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            add(scroller, Layout.getGBC( 0, 1, 1, 1, 20.0, 20.0
+            add(scroller, Layout.getGBC( 0, 2, 1, 1, 20.0, 20.0
                         ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                          new Insets(5, 5, 5, 5), 0, 0));      
             

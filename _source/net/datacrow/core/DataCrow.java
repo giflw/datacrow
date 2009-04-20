@@ -54,6 +54,7 @@ import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
@@ -67,6 +68,7 @@ import net.datacrow.core.web.DcWebServer;
 import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.Directory;
 import net.datacrow.util.MemoryMonitor;
 import net.datacrow.util.Utilities;
@@ -111,6 +113,8 @@ public class DataCrow {
         boolean nocache = false;
         boolean webserverMode = false; 
         
+        String password = null;
+        String username = null;
 
         installationDir = System.getenv("DATACROW_HOME");
         
@@ -123,7 +127,7 @@ public class DataCrow {
             if (args[i].toLowerCase().startsWith("-dir:")) {
                 dir = args[i].substring(5, args[i].length());
             } else if (args[i].toLowerCase().startsWith("-db:")) {
-                db = args[i].substring(4, args[i].length());
+                db = args[i].substring("-db:".length());
             } else if (args[i].toLowerCase().startsWith("-nocache")) {
                 nocache = true;        
             } else if (args[i].toLowerCase().startsWith("-help")) {
@@ -133,6 +137,13 @@ public class DataCrow {
                 noSplash = true;
             } else if (args[i].toLowerCase().startsWith("-webserver")) {
                 webserverMode = true;
+            } else if (args[i].toLowerCase().startsWith("-credentials:")) {
+                
+                String credentials = args[i].substring("-credentials:".length());
+                int index = credentials.indexOf("/");
+                username = index > -1 ? credentials.substring(0, index) : credentials;
+                password = index > -1 ? credentials.substring(index + 1) : "";
+                
             } else if (dir != null) {
                 dir += " " + args[i];
             } else { 
@@ -147,15 +158,22 @@ public class DataCrow {
                 System.out.println("Example: java -jar datacrow.jar -db:testdb");
                 System.out.println("");
                 System.out.println("-webserver");
-                System.out.println("Starts the web server without starting the Data Crow GUI.");
+                System.out.println("Starts the web server without starting the Data Crow GUI. Specify -credentials to avoid the login dialog.");
                 System.out.println("Example: java -jar datacrow.jar -webserver");
                 System.out.println("");
                 System.out.println("-nocache");
                 System.out.println("Starts Data Crow without loading the items from the cache. This will cause the items to be loaded from the database (slow).");
                 System.out.println("Example: java -jar datacrow.jar -nocache");                
+                System.out.println("");
+                System.out.println("-credentials:username/password");
+                System.out.println("Specify the login credentials to start Data Crow without displaying the login dialog.");
+                System.out.println("Example (username and password): java -jar datacrow.jar -credentials:sa/12345");                
+                System.out.println("Example (username without a password): java -jar datacrow.jar -credentials:sa");
                 System.exit(0);
             }
         }
+        
+        noSplash = !noSplash ? webserverMode && username != null : noSplash;
         
         installationDir = dir != null ? dir : installationDir;
         
@@ -255,7 +273,7 @@ public class DataCrow {
             }
             
             // log in
-            login();
+            login(username, password);
             
             // Establish a connection to the database / server
             showSplashMsg(DcResources.getText("msgInitializingDB"));
@@ -267,6 +285,8 @@ public class DataCrow {
             
             // convert the settings
             SettingsConversion.convert();
+            
+            checkTabs();
         
             // Start the UI
             if (splashScreen == null)
@@ -357,6 +377,18 @@ public class DataCrow {
         }  
     }
     
+    private static void checkTabs() {
+        for (DcModule module : DcModules.getAllModules()) {
+            
+            if (module.getFieldDefinitions() == null) continue;
+            
+            for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
+               if (!Utilities.isEmpty(definition.getTab(module.getIndex())))
+                   DataManager.checkTab(module.getIndex(), definition.getTab(module.getIndex()));
+            }
+        }
+    }
+    
     private static void showSplashMsg(String msg) {
         if (!noSplash)
             splashScreen.setStatusMsg(DcResources.getText("msgInitializingDB"));
@@ -376,30 +408,42 @@ public class DataCrow {
         return isWebModuleInstalled; 
     }
     
-    private static void login() {
-        if (!SecurityCentre.getInstance().unsecureLogin()) {
-            boolean success = false;
-            int retry = 0;
-            while (!success && retry < 3) {
-                showSplashScreen(false);
-                LoginDialog dlg = new LoginDialog();
-                dlg.setVisible(true);
-                
-                if (dlg.isCanceled()) break;
-                
-                try {
-                    success = SecurityCentre.getInstance().login(dlg.getLoginName(), dlg.getPassword(), false) != null;
-                } catch (SecurityException se) {
-                    new MessageBox(se.getMessage(), MessageBox._INFORMATION);
-                    retry ++;
+    private static void login(String username, String password) {
+        // use the login dialog method
+        if (username == null) {
+            if (!SecurityCentre.getInstance().unsecureLogin()) {
+                boolean success = false;
+                int retry = 0;
+                while (!success && retry < 3) {
+                    showSplashScreen(false);
+                    LoginDialog dlg = new LoginDialog();
+                    dlg.setVisible(true);
+                    
+                    if (dlg.isCanceled()) break;
+                    
+                    try {
+                        success = SecurityCentre.getInstance().login(dlg.getLoginName(), dlg.getPassword(), false) != null;
+                    } catch (SecurityException se) {
+                        new MessageBox(se.getMessage(), MessageBox._INFORMATION);
+                        retry ++;
+                    }
                 }
+                
+                if (!success) 
+                    System.exit(0);
+                else
+                    showSplashScreen(true);
             }
-            
-            if (!success) 
+        // use the blunt message
+        } else {
+            try {
+                SecurityCentre.getInstance().login(username, password, false);
+            } catch (SecurityException se) {
+                logger.info(se, se);
+                System.out.println(se.getMessage());
                 System.exit(0);
-            else
-                showSplashScreen(true);
-        }        
+            }
+        }
     }
     
     /**

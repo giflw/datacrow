@@ -89,8 +89,16 @@ public class StartupHelpDialog extends JDialog implements ActionListener {
                 "<tr><td>-dir:&lt;installation directory&gt;</td></tr>" +
                 "<tr><td>Use this parameter when Data Crow starts incorrectly and complains about missing directories (non Windows platform only).</td></tr>" +
                 "<tr><td><br></td></tr>" +
+                "<tr><td>-webserver</td></tr>" +
+                "<tr><td>Starts the web server without starting the Data Crow GUI. Specify -credentials to avoid the login dialog.</td></tr>" +
+                "<tr><td><br></td></tr>" +
                 "<tr><td>-nocache</td></tr>" +
                 "<tr><td>Forces Data Crow to ignore the cached items and load everything fresh from the database.</td></tr>" +
+                "<tr><td><br></td></tr>" +
+                "<tr><td>-credentials:username/password</td></tr>" +
+                "<tr><td>Specify the login credentials to start Data Crow without displaying the login dialog.</td></tr>" +
+                "<tr><td>Example (username and password): java -jar datacrow.jar -credentials:sa/12345</td></tr>" +
+                "<tr><td>Example (username without a password): java -jar datacrow.jar -credentials:sa</td></tr>" +
                 "<tr><td><br></td></tr>" +
              "</table></p></body></html>";
         tp.setHtml(html);

@@ -123,8 +123,8 @@ public class DcFieldDefinitions implements IDefinitions {
         boolean enabled = Boolean.valueOf(values[2]).booleanValue();
         boolean required = Boolean.valueOf(values[3]).booleanValue();
         boolean descriptive = Boolean.valueOf(values[4]).booleanValue();
-        boolean unique = Boolean.valueOf(values[5]).booleanValue();
-        String tab = values[6] == null || values[6].toLowerCase().equals("null") ? "" : values[6];
+        boolean unique = values.length >= 6 ? Boolean.valueOf(values[5]).booleanValue() : false;
+        String tab = values.length < 7 || values[6] == null || values[6].equalsIgnoreCase("null") ? "" : values[6];
         
         removeDefinition(field);
     	add(new DcFieldDefinition(field, name, enabled, required, descriptive, unique, tab));	

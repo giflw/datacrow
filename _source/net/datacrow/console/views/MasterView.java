@@ -39,12 +39,12 @@ import net.datacrow.console.components.panels.tree.GroupingPane;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.settings.DcSettings;
 
 /**
- * Thread safe view encapsulator
- * @author rj.vanderwaals
+ * Thread safe view encapsulation
+ * @author Robert Jan van der Waals
  */
 public class MasterView {
 
@@ -104,8 +104,16 @@ public class MasterView {
     }
     
     public View getCurrent() {
-        View current = get(DcSettings.getInt(DcRepository.Settings.stSelectedView));
-        current = current == null ? get(MasterView._TABLE_VIEW) : current;        
+        int view = DcModules.getCurrent().getSettings().getInt(DcRepository.ModuleSettings.stDefaultView);
+        View current = get(view);
+        
+        // Get the first available view if the view cannot be found (for whatever reason)
+        if (current == null) {
+            for (Integer key : views.keySet()) { 
+                current = views.get(key);
+                break;
+            }
+        }
         return current;
     }      
     

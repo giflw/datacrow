@@ -4,7 +4,7 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.4.8 patch 3
+Version 3.4.9
 Created on 04/03/2009
 Created by Robert Jan van der Waals
 
@@ -154,6 +154,12 @@ Additional parameters:
      
     -webserver
      Starts the web server without starting the actual Data Crow application.
+     Can be used in combination with the credentials parameter to bypass all the GUI
+     stuff (such as the splash screen and the login dialog)
+     
+    -credentials:username/password
+     Specify the login credentials to start Data Crow without displaying the 
+     login dialog.
 
 
 ----------------------------------------------------------------------------------------

@@ -28,6 +28,7 @@ package net.datacrow.fileimporters;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Movie;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Hash;
 import net.datacrow.util.movie.FilePropertiesMovie;
 
@@ -43,7 +44,7 @@ public class MovieImporter extends FileImporter {
     }
 
     @Override
-    public String[] getSupportedExtensions() {
+    public String[] getDefaultSupportedFileTypes() {
         return new String[] {"mpg", "mpeg", "riff", "avi", "vob",
                              "ogm", "mov",  "ifo",  "mkv", "asf", 
                              "wmv"};    
@@ -60,14 +61,14 @@ public class MovieImporter extends FileImporter {
     }    
 
     @Override
-    public DcObject parse(String filename, int directoryUsage) throws ParseException {
+    public DcObject parse(IFileImportClient listener,  String filename, int directoryUsage) {
         Movie movie = new Movie();
-        
+
+        movie.setValue(Movie._SYS_FILENAME, filename);
+        movie.setValue(Movie._A_TITLE, getName(filename, directoryUsage));
+
         try {
-            movie.setValue(Movie._SYS_FILENAME, filename);
             Hash.getInstance().calculateHash(movie);
-        	
-            movie.setValue(Movie._A_TITLE, getName(filename, directoryUsage));
 
             FilePropertiesMovie fpm = new FilePropertiesMovie(filename);
             Long playlength = Long.valueOf(fpm.getDuration());
@@ -101,7 +102,7 @@ public class MovieImporter extends FileImporter {
             movie.setValue(Movie._W_VIDEOBITRATE, Long.valueOf(bitrate));
 
         } catch (Exception exp) {
-            throw new ParseException(exp);
+            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
         
         return movie;

@@ -28,6 +28,7 @@ package net.datacrow.fileimporters;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Book;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Hash;
 
 /**
@@ -42,7 +43,7 @@ public class EbookImport extends FileImporter {
     }
 
     @Override
-    public String[] getSupportedExtensions() {
+    public String[] getDefaultSupportedFileTypes() {
         return new String[] {"txt","chm", "doc", "pdf", "prc", "pdb", "kml", "html", "htm", "pdf", "prc"};
     }
     
@@ -52,7 +53,7 @@ public class EbookImport extends FileImporter {
     }    
     
     @Override
-    public DcObject parse(String filename, int directoryUsage) throws ParseException {
+    public DcObject parse(IFileImportClient listener, String filename, int directoryUsage) {
         Book book = new Book();
         
         try {
@@ -60,7 +61,7 @@ public class EbookImport extends FileImporter {
             book.setValue(Book._SYS_FILENAME, filename);
             Hash.getInstance().calculateHash(book);
         } catch (Exception exp) {
-            throw new ParseException(exp);
+            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
         
         return book;

@@ -37,7 +37,9 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class ModuleSettings {
-    	public static final String stCardViewPictureOrder = "card_view_picture_order";
+        public static final String stDefaultView = "default_view";
+        public static final String stFileImportFileTypes = "file_import_file_types";
+        public static final String stCardViewPictureOrder = "card_view_picture_order";
         public static final String stTableColumnOrder = "table_column_order";
         public static final String stCardViewItemDescription = "card_view_item_description";
         public static final String stTitleCleanup = "title_cleanup";
@@ -117,7 +119,6 @@ public abstract class DcRepository {
         public static final String stHsqlCacheSizeScale = "hsql_cache_size_scale";
         public static final String stGarbageCollectionIntervalMs = "gargabe_collection_interval_milliseconds";
         public static final String stFontAntiAliasing = "font_anti_aliasing";
-        public static final String stSelectedView = "selected_view";
         public static final String stImportCharacterSet = "import_character_set";
         public static final String stImportSeperator = "import_seperator";
         public static final String stSortDialogSize = "sort_dialog_size";

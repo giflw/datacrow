@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
@@ -64,14 +65,14 @@ public class DcDatabase {
     
     public DcDatabase() {}
     
-    public Conversions getConversions() {
+    protected Conversions getConversions() {
         return conversions;
     }
     
     /**
      * The version from before the upgrade.
      */
-    public Version getOriginalVersion() {
+    protected Version getOriginalVersion() {
         return originalVersion;
     }
 
@@ -80,7 +81,7 @@ public class DcDatabase {
      * a version number asigned an undetermined version number is returned.
      * @param connection
      */
-    public Version getVersion(Connection connection) {
+    protected Version getVersion(Connection connection) {
         int major = 0;
         int minor = 0;
         int build = 0;
@@ -120,8 +121,9 @@ public class DcDatabase {
      * @param connection
      * @throws Exception
      */
-    public void initiliaze(Connection connection) throws Exception {
+    protected void initiliaze() throws Exception {
         
+        Connection connection = DatabaseManager.getAdminConnection();
         new DatabaseUpgrade().start();
         
         startQueryQueue();
@@ -141,11 +143,45 @@ public class DcDatabase {
             logger.error(e, e);
         }
     }
+    
+    /**
+     * Removes unused columns.
+     */
+    protected void cleanup() {
+        for (DcModule module : DcModules.getAllModules()) {
+            
+            if (module.isAbstract()) continue;
+            
+            try {
+                String sql = "select top 1 * from " + module.getTableName();
+                ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                ResultSetMetaData md = rs.getMetaData();
+                
+                for (int i = 1; i < md.getColumnCount() + 1; i++) {
+                    boolean found = false;
+                    for (DcField field : module.getFields()) {
+                        if (md.getColumnName(i).equalsIgnoreCase(field.getDatabaseFieldName()))
+                            found = true;
+                    }
+                    
+                    // the column is not used.. remove!
+                    if (!found) {
+                        logger.info("Removing column " + md.getColumnName(i) + " for module " + module.getName() + " as it is no longer in use");
+                        DatabaseManager.executeSQL("alter table " + module.getTableName() + " drop column " + md.getColumnName(i), true);
+                    }
+                }
+                
+                rs.close();
+            } catch (Exception e) {
+                logger.error("Error while trying to cleanup unused columns", e);
+            }
+        }
+    }
 
     /**
      * Returns the current count of queries waiting in the queue.
      */
-    public int getQueueSize() {
+    protected int getQueueSize() {
     	return queue.getQueueSize();
     }
     
@@ -160,7 +196,7 @@ public class DcDatabase {
     /**
      * Returns the name of the database.
      */
-    public String getName() {
+    protected String getName() {
         return DcSettings.getString(DcRepository.Settings.stConnectionString);
     }
 
@@ -168,7 +204,7 @@ public class DcDatabase {
      * Adds a query to the query queue of this database.
      * @param query
      */
-    public void addQuery(Query query) {
+    protected void addQuery(Query query) {
         queue.addQuery(query);
     }
 
@@ -176,7 +212,7 @@ public class DcDatabase {
      * Applies the default settings on the database.
      * @param connection
      */
-    public void setDbProperies(Connection connection) {
+    protected void setDbProperies(Connection connection) {
         try {
             
             Statement stmt = connection.createStatement();
@@ -273,9 +309,14 @@ public class DcDatabase {
                         executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
                     }
                     
-                    if (!isCorrectColumnType(field.getDataBaseFieldType(), metaData.getColumnType(i))) {
-                        executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
-                        DataManager.setUseCache(false);
+                    // Do the simple conversions here.
+                    // Avoid converting a reference field as this is being done by the conversion class
+                    if (field.getFieldType() != ComponentFactory._REFERENCEFIELD) {
+                        if (!isCorrectColumnType(field.getDataBaseFieldType(), metaData.getColumnType(i))) {
+                            logger.info("Converting field type of " + field.getSystemName());
+                            executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
+                            DataManager.setUseCache(false);
+                        }
                     }
                 }
             }

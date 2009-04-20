@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcMediaModule;
@@ -43,6 +44,7 @@ import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
+import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.settings.definitions.QuickViewFieldDefinition;
@@ -137,7 +139,15 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));  
-
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BIGINTEGER,
+                            DcRepository.ModuleSettings.stDefaultView,
+                            MasterView._LIST_VIEW,
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));  
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DEFINITIONGROUP,
                             DcRepository.ModuleSettings.stQuickViewFieldDefinitions,
@@ -296,6 +306,20 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));
+        
+        FileImporter importer = module.getImporter();
+        if (importer != null) {
+            getSettings().addSetting(_General,
+                    new Setting(DcRepository.ValueTypes._STRINGARRAY,
+                                DcRepository.ModuleSettings.stFileImportFileTypes,
+                                importer.getDefaultSupportedFileTypes(),
+                                -1,
+                                "",
+                                "",
+                                false,
+                                false));
+        }
+        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stOnlineSearchFormSize,

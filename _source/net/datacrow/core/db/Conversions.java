@@ -29,8 +29,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import net.datacrow.core.DataCrow;
@@ -38,6 +42,8 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.util.Directory;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -76,8 +82,16 @@ public class Conversions {
     }
 
     public void load() {
-        File file = new File(filename);
-        if (file.exists()) {
+        List<String> filenames = Directory.read(DataCrow.installationDir + "upgrade", false, false, new String[] {"properties"});
+        
+        // sort them in their natural order
+        Collections.sort(filenames);
+
+        for (String filename : filenames) {
+            
+            if (!filename.endsWith("conversions.properties"))
+                continue;
+            
             try {
                 Properties properties = new Properties();
                 properties.load(new FileInputStream(filename));
@@ -87,14 +101,29 @@ public class Conversions {
             } catch (IOException e) {
                 logger.error("Failed to load database column conversion scripts", e);
             }
-        }        
+        }
     }
     
     public void execute() {
-        for (Conversion conversion : conversions) 
-            conversion.execute();
+        boolean converted = false;
+        for (Conversion conversion : conversions) {
+            if (conversion.isNeeded()) 
+                converted |= conversion.execute();
+        }
         
-        new File(filename).delete();
+        // rename the old file
+        File file = new File(filename);
+        if (converted && file.exists()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+            String prefix = sdf.format(new Date());
+            File newFile = new File(file.getParent(), prefix + file.getName());
+            
+            try {
+                Utilities.rename(new File(filename), newFile);
+            } catch (IOException e) {
+                logger.error("Could not rename the conversion file from " + file + " to " + newFile, e);
+            }
+        }
     }
     
     public void save() {

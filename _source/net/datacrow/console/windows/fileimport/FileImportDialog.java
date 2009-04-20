@@ -44,7 +44,6 @@ import javax.swing.JTextArea;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcFrame;
-import net.datacrow.console.components.fstree.FileSystemTreePanel;
 import net.datacrow.console.components.panels.OnlineServicePanel;
 import net.datacrow.console.components.panels.OnlineServiceSettingsPanel;
 import net.datacrow.console.windows.itemforms.ItemForm;
@@ -82,19 +81,19 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     protected JButton buttonStop = ComponentFactory.getButton(DcResources.getText("lblStop"));
     protected JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
     
-    protected FileSystemTreePanel panelFsTree;
-    
     protected JTextArea textLog = ComponentFactory.getTextArea();
     protected JTextArea textTitleCleanup = ComponentFactory.getTextArea();
     
     private OnlineServicePanel panelServer;
     private OnlineServiceSettingsPanel panelServerSettings;
     private LocalArtSettingsPanel panelLocalArt;
+    private FileImportFileSelectPanel panelFs;
     
     protected Settings settings;
     protected FileImporter importer;
     
     public FileImportDialog(FileImporter importer) {
+        
         super(DcResources.getText("lblXImport", 
                 DcModules.get(importer.getModule()).getObjectName()), 
                 IconLibrary._icoImport);
@@ -113,8 +112,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return checkDirNameAsTitle.isSelected() ? 1 : 0;
     }
     
-    public int getModule() {
-        return importer.getModule();
+    public DcModule getModule() {
+        return DcModules.get(importer.getModule());
     }
 
     public DcProperty getStorageMedium() {
@@ -184,7 +183,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         saveSettings();
         try {
             cancelled = false;
-            importer.parse(this, panelFsTree.getFiles(false));
+            importer.parse(this, panelFs.getFiles(false));
         } catch (Exception e) {
             new MessageBox(e.getMessage(), MessageBox._INFORMATION);
             finish();
@@ -230,8 +229,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         progressBar = null;
         settings = null;
         
-        panelFsTree.clear();
-        panelFsTree = null;
+        panelFs.clear();
+        panelFs = null;
         
         super.close();
     }
@@ -250,6 +249,25 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         
         checkDirNameAsTitle.setSelected(false);
         return panelDirs;
+    }
+    
+    private JPanel getTitleCleanupPanel() {
+      //**********************************************************
+        //Title cleanup
+        //**********************************************************
+        JPanel panel = new JPanel();
+        panel.setLayout(Layout.getGBL());
+        
+        JScrollPane scroller = new JScrollPane(textTitleCleanup);
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        textTitleCleanup.setText(settings.getString(DcRepository.ModuleSettings.stTitleCleanup));
+        
+        panel.add(scroller, Layout.getGBC( 0, 0, 2, 1, 5.0, 5.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0));  
+        
+        return panel;
     }
     
     private JPanel getSettingsPanel() {
@@ -301,28 +319,6 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(15, 5, 5, 5), 0, 0));  
 
-
-        //**********************************************************
-        //Title cleanup
-        //**********************************************************
-        JPanel panelTitleCleanup = new JPanel();
-        panelTitleCleanup.setLayout(Layout.getGBL());
-        panelTitleCleanup.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblTitleCleanup")));
-        
-        JScrollPane scroller = new JScrollPane(textTitleCleanup);
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        textTitleCleanup.setText(settings.getString(DcRepository.ModuleSettings.stTitleCleanup));
-        
-        panelTitleCleanup.add(scroller, Layout.getGBC( 0, 0, 2, 1, 5.0, 5.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets(5, 5, 5, 5), 0, 0));  
-        
-        panel.add(panelTitleCleanup, Layout.getGBC( 0, 1, 1, 1, 5.0, 5.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                new Insets(10, 0, 0, 0), 0, 0));
-        
-        
         //**********************************************************
         //Directory usage
         //**********************************************************
@@ -424,24 +420,23 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         panelLocalArt = new LocalArtSettingsPanel(importer.getModule());
 
         FileNameFilter filter =
-            importer.getSupportedExtensions() != null &&
-            importer.getSupportedExtensions().length > 0 ?
-            new FileNameFilter(importer.getSupportedExtensions(), true)
-            : null;
+            importer.getSupportedFileTypes() != null &&
+            importer.getSupportedFileTypes().length > 0 ?
+            new FileNameFilter(importer.getSupportedFileTypes(), true) : null;
                  
             
         //**********************************************************
         //Files / Directories
         //**********************************************************            
-        panelFsTree = new FileSystemTreePanel(filter);
-
+        panelFs = new FileImportFileSelectPanel(filter, module.getIndex());
         
         //**********************************************************
         //Tabs Panel
         //**********************************************************
         JTabbedPane tp = ComponentFactory.getTabbedPane();
-        tp.addTab(DcResources.getText("lblDirectoriesFiles"), IconLibrary._icoOpen , panelFsTree);
-        tp.addTab(DcResources.getText("lblSettings"), IconLibrary._icoSettings , getSettingsPanel());
+        tp.addTab(DcResources.getText("lblDirectoriesFiles"), IconLibrary._icoOpen , panelFs);
+        tp.addTab(DcResources.getText("lblSettings"), IconLibrary._icoSettings, getSettingsPanel());
+        tp.addTab(DcResources.getText("lblTitleCleanup"),  IconLibrary._icoSettings, getTitleCleanupPanel());
         
         if (module.deliversOnlineService())
             tp.addTab(DcResources.getText("lblOnlineSearch"), IconLibrary._icoSearchOnline,panelOs);

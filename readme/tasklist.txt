@@ -22,17 +22,22 @@ Online services
 [x] Check the sort order in the web module; is it still broken or is this because of the old version?
 [ ] Import functionality: log content of the folder in the description field.
 [ ] Import functionality: directory selection is broken. Directories should be logged when selected.
-[ ] Silent strart of the web server: -password -username = hides log screens.
+[x] Silent strart of the web server: -password -username = hides log screens.
 [x] The Java from Sun check should only be a warnign after which the user can continue (setting is saved).
     (perform check twice and update settings).
 [ ] Mass update functionality: allow update by ISBN.
+[ ] Java help: search + index
+[ ] Use system variables for the path configuration (programs).
+[ ] Allow changing a field definition of a module.
+[ ] Default view does not seem to be remembered correctly!!!!
+[ ] Alter fields: Make sure to warn about incompatible backups!
 
 
 3.4.8
 ---------------------------------------------------------------------------------------------------------
 [x] Re-test ASF for movies
 [x] Translate the web module
-[ ] Refresh of screen for the module wizard after adding fields.
+[x] Refresh of screen for the module wizard after adding fields.
 [x] Module name; special characters?
 [x] Image from clipboard (+ CTRL-V)
 

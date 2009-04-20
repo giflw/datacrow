@@ -91,9 +91,14 @@ public abstract class FileImporter {
      * Depends on a specific implementation.
      * @throws ParseException
      */
-    public abstract DcObject parse(String filename, int directoryUsage) throws ParseException;
-    public abstract String[] getSupportedExtensions();
+    public abstract DcObject parse(IFileImportClient listener, String filename, int directoryUsage);
+    
+    public abstract String[] getDefaultSupportedFileTypes();
 
+    public String[] getSupportedFileTypes() {
+        return DcModules.get(module).getSettings().getStringArray(DcRepository.ModuleSettings.stFileImportFileTypes);
+    }
+    
     /**
      * Indicates if a directory can be used instead of a file.
      * @return false
@@ -172,11 +177,11 @@ public abstract class FileImporter {
      * @param filename
      */
     protected void parse(IFileImportClient listener, String filename) {
-        int module = listener.getModule();
+        int module = listener.getModule().getIndex();
         
         module = module == DcModules._MUSICALBUM ? DcModules._MUSICTRACK : module;
         
-        DataFilter df = new DataFilter(listener.getModule());
+        DataFilter df = new DataFilter(listener.getModule().getIndex());
         df.addEntry(new DataFilterEntry(
                 DataFilterEntry._AND, module, 
                 DcObject._SYS_FILENAME, Operator.EQUAL_TO, filename));
@@ -189,13 +194,7 @@ public abstract class FileImporter {
             
         } else {
             listener.addMessage(DcResources.getText("msgProcessingFileX", filename));
-            DcObject dco = null; 
-            try {
-                dco = parse(filename, listener.getDirectoryUsage());
-            } catch (ParseException pe) {
-                listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
-                dco = DcModules.get(listener.getModule()).getDcObject();
-            }
+            DcObject dco = parse(listener, filename, listener.getDirectoryUsage());
                 
             if (listener.getStorageMedium() != null) { 
                 for (DcField  field : dco.getFields()) {
@@ -226,9 +225,9 @@ public abstract class FileImporter {
     protected void afterParse(IFileImportClient listener, DcObject dco) {
         if (listener.useOnlineServices()) {
             listener.addMessage(DcResources.getText("msgSearchingOnlineFor", StringUtils.normalize(dco.toString())));
-            DcModules.get(listener.getModule()).getSynchronizer().onlineUpdate(dco, listener.getServer(), 
-                                                                 listener.getRegion(), 
-                                                                 listener.getSearchMode());
+            listener.getModule().getSynchronizer().onlineUpdate(dco, listener.getServer(), 
+                                                                listener.getRegion(), 
+                                                                listener.getSearchMode());
         }
         DcModules.getCurrent().getCurrentInsertView().add(dco, false);
     }

@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+import org.apache.log4j.Logger;
+
 /**
  * Movie file representation.
  * 
@@ -36,6 +38,8 @@ import java.io.RandomAccessFile;
  */
 public class MovieFile {
 
+    private static Logger logger = Logger.getLogger(MovieFile.class.getName());
+    
     private RandomAccessFile raf;
 
     // tmp arrays to save information read form the avi file
@@ -146,7 +150,8 @@ public class MovieFile {
             } else {
                 audioChannel = Integer.toString(ACHAN0);
             }
-        } catch (IOException ignore) {
+        } catch (IOException e) {
+            logger.error("Error while parsing the movie file " + filename, e);
         } finally {
             try { raf.close(); } catch(Exception ignore) {}
         }

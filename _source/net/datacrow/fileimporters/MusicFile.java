@@ -26,7 +26,6 @@
 package net.datacrow.fileimporters;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -41,11 +40,7 @@ import net.datacrow.util.StringUtils;
 import org.apache.log4j.Logger;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.datatype.Artwork;
 
 /**
@@ -72,47 +67,41 @@ public class MusicFile implements IOnlineSearchClient {
     
     public MusicFile() {}
     
-    public MusicFile(String filename) throws CannotReadException {
+    public MusicFile(String filename) {
         AudioFile audioFile;
         try {
         	audioFile = AudioFileIO.read(new File(filename));
-        } catch (IOException e1) {
-            throw new CannotReadException(e1);
-        } catch (TagException e1) {
-            throw new CannotReadException(e1);
-        } catch (ReadOnlyFileException e1) {
-            throw new CannotReadException(e1);
-        } catch (InvalidAudioFrameException e1) {
-            throw new CannotReadException(e1);
-        }
         
-        Tag tag = audioFile.getTag();
-        if (tag != null) {
-            album = tag.getFirstAlbum();
-            artist = tag.getFirstArtist();
-            genre = getGenre(tag.getFirstGenre());
-            year = tag.getFirstYear();
-            title = tag.getFirstTitle();
-            
-            for (Artwork aw : tag.getArtworkList())
-                image = new DcImageIcon(aw.getBinaryData());
-            
-            bitrate = (int)audioFile.getAudioHeader().getBitRateAsNumber();
-            length = audioFile.getAudioHeader().getTrackLength();
-            encodingType = audioFile.getAudioHeader().getEncodingType();
-            
-            try {
-                String s = tag.getFirstTrack();
-                if (s != null && s.length() > 0) {
-                    if (s.indexOf("/") > 0)
-                        s = s.substring(0, s.indexOf("/"));
-                    
-                    track = Integer.parseInt(s);
+            Tag tag = audioFile.getTag();
+            if (tag != null) {
+                album = tag.getFirstAlbum();
+                artist = tag.getFirstArtist();
+                genre = getGenre(tag.getFirstGenre());
+                year = tag.getFirstYear();
+                title = tag.getFirstTitle();
+                
+                for (Artwork aw : tag.getArtworkList())
+                    image = new DcImageIcon(aw.getBinaryData());
+                
+                bitrate = (int)audioFile.getAudioHeader().getBitRateAsNumber();
+                length = audioFile.getAudioHeader().getTrackLength();
+                encodingType = audioFile.getAudioHeader().getEncodingType();
+                
+                try {
+                    String s = tag.getFirstTrack();
+                    if (s != null && s.length() > 0) {
+                        if (s.indexOf("/") > 0)
+                            s = s.substring(0, s.indexOf("/"));
+                        
+                        track = Integer.parseInt(s);
+                    }
+                        
+                } catch (Exception e) {
+                    logger.debug("Could not parse track [" + tag.getTrack() + "]", e);
                 }
-                    
-            } catch (Exception e) {
-                logger.debug("Could not parse track [" + tag.getTrack() + "]", e);
             }
+        } catch (Exception e) {
+            logger.error("Could not parse music file " + filename, e);
         }
     }
     

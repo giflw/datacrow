@@ -48,8 +48,6 @@ import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.fileimporters.MusicFile;
 import net.datacrow.util.StringUtils;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-
 public class MusicAlbumSynchronizer extends DefaultSynchronizer {
 
     private DcObject dco;
@@ -121,33 +119,28 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
                             if (!tst.exists())
                                 filename = filename.replaceAll("`", "'");
                             
-                            try {
-                                addMessage(DcResources.getText("msgParsing", filename));
-                                
-                                MusicFile musicFile = new MusicFile(filename);
-        
-                                dco.setValue(MusicAlbum._A_TITLE, musicFile.getAlbum());
-                                
-                                DcObject artist  = DataManager.createReference(dco, MusicAlbum._F_ARTISTS, musicFile.getArtist());
-                                
-                                setValue(child, MusicTrack._K_QUALITY, Long.valueOf(musicFile.getBitrate()));
-                                setValue(child, MusicTrack._J_PLAYLENGTH, Long.valueOf(musicFile.getLength()));
-                                setValue(child, MusicTrack._L_ENCODING, musicFile.getEncodingType());
-                                setValue(child, MusicTrack._A_TITLE, musicFile.getTitle());
+                            addMessage(DcResources.getText("msgParsing", filename));
+                            
+                            MusicFile musicFile = new MusicFile(filename);
+    
+                            dco.setValue(MusicAlbum._A_TITLE, musicFile.getAlbum());
+                            
+                            DcObject artist  = DataManager.createReference(dco, MusicAlbum._F_ARTISTS, musicFile.getArtist());
+                            
+                            setValue(child, MusicTrack._K_QUALITY, Long.valueOf(musicFile.getBitrate()));
+                            setValue(child, MusicTrack._J_PLAYLENGTH, Long.valueOf(musicFile.getLength()));
+                            setValue(child, MusicTrack._L_ENCODING, musicFile.getEncodingType());
+                            setValue(child, MusicTrack._A_TITLE, musicFile.getTitle());
 
-                                DataManager.createReference(child, MusicTrack._G_ARTIST, artist);
-                                
-                                setValue(child, MusicTrack._C_YEAR, musicFile.getYear());
-                                setValue(child, MusicTrack._F_TRACKNUMBER, Long.valueOf(musicFile.getTrack()));
-                                
-                                DataManager.createReference(child, MusicTrack._H_GENRES, musicFile.getGenre());
-                                
-                                child.setSilent(true);
-                                updated = true;
-                            } catch (CannotReadException exp) {
-                                child.markAsUnchanged();
-                                addMessage(exp.getMessage());
-                            }
+                            DataManager.createReference(child, MusicTrack._G_ARTIST, artist);
+                            
+                            setValue(child, MusicTrack._C_YEAR, musicFile.getYear());
+                            setValue(child, MusicTrack._F_TRACKNUMBER, Long.valueOf(musicFile.getTrack()));
+                            
+                            DataManager.createReference(child, MusicTrack._H_GENRES, musicFile.getGenre());
+                            
+                            child.setSilent(true);
+                            updated = true;
                         }
                     }
                     
