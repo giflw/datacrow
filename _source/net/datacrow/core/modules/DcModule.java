@@ -684,7 +684,7 @@ public class DcModule implements Comparable<DcModule> {
      */
     public DcField getField(String columnName) {
         for (DcField field : getFields()) {
-            if (field.getDatabaseFieldName().equals(columnName))
+            if (field.getDatabaseFieldName().equalsIgnoreCase(columnName))
                 return field;
         }
         return null;

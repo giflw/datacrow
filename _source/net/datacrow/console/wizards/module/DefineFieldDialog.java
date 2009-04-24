@@ -346,6 +346,15 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             }
         }
         
+        if (canHaveReferences) {
+            fieldTypes.add(new FieldType(ComponentFactory._REFERENCESFIELD, 
+                                         DcRepository.ValueTypes._DCOBJECTCOLLECTION, 
+                                         DcResources.getText("lblMultiReferenceField")));
+            fieldTypes.add(new FieldType(ComponentFactory._REFERENCEFIELD, 
+                                         DcRepository.ValueTypes._DCOBJECTREFERENCE, 
+                                         DcResources.getText("lblSingleReferenceField")));
+        }      
+        
         fieldTypes.removeAll(remove);
     }
     

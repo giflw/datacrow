@@ -116,8 +116,14 @@ public class Conversion {
                     ResultSet rs = DatabaseManager.executeSQL(sql, false);
                     rs.close();
                     
+                    int pos = -1;
+                    for (int idx = 1; idx < meta.getColumnCount(); idx ++) {
+                        if (meta.getColumnName(idx).equalsIgnoreCase(columnName))
+                            pos = idx;
+                    }
+                    
                     // check the column type.. if not BIGINT a conversion is still needed.
-                    needed = meta.getColumnType(1) != Types.BIGINT;
+                    needed = pos > -1 && meta.getColumnType(pos) != Types.BIGINT;
                 } catch (Exception ignore) {
                     needed = true;
                 }
@@ -128,7 +134,14 @@ public class Conversion {
                 try {
                     ResultSet rs = DatabaseManager.executeSQL(sql, false);
                     rs.close();
-                    needed = isCorrectColumnType(DcModules.get(moduleIdx).getField(columnName).getDataBaseFieldType(), meta.getColumnType(1));
+                    
+                    int pos = -1;
+                    for (int idx = 1; idx < meta.getColumnCount(); idx ++) {
+                        if (meta.getColumnName(idx).equalsIgnoreCase(columnName))
+                            pos = idx;
+                    }
+                    
+                    needed = !isCorrectColumnType(DcModules.get(moduleIdx).getField(columnName).getDataBaseFieldType(), meta.getColumnType(pos));
                 } catch (Exception ignore) {
                     needed = true;
                 }

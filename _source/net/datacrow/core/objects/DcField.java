@@ -467,12 +467,20 @@ public class DcField implements Serializable{
     }
     
     public boolean canConvertTo(int fieldType, int valueType) {
+        
+        if (fieldType == getFieldType())
+            return true;
+        
         if (fieldType == ComponentFactory._CHECKBOX ||
             fieldType == ComponentFactory._PICTUREFIELD ||
             fieldType == ComponentFactory._DATEFIELD ||
             fieldType == ComponentFactory._RATINGCOMBOBOX) {
 
             return false;
+        } else if (fieldType == ComponentFactory._REFERENCESFIELD ||
+                   fieldType == ComponentFactory._REFERENCEFIELD) {
+            
+            return true;
         } else if ((getValueType() == DcRepository.ValueTypes._BOOLEAN || 
                     getValueType() == DcRepository.ValueTypes._DATE ||
                     getValueType() == DcRepository.ValueTypes._STRING ||
@@ -488,7 +496,7 @@ public class DcField implements Serializable{
     }
 
     /**
-     * Calculates the database field type defition.
+     * Calculates the database field type definition.
      */
     public String getDataBaseFieldType() {
         String s = "";
