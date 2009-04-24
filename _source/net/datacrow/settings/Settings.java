@@ -103,6 +103,7 @@ public abstract class Settings {
         Object o = get(key);
         return o instanceof Integer ? ((Integer) o).intValue() :
                o instanceof Long ? ((Long) o).intValue() : 0;
+               //o instanceof String ? Integer.valueOf((String) o) : 0;
     }
 
     public boolean getBoolean(String key) {

@@ -303,8 +303,9 @@ public class Setting {
                     int lafType = Integer.valueOf(lafValues[3]).intValue();
                     value = new DcLookAndFeel(name, className, fileName, lafType);
                     break;                    
+                case DcRepository.ValueTypes._BIGINTEGER:
                 case DcRepository.ValueTypes._LONG:
-                    value = Integer.valueOf(sValue);
+                    value = Long.valueOf(sValue);
                     break;
                 case DcRepository.ValueTypes._BOOLEAN:
                     value = Boolean.valueOf(sValue);

@@ -24,6 +24,7 @@ Data Crow 3.4.9 [Release on 04/03/2009] [testing: moderate] [target: beta]
 
 [Fixed]
 - Nullpointer exception when clicking in an empty space of the field selection dialog.
+- Error in the settings: long stored as integer.
 
 
 -----------------------------------------------------------------------------------------
