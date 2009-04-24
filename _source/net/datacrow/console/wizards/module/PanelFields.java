@@ -51,6 +51,7 @@ import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
@@ -124,7 +125,8 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     }
     
     private void createField() {
-        DefineFieldDialog dlg = new DefineFieldDialog(getWizard(), 
+        DefineFieldDialog dlg = new DefineFieldDialog(getModule().getIndex(),
+                                                      getWizard(), 
                                                       null, 
                                                       getCurrentFieldNames(), 
                                                       canHaveReferences);
@@ -144,8 +146,11 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         
         XmlField oldField = (XmlField) table.getValueAt(table.getSelectedRow(), 0);
         
-        if (oldField.isOverwritable()) {
-            DefineFieldDialog dlg = new DefineFieldDialog(getWizard(), 
+        if (oldField.isOverwritable() &&
+            DcModules.get(getModule().getIndex()).getField(oldField.getIndex()).canBeConverted()) {
+            
+            DefineFieldDialog dlg = new DefineFieldDialog(getModule().getIndex(),
+                                                          getWizard(), 
                                                           oldField,
                                                           getCurrentFieldNames(), 
                                                           canHaveReferences);
@@ -161,7 +166,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             revalidate();
             repaint();
         } else {
-            new MessageBox(DcResources.getText("msgFieldCannotBeRemoved"), MessageBox._INFORMATION);
+            new MessageBox(DcResources.getText("msgFieldCannotBeAltered"), MessageBox._INFORMATION);
             return;
         }
     }

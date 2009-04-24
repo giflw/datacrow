@@ -31,9 +31,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
@@ -269,28 +267,6 @@ public class DcDatabase {
         }
     }
     
-    private boolean isCorrectColumnType(String dcType, int dbType) {
-        if (dbType == Types.BIGINT && 
-           (!dcType.startsWith(DcRepository.Database._FIELDBIGINT) &&
-            !dcType.startsWith(DcRepository.Database._FIELDNUMERIC))) {
-            return false;
-        } else if (dbType == Types.VARCHAR && !dcType.startsWith(DcRepository.Database._FIELDSTRING)) {
-            return false;
-        } else if (dbType == Types.LONGVARCHAR && 
-                (!dcType.equals(DcRepository.Database._FIELDOBJECT) && 
-                 !dcType.equals(DcRepository.Database._FIELDLONGSTRING))) {
-            return false;
-        } else if (dbType == Types.DATE && !dcType.equals(DcRepository.Database._FIELDDATE)) {
-            return false;
-        } else if (dbType == Types.BOOLEAN && !dcType.equals(DcRepository.Database._FIELDBOOLEAN)) {
-            return false;
-        } else if (dbType == Types.NUMERIC && !dcType.startsWith(DcRepository.Database._FIELDNUMERIC)) {
-            return false;
-        }
-        
-        return true;
-    }
-    
     private void initializeColumns(Connection connection, ResultSetMetaData metaData, DcObject dco) throws SQLException {
         String tablename = dco.getTableName();
         
@@ -307,16 +283,6 @@ public class DcDatabase {
                             field.getValueType() == DcRepository.ValueTypes._STRING) {
                         logger.info(DcResources.getText("msgTableUpgradeIncorrectColumn", new String[] {tablename, field.getLabel()}));
                         executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
-                    }
-                    
-                    // Do the simple conversions here.
-                    // Avoid converting a reference field as this is being done by the conversion class
-                    if (field.getFieldType() != ComponentFactory._REFERENCEFIELD) {
-                        if (!isCorrectColumnType(field.getDataBaseFieldType(), metaData.getColumnType(i))) {
-                            logger.info("Converting field type of " + field.getSystemName());
-                            executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
-                            DataManager.setUseCache(false);
-                        }
                     }
                 }
             }

@@ -46,6 +46,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcDialog;
+import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcNumberField;
 import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.windows.messageboxes.MessageBox;
@@ -72,22 +73,26 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     
     private Collection<String> excludedNames;
     private XmlField field;
+    private int module;
 
     boolean existingField = true;
     
-    public DefineFieldDialog(Wizard parent,
+    public DefineFieldDialog(int module,
+                             Wizard parent,
                              XmlField oldField,
                              Collection<String> excludedNames, 
                              boolean canHaveReferences) {
         
         super(parent);
         
+        this.module = module;
         this.canHaveReferences = canHaveReferences;
-        this.setModal(true);
-        this.excludedNames = excludedNames;
-        this.setTitle(DcResources.getText("lblDefineField"));
         this.field = oldField;
         this.existingField = parent instanceof AlterModuleWizard;
+        this.excludedNames = excludedNames;
+        
+        this.setModal(true);
+        this.setTitle(DcResources.getText("lblDefineField"));
         
         build();
         applyField();
@@ -222,54 +227,60 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         comboFieldType = ComponentFactory.getComboBox();
         initializeTypes();
         
+        DcLongTextField textHelp = ComponentFactory.getHelpTextField();
+        textHelp.setText(DcResources.getText("msgHelpAterField"));
+        textHelp.setPreferredSize(new Dimension(100, 60));
+        textHelp.setMinimumSize(new Dimension(100, 60));
+        textHelp.setMaximumSize(new Dimension(800, 60));
+
         panel.add(ComponentFactory.getLabel(DcResources.getText("lblName")),
-                Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(textName,
-                Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(ComponentFactory.getLabel(DcResources.getText("lblSearchable")),
                 Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(checkSearchable,
+        panel.add(textName,
                 Layout.getGBC(1, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(ComponentFactory.getLabel(DcResources.getText("lblHoldsTechnicalInfo")),
+        panel.add(ComponentFactory.getLabel(DcResources.getText("lblSearchable")),
                 Layout.getGBC(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(checkTechinfo,
+        panel.add(checkSearchable,
                 Layout.getGBC(1, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(ComponentFactory.getLabel(DcResources.getText("lblMaxTextLength")),
+        panel.add(ComponentFactory.getLabel(DcResources.getText("lblHoldsTechnicalInfo")),
                 Layout.getGBC(0, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(numberMaxLength,
+        panel.add(checkTechinfo,
                 Layout.getGBC(1, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(ComponentFactory.getLabel(DcResources.getText("lblFieldType")),
+        panel.add(ComponentFactory.getLabel(DcResources.getText("lblMaxTextLength")),
                 Layout.getGBC(0, 4, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(comboFieldType,
+        panel.add(numberMaxLength,
                 Layout.getGBC(1, 4, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 0), 0, 0));
+        panel.add(ComponentFactory.getLabel(DcResources.getText("lblFieldType")),
+                Layout.getGBC(0, 5, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        panel.add(comboFieldType,
+                Layout.getGBC(1, 5, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
         
         if (canHaveReferences) {
             panel.add(ComponentFactory.getLabel(DcResources.getText("lblReferencedModule")),
-                    Layout.getGBC(0, 5, 1, 1, 1.0, 1.0,
+                    Layout.getGBC(0, 6, 1, 1, 1.0, 1.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(0, 0, 0, 0), 0, 0));
             panel.add(comboReference,
-                    Layout.getGBC(1, 5, 1, 1, 1.0, 1.0,
+                    Layout.getGBC(1, 6, 1, 1, 1.0, 1.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             
@@ -288,9 +299,13 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 comboReference.addItem(module);
         }
 
+        
         comboFieldType.addActionListener(this);
         comboFieldType.setActionCommand("fieldTypeSelected");
         comboFieldType.setSelectedIndex(0);
+        
+        if (existingField && field.getFieldType() == ComponentFactory._REFERENCESFIELD)
+            comboFieldType.setEnabled(false);
         
         JPanel panelActions = new JPanel();
         panelActions.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -307,16 +322,37 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         buttonOk.setActionCommand("createField");
         
         getContentPane().setLayout(Layout.getGBL());
-        add(panel, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
+        
+        if (existingField)
+            add(textHelp, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                new Insets(5, 5, 5, 5), 0, 0));
+        
+        add(panel, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(5, 5, 5, 5), 0, 0));
-        add(panelActions, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
+        add(panelActions, Layout.getGBC(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.SOUTHEAST, GridBagConstraints.HORIZONTAL,
                 new Insets(5, 5, 5, 5), 0, 0));
     }
     
+    private void filterTypesForAlteration(List<FieldType> fieldTypes) {
+        List<FieldType> remove = new ArrayList<FieldType>();
+        for (FieldType fieldType : fieldTypes) {
+            if ( DcModules.get(module).getField(field.getIndex()) == null || // do not allow changing new fields!
+                !DcModules.get(module).getField(field.getIndex()).canConvertTo(fieldType.getIndex(), fieldType.getValueType())) {
+                
+                remove.add(fieldType);
+            }
+        }
+        
+        fieldTypes.removeAll(remove);
+    }
+    
     private void initializeTypes() {
+
         List<FieldType> fieldTypes = new ArrayList<FieldType>();
+
         fieldTypes.add(new FieldType(ComponentFactory._CHECKBOX, 
                                      DcRepository.ValueTypes._BOOLEAN, 
                                      DcResources.getText("lblCheckbox")));
@@ -350,7 +386,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         fieldTypes.add(new FieldType(ComponentFactory._DECIMALFIELD, 
                                      DcRepository.ValueTypes._DOUBLE, 
                                      DcResources.getText("lblDecimalField")));
-        
+            
         if (canHaveReferences) {
             fieldTypes.add(new FieldType(ComponentFactory._REFERENCESFIELD, 
                                          DcRepository.ValueTypes._DCOBJECTCOLLECTION, 
@@ -358,7 +394,10 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             fieldTypes.add(new FieldType(ComponentFactory._REFERENCEFIELD, 
                                          DcRepository.ValueTypes._DCOBJECTREFERENCE, 
                                          DcResources.getText("lblSingleReferenceField")));
-        }
+        }            
+        
+        if (existingField)
+            filterTypesForAlteration(fieldTypes);
         
         Collections.sort(fieldTypes, new FieldTypeComparator());
         
