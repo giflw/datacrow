@@ -42,6 +42,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.Directory;
 import net.datacrow.util.Utilities;
 
@@ -73,7 +74,7 @@ public class Conversions {
             for (XmlField xmlField : module.getXmlModule().getFields()) {
                 DcField field = module.getField(xmlField.getIndex());
                 
-                if (field.getFieldType() != xmlField.getFieldType()) {
+                if (field != null && field.getIndex() != DcObject._ID && field.getFieldType() != xmlField.getFieldType()) {
                     Conversion conversion = new Conversion(module.getIndex());
                     conversion.setColumnName(field.getDatabaseFieldName());
                     conversion.setOldFieldType(field.getFieldType());

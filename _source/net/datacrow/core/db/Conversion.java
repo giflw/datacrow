@@ -173,13 +173,10 @@ public class Conversion {
             
             return convertToRef();
             
-        } else if (getNewFieldType() == ComponentFactory._LONGTEXTFIELD ||
-                   getNewFieldType() == ComponentFactory._SHORTTEXTFIELD) {
+        } else {
             
             return convertToText();
         }
-        
-        return true;
     }    
     
     private boolean convertFromRefToMulti() {
@@ -240,8 +237,8 @@ public class Conversion {
                 
                 String sql2 = "select item.ID, property.ID from " + refMod.getTableName() + " property " +
                                "inner join " + DcModules.get(getModuleIdx()).getTableName() + " item " +
-                               "on property." + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + "=" +
-                               "item." + columnName + " and " + columnName + " = '" + name.replaceAll("'", "''") + "'";
+                               "on CONVERT(property." + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + ",LONGVARCHAR) =" +
+                               "CONVERT(item." + columnName + ",LONGVARCHAR) and item." + columnName + " = '" + name.replaceAll("'", "''") + "'";
                 ResultSet rs2 = DatabaseManager.executeSQL(sql2, true);
                 
                 while (rs2.next()) {
@@ -296,10 +293,11 @@ public class Conversion {
         try {
             logger.info("Converting " + columnName + " for module " + DcModules.get(moduleIdx).getName() + " to a text column.");
           
-            String sql = "alter table " + DcModules.get(moduleIdx).getTableName() + " alter column " + columnName + " " +
-                         DcModules.get(moduleIdx).getField(columnName).getDataBaseFieldType();
-        
-            DatabaseManager.executeSQL(sql, true);
+            if (DcModules.get(moduleIdx).getField(columnName) != null) {
+                String sql = "alter table " + DcModules.get(moduleIdx).getTableName() + " alter column " + columnName + " " +
+                             DcModules.get(moduleIdx).getField(columnName).getDataBaseFieldType();
+                DatabaseManager.executeSQL(sql, true);
+            }
 
         } catch (Exception se) {
             logger.error("Could not convert to text!", se);

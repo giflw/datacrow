@@ -88,7 +88,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         this.module = module;
         this.canHaveReferences = canHaveReferences;
         this.field = oldField;
-        this.existingField = parent instanceof AlterModuleWizard;
+        this.existingField = parent instanceof AlterModuleWizard && oldField != null;
         this.excludedNames = excludedNames;
         
         this.setModal(true);
@@ -150,23 +150,26 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             if (numberMaxLength.isEnabled())
                 checkValue(name, DcResources.getText("lblMaxTextLength"));
             
-            String column = StringUtils.normalize(name).replaceAll(" ", "").replaceAll("[\\-]", "");
-            
             if (!existingField) {
-                for (String excludedName : excludedNames) {
-                    if (excludedName != null && 
-                        excludedName.toLowerCase().equals(column.toLowerCase()))
-                        throw new WizardException(DcResources.getText("msgFieldWithSameNameExists"));
+                String column = StringUtils.normalize(name).replaceAll(" ", "").replaceAll("[\\-]", "");
+                
+                if (!existingField) {
+                    for (String excludedName : excludedNames) {
+                        if (excludedName != null && 
+                            excludedName.toLowerCase().equals(column.toLowerCase()))
+                            throw new WizardException(DcResources.getText("msgFieldWithSameNameExists"));
+                    }
                 }
+                
+                field.setColumn(column);
             }
             
-            field.setColumn(column);
             field.setName(name);
             field.setSearchable(checkSearchable.isSelected());
             field.setTechinfo(checkTechinfo.isSelected());
             
             field.setMaximumLength(numberMaxLength.getValue() == null ? 255 : 
-            						((Long) numberMaxLength.getValue()).intValue());
+            				       ((Long) numberMaxLength.getValue()).intValue());
             
             FieldType ft = (FieldType) comboFieldType.getSelectedItem();
             if (ft.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
