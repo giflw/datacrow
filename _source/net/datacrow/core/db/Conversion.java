@@ -92,6 +92,7 @@ public class Conversion {
     public boolean isNeeded() {
         boolean needed = false;
         
+        DcModule refMod = DcModules.get(moduleIdx + referencingModuleIdx) != null ? DcModules.get(moduleIdx + referencingModuleIdx) : DcModules.get(referencingModuleIdx);
         
         try {
             String sql = "select top 1 * from " + DcModules.get(moduleIdx).getTableName();
@@ -107,10 +108,9 @@ public class Conversion {
                 // else the conversion still needs to (re-) occur.
                 needed = exists;
             } else if (getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
-                // Check: check if there are items stored in the targeted module and if it exists.
+                // Check if there are items stored in the targeted module and if it exists.
 
-                DcModule reference = DcModules.get(referencingModuleIdx);
-                sql = "select top 1 " + columnName + " from " + reference.getTableName();
+                sql = "select top 1 " + columnName + " from " + refMod.getTableName();
                 
                 try {
                     ResultSet rs = DatabaseManager.executeSQL(sql, false);
@@ -128,8 +128,7 @@ public class Conversion {
                     needed = true;
                 }
             } else {
-                DcModule reference = DcModules.get(referencingModuleIdx);
-                sql = "select top 1 " + columnName + " from " + reference.getTableName();
+                sql = "select top 1 " + columnName + " from " + DcModules.get(moduleIdx);
                 
                 try {
                     ResultSet rs = DatabaseManager.executeSQL(sql, false);

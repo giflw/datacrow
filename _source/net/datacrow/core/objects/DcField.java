@@ -477,11 +477,13 @@ public class DcField implements Serializable{
             fieldType == ComponentFactory._RATINGCOMBOBOX) {
 
             return false;
-        } else if (fieldType == ComponentFactory._REFERENCESFIELD ||
-                   fieldType == ComponentFactory._REFERENCEFIELD) {
+        } else if (getFieldType() == ComponentFactory._REFERENCEFIELD &&
+                   fieldType != ComponentFactory._REFERENCESFIELD) {
             
-            return true;
-        } else if ((getValueType() == DcRepository.ValueTypes._BOOLEAN || 
+            return false;
+        } else if ( fieldType != ComponentFactory._REFERENCEFIELD &&
+                    fieldType != ComponentFactory._REFERENCESFIELD &&
+                   (getValueType() == DcRepository.ValueTypes._BOOLEAN || 
                     getValueType() == DcRepository.ValueTypes._DATE ||
                     getValueType() == DcRepository.ValueTypes._STRING ||
                     getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
