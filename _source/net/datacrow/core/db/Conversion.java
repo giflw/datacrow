@@ -120,6 +120,8 @@ public class Conversion {
                     needed = true;
                 }
             }
+            
+            result.close();
         } catch (Exception e) {
             logger.error(e, e);
         }
@@ -133,6 +135,9 @@ public class Conversion {
      * @return
      */
     public boolean execute() {
+        
+        DcModule refMod = DcModules.get(moduleIdx + referencingModuleIdx) != null ? DcModules.get(moduleIdx + referencingModuleIdx) : DcModules.get(referencingModuleIdx);
+        
         // Converting a reference field to a multi-reference field
         if (getOldFieldType() == ComponentFactory._REFERENCEFIELD &&
             getNewFieldType() == ComponentFactory._REFERENCESFIELD) {
@@ -145,7 +150,7 @@ public class Conversion {
                          "WHERE " + getColumnName() + " IS NOT NULL";
             try {
                 ResultSet rs = DatabaseManager.executeSQL(sql, true);
-                DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, DcModules.get(getModuleIdx()).getField(columnName).getReferenceIdx()));
+                DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, refMod.getIndex()));
             
                 DcObject mapping = mappingMod.getDcObject();
                 while (rs.next()) {
@@ -157,6 +162,7 @@ public class Conversion {
                     
                     DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null), true);
                 }
+                rs.close();
             } catch (Exception e) {
                 logger.error("Failed to create reference. Conversion has failed. Restart Data Crow to try again.", e);
                 return false;
@@ -166,25 +172,29 @@ public class Conversion {
         } else if (getNewFieldType() == ComponentFactory._REFERENCESFIELD ||
                    getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
             
-            logger.info("Starting to convert field [" + columnName + "] to a multi references field");
+            logger.info("Starting to convert field [" + columnName + "] to a reference field");
             
-            String sql = "select distinct " + columnName + " from " + DcModules.get(getModuleIdx()).getTableName();
+            String sql = "select distinct " + columnName + " from " + DcModules.get(getModuleIdx()).getTableName() + " where " + columnName + " is not null";
             
             try {
                 ResultSet rs = DatabaseManager.executeSQL(sql, true);
                 
-                DcModule refMod = DcModules.get(referencingModuleIdx);
-                
                 while (rs.next()) {
                     String name = rs.getString(1);
+                    
+                    // check if the referenced item exists
                     DcObject reference = refMod.getDcObject();
                     reference.setValue(DcProperty._A_NAME, name);
-                    DatabaseManager.executeQuery(new Query(Query._INSERT, reference, null, null), true);
+                    List<DcObject> items = DatabaseManager.executeQuery(reference, false);
+                    if (items.size() == 0) {
+                        reference.setIDs();
+                        DatabaseManager.executeQuery(new Query(Query._INSERT, reference, null, null), true);
+                    }
                     
                     String sql2 = "select item.ID, property.ID from " + refMod.getTableName() + " property " +
                                    "inner join " + DcModules.get(getModuleIdx()).getTableName() + " item " +
                                    "on property." + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + "=" +
-                                   "item." + columnName;
+                                   "item." + columnName + " and " + columnName + " = '" + name.replaceAll("'", "''") + "'";
                     ResultSet rs2 = DatabaseManager.executeSQL(sql2, true);
                     
                     while (rs2.next()) {
@@ -192,20 +202,28 @@ public class Conversion {
                         String propertyID = rs2.getString(2);
                         
                         if (getNewFieldType() == ComponentFactory._REFERENCESFIELD) {
-                            DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, getReferencingModuleIdx()));
+                            DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, refMod.getIndex()));
                             
                             DcObject mapping = mappingMod.getDcObject();
                             mapping.setValue(DcMapping._A_PARENT_ID, itemID);
                             mapping.setValue(DcMapping._B_REFERENCED_ID, propertyID);
                             
-                            DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null), true);
+                            items = DatabaseManager.executeQuery(mapping, false);
+                            if (items.size() == 0)
+                                DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null), true);
+                            
                         } else {
                             String sql3 = "update " + DcModules.get(getModuleIdx()).getTableName() +
                                           " set " + columnName + "=" + propertyID;
                             DatabaseManager.executeSQL(sql3, true);
                         }
                     }
+                    
+                    rs2.close();
                 }
+                
+                rs.close();
+                
             } catch (Exception e) {
                 logger.error("Failed to create reference. Conversion has failed. Restart Data Crow to try again.", e);
                 return false;

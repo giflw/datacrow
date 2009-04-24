@@ -378,9 +378,8 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 numberMaxLength.setEnabled(true);
             }
             
-            if ((type.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                 type.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) &&
-                !existingField) {
+            if (type.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                type.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                 
                 comboReference.setEnabled(true);
             } else {

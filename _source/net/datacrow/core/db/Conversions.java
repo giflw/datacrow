@@ -92,14 +92,22 @@ public class Conversions {
             if (!filename.endsWith("conversions.properties"))
                 continue;
             
+            FileInputStream fos = null;
             try {
+                fos = new FileInputStream(filename);
                 Properties properties = new Properties();
-                properties.load(new FileInputStream(filename));
+                properties.load(fos);
                 for (Object value : properties.values())
                     conversions.add(new Conversion((String) value));
                 
             } catch (IOException e) {
                 logger.error("Failed to load database column conversion scripts", e);
+            } finally {
+                try {
+                    if (fos != null) fos.close();
+                } catch (IOException e) {
+                    logger.error("Could not release conversion file " + filename, e);
+                }
             }
         }
     }
@@ -124,6 +132,13 @@ public class Conversions {
                 logger.error("Could not rename the conversion file from " + file + " to " + newFile, e);
             }
         }
+        
+//        if (converted) {
+//            DataCrow.showSplashScreen(false);
+//            new MessageBox("Conversions have been applied. Data Crow needs to be restarted.", MessageBox._INFORMATION);
+//            DatabaseManager.closeDatabases(false);
+//            System.exit(0);
+//        }
     }
     
     public void save() {
