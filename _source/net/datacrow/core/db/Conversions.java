@@ -61,6 +61,10 @@ public class Conversions {
     public Conversions() {}
     
     public void calculate() {
+        
+        // remove old conversions
+        conversions.clear();
+        
         for (DcModule module : DcModules.getAllModules()) {
             
             if (module.getXmlModule() == null)
@@ -122,8 +126,8 @@ public class Conversions {
         // rename the old file
         File file = new File(filename);
         if (converted && file.exists()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-            String prefix = sdf.format(new Date());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            String prefix = sdf.format(new Date()) + "_";
             File newFile = new File(file.getParent(), prefix + file.getName());
             
             try {
@@ -132,16 +136,13 @@ public class Conversions {
                 logger.error("Could not rename the conversion file from " + file + " to " + newFile, e);
             }
         }
-        
-//        if (converted) {
-//            DataCrow.showSplashScreen(false);
-//            new MessageBox("Conversions have been applied. Data Crow needs to be restarted.", MessageBox._INFORMATION);
-//            DatabaseManager.closeDatabases(false);
-//            System.exit(0);
-//        }
     }
     
     public void save() {
+        
+        if (conversions.size() == 0)
+            return;
+        
         Properties properties = new Properties();
         int count = 0;
         for (Conversion conversion : conversions) {
