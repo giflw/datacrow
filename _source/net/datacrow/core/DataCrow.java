@@ -286,14 +286,14 @@ public class DataCrow {
             // convert the settings
             SettingsConversion.convert();
             
-            checkTabs();
-        
             // Start the UI
             if (splashScreen == null)
                 showSplashScreen();
 
             showSplashMsg(DcResources.getText("msgLoadingItems"));
             DcModules.loadData();
+
+            checkTabs();
             
             if (!webserverMode)
                 showSplashMsg(DcResources.getText("msgLoadingUI"));

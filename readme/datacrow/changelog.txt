@@ -3,6 +3,7 @@ Data Crow 3.4.9 [Release on 04/03/2009] [testing: moderate] [target: beta]
 -----------------------------------------------------------------------------------------
 
 [New]
+- Italian translation! Thanks to Marco Artioli!
 - Data Crow's web server can now be started without showing the UI. The normal parameter
   'webserver' in combination with the new credentials parameter hides the splash screen 
   and bypasses the login dialog. See the readme on how to apply these parameters.

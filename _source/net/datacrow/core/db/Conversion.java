@@ -94,6 +94,17 @@ public class Conversion {
         
         DcModule refMod = DcModules.get(moduleIdx + referencingModuleIdx) != null ? DcModules.get(moduleIdx + referencingModuleIdx) : DcModules.get(referencingModuleIdx);
         
+        // check if the column exists (old version with old module will not have the column)
+        if (getNewFieldType() != ComponentFactory._REFERENCESFIELD) {
+            String sql = "select top 1 " + columnName + " from " + DcModules.get(moduleIdx).getTableName();
+            try {
+                ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                rs.close();
+            } catch (Exception se) {
+                return false;
+            }
+        }
+        
         try {
             String sql = "select top 1 * from " + DcModules.get(moduleIdx).getTableName();
             ResultSet result = DatabaseManager.executeSQL(sql, false);
@@ -127,9 +138,10 @@ public class Conversion {
                     needed = pos > -1 && meta.getColumnType(pos) != Types.BIGINT;
                     
                     if (!needed) {
-                        // TODO: check if each of the values actually exists in the reference module!!!!!!
+                        // Check if each of the values actually exists in the reference module!!!!!!
                         sql = "select distinct " + columnName + " from " + DcModules.get(getModuleIdx()).getTableName() + " where " + columnName + " is not null " +
-                              "and " + columnName + " not in (select " + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + " from " + refMod.getTableName() + ")";
+                              "and " + columnName + " not in (select " + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + " from " + refMod.getTableName() + ") " +
+                              "and " + columnName + " not in (select ID from " + refMod.getTableName() + ")";
                         
                         rs = DatabaseManager.executeSQL(sql, false);
                         

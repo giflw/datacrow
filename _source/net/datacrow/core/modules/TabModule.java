@@ -41,7 +41,12 @@ public class TabModule extends DcPropertyModule {
     public DcObject getDcObject() {
         return new Tab();
     }
-
+    
+    @Override
+    public boolean hasDependingModules() {
+        return true;    
+    }
+    
     @Override
     public int getDefaultSortFieldIdx() {
         return Tab._C_ORDER;

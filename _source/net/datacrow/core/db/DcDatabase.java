@@ -276,7 +276,7 @@ public class DcDatabase {
             
             boolean found = false;
             for (int i = 1; i < metaData.getColumnCount() + 1; i++) {
-                if (metaData.getColumnName(i).toUpperCase().equals(column.toUpperCase())) {
+                if (metaData.getColumnName(i).equalsIgnoreCase(column)) {
                     found = true;
                     int dbSize = metaData.getColumnDisplaySize(i);
                     if (    dbSize < field.getMaximumLength() && 

@@ -379,7 +379,7 @@ public class DataManager {
      */
     public static boolean checkTab(int module, String name) {
         boolean exists = true;
-        
+
         DataFilter df = new DataFilter(DcModules._TAB);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
