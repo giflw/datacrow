@@ -110,7 +110,7 @@ public class Conversion {
             } else if (getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
                 // Check if there are items stored in the targeted module and if it exists.
 
-                sql = "select top 1 " + columnName + " from " + refMod.getTableName();
+                sql = "select top 1 * from " + refMod.getTableName();
                 
                 try {
                     ResultSet rs = DatabaseManager.executeSQL(sql, false);
@@ -122,8 +122,25 @@ public class Conversion {
                             pos = idx;
                     }
                     
+                    
                     // check the column type.. if not BIGINT a conversion is still needed.
                     needed = pos > -1 && meta.getColumnType(pos) != Types.BIGINT;
+                    
+                    if (!needed) {
+                        // TODO: check if each of the values actually exists in the reference module!!!!!!
+                        sql = "select distinct " + columnName + " from " + DcModules.get(getModuleIdx()).getTableName() + " where " + columnName + " is not null " +
+                              "and " + columnName + " not in (select " + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + " from " + refMod.getTableName() + ")";
+                        
+                        rs = DatabaseManager.executeSQL(sql, false);
+                        
+                        while (rs.next()) {
+                            needed = true;
+                            break;
+                        }
+                        
+                        rs.close();
+                    }
+                    
                 } catch (Exception ignore) {
                     needed = true;
                 }
