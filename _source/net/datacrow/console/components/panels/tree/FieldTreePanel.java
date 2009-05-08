@@ -33,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -252,19 +253,28 @@ public class FieldTreePanel extends TreePanel {
                 if (references != null && references.size() > 0) {
                     for (DcObject reference : references) {
                         String key = reference.toString();
-                        DefaultMutableTreeNode node = addElement(key, dco, parent);
+                        DefaultMutableTreeNode node = addElement(key, reference.getIcon(), dco, parent);
                         if (level + 1 < fields.length)
                             addElement(dco, node, level + 1);
                     }
                 } else {
-                    DefaultMutableTreeNode node = addElement(empty, dco, parent);
+                    DefaultMutableTreeNode node = addElement(empty, null, dco, parent);
                     if (level + 1 < fields.length)
                         addElement(dco, node, level + 1);
                 }
             } else {
                 String key = dco.getDisplayString(field.getIndex());
                 key = key.trim().length() == 0 ? empty : key;
-                DefaultMutableTreeNode node = addElement(key, dco, parent);
+                
+                
+                DefaultMutableTreeNode node;
+                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+                    DcObject ref = (DcObject) dco.getValue(field.getIndex());
+                    node = addElement(key, (ref != null ? ref.getIcon() : null), dco, parent);    
+                } else {
+                    node = addElement(key, null, dco, parent);
+                }
+                
                 if (level + 1 < fields.length)
                     addElement(dco, node, level + 1);
             }
@@ -281,10 +291,10 @@ public class FieldTreePanel extends TreePanel {
      * @param parent
      * @return
      */
-    private DefaultMutableTreeNode addElement(String key, DcObject dco, DefaultMutableTreeNode parent) {
+    private DefaultMutableTreeNode addElement(String key, ImageIcon icon, DcObject dco, DefaultMutableTreeNode parent) {
         DefaultMutableTreeNode node = findNode(key, parent);
         if (node == null) {
-            NodeElement ne = new NodeElement(getModule(), key);
+            NodeElement ne = new NodeElement(getModule(), key, icon);
             ne.addValue(dco);
             node = new DefaultMutableTreeNode(ne);
 
@@ -383,7 +393,7 @@ public class FieldTreePanel extends TreePanel {
         
         top = new DefaultMutableTreeNode(orderingOn);
         
-        NodeElement element = new NodeElement(getModule(), orderingOn);
+        NodeElement element = new NodeElement(getModule(), orderingOn, null);
         element.setValues(getItems());
         top.setUserObject(element);
     }
@@ -398,7 +408,7 @@ public class FieldTreePanel extends TreePanel {
     @SuppressWarnings("unchecked")
     protected void createLeafs(DefaultMutableTreeNode parentNode, List<DcObject> objects, int level) {
         // determine the leafs to create
-        LinkedHashMap<String, Collection<DcObject>> keys = new LinkedHashMap<String, Collection<DcObject>>();
+        LinkedHashMap<NodeElement, Collection<DcObject>> keys = new LinkedHashMap<NodeElement, Collection<DcObject>>();
         DcField field = DcModules.get(getModule()).getField(fields[level]);
         
         // field does not longer exist (upgraded version), resetting tree
@@ -414,38 +424,46 @@ public class FieldTreePanel extends TreePanel {
                 List<DcObject> references = (List<DcObject>) dco.getValue(field.getIndex());
                 
                 if (references == null || references.size() == 0) {
-                    addKey(keys, empty, dco);
+                    
+                    addKey(keys, new NodeElement(getModule(), empty, null), dco);
                 } else {
                     Collections.sort(references);
                     for (DcObject reference : references)
-                        addKey(keys, reference.toString(), dco);
+                        addKey(keys, new NodeElement(getModule(), reference.toString(), reference.getIcon()), dco);
                 }
             } else {
+
                 String key = dco.getDisplayString(field.getIndex());
                 key = key.trim().length() == 0 ? empty : key;
-                addKey(keys, key, dco);
+
+                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+                    DcObject ref = (DcObject) dco.getValue(field.getIndex());
+                    addKey(keys, new NodeElement(getModule(), key, (ref != null ? ref.getIcon() : null)), dco);
+                } else {
+                    addKey(keys, new NodeElement(getModule(), key, null), dco);
+                }
+                
             }
         }
         
         // create the actual leafs
-        for (String key : keys.keySet())
+        for (NodeElement key : keys.keySet())
             addLeaf(parentNode, keys.get(key), key);
         
         keys.clear();
     }   
     
-    protected void addKey(Map<String, Collection<DcObject>> keys, String key, DcObject dco) {
+    protected void addKey(Map<NodeElement, Collection<DcObject>> keys, NodeElement key, DcObject dco) {
         Collection<DcObject> values = keys.get(key);
         values = values == null ? new ArrayList<DcObject>() : values;
         values.add(dco);
         keys.put(key, values);
     }
     
-    private void addLeaf(DefaultMutableTreeNode parentNode, Collection<DcObject> values, String key) {
-        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(new NodeElement(getModule(), key));
+    private void addLeaf(DefaultMutableTreeNode parentNode, Collection<DcObject> values, NodeElement key) {
+        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(key);
         for (DcObject dco : values)
             ((NodeElement) newNode.getUserObject()).addValue(dco);
-        
         
         insertNode(newNode, parentNode);
     }

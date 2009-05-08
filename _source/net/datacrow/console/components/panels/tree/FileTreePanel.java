@@ -115,7 +115,7 @@ public class FileTreePanel extends TreePanel {
                         nodes.add(node);
                     }
                     
-                    NodeElement element = new NodeElement(getModule(), part);
+                    NodeElement element = new NodeElement(getModule(), part, null);
                     node.setUserObject(element);
                     
                     if (parts.size() - 1 == level)
@@ -159,7 +159,7 @@ public class FileTreePanel extends TreePanel {
         
         top = new DefaultMutableTreeNode(orderingOn);
         
-        NodeElement element = new NodeElement(getModule(), orderingOn);
+        NodeElement element = new NodeElement(getModule(), orderingOn, null);
         element.setValues(new ArrayList<DcObject>());
         top.setUserObject(element);
     }

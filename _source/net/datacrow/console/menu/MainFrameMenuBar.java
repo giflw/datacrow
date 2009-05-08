@@ -181,8 +181,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
                 PluginHelper.add(menuSettings, "WebFieldSettings");
         }
         
-        menuSettings.addSeparator();
         PluginHelper.add(menuSettings, "ItemFormSettings");
+        menuSettings.addSeparator();
         PluginHelper.add(menuSettings, "ChangeLookAndFeel");
         menuSettings.addSeparator();
         PluginHelper.add(menuSettings, "ResourceEditor");

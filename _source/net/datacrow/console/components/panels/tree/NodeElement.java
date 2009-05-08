@@ -3,6 +3,8 @@ package net.datacrow.console.components.panels.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.objects.DcObject;
@@ -11,18 +13,24 @@ public class NodeElement {
         
     private String key;
     private String keyComparable;
+    private ImageIcon icon;
     private int module;
     
     private List<DcObject> values = new ArrayList<DcObject>();
     
-    public NodeElement(int module, String key) {
+    public NodeElement(int module, String key, ImageIcon icon) {
         this.module = module;
         this.key = key;
+        this.icon = icon;
         this.keyComparable = key.toLowerCase();        
     }
 
     public void setValues(List<DcObject> values) {
         this.values = values;
+    }
+    
+    public ImageIcon getIcon() {
+        return icon;
     }
     
     public void addValue(DcObject dco) {
@@ -86,6 +94,14 @@ public class NodeElement {
             return key;
         else 
             return key + " (" + String.valueOf(values.size()) + ")";    
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof NodeElement))
+            return false;
+        else 
+            return getKey().equals(((NodeElement) o).getKey());
     }
 
     @Override

@@ -23,52 +23,31 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components;
+package net.datacrow.console.components.renderers;
 
-import java.awt.Graphics;
+import java.awt.Component;
 
-import javax.swing.JToolTip;
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
-import net.datacrow.console.components.renderers.DcTreeRenderer;
-import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.console.components.panels.tree.NodeElement;
 
-public class DcTree extends JTree {
- 
-    public DcTree(DefaultMutableTreeNode node) {
-        super(node);
-        setCellRenderer(new DcTreeRenderer());
-    }
+public class DcTreeRenderer extends DefaultTreeCellRenderer {
 
-    public DcTree(DefaultTreeModel model) {
-        super(model);
-        setCellRenderer(new DcTreeRenderer());
-    }    
-    
     @Override
-    public void removeTreeSelectionListener(TreeSelectionListener tsl) {
-        for (TreeSelectionListener listener : getTreeSelectionListeners()) {
-            if (listener == tsl) 
-                super.removeTreeSelectionListener(listener);
-        }
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
+            boolean expanded, boolean leaf, int row, boolean hasFocus) {
+
+            super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+            
+            if (value instanceof DefaultMutableTreeNode) {
+                Object o = ((DefaultMutableTreeNode) value).getUserObject();
+                
+                if (o instanceof NodeElement) 
+                    setIcon(((NodeElement) o).getIcon());
+            }
+
+            return this;
     }
-    
-    @Override
-    public void addTreeSelectionListener(TreeSelectionListener tsl) {
-        removeTreeSelectionListener(tsl);
-        super.addTreeSelectionListener(tsl);
-    }    
-    
-    @Override
-    public JToolTip createToolTip() {
-        return new DcMultiLineToolTip();
-    }
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(DcSwingUtilities.setRenderingHint(g));
-    }      
 }
