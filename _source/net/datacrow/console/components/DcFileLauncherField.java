@@ -43,6 +43,7 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.FileLauncher;
+import net.datacrow.util.Utilities;
 
 public class DcFileLauncherField extends JComponent implements IComponent, ActionListener {
 
@@ -90,8 +91,11 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     }
 
     public void setFile(File file) {
-        this.file = file;
-        text.setText(file == null ? "" : file.toString());
+        String filename = file == null ? "" : file.toString();
+        filename = Utilities.getMappedFilename(filename);
+
+        this.file = new File(filename);
+        text.setText(filename);
     }
     
     public void setValue(Object value) {

@@ -44,6 +44,7 @@ import javax.swing.table.TableColumn;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcLabel;
+import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
 import net.datacrow.console.components.renderers.XmlFieldCellRenderer;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.messageboxes.MessageBox;
@@ -171,6 +172,10 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         }
     }
     
+    private boolean canBeRemoved() {
+        
+    }
+    
     private Collection<DcField> getDefaultFields() {
         XmlModule xmlModule = getModule();
 
@@ -260,13 +265,23 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         scrollerSysFields.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollerSysFields.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         
-        table.setColumnCount(1);
+        table.setColumnCount(3);
         TableColumn colField = table.getColumnModel().getColumn(0);
         JTextField textField = ComponentFactory.getTextFieldDisabled();
         colField.setCellEditor(new DefaultCellEditor(textField));
         colField.setHeaderValue(DcResources.getText("lblName"));
         colField.setCellRenderer(XmlFieldCellRenderer.getInstance());
 
+        TableColumn colCanRemove = table.getColumnModel().getColumn(1);
+        colCanRemove.setCellEditor(new DefaultCellEditor(ComponentFactory.getCheckBox("")));
+        colCanRemove.setHeaderValue(DcResources.getText("lblName"));
+        colCanRemove.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
+
+        TableColumn colCanChange = table.getColumnModel().getColumn(2);
+        colCanChange.setCellEditor(new DefaultCellEditor(ComponentFactory.getCheckBox("")));
+        colCanChange.setHeaderValue(DcResources.getText("lblName"));
+        colCanChange.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
+        
         JScrollPane scroller = new JScrollPane(table);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroller.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);

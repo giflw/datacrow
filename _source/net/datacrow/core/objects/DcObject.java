@@ -477,7 +477,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public String getFilename() {
         DcField field = getFileField();
-        return field != null ? (String) getValue(field.getIndex()) : null;
+        return field != null ? Utilities.getMappedFilename((String) getValue(field.getIndex())) : null; 
     }
 
     /**

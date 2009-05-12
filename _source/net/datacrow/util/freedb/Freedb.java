@@ -241,7 +241,6 @@ public class Freedb {
      */
     public AudioCD convertToDcObject(FreedbReadResult result) {
         AudioCD audioCD = new AudioCD();
-        audioCD.setIDs();
         
         String title = result.getAlbum();
         if (title != null && title.length() > 0)
@@ -266,6 +265,8 @@ public class Freedb {
             track.setValue(AudioTrack._H_PLAYLENGTH, result.getTrackSeconds(i));
             audioCD.addChild(track);
         }
+        
+        audioCD.setIDs();
         return audioCD;
     }    
 }

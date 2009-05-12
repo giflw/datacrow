@@ -29,6 +29,8 @@ Data Crow 3.4.9 [Release on 04/03/2009] [testing: moderate] [target: beta]
 - Error in the settings: long stored as integer.
 - Unused columns, due to conversions in the past, will now be removed.
 - NullPointerException when trying to use the Bol.com online search.
+- Tracks were duplicated after updating an audio CD imported via the 'retrieve CD information'
+  tool. 
 
 
 -----------------------------------------------------------------------------------------

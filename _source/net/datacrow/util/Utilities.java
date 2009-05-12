@@ -60,6 +60,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -99,6 +100,28 @@ public class Utilities {
         } catch (Exception e) {
             logger.error("Could not load languages file", e);
         }
+    }
+    
+    public static String getMappedFilename(String filename) {
+        String s = filename;
+        
+        if (s != null) {
+            String[] mappings = DcSettings.getStringArray(DcRepository.Settings.stDriveMappings);
+            if (mappings != null) {
+                for (String mapping : mappings) {
+                    StringTokenizer st = new StringTokenizer(mapping, "/&/");
+                    String drive = (String) st.nextElement();
+                    String mapsTo = (String) st.nextElement();
+                    
+                    if (s.length() > drive.length() && s.substring(0, drive.length()).equalsIgnoreCase(drive)) {
+                        s = mapsTo + s.substring(drive.length());
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return s;
     }
     
     public static DcImageIcon getImageFromClipboard() {

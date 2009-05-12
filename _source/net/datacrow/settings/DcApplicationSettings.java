@@ -56,6 +56,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     public static final String _FileHashing = "lblFileHashing";
     public static final String _Locale = "lblGroupLocale";
     public static final String _Module = "lblModuleSettings";
+    public static final String _DriveMappings = "lblDriveMappings";
     public static final String _FileHandlers = "lblProgramDefinitions";
     public static final String _SelectionColor = "lblSelectionColor";
     public static final String _HTTP = "lblHTTPSettings";
@@ -81,6 +82,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         SettingsGroup moduleGroup = new SettingsGroup(_Module, "dc.settings.module");
         SettingsGroup fontGroup = new SettingsGroup(_Font, "dc.settings.font");
         SettingsGroup fileHashingGroup = new SettingsGroup(_FileHashing, "dc.settings.filehash");
+        SettingsGroup driveMappings = new SettingsGroup(_DriveMappings, "dc.settings.drivemappings");
 
         getSettings().addGroup(_Module, moduleGroup);
         getSettings().addGroup(_Locale, localeGroup);
@@ -89,6 +91,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addGroup(_HTTP, http);
         getSettings().addGroup(_SelectionColor, colorGroup);
         getSettings().addGroup(_FileHandlers, fileHandlers);
+        getSettings().addGroup(_DriveMappings, driveMappings);
         getSettings().addGroup(_FileHashing, fileHashingGroup);
     }
 
@@ -120,6 +123,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));          
+        getSettings().addSetting(_DriveMappings,
+                new Setting(DcRepository.ValueTypes._STRINGARRAY,
+                            DcRepository.Settings.stDriveMappings,
+                            null,
+                            ComponentFactory._DRIVEMAPPING,
+                            "",
+                            "lblDriveMappings",
+                            false,
+                            true));          
         getSettings().addSetting(_Module,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stModuleSettings,

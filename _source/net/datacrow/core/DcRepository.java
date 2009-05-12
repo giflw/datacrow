@@ -89,6 +89,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
+        public static final String stDriveMappings = "drive_mappings";
         public static final String stLanguage = "language";
         public static final String stCheckedForJavaVersion = "checked_for_java_version";
         public static final String stSelectItemDialogSize = "select_item_dialog_size";

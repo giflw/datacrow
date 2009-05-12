@@ -78,6 +78,7 @@ import net.datacrow.console.components.DcColorSelector;
 import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcDateField;
 import net.datacrow.console.components.DcDecimalField;
+import net.datacrow.console.components.DcDriveMappingField;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcFileLauncherField;
 import net.datacrow.console.components.DcFilePatternField;
@@ -168,6 +169,7 @@ public final class ComponentFactory {
     public static final int _PERSONORDERCOMBO = 29;
     public static final int _PERSONDISPLAYFORMATCOMBO = 30;
     public static final int _LANGUAGECOMBO = 31;
+    public static final int _DRIVEMAPPING = 32;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -411,6 +413,8 @@ public final class ComponentFactory {
                 return getPersonDisplayFormatComboBox();
             case _LANGUAGECOMBO:
                 return getLanguageCombobox();
+            case _DRIVEMAPPING:
+                return getDriveMappingField();
 
             default:
                 return getShortTextField(maxTextLength);
@@ -487,6 +491,10 @@ public final class ComponentFactory {
         cb.addItem(DcResources.getText("lblPersonOrderByLastname"));
         cb.addItem(DcResources.getText("lblPersonOrderByFirstname"));
         return cb;
+    }
+    
+    public static final DcDriveMappingField getDriveMappingField() {
+        return new DcDriveMappingField();
     }
     
     public static final JComboBox getLanguageCombobox() {
