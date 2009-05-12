@@ -17,6 +17,8 @@ Data Crow 3.4.9 [Release on 04/03/2009] [testing: moderate] [target: beta]
 - The file importer considered a fixed set of file types. The functionality has been 
   expanded to allow the user to define additional file types.
 - Icons are now shown in the tree view.
+- The alter module wizard now allows for fields to be changed as well. Upgrades are managed
+  automatically.
 
 [Changed]
 - The default view can now be set per module. In previous versions this was a global 
