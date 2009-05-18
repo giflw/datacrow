@@ -75,6 +75,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     private XmlField field;
     private int module;
 
+    boolean canceled = false;
     boolean existingField = true;
     
     public DefineFieldDialog(int module,
@@ -88,7 +89,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         this.module = module;
         this.canHaveReferences = canHaveReferences;
         this.field = oldField;
-        this.existingField = parent instanceof AlterModuleWizard && oldField != null;
+        this.existingField = oldField != null;
         this.excludedNames = excludedNames;
         
         this.setModal(true);
@@ -101,6 +102,10 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         pack();
         setSize(new Dimension(400,300));
         setCenteredLocation();
+    }
+    
+    public boolean isCanceled() {
+        return canceled;
     }
 
     private void applyField() {
@@ -340,11 +345,15 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     }
     
     private void filterTypesForAlteration(List<FieldType> fieldTypes) {
+        
+        // new fields can change to anything they like
+        if (field == null || field.isNew())
+            return;
+        
         List<FieldType> remove = new ArrayList<FieldType>();
         for (FieldType fieldType : fieldTypes) {
             if ( DcModules.get(module).getField(field.getIndex()) == null || // do not allow changing new fields!
-                !DcModules.get(module).getField(field.getIndex()).canConvertTo(fieldType.getIndex(), fieldType.getValueType())) {
-                
+                !field.canConvertTo(fieldType.getIndex(), fieldType.getValueType())) {
                 remove.add(fieldType);
             }
         }
@@ -428,6 +437,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 comboReference.setEnabled(false);
             }
         } else if (e.getActionCommand().equals("close")) {
+            canceled = true;
             close();
         } else if (e.getActionCommand().equals("createField")) {
             createField();

@@ -30,6 +30,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -380,12 +382,21 @@ public class DataCrow {
     private static void checkTabs() {
         for (DcModule module : DcModules.getAllModules()) {
             
-            if (module.getFieldDefinitions() == null) continue;
-            
-            for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-               if (!Utilities.isEmpty(definition.getTab(module.getIndex())))
-                   DataManager.checkTab(module.getIndex(), definition.getTab(module.getIndex()));
+            if (module.getFieldDefinitions() == null ||
+               !module.isTopModule()) { 
+             
+                continue;
             }
+            
+            Collection<String> tabs = new ArrayList<String>();
+            for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
+                String tab = definition.getTab(module.getIndex());
+                if (!Utilities.isEmpty(tab) && !tabs.contains(tab))
+                    tabs.add(tab);
+            }
+            
+            for (String tab : tabs)
+                DataManager.checkTab(module.getIndex(), tab);
         }
     }
     

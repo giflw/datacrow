@@ -35,6 +35,7 @@ import java.util.Collection;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -45,7 +46,6 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
-import net.datacrow.console.components.renderers.XmlFieldCellRenderer;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
@@ -69,12 +69,12 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     private DcTable table;
     private DcTable tableSysFields;
     
-    private final boolean dbCheck;
+    private final boolean update;
     
-    public PanelFields(Wizard wizard, boolean dbCheck) {
+    public PanelFields(Wizard wizard, boolean update) {
         super(wizard);
         
-        this.dbCheck = dbCheck;
+        this.update = update;
         table = ComponentFactory.getDCTable(true, false);
         tableSysFields = ComponentFactory.getDCTable(true, false);
         build();
@@ -84,11 +84,12 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     public void setModule(XmlModule module) {
         super.setModule(module);
         canHaveReferences = !getModule().getModuleClass().equals(DcPropertyModule.class); 
+        
         addDefaultFields();
         
         table.clear();
         for (XmlField field : module.getFields()) 
-            table.addRow(new Object[] {field});
+            addFieldToTable(field);
     }
     
     public Object apply() {
@@ -103,6 +104,12 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         module.setFields(fields);
         
         return module;
+    }
+    
+    public void addFieldToTable(XmlField field) {
+        table.addRow(new Object[] {field, 
+                update ? Boolean.valueOf(field.isOverwritable()) : true, 
+                update ? Boolean.valueOf(field.canBeConverted()) : true});
     }
     
     @Override
@@ -135,7 +142,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         
         XmlField field = dlg.getField();
         if (field != null)
-            table.addRow(new Object[] {field});
+            addFieldToTable(field);
         
         revalidate();
         repaint();
@@ -147,8 +154,9 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         
         XmlField oldField = (XmlField) table.getValueAt(table.getSelectedRow(), 0);
         
-        if (oldField.isOverwritable() &&
-            DcModules.get(getModule().getIndex()).getField(oldField.getIndex()).canBeConverted()) {
+        if (oldField.canBeConverted() ||
+            DcModules.get(getModule().getIndex()) == null || // module does not exist
+            DcModules.get(getModule().getIndex()).getField(oldField.getIndex()) == null) {
             
             DefineFieldDialog dlg = new DefineFieldDialog(getModule().getIndex(),
                                                           getWizard(), 
@@ -158,10 +166,10 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             dlg.setVisible(true);
             
             XmlField newField = dlg.getField();
-            if (newField != null) {
+            if (newField != null && !dlg.isCanceled()) {
                 table.removeRow(table.getSelectedIndex());
-                table.addRow(new Object[] {newField});
-                table.setSelected(row);
+                addFieldToTable(newField);
+                table.setSelected(table.getColumnCount() - 1);
             }
             
             revalidate();
@@ -170,10 +178,6 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             new MessageBox(DcResources.getText("msgFieldCannotBeAltered"), MessageBox._INFORMATION);
             return;
         }
-    }
-    
-    private boolean canBeRemoved() {
-        
     }
     
     private Collection<DcField> getDefaultFields() {
@@ -216,21 +220,20 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         if (table.getSelectedRow() == -1)
             return;
         
-        if (dbCheck) {
+        if (update) {
             XmlField field = (XmlField) table.getValueAt(table.getSelectedRow(), 0);
             
             if (field.isOverwritable()) {
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteField"));
-                if (!qb.isAffirmative())
-                    return;
+                if (qb.isAffirmative())
+                    table.removeRow(table.getSelectedRow());
             } else {
                 new MessageBox(DcResources.getText("msgFieldCannotBeRemoved"), MessageBox._INFORMATION);
                 return;
             }
-        }
-        
-        if (table.getSelectedRow() != -1)
+        } else {
             table.removeRow(table.getSelectedRow());
+        }
     }
     
     private void build() {
@@ -254,7 +257,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         panelFields.setLayout(Layout.getGBL());
 
         DcLabel labelPredefined = ComponentFactory.getLabel(DcResources.getText("lblPredefinedFields"));
-        DcLabel labelNew = ComponentFactory.getLabel(DcResources.getText("lblNewFields"));
+        DcLabel lebelFields = ComponentFactory.getLabel(update ? DcResources.getText("lblFields") : DcResources.getText("lblNewFields"));
         
         tableSysFields.setColumnCount(1);
         TableColumn colSysField = tableSysFields.getColumnModel().getColumn(0);
@@ -270,16 +273,20 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         JTextField textField = ComponentFactory.getTextFieldDisabled();
         colField.setCellEditor(new DefaultCellEditor(textField));
         colField.setHeaderValue(DcResources.getText("lblName"));
-        colField.setCellRenderer(XmlFieldCellRenderer.getInstance());
 
         TableColumn colCanRemove = table.getColumnModel().getColumn(1);
-        colCanRemove.setCellEditor(new DefaultCellEditor(ComponentFactory.getCheckBox("")));
-        colCanRemove.setHeaderValue(DcResources.getText("lblName"));
+        
+        JCheckBox cb1 = ComponentFactory.getCheckBox("");
+        cb1.setEnabled(false);
+        colCanRemove.setCellEditor(new DefaultCellEditor(cb1));
+        colCanRemove.setHeaderValue(DcResources.getText("lblCanBeRemoved"));
         colCanRemove.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
 
+        JCheckBox cb2 = ComponentFactory.getCheckBox("");
+        cb2.setEnabled(false);
         TableColumn colCanChange = table.getColumnModel().getColumn(2);
-        colCanChange.setCellEditor(new DefaultCellEditor(ComponentFactory.getCheckBox("")));
-        colCanChange.setHeaderValue(DcResources.getText("lblName"));
+        colCanChange.setCellEditor(new DefaultCellEditor(cb2));
+        colCanChange.setHeaderValue(DcResources.getText("lblCanBeAltered"));
         colCanChange.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
         
         JScrollPane scroller = new JScrollPane(table);
@@ -292,7 +299,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         panelFields.add(scrollerSysFields, Layout.getGBC(0, 1, 1, 1, 50.0, 50.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-        panelFields.add(labelNew, Layout.getGBC(0, 2, 1, 1, 1.0, 1.0,
+        panelFields.add(lebelFields, Layout.getGBC(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(10, 0, 0, 0), 0, 0));
         panelFields.add(scroller, Layout.getGBC(0, 3, 1, 4, 50.0, 50.0,

@@ -152,6 +152,8 @@ public class DcValue implements Serializable {
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     if (o instanceof Collection) // always create a new arraylist
                         setValueNative(new ArrayList<DcMapping>((Collection) o), field);
+                    else 
+                        logger.error("Trying to set " + o + " while expecting a collection of mappings object");
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                     if (o instanceof DcObject)
                         setValueNative(o, field);

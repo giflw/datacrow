@@ -199,12 +199,12 @@ public abstract class FileImporter {
             if (listener.getStorageMedium() != null) { 
                 for (DcField  field : dco.getFields()) {
                     if (field.getSourceModuleIdx() == DcModules._STORAGEMEDIA)
-                        dco.setValue(field.getIndex(), listener.getStorageMedium());
+                        DataManager.createReference(dco, field.getIndex(), listener.getStorageMedium());
                 }
             }
     
             if (listener.getDcContainer() != null && dco.getModule().isContainerManaged())
-                dco.setValue(DcObject._SYS_CONTAINER, listener.getDcContainer());
+                DataManager.createReference(dco, DcObject._SYS_CONTAINER, listener.getDcContainer());
             
             dco.applyTemplate();
             dco.setIDs();

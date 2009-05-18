@@ -230,6 +230,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         top.removeAllChildren();
         top = null;
         
+        currentUserObject = null;
+        
         revalidate();
         repaint();
     }

@@ -27,6 +27,7 @@ package net.datacrow.core.modules.xml;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.InvalidValueException;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.util.XMLParser;
@@ -41,6 +42,7 @@ import org.w3c.dom.Element;
 public class XmlField extends XmlObject {
     
     private int index;
+    private int module;
     
     private int valueType;
     private int fieldType;
@@ -63,11 +65,11 @@ public class XmlField extends XmlObject {
     
     /**
      * Creates a new instances.
-     * @param module The XML module to which the field belongs.
+     * @param xmlModule The XML module to which the field belongs.
      * @param element The XML element to parse.
      * @throws InvalidValueException
      */
-    public XmlField(XmlModule module, Element element) throws InvalidValueException {
+    public XmlField(XmlModule xmlModule, Element element) throws InvalidValueException {
         index = XMLParser.getInt(element, "index");
         name = XMLParser.getString(element, "name");
         column = XMLParser.getString(element, "database-column-name");
@@ -82,11 +84,58 @@ public class XmlField extends XmlObject {
         overwritable = XMLParser.getBoolean(element, "overwritable");
         
         String reference = XMLParser.getString(element, "module-reference");
-        if (module != null)
+        if (xmlModule != null) {
             moduleReference = reference == null || reference.trim().length() == 0 || reference.equals("{index}") ?
-                              module.getIndex() :  XMLParser.getInt(element, "module-reference"); 
+                              xmlModule.getIndex() :  XMLParser.getInt(element, "module-reference");
+            module = xmlModule.getIndex();
+        }
+    }
+    
+    public boolean isNew() {
+        return DcModules.get(module) == null ||
+               DcModules.get(module).getField(index) == null;
     }
 
+    public boolean canBeConverted() {
+        return isNew() ||
+               (fieldType != ComponentFactory._PICTUREFIELD &&
+                fieldType != ComponentFactory._REFERENCESFIELD &&
+                fieldType != ComponentFactory._CHECKBOX &&
+                fieldType != ComponentFactory._DATEFIELD &&
+                fieldType != ComponentFactory._RATINGCOMBOBOX);
+    }
+    
+    public boolean canConvertTo(int fieldType, int valueType) {
+        
+        if (fieldType == getFieldType())
+            return true;
+        
+        if (fieldType == ComponentFactory._CHECKBOX ||
+            fieldType == ComponentFactory._PICTUREFIELD ||
+            fieldType == ComponentFactory._DATEFIELD ||
+            fieldType == ComponentFactory._RATINGCOMBOBOX) {
+
+            return false;
+        } else if (getFieldType() == ComponentFactory._REFERENCEFIELD &&
+                   fieldType != ComponentFactory._REFERENCESFIELD) {
+            
+            return false;
+        } else if ( fieldType != ComponentFactory._REFERENCEFIELD &&
+                    fieldType != ComponentFactory._REFERENCESFIELD &&
+                   (getValueType() == DcRepository.ValueTypes._BOOLEAN || 
+                    getValueType() == DcRepository.ValueTypes._DATE ||
+                    getValueType() == DcRepository.ValueTypes._STRING ||
+                    getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
+                    getValueType() == DcRepository.ValueTypes._LONG ||
+                    getValueType() == DcRepository.ValueTypes._DOUBLE) &&
+                    valueType != DcRepository.ValueTypes._STRING) {
+            
+            return false;
+        }
+        
+        return true;
+    }    
+    
     /**
      * The database column name
      */

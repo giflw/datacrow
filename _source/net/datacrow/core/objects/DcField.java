@@ -461,42 +461,6 @@ public class DcField implements Serializable{
         return enhancers.toArray(new IValueEnhancer[0]);
     }
     
-    public boolean canBeConverted() {
-        return fieldType != ComponentFactory._PICTUREFIELD &&
-               fieldType != ComponentFactory._REFERENCESFIELD;
-    }
-    
-    public boolean canConvertTo(int fieldType, int valueType) {
-        
-        if (fieldType == getFieldType())
-            return true;
-        
-        if (fieldType == ComponentFactory._CHECKBOX ||
-            fieldType == ComponentFactory._PICTUREFIELD ||
-            fieldType == ComponentFactory._DATEFIELD ||
-            fieldType == ComponentFactory._RATINGCOMBOBOX) {
-
-            return false;
-        } else if (getFieldType() == ComponentFactory._REFERENCEFIELD &&
-                   fieldType != ComponentFactory._REFERENCESFIELD) {
-            
-            return false;
-        } else if ( fieldType != ComponentFactory._REFERENCEFIELD &&
-                    fieldType != ComponentFactory._REFERENCESFIELD &&
-                   (getValueType() == DcRepository.ValueTypes._BOOLEAN || 
-                    getValueType() == DcRepository.ValueTypes._DATE ||
-                    getValueType() == DcRepository.ValueTypes._STRING ||
-                    getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
-                    getValueType() == DcRepository.ValueTypes._LONG ||
-                    getValueType() == DcRepository.ValueTypes._DOUBLE) &&
-                    valueType != DcRepository.ValueTypes._STRING) {
-            
-            return false;
-        }
-        
-        return true;
-    }
-
     /**
      * Calculates the database field type definition.
      */
