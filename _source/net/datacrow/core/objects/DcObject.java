@@ -25,6 +25,9 @@
 
 package net.datacrow.core.objects;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import net.datacrow.console.ComponentFactory;
@@ -53,6 +57,7 @@ import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
+import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Hash;
 import net.datacrow.util.Utilities;
@@ -454,6 +459,15 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * The icon used to represent this item.
      */
     public ImageIcon getIcon() {
+        for (DcField field : getFields()) {
+            if (field.getValueType() == DcRepository.ValueTypes._ICON) {
+                String value = (String) getValue(field.getIndex());
+                ImageIcon icon = null;
+                if (value != null && value.length() > 1) 
+                    icon = Utilities.base64ToImage(value);
+                return icon;
+            }
+        }
         return null;
     }
 
@@ -560,6 +574,43 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     protected void beforeSave() throws ValidationException {
         if (getModule().isFileBacked())
             Hash.getInstance().calculateHash(this);
+        
+        saveIcon();
+    }
+    
+    private void saveIcon() {
+        for (DcField field : getFields()) {
+        
+            if (field.getValueType() != DcRepository.ValueTypes._ICON) continue;
+            if (!isChanged(field.getIndex())) continue;
+            
+            String value = (String) getValue(field.getIndex());
+            
+            if (value != null && value.length() > 0) {
+                byte[] bytes = Base64.decode(value.toCharArray());
+                
+                ImageIcon current = new ImageIcon(bytes);
+                
+                if (current.getIconHeight() > 16 || current.getIconWidth() > 16) {
+                    Image img = Utilities.getScaledImage(bytes, 16, 16);
+                    BufferedImage buffImg = Utilities.toBufferedImage(new ImageIcon(img));
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        
+                    try {
+                        ImageIO.write(buffImg, "jpg", baos );
+                        baos.flush();
+                        bytes = baos.toByteArray();
+                        baos.close();
+                        setValue(field.getIndex(), new String(Base64.encode(bytes)));
+                        
+                        img = null;
+                        buffImg = null;
+                    } catch (Exception e) {
+                        logger.error("Could not save scaled image for object with ID " + getID(), e);
+                    }
+                }
+            }
+        }
     }
     
     /**

@@ -19,6 +19,23 @@
                 <overwritable>false</overwritable>
             </field>
         </fields>
+        <fields>
+            <field>
+                <index>5</index>
+                <name>Icon</name>
+                <database-column-name>Icon</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>false</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>0</maximum-length>
+                <field-type>7</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>12</value-type>
+                <overwritable>false</overwritable>
+            </field>
+        </fields>        
     </module>
     <module>
         <module-jar>softwarepublisher.jar</module-jar>

@@ -25,17 +25,6 @@
 
 package net.datacrow.core.objects;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-
-import net.datacrow.util.Base64;
-import net.datacrow.util.Utilities;
-
-import org.apache.log4j.Logger;
 
 /**
  * A property represents a simple item such as a category or a storage medium.
@@ -48,8 +37,6 @@ public class DcProperty extends DcObject {
 
     private static final long serialVersionUID = -936831554081323250L;
 
-    private static Logger logger = Logger.getLogger(DcProperty.class.getName());
-    
     public static final int _A_NAME = 150;
     public static final int _B_ICON = 151;
     
@@ -60,20 +47,6 @@ public class DcProperty extends DcObject {
     public DcProperty(int module) {
         super(module);
     }
-    
-    /**
-     * Retrieve the icon to represent the item.
-     * @return The value of the {@link #_B_ICON} field.
-     */
-    @Override
-    public ImageIcon getIcon() {
-        String value = (String) getValue(_B_ICON);
-        ImageIcon icon = null;
-        if (value != null && value.length() > 1) 
-            icon = Utilities.base64ToImage(value);
-        
-        return icon;
-    } 
     
     /**
      * The filename on which this item is based.
@@ -93,41 +66,6 @@ public class DcProperty extends DcObject {
     public String getName() {
         return toString();
     }
-    
-    /**
-     * Before saving a property its icon is scaled.
-     */
-    @Override
-    protected void beforeSave()  throws ValidationException {
-        super.beforeSave();
-        
-        String value = (String) getValue(_B_ICON);
-        
-        if (value != null && value.length() > 0) {
-            byte[] bytes = Base64.decode(value.toCharArray());
-            
-            ImageIcon current = new ImageIcon(bytes);
-            
-            if (current.getIconHeight() > 16 || current.getIconWidth() > 16) {
-                Image img = Utilities.getScaledImage(bytes, 16, 16);
-                BufferedImage buffImg = Utilities.toBufferedImage(new ImageIcon(img));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    
-                try {
-                    ImageIO.write(buffImg, "jpg", baos );
-                    baos.flush();
-                    bytes = baos.toByteArray();
-                    baos.close();
-                    setValue(_B_ICON, new String(Base64.encode(bytes)));
-                    
-                    img = null;
-                    buffImg = null;
-                } catch (Exception e) {
-                    logger.error("Could not save scaled image for object with ID " + getID(), e);
-                }
-            }
-        }
-    }   
     
     @Override
     public boolean equals(Object o) {
