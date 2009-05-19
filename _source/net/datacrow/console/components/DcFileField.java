@@ -44,6 +44,7 @@ import net.datacrow.console.windows.BrowserDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -119,7 +120,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         String filename = file == null ? "" : file.toString();
 
         this.file = new File(filename);
-        text.setText(filename);
+        text.setText(Utilities.getMappedFilename(filename));
     }
 
     protected void showFileSaveDialog() {
@@ -182,7 +183,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
 	}
 
 	public Object getValue() {
-		return file == null ? "" : file.toString();
+	    return file == null ? "" : Utilities.getOriginalFilename(file.toString());
 	}
     
     @Override

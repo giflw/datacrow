@@ -87,13 +87,13 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     }
 
     public String getFileAsString() {
-        return file == null ? "" : file.toString();
+        return file == null ? "" : Utilities.getOriginalFilename(file.toString());
     }
 
     public void setFile(File file) {
         String filename = file == null ? "" : file.toString();
         this.file = new File(filename);
-        text.setText(filename);
+        text.setText(Utilities.getMappedFilename(filename));
     }
     
     public void setValue(Object value) {

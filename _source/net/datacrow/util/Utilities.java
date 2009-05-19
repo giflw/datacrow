@@ -124,6 +124,29 @@ public class Utilities {
         return s;
     }
     
+    public static String getOriginalFilename(String filename) {
+        String s = filename;
+        
+        if (s != null) {
+            String[] mappings = DcSettings.getStringArray(DcRepository.Settings.stDriveMappings);
+            if (mappings != null) {
+                for (String mapping : mappings) {
+                    StringTokenizer st = new StringTokenizer(mapping, "/&/");
+                    String mapsTo = (String) st.nextElement();
+                    String drive = (String) st.nextElement();
+                    
+                    if (s.length() > drive.length() && s.substring(0, drive.length()).equalsIgnoreCase(drive)) {
+                        s = mapsTo + s.substring(drive.length());
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return s;
+    }
+    
+    
     public static DcImageIcon getImageFromClipboard() {
         Transferable clipData = clipboard.getContents(clipboard);
         if (clipData != null) {

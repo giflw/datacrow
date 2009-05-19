@@ -23,9 +23,9 @@ Online services
 [x] Silent strart of the web server: -password -username = hides log screens.
 [x] The Java from Sun check should only be a warnign after which the user can continue (setting is saved).
     (perform check twice and update settings).
-[ ] Mass update functionality: allow update by ISBN.
+[x] Mass update functionality: allow update by ISBN.
 [x] Java help: search
-[-] Use system variables for the path configuration (programs).
+[x] Use system variables for the path configuration (programs).
 [x] Allow changing a field definition of a module.
 [x] Default view does not seem to be remembered correctly!!!!
 [x] Alter fields: Make sure to warn about incompatible backups!
@@ -37,7 +37,7 @@ Online services
 [x] Translate the web module
 [x] Refresh of screen for the module wizard after adding fields.
 [x] Module name; special characters?
-[x] Image from clipboard (+ CTRL-V)
+[x] Image from clip board (CTRL-V)
 
 
 3.5
