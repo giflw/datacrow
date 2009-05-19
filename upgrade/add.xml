@@ -458,6 +458,21 @@
                 <value-type>0</value-type>
                 <overwritable>false</overwritable>
             </field> 
+            <field>
+                <index>10</index>
+                <name>ASIN</name>
+                <database-column-name>ASIN</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>5</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>0</value-type>
+                <overwritable>false</overwritable>
+            </field>
        </fields>
     </module>     
     <module>
@@ -480,6 +495,42 @@
                 <overwritable>false</overwritable>
             </field>
        </fields>
-    </module>     
+    </module>   
+    <module>
+        <module-jar>musicalbum.jar</module-jar>
+        <module-index>52</module-index>
+        <fields>
+            <field>
+                <index>10</index>
+                <name>ASIN</name>
+                <database-column-name>ASIN</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>5</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>0</value-type>
+                <overwritable>false</overwritable>
+            </field>
+            <field>
+                <index>11</index>
+                <name>EAN</name>
+                <database-column-name>EAN</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>5</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>0</value-type>
+                <overwritable>false</overwritable>
+            </field>            
+       </fields>
+    </module>        
 </modules> 
 		
