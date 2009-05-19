@@ -238,7 +238,7 @@ public class DcValue implements Serializable {
     
     private void setValueNative(Object value, DcField field) {
         this.value = value;
-        this.displayString = createDisplayString(field);
+        createDisplayString(field);
         this.changed = true;
     }
 
@@ -272,7 +272,7 @@ public class DcValue implements Serializable {
     }
     
     @SuppressWarnings("unchecked")
-    private String createDisplayString(DcField field) {
+    public void createDisplayString(DcField field) {
         Object o = getValue();
         String text = "";
 
@@ -324,6 +324,9 @@ public class DcValue implements Serializable {
                     text = Utilities.toString((Double) o);
                 } else if (field.getFieldType() == ComponentFactory._FILESIZEFIELD) {
                     text = Utilities.toFileSizeString((Long) o);
+                } else if (field.getFieldType() == ComponentFactory._FILEFIELD ||
+                           field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
+                    text = Utilities.getMappedFilename((String) o);
                 } else {
                 	text = o == null ? "" : o instanceof String ? (String) o : o.toString();
                 }
@@ -332,7 +335,7 @@ public class DcValue implements Serializable {
             logger.error("Error while creating the display string for field " + field + ", value " + o, e);
         }
 
-        return text;
+        this.displayString = text;
     }
 
     private String getDoubleDigitString(int value) {

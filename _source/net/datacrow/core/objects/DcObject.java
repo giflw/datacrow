@@ -840,7 +840,15 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (index == _SYS_DISPLAYVALUE)
             return toString();
         
-        return  getValueDef(index) != null ? getValueDef(index).getDisplayString() : "";
+        // as file mappings can be changed at any time recalculate the display value
+        if ((getField(index).getFieldType() == ComponentFactory._FILEFIELD ||
+             getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) &&
+            getValueDef(index) != null) {
+         
+            getValueDef(index).createDisplayString(getField(index));
+        }
+        
+        return getValueDef(index) != null ? getValueDef(index).getDisplayString() : "";
     }
 
     /**
