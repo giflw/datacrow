@@ -66,14 +66,16 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
     @SuppressWarnings("unchecked")
     @Override
     public boolean onlineUpdate(DcObject album, IServer server, Region region, SearchMode mode) {
-        addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
+
         boolean updated = exactSearch(album);
         
+        int field = mode == null ? AudioCD._A_TITLE : mode.getFieldBinding();
+        
         if (!updated) {
-            String title = (String) album.getValue(AudioCD._A_TITLE);
+            String value = (String) album.getValue(field);
             Collection<DcMapping> artists = (Collection<DcMapping>) album.getValue(AudioCD._F_ARTIST);
             
-            if ((title == null || title.trim().length() == 0) || (artists == null || artists.size() == 0)) 
+            if ((value == null || value.trim().length() == 0) || (artists == null || artists.size() == 0)) 
                 return updated;
             
             OnlineSearchHelper osh = new OnlineSearchHelper(album.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
@@ -81,10 +83,10 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
             osh.setRegion(region);
             osh.setMode(mode);
             osh.setMaximum(2);
-            Collection<DcObject> c = osh.query((String) album.getValue(AudioCD._A_TITLE));
+            Collection<DcObject> c = osh.query((String) album.getValue(field));
 
             for (DcObject albumNew : c) {
-                if (match(album, albumNew)) {
+                if (match(album, albumNew, field)) {
                     DcObject albumNew2 = osh.query(albumNew);
                     updateTracks(album, album.getChildren(), albumNew2.getChildren());
                     album.copy(albumNew2, true);
@@ -143,26 +145,30 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
     } 
     
     @SuppressWarnings("unchecked")
-    protected boolean match(DcObject dco1, DcObject dco2) {
-        String title1 = (String) dco1.getValue(AudioCD._A_TITLE);
-        String title2 = (String) dco2.getValue(AudioCD._A_TITLE);
+    protected boolean match(DcObject dco1, DcObject dco2, int field) {
+        String value1 = (String) dco1.getValue(field);
+        String value2 = (String) dco2.getValue(field);
 
         boolean match = false;
-        if (StringUtils.equals(title1, title2)) {
+        if (StringUtils.equals(value1, value2)) {
             
-            Collection<DcMapping> artists1 = (Collection<DcMapping>) dco1.getValue(AudioCD._F_ARTIST);
-            Collection<DcMapping> artists2 = (Collection<DcMapping>) dco2.getValue(AudioCD._F_ARTIST);
-            
-            artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
-            artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
-
-            for (DcObject person1 : artists1) {
-                for (DcObject person2 : artists2) {
-                    String name1 = person1.toString().trim();
-                    String name2 = person2.toString().trim();
-                    match = StringUtils.equals(name1, name2); 
-                    if (match) break;
+            if (field == AudioCD._A_TITLE) {
+                Collection<DcMapping> artists1 = (Collection<DcMapping>) dco1.getValue(AudioCD._F_ARTIST);
+                Collection<DcMapping> artists2 = (Collection<DcMapping>) dco2.getValue(AudioCD._F_ARTIST);
+                
+                artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
+                artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
+    
+                for (DcObject person1 : artists1) {
+                    for (DcObject person2 : artists2) {
+                        String name1 = person1.toString().trim();
+                        String name2 = person2.toString().trim();
+                        match = StringUtils.equals(name1, name2); 
+                        if (match) break;
+                    }
                 }
+            } else {
+                match = true;
             }
         }
         return match;        

@@ -61,11 +61,12 @@ public class BookSynchronizer extends DefaultSynchronizer {
         this.dco = dco;
         boolean updated = exactSearch(dco);
         
+        int field = mode == null ? Book._A_TITLE : mode.getFieldBinding();
+        
         if (!updated) {
-            String title =(String) dco.getValue(Book._A_TITLE);
-            String isbn = StringUtils.normalize((String) dco.getValue(Book._N_ISBN13));
+            String value = StringUtils.normalize((String) dco.getValue(field));
             
-            if ((title == null || title.length() == 0)) 
+            if (value == null || value.length() == 0) 
                 return updated;
             
             OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
@@ -73,15 +74,10 @@ public class BookSynchronizer extends DefaultSynchronizer {
             osh.setRegion(region);
             osh.setMode(mode);
             osh.setMaximum(2);
-            Collection<DcObject> books = osh.query((String) dco.getValue(Book._A_TITLE));
+            Collection<DcObject> books = osh.query((String) dco.getValue(field));
             
             for (DcObject book : books) {
-                String titleNew = (String) book.getValue(Book._A_TITLE);
-                String isbnNew = StringUtils.normalize((String) book.getValue(Book._N_ISBN13));
-                
-                boolean match = (isbn.length() > 0) && (isbnNew.length() > 0) ? isbn.equals(isbnNew) :
-                                 StringUtils.equals(titleNew, title);
-                if (match) {
+                if (StringUtils.equals(value, (String) book.getValue(field))) {
                     updated = true;
                     update(dco, book, osh);
                     break;

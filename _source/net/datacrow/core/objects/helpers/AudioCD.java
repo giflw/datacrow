@@ -41,6 +41,7 @@ public class AudioCD extends DcMediaObject {
     public static final int _L_STATE = 7;
     public static final int _M_WEBPAGE = 8;
     public static final int _N_EAN = 9;
+    public static final int _O_ASIN = 10;
     
     public AudioCD() {
         super(DcModules._AUDIOCD);

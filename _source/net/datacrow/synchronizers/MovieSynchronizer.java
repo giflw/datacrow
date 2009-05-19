@@ -62,8 +62,10 @@ public class MovieSynchronizer extends DefaultSynchronizer {
         this.dco = dco;
         boolean updated = exactSearch(dco);
         
+        int field = mode == null ? Movie._A_TITLE : mode.getFieldBinding();
+
         if (!updated) {
-            String title = (String) dco.getValue(Movie._A_TITLE);
+            String title = (String) dco.getValue(field);
             if (title.trim().length() == 0) return updated;
             
             OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
@@ -71,9 +73,9 @@ public class MovieSynchronizer extends DefaultSynchronizer {
             osh.setRegion(region);
             osh.setMode(mode);
             osh.setMaximum(2);
-            Collection<DcObject> movies = osh.query((String) dco.getValue(Movie._A_TITLE));
+            Collection<DcObject> movies = osh.query((String) dco.getValue(field));
             for (DcObject movie : movies) {
-                if (StringUtils.equals(title, (String) movie.getValue(Movie._A_TITLE))) {
+                if (StringUtils.equals(title, (String) movie.getValue(field))) {
                     updated = true;
                     update(dco, movie, osh);
                     break;

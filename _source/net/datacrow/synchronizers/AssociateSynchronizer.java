@@ -58,18 +58,21 @@ public class AssociateSynchronizer extends DefaultSynchronizer {
     
     @Override
     public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
+        
         this.dco = dco;
         boolean updated = exactSearch(dco);
         
+        int field = mode != null ? mode.getFieldBinding() : DcAssociate._A_NAME;
+        
         if (!updated) {
-            String name = StringUtils.normalize((String) dco.getValue(DcAssociate._A_NAME));
+            String value = StringUtils.normalize((String) dco.getValue(field));
 
-            if (name == null || name.length() == 0) 
+            if (value == null || value.length() == 0) 
                 return updated;
             
             OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
             osh.setMode(mode);
-            DcObject result = osh.query(dco, (String) dco.getValue(DcAssociate._A_NAME), new int[] {DcAssociate._A_NAME});
+            DcObject result = osh.query(dco, (String) dco.getValue(field), new int[] {field});
             update(dco, result, osh);
         }
         

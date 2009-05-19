@@ -36,7 +36,6 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
-import net.datacrow.core.objects.helpers.AudioCD;
 import net.datacrow.core.objects.helpers.MusicAlbum;
 import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.core.resources.DcResources;
@@ -177,8 +176,10 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
         addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
         boolean updated = exactSearch(dco);
         
+        int field = mode == null ? MusicAlbum._A_TITLE : mode.getFieldBinding();
+        
         if (!updated) {
-            String title = (String) dco.getValue(MusicAlbum._A_TITLE);
+            String title = (String) dco.getValue(field);
             Collection<DcMapping> artists = (Collection<DcMapping>) dco.getValue(MusicAlbum._F_ARTISTS);
             if ((title == null || title.length() == 0) || (artists == null || artists.size() == 0)) 
                 return updated;
@@ -188,10 +189,10 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
             osh.setRegion(region);
             osh.setMode(mode);
             osh.setMaximum(2);
-            Collection<DcObject> albums = osh.query((String) dco.getValue(AudioCD._A_TITLE));
+            Collection<DcObject> albums = osh.query((String) dco.getValue(field));
     
             for (DcObject albumNew : albums) {
-                if (match(dco, albumNew)) {
+                if (match(dco, albumNew, field)) {
                     updated = true;
                     DcObject albumNew2 = osh.query(albumNew);
                     updateTracks(dco.getChildren(), albumNew2.getChildren());
@@ -215,26 +216,30 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
     }
     
     @SuppressWarnings("unchecked")
-    protected boolean match(DcObject dco1, DcObject dco2) {
-        String title1 = (String) dco1.getValue(MusicAlbum._A_TITLE);
-        String title2 = (String) dco2.getValue(MusicAlbum._A_TITLE);
+    protected boolean match(DcObject dco1, DcObject dco2, int field) {
+        String value1 = (String) dco1.getValue(field);
+        String value2 = (String) dco2.getValue(field);
 
         boolean match = false;
-        if (StringUtils.equals(title1, title2)) {
+        if (StringUtils.equals(value1, value2)) {
             
-            Collection<DcMapping> artists1 = (Collection<DcMapping>) dco1.getValue(MusicAlbum._F_ARTISTS);
-            Collection<DcMapping> artists2 = (Collection<DcMapping>) dco2.getValue(MusicAlbum._F_ARTISTS);
-            
-            artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
-            artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
-
-            for (DcObject person1 : artists1) {
-                for (DcObject person2 : artists2) {
-                    String name1 = person1.toString().trim();
-                    String name2 = person2.toString().trim();
-                    match = StringUtils.equals(name1, name2); 
-                    if (match) break;
+            if (field == MusicAlbum._A_TITLE) {
+                Collection<DcMapping> artists1 = (Collection<DcMapping>) dco1.getValue(MusicAlbum._F_ARTISTS);
+                Collection<DcMapping> artists2 = (Collection<DcMapping>) dco2.getValue(MusicAlbum._F_ARTISTS);
+                
+                artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
+                artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
+    
+                for (DcObject person1 : artists1) {
+                    for (DcObject person2 : artists2) {
+                        String name1 = person1.toString().trim();
+                        String name2 = person2.toString().trim();
+                        match = StringUtils.equals(name1, name2); 
+                        if (match) break;
+                    }
                 }
+            } else {
+                match = true;
             }
         }
         return match;        

@@ -85,7 +85,7 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
         	
         	if (server.getSearchModes() != null) {
             	for (SearchMode mode : server.getSearchModes()) {
-            	    if (mode.keywordSearch())
+            	    //if (mode.keywordSearch())
             	        comboModes.addItem(mode);
             	}
         	}

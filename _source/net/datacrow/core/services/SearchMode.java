@@ -32,8 +32,16 @@ package net.datacrow.core.services;
  */
 public abstract class SearchMode {
     
-    public SearchMode() {}
-
+    private final int fieldBinding;
+    
+    public SearchMode(int fieldBinding) {
+        this.fieldBinding = fieldBinding;
+    }
+    
+    public int getFieldBinding() {
+        return fieldBinding;
+    }
+    
     public abstract String getDisplayName();
 
     /**

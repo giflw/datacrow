@@ -37,6 +37,7 @@ import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 public class SoftwareSynchronizer extends DefaultSynchronizer {
 
@@ -58,18 +59,20 @@ public class SoftwareSynchronizer extends DefaultSynchronizer {
     
     @Override
     public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
-        this.dco = dco;
         boolean updated = exactSearch(dco);
         
+        int field = mode == null ? Software._A_TITLE : mode.getFieldBinding();
+        
         if (!updated) {
-            String title = StringUtils.normalize((String) dco.getValue(Software._A_TITLE));
+            String value = (String) dco.getValue(field);
             
-            if ((title == null || title.length() == 0)) 
+            if (Utilities.isEmpty(value)) 
                 return updated;
             
-            String searchString = (String) dco.getValue(Software._A_TITLE);
+            String searchString = (String) dco.getValue(field);
             
-            searchString += server.getName().equals("MobyGames") && dco.getValue(Software._H_PLATFORM) != null ? 
+            if (field == Software._A_TITLE && server.getName().equals("MobyGames"))
+                searchString += dco.getValue(Software._H_PLATFORM) != null ? 
                                 " " + dco.getDisplayString(Software._H_PLATFORM) : "";
 
             OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
@@ -79,14 +82,13 @@ public class SoftwareSynchronizer extends DefaultSynchronizer {
             Collection<DcObject> items = osh.query(searchString);
             
             for (DcObject software : items) {
-                String titleNew = StringUtils.normalize((String) software.getValue(Software._A_TITLE));
+                String valueNew = (String) software.getValue(field);
                 
-                if (titleNew.indexOf(" for ") > -1)
-                    titleNew = titleNew.substring(0, titleNew.indexOf(" for "));
+                if (valueNew.indexOf(" for ") > -1)
+                    valueNew = valueNew.substring(0, valueNew.indexOf(" for "));
                 
-                if (StringUtils.equals(titleNew, title)) {
+                if (StringUtils.equals(value, valueNew)) {
                     update(dco, software, osh);
-                    
                     updated = true;
                     break;
                 }
