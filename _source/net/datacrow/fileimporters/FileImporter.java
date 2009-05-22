@@ -264,10 +264,16 @@ public abstract class FileImporter {
                 }
             }
             
+//                name = name.replaceAll(regex, "");
+            
+            // Compile the regex.
             String regex = DcModules.get(getModule()).getSettings().getString(DcRepository.ModuleSettings.stTitleCleanupRegex);
+
             if (!Utilities.isEmpty(regex)) {
-                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
+                Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(name);
+        
+                // Find all the matches.
                 while (matcher.find())
                     name = matcher.replaceAll(" ");
             }
