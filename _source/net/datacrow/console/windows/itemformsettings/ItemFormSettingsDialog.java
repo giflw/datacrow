@@ -89,6 +89,9 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
         JTabbedPane tp = ComponentFactory.getTabbedPane();
         tp.addTab(DcResources.getText("lblTabs"), panelTab);
         tp.addTab(DcResources.getText("lblTabDesign"), panelTabFields);
+        
+        // TODO: Add change listener
+        //tp.add
 
         //**********************************************************
         //Action panel
