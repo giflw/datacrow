@@ -95,7 +95,7 @@ public class PictureDialog extends DcDialog implements ActionListener {
     }
     
     public boolean isPictureChanged() {
-        return pf.isChanged();
+        return pf == null ? pf.isChanged() : false;
     }
     
     public DcImageIcon getImage() {

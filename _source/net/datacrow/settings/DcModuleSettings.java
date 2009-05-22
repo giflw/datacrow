@@ -254,6 +254,15 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             false,
                             false));
         getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._STRING,
+                            DcRepository.ModuleSettings.stTitleCleanupRegex,
+                            "",
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));
+        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stImportLocalArt,
                             module.getIndex() == DcModules._SOFTWARE ? Boolean.FALSE : Boolean.TRUE,

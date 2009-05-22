@@ -30,6 +30,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -83,6 +85,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     
     protected JTextArea textLog = ComponentFactory.getTextArea();
     protected JTextArea textTitleCleanup = ComponentFactory.getTextArea();
+    protected JTextArea textTitleCleanupRegex = ComponentFactory.getTextArea();
     
     private OnlineServicePanel panelServer;
     private OnlineServiceSettingsPanel panelServerSettings;
@@ -178,7 +181,26 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return panelServer != null ? panelServer.getMode() : null;
     }
     
+    private boolean checkRegex() {
+        boolean valid = true;
+        
+        String regex = textTitleCleanupRegex.getText();
+        if (regex.trim().length() > 0) {
+            try {
+                Pattern.compile(regex);
+            } catch (PatternSyntaxException pse) {
+                new MessageBox(DcResources.getText("msgPatternError", pse.getMessage()), MessageBox._ERROR);
+                valid = false;
+            }
+        }
+        
+        return valid;
+    }
+    
     protected void startImport() {
+        if (!checkRegex())
+            return;
+        
         denyActions();
         saveSettings();
         try {
@@ -193,6 +215,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     private void saveSettings() {
         settings.set(DcRepository.ModuleSettings.stImportCDDialogSize, getSize());
         settings.set(DcRepository.ModuleSettings.stTitleCleanup, textTitleCleanup.getText());
+        settings.set(DcRepository.ModuleSettings.stTitleCleanupRegex, textTitleCleanupRegex.getText());
     }
     
     public void denyActions() {
@@ -258,14 +281,30 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         JPanel panel = new JPanel();
         panel.setLayout(Layout.getGBL());
         
-        JScrollPane scroller = new JScrollPane(textTitleCleanup);
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scroller1 = new JScrollPane(textTitleCleanup);
+        scroller1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        JScrollPane scroller2 = new JScrollPane(textTitleCleanupRegex);
+        scroller2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         textTitleCleanup.setText(settings.getString(DcRepository.ModuleSettings.stTitleCleanup));
+        textTitleCleanupRegex.setText(settings.getString(DcRepository.ModuleSettings.stTitleCleanupRegex));
         
-        panel.add(scroller, Layout.getGBC( 0, 0, 2, 1, 5.0, 5.0
+        panel.add(ComponentFactory.getLabel(DcResources.getText("lblRemoveWords")), 
+                 Layout.getGBC( 0, 0, 2, 1, 5.0, 5.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets(5, 5, 5, 5), 0, 0));  
+        panel.add(scroller1, Layout.getGBC( 0, 1, 2, 1, 50.0, 50.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(5, 5, 5, 5), 0, 0));  
+        panel.add(ComponentFactory.getLabel(DcResources.getText("lblRegexPattern")), 
+                Layout.getGBC( 0, 2, 2, 1, 5.0, 5.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(5, 5, 5, 5), 0, 0));  
+        
+        panel.add(scroller2, Layout.getGBC( 0, 3, 2, 1, 50.0, 50.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0));          
         
         return panel;
     }

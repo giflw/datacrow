@@ -28,6 +28,8 @@ package net.datacrow.fileimporters;
 import java.io.File;
 import java.util.Collection;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.datacrow.console.windows.fileimport.FileImportDialog;
 import net.datacrow.core.DataCrow;
@@ -44,6 +46,7 @@ import net.datacrow.settings.Settings;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Directory;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -250,19 +253,23 @@ public abstract class FileImporter {
             if (index > 0 && index > name.length() - 5)
                 name = name.substring(0, index);
 
-            name = name.replaceAll("\\.", " ");
-            name = name.replaceAll("_", " ");
-            name = name.replaceAll("-", " ");
-            
-            name = StringUtils.normalize(name); 
-            
             String remove = 
                 DcModules.get(getModule()).getSettings().getString(DcRepository.ModuleSettings.stTitleCleanup);
             
-            StringTokenizer st = new StringTokenizer(remove, ",");
-            while (st.hasMoreElements()) {
-                String s = (String) st.nextElement();
-                name = name.replaceAll(s, "");
+            if (!Utilities.isEmpty(remove)) {
+                StringTokenizer st = new StringTokenizer(remove, ",");
+                while (st.hasMoreElements()) {
+                    String s = (String) st.nextElement();
+                    name = name.replaceAll(s, "");
+                }
+            }
+            
+            String regex = DcModules.get(getModule()).getSettings().getString(DcRepository.ModuleSettings.stTitleCleanupRegex);
+            if (!Utilities.isEmpty(regex)) {
+                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
+                Matcher matcher = pattern.matcher(name);
+                while (matcher.find())
+                    name = matcher.replaceAll(" ");
             }
         }
         
