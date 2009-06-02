@@ -125,7 +125,7 @@ public class Version {
      * Full string representation of the current version. 
      */
     public String getFullString() {
-        return "Data Crow " + toString();
+        return "Data Crow " + toString() + " beta";
     }
     
     @Override

@@ -4,6 +4,7 @@ Data Crow 3.4.9 [Release on 18/05/2009] [testing: moderate] [target: beta]
 
 [New]
 - Italian translation! Thanks to Marco Artioli!
+- Updated german translation! Thanks to Mathias Epp!
 - Data Crow's web server can now be started without showing the UI. The normal parameter
   'webserver' in combination with the new credentials parameter hides the splash screen 
   and bypasses the login dialog. See the readme on how to apply these parameters.
@@ -21,7 +22,7 @@ Data Crow 3.4.9 [Release on 18/05/2009] [testing: moderate] [target: beta]
   automatically.
 - You can now map a drive letter / location to a new location. Settings > Drive Mappings.
 - The help now has search capabilities.
-- The mass update functionality now supports all search modes (!).
+- The mass update functionality now supports all search modes.
 
 [Changed]
 - The default view can now be set per module. In previous versions this was a global 
