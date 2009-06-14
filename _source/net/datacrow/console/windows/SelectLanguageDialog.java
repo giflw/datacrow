@@ -45,15 +45,27 @@ import net.datacrow.util.Utilities;
 public class SelectLanguageDialog extends JDialog implements ActionListener {
 
     private JComboBox cbLanguage = new JComboBox();
+    private final java.util.concurrent.atomic.AtomicBoolean activeDialog;
     
-    public SelectLanguageDialog() {
+    public SelectLanguageDialog(java.util.concurrent.atomic.AtomicBoolean activeDialog) {
+        this.activeDialog = activeDialog;
         build();
         pack();
         setTitle("Select the preferred language");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setModal(true);
         setLocation(Utilities.getCenteredWindowLocation(getSize()));
     }
     
+    @Override
+    public void dispose() {
+        synchronized (activeDialog) {
+            activeDialog.set(false);
+            activeDialog.notifyAll();
+        }
+        super.dispose();
+    }
+
     private void close() {
         DcSettings.set(DcRepository.Settings.stLanguage, cbLanguage.getSelectedItem());
         setVisible(false);

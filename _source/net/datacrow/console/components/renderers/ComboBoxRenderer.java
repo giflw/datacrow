@@ -60,6 +60,8 @@ public class ComboBoxRenderer extends DcLabel implements ListCellRenderer {
     	setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
     	setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
     	
+    	setFont(ComponentFactory.getStandardFont());
+    	
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
@@ -76,6 +78,9 @@ public class ComboBoxRenderer extends DcLabel implements ListCellRenderer {
         	DcModule module = (DcModule) value;
             setIcon(module.getIcon16());
             setText(module.getLabel());
+        } else if (value instanceof String) {
+            setIcon(null);
+            setText((String) value);
         } else if (value != null){
             setIcon(null);
             setText(value.toString());

@@ -221,8 +221,18 @@ public class DataCrow {
             if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
                 DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
                 
-                SelectLanguageDialog dlg = new SelectLanguageDialog();
-                dlg.setVisible(true);
+                final java.util.concurrent.atomic.AtomicBoolean activeDialog = new java.util.concurrent.atomic.AtomicBoolean(true);
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        SelectLanguageDialog dlg = new SelectLanguageDialog(activeDialog);
+                        dlg.setVisible(true);
+                    }
+                });
+                
+                synchronized (activeDialog) {
+                    while (activeDialog.get() == true)
+                        activeDialog.wait();
+                }
             }
             
             showSplashScreen();
@@ -368,7 +378,8 @@ public class DataCrow {
         
         new FreeResourcesTask();
 
-        if (!webserverMode && DcSettings.getInt(DcRepository.Settings.stXpMode) == -1) {
+        int xp = DcSettings.getInt(DcRepository.Settings.stXpMode);
+        if (!webserverMode && xp == -1) {
             SelectExpienceLevelDialog dlg = new SelectExpienceLevelDialog();
             dlg.setVisible(true);
         }

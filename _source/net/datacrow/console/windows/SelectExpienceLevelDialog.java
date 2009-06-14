@@ -78,7 +78,7 @@ public class SelectExpienceLevelDialog extends DcDialog implements ActionListene
         buttonExpert.addActionListener(this);
         
         buttonBeginner.setActionCommand("beginner");
-        buttonExpert.setActionCommand("exper");
+        buttonExpert.setActionCommand("expert");
         
         panelActions.add(buttonBeginner);
         panelActions.add(buttonExpert);
