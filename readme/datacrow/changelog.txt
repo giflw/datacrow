@@ -1,6 +1,8 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.9 [Release on 18/06/2009] [testing: high] [target: production]
+Data Crow 3.4.9 [Release on 14/06/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+I'd like to thank the following contributors: Marco Artioli, Mathias Epp and 
+Tomáš Polomský.
 
 [Fixed]
 - Preventing a thread lock on startup for Linux systems related to the language selection
