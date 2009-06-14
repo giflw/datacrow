@@ -158,8 +158,7 @@ Additional parameters:
      stuff (such as the splash screen and the login dialog)
      
     -credentials:username/password
-     Specify the login credentials to start Data Crow without displaying the 
-     login dialog.
+     Specify the login credentials to start Data Crow without displaying the login dialog.
 
 
 ----------------------------------------------------------------------------------------

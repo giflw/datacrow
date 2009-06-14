@@ -1,4 +1,17 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.9 [Release on 18/06/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Preventing a thread lock on startup for Linux systems related to the language selection
+  dialog. Code donated by Tomáš Polomský.
+- Experience mode was nor remembered when selecting the expert user mode.
+- The selection of field in the item form settings dialog caused the lists to resize
+  with every selection.
+- The XSL (stylesheets) were called XLS in the backup and restore interface.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.9 [Release on 02/06/2009] [testing: moderate] [target: beta]
 -----------------------------------------------------------------------------------------
 

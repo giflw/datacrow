@@ -59,7 +59,7 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
         panelTab = new TabPanel(this);
         panelTabFields = new TabFieldsPanel(DcModules.get(module));
         
-        setHelpIndex("dc.settings.itemform");
+        setHelpIndex("dc.settings.itemformsettings");
         
         setResizable(true);
         

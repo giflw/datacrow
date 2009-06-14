@@ -21,7 +21,18 @@
 	Java -Xmx512m -jar datacrow.jar
 	
 	<h2>Starting the web server</h2>
-	You can start the web server without opening the main application by using the -webserver parameter. 
+	You can start the web server without opening the main application by using the -webserver parameter.
+    This parameter can be used in combination with the credentials parameter to bypass all the GUI stuff 
+    (such as the splash screen and the login dialog).
+
+    <h2>Specifying the login credentials</h2>
+    Parameter: -credentials:username/password <br>
+    Specifies the login credentials to start Data Crow without displaying the login dialog.
+
+    <h2>Avoiding the use of cached items</h2>
+    Data Crow creates cache files instead of loading all items from the database on every startup.
+    In case there are issues Data Crow can be forced to disgard the cache and load all the items 
+    from the database instead: -nocache
 
 </body>
 </html>

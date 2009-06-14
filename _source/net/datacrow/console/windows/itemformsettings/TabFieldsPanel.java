@@ -25,10 +25,13 @@
 
 package net.datacrow.console.windows.itemformsettings;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -57,7 +60,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 
-public class TabFieldsPanel extends JPanel implements ActionListener {
+public class TabFieldsPanel extends JPanel implements ActionListener, ComponentListener {
     
     private DcFieldList listLeft;
     private JComboBox cbTabs = ComponentFactory.getComboBox();
@@ -69,7 +72,6 @@ public class TabFieldsPanel extends JPanel implements ActionListener {
     
     public TabFieldsPanel(DcModule module) {
         this.module = module;
-
         build();
     }
     
@@ -257,7 +259,7 @@ public class TabFieldsPanel extends JPanel implements ActionListener {
         listLeft.addMouseListener(new ListMouseListener(ListMouseListener._RIGHT));
 
         JScrollPane scrollerLeft = new JScrollPane(listLeft);
-        scrollerLeft.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollerLeft.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollerLeft.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         JPanel panelInput = new JPanel();
@@ -277,20 +279,21 @@ public class TabFieldsPanel extends JPanel implements ActionListener {
 
         add(panelInput, Layout.getGBC( 0, 0, 3, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 0, 0, 0), 0, 0));
+                 new Insets( 5, 5, 0, 5), 0, 0));
         add(ComponentFactory.getLabel(DcResources.getText("lblAvailableFields")),  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                 new Insets( 5, 0, 0, 0), 0, 0));
+                 new Insets( 10, 5, 0, 0), 0, 0));
         add(ComponentFactory.getLabel(DcResources.getText("lblSelectedFields")), Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                 new Insets( 5, 0, 0, 0), 0, 0));
+                 new Insets( 10, 0, 0, 0), 0, 0));
         add(scrollerLeft,  Layout.getGBC( 0, 3, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 0, 0, 0, 0), 0, 0));
+                 new Insets( 0, 5, 0, 0), 0, 0));
         add(panelNav, Layout.getGBC(2, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(0, 5, 5, 5), 0, 0));
         
+        addComponentListener(this);
         initialize();
         cbTabs.setSelectedIndex(0);
     }
@@ -323,6 +326,9 @@ public class TabFieldsPanel extends JPanel implements ActionListener {
                     listLeft.clearSelection();
                 }
             }  
+            
+            revalidate();
+            repaint();
         }
         
         public void mouseEntered(MouseEvent e) {}
@@ -346,4 +352,48 @@ public class TabFieldsPanel extends JPanel implements ActionListener {
         else if (ae.getActionCommand().equals("rowToBottom"))
             getList().moveRowToBottom();
     }
+
+    private void checkListSizes() {
+        Dimension dimLeft = listLeft.getSize();
+        
+        Dimension dim = null;
+        for (DcFieldList listRight : listsRight.values()) {
+            if (listRight.isVisible()) {
+                int width = (int) ((dimLeft.getWidth() + listRight.getWidth()) - 10) / 2; 
+                dim = new Dimension(width, (int) dimLeft.getHeight());
+                break;
+            }
+        }
+        
+        for (DcFieldList listRight : listsRight.values()) {
+            listRight.setPreferredSize(dim);
+            listRight.setMinimumSize(dim);
+            listRight.setMaximumSize(dim);
+            
+            if (listRight.isVisible()) {
+                listRight.revalidate();
+                listRight.repaint();
+            }
+        }
+        
+        listLeft.setPreferredSize(dim);
+        listLeft.setMinimumSize(dim);
+        listLeft.setMaximumSize(dim);
+        listLeft.revalidate();
+        listLeft.repaint();
+        
+        revalidate();
+        repaint();
+    }
+    
+    public void componentHidden(ComponentEvent e) {}
+
+    public void componentMoved(ComponentEvent e) {}
+
+    public void componentResized(ComponentEvent e) {
+        checkListSizes();
+    }
+
+    public void componentShown(ComponentEvent e) {}
+    
 }

@@ -46,9 +46,9 @@ public class StringUtils {
     private static final Collator collator = Collator.getInstance(Locale.FRANCE);
 
     private static final Pattern[] normalizer = {
+        Pattern.compile("('|~|\\!|@|#|\\$|%|\\^|\\*|_|\\[|\\{|\\]|\\}|\\||\\\\|;|:|`|\"|<|,|>|\\.|\\?|/|&|_|-)"),
         Pattern.compile("^(de|het|een|the|a|an|el|le|les|la|los|die|der|das|den) "),
         Pattern.compile(" (de|het|een|the|a|an|el|le|les|la|los|die|der|das|den) "),
-        Pattern.compile("('|~|\\!|@|#|\\$|%|\\^|\\*|_|\\[|\\{|\\]|\\}|\\||\\\\|;|:|`|\"|<|,|>|\\.|\\?|/|&)"),
         Pattern.compile("[(,)]")};
     
     private static final HTMLEditorKit kit = new HTMLEditorKit();
@@ -175,7 +175,7 @@ public class StringUtils {
 
         for (int i = 0; i < normalizer.length; i++) {
             Matcher ma = normalizer[i].matcher(s);
-            s = ma.replaceAll(i == 1 ? " " : "");
+            s = ma.replaceAll(" ");
         }
         
         s = s.replaceAll("\n", "");

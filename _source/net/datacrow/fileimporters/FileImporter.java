@@ -40,6 +40,7 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.Settings;
@@ -228,10 +229,17 @@ public abstract class FileImporter {
     protected void afterParse(IFileImportClient listener, DcObject dco) {
         if (listener.useOnlineServices()) {
             listener.addMessage(DcResources.getText("msgSearchingOnlineFor", StringUtils.normalize(dco.toString())));
+            
+            String originalTitle = (String) dco.getValue(DcMediaObject._A_TITLE);
+            dco.setValue(DcMediaObject._A_TITLE, StringUtils.normalize(originalTitle));
+            
             listener.getModule().getSynchronizer().onlineUpdate(dco, listener.getServer(), 
                                                                 listener.getRegion(), 
                                                                 listener.getSearchMode());
+            
+            dco.setValue(DcMediaObject._A_TITLE, originalTitle);
         }
+
         DcModules.getCurrent().getCurrentInsertView().add(dco, false);
     }
 
@@ -260,22 +268,19 @@ public abstract class FileImporter {
                 StringTokenizer st = new StringTokenizer(remove, ",");
                 while (st.hasMoreElements()) {
                     String s = (String) st.nextElement();
-                    name = name.replaceAll(s, "");
+                    int idx = name.toLowerCase().indexOf(s.toLowerCase());
+                    name = name.substring(0, idx) + name.substring(idx + s.length());
+                    
+                    //name = name.replaceAll(s, "");
                 }
             }
             
-//                name = name.replaceAll(regex, "");
-            
-            // Compile the regex.
             String regex = DcModules.get(getModule()).getSettings().getString(DcRepository.ModuleSettings.stTitleCleanupRegex);
-
             if (!Utilities.isEmpty(regex)) {
-                Pattern pattern = Pattern.compile(regex);
+                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
                 Matcher matcher = pattern.matcher(name);
-        
-                // Find all the matches.
                 while (matcher.find())
-                    name = matcher.replaceAll(" ");
+                    name = matcher.replaceAll("");
             }
         }
         

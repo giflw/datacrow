@@ -12,8 +12,7 @@
 
 
 	<h1>Files / Directories</h1>
-	Here you can select the files to import. Navigate the tree and tick the directories
-	from which you would like to import the content.
+	Here you can select the files to import. Navigate the tree and tick the directories and/or filed from which you would like to import the content.
 
 
 	<h1>Settings</h1>
@@ -23,9 +22,6 @@
 
 	<h2>Storage Medium</h2>
 	Optionally you can select the Storage Media type on which the to be imported data resides. The storage medium indicates on which type of media the item is stored (CD/DVD/etc.).
-
-	<h2>Remove the following words from the title</h2>
-	The import tries to get the title from the filename if the information cannot be parsed from the file itself. Here you can enter words which should be removed when transforming the filename into a title. 
 
     <h2>Directory usage information</h2>
     Allows directory information to be used for filling fields like the title, album name or
@@ -37,18 +33,31 @@
     <h3>Options for music files</h3>
 
     <h4>Do not use directory information</h4>
-	Only use the information from the music file itself, such as the tag information of an mp3.
+    Only use the information from the music file itself, such as the tag information of an mp3.
 
-	<h4>Use directory name as album name</h4>
-	The directory in which the music file resides has the album name (example ../../Abba Gold).
+    <h4>Use directory name as album name</h4>
+    The directory in which the music file resides has the album name (example ../../Abba Gold).
 
-	<h4>Use directory name as artist name</h4>
-	The directory in which the music file resides has the artist name (example ../../Abba).
+    <h4>Use directory name as artist name</h4>
+    The directory in which the music file resides has the artist name (example ../../Abba).
 
-	<h4>Use directory name as artist name and its sub-directory as album name</h4>
-	The directory in which the music file resides has the artist name and its sub-directory has the album name
-	(example ../../Abba/Abba Gold).
+    <h4>Use directory name as artist name and its sub-directory as album name</h4>
+    The directory in which the music file resides has the artist name and its sub-directory has the album name
+    (example ../../Abba/Abba Gold).
 
+
+    <h1>Title Cleaning</h1>
+    
+    When the directory usage has been de-activated in the settings panel, Data Crow will try to create the title from the filename. As you can imagine
+    this requires some cleaning. In order to get better results you can specify words to be removed from the filename and/or use a regex pattern. 
+    Data Crow will first remove the defined words and then apply the regex pattern.  
+
+	<h2>Remove the following words from the title</h2>
+	The import tries to get the title from the filename if the information cannot be parsed from the file itself. Here you can enter words which should be removed when transforming the filename into a title. 
+	The words are matched regardless if they are upper or lower case.  
+
+    <h2>Apply the following regex pattern</h2>
+    A regex pattern is a sort of scripting language which can be used to parse information. Matched words or characters are removed.
 
 	<h1>Online Search</h1>
 	This panel will only appear if the module supports the use of online services. An online service can be used to retrieve additional information such as covers. You can decide whether you want to use an online service by checking the "Use online service" box. If selected you can specify the online service to be used..
