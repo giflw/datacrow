@@ -59,24 +59,24 @@
   </OISV>
   <Program_Info>
     <Program_Name>Data Crow</Program_Name>
-    <Program_Version>3.4.8</Program_Version>
-    <Program_Release_Month>01</Program_Release_Month>
-    <Program_Release_Day>18</Program_Release_Day>
+    <Program_Version>3.4.9</Program_Version>
+    <Program_Release_Month>06</Program_Release_Month>
+    <Program_Release_Day>14</Program_Release_Day>
     <Program_Release_Year>2009</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
     <Program_Type>Freeware</Program_Type>
     <Program_Release_Status>New Release</Program_Release_Status>
     <Program_Install_Support>Install and Uninstall</Program_Install_Support>
     <Program_OS_Support>Win95,Win98,WinME,WinNT 3.x,WinNT 4.x,WinXP,Windows2000,Windows2003,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64,Linux,Linux Gnome,Linux GPL,Linux Open Source,Mac OS 9,Mac OS X,Mac OS X 10.1,Mac OS X 10.2,Mac OS X 10.3,Mac OS X 10.4,Mac OS X 10.5,Java</Program_OS_Support>
-    <Program_Language>English,Dutch,French,German</Program_Language>
-    <Program_Change_Info>Multiple fixes</Program_Change_Info>
+    <Program_Language>English,Dutch,French,German,Italian</Program_Language>
+    <Program_Change_Info>This version contains many improvements. The module wizard enables the user to change a field (with limitations). The mass update is now capable to use all search modes of the online search. The tabs as displayed on the item form are now customizable.</Program_Change_Info>
     <Program_Specific_Category>Home/Hobby</Program_Specific_Category>
     <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
     <Program_System_Requirements>256MB of memory / P3 800MHZ</Program_System_Requirements>
     <File_Info>
-      <File_Size_Bytes>20341760</File_Size_Bytes>
-      <File_Size_K>19865</File_Size_K>
-      <File_Size_MB>19.40</File_Size_MB>
+      <File_Size_Bytes>20433859</File_Size_Bytes>
+      <File_Size_K>19954</File_Size_K>
+      <File_Size_MB>19.49</File_Size_MB>
       <Filename_Versioned>datacrow.exe</Filename_Versioned>
       <Filename_Previous></Filename_Previous>
       <Filename_Generic></Filename_Generic>
@@ -109,8 +109,8 @@
       <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>http://ovh.dl.sourceforge.net/sourceforge/datacrow/datacrow_3_4_8_installer.zip</Primary_Download_URL>
-      <Secondary_Download_URL>http://ovh.dl.sourceforge.net/sourceforge/datacrow/datacrow_3_4_8_installer.exe</Secondary_Download_URL>
+      <Primary_Download_URL>http://ovh.dl.sourceforge.net/sourceforge/datacrow/datacrow_3_4_9_installer.zip</Primary_Download_URL>
+      <Secondary_Download_URL>http://ovh.dl.sourceforge.net/sourceforge/datacrow/datacrow_3_4_9_installer.exe</Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>
     </Download_URLs>
@@ -331,23 +331,23 @@ Data Crow runs on any system where Java from Sun is installed.</Press_Release>
       <Char_Desc_450>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.</Char_Desc_450>
       <Char_Desc_2000>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself. Don't strain yourself in organizing your items and trying to keep track of their location, start using the best cataloging software today. Start using Data Crow.
 
-# Out of the box experience
-# Audio, software, book, movie and photo collections organizer
-# Customizable UI: select a skin, change the fonts, customize views and much more
-# Create your own module from within Data Crow!
-# Optional web module; web interface + integrated web server
-# Everything in Data Crow can be modified to your own needs! Add your own categories, genres, states, ..
-# Rename your files based on the item information in Data Crow
-# Advanced user management
-# Keep track of loaned items using the simple loan management system
-# Use online services like Amazon.com, Imdb.com, Musicbrainz.org, and many others, to retrieve information
-# The internal powerful image editor enables you to manipulate any image
-# Create pdf and html reports. Create your own reports by supplying new XSLT documents
-# Use templates to fill your default values
-# Mass update your items
-# Auto number your items using the auto numbering functionality
-# Create a backup of your items and settings by using the "backup &amp; restore" functionality
-# Easily upgrade to newer versions of Data Crow</Char_Desc_2000>
+- Out of the box experience
+- Audio, software, book, movie and photo collections organizer
+- Customizable UI: select a skin, change the fonts, customize views and much more
+- Create your own module from within Data Crow!
+- Optional web module; web interface + integrated web server
+- Everything in Data Crow can be modified to your own needs! Add your own categories, genres, states, ..
+- Rename your files based on the item information in Data Crow
+- Advanced user management
+- Keep track of loaned items using the simple loan management system
+- Use online services like Amazon.com, Imdb.com, Musicbrainz.org, and many others, to retrieve information
+- The internal powerful image editor enables you to manipulate any image
+- Create pdf and html reports. Create your own reports by supplying new XSLT documents
+- Use templates to fill your default values
+- Mass update your items
+- Auto number your items using the auto numbering functionality
+- Create a backup of your items and settings by using the "backup &amp; restore" functionality
+- Easily upgrade to newer versions of Data Crow</Char_Desc_2000>
     </English>
   </Program_Descriptions>
 </XML_DIZ_INFO>
