@@ -31,9 +31,11 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Book;
@@ -80,6 +82,20 @@ public class EbookImport extends FileImporter {
                 FileChannel channel = raf.getChannel();
                 ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
                 PDFFile pdffile = new PDFFile(buf);
+                
+                book.setValue(Book._T_NROFPAGES, Long.valueOf(pdffile.getNumPages()));
+                Iterator<String> it = pdffile.getMetadataKeys();
+                while (it.hasNext()) {
+                    String key = it.next();
+                    String value = pdffile.getStringMetadata(key);
+                    
+                    if (!Utilities.isEmpty(value)) {
+                        if (key.equalsIgnoreCase("Author"))
+                            DataManager.createReference(book, Book._G_AUTHOR, value);
+                        if (key.equalsIgnoreCase("Title") && !value.trim().equalsIgnoreCase("untitled"))
+                            book.setValue(Book._A_TITLE, value);
+                    }
+                }
 
                 // draw the first page to an image
                 PDFPage page = pdffile.getPage(0);
