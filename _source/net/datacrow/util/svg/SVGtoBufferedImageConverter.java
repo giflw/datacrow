@@ -23,34 +23,31 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.util;
+package net.datacrow.util.svg;
 
-import java.io.File;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
-import javax.swing.filechooser.FileFilter;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
 
-import net.datacrow.core.resources.DcResources;
-
-public class PictureFileFilter extends FileFilter {
-
-    @Override
-    public boolean accept(File file) {
-        if (file.isDirectory()) {
-            return true;
-        } else if (Utilities.getExtension(file).equals("jpg") ||
-                   Utilities.getExtension(file).equals("jpeg")||
-                   Utilities.getExtension(file).equals("png") ||
-                   Utilities.getExtension(file).equals("gif") ||
-                   Utilities.getExtension(file).equals("svg") ||
-                   Utilities.getExtension(file).equals("bmp")) {
-            return true;
-        } else {
-            return false;
-        }
+public class SVGtoBufferedImageConverter{
+   
+    public SVGtoBufferedImageConverter() {}
+   
+    public BufferedImage renderSVG(String strFileName) throws Exception {
+        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
+        BufferedImage outputImage = null;
+        transcode(strFileName, transcoder);
+        outputImage = transcoder.getLastRendered();
+        return outputImage;
     }
-
-    @Override
-    public String getDescription() {
-        return DcResources.getText("lblPicFileFilter");
+   
+    private void transcode(String inputFile, BufferedImageTranscoder transcoder) throws Exception {
+        InputStream in = new FileInputStream(inputFile);
+        TranscoderInput input = new TranscoderInput(in);
+        TranscoderOutput output = new TranscoderOutput();
+        transcoder.transcode(input, output);    
     }
 }

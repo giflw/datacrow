@@ -4,7 +4,7 @@
 
     <info>
         <appname>Data Crow</appname>
-        <appversion>3.4.9</appversion>
+        <appversion>3.4.10</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
@@ -58,6 +58,7 @@
             <file src="webserver.sh" targetdir="$INSTALL_PATH"/>
             <file src="readme" targetdir="$INSTALL_PATH"/>
             <file src="upgrade" targetdir="$INSTALL_PATH"/>
+            <file src="lib/PDFRenderer.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/browserlauncher2.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/hsqldb.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jacksum.jar" targetdir="$INSTALL_PATH/lib"/>

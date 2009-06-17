@@ -1,4 +1,20 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.10 [Release on 17/06/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+A new release containing minor new functionality and minor fixes.
+
+[Fixed]
+- File importer sometimes fails when removing words from the filename.
+- The File Types dialog for the File Import dialog was too small and didn't have a title
+  set.
+
+[Changed]
+- Book file import now reads the first page of a PDF and sets this as the front picture.
+- The image importer now also supports SVG files. Note that for existing installations
+  you will have to add the SVG extensions to the File Types filter of the import dialog.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.9 [Release on 14/06/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 I'd like to thank the following contributors: Marco Artioli, Mathias Epp and 

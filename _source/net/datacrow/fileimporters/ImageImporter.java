@@ -25,9 +25,12 @@
 
 package net.datacrow.fileimporters;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.swing.ImageIcon;
 
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
@@ -36,6 +39,7 @@ import net.datacrow.core.objects.helpers.Image;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.svg.SVGtoBufferedImageConverter;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
@@ -65,7 +69,7 @@ public class ImageImporter extends FileImporter {
      */
     @Override
     public String[] getDefaultSupportedFileTypes() {
-        return new String[] {"jpg", "gif", "jpeg", "png"};
+        return new String[] {"jpg", "gif", "jpeg", "png", "svg"};
     }
     
     @Override
@@ -82,7 +86,17 @@ public class ImageImporter extends FileImporter {
             image.setValue(Image._A_TITLE, getName(filename, directoryUsage));
             image.setValue(Image._SYS_FILENAME, filename);
             
-            DcImageIcon icon = new DcImageIcon(filename);
+            DcImageIcon icon;
+            if (filename.toLowerCase().endsWith(".svg")) {
+                SVGtoBufferedImageConverter converter = new SVGtoBufferedImageConverter();
+                BufferedImage bi = converter.renderSVG(filename);
+                icon = new DcImageIcon(Utilities.getBytes(new ImageIcon(bi)));
+                filename = File.createTempFile(Utilities.getUniqueID(), ".png").toString();
+                Utilities.writeToFile(icon, filename);
+            } else {
+                icon = new DcImageIcon(filename);
+            }
+            
             int width = icon.getIconWidth();
             int height = icon.getIconHeight();
             

@@ -23,34 +23,49 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.util;
+package net.datacrow.util.svg;
 
-import java.io.File;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 
-import javax.swing.filechooser.FileFilter;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
 
-import net.datacrow.core.resources.DcResources;
+public class BufferedImageTranscoder extends ImageTranscoder {
 
-public class PictureFileFilter extends FileFilter {
+    private BufferedImage biLast = null;
 
-    @Override
-    public boolean accept(File file) {
-        if (file.isDirectory()) {
-            return true;
-        } else if (Utilities.getExtension(file).equals("jpg") ||
-                   Utilities.getExtension(file).equals("jpeg")||
-                   Utilities.getExtension(file).equals("png") ||
-                   Utilities.getExtension(file).equals("gif") ||
-                   Utilities.getExtension(file).equals("svg") ||
-                   Utilities.getExtension(file).equals("bmp")) {
-            return true;
-        } else {
-            return false;
-        }
+    /**
+     * Constructs a new transcoder that produces BufferedImage images.
+     */
+    public BufferedImageTranscoder() {
+        hints.put(ImageTranscoder.KEY_BACKGROUND_COLOR, Color.white);
     }
 
+    /**
+     * Creates a new ARGB image with the specified dimension.
+     * @param width the image width in pixels
+     * @param height the image height in pixels
+     */
     @Override
-    public String getDescription() {
-        return DcResources.getText("lblPicFileFilter");
+    public BufferedImage createImage(int width, int height) {
+        return new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    }
+
+    /**
+     * Writes the specified image to the specified output.
+     * @param img the image to write
+     * @param output the output where to store the image
+     * @param TranscoderException if an error occurred while storing the image
+     */
+    @Override
+    public void writeImage(BufferedImage img, TranscoderOutput output) throws TranscoderException {
+        biLast = img;
+    }
+
+    public BufferedImage getLastRendered(){
+        return biLast;
     }
 }
+

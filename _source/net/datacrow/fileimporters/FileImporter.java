@@ -269,9 +269,8 @@ public abstract class FileImporter {
                 while (st.hasMoreElements()) {
                     String s = (String) st.nextElement();
                     int idx = name.toLowerCase().indexOf(s.toLowerCase());
-                    name = name.substring(0, idx) + name.substring(idx + s.length());
-                    
-                    //name = name.replaceAll(s, "");
+                    if (idx > -1)
+                        name = name.substring(0, idx) + name.substring(idx + s.length());
                 }
             }
             

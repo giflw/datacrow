@@ -68,53 +68,42 @@
             This page should cover most of the commonly asked questions about Data Crow cataloger software.
 
             <br><br><br>
-            <span class="content_main_bold">I downloaded the installation and now I got myself a jar file .. ??</span><br><br>
+            <span class="content_main_bold">I downloaded the installation and now I got myself a jar file .. ?</span><br><br>
 
             Try a "double-click" first. The jar file is a self-executing file.
             If that didn't help at all it means you either you have no Java Runtime Environment
             installed or Java is not correctly setup. If Java is not installed
             go to <a href="http://www.java.com/">the Java homepage</a> and download the latest version.
-            If Java is installed, type (in the folder where Data Crow is located): java -jar &lt;filename&gt;
+            If Java is installed, type (in the folder where Data Crow is located): java -Xmx256m -jar &lt;filename&gt;
 
             <br><br><br>
-            <span class="content_main_bold">A get a message saying Data Crow need full control over its folders..</span><br><br>
+            <span class="content_main_bold">I get a message saying Data Crow need full control over its folders</span><br><br>
 
             Data Crow needs to be able to create and alter files such as the database and the module files.
             Some platforms have a solid security layer in place and will require you to change the permissions
             for the user running Data Crow or to start Data Crow with a user having the correct privileges.
-            Windows Vista is especially restrictive to programs installed in the program files folder. I would
+            Windows Vista is especially restrictive to programs installed in the <i>program files</i> folder. I would
             advise to install Data Crow in your user folder, saving you the hassle of having to change folder / user
             permissions.
 
-            <br><br><br>
-            <span class="content_main_bold">How do I supply the -dir: parameter?</span><br><br>
+			<br><br><br>
+            <span class="content_main_bold">Nice reports but I want something different</span><br><br>
+            The reports in Data Crow are based on templates which are easily modified. In case the existing reports
+            are not suitable for your needs try to create a new one. I have written a short manual on this
+            which can be found in the download section under documentation.
 
-            To supply the -dir: parameter you have to start Data Crow in the following way:<br><br>
-            java -Xmx256m -jar datacrow.jar -dir:&lt;installation directory&gt;<br><br>
-            or (when using the datacrow.exe)<br><br>
-            datacrow.exe -dir:&lt;installation directory&gt;.<br><br>
-            <i>
-            The installation directory is the directory where Data Crow has been installed
-            (for example c:\program files\datacrow).
-            </i>
-
-            <br><br><br>
-            <span class="content_main_bold">How do I set the DATACROW_HOME environment variable?</span><br><br>
-
-            This differs per operating system. Try google to find out how you should do this for your operating system.
-            Some references:
-            <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;310519" />Windows XP</a>,
-            <a href="http://www.chem.gla.ac.uk/~louis/software/faq/q1.html#winXP" />Windows</a>,
-            <a href="http://www.zolved.com/synapse/view_content/28157/How_to_set_environment_variables_on_Ubuntu_" />Ubuntu</a>,
-            <a href="http://ranjankumar.com/2008/05/24/how-to-set-environment-variables-in-linux/" />Linux</a>
+			<br><br><br>
+            <span class="content_main_bold">I would like to create a plugin but where do I start?</span><br><br>
+            A developer guide has been made available. This guide explains how Data Crow works and how to create a new
+            plugin. It's actually not that difficult! The developer guide can be found in the download section under documentation.
 
             <br><br><br>
-            <span class="content_main_bold">Why can't Data Crow determine the installation directory by itself?</span><br><br>
-
-            This is due to Data Crow's platform independent nature. In the past I had some tricks in place to determine
-            from which folder Data Crow was running from but this did not work for all platforms (as it turned out).
-            To specify the installation folder you have to set the DATACROW_HOME environment variable or supply the
-            -dir: parameter.
+            <span class="content_main_bold">I get a message saying Data Crow can't determine its installation folder</span><br><br>
+            As Data Crow does not maintain its location in the registry or in any other platform dependent way it has
+            to find the installation folder all by itself.. In case this fails you can use the following parameter: <br><br>
+            java -Xmx256m -jar datacrow.jar -dir:&lt;installation directory&gt;<br>
+            <i>or (when using the datacrow.exe)</i><br>
+            datacrow.exe -dir:&lt;installation directory&gt;
 
             <br><br><br>
             <span class="content_main_bold">How do I run the web module?</span><br><br>
@@ -122,8 +111,8 @@
             it will fail to start. Another thing to check is the firewall and virus scanner settings and permissions.
             <br><br>
             The web module can be started from within Data Crow from the web server menu. Alternatively it can be started from the
-            console by using the webserver.sh or the webserver.bat files or by entering the following command manually:<br>
-            java -Xmx512m -jar datacrow.jar -webserver
+            console by using the webserver.sh or the webserver.bat file or by entering the following command manually:<br>
+            java -Xmx512m -jar datacrow.jar -webserver -credentials:&lt;username&gt;/&lt;password&gt;
 
             <br><br><br>
             <span class="content_main_bold">What is the "new" tab about?</span><br><br>
@@ -139,7 +128,7 @@
             search, select an Amazon server (if available for the selected module) and the preferred language.
 
             <br><br><br>
-            <span class="content_main_bold">I would like to have feature X in Data Crow</span><br><br>
+            <span class="content_main_bold">I would like to have a new feature in Data Crow</span><br><br>
             Please go to the contact page and follow the directions from there
 
             <br><br><br>

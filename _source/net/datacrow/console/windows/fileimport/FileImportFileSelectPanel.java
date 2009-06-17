@@ -57,7 +57,7 @@ public class FileImportFileSelectPanel extends FileSystemTreePanel implements Ac
         menu.setMaximumSize(new Dimension(100, 22));
         menu.setMinimumSize(new Dimension(50, 22));
         
-        DcMenu menuFilter = ComponentFactory.getMenu(DcResources.getText("lblFilter"));
+        DcMenu menuFilter = ComponentFactory.getMenu(DcResources.getText("lblFileTypes"));
         DcMenuItem menuFileTypes = ComponentFactory.getMenuItem(DcResources.getText("lblFileTypes"));
         menuFilter.add(menuFileTypes);
         

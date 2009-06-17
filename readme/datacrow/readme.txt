@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.4.9
-Created on 14/06/2009
+Version 3.4.10
+Created on 17/06/2009
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -54,7 +54,7 @@ Features:
 * Search for items using online services such as Amazon.com (http://www.amazon.com), 
   Imdb (http://www.imdb.com), Musicbrainz (http://musicbrainz.org) and many others.
 * Extract information from files on your CD, DVD or Harddisk:
-  image files (JPG, GIF, PNG), music files (technical info and tag content of 
+  image files (JPG, GIF, PNG, SVG), music files (technical info and tag content of 
   ASF, OGG, APE, FLAC and MP3 files) and movie file (DivX, Xvid, ASF, MKV, OGM, 
   RIFF, MOV, IFO, VOB and Mpeg video).
 * Internal HSQL database + SQL query tool for expert users.

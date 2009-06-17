@@ -69,6 +69,7 @@ import net.datacrow.util.DcFileFilter;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.PictureFileFilter;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.svg.SVGtoBufferedImageConverter;
 
 import org.apache.log4j.Logger;
 
@@ -327,7 +328,15 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             BrowserDialog dialog = new BrowserDialog("Select a new Image", new PictureFileFilter());
             File file = dialog.showOpenFileDialog(this, null);
             if (file != null) {
-                picture = new DcImageIcon(Utilities.readFile(file));
+                
+                if (file.toString().toLowerCase().endsWith(".svg")) {
+                    SVGtoBufferedImageConverter converter = new SVGtoBufferedImageConverter();
+                    BufferedImage bi = converter.renderSVG(file.toString());
+                    picture = new DcImageIcon(Utilities.getBytes(new ImageIcon(bi)));
+                } else {
+                    picture = new DcImageIcon(Utilities.readFile(file));
+                }
+                
                 initialize();
                 changed = true;
                 

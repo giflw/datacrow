@@ -54,5 +54,6 @@
 	<classpathentry kind="lib" path="lib/xml/xml-apis-ext-1.3.04.jar"/>
 	<classpathentry kind="lib" path="lib/xml/xmlgraphics-commons-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jaudiotagger_1.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/PDFRenderer.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

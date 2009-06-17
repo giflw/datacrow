@@ -53,6 +53,7 @@ public class OpenFromUrlDialog extends DcDialog implements ActionListener {
     
     private DcUrlField input = ComponentFactory.getURLField(500);
     
+    private URL url;
     private byte[] image;
     
     public OpenFromUrlDialog() {
@@ -73,7 +74,7 @@ public class OpenFromUrlDialog extends DcDialog implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         try {
             if (ae.getActionCommand().equals("ok")) {
-                URL url = input.getURL();                
+                url = input.getURL();                
                 
                 if (url != null) {
                     setImage(HttpConnectionUtil.retrieveBytes(url));

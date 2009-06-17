@@ -55,11 +55,14 @@ public class SelectFileTypesDialog extends DcDialog implements ActionListener {
     public SelectFileTypesDialog(int module) {
         super();
         
+        setTitle(DcResources.getText("lblFileTypes"));
+        
         this.settings = DcModules.get(module).getSettings();
         
         build();
         setCenteredLocation();
         setModal(true);
+        setSize(400, 300);
     }
     
     public boolean isChanged() {
