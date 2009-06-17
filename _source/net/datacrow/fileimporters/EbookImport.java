@@ -32,12 +32,15 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import javax.swing.ImageIcon;
+
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Book;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Hash;
+import net.datacrow.util.Utilities;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -55,7 +58,7 @@ public class EbookImport extends FileImporter {
 
     @Override
     public String[] getDefaultSupportedFileTypes() {
-        return new String[] {"txt","chm", "doc", "pdf", "prc", "pdb", "kml", "html", "htm", "pdf", "prc"};
+        return new String[] {"txt","chm", "doc", "pdf", "prc", "pdb", "kml", "html", "htm", "pdf", "prc", "lit"};
     }
     
     @Override
@@ -82,7 +85,7 @@ public class EbookImport extends FileImporter {
                 PDFPage page = pdffile.getPage(0);
                 Rectangle rect = new Rectangle(0,0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
                 Image front = page.getImage(rect.width, rect.height, rect, null, true, true);
-                book.setValue(Book._K_PICTUREFRONT, new DcImageIcon(front));
+                book.setValue(Book._K_PICTUREFRONT, new DcImageIcon(Utilities.getBytes(new ImageIcon(front))));
             }
             
             Hash.getInstance().calculateHash(book);
