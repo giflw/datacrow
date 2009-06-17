@@ -4,7 +4,7 @@
 
     <info>
         <appname>Data Crow</appname>
-        <appversion>3.4.9</appversion>
+        <appversion>3.4.10</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
@@ -51,8 +51,6 @@
             <file src="datacrow.exe" targetdir="$INSTALL_PATH"/>
             <file src="datacrow.jar" targetdir="$INSTALL_PATH"/>
             <file src="datacrow.sh" targetdir="$INSTALL_PATH"/>
-            <file src="imagej.properties" targetdir="$INSTALL_PATH"/>
-            <file src="imagej.preferences" targetdir="$INSTALL_PATH"/>
             <file src="hsqlmanager.sh" targetdir="$INSTALL_PATH"/>
             <file src="webserver.cmd" targetdir="$INSTALL_PATH"/>
             <file src="webserver.sh" targetdir="$INSTALL_PATH"/>
