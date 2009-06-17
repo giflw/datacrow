@@ -16,6 +16,21 @@ Online services
 [ ] Wikipedia
 [ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
 
+3.5
+---------------------------------------------------------------------------------------------------------
+[ ] Flexible Online Services model (scripting).
+[ ] Additional online services (using the new model).
+[x] SVG compatibility / Conversion.
+[x] Get the first image from PDF files (e-Book).
+[ ] Country and Language drop down / modules.
+[ ] Upgrade of the Container module / Container Hierarchy.
+[ ] Upgrade of the Container module / Global Importer.
+[ ] Store table layout.
+[ ] Export to: for views (XLS, XML, TXT).
+[ ] Book Module / Additional import.
+[ ] Export Module Wizard.
+[ ] Volume name: Do something with the volume name......
+
 
 3.4.9
 ---------------------------------------------------------------------------------------------------------

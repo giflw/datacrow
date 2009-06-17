@@ -221,6 +221,10 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         add(ComponentFactory.getLabel(DcResources.getText("lblQuickFilter") + " "));
         add(comboFields);
         add(comboCriteria);
+
+        JButton buttonCancel = ComponentFactory.getIconButton(IconLibrary._icoRemove);
+        buttonCancel.setActionCommand("cancel");
+        buttonCancel.addActionListener(this);
         
         JButton button1 = ComponentFactory.getIconButton(IconLibrary._icoAccept);
         button1.setActionCommand("search");
@@ -231,6 +235,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         button2.addActionListener(this);
 
         add(button1);
+        add(buttonCancel);
         
         if (filters.size() > 0) {
             addSeparator();
@@ -246,6 +251,8 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             search(comboFilters.getSelectedIndex() > 0 ? (DataFilter) comboFilters.getSelectedItem() : null);    
         else if (ae.getActionCommand().equals("search"))
             search();
+        else if (ae.getActionCommand().equals("cancel"))
+            search(null);
         else if (ae.getActionCommand().equals("fieldSelected"))
             applySelectedField();
         else if (ae.getActionCommand().equals("filterSelected"))
