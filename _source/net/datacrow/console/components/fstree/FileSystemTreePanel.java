@@ -119,7 +119,7 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
         if (menu != null) {
             add(menu, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                      ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                      new Insets(5, 5, 0, 5), 0, 0));
+                      new Insets(0, 0, 0, 0), 0, 0));
         }
         
         JComboBox cbDrives = ComponentFactory.getComboBox();
