@@ -168,26 +168,22 @@ This piece of software would not have succeeded (or even existed) with help
 from other development teams and information providers:
 
 * Bas Uildriks for designing creating the web site (http://www.datacrow.net).
-* ImageJ: A very powerful image editor.
-  http://rsb.info.nih.gov/ij/
 * HSQL: This product includes Hypersonic SQL.
   Originally developed by Thomas Mueller and the Hypersonic SQL Group. 
   I want to thank Thomas Mueller for providing this application with an easy
   to use, powerful but small and platform independent database.
   http://hsqldb.sourceforge.net/
-* Med's Movie Manager allows parsing of various movie file formats
+* Med's Movie Manager allows parsing of various movie file formats.
   http://sourceforge.net/projects/xmm
-* http://www.freedb.org for allowing me to retrieve data from their web servers
-* http://musicbrainz.org for allowing me to retrieve Music Albums
-* Amazon.com for allowing me to retrieve data from their web servers
+* http://www.freedb.org for allowing me to retrieve data from their web servers.
+* http://musicbrainz.org for allowing me to retrieve Music Albums.
+* Amazon.com for allowing me to retrieve data from their web servers.
   http://www.amazon.com
-* Imdb.com for allowing me to extract data from their database 
+* Imdb.com for allowing me to extract data from their database .
   http://www.imdb.com
-* Entagged. I have been switching back and forth between several music tag 
-  readers. Now there is Entagged and I like it so far..
-  http://entagged.sourceforge.net/
-* izPack
-  for providing a smooth way to install Data Crow on multiple platforms
+* JAudioTagger which I use to parse audio file information.
+  http://www.jthink.net/jaudiotagger
+* izPack for providing a smooth way to install Data Crow on multiple platforms.
   http://www.izforge.com/izpack/
 
 
