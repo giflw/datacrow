@@ -26,20 +26,10 @@
 package net.datacrow.synchronizers;
 
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcAssociate;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.services.OnlineSearchHelper;
-import net.datacrow.core.services.Region;
-import net.datacrow.core.services.SearchMode;
-import net.datacrow.core.services.SearchTask;
-import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.util.StringUtils;
 
 public class AssociateSynchronizer extends DefaultSynchronizer {
 
-    private DcObject dco;
-    
     public AssociateSynchronizer() {
         super(DcResources.getText("lblMassItemUpdate", DcModules.getCurrent().getObjectName()),
               DcModules.getCurrent().getIndex());    
@@ -50,32 +40,5 @@ public class AssociateSynchronizer extends DefaultSynchronizer {
         return DcResources.getText("msgAssociateMassUpdateHelp",
                                     new String[] {DcModules.getCurrent().getObjectNamePlural().toLowerCase(),
                                                   DcModules.getCurrent().getObjectName().toLowerCase()});
-    }
-
-    public DcObject getDcObject() {
-        return dco;
-    }
-    
-    @Override
-    public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
-        
-        this.dco = dco;
-        boolean updated = exactSearch(dco);
-        
-        int field = mode != null ? mode.getFieldBinding() : DcAssociate._A_NAME;
-        
-        if (!updated) {
-            String value = StringUtils.normalize((String) dco.getValue(field));
-
-            if (value == null || value.length() == 0) 
-                return updated;
-            
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
-            osh.setMode(mode);
-            DcObject result = osh.query(dco, (String) dco.getValue(field), new int[] {field});
-            update(dco, result, osh);
-        }
-        
-        return updated;
     }
 }

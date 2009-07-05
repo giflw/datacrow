@@ -509,7 +509,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
         JTabbedPane tp = ComponentFactory.getTabbedPane();
         
-        panelSettings = new OnlineServiceSettingsPanel(this, true, true, ID != null, module);
+        panelSettings = new OnlineServiceSettingsPanel(this, true, true, ID != null, false, module);
         
         
         JPanel panel2 = new JPanel();

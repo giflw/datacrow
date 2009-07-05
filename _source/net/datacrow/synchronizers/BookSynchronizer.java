@@ -25,23 +25,11 @@
 
 package net.datacrow.synchronizers;
 
-import java.util.Collection;
-
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.helpers.Book;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.services.OnlineSearchHelper;
-import net.datacrow.core.services.Region;
-import net.datacrow.core.services.SearchMode;
-import net.datacrow.core.services.SearchTask;
-import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.util.StringUtils;
 
 public class BookSynchronizer extends DefaultSynchronizer {
 
-    private DcObject dco;
-    
     public BookSynchronizer() {
         super(DcResources.getText("lblMassItemUpdate", DcModules.get(DcModules._BOOK).getObjectName()),
               DcModules._BOOK);
@@ -50,41 +38,5 @@ public class BookSynchronizer extends DefaultSynchronizer {
     @Override
     public String getHelpText() {
         return DcResources.getText("msgBookMassUpdateHelp");
-    }
-
-    public DcObject getDcObject() {
-        return dco;
-    }
-    
-    @Override
-    public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
-        this.dco = dco;
-        boolean updated = exactSearch(dco);
-        
-        int field = mode == null ? Book._A_TITLE : mode.getFieldBinding();
-        
-        if (!updated) {
-            String value = StringUtils.normalize((String) dco.getValue(field));
-            
-            if (value == null || value.length() == 0) 
-                return updated;
-            
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
-            osh.setServer(server);
-            osh.setRegion(region);
-            osh.setMode(mode);
-            osh.setMaximum(2);
-            Collection<DcObject> books = osh.query((String) dco.getValue(field));
-            
-            for (DcObject book : books) {
-                if (StringUtils.equals(value, (String) book.getValue(field))) {
-                    updated = true;
-                    update(dco, book, osh);
-                    break;
-                }
-            }
-        }
-
-        return updated;
     }
 }

@@ -35,18 +35,17 @@ import net.datacrow.core.objects.helpers.AudioCD;
 import net.datacrow.core.objects.helpers.AudioTrack;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
-import net.datacrow.core.services.Region;
-import net.datacrow.core.services.SearchMode;
-import net.datacrow.core.services.SearchTask;
-import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Basically the same as the MusicAlbumSynchronizer class. 
+ * However, for customization reasons (and the likes) it was decided to keep this class.
+ * @author Robert Jan van der Waals
+ */
 public class AudioCdSynchronizer extends DefaultSynchronizer {
 
-    private DcObject dco;
-    
     private static Logger logger = Logger.getLogger(AudioCdSynchronizer.class.getName());
     
     public AudioCdSynchronizer() {
@@ -59,56 +58,37 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
         return DcResources.getText("msgAudioCdMassUpdateHelp");
     }
     
-    public DcObject getDcObject() {
-        return dco;
-    }
-    
     @SuppressWarnings("unchecked")
     @Override
-    public boolean onlineUpdate(DcObject album, IServer server, Region region, SearchMode mode) {
-
-        boolean updated = exactSearch(album);
-        
-        int field = mode == null ? AudioCD._A_TITLE : mode.getFieldBinding();
-        
-        if (!updated) {
-            String value = (String) album.getValue(field);
-            Collection<DcMapping> artists = (Collection<DcMapping>) album.getValue(AudioCD._F_ARTIST);
-            
-            if ((value == null || value.trim().length() == 0) || (artists == null || artists.size() == 0)) 
-                return updated;
-            
-            OnlineSearchHelper osh = new OnlineSearchHelper(album.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
-            osh.setServer(server);
-            osh.setRegion(region);
-            osh.setMode(mode);
-            osh.setMaximum(2);
-            Collection<DcObject> c = osh.query((String) album.getValue(field));
-
-            for (DcObject albumNew : c) {
-                if (match(album, albumNew, field)) {
-                    DcObject albumNew2 = osh.query(albumNew);
-                    updateTracks(album, album.getChildren(), albumNew2.getChildren());
-                    album.copy(albumNew2, true);
-                    updated = true;
-                    albumNew2.unload();
+    protected boolean matches(DcObject result, String searchString, int fieldIdx) {
+        boolean matches = super.matches(result, searchString, fieldIdx);
+        if (matches && (getSearchMode() == null || getSearchMode().keywordSearch())) {
+            // Additionally one of the artists has to match. Only used for keyword searches!
+            Collection<DcMapping> artists1 = (Collection<DcMapping>) result.getValue(AudioCD._F_ARTIST);
+            Collection<DcMapping> artists2 = (Collection<DcMapping>) getDcObject().getValue(AudioCD._F_ARTIST);
+            artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
+            artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
+            for (DcObject person1 : artists1) {
+                for (DcObject person2 : artists2) {
+                    matches = StringUtils.equals(person1.toString(), person2.toString()); 
+                    if (matches) break;
                 }
             }
-            
-            c.clear();
         }
-        return updated;
+        return matches;    
     }
     
-    private void updateTracks(DcObject album, Collection<DcObject> oldTracks, Collection<DcObject> newTracks) {
-        
-        oldTracks = oldTracks == null ? new ArrayList<DcObject>() : oldTracks;
-        newTracks = newTracks == null ? new ArrayList<DcObject>() : newTracks;
+    @Override
+    protected void merge(DcObject target, DcObject source, OnlineSearchHelper osh) {
+        super.merge(target, source, osh);
+
+        Collection<DcObject> oldTracks = target.getChildren() == null ? new ArrayList<DcObject>() : target.getChildren();
+        Collection<DcObject> newTracks = source.getChildren() == null ? new ArrayList<DcObject>() : source.getChildren();
         
         if (oldTracks.size() == 0) {
             for (DcObject track : newTracks) {
-                track.setValue(track.getParentReferenceFieldIndex(), album.getID());
-                album.addChild(track);
+                track.setValue(track.getParentReferenceFieldIndex(), target.getID());
+                target.addChild(track);
                 try {
                     track.saveNew(false);
                 } catch (Exception e) {
@@ -117,60 +97,15 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
             }
         } else {
             for (DcObject currentTrack : oldTracks) {
-                
-                String titleOld = (String) currentTrack.getValue(AudioTrack._A_TITLE);
-                Long lengthOld = (Long) currentTrack.getValue(AudioTrack._H_PLAYLENGTH);
-                Long trackOld = (Long) currentTrack.getValue(AudioTrack._F_TRACKNUMBER);
-    
                 for (DcObject newTrack : newTracks) {
-                    
-                    String titleNew = (String) newTrack.getValue(AudioTrack._A_TITLE);
-                    Long lengthNew = (Long) newTrack.getValue(AudioTrack._H_PLAYLENGTH);
-                    Long trackNew = (Long) newTrack.getValue(AudioTrack._F_TRACKNUMBER);
-    
-                    if ((titleOld != null && titleNew != null) && 
-                         StringUtils.equals(titleNew, titleOld)) {
-                        
+                    if (StringUtils.equals(currentTrack.getDisplayString(AudioTrack._A_TITLE), newTrack.getDisplayString(AudioTrack._A_TITLE))) {
                         currentTrack.copy(newTrack, true);
-                    
                     } else if (newTracks.size() == oldTracks.size() && 
-                               ((lengthOld != null && lengthNew != null) && lengthNew.equals(lengthOld)) ||  
-                               ((trackOld != null && trackNew != null) && trackNew.equals(trackOld))) {
-                    
+                            StringUtils.equals(currentTrack.getDisplayString(AudioTrack._H_PLAYLENGTH), newTrack.getDisplayString(AudioTrack._H_PLAYLENGTH))) {    
                         currentTrack.copy(newTrack, true);
                     }
                 }
             }
         }
-    } 
-    
-    @SuppressWarnings("unchecked")
-    protected boolean match(DcObject dco1, DcObject dco2, int field) {
-        String value1 = (String) dco1.getValue(field);
-        String value2 = (String) dco2.getValue(field);
-
-        boolean match = false;
-        if (StringUtils.equals(value1, value2)) {
-            
-            if (field == AudioCD._A_TITLE) {
-                Collection<DcMapping> artists1 = (Collection<DcMapping>) dco1.getValue(AudioCD._F_ARTIST);
-                Collection<DcMapping> artists2 = (Collection<DcMapping>) dco2.getValue(AudioCD._F_ARTIST);
-                
-                artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
-                artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
-    
-                for (DcObject person1 : artists1) {
-                    for (DcObject person2 : artists2) {
-                        String name1 = person1.toString().trim();
-                        String name2 = person2.toString().trim();
-                        match = StringUtils.equals(name1, name2); 
-                        if (match) break;
-                    }
-                }
-            } else {
-                match = true;
-            }
-        }
-        return match;        
     }
 }

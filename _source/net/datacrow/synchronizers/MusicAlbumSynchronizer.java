@@ -29,27 +29,27 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.datacrow.console.views.View;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.helpers.MusicAlbum;
 import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
-import net.datacrow.core.services.Region;
-import net.datacrow.core.services.SearchMode;
-import net.datacrow.core.services.SearchTask;
-import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.fileimporters.MusicFile;
 import net.datacrow.util.StringUtils;
 
+import org.apache.log4j.Logger;
+
+/**
+ * Basically the same as the AudioCdSynchronizer class. 
+ * However, for customization reasons (and the likes) it was decided to keep this class.
+ * @author Robert Jan van der Waals
+ */
 public class MusicAlbumSynchronizer extends DefaultSynchronizer {
 
-    private DcObject dco;
+    private static Logger logger = Logger.getLogger(MusicAlbumSynchronizer.class.getName());
     
     public MusicAlbumSynchronizer() {
         super(DcResources.getText("lblMassItemUpdate", DcModules.get(DcModules._MUSICALBUM).getObjectName()),
@@ -71,215 +71,103 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
         return true;
     }
     
-    public DcObject getDcObject() {
-        return dco;
-    }    
-    
     @Override
-    public Thread getTask() {
-        return new Task();
-    }    
-    
-    private class Task extends Thread {
-
-        @Override
-        public void run() {
-            try {
-                initialize();
-                
-                View view = DcModules.get(module).getCurrentSearchView();
-                
-                Collection<DcObject> objects = new ArrayList<DcObject>();
-                objects.addAll(dlg.getItemPickMode() == _ALL ? view.getItems() : view.getSelectedItems());
-                initProgressBar(objects.size());
-                
-                for (DcObject o : objects) {
-                    
-                    dco = o;
-                    
-                    if (isCancelled()) break;
-                    
-                    dco.loadChildren();
-                    
-
-                    boolean updated = false;
-                    
-                    if (isReparseFiles()) {
-                        for (DcObject child : dco.getChildren()) {
-                            
-                            if (isCancelled()) break;
-                            
-                            String filename = child.getFilename();
-                            
-                            if (filename == null || filename.trim().length() == 0)
-                                continue;
-                            
-                            File tst = new File(filename);
-                            if (!tst.exists())
-                                filename = filename.replaceAll("`", "'");
-                            
-                            addMessage(DcResources.getText("msgParsing", filename));
-                            
-                            MusicFile musicFile = new MusicFile(filename);
-    
-                            dco.setValue(MusicAlbum._A_TITLE, musicFile.getAlbum());
-                            
-                            DcObject artist  = DataManager.createReference(dco, MusicAlbum._F_ARTISTS, musicFile.getArtist());
-                            
-                            setValue(child, MusicTrack._K_QUALITY, Long.valueOf(musicFile.getBitrate()));
-                            setValue(child, MusicTrack._J_PLAYLENGTH, Long.valueOf(musicFile.getLength()));
-                            setValue(child, MusicTrack._L_ENCODING, musicFile.getEncodingType());
-                            setValue(child, MusicTrack._A_TITLE, musicFile.getTitle());
-
-                            DataManager.createReference(child, MusicTrack._G_ARTIST, artist);
-                            
-                            setValue(child, MusicTrack._C_YEAR, musicFile.getYear());
-                            setValue(child, MusicTrack._F_TRACKNUMBER, Long.valueOf(musicFile.getTrack()));
-                            
-                            DataManager.createReference(child, MusicTrack._H_GENRES, musicFile.getGenre());
-                            
-                            child.setSilent(true);
-                            updated = true;
-                        }
-                    }
-                    
-                    if (useOnlineService())
-                        updated = onlineUpdate(dco, getServer(), getRegion(), getSearchMode());
-
-                    updateProgressBar();
-                    
-                    try {
-                        if (updated) {
-                            dco.setSilent(true);
-                            dco.saveUpdate(true);
-                            
-                            while (DatabaseManager.getQueueSize() > 0) {
-                                try {
-                                    sleep(100);
-                                } catch (Exception exp) {}
-                            }
-                        }
-                    } catch (ValidationException ve) {
-                        addMessage(ve.getMessage());
-                    }
-                }
-            } finally {
-                addMessage(DcResources.getText("msgSynchronizerEnded"));
-                enableAction(true);
-            }  
-        }
-    }
-    
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
-        addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
-        boolean updated = exactSearch(dco);
+    protected boolean parseFiles(DcObject dco) {
         
-        int field = mode == null ? MusicAlbum._A_TITLE : mode.getFieldBinding();
+        boolean updated = false;
         
-        if (!updated) {
-            String title = (String) dco.getValue(field);
-            Collection<DcMapping> artists = (Collection<DcMapping>) dco.getValue(MusicAlbum._F_ARTISTS);
-            if ((title == null || title.length() == 0) || (artists == null || artists.size() == 0)) 
-                return updated;
+        if (!isReparseFiles()) 
+            return updated;
             
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
-            osh.setServer(server);
-            osh.setRegion(region);
-            osh.setMode(mode);
-            osh.setMaximum(2);
-            Collection<DcObject> albums = osh.query((String) dco.getValue(field));
-    
-            for (DcObject albumNew : albums) {
-                if (match(dco, albumNew, field)) {
-                    updated = true;
-                    DcObject albumNew2 = osh.query(albumNew);
-                    updateTracks(dco.getChildren(), albumNew2.getChildren());
-                    dco.copy(albumNew2, true);
-                    updated = true;
-                    albumNew2.unload();
-                    break;
-                }
-            }
+        for (DcObject child : dco.getChildren()) {
             
-            albums.clear();
+            if (isCancelled()) break;
+            
+            String filename = child.getFilename();
+            
+            if (filename == null || filename.trim().length() == 0)
+                continue;
+            
+            File tst = new File(filename);
+            if (!tst.exists())
+                filename = filename.replaceAll("`", "'");
+            
+            addMessage(DcResources.getText("msgParsing", filename));
+            
+            MusicFile musicFile = new MusicFile(filename);
+
+            dco.setValue(MusicAlbum._A_TITLE, musicFile.getAlbum());
+            
+            DcObject artist  = DataManager.createReference(dco, MusicAlbum._F_ARTISTS, musicFile.getArtist());
+            
+            setValue(child, MusicTrack._K_QUALITY, Long.valueOf(musicFile.getBitrate()));
+            setValue(child, MusicTrack._J_PLAYLENGTH, Long.valueOf(musicFile.getLength()));
+            setValue(child, MusicTrack._L_ENCODING, musicFile.getEncodingType());
+            setValue(child, MusicTrack._A_TITLE, musicFile.getTitle());
+
+            DataManager.createReference(child, MusicTrack._G_ARTIST, artist);
+            
+            setValue(child, MusicTrack._C_YEAR, musicFile.getYear());
+            setValue(child, MusicTrack._F_TRACKNUMBER, Long.valueOf(musicFile.getTrack()));
+            
+            DataManager.createReference(child, MusicTrack._H_GENRES, musicFile.getGenre());
+            
+            child.setSilent(true);
+            updated = true;
         }
         
         return updated;
-    }    
-    
-    
-    public void merge(DcObject dco1, DcObject dco2) {
-        dco1.copy(dco2, true);
-        updateTracks(dco1.getChildren(), dco2.getChildren());
     }
+    
     
     @SuppressWarnings("unchecked")
-    protected boolean match(DcObject dco1, DcObject dco2, int field) {
-        String value1 = (String) dco1.getValue(field);
-        String value2 = (String) dco2.getValue(field);
-
-        boolean match = false;
-        if (StringUtils.equals(value1, value2)) {
-            
-            if (field == MusicAlbum._A_TITLE) {
-                Collection<DcMapping> artists1 = (Collection<DcMapping>) dco1.getValue(MusicAlbum._F_ARTISTS);
-                Collection<DcMapping> artists2 = (Collection<DcMapping>) dco2.getValue(MusicAlbum._F_ARTISTS);
-                
-                artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
-                artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
-    
-                for (DcObject person1 : artists1) {
-                    for (DcObject person2 : artists2) {
-                        String name1 = person1.toString().trim();
-                        String name2 = person2.toString().trim();
-                        match = StringUtils.equals(name1, name2); 
-                        if (match) break;
-                    }
+    @Override
+    protected boolean matches(DcObject result, String searchString, int fieldIdx) {
+        boolean matches = super.matches(result, searchString, fieldIdx);
+        if (matches && (getSearchMode() == null || getSearchMode().keywordSearch())) {
+            // Additionally one of the artists has to match. Only used for keyword searches!
+            Collection<DcMapping> artists1 = (Collection<DcMapping>) result.getValue(MusicAlbum._F_ARTISTS);
+            Collection<DcMapping> artists2 = (Collection<DcMapping>) getDcObject().getValue(MusicAlbum._F_ARTISTS);
+            artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
+            artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
+            for (DcObject person1 : artists1) {
+                for (DcObject person2 : artists2) {
+                    matches = StringUtils.equals(person1.toString(), person2.toString()); 
+                    if (matches) break;
                 }
-            } else {
-                match = true;
             }
         }
-        return match;        
-    }    
+        return matches;    
+    }
     
-    private void updateTracks(Collection<DcObject> oldTracks, Collection<DcObject> newTracks) {
-        oldTracks = oldTracks == null ? new ArrayList<DcObject>() : oldTracks;
-        newTracks = newTracks == null ? new ArrayList<DcObject>() : newTracks;
+    @Override
+    protected void merge(DcObject target, DcObject source, OnlineSearchHelper osh) {
+        super.merge(target, source, osh);
+
+        Collection<DcObject> oldTracks = target.getChildren() == null ? new ArrayList<DcObject>() : target.getChildren();
+        Collection<DcObject> newTracks = source.getChildren() == null ? new ArrayList<DcObject>() : source.getChildren();
         
-        for (DcObject oldTrack : oldTracks) {
-            String titleOld = (String) oldTrack.getValue(MusicTrack._A_TITLE);
-            Long lengthOld = (Long) oldTrack.getValue(MusicTrack._J_PLAYLENGTH);
-            Long trackOld = (Long) oldTrack.getValue(MusicTrack._F_TRACKNUMBER);
-
-            for (DcObject newTrack : newTracks) {
-                
-                String titleNew = (String) newTrack.getValue(MusicTrack._A_TITLE);
-                Long lengthNew = (Long) newTrack.getValue(MusicTrack._J_PLAYLENGTH);
-                Long trackNew = (Long) newTrack.getValue(MusicTrack._F_TRACKNUMBER);
-
-                if ((titleOld != null && titleNew != null) && 
-                    (StringUtils.equals(titleNew, titleOld))) {
-                    merge((MusicTrack) newTrack, (MusicTrack) oldTrack);
-                
-                } else if (newTracks.size() == oldTracks.size() && 
-                         ((lengthOld != null && lengthNew != null) && lengthNew.equals(lengthOld)) ||  
-                         ((trackOld != null && trackNew != null) && trackNew.equals(trackOld))) {
-                    merge((MusicTrack) newTrack, (MusicTrack) oldTrack);
+        if (oldTracks.size() == 0) {
+            for (DcObject track : newTracks) {
+                track.setValue(track.getParentReferenceFieldIndex(), target.getID());
+                target.addChild(track);
+                try {
+                    track.saveNew(false);
+                } catch (Exception e) {
+                    logger.error("Unable to save new music track " + track, e);
+                }
+            }
+        } else {
+            for (DcObject currentTrack : oldTracks) {
+                for (DcObject newTrack : newTracks) {
+                    if (StringUtils.equals(currentTrack.getDisplayString(MusicTrack._A_TITLE), newTrack.getDisplayString(MusicTrack._A_TITLE))) {
+                        currentTrack.copy(newTrack, true);
+                    } else if (newTracks.size() == oldTracks.size() && 
+                            StringUtils.equals(currentTrack.getDisplayString(MusicTrack._J_PLAYLENGTH), newTrack.getDisplayString(MusicTrack._J_PLAYLENGTH))) {    
+                        currentTrack.copy(newTrack, true);
+                    }
                 }
             }
         }
     }
-    
-    private void merge(MusicTrack mtOld, MusicTrack mt) {
-        setValue(mt, MusicTrack._A_TITLE, mtOld.getValue(MusicTrack._A_TITLE));
-        setValue(mt, MusicTrack._B_DESCRIPTION, mtOld.getValue(MusicTrack._B_DESCRIPTION));
-        setValue(mt, MusicTrack._C_YEAR, mtOld.getValue(MusicTrack._C_YEAR));
-        setValue(mt, MusicTrack._E_RATING, mtOld.getValue(MusicTrack._E_RATING));
-        setValue(mt, MusicTrack._F_TRACKNUMBER, mtOld.getValue(MusicTrack._F_TRACKNUMBER));
-        setValue(mt, MusicTrack._G_ARTIST, mtOld.getValue(MusicTrack._G_ARTIST));
-        setValue(mt, MusicTrack._J_PLAYLENGTH, mtOld.getValue(MusicTrack._J_PLAYLENGTH));
-    }    
 }

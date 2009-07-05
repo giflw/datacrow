@@ -1133,7 +1133,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         for (int i = 0; i < fields.length; i++) {
             int field = dco.getFieldIndices()[i];
 
-            if (!overwrite && !Utilities.isEmpty(getValue(field)))
+            if (!overwrite && !Utilities.isEmpty(dco.getValue(field)))
                 continue;
             
             if (field != _ID && dco.getValue(field) != null) {

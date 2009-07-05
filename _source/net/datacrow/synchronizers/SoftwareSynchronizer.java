@@ -25,24 +25,12 @@
 
 package net.datacrow.synchronizers;
 
-import java.util.Collection;
-
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.services.OnlineSearchHelper;
-import net.datacrow.core.services.Region;
-import net.datacrow.core.services.SearchMode;
-import net.datacrow.core.services.SearchTask;
-import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.util.StringUtils;
-import net.datacrow.util.Utilities;
 
 public class SoftwareSynchronizer extends DefaultSynchronizer {
 
-    private DcObject dco;
-    
     public SoftwareSynchronizer() {
         super(DcResources.getText("lblMassItemUpdate", DcModules.get(DcModules._SOFTWARE).getObjectName()),
               DcModules._SOFTWARE);
@@ -53,48 +41,11 @@ public class SoftwareSynchronizer extends DefaultSynchronizer {
         return DcResources.getText("msgSoftwareMassUpdateHelp");
     }
     
-    public DcObject getDcObject() {
-        return dco;
-    }
-    
     @Override
-    public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
-        boolean updated = exactSearch(dco);
-        
-        int field = mode == null ? Software._A_TITLE : mode.getFieldBinding();
-        
-        if (!updated) {
-            String value = (String) dco.getValue(field);
-            
-            if (Utilities.isEmpty(value)) 
-                return updated;
-            
-            String searchString = (String) dco.getValue(field);
-            
-            if (field == Software._A_TITLE && server.getName().equals("MobyGames"))
-                searchString += dco.getValue(Software._H_PLATFORM) != null ? 
-                                " " + dco.getDisplayString(Software._H_PLATFORM) : "";
-
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
-            osh.setServer(server);
-            osh.setRegion(region);
-            osh.setMode(mode);
-            Collection<DcObject> items = osh.query(searchString);
-            
-            for (DcObject software : items) {
-                String valueNew = (String) software.getValue(field);
-                
-                if (valueNew.indexOf(" for ") > -1)
-                    valueNew = valueNew.substring(0, valueNew.indexOf(" for "));
-                
-                if (StringUtils.equals(value, valueNew)) {
-                    update(dco, software, osh);
-                    updated = true;
-                    break;
-                }
-            }
-        }
-        
-        return updated;
+    protected String getSearchString(int field) {
+        if (field == Software._A_TITLE && getServer().getName().equals("MobyGames") && dco.getValue(Software._H_PLATFORM) != null)
+            return super.getSearchString(field) +  " " + dco.getDisplayString(Software._H_PLATFORM);
+        else
+            return super.getSearchString(field);
     }
 }

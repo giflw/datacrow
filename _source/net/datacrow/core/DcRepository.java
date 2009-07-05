@@ -37,6 +37,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class ModuleSettings {
+        public static final String stMassUpdateUseOriginalServiceSettings = "mass_update_use_original_service_settings";
         public static final String stDefaultView = "default_view";
         public static final String stFileImportFileTypes = "file_import_file_types";
         public static final String stCardViewPictureOrder = "card_view_picture_order";

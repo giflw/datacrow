@@ -28,19 +28,31 @@ package net.datacrow.synchronizers;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.console.views.View;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcAssociate;
+import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
-
-import org.apache.log4j.Logger;
+import net.datacrow.core.services.Region;
+import net.datacrow.core.services.SearchMode;
+import net.datacrow.core.services.SearchTask;
+import net.datacrow.core.services.plugin.IServer;
+import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 public abstract class DefaultSynchronizer extends Synchronizer {
 
     private static Logger logger = Logger.getLogger(DefaultSynchronizer.class.getName());
+    
+    protected DcObject dco;
     
     public DefaultSynchronizer(String title, int module) {
         super(title, module);
@@ -50,13 +62,60 @@ public abstract class DefaultSynchronizer extends Synchronizer {
     public boolean canParseFiles() {
         return false;
     }
+    
+    public DcObject getDcObject() {
+        return dco;
+    }
 
-    @Override
-    public boolean canUseOnlineServices() {
-        return true;
+    protected int getSearchFieldIdx(SearchMode mode) {
+        return  mode != null ? mode.getFieldBinding() :
+                dco instanceof DcMediaObject ? DcMediaObject._A_TITLE :
+                dco instanceof DcProperty ? DcProperty._A_NAME :
+                dco instanceof DcAssociate ? DcAssociate._A_NAME :
+                dco.getDisplayFieldIdx();
     }
     
-    protected boolean exactSearch(DcObject dco) {
+    protected String getSearchString(int field) {
+        return dco.getDisplayString(field);
+    }
+    
+    protected boolean matches(DcObject result, String searchString, int fieldIdx) {
+        return StringUtils.equals(searchString, result.getDisplayString(fieldIdx));
+    }
+    
+    @Override
+    public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
+        this.dco = dco;
+
+        // use the original service settings
+        if (dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings)) {
+            return exactSearch(dco);
+
+        } else { 
+            boolean updated = false;
+            int fieldIdx = getSearchFieldIdx(mode);
+            String searchString = getSearchString(fieldIdx);
+            if (Utilities.isEmpty(searchString)) return updated;
+            
+            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
+            osh.setServer(server);
+            osh.setRegion(region);
+            osh.setMode(mode);
+            osh.setMaximum(2);
+            
+            Collection<DcObject> results = osh.query(searchString);
+            for (DcObject result : results) {
+                if (matches(result, searchString, fieldIdx)) {
+                    merge(dco, result, osh);
+                    updated = true;
+                    break;
+                }
+            }
+            return updated;
+        }
+    }
+    
+    private boolean exactSearch(DcObject dco) {
         try {
             DcObject dcoNew = dco.getModule().getOnlineServices().query(dco);
             if (dcoNew != null) {
@@ -68,21 +127,17 @@ public abstract class DefaultSynchronizer extends Synchronizer {
             logger.error("Error while retrieving exact match for " + dco, e);
         }        
         return false;
-    }    
+    }     
+    
+    @Override
+    public boolean canUseOnlineServices() {
+        return true;
+    }
     
     @Override
     public Thread getTask() {
         return new Task();
     }    
-    
-    protected void update(DcObject dco, DcObject result, OnlineSearchHelper osh) {
-        if (result == null) return;
-
-        DcObject result2 = osh.query(result);
-        dco.copy(result2, true);
-        result.unload();
-        result2.unload();
-    }
     
     private class Task extends Thread {
         
@@ -92,7 +147,6 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                 initialize();
                 
                 View view = DcModules.getCurrent().getCurrentSearchView();
-                
                 Collection<DcObject> objects = new ArrayList<DcObject>();
                 objects.addAll(dlg.getItemPickMode() == _ALL ? view.getItems() : view.getSelectedItems());                
                 initProgressBar(objects.size());
@@ -103,7 +157,10 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                     boolean updated = false;
                     
                     addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
-                    updated = onlineUpdate(dco, getServer(), getRegion(), getSearchMode());
+                    
+                    updated = parseFiles(dco);
+                    updated |= onlineUpdate(dco, getServer(), getRegion(), getSearchMode());
+                    
                     updateProgressBar();
                     
                     try {

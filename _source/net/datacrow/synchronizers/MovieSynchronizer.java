@@ -25,23 +25,11 @@
 
 package net.datacrow.synchronizers;
 
-import java.util.Collection;
-
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.helpers.Movie;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.services.OnlineSearchHelper;
-import net.datacrow.core.services.Region;
-import net.datacrow.core.services.SearchMode;
-import net.datacrow.core.services.SearchTask;
-import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.util.StringUtils;
 
 public class MovieSynchronizer extends DefaultSynchronizer {
 
-    private DcObject dco;
-    
     public MovieSynchronizer() {
         super(DcResources.getText("lblMassItemUpdate", DcModules.get(DcModules._MOVIE).getObjectName()),
               DcModules._MOVIE);
@@ -50,39 +38,5 @@ public class MovieSynchronizer extends DefaultSynchronizer {
     @Override
     public String getHelpText() {
         return DcResources.getText("msgMovieMassUpdateHelp");
-    }
-    
-    
-    public DcObject getDcObject() {
-        return dco;
-    }
-
-    @Override
-    public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
-        this.dco = dco;
-        boolean updated = exactSearch(dco);
-        
-        int field = mode == null ? Movie._A_TITLE : mode.getFieldBinding();
-
-        if (!updated) {
-            String title = (String) dco.getValue(field);
-            if (title.trim().length() == 0) return updated;
-            
-            OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
-            osh.setServer(server);
-            osh.setRegion(region);
-            osh.setMode(mode);
-            osh.setMaximum(2);
-            Collection<DcObject> movies = osh.query((String) dco.getValue(field));
-            for (DcObject movie : movies) {
-                if (StringUtils.equals(title, (String) movie.getValue(field))) {
-                    updated = true;
-                    update(dco, movie, osh);
-                    break;
-                }
-            }
-        }
-
-        return updated;
     }
 }

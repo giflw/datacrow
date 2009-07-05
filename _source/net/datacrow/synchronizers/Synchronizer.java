@@ -34,6 +34,7 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
@@ -45,7 +46,7 @@ public abstract class Synchronizer {
 
     public static final int _ALL = 0;
     public static final int _SELECTED = 1;
-    
+
     private String title;
     protected final int module;
     
@@ -69,6 +70,37 @@ public abstract class Synchronizer {
     }
     
     public abstract boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode);
+    
+    /**
+     * Executed before the online update.
+     * @param dco
+     */
+    protected boolean parseFiles(DcObject dco) {
+        return false;
+    }
+
+    /**
+     * Merges the data of the source and the target with regard of the settings.
+     */
+    protected void merge(DcObject target, DcObject source) {
+        merge(target, source, null);
+    }
+
+    /**
+     * Merges the data of the source and the target with regard of the settings.
+     * The online search helper is used to query additional data when needed.
+     */
+    protected void merge(DcObject target, DcObject source, OnlineSearchHelper osh) {
+        if (source == null) return;
+        
+        DcObject queried = osh != null ? osh.query(source) : source;
+        for (int field : queried.getFieldIndices())
+            setValue(target, field, queried.getValue(field));
+        
+        source.unload();
+        if (queried != source) queried.unload();
+    }
+    
     
     public void synchronize(ItemSynchronizerDialog dlg) {
         this.dlg = dlg;
@@ -139,7 +171,7 @@ public abstract class Synchronizer {
                        dco.getModule().getSettings().getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings) :
                        dco.getModule().getFieldIndices();
             
-       // if all fails, just update all!
+       // if all fails, just update all..
        if (fields == null || fields.length == 0)
            fields = dco.getModule().getFieldIndices();
                        
