@@ -13,7 +13,8 @@ Data Crow 3.4.11 [Release on xx/07/2009] [testing: high] [target: production]
   the original settings as stored in the item. Only items having service information set 
   will be updated. This was, somewhat, the default behavior in the past which caused 
   confusion. By default this option is "off".
- 
+- Synchronize (mass update) classes have been simplified.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.10 [Release on 17/06/2009] [testing: high] [target: production]
@@ -30,6 +31,12 @@ This new release contains minor new functionality and fixes.
 - The image importer now also supports SVG files. Note that for existing installations
   you will have to add the SVG extensions to the File Types filter of the import dialog.
 - Added a cancel button to the quick filter bar.
+
+UPDATE ALL + CONTAINER = DOES NOT WORK
++
+CHECK WITH ACTUAL DATABASE
++
+CHECK WITH APPLYING A SAVED FILTER
 
 
 -----------------------------------------------------------------------------------------
