@@ -35,12 +35,6 @@ This new release contains minor new functionality and fixes.
   you will have to add the SVG extensions to the File Types filter of the import dialog.
 - Added a cancel button to the quick filter bar.
 
-UPDATE ALL + CONTAINER = DOES NOT WORK
-+
-CHECK WITH ACTUAL DATABASE
-+
-CHECK WITH APPLYING A SAVED FILTER
-
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.9 [Release on 14/06/2009] [testing: high] [target: production]
