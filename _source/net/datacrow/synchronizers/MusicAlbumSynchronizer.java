@@ -39,6 +39,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.fileimporters.MusicFile;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -162,9 +163,12 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
                 for (DcObject newTrack : newTracks) {
                     if (StringUtils.equals(currentTrack.getDisplayString(MusicTrack._A_TITLE), newTrack.getDisplayString(MusicTrack._A_TITLE))) {
                         currentTrack.copy(newTrack, true);
+                        break;
                     } else if (newTracks.size() == oldTracks.size() && 
-                            StringUtils.equals(currentTrack.getDisplayString(MusicTrack._J_PLAYLENGTH), newTrack.getDisplayString(MusicTrack._J_PLAYLENGTH))) {    
+                              !Utilities.isEmpty(currentTrack.getValue(MusicTrack._J_PLAYLENGTH)) && 
+                               currentTrack.getDisplayString(MusicTrack._J_PLAYLENGTH).equals(newTrack.getDisplayString(MusicTrack._J_PLAYLENGTH))) {    
                         currentTrack.copy(newTrack, true);
+                        break;
                     }
                 }
             }

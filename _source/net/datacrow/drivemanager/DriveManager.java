@@ -202,12 +202,8 @@ public class DriveManager {
     
     public synchronized Collection<File> getDrives() {
         if (drives == null || drives.size() == 0) {
-            drives = new ArrayList<File>();
-            File[] roots = File.listRoots();
-            for (File root : roots) {
-                if (!Utilities.isFloppyDrive(root) && Utilities.isDriveTraversable(root))
-                    drives.add(root);
-            }
+            for (Drive drive : new Drives().getDrives())
+                drives.add(drive.getPath());
         }
         return drives;
     }

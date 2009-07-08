@@ -23,61 +23,32 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.renderers;
+package net.datacrow.drivemanager;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-
-import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.components.DcLabel;
 import net.datacrow.util.Utilities;
 
-public class ComboBoxFsRenderer extends DcLabel implements ListCellRenderer {
-    
-    private static final ComboBoxFsRenderer instance = new ComboBoxFsRenderer();
+public class Drives {
 
-    private ComboBoxFsRenderer() {
-        setOpaque(true);
-        setHorizontalAlignment(LEFT);
-        setVerticalAlignment(CENTER);
+    private Collection<Drive> drives = new ArrayList<Drive>();
+    
+    public Drives() {
+        initialize();
     }
     
-    public static ComboBoxFsRenderer getInstance() {
-        return instance;
-    }    
-    
-    public Component getListCellRendererComponent(
-                                       JList list,
-                                       Object value,
-                                       int index,
-                                       boolean isSelected,
-                                       boolean cellHasFocus) {
-        
-    	setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
-    	setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
-    	
-    	setFont(ComponentFactory.getStandardFont());
-    	
-        if (isSelected) {
-            setBackground(list.getSelectionBackground());
-            setForeground(list.getSelectionForeground());
-        } else {
-            setBackground(list.getBackground());
-            setForeground(list.getForeground());
-        } 
+    public Collection<Drive> getDrives() {
+        return drives;
+    }
 
-        setText("");
-        if (value != null && value instanceof File) {
-            String text = Utilities.getSystemName((File) value);
-            setText(!Utilities.isEmpty(text) ? text : value.toString());
+    private void initialize() {
+        drives.clear();
+        File[] roots = File.listRoots();
+        for (File root : roots) {
+            if (!Utilities.isFloppyDrive(root) && Utilities.isDriveTraversable(root))
+                drives.add(new Drive(root));
         }
-        
-        revalidate();
-        
-        return this;
     }
 }

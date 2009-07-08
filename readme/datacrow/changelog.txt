@@ -16,6 +16,7 @@ Data Crow 3.4.11 [Release on xx/07/2009] [testing: high] [target: production]
   will be updated. This was, somewhat, the default behavior in the past which caused 
   confusion. By default this option is "off".
 - Technical: Synchronize (mass update) classes have been simplified.
+- File Import: the dialog now shows the volume names as well as the drive letters.
 
 
 -----------------------------------------------------------------------------------------

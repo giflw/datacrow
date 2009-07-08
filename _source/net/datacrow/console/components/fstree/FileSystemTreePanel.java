@@ -44,14 +44,14 @@ import javax.swing.JScrollPane;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
-import net.datacrow.console.components.renderers.ComboBoxFsRenderer;
+import net.datacrow.drivemanager.Drive;
+import net.datacrow.drivemanager.Drives;
 import net.datacrow.util.FileNameFilter;
-import net.datacrow.util.Utilities;
 
 public abstract class FileSystemTreePanel extends JPanel implements ActionListener {
     
-    private Map<File, JScrollPane> scrollers = new HashMap<File, JScrollPane>();
-    private Map<File, FileSystemTreeModel> models = new HashMap<File, FileSystemTreeModel>();
+    private Map<Drive, JScrollPane> scrollers = new HashMap<Drive, JScrollPane>();
+    private Map<Drive, FileSystemTreeModel> models = new HashMap<Drive, FileSystemTreeModel>();
     private FileNameFilter filter;
     
     public FileSystemTreePanel(FileNameFilter filter) {
@@ -71,7 +71,7 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
         build();
     }
     
-    private void setSelectedDrive(File drv) {
+    private void setSelectedDrive(Drive drv) {
         for (JScrollPane scroller : scrollers.values())
             scroller.setVisible(false);
 
@@ -124,13 +124,12 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
         }
         
         JComboBox cbDrives = ComponentFactory.getComboBox();
-        cbDrives.setRenderer(ComboBoxFsRenderer.getInstance());
         add(cbDrives, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(15, 5, 5, 5), 0, 0));     
         
-        for (File drv : Utilities.getDrives()) {
-            DcTree tree = new DcTree(new FileSystemTreeModel(drv, filter));
+        for (Drive drive : new Drives().getDrives()) {
+            DcTree tree = new DcTree(new FileSystemTreeModel(drive.getPath(), filter));
             
             tree.setCellRenderer(new FileSystemTreeNodeRenderer());
             tree.setCellEditor(new FileSystemTreeNodeEditor());
@@ -143,9 +142,9 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
                          new Insets(5, 5, 5, 5), 0, 0));      
             
             scroller.setVisible(false);
-            scrollers.put(drv, scroller);
-            models.put(drv, (FileSystemTreeModel) tree.getModel());
-            cbDrives.addItem(drv);
+            scrollers.put(drive, scroller);
+            models.put(drive, (FileSystemTreeModel) tree.getModel());
+            cbDrives.addItem(drive);  
         }
         
         cbDrives.setActionCommand("drvChanged");
@@ -156,7 +155,7 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("drvChanged")) {
             JComboBox cb = (JComboBox) e.getSource();
-            setSelectedDrive((File) cb.getSelectedItem());
+            setSelectedDrive((Drive) cb.getSelectedItem());
         }
     }
     

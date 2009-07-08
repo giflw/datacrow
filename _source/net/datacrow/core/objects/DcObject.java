@@ -1091,7 +1091,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     protected DcValue getValueDef(int index) {
-        return values.get(index);
+        return values == null ? null : values.get(index);
     }
 
     protected void executeRequests(boolean saveSuccessful) {

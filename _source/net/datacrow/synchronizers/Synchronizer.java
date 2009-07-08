@@ -96,11 +96,7 @@ public abstract class Synchronizer {
         DcObject queried = osh != null ? osh.query(source) : source;
         for (int field : queried.getFieldIndices())
             setValue(target, field, queried.getValue(field));
-        
-        source.unload();
-        if (queried != source) queried.unload();
     }
-    
     
     public void synchronize(ItemSynchronizerDialog dlg) {
         this.dlg = dlg;
