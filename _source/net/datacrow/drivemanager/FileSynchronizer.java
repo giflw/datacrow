@@ -130,7 +130,9 @@ public class FileSynchronizer {
                         
                         FileInfo currentFI = new FileInfo(hash, filename, size);
                         FileInfo fi = dm.find(currentFI, precision);
+                        
                         if (fi != null && !currentFI.equals(fi)) {
+                            
                             dco.setValue(DcObject._SYS_FILENAME, fi.getFilename());
                             dco.setValue(DcObject._SYS_FILESIZE, fi.getSize());
                             dco.setValue(DcObject._SYS_FILEHASH, fi.getHash());

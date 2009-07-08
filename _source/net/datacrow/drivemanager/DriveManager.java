@@ -271,28 +271,24 @@ public class DriveManager {
      * location.
      */
     public FileInfo find(FileInfo fi, int precision) {
-        String filename = fi.getFilename();
         File file = new File(fi.getFilename());
         
         if (file.exists())
             return getFileInfo(file, fi.getHash(), fi.getSize());
         
-        // The precision determines on which a file is allowed to be matched.
-        // skip this file if there is not enough information for the given precision level.
-        if (!fi.valid(precision))
-            return null;
-            
         try {
-	        String name =  filename.indexOf("/") > 0 ?  filename.substring(filename.lastIndexOf("/")) : 
-	                       filename.indexOf("\\") > 0 ? filename.substring(filename.lastIndexOf("\\")) :
-	                       filename;
-	        
+	        String name =  file.getName();
 	        FileInfo result = null;
+
 	        for (String propertyFile : new File(getTempDir()).list()) {
+	            
 	            if (!propertyFile.endsWith(getTempFileSuffix())) continue;
 	            
 	            File tmpFile = new File(getTempDir() + propertyFile);
-	            if (!tmpFile.canRead()) continue;
+	            if (!tmpFile.canRead()) {
+	                logger.info("Could not read drive information file: " + tmpFile + " The drive for which this file was created will be skipped!");
+	                continue;
+	            }
 	            
                 RandomAccessFile raf = new RandomAccessFile(tmpFile, "r");
 	            long length = raf.length();
@@ -306,27 +302,44 @@ public class DriveManager {
 	                    String fodName = line.substring(idx + 1);
 	                    File fod = new File(fodName);
                         
-                        // make sure the file exists; might be dealing with info from an
-                        // unmounted drive!
-                        if (fod.exists()) {
-    	                    if (fi.getSize() == null) {
-    	                        if (name.equals(fodName)) {
-    	                            result = getFileInfo(fod, null, null);
-    	                            break;
-    	                        }
-    	                        
-    	                    } else if (fi.getSize().equals(fodSize)) {
-                                String newHash = Hash.getInstance().calculateHash(fod.toString());
-    	                        if (fi.getHash() == null) {
-    	                            if (fod.getName().equalsIgnoreCase(name)) { 
-    	                                result = getFileInfo(fod, newHash, Utilities.getSize(fod));
-    	                                break;
-    	                            }
-    	                        } else if (newHash.equals(fi.getHash())) {
-                                    result = getFileInfo(fod, newHash, Utilities.getSize(fod));
-                                    break;
-    	                        }
-    	                    }
+                        // make sure the file exists; might be dealing with info from an unmounted drive!
+	                    if (!fod.exists()) {
+	                        logger.info("The file as found in " + tmpFile + " does not exist and will be skipped.");
+	                        continue;
+	                    }
+	                    
+                        boolean match = false;
+                        String newHash = null;
+                        
+                        // low: match file name
+                        if (precision == DriveManager._PRECISION_LOWEST && name.equals(fod.getName())) {
+                            match = true;
+                            
+                        // medium: match on file size and file name
+                        } else if (precision == DriveManager._PRECISION_MEDIUM && 
+                                   name.equals(fod.getName()) && fodSize.equals(fi.getSize())) {
+                            match = true;
+	                   
+                        // high: match on file size and file hash
+                        } else if (precision == DriveManager._PRECISION_HIGHEST) {
+	                       
+                            newHash = Hash.getInstance().calculateHash(fod.toString());
+	                       
+	                       if (newHash.equals(fi.getHash()) && 
+                               fodSize.equals(fi.getSize())) {
+
+	                           match = true;
+	                       }
+                        }
+	                    
+                        if (match) {
+                            // calculate the new hash if needed
+                            newHash = newHash == null ? Hash.getInstance().calculateHash(fod.toString()) : newHash;
+                            Long filesize = Utilities.getSize(fod);
+                            
+                            logger.info("Match found for " + name + " (hash: " + newHash + ", filesize " + String.valueOf(filesize) + ")");
+                            result = getFileInfo(fod, newHash, filesize);
+                            break;
                         }
 		            } catch (IOException ioe) {
 		                logger.error(ioe, ioe);
@@ -339,7 +352,7 @@ public class DriveManager {
                     logger.error("Could not close RAF", ioe);
                 }
                 
-                if (result != null) 
+                if (result != null)
                     return result;
 	        }
         } catch (Exception e) {

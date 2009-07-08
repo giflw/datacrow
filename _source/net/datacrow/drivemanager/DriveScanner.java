@@ -164,8 +164,7 @@ public class DriveScanner {
                         for (String directoryFile : directoryFiles) {
                             if (!keepOnRunning) break;
                             
-                            File currentFile = new File(file.getPath().endsWith(File.separator) ? file.getPath() + directoryFile :
-                                                        file.getPath() + File.separator + directoryFile);
+                            File currentFile = new File(file.getPath() + File.separator + directoryFile);
                             if (currentFile.isDirectory())
                                 tasks.add(currentFile);
                             else

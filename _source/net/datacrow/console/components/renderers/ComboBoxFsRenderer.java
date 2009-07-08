@@ -23,51 +23,61 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.drivemanager;
+package net.datacrow.console.components.renderers;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.io.File;
+
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.DcLabel;
 import net.datacrow.util.Utilities;
 
-public class FileInfo {
-
-    private String hash;
-    private String filename;
-    private Long size;
+public class ComboBoxFsRenderer extends DcLabel implements ListCellRenderer {
     
-    public FileInfo(String hash, String filename, Long size) {
-        super();
-        this.hash = hash;
-        this.filename = filename;
-        this.size = size;
+    private static final ComboBoxFsRenderer instance = new ComboBoxFsRenderer();
+
+    private ComboBoxFsRenderer() {
+        setOpaque(true);
+        setHorizontalAlignment(LEFT);
+        setVerticalAlignment(CENTER);
     }
     
-    public String getFilename() {
-        return filename;
-    }
-
-    public String getHash() {
-        return hash;
-    }
-
-    public Long getSize() {
-        return size;
-    }
+    public static ComboBoxFsRenderer getInstance() {
+        return instance;
+    }    
     
-    public void clear() {
-        size = null;
-        hash = null;
-        filename = null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof FileInfo) {
-            FileInfo fi = ((FileInfo) o); 
-            return fi.getFilename().equals(filename) &&
-                   Utilities.getComparableString(getHash()).equals(Utilities.getComparableString(fi.getHash())) &&
-                   ((getSize() == null && fi.getSize() == null) ||  
-                    (getSize() != null && fi.getSize() != null && fi.getSize().equals(getSize())));
+    public Component getListCellRendererComponent(
+                                       JList list,
+                                       Object value,
+                                       int index,
+                                       boolean isSelected,
+                                       boolean cellHasFocus) {
+        
+    	setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+    	setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+    	
+    	setFont(ComponentFactory.getStandardFont());
+    	
+        if (isSelected) {
+            setBackground(list.getSelectionBackground());
+            setForeground(list.getSelectionForeground());
         } else {
-            return false;
+            setBackground(list.getBackground());
+            setForeground(list.getForeground());
+        } 
+
+        setText("");
+        if (value != null && value instanceof File) {
+            String text = Utilities.getSystemName((File) value);
+            setText(!Utilities.isEmpty(text) ? text : value.toString());
         }
+        
+        revalidate();
+        
+        return this;
     }
 }

@@ -44,6 +44,7 @@ import javax.swing.JScrollPane;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
+import net.datacrow.console.components.renderers.ComboBoxFsRenderer;
 import net.datacrow.util.FileNameFilter;
 import net.datacrow.util.Utilities;
 
@@ -123,6 +124,7 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
         }
         
         JComboBox cbDrives = ComponentFactory.getComboBox();
+        cbDrives.setRenderer(ComboBoxFsRenderer.getInstance());
         add(cbDrives, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(15, 5, 5, 5), 0, 0));     
