@@ -1,6 +1,8 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.11 [Release on xx/07/2009] [testing: high] [target: production]
+Data Crow 3.4.11 [Release on 10/07/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+This is a maintenance release fixing several issues for the mass update and the drive
+manager functionality.
 
 [Fixed]
 - Mass Update did not use the overwrite field settings correctly. Additionally values
@@ -8,15 +10,16 @@ Data Crow 3.4.11 [Release on xx/07/2009] [testing: high] [target: production]
 - Changed labels for fields caused the sorting dialog to stop working correctly; 
   empty field shown in the field selection.
 - Drive Manager File Synchronizer was not working correctly. The matching process has
-  been improved and some performance fixes have been made.
+  been improved.
 
 [Changed]
 - Mass Update: A new option is available "Use original service settings". When enabled
   the original settings as stored in the item. Only items having service information set 
   will be updated. This was, somewhat, the default behavior in the past which caused 
   confusion. By default this option is "off".
-- Technical: Synchronize (mass update) classes have been simplified.
+- Code review: Synchronize (mass update) classes have been simplified.
 - File Import: the dialog now shows the volume names as well as the drive letters.
+- Drive Manager: changes have been made to improve the performance dramatically.
 
 
 -----------------------------------------------------------------------------------------

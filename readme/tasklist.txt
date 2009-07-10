@@ -42,8 +42,6 @@ Online services
 
 3.4.11
 ---------------------------------------------------------------------------------------------------------
-[ ] Error: mass update with images -> Check; what should be set and also a black image was drawn??
-    Mass update works perfectly for the Audio CD module.
 [ ] UPDATE ALL + CONTAINER = DOES NOT WORK
 [ ] CHECK WITH APPLYING A SAVED FILTER
 

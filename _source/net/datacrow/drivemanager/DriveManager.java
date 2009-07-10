@@ -34,7 +34,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Hash;
 import net.datacrow.util.Utilities;
 
@@ -62,6 +64,8 @@ public class DriveManager {
     private Collection<String> excludedDirs = new ArrayList<String>();
     private Map<File, DriveScanner> scanners = new HashMap<File, DriveScanner>();
     
+    private Map<File, String> hashes = new HashMap<File, String>();
+    
     private Collection<IDriveManagerListener> pollerListeners = new ArrayList<IDriveManagerListener>();
     private Collection<IDriveManagerListener> scannerListeners = new ArrayList<IDriveManagerListener>();
     private Collection<IDriveManagerListener> synchronizerListeners = new ArrayList<IDriveManagerListener>();
@@ -87,6 +91,7 @@ public class DriveManager {
         if (fs != null && fs.isRunning()) {
             throw new JobAlreadyRunningException();
         } else {
+            hashes.clear();
             fs = fs == null ? new FileSynchronizer() : fs;
             fs.start(precision);
         }
@@ -202,6 +207,7 @@ public class DriveManager {
     
     public synchronized Collection<File> getDrives() {
         if (drives == null || drives.size() == 0) {
+            drives = drives == null ? new ArrayList<File>() : drives;
             for (Drive drive : new Drives().getDrives())
                 drives.add(drive.getPath());
         }
@@ -259,6 +265,18 @@ public class DriveManager {
 
     public void addSynchronizerListener(IDriveManagerListener listener) {
         synchronizerListeners.add(listener);
+    }
+
+    /**
+     * Calculates the hash for the given file and stores it for future references.
+     */
+    private String getHash(File file) {
+        String hash = hashes.get(file);
+        
+        if (file.length() < DcSettings.getInt(DcRepository.Settings.stHashMaxFileSizeKb)) 
+            hash = hash == null ? Hash.getInstance().calculateHash(file.toString()) : hash;
+            
+        return hash;
     }
     
     /**
@@ -319,10 +337,17 @@ public class DriveManager {
                         // high: match on file size and file hash
                         } else if (precision == DriveManager._PRECISION_HIGHEST) {
 	                       
-                            newHash = Hash.getInstance().calculateHash(fod.toString());
+                            newHash = getHash(fod);
 	                       
-	                       if (newHash.equals(fi.getHash()) && 
-                               fodSize.equals(fi.getSize())) {
+                            // can happen when out of memory, when the file is not readable or when the settings
+                            // do not allow for the hash to be calculated based on the file size.
+                            if (newHash == null)
+                                continue;
+                            
+                            hashes.put(fod, newHash);
+                            
+	                        if (newHash.equals(fi.getHash()) && 
+                                fodSize.equals(fi.getSize())) {
 
 	                           match = true;
 	                       }
@@ -330,7 +355,7 @@ public class DriveManager {
 	                    
                         if (match) {
                             // calculate the new hash if needed
-                            newHash = newHash == null ? Hash.getInstance().calculateHash(fod.toString()) : newHash;
+                            newHash = getHash(fod);
                             Long filesize = Utilities.getSize(fod);
                             
                             logger.info("Match found for " + name + " (hash: " + newHash + ", filesize " + String.valueOf(filesize) + ")");
