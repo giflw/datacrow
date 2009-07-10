@@ -38,6 +38,7 @@ import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
 public abstract class Synchronizer {
@@ -186,7 +187,7 @@ public abstract class Synchronizer {
                             DataManager.createReference(dco, field, o);
                     }
                 } else if (value instanceof Picture) {
-                    dco.setValue(field, ((Picture) value).getBytes());
+                    dco.setValue(field, new DcImageIcon(((Picture) value).getBytes()));
                 } else {
                     dco.setValue(field, value);    
                 }                
