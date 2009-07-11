@@ -35,6 +35,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -342,22 +343,28 @@ public class FieldTreePanel extends TreePanel {
     
     @Override
     protected void buildTree() {
-        fields = (int[]) DcModules.get(getModule()).getSetting(DcRepository.ModuleSettings.stGroupedBy);
+        SwingUtilities.invokeLater(
+        new Thread() {
+            @Override
+            public void start() {
+                fields = (int[]) DcModules.get(getModule()).getSetting(DcRepository.ModuleSettings.stGroupedBy);
+                
+                build();
+                DefaultMutableTreeNode top = getTopNode();
+                
+                if (isActive()) {
+                    createLeafs(top, gp.getItems(), 0);
+                    if (fields != null && fields.length > 1)
+                        buildTree(top, 1);
+                }
         
-        build();
-        DefaultMutableTreeNode top = getTopNode();
-        
-        if (isActive()) {
-            createLeafs(top, gp.getItems(), 0);
-            if (fields != null && fields.length > 1)
-                buildTree(top, 1);
-        }
-
-        expandAll();
-        setDefaultSelection();
-        
-        revalidate();
-        repaint();
+                expandAll();
+                setDefaultSelection();
+                
+                revalidate();
+                repaint();
+            }
+        });
     }
     
     /**

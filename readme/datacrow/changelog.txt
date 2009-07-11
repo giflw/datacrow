@@ -1,4 +1,12 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.12 [Release on xx/07/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- File System Tree view did not always show the correct path structure.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.11 [Release on 10/07/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 This is a maintenance release fixing several issues for the mass update and the drive

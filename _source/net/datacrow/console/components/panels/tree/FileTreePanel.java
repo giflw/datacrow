@@ -26,6 +26,7 @@
 package net.datacrow.console.components.panels.tree;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import net.datacrow.core.modules.DcModule;
@@ -56,96 +58,97 @@ public class FileTreePanel extends TreePanel {
         return DcResources.getText("lblFileStructure");
     }
     
-    private void createLeafs() {
-        build();
-        
-        setListeningForSelection(false);
-        setSaveChanges(false);
-        
-        List<DcObject> items = getItems();
-        
-        DcObjectComparator oc = new DcObjectComparator(DcObject._SYS_FILENAME);
-        Map<DcObject, List<String>> map = new HashMap<DcObject, List<String>>();
-        Collections.sort(items, oc);
-        
-        for (DcObject dco : items) {
-            String filename = dco.getFilename();
-            
-            if (filename == null)
-                continue;
-            
-            StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
-            
-            List<String> c = new ArrayList<String>();
-            while (st.hasMoreElements())
-                c.add((String) st.nextElement());
-            
-            if (c.size() > 0)
-                map.put(dco, c);
-        }
-        
-        List<DefaultMutableTreeNode> nodes = new ArrayList<DefaultMutableTreeNode>();
+    
+    protected ArrayList<DefaultMutableTreeNode> findNode(Collection<String> parts, DefaultMutableTreeNode parentNode) {
+        ArrayList<DefaultMutableTreeNode> nodes = new ArrayList<DefaultMutableTreeNode>();
         int level = 0;
-        
-        DefaultMutableTreeNode parent = top;
-        while (true) {
-            boolean success = false;
-            for (DcObject dco : map.keySet()) {
-                List<String> parts = map.get(dco);
-                if (parts.size() > level) {
-                    success = true;
-                    String part = parts.get(level);
-                    
-                    if (level > 0) {
-                        String parentKey = parts.get(level - 1);
-                        for (DefaultMutableTreeNode node : nodes) {
-                            if (node.getUserObject() instanceof NodeElement) {
-                                NodeElement element = (NodeElement) node.getUserObject();
-                                if (element.getComparableKey().toLowerCase().equals(parentKey.toLowerCase())) {
-                                    parent = node;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    
-                    DefaultMutableTreeNode node = findNode(part, parent);
-                    if (node == null) {
-                        node = new DefaultMutableTreeNode();
-                        nodes.add(node);
-                    }
-                    
-                    NodeElement element = new NodeElement(getModule(), part, null);
-                    node.setUserObject(element);
-                    
-                    if (parts.size() - 1 == level)
-                        element.addValue(dco);
-                    
-                    insertNode(node, parent);
-                }
-            }
-            
-            if (!success)
+        for (String part : parts) {
+            DefaultMutableTreeNode parent = nodes.size() == 0 ? parentNode : nodes.get(level - 1);
+            DefaultMutableTreeNode node = findNode(part, parent);
+            if (node != null)
+                nodes.add(node);
+            else
                 break;
             
             level++;
         }
+        return nodes;
+    }  
+    
+    private void createLeafs() {
         
-        setListeningForSelection(true);
-        setSaveChanges(true);
+        SwingUtilities.invokeLater(
+        new Thread() {
+            @Override
+            public void start() {
+                build();
+                
+                setListeningForSelection(false);
+                setSaveChanges(false);
+                
+                List<DcObject> items = getItems();
+                
+                DcObjectComparator oc = new DcObjectComparator(DcObject._SYS_FILENAME);
+                Map<DcObject, List<String>> map = new HashMap<DcObject, List<String>>();
+                Collections.sort(items, oc);
+                
+                for (DcObject dco : items) {
+                    String filename = dco.getFilename();
+                    
+                    if (filename == null)
+                        continue;
+                    
+                    StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
+                    
+                    List<String> c = new ArrayList<String>();
+                    while (st.hasMoreElements())
+                        c.add((String) st.nextElement());
+                    
+                    if (c.size() > 0)
+                        map.put(dco, c);
+                }
+                
+                for (DcObject dco : map.keySet()) {
+                    List<String> parts = map.get(dco);
+                    ArrayList<DefaultMutableTreeNode> nodes = findNode(parts, top);
+                    if (nodes.size() != parts.size()) {
+                        for (int i = nodes.size(); i < parts.size(); i++) {
+                            DefaultMutableTreeNode node = new DefaultMutableTreeNode();
+                            
+                            NodeElement element = new NodeElement(getModule(), parts.get(i), null);
+                            node.setUserObject(element);
+                            
+                            DefaultMutableTreeNode parent = i == 0 ? top : nodes.get(i - 1);
+                            
+                            if (parts.size() - 1 == i) 
+                                element.addValue(dco);
+                            
+                            nodes.add(node);
+                            insertNode(node, parent);
+                        }
+                    } else if (nodes.size() > 0) {
+                        ((NodeElement) nodes.get(nodes.size() - 1).getUserObject()).addValue(dco);
+                    }
+                    
+                    try {
+                        sleep(10);
+                    } catch (Exception ignore) {}
+                }
+                
+                setListeningForSelection(true);
+                setSaveChanges(true);
+                expandAll();
+            }
+        }); 
     }
-    
-    
     
     @Override
     protected void buildTree() {
         build();
-        //DefaultMutableTreeNode top = getTopNode();
         
         if (isActive())
             createLeafs();
 
-        //expandAll();
         setDefaultSelection();
         
         revalidate();
