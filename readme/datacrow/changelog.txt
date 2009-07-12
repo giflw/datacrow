@@ -4,6 +4,8 @@ Data Crow 3.4.12 [Release on xx/07/2009] [testing: high] [target: production]
 
 [Fixed]
 - File System Tree view sometimes showed an incorrect path structure.
+- Building a new chart will no longer lock the GUI.
+- Building the File System Tree will no longer lock the GUI.
 
 
 -----------------------------------------------------------------------------------------

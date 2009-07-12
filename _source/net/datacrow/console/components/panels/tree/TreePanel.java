@@ -157,7 +157,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public void expandAll() {
         expandAll(top);
-        setDefaultSelection();
     }   
     
     private void expandAll(DefaultMutableTreeNode node) {
@@ -180,7 +179,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         getView().getCurrent().add(dcos);      
     }
     
-    protected void setDefaultSelection() {
+    public void setDefaultSelection() {
         setListeningForSelection(true);
         try {
             if (isActive())

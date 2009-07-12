@@ -356,7 +356,7 @@ public class FieldTreePanel extends TreePanel {
 
         expandAll();
         
-        if (isVisible())
+        if (isShowing())
             setDefaultSelection();
         
         tree.setEnabled(true);

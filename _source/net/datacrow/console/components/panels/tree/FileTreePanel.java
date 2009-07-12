@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import net.datacrow.core.objects.DcObject;
@@ -39,8 +40,11 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcObjectComparator;
 import net.datacrow.util.Utilities;
 
+import org.apache.log4j.Logger;
 
 public class FileTreePanel extends TreePanel {
+    
+    private static Logger logger = Logger.getLogger(FileTreePanel.class.getName());
     
     private FillerThread filler;
     private ThreadGroup tg = new ThreadGroup("tree-fillers");
@@ -170,7 +174,16 @@ public class FileTreePanel extends TreePanel {
                             element.addValue(dco);
                         
                         nodes.add(node);
-                        insertNode(node, parent);
+                        
+                        try {
+                            SwingUtilities.invokeAndWait(new Runnable() {
+                                public void run() {
+                                    insertNode(node, parent);
+                                };
+                            });
+                        } catch (Exception e) {
+                            logger.error(e, e);
+                        }                    
                         
                         try {
                             sleep(5);
@@ -181,17 +194,35 @@ public class FileTreePanel extends TreePanel {
                 }
             }
             
-            if (isVisible())
-                setDefaultSelection();
+            
+            if (isShowing()) {
+                try {
+                    SwingUtilities.invokeAndWait(new Runnable() {
+                        public void run() {
+                            setDefaultSelection();
+                        };
+                    });
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }    
+            }
             
             setListeningForSelection(true);
             setSaveChanges(true);
-            
-            tree.setEnabled(true);
-            setDefaultSelection();
-            
-            revalidate();
-            repaint();
+
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        tree.setEnabled(true);
+                        setDefaultSelection();
+                        
+                        revalidate();
+                        repaint();
+                    };
+                });
+            } catch (Exception e) {
+                logger.error(e, e);
+            }  
         }
     }
 }

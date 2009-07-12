@@ -43,11 +43,14 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.DcThread;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
@@ -68,9 +71,13 @@ import com.approximatrix.charting.charting.render.PieChartRenderer;
 
 public class ChartPanel extends DcPanel implements ActionListener {
     
+    private static Logger logger = Logger.getLogger(ChartPanel.class.getName());
+    
     private JComboBox comboFields;
     private JComboBox comboTypes;
+    private JButton button = ComponentFactory.getIconButton(IconLibrary._icoAccept);
     
+    private ThreadGroup tg = new ThreadGroup("chart-builders");
     private com.approximatrix.charting.charting.swing.ChartPanel chart;
     
     private final int module;
@@ -88,6 +95,15 @@ public class ChartPanel extends DcPanel implements ActionListener {
         comboFields = null;
         comboTypes = null;
         chart = null;
+        button = null;
+        tg = null;
+    }
+    
+    @Override
+    public void setEnabled(boolean b) {
+        comboFields.setEnabled(b);
+        comboTypes.setEnabled(b);
+        button.setEnabled(b);
     }
     
     private void buildChart() {
@@ -115,7 +131,8 @@ public class ChartPanel extends DcPanel implements ActionListener {
         add(chart, Layout.getGBC( 0, 1, 2, 1, 40.0, 40.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets(5, 5, 5, 5), 0, 0));
-        
+     
+        setEnabled(true);
         revalidate();
     }
     
@@ -131,85 +148,18 @@ public class ChartPanel extends DcPanel implements ActionListener {
         return c.toArray(new String[0]);        
     }
     
-    private void buildBar(final DcField field) {
-        SwingUtilities.invokeLater(
-        new Thread() {
-            @Override
-            public void run() {
-                Map<String, Integer> dataMap = getDataMap(field);
-                
-                deinstall();
-                
-                if (dataMap == null) return;
-                
-                double[][] data = new double[1][dataMap.keySet().size()];
-                int maximum = 0;
-                String[] labels = getSortedLabels(dataMap);
-                for (int i = 0; i < labels.length; i++) {
-                    String key = labels[i];
-                    int value = dataMap.get(key).intValue();
-                    data[0][i] = value;
-                    maximum = maximum < value ? value : maximum;
-                    
-                    try {
-                        sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                
-                // create the model
-                ObjectChartDataModel model = 
-                    new ObjectChartDataModel(data, labels, new String[] {field.getLabel()}, ComponentFactory.getSystemFont(), 
-                            DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));  
-                
-                // create the chart
-                CoordSystem coord = new CoordSystem(model);
-        
-                model.setManualScale(true);
-                model.setMinimumValue(new Double(0.0));
-                model.setMaximumValue(new Double(maximum * 1.5));
-                
-                chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, " ");
-                chart.setCoordSystem(coord);
-                chart.addChartRenderer(new BarChartRenderer(coord, model), 0);
-                
-                dataMap.clear();
-                install();
-            }
-        });
+    private void buildBar(DcField field) {
+        deinstall();
+        setEnabled(false);
+
+        new BarChartBuilder(field.getIndex()).start();
     }
     
     private void buildPie(DcField field) {
-        Map<String, Integer> dataMap = getDataMap(field);
-
         deinstall();
-        
-        if (dataMap == null) return;
-        
-        double[][] data = new double[dataMap.keySet().size()][1];
-        String[] labels = getSortedLabels(dataMap);
-        for (int i = 0; i < labels.length; i++) {
-            String key = labels[i];
-            data[i][0] = dataMap.get(key).intValue();
-        }
-        
-        // create the model
-        ObjectChartDataModel model = new ObjectChartDataModel(
-                data, new String[] {field.getLabel()}, labels, 
-                ComponentFactory.getSystemFont(), 
-                DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));
-        
-        // create the chart
-        CoordSystem coord = new CoordSystem(model);
-        coord.setPaintAxes(false);
-        
-        chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, field.getLabel());
-        chart.setCoordSystem(coord);
-        chart.addChartRenderer(new PieChartRenderer(model), 0);
-        
-        dataMap.clear();
-        install();
+        setEnabled(false);
+
+        new PieChartBuilder(field.getIndex()).start();
     }
     
     private Collection<String> getUniqueValues(int module, int field) {
@@ -266,6 +216,13 @@ public class ChartPanel extends DcPanel implements ActionListener {
         // create the data map. exclude zero counts
         Map<String, Integer> dataMap = new HashMap<String, Integer>();
         for (String key : categories) {
+            
+            try {
+                Thread.sleep(5);
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
+            
             int count = getCount(module, field, key);
             if (key.equals(DcResources.getText("lblEmpty"))) {
                 dataMap.put(key + " (" + empty + ")", empty);
@@ -304,7 +261,6 @@ public class ChartPanel extends DcPanel implements ActionListener {
         
         comboFields = ComponentFactory.getComboBox();
         comboTypes = ComponentFactory.getComboBox();
-        JButton button = ComponentFactory.getIconButton(IconLibrary._icoAccept);
         
         panel.add(comboFields);
         panel.add(comboTypes);
@@ -338,5 +294,128 @@ public class ChartPanel extends DcPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("buildChart"))
             buildChart();
+    }
+    
+    
+    private class PieChartBuilder extends DcThread {
+        
+        private final int fieldIdx;
+        
+        public PieChartBuilder(int field) {
+            super(tg, "");
+            this.fieldIdx = field;
+        }
+        
+        @Override
+        public void run() {
+            
+            DcField field = DcModules.get(module).getField(fieldIdx);
+            
+            cancelOthers();
+            
+            Map<String, Integer> dataMap = getDataMap(field);
+            
+            if (dataMap == null) return;
+            
+            double[][] data = new double[dataMap.keySet().size()][1];
+            String[] labels = getSortedLabels(dataMap);
+            for (int i = 0; i < labels.length; i++) {
+                
+                if (isCanceled()) break;
+                
+                String key = labels[i];
+                data[i][0] = dataMap.get(key).intValue();
+            }
+            
+            
+            if (!isCanceled()) {
+                // create the model
+                ObjectChartDataModel model = new ObjectChartDataModel(
+                        data, new String[] {field.getLabel()}, labels, 
+                        ComponentFactory.getSystemFont(), 
+                        DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));
+                
+                // create the chart
+                CoordSystem coord = new CoordSystem(model);
+                coord.setPaintAxes(false);
+                
+                chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, field.getLabel());
+                chart.setCoordSystem(coord);
+                chart.addChartRenderer(new PieChartRenderer(model), 0);
+                
+                dataMap.clear();
+                
+                try {
+                    SwingUtilities.invokeAndWait(new Runnable() {
+                        public void run() {
+                            install();
+                        };
+                    });
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }                    
+            }
+        }
+    }
+    
+    private class BarChartBuilder extends DcThread {
+        
+        private final int fieldIdx;
+        
+        public BarChartBuilder(int field) {
+            super(tg, "");
+            this.fieldIdx = field;
+        }
+        
+        @Override
+        public void run() {
+            
+            cancelOthers();
+            
+            Map<String, Integer> dataMap = getDataMap(DcModules.get(module).getField(fieldIdx));
+            
+            if (dataMap == null) return;
+            
+            double[][] data = new double[1][dataMap.keySet().size()];
+            int maximum = 0;
+            String[] labels = getSortedLabels(dataMap);
+            for (int i = 0; i < labels.length; i++) {
+                
+                if (isCanceled()) break;
+                
+                String key = labels[i];
+                int value = dataMap.get(key).intValue();
+                data[0][i] = value;
+                maximum = maximum < value ? value : maximum;
+            }
+            
+            if (!isCanceled()) {
+                // create the model
+                ObjectChartDataModel model = 
+                    new ObjectChartDataModel(data, labels, 
+                            new String[] {DcModules.get(module).getField(fieldIdx).getLabel()}, 
+                            ComponentFactory.getSystemFont(), 
+                            DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));  
+                
+                // create the chart
+                CoordSystem coord = new CoordSystem(model);
+        
+                model.setManualScale(true);
+                model.setMinimumValue(new Double(0.0));
+                model.setMaximumValue(new Double(maximum * 1.5));
+                
+                chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, " ");
+                chart.setCoordSystem(coord);
+                chart.addChartRenderer(new BarChartRenderer(coord, model), 0);
+                
+                dataMap.clear();
+                
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        install();
+                    };
+                });
+            }
+        }
     }
 }

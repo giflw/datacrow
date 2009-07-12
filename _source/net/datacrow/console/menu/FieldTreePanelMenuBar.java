@@ -91,6 +91,7 @@ public class FieldTreePanelMenuBar extends DcMenuBar implements ActionListener {
             treePanel.collapseAll();
         } else if (ae.getActionCommand().equals("expandAll")) {
             treePanel.expandAll();
+            treePanel.setDefaultSelection();
         } else {
             groupBy(ae.getActionCommand());
         }
