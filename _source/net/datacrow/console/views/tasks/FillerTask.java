@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 
 import javax.swing.SwingUtilities;
 
+import net.datacrow.console.components.panels.tree.TreePanel;
 import net.datacrow.console.views.View;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -19,12 +20,14 @@ public class FillerTask extends DataTask {
     
     private DcObject[] objects;
     private View view;
+    private TreePanel tree;
     
-    public FillerTask(View view, DcObject[] objects) {
+    public FillerTask(TreePanel tree, View view, DcObject[] objects) {
         super();
         setName("Filler-Task [Object count: " + objects.length + "]");
         
         this.view = view;
+        this.tree = tree;
         this.objects = objects;
     }
     
@@ -40,8 +43,9 @@ public class FillerTask extends DataTask {
        }
 
        view.deselect();
-       view.updateProgressBar(0);
-       view.initProgressBar(objects.length);
+       
+       if (tree == null || tree.isShowing())
+           view.initProgressBar(objects.length);
 
        final int batchSize = view.getOptimalItemAdditionBatchSize();
        final int batches = (int) Math.ceil((double) objects.length / batchSize);
@@ -64,7 +68,7 @@ public class FillerTask extends DataTask {
           final Collection<DcObject> c = batchMap.get(batch);
 
           try {
-              SwingUtilities.invokeLater(new Filler(view, c, batch, batchSize));
+              SwingUtilities.invokeAndWait(new Filler(tree, view, c, batch, batchSize, objects.length));
           } catch (Exception e) {
               logger.error("Error while updating the view", e);
           }
@@ -79,13 +83,14 @@ public class FillerTask extends DataTask {
        batchMap.clear();
        stopRunning();
        try {
-           SwingUtilities.invokeLater(new FinishingTask(view, objects.length));
+           SwingUtilities.invokeAndWait(new FinishingTask(view, objects.length));
        } catch (Exception e) {
            logger.error(e, e);
        }
         
        view = null;
        objects = null;
+       tree = null;
     }
 
     private static class FinishingTask implements Runnable {
@@ -130,17 +135,21 @@ public class FillerTask extends DataTask {
     private static class Filler implements Runnable {
         
         private View view;
+        private TreePanel tree;
         private Collection<DcObject> c;
         
         private int batch;
         private int batchSize;
+        private int total;
         
-        public Filler(View view, Collection<DcObject> c, int batch, int batchSize) {
+        public Filler(TreePanel tree, View view, Collection<DcObject> c, int batch, int batchSize, int total) {
             super();
             this.view = view;
             this.c = c;
             this.batch = batch;
             this.batchSize = batchSize;
+            this.total = total;
+            this.tree = tree;
         }
         
         public void run() {
@@ -148,13 +157,18 @@ public class FillerTask extends DataTask {
             for (final DcObject dco : c) {
                 //if (!keepOnRunning()) break;
                 view.add(dco, false);
-                view.setStatus(DcResources.getText("msgAddingXToView", dco.toString()));
-                view.updateProgressBar((batch * batchSize) + pos++);
+                
+                if (tree == null || tree.isShowing()) {
+                    view.setStatus(DcResources.getText("msgAddingXToView", dco.toString()));
+                    view.setMaxForProgressBar(total);
+                    view.updateProgressBar((batch * batchSize) + pos++);
+                }
             }
             
             c.clear();
             c = null;
             view = null;
+            tree = null;
         }
     }    
     

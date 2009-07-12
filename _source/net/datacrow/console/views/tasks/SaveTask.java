@@ -3,6 +3,8 @@ package net.datacrow.console.views.tasks;
 import java.awt.Cursor;
 import java.util.Collection;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.log4j.Logger;
 
 import net.datacrow.console.MainFrame;
@@ -31,14 +33,23 @@ public class SaveTask extends DataTask {
     @Override
     public void run() {
         try {
-            view.updateProgressBar(0);
-            view.initProgressBar(objects.length);
-            view.setStatus(DcResources.getText("msgSavingXItems", "" + objects.length));
-            view.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        view.updateProgressBar(0);
+                        view.initProgressBar(objects.length);
+                        view.setStatus(DcResources.getText("msgSavingXItems", "" + objects.length));
+                        view.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        view.setActionsAllowed(false);
+                        view.checkForChanges(false);
+                    }
+                });
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
 
             startRunning();
-            view.setActionsAllowed(false);
-            view.checkForChanges(false);
 
             boolean ignoreErrors = false;
             int counter = 1;
@@ -84,11 +95,20 @@ public class SaveTask extends DataTask {
                 counter++;
             }
         } finally {
-            view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            view.setActionsAllowed(true);
-            view.checkForChanges(true);
             stopRunning();
-            view.setDefaultSelection();
+            
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        view.setActionsAllowed(true);
+                        view.checkForChanges(true);
+                        view.setDefaultSelection();
+                    }
+                });
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
         }
     }
 }

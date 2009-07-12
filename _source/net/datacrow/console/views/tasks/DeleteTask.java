@@ -3,6 +3,8 @@ package net.datacrow.console.views.tasks;
 import java.awt.Cursor;
 import java.util.Collection;
 
+import javax.swing.SwingUtilities;
+
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
@@ -13,7 +15,11 @@ import net.datacrow.core.wf.requests.StatusUpdateRequest;
 import net.datacrow.core.wf.requests.UpdateStatusProgressBarRequest;
 import net.datacrow.util.DataTask;
 
+import org.apache.log4j.Logger;
+
 public class DeleteTask extends DataTask {
+    
+    private static Logger logger = Logger.getLogger(DeleteTask.class.getName());
 
     private View view; 
     
@@ -25,19 +31,36 @@ public class DeleteTask extends DataTask {
     @Override
     public void run() {
         try {
-            view.updateProgressBar(0);
-            view.initProgressBar(objects.length);   
-            view.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             
-            view.setStatus(DcResources.getText("msgDeletingXItems", "" +objects.length));
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        view.updateProgressBar(0);
+                        view.initProgressBar(objects.length);   
+                        view.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        view.setStatus(DcResources.getText("msgDeletingXItems", "" +objects.length));
+                        view.setActionsAllowed(false);
+                    }
+                });
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
             
             startRunning();
-            view.setActionsAllowed(false);
             
-            QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion")); 
-            if (!qb.isAffirmative()) {
-                stopRunning();
-            } else {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion")); 
+                        if (!qb.isAffirmative())
+                            stopRunning();
+                    }
+                });
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
+                
+            if (isRunning()) {
                 int counter = 1;
                 
                 for (DcObject dco : objects) {
@@ -68,10 +91,17 @@ public class DeleteTask extends DataTask {
                 }
             }
         } finally {
-            //view.setSelected(0);
-            view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             stopRunning();
-            view.setActionsAllowed(true);
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        view.setActionsAllowed(true);
+                    }
+                });
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
             view = null;
         }
     }

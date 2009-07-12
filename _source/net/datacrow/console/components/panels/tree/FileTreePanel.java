@@ -35,6 +35,8 @@ import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import net.datacrow.console.views.View;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcObjectComparator;
@@ -146,8 +148,21 @@ public class FileTreePanel extends TreePanel {
             
             DcObjectComparator oc = new DcObjectComparator(DcObject._SYS_FILENAME);
             Collections.sort(items, oc);
+
+            // thread safe
+            View view = DcModules.get(getModule()).getSearchView().getCurrent();
+            if (isShowing())
+                view.initProgressBar(items.size());
             
+            int counter = 0;
             for (DcObject dco : items) {
+
+                // thread safe
+                if (isShowing()) {
+                    view.setMaxForProgressBar(items.size());
+                    view.updateProgressBar(counter++);
+                    view.setStatus(DcResources.getText("msgAddingXToTree", dco.toString()));
+                }
                 
                 if (canceled) break;
                 
@@ -199,6 +214,7 @@ public class FileTreePanel extends TreePanel {
                 try {
                     SwingUtilities.invokeAndWait(new Runnable() {
                         public void run() {
+                            expandAll();
                             setDefaultSelection();
                         };
                     });

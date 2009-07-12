@@ -220,8 +220,11 @@ public final class ComponentFactory {
                     clean(((JMenu) c).getItem(i));
             }
             
-            for (int i = 0; i < c.getComponentCount(); i++)
-                clean(c.getComponent(i));
+            for (int i = 0; i < c.getComponentCount(); i++) {
+                try {
+                    clean(c.getComponent(i));
+                } catch (Exception e) {}
+            }
 
             c.setComponentPopupMenu(null);
             c.removeAll();

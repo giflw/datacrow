@@ -112,6 +112,19 @@ public class DcPanel extends JPanel {
             }
         }
     }
+    
+    
+    public void setMaxForProgressBar(final int maxValue) {
+        if (SwingUtilities.isEventDispatchThread()) {
+            progress.setMaximum(maxValue);
+        } else {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    progress.setMaximum(maxValue);
+                }
+            });
+        }
+    }
 
     public void initProgressBar(final int maxValue) {
         if (SwingUtilities.isEventDispatchThread()) {

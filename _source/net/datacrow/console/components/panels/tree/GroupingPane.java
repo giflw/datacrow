@@ -83,6 +83,15 @@ public class GroupingPane extends JPanel {
             tp.buildTree();
     }
 
+    public TreePanel getActiveTree() {
+        for (TreePanel tp : panels) {
+            if (tp.isShowing())
+                return tp;
+        }
+        
+        return null;
+    }
+    
     public void add(DcObject dco) {
         if (!items.contains(dco)) {
             items.add(dco);
