@@ -28,6 +28,7 @@ package net.datacrow.console.components.panels.tree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -115,7 +116,24 @@ public class FileTreePanel extends TreePanel {
     }
 
     @Override
-    protected void revalidateTree(DcObject dco, int modus) {}
+    protected void revalidateTree(DcObject dco, int modus) {
+        setListeningForSelection(false);
+        setSaveChanges(false);
+        
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        
+        if (modus == _OBJECT_REMOVED)
+            removeElement(dco, top);
+
+        if (logger.isDebugEnabled()) 
+            logger.debug("Tree was update in " + (new Date().getTime() - start) + "ms");
+
+        repaint();
+        revalidate();
+
+        setListeningForSelection(true);
+        setSaveChanges(true);
+    } 
     
     private class FillerThread extends Thread {
         

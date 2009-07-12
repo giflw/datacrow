@@ -303,10 +303,41 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected abstract JMenuBar getMenu();
     protected abstract void createTopNode();
     protected abstract void buildTree();
+    
     protected abstract void revalidateTree(DcObject dco, int modus);
     protected abstract boolean isActive();
     public abstract void groupBy();
     
+    
+    /**
+     * Removes the item / element from the tree and removes the leaf if necessary.
+     * This method is called recursively.
+     */
+    protected void removeElement(DcObject dco, DefaultMutableTreeNode parent) {
+        
+        if (parent.getUserObject() instanceof NodeElement) {
+            NodeElement elem = (NodeElement) parent.getUserObject();
+            elem.removeValue(dco);
+        }
+        
+        int count = parent.getChildCount();
+        for (int pos = count; pos > 0; pos--) {
+            try {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) parent.getChildAt(pos -1);
+                NodeElement ne = (NodeElement) node.getUserObject();
+                ne.removeValue(dco);
+                if (ne.size() == 0) {
+                    DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+                    model.removeNodeFromParent(node);
+                    ne.clear();
+                } else {
+                    removeElement(dco, node);
+                }
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
+        }
+    }
     
     /************************************************************************
      * Selection listener
