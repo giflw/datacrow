@@ -1,4 +1,45 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.11 [Release on 10/07/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+This is a maintenance release fixing several issues for the mass update and the drive
+manager functionality.
+
+[Fixed]
+- Mass Update did not use the overwrite field settings correctly. Additionally values
+  were cleared.
+- Changed labels for fields caused the sorting dialog to stop working correctly; 
+  empty field shown in the field selection.
+- Drive Manager File Synchronizer was not working correctly. The matching process has
+  been improved.
+
+[Changed]
+- Mass Update: A new option is available "Use original service settings". When enabled
+  the original settings as stored in the item. Only items having service information set 
+  will be updated. This was, somewhat, the default behavior in the past which caused 
+  confusion. By default this option is "off".
+- Code review: Synchronize (mass update) classes have been simplified.
+- File Import: the dialog now shows the volume names as well as the drive letters.
+- Drive Manager: changes have been made to improve the performance dramatically.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.10 [Release on 17/06/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+I'd like to thank Pierre-Yves  for his contributions.
+This new release contains minor new functionality and fixes.
+
+[Fixed]
+- File importer sometimes fails when removing words from the filename.
+- The File Types dialog for the File Import dialog was too small and didn't have a title.
+
+[Changed]
+- Book file import now reads the first page of a PDF and sets this as the front picture.
+- The image importer now also supports SVG files. Note that for existing installations
+  you will have to add the SVG extensions to the File Types filter of the import dialog.
+- Added a cancel button to the quick filter bar.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.9 [Release on 14/06/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 I'd like to thank the following contributors: Marco Artioli, Mathias Epp and 

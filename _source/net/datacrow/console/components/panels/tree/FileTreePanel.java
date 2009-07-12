@@ -28,23 +28,22 @@ package net.datacrow.console.components.panels.tree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.swing.JMenuBar;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcObjectComparator;
+import net.datacrow.util.Utilities;
 
 
 public class FileTreePanel extends TreePanel {
+    
+    private FillerThread filler;
+    private ThreadGroup tg = new ThreadGroup("tree-fillers");
     
     public FileTreePanel(GroupingPane gp) {
         super(gp);
@@ -57,7 +56,6 @@ public class FileTreePanel extends TreePanel {
     public String getName() {
         return DcResources.getText("lblFileStructure");
     }
-    
     
     protected ArrayList<DefaultMutableTreeNode> findNode(Collection<String> parts, DefaultMutableTreeNode parentNode) {
         ArrayList<DefaultMutableTreeNode> nodes = new ArrayList<DefaultMutableTreeNode>();
@@ -77,69 +75,11 @@ public class FileTreePanel extends TreePanel {
     
     private void createLeafs() {
         
-        SwingUtilities.invokeLater(
-        new Thread() {
-            @Override
-            public void start() {
-                build();
-                
-                setListeningForSelection(false);
-                setSaveChanges(false);
-                
-                List<DcObject> items = getItems();
-                
-                DcObjectComparator oc = new DcObjectComparator(DcObject._SYS_FILENAME);
-                Map<DcObject, List<String>> map = new HashMap<DcObject, List<String>>();
-                Collections.sort(items, oc);
-                
-                for (DcObject dco : items) {
-                    String filename = dco.getFilename();
-                    
-                    if (filename == null)
-                        continue;
-                    
-                    StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
-                    
-                    List<String> c = new ArrayList<String>();
-                    while (st.hasMoreElements())
-                        c.add((String) st.nextElement());
-                    
-                    if (c.size() > 0)
-                        map.put(dco, c);
-                }
-                
-                for (DcObject dco : map.keySet()) {
-                    List<String> parts = map.get(dco);
-                    ArrayList<DefaultMutableTreeNode> nodes = findNode(parts, top);
-                    if (nodes.size() != parts.size()) {
-                        for (int i = nodes.size(); i < parts.size(); i++) {
-                            DefaultMutableTreeNode node = new DefaultMutableTreeNode();
-                            
-                            NodeElement element = new NodeElement(getModule(), parts.get(i), null);
-                            node.setUserObject(element);
-                            
-                            DefaultMutableTreeNode parent = i == 0 ? top : nodes.get(i - 1);
-                            
-                            if (parts.size() - 1 == i) 
-                                element.addValue(dco);
-                            
-                            nodes.add(node);
-                            insertNode(node, parent);
-                        }
-                    } else if (nodes.size() > 0) {
-                        ((NodeElement) nodes.get(nodes.size() - 1).getUserObject()).addValue(dco);
-                    }
-                    
-                    try {
-                        sleep(10);
-                    } catch (Exception ignore) {}
-                }
-                
-                setListeningForSelection(true);
-                setSaveChanges(true);
-                expandAll();
-            }
-        }); 
+        if (filler != null)
+            filler.cancel();
+        
+        filler = new FillerThread();
+        filler.start();
     }
     
     @Override
@@ -148,21 +88,12 @@ public class FileTreePanel extends TreePanel {
         
         if (isActive())
             createLeafs();
-
-        setDefaultSelection();
-        
-        revalidate();
-        repaint();
     }
 
     @Override
     protected void createTopNode() {
-        DcModule mod = DcModules.get(getModule());
-        String orderingOn = mod.getObjectNamePlural();
-        
-        top = new DefaultMutableTreeNode(orderingOn);
-        
-        NodeElement element = new NodeElement(getModule(), orderingOn, null);
+        top = new DefaultMutableTreeNode(DcResources.getText("lblFileTreeSystem"));
+        NodeElement element = new NodeElement(getModule(), DcResources.getText("lblFileTreeSystem"), null);
         element.setValues(new ArrayList<DcObject>());
         top.setUserObject(element);
     }
@@ -179,4 +110,88 @@ public class FileTreePanel extends TreePanel {
 
     @Override
     protected void revalidateTree(DcObject dco, int modus) {}
+    
+    private class FillerThread extends Thread {
+        
+        private boolean canceled = false;
+        
+        public FillerThread() {
+            super(tg, "");
+        }
+        
+        public void cancel() {
+            canceled = true;
+        }
+        
+        @Override
+        public void run() {
+            
+            while (getThreadGroup().activeCount() > 1) {
+                try {
+                    sleep(100);
+                } catch (Exception ignore) {}
+            }
+            
+            build();
+
+            tree.setEnabled(false);
+            setListeningForSelection(false);
+            setSaveChanges(false);
+            
+            List<DcObject> items = getItems();
+            
+            DcObjectComparator oc = new DcObjectComparator(DcObject._SYS_FILENAME);
+            Collections.sort(items, oc);
+            
+            for (DcObject dco : items) {
+                
+                if (canceled) break;
+                
+                String filename = dco.getFilename();
+                if (Utilities.isEmpty(filename)) continue;
+                
+                StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
+                
+                List<String> parts = new ArrayList<String>();
+                while (st.hasMoreElements())
+                    parts.add((String) st.nextElement());
+                
+                ArrayList<DefaultMutableTreeNode> nodes = findNode(parts, top);
+                if (nodes.size() != parts.size()) {
+                    for (int i = nodes.size(); i < parts.size(); i++) {
+                        final DefaultMutableTreeNode node = new DefaultMutableTreeNode();
+                        
+                        NodeElement element = new NodeElement(getModule(), parts.get(i), null);
+                        node.setUserObject(element);
+                        
+                        final DefaultMutableTreeNode parent = i == 0 ? top : nodes.get(i - 1);
+                        
+                        if (parts.size() - 1 == i) 
+                            element.addValue(dco);
+                        
+                        nodes.add(node);
+                        insertNode(node, parent);
+                        
+                        try {
+                            sleep(5);
+                        } catch (Exception ignore) {}
+                    }
+                } else if (nodes.size() > 0) {
+                    ((NodeElement) nodes.get(nodes.size() - 1).getUserObject()).addValue(dco);
+                }
+            }
+            
+            if (isVisible())
+                setDefaultSelection();
+            
+            setListeningForSelection(true);
+            setSaveChanges(true);
+            
+            tree.setEnabled(true);
+            setDefaultSelection();
+            
+            revalidate();
+            repaint();
+        }
+    }
 }

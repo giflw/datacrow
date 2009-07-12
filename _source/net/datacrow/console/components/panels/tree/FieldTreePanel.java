@@ -35,7 +35,6 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -320,7 +319,7 @@ public class FieldTreePanel extends TreePanel {
     
     @Override
     public boolean isActive() {
-        boolean active = isEnabled() && isVisible() && top != null && fields != null && fields.length > 0;
+        boolean active = isEnabled() && top != null && fields != null && fields.length > 0;
         
         if (active) {
             for (int i = 0; i < fields.length; i++)
@@ -343,28 +342,26 @@ public class FieldTreePanel extends TreePanel {
     
     @Override
     protected void buildTree() {
-        SwingUtilities.invokeLater(
-        new Thread() {
-            @Override
-            public void start() {
-                fields = (int[]) DcModules.get(getModule()).getSetting(DcRepository.ModuleSettings.stGroupedBy);
-                
-                build();
-                DefaultMutableTreeNode top = getTopNode();
-                
-                if (isActive()) {
-                    createLeafs(top, gp.getItems(), 0);
-                    if (fields != null && fields.length > 1)
-                        buildTree(top, 1);
-                }
+        tree.setEnabled(false);
+        fields = (int[]) DcModules.get(getModule()).getSetting(DcRepository.ModuleSettings.stGroupedBy);
         
-                expandAll();
-                setDefaultSelection();
-                
-                revalidate();
-                repaint();
-            }
-        });
+        build();
+        DefaultMutableTreeNode top = getTopNode();
+        
+        if (isActive()) {
+            createLeafs(top, gp.getItems(), 0);
+            if (fields != null && fields.length > 1)
+                buildTree(top, 1);
+        }
+
+        expandAll();
+        
+        if (isVisible())
+            setDefaultSelection();
+        
+        tree.setEnabled(true);
+        revalidate();
+        repaint();
     }
     
     /**

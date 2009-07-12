@@ -41,6 +41,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -130,41 +131,53 @@ public class ChartPanel extends DcPanel implements ActionListener {
         return c.toArray(new String[0]);        
     }
     
-    private void buildBar(DcField field) {
-        Map<String, Integer> dataMap = getDataMap(field);
+    private void buildBar(final DcField field) {
+        SwingUtilities.invokeLater(
+        new Thread() {
+            @Override
+            public void run() {
+                Map<String, Integer> dataMap = getDataMap(field);
+                
+                deinstall();
+                
+                if (dataMap == null) return;
+                
+                double[][] data = new double[1][dataMap.keySet().size()];
+                int maximum = 0;
+                String[] labels = getSortedLabels(dataMap);
+                for (int i = 0; i < labels.length; i++) {
+                    String key = labels[i];
+                    int value = dataMap.get(key).intValue();
+                    data[0][i] = value;
+                    maximum = maximum < value ? value : maximum;
+                    
+                    try {
+                        sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+                // create the model
+                ObjectChartDataModel model = 
+                    new ObjectChartDataModel(data, labels, new String[] {field.getLabel()}, ComponentFactory.getSystemFont(), 
+                            DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));  
+                
+                // create the chart
+                CoordSystem coord = new CoordSystem(model);
         
-        deinstall();
-        
-        if (dataMap == null) return;
-        
-        double[][] data = new double[1][dataMap.keySet().size()];
-        int maximum = 0;
-        String[] labels = getSortedLabels(dataMap);
-        for (int i = 0; i < labels.length; i++) {
-            String key = labels[i];
-            int value = dataMap.get(key).intValue();
-            data[0][i] = value;
-            maximum = maximum < value ? value : maximum;
-        }
-        
-        // create the model
-        ObjectChartDataModel model = 
-            new ObjectChartDataModel(data, labels, new String[] {field.getLabel()}, ComponentFactory.getSystemFont(), 
-                    DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));  
-        
-        // create the chart
-        CoordSystem coord = new CoordSystem(model);
-
-        model.setManualScale(true);
-        model.setMinimumValue(new Double(0.0));
-        model.setMaximumValue(new Double(maximum * 1.5));
-        
-        chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, " ");
-        chart.setCoordSystem(coord);
-        chart.addChartRenderer(new BarChartRenderer(coord, model), 0);
-        
-        dataMap.clear();
-        install();
+                model.setManualScale(true);
+                model.setMinimumValue(new Double(0.0));
+                model.setMaximumValue(new Double(maximum * 1.5));
+                
+                chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, " ");
+                chart.setCoordSystem(coord);
+                chart.addChartRenderer(new BarChartRenderer(coord, model), 0);
+                
+                dataMap.clear();
+                install();
+            }
+        });
     }
     
     private void buildPie(DcField field) {
