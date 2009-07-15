@@ -37,6 +37,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import net.datacrow.console.views.View;
+import net.datacrow.core.DcThread;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -48,8 +49,6 @@ import org.apache.log4j.Logger;
 public class FileTreePanel extends TreePanel {
     
     private static Logger logger = Logger.getLogger(FileTreePanel.class.getName());
-    
-    private FillerThread filler;
     private ThreadGroup tg = new ThreadGroup("tree-fillers");
     
     public FileTreePanel(GroupingPane gp) {
@@ -81,12 +80,7 @@ public class FileTreePanel extends TreePanel {
     }  
     
     private void createLeafs() {
-        
-        if (filler != null)
-            filler.cancel();
-        
-        filler = new FillerThread();
-        filler.start();
+        new FillerThread(tg).start();
     }
     
     @Override
@@ -100,7 +94,7 @@ public class FileTreePanel extends TreePanel {
     @Override
     protected void createTopNode() {
         top = new DefaultMutableTreeNode(DcResources.getText("lblFileTreeSystem"));
-        NodeElement element = new NodeElement(getModule(), DcResources.getText("lblFileTreeSystem"), null);
+        FileNodeElement element = new FileNodeElement(getModule(), DcResources.getText("lblFileTreeSystem"));
         element.setValues(new ArrayList<DcObject>());
         top.setUserObject(element);
     }
@@ -125,6 +119,11 @@ public class FileTreePanel extends TreePanel {
         if (modus == _OBJECT_REMOVED)
             removeElement(dco, top);
 
+        if (modus == _OBJECT_ADDED || modus == _OBJECT_UPDATED) {
+            removeElement(dco, top);
+            addElement(dco, top);
+        }
+        
         if (logger.isDebugEnabled()) 
             logger.debug("Tree was update in " + (new Date().getTime() - start) + "ms");
 
@@ -134,27 +133,63 @@ public class FileTreePanel extends TreePanel {
         setListeningForSelection(true);
         setSaveChanges(true);
     } 
-    
-    private class FillerThread extends Thread {
+ 
+	private void addElement(DcObject dco, DefaultMutableTreeNode notused) {
+    	// thread safe
+        String filename = dco.getFilename();
+        if (Utilities.isEmpty(filename)) return;
         
-        private boolean canceled = false;
+        StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
         
-        public FillerThread() {
-            super(tg, "");
+        List<String> parts = new ArrayList<String>();
+        while (st.hasMoreElements())
+            parts.add((String) st.nextElement());
+        
+        ArrayList<DefaultMutableTreeNode> nodes = findNode(parts, top);
+        if (nodes.size() != parts.size()) {
+            for (int i = nodes.size(); i < parts.size(); i++) {
+                final DefaultMutableTreeNode node = new DefaultMutableTreeNode();
+                
+                FileNodeElement element = new FileNodeElement(getModule(), parts.get(i));
+                node.setUserObject(element);
+                
+                final DefaultMutableTreeNode parent = i == 0 ? top : nodes.get(i - 1);
+                
+                if (parts.size() - 1 == i) 
+                    element.addValue(dco);
+                
+                nodes.add(node);
+                
+                try {
+                	if (!SwingUtilities.isEventDispatchThread()) {
+	                    SwingUtilities.invokeAndWait(new Runnable() {
+	                        public void run() {
+	                            insertNode(node, parent);
+	                        };
+	                    });
+                	} else {
+                		insertNode(node, parent);
+                	}
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }                    
+            }
+        } else if (nodes.size() > 0) {
+            ((FileNodeElement) nodes.get(nodes.size() - 1).getUserObject()).addValue(dco);
         }
+    }
+    
+    private class FillerThread extends DcThread {
         
-        public void cancel() {
-            canceled = true;
+        public FillerThread(ThreadGroup tg) {
+            super(tg, "");
         }
         
         @Override
         public void run() {
             
-            while (getThreadGroup().activeCount() > 1) {
-                try {
-                    sleep(100);
-                } catch (Exception ignore) {}
-            }
+        	// cancel other threads of the same thread group.
+        	cancelOthers();
             
             build();
 
@@ -182,54 +217,19 @@ public class FileTreePanel extends TreePanel {
                     view.setStatus(DcResources.getText("msgAddingXToTree", dco.toString()));
                 }
                 
-                if (canceled) break;
+                if (isCanceled()) break;
                 
-                String filename = dco.getFilename();
-                if (Utilities.isEmpty(filename)) continue;
+                addElement(dco, top);
                 
-                StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
-                
-                List<String> parts = new ArrayList<String>();
-                while (st.hasMoreElements())
-                    parts.add((String) st.nextElement());
-                
-                ArrayList<DefaultMutableTreeNode> nodes = findNode(parts, top);
-                if (nodes.size() != parts.size()) {
-                    for (int i = nodes.size(); i < parts.size(); i++) {
-                        final DefaultMutableTreeNode node = new DefaultMutableTreeNode();
-                        
-                        NodeElement element = new NodeElement(getModule(), parts.get(i), null);
-                        node.setUserObject(element);
-                        
-                        final DefaultMutableTreeNode parent = i == 0 ? top : nodes.get(i - 1);
-                        
-                        if (parts.size() - 1 == i) 
-                            element.addValue(dco);
-                        
-                        nodes.add(node);
-                        
-                        try {
-                            SwingUtilities.invokeAndWait(new Runnable() {
-                                public void run() {
-                                    insertNode(node, parent);
-                                };
-                            });
-                        } catch (Exception e) {
-                            logger.error(e, e);
-                        }                    
-                        
-                        try {
-                            sleep(5);
-                        } catch (Exception ignore) {}
-                    }
-                } else if (nodes.size() > 0) {
-                    ((NodeElement) nodes.get(nodes.size() - 1).getUserObject()).addValue(dco);
-                }
+                try {
+                    sleep(5);
+                } catch (Exception ignore) {}
             }
-            
             
             if (isShowing()) {
                 try {
+                	sleep(1000);
+                	
                     SwingUtilities.invokeAndWait(new Runnable() {
                         public void run() {
                             expandAll();

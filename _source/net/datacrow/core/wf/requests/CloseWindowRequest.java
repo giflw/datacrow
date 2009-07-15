@@ -86,7 +86,7 @@ public class CloseWindowRequest implements IRequest {
                 ((ItemForm) window).close(true);
             else if (window instanceof DcFrame)
                 ((DcFrame) window).close();
-            else 
+            else if (window != null)
                 window.dispose();
             
             window = null;

@@ -313,25 +313,39 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
      * Removes the item / element from the tree and removes the leaf if necessary.
      * This method is called recursively.
      */
-    protected void removeElement(DcObject dco, DefaultMutableTreeNode parent) {
+    protected void removeElement(DcObject dco, DefaultMutableTreeNode parentNode) {
         
+    	DefaultMutableTreeNode parent = parentNode;
+    	
         if (parent.getUserObject() instanceof NodeElement) {
             NodeElement elem = (NodeElement) parent.getUserObject();
             elem.removeValue(dco);
         }
         
         int count = parent.getChildCount();
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         for (int pos = count; pos > 0; pos--) {
             try {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) parent.getChildAt(pos -1);
                 NodeElement ne = (NodeElement) node.getUserObject();
                 ne.removeValue(dco);
-                if (ne.size() == 0) {
-                    DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+                if (ne.size() == 0 && node.getChildCount() == 0) {
                     model.removeNodeFromParent(node);
                     ne.clear();
+                    
+                	// remove empty branches above (needed for the file tree panel)
+                	while (parent != null) {
+                		if (((NodeElement) node.getUserObject()).size() == 0 && parent.getChildCount() == 0) {
+                			DefaultMutableTreeNode newParent = (DefaultMutableTreeNode) parent.getParent();
+                			model.removeNodeFromParent(parent);
+                			parent = newParent;
+                		} else {
+                			parent = null;
+                		}
+                	}
+                    
                 } else {
-                    removeElement(dco, node);
+                	removeElement(dco, node);
                 }
             } catch (Exception e) {
                 logger.error(e, e);

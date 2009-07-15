@@ -7,6 +7,10 @@ Data Crow 3.4.12 [Release on xx/07/2009] [testing: high] [target: production]
 - Building a new chart will no longer lock the GUI.
 - Building the File System Tree will no longer lock the GUI.
 - Deleted items were not removed from the file tree view.
+- New items were not added to the file tree view.
+- Software Import in combination with an online service sometimes failed 
+  (rare occurrence).
+- The grouping pane sometimes failed to add an item (rare occurrence).
 
 
 -----------------------------------------------------------------------------------------

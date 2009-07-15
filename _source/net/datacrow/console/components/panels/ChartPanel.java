@@ -315,7 +315,10 @@ public class ChartPanel extends DcPanel implements ActionListener {
             
             Map<String, Integer> dataMap = getDataMap(field);
             
-            if (dataMap == null) return;
+            if (dataMap == null) {
+            	setEnabled(true);
+            	return;
+            }
             
             double[][] data = new double[dataMap.keySet().size()][1];
             String[] labels = getSortedLabels(dataMap);

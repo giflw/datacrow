@@ -47,6 +47,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcObjectComparator;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -413,12 +414,15 @@ public class FieldTreePanel extends TreePanel {
                 key = key.trim().length() == 0 ? empty : key;
 
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                    DcObject ref = (DcObject) dco.getValue(field.getIndex());
-                    addKey(keys, new NodeElement(getModule(), key, (ref != null ? ref.getIcon() : null)), dco);
+                	Object value = dco.getValue(field.getIndex());
+                	value = Utilities.isEmpty(value) ? null : value;
+                	if (value instanceof DcObject || value == null) {
+	                    DcObject ref = (DcObject) value;
+	                    addKey(keys, new NodeElement(getModule(), key, (ref != null ? ref.getIcon() : null)), dco);
+                	}
                 } else {
                     addKey(keys, new NodeElement(getModule(), key, null), dco);
                 }
-                
             }
         }
         

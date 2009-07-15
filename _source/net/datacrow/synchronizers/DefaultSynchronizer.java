@@ -75,7 +75,7 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                 dco.getDisplayFieldIdx();
     }
     
-    protected String getSearchString(int field) {
+    protected String getSearchString(int field, IServer server) {
         return dco.getDisplayString(field);
     }
     
@@ -94,7 +94,7 @@ public abstract class DefaultSynchronizer extends Synchronizer {
         } else { 
             boolean updated = false;
             int fieldIdx = getSearchFieldIdx(mode);
-            String searchString = getSearchString(fieldIdx);
+            String searchString = getSearchString(fieldIdx, server);
             if (Utilities.isEmpty(searchString)) return updated;
             
             OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);

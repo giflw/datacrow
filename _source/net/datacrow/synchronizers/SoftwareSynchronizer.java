@@ -28,6 +28,7 @@ package net.datacrow.synchronizers;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.services.plugin.IServer;
 
 public class SoftwareSynchronizer extends DefaultSynchronizer {
 
@@ -42,10 +43,10 @@ public class SoftwareSynchronizer extends DefaultSynchronizer {
     }
     
     @Override
-    protected String getSearchString(int field) {
-        if (field == Software._A_TITLE && getServer().getName().equals("MobyGames") && dco.getValue(Software._H_PLATFORM) != null)
-            return super.getSearchString(field) +  " " + dco.getDisplayString(Software._H_PLATFORM);
+    protected String getSearchString(int field, IServer server) {
+        if (field == Software._A_TITLE && server.getName().equals("MobyGames") && dco.getValue(Software._H_PLATFORM) != null)
+            return super.getSearchString(field, server) +  " " + dco.getDisplayString(Software._H_PLATFORM);
         else
-            return super.getSearchString(field);
+            return super.getSearchString(field, server);
     }
 }
