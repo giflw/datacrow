@@ -46,6 +46,14 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+
+/**
+ * The file tree panel shows the file paths and file names of the current
+ * items. Additionally it shows whether the file or directory exists by checking the file system.
+ * @see {@link FileNodeElement}
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class FileTreePanel extends TreePanel {
     
     private static Logger logger = Logger.getLogger(FileTreePanel.class.getName());
@@ -225,30 +233,23 @@ public class FileTreePanel extends TreePanel {
                     sleep(5);
                 } catch (Exception ignore) {}
             }
-            
-            if (isShowing()) {
-                try {
-                	sleep(1000);
-                	
-                    SwingUtilities.invokeAndWait(new Runnable() {
-                        public void run() {
-                            expandAll();
-                            setDefaultSelection();
-                        };
-                    });
-                } catch (Exception e) {
-                    logger.error(e, e);
-                }    
-            }
-            
-            setListeningForSelection(true);
-            setSaveChanges(true);
 
+            try {
+                sleep(500);
+            } catch (Exception ignore) {}
+            
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
                     public void run() {
-                        tree.setEnabled(true);
-                        setDefaultSelection();
+
+                        setListeningForSelection(true);
+                        setSaveChanges(true);
+                    	tree.setEnabled(true);
+
+                    	expandAll();
+                    	
+                    	if (isShowing())
+                    		setDefaultSelection();
                         
                         revalidate();
                         repaint();

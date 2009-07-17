@@ -10,7 +10,7 @@ import net.datacrow.util.Utilities;
 
 public class FileNodeElement extends NodeElement {
     
-    private String path;
+    private File file;
     
     public FileNodeElement(int module, String key) {
     	super(module, key, null);
@@ -18,24 +18,24 @@ public class FileNodeElement extends NodeElement {
 
     @Override
     public ImageIcon getIcon() {
-    	if (path == null) {
+    	if (file == null) {
     		return IconLibrary._icoOpen;
     	} else {
-    		File file = new File(path);
     		boolean isFile = file.isFile();
     		boolean isDirectory = file.isDirectory();
     		boolean exists = file.exists();
     		
-    		return exists && isFile ? IconLibrary._icoAnchor :
-    			   exists && isDirectory ?  IconLibrary._icoAccept :
-				   IconLibrary._icoError;
+    		return exists && isFile ? IconLibrary._icoFileSystemExists :
+    			   exists && isDirectory ?  IconLibrary._icoFileSystemExists :
+				  IconLibrary._icoFileSystemNotExists;
     	}
     }
     
     @Override
 	public void addValue(DcObject dco) {
 		super.addValue(dco);
-		path = Utilities.isEmpty(path) ? dco.getFilename() : path;
+		String filename = dco.getFilename();
+		file = file == null && !Utilities.isEmpty(filename)? new File(filename) : file;
 	}
 
 	@Override
@@ -47,6 +47,12 @@ public class FileNodeElement extends NodeElement {
             return getKey() + " (" + String.valueOf(count) + ")";    
     }
 
+	@Override
+    public void clear() {
+		super.clear();
+		file = null;
+    }
+	
     @Override
     public boolean equals(Object o) {
         if (o == null || !(o instanceof FileNodeElement))

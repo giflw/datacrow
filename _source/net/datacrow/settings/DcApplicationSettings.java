@@ -54,7 +54,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     
     public static final String _General = "lblGroupGeneral";
     public static final String _FileHashing = "lblFileHashing";
-    public static final String _Locale = "lblGroupLocale";
+    public static final String _Regional = "lblGroupRegional";
     public static final String _Module = "lblModuleSettings";
     public static final String _DriveMappings = "lblDriveMappings";
     public static final String _FileHandlers = "lblProgramDefinitions";
@@ -75,7 +75,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     @Override
     protected void createGroups() {
         SettingsGroup generalGroup = new SettingsGroup(_General, "dc.settings.general");
-        SettingsGroup localeGroup = new SettingsGroup(_Locale, "dc.settings.locale");
+        SettingsGroup regionalGroup = new SettingsGroup(_Regional, "dc.settings.regional");
         SettingsGroup colorGroup = new SettingsGroup(_SelectionColor, "dc.settings.colors");
         SettingsGroup http = new SettingsGroup(_HTTP, "dc.settings.http");
         SettingsGroup fileHandlers = new SettingsGroup(_FileHandlers, "dc.settings.fileassociations");
@@ -85,7 +85,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         SettingsGroup driveMappings = new SettingsGroup(_DriveMappings, "dc.settings.drivemappings");
 
         getSettings().addGroup(_Module, moduleGroup);
-        getSettings().addGroup(_Locale, localeGroup);
+        getSettings().addGroup(_Regional, regionalGroup);
         getSettings().addGroup(_General, generalGroup);
         getSettings().addGroup(_Font, fontGroup);
         getSettings().addGroup(_HTTP, http);
@@ -96,7 +96,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     }
 
     protected void createSettings() {
-        getSettings().addSetting(_Locale,
+        getSettings().addSetting(_Regional,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stLanguage,
                             "",
@@ -105,7 +105,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblLanguage",
                             true,
                             true));   
-        getSettings().addSetting(_Locale,
+        getSettings().addSetting(_Regional,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stCheckedForJavaVersion,
                             Boolean.FALSE,
@@ -801,7 +801,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));
-        getSettings().addSetting(_Locale,
+        getSettings().addSetting(_Regional,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stDecimalGroupingSymbol,
                             ".",
@@ -810,7 +810,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblDecimalGroupingSymbol",
                             true,
                             true));
-        getSettings().addSetting(_Locale,
+        getSettings().addSetting(_Regional,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stDecimalSeparatorSymbol,
                             ",",

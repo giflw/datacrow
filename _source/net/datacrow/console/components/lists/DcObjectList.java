@@ -385,6 +385,8 @@ public class DcObjectList extends DcList implements IViewComponent {
         } else if (style == _LISTING) {
             if (dco instanceof DcProperty)
                 element = new DcPropertyListElement(dco);
+            else if (dco instanceof DcTemplate)
+            	element = new DcTemplateListElement(dco);
             else if (dco instanceof MusicTrack)
                 element = new DcMusicTrackListElement(dco);
             else if (dco instanceof AudioTrack)

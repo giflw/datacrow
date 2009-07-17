@@ -23,61 +23,61 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.lists.elements;
+package net.datacrow.console.components.renderers;
 
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.File;
 
-import javax.swing.JPanel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcLabel;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.Picture;
-import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
+import net.datacrow.util.Utilities;
 
-public class DcTemplateListElement extends DcObjectListElement {
-
-    private JPanel panelInfo;
+public class ComboBoxFsRenderer extends DcLabel implements ListCellRenderer {
     
-    public DcTemplateListElement(DcObject dco) {
-        super(dco);
+    private static final ComboBoxFsRenderer instance = new ComboBoxFsRenderer();
+
+    private ComboBoxFsRenderer() {
+        setOpaque(true);
+        setHorizontalAlignment(LEFT);
+        setVerticalAlignment(CENTER);
     }
     
-    @Override
-    public void setBackground(Color color) {
-        super.setBackground(color);
-        if (panelInfo != null)
-            panelInfo.setBackground(color);
-    }     
+    public static ComboBoxFsRenderer getInstance() {
+        return instance;
+    }    
     
-    @Override
-    public Collection<Picture> getPictures() {
-        return new ArrayList<Picture>();
-    }
+    public Component getListCellRendererComponent(
+                                       JList list,
+                                       Object value,
+                                       int index,
+                                       boolean isSelected,
+                                       boolean cellHasFocus) {
+        
+    	setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+    	setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
+    	
+    	setFont(ComponentFactory.getStandardFont());
+    	
+        if (isSelected) {
+            setBackground(list.getSelectionBackground());
+            setForeground(list.getSelectionForeground());
+        } else {
+            setBackground(list.getBackground());
+            setForeground(list.getForeground());
+        } 
 
-    @Override
-    public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setText("");
+        if (value != null && value instanceof File) {
+            String text = Utilities.getSystemName((File) value);
+            setText(!Utilities.isEmpty(text) ? text : value.toString());
+        }
         
-        DcTemplate template = (DcTemplate) dco;
+        revalidate();
         
-        String label = dco.getDisplayString(DcTemplate._SYS_TEMPLATENAME); 
-        if (template.isDefault()) 
-            label += " (" + DcResources.getText("lblDefault") + ")";
-        
-        DcLabel lbl = new DcLabel(label);
-        lbl.setPreferredSize(new Dimension(800, fieldHeight));
-        lbl.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
-        
-        panelInfo = getPanel();
-        panelInfo.add(lbl);
-        panelInfo.setPreferredSize(new Dimension(800, fieldHeight));
-        add(panelInfo);
-    } 
+        return this;
+    }
 }

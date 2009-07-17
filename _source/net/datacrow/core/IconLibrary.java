@@ -126,4 +126,6 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoArrowBottom = new ImageIcon(picPath + "arrow_bottom.png");
     public static final ImageIcon _icoArrowUp = new ImageIcon(picPath + "arrow_up.png");
     public static final ImageIcon _icoArrowDown = new ImageIcon(picPath + "arrow_down.png");
+    public static final ImageIcon _icoFileSystemExists = new ImageIcon(picPath + "filesystem_exists.png");
+    public static final ImageIcon _icoFileSystemNotExists = new ImageIcon(picPath + "filesystem_not_exists.png");
 }
