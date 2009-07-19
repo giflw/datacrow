@@ -28,7 +28,7 @@
     <mapID target="dc.settings.fields" url="settings/fields.html"/>
     <mapID target="dc.settings.webfields" url="settings/webfields.html"/>
     <mapID target="dc.settings.font" url="settings/font.html"/>
-    <mapID target="dc.settings.locale" url="settings/locale.html"/>    
+    <mapID target="dc.settings.regional" url="settings/regional.html"/>    
     <mapID target="dc.settings.fileassociations" url="settings/fileassociations.html"/>
     <mapID target="dc.settings.general" url="settings/general.html"/>
     <mapID target="dc.settings.http" url="settings/http.html"/>

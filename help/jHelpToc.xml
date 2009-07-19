@@ -50,7 +50,7 @@
       <tocitem target="dc.settings.module" text="Modules"/>
       <tocitem target="dc.settings.laf" text="Look &amp; Feel"/>
       <tocitem target="dc.settings.quickview" text="Quick View"/>
-      <tocitem target="dc.settings.locale" text="Locale"/>
+      <tocitem target="dc.settings.regional" text="Regional Settings"/>
       <tocitem target="dc.settings.filehash" text="File Hashing"/>
       <tocitem target="dc.settings.itemformsettings" text="Item Form Settings"/>
       <tocitem target="dc.settings.drivemappings" text="Drive Mappings"/>

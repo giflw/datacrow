@@ -359,36 +359,36 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
     }
 
     private void checkListSizes() {
-//        Dimension dimLeft = listLeft.getSize();
-//        
-//        Dimension dim = null;
-//        for (DcFieldList listRight : listsRight.values()) {
-//            if (listRight.isVisible()) {
-//                int width = (int) ((dimLeft.getWidth() + listRight.getWidth()) - 10) / 2; 
-//                dim = new Dimension(width, (int) dimLeft.getHeight());
-//                break;
-//            }
-//        }
-//        
-//        for (DcFieldList listRight : listsRight.values()) {
-//            listRight.setPreferredSize(dim);
-//            listRight.setMinimumSize(dim);
-//            listRight.setMaximumSize(dim);
-//            
-//            if (listRight.isVisible()) {
-//                listRight.revalidate();
-//                listRight.repaint();
-//            }
-//        }
-//        
-//        listLeft.setPreferredSize(dim);
-//        listLeft.setMinimumSize(dim);
-//        listLeft.setMaximumSize(dim);
-//        listLeft.revalidate();
-//        listLeft.repaint();
-//        
-//        revalidate();
-//        repaint();
+        Dimension dimLeft = listLeft.getParent().getSize();
+        
+        Dimension dim = null;
+        for (DcFieldList listRight : listsRight.values()) {
+            if (listRight.isVisible()) {
+                int width = (int) ((dimLeft.getWidth() + listRight.getParent().getWidth()) - 20) / 2; 
+                dim = new Dimension(width, (int) dimLeft.getHeight());
+                break;
+            }
+        }
+        
+        for (DcFieldList listRight : listsRight.values()) {
+            listRight.getParent().setPreferredSize(dim);
+            listRight.getParent().setMinimumSize(dim);
+            listRight.getParent().setMaximumSize(dim);
+            
+            if (listRight.isVisible()) {
+                listRight.revalidate();
+                listRight.repaint();
+            }
+        }
+        
+        listLeft.getParent().setPreferredSize(dim);
+        listLeft.getParent().setMinimumSize(dim);
+        listLeft.getParent().setMaximumSize(dim);
+        listLeft.revalidate();
+        listLeft.repaint();
+        
+        revalidate();
+        repaint();
     }
     
     public void componentHidden(ComponentEvent e) {}

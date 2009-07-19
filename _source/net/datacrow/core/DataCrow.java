@@ -90,7 +90,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 11, 0);
+    private static Version version = new Version(3, 4, 12, 0);
     
     public static String installationDir;
     public static String imageDir;
