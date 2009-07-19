@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components.renderers;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTree;
@@ -32,22 +33,31 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import net.datacrow.console.components.panels.tree.NodeElement;
+import net.datacrow.core.DcRepository;
+import net.datacrow.settings.DcSettings;
 
 public class DcTreeRenderer extends DefaultTreeCellRenderer {
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
-            boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        boolean expanded, boolean leaf, int row, boolean hasFocus) {
 
-            super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+        setBorder(null);
+    
+        if (value instanceof DefaultMutableTreeNode) {
             
-            if (value instanceof DefaultMutableTreeNode) {
-                Object o = ((DefaultMutableTreeNode) value).getUserObject();
-                
-                if (o instanceof NodeElement) 
-                    setIcon(((NodeElement) o).getIcon());
-            }
-
-            return this;
+            
+            Object o = ((DefaultMutableTreeNode) value).getUserObject();
+            
+            if (o instanceof NodeElement) 
+                setIcon(((NodeElement) o).getIcon());
+            
+            if (hasFocus)
+                setBackgroundSelectionColor(DcSettings.getColor(DcRepository.Settings.stSelectionColor));
+            else
+                setBackgroundNonSelectionColor(Color.WHITE);
+        }
+        
+        return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
     }
 }

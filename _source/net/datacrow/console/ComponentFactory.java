@@ -944,6 +944,12 @@ public final class ComponentFactory {
 
         return comboBox;
     }
+    
+    public static final TitledBorder getSelectionBorder() {
+        TitledBorder border = new DcTitledBorder(BorderFactory.createLineBorder(DcSettings.getColor(DcRepository.Settings.stSelectionColor), 1), "");
+        border.setTitleFont(getSystemFont());
+        return border;
+    }
 
     public static final TitledBorder getTitleBorder(String title) {
         TitledBorder border = new DcTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1), title);

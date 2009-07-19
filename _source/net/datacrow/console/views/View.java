@@ -308,7 +308,7 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public void add(DcObject[] objects) {
         cancelCurrentTask();
-        task = new FillerTask(groupingPane.getActiveTree(), this, objects);
+        task = new FillerTask(groupingPane != null ? groupingPane.getActiveTree() : null, this, objects);
         task.start();
     }    
     
