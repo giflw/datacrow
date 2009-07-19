@@ -42,8 +42,8 @@ public class DcTreeRenderer extends DefaultTreeCellRenderer {
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
         boolean expanded, boolean leaf, int row, boolean hasFocus) {
 
-        setBorder(null);
-    
+        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+        
         if (value instanceof DefaultMutableTreeNode) {
             
             
@@ -52,12 +52,12 @@ public class DcTreeRenderer extends DefaultTreeCellRenderer {
             if (o instanceof NodeElement) 
                 setIcon(((NodeElement) o).getIcon());
             
-            if (hasFocus)
+            if (hasFocus || sel)
                 setBackgroundSelectionColor(DcSettings.getColor(DcRepository.Settings.stSelectionColor));
             else
                 setBackgroundNonSelectionColor(Color.WHITE);
         }
         
-        return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+        return this;
     }
 }
