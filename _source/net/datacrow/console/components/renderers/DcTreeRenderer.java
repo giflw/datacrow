@@ -52,7 +52,7 @@ public class DcTreeRenderer extends DefaultTreeCellRenderer {
             if (o instanceof NodeElement) 
                 setIcon(((NodeElement) o).getIcon());
             
-            if (hasFocus || sel)
+            if (hasFocus)
                 setBackgroundSelectionColor(DcSettings.getColor(DcRepository.Settings.stSelectionColor));
             else
                 setBackgroundNonSelectionColor(Color.WHITE);
