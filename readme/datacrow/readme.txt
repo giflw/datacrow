@@ -29,7 +29,7 @@ Table of Content
 ----------------------------------------------------------------------------------------
 1.0 Introduction
 
-Data Crow is a program to register Software, Images, Music Files, Audio CDs, 
+Data Crow is an application to register Software, Images, Music Files, Audio CDs, 
 Books and Movies. The registration is automated as far as possible. To achieve 
 this, an internet connection is needed as Data Crow uses web services 
 (like amazon.com, imdb.com and freedb.org) to retrieve information about a piece 
@@ -43,7 +43,7 @@ Features:
 * Internal help system (F1).
 * Nice looking and easy to use UI.
 * Loan administration.
-* Optional web module (multi user / remote interface).
+* Optional web module (multiple users / remote interface).
 * Create your own modules or modify existing modules.
 * Advanced user configuration (access rights + field access).
 * Rename your files based on the information of Data Crow.
@@ -94,13 +94,10 @@ datacrow.exe -db:<database name>
 
 Upgrading is as simple as installing the latest version on top of an older version.
 Always make a backup of your data first by using the "Backup & Restore" functionality
-situated in the tools menu.
+situated in the "tools" menu.
 
 Upgrade paths:
   
-  Upgrade paths are necessary to remove deprecated coding in newer versions. 
-  I will try to keep the upgrade paths as short as possible.
-
   [Version 2.8.4 and Older]
   From versions below the 2.8.6 to the latest: Install the 2.8.6 first. 
   Start Data Crow and start the conversion (answer "yes" on the upgrade question)
@@ -159,15 +156,17 @@ Additional parameters:
      
     -credentials:username/password
      Specify the login credentials to start Data Crow without displaying the login dialog.
+     
+    -nosplash
+     Hides the splashscreen on startup.
 
 
 ----------------------------------------------------------------------------------------
 7.0 Credits
 
-This piece of software would not have succeeded (or even existed) with help
-from other development teams and information providers:
+This application would not have succeeded (or even existed) without the help of:
 
-* Bas Uildriks for designing creating the web site (http://www.datacrow.net).
+* Bas Uildriks who designed and created the web site (http://www.datacrow.net).
 * HSQL: This product includes Hypersonic SQL.
   Originally developed by Thomas Mueller and the Hypersonic SQL Group. 
   I want to thank Thomas Mueller for providing this application with an easy

@@ -11,11 +11,13 @@ Data Crow 3.4.12 [Release on 19/07/2009] [testing: high] [target: production]
 - Software Import in combination with an online service sometimes failed 
   (rare occurrence).
 - The grouping pane sometimes failed to add an item (rare occurrence).
+- Several mistakes in the Dutch translation.
 
 [Changed]
 - The File Structure tree now shows the correct file system structure and
   indicates whether the file or directory actually exists.
 - 'Locale Settings' has been renamed to 'Regional Settings'.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.11 [Release on 10/07/2009] [testing: high] [target: production]
