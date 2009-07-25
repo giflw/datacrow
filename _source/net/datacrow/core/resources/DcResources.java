@@ -171,7 +171,7 @@ public class DcResources {
     	    do {
         		index = result.indexOf(searchPat, index);
         		if (index < 0) 
-        		    logger.error("Could not insert the parameter for label " + s);
+        		    logger.debug("Could not insert the parameter for label " + s);
         		else
         		    escapedPatFound = (index > 0 && result.charAt(index - 1) == '\\');
     	    } while (escapedPatFound);

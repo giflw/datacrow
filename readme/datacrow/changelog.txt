@@ -3,7 +3,6 @@ Data Crow 3.4.13 [Release on 25/07/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Icons are not displayed in the tree / grouping pane (broken by version 3.4.12)
 - Icons for multiple reference fields are not shown in the tree / grouping pane.
 - Removing an item did not remove all the empty paths from the tree / grouping.
 - The mass update feature failed to retrieve / update multiple reference fields 
@@ -15,8 +14,9 @@ Data Crow 3.4.13 [Release on 25/07/2009] [testing: high] [target: production]
 - The Look and Feel settings dialog now allows you to set the table row height and the
   tree node height. This dialog already allowed you to change the look and feel and set
   the button and input field height.
-- Number of pages os now retrieved from amazon.
-  
+- 'Number of pages' is now retrieved from amazon.
+- Changed the icons for the file structure tree.  
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.12 [Release on 19/07/2009] [testing: high] [target: production]
