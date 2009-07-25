@@ -25,6 +25,7 @@
 
 package net.datacrow.synchronizers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -181,10 +182,15 @@ public abstract class Synchronizer {
                 if (value instanceof Collection) {
                     for (Iterator iter = ((Collection) value).iterator(); iter.hasNext(); ) {
                         DcObject o = (DcObject) iter.next();
-                        if (o instanceof DcMapping)
+                        if (o instanceof DcMapping) {
                             o.setValue(DcMapping._A_PARENT_ID, dco.getID());
-                        else
+                            Collection c = (Collection) dco.getValue(field);
+                            c = c == null ? new ArrayList<DcMapping>() : c;
+                            c.add(o);
+                            dco.setValue(field, c);
+                        } else {
                             DataManager.createReference(dco, field, o);
+                        }
                     }
                 } else if (value instanceof Picture) {
                     dco.setValue(field, new DcImageIcon(((Picture) value).getBytes()));
