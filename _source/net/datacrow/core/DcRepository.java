@@ -78,6 +78,7 @@ public abstract class DcRepository {
         public static final String stSynchronizerDialogSize = "synchronizer_dialog_size";
         public static final String stQuickViewFieldDefinitions = "quick_view_field_definitions";
         public static final String stWebFieldDefinitions = "web_field_definitions";
+        public static final String stTableSettings = "table_settings";
         public static final String stQuickViewSettingsDialogSize = "quick_view_settings_dialog_size";
         public static final String stTableViewSettingsDialogSize = "table_view_settings_dialog_size";
         public static final String stCardViewSettingsDialogSize = "card_view_settings_dialog_size";
@@ -98,6 +99,8 @@ public abstract class DcRepository {
         public static final String stOnlineSearchSelectedView = "online_search_selected_view";
         public static final String stInputFieldHeight = "input_field_height";
         public static final String stButtonHeight = "button_height";
+        public static final String stTreeNodeHeight = "tree_node_height";
+        public static final String stTableRowHeight = "table_row_height";
         public static final String stUseCache = "use_cache";
         public static final String stGracefulShutdown = "gracefuk_shutdown";
     	public static final String stPersonOrder = "person_order";
@@ -243,6 +246,7 @@ public abstract class DcRepository {
         public static final int _DCOBJECTCOLLECTION = 18;
         public static final int _IMAGEICON = 19;
         public static final int _DOUBLE = 20;
+        public static final int _TABLESETTINGS = 21;
     }
 
     /**

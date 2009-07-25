@@ -132,11 +132,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         for (int i = 0; i < fields.length; i++) {
             values.put(fields[i], new DcValue());
         }
-
-        // initialize system values
-        values.put(DcObject._SYS_MODULE, new DcValue());
-        setValue(DcObject._SYS_MODULE, getModule());
-
         markAsUnchanged();
     }    
     
@@ -824,6 +819,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         	
             if (index == _SYS_DISPLAYVALUE) {
                 value = toString();
+            } else if (index == _SYS_MODULE) {
+                value = getModule();
             } else {
                 value = getValueDef(index).getValue();
             }
@@ -839,13 +836,15 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public String getDisplayString(int index) {
         if (index == _SYS_DISPLAYVALUE)
             return toString();
+        else if (index == _SYS_MODULE)
+            return getModule().getObjectNamePlural();
         
         // as file mappings can be changed at any time recalculate the display value
         if (getField(index) != null &&
             (getField(index).getFieldType() == ComponentFactory._FILEFIELD ||
              getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) &&
-            getValueDef(index) != null) {
-         
+             getValueDef(index) != null) {
+
             getValueDef(index).createDisplayString(getField(index));
         }
         

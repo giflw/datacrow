@@ -493,6 +493,10 @@ public class View extends DcPanel implements ListSelectionListener {
         clear(true);
     }
     
+    public void saveSettings() {
+        vc.saveSettings();
+    }
+    
     public void applySettings() {
         setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
         

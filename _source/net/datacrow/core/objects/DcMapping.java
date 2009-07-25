@@ -59,7 +59,7 @@ public class DcMapping extends DcObject {
      */
     @Override
     public ImageIcon getIcon() {
-        return null;
+        return getReferencedObject() != null ? getReferencedObject().getIcon() : null;
     } 
     
     /**

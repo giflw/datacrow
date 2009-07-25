@@ -130,6 +130,11 @@ public class MasterView {
         getCurrent().setStatus(message);
     }    
     
+    public void saveSettings() {
+        for (View view : getViews())
+            view.saveSettings();
+    }    
+    
     public void applySettings() {
         for (View view : getViews())
             view.applySettings();

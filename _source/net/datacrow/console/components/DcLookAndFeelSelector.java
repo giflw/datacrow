@@ -55,6 +55,8 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
 
     private DcComboBox cbFieldHeight = ComponentFactory.getComboBox();
     private DcComboBox cbButtonHeight = ComponentFactory.getComboBox();
+    private DcComboBox cbTreeNodeHeight = ComponentFactory.getComboBox();
+    private DcComboBox cbTableRowHeight = ComponentFactory.getComboBox();
     
     private JCheckBox checkNoLF = ComponentFactory.getCheckBox(DcResources.getText("lblNoLF"));
     private JCheckBox checkSystemLF = ComponentFactory.getCheckBox(DcResources.getText("lblLaf"));
@@ -141,6 +143,8 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         
         cbFieldHeight.setSelectedItem(Long.valueOf(DcSettings.getInt(DcRepository.Settings.stInputFieldHeight)));
         cbButtonHeight.setSelectedItem(Long.valueOf(DcSettings.getInt(DcRepository.Settings.stButtonHeight)));
+        cbTreeNodeHeight.setSelectedItem(Long.valueOf(DcSettings.getInt(DcRepository.Settings.stTreeNodeHeight)));
+        cbTableRowHeight.setSelectedItem(Long.valueOf(DcSettings.getInt(DcRepository.Settings.stTableRowHeight)));
         
         applyModus = true;
     }
@@ -166,6 +170,8 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         comboSystemLF.setEnabled(b);
         cbButtonHeight.setEnabled(b);
         cbFieldHeight.setEnabled(b);
+        cbTreeNodeHeight.setEnabled(b);
+        cbTableRowHeight.setEnabled(b);
     }
     
     /**
@@ -174,23 +180,33 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     private void buildComponent() {
         setLayout(Layout.getGBL());
         
-        for (int i = 20; i < 50; i++)
+        for (int i = 20; i < 50; i++) {
             cbFieldHeight.addItem(Long.valueOf(i));
+            cbButtonHeight.addItem(Long.valueOf(i));
+            cbTableRowHeight.addItem(Long.valueOf(i));
+            cbTreeNodeHeight.addItem(Long.valueOf(i));
+        }
         
         cbFieldHeight.addActionListener(this);
-        cbFieldHeight.setActionCommand("changeFieldHeight");
+        cbFieldHeight.setActionCommand("applyInputFieldHeight");
         cbFieldHeight.setToolTipText(DcResources.getText("tpInputFieldHeight"));
 
-        for (int i = 20; i < 50; i++)
-            cbButtonHeight.addItem(Long.valueOf(i));
-
         cbButtonHeight.addActionListener(this);
-        cbButtonHeight.setActionCommand("changeButtonHeight");
+        cbButtonHeight.setActionCommand("applyButtonHeight");
         cbButtonHeight.setToolTipText(DcResources.getText("tpButtonHeight"));
         
+        cbTableRowHeight.addActionListener(this);
+        cbTableRowHeight.setActionCommand("applyTableRowHeight");
+        cbTableRowHeight.setToolTipText(DcResources.getText("tpTableRowHeight"));
+
+        cbTreeNodeHeight.addActionListener(this);
+        cbTreeNodeHeight.setActionCommand("applyTreeNodeHeight");
+        cbTreeNodeHeight.setToolTipText(DcResources.getText("tpTreeNodeHeight"));
+        
+        DcLabel lblTableRowHeight = ComponentFactory.getLabel(DcResources.getText("lblTableRowHeight"));
+        DcLabel lblTreeNodeHeight = ComponentFactory.getLabel(DcResources.getText("lblTreeNodeHeight"));
         DcLabel lblFieldHeight = ComponentFactory.getLabel(DcResources.getText("lblInputFieldHeight"));
         lblFieldHeight.setToolTipText(DcResources.getText("tpInputFieldHeight"));
-
         DcLabel lblButtonHeight = ComponentFactory.getLabel(DcResources.getText("lblButtonHeight"));
         lblButtonHeight.setToolTipText(DcResources.getText("tpButtonHeight"));
         
@@ -201,34 +217,45 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         comboSystemLF.addActionListener(this);
         comboSkinLF.addActionListener(this);
         
-        
         add(checkNoLF,       Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(checkSystemLF,   Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(comboSystemLF,   Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(checkSkinLF,     Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(comboSkinLF,     Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(lblFieldHeight,  Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(cbFieldHeight,   Layout.getGBC( 1, 3, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(lblButtonHeight, Layout.getGBC( 0, 4, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 0), 0, 0));
         add(cbButtonHeight,  Layout.getGBC( 1, 4, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets( 0, 0, 0, 0), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
+        add(lblTableRowHeight,Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 0), 0, 0));
+        add(cbTableRowHeight, Layout.getGBC( 1, 5, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));      
+        add(lblTreeNodeHeight,Layout.getGBC( 0, 6, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 0), 0, 0));
+        add(cbTreeNodeHeight, Layout.getGBC( 1, 6, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));         
     }
     
     public static class FontStyle {
@@ -302,15 +329,18 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     }
     
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("changeFieldHeight")) {
+        if (ae.getActionCommand().equals("applyInputFieldHeight")) {
             Long value = (Long) cbFieldHeight.getSelectedItem();
-            if (value != null) 
-                DcSettings.set(DcRepository.Settings.stInputFieldHeight, value);
-
-        } else if (ae.getActionCommand().equals("changeButtonHeight")) {
-                Long value = (Long) cbButtonHeight.getSelectedItem();
-                if (value != null) 
-                    DcSettings.set(DcRepository.Settings.stButtonHeight, value);
+            if (value != null) DcSettings.set(DcRepository.Settings.stInputFieldHeight, value);
+        } else if (ae.getActionCommand().equals("applyButtonHeight")) {
+            Long value = (Long) cbButtonHeight.getSelectedItem();
+            if (value != null) DcSettings.set(DcRepository.Settings.stButtonHeight, value);
+        } else if (ae.getActionCommand().equals("applyTreeNodeHeight")) {
+            Long value = (Long) cbTreeNodeHeight.getSelectedItem();
+            if (value != null) DcSettings.set(DcRepository.Settings.stTreeNodeHeight, value);
+        } else if (ae.getActionCommand().equals("applyTableRowHeight")) {
+            Long value = (Long) cbTableRowHeight.getSelectedItem();
+            if (value != null) DcSettings.set(DcRepository.Settings.stTableRowHeight, value);
         } else {
             applyLAF();
         }

@@ -64,6 +64,7 @@ public interface IViewComponent {
     boolean allowsVerticalTraversel();
     
     void applySettings();
+    void saveSettings();
     void updateUI(String ID);
     void afterUpdate();
 

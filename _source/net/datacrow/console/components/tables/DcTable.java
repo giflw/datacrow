@@ -84,6 +84,8 @@ import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Media;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.DcTableSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.util.DcSwingUtilities;
@@ -98,7 +100,7 @@ public class DcTable extends JTable implements IViewComponent {
     private final DcModule module;
     private final Hashtable<String, DcObject> cache = new Hashtable<String, DcObject>();
     private final TableValueChangedAction tableChangeListener = new TableValueChangedAction();
-
+    
     private final boolean caching;
     private final boolean readonly;
 
@@ -277,11 +279,18 @@ public class DcTable extends JTable implements IViewComponent {
         ignoreEdit = b;
     }
 
+    public void applyColumnWidths() {
+        for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e.hasMoreElements();) {
+            TableColumn column = e.nextElement();
+            if (!columnsHidden.contains(column) && column.getIdentifier() instanceof Integer)
+                column.setPreferredWidth(getPreferredWidth((Integer) column.getIdentifier()));
+        }
+    }
+    
     public void applyHeaders() {
         DcTableHeaderRenderer.getInstance().applySettings();
 
-        for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e
-                .hasMoreElements();) {
+        for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e.hasMoreElements();) {
             TableColumn column = e.nextElement();
             column.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
             columns.put(column.getIdentifier(), column);
@@ -359,7 +368,8 @@ public class DcTable extends JTable implements IViewComponent {
                 TableColumn column = getColumnModel().getColumn(tableIndex);
                 columnsHidden.add(column);
                 removeColumn(column);
-            } catch (Exception ignore) {
+            } catch (Exception e) {
+                logger.error("An error occurred while removing the column from the model.", e);
             }
         }
     }
@@ -700,6 +710,8 @@ public class DcTable extends JTable implements IViewComponent {
             columnNew.setIdentifier(field.getIndex());
             columnNew.setHeaderValue(field.getLabel());
 
+            columnNew.setPreferredWidth(getPreferredWidth(field.getIndex()));
+            
             JComponent comp = ComponentFactory.getComponent(module.getIndex(),
                     field.getReferenceIdx(), field.getFieldType(), field.getLabel(), field.getMaximumLength());
             comp.setAutoscrolls(false);
@@ -739,8 +751,7 @@ public class DcTable extends JTable implements IViewComponent {
             } else if (field.getIndex() == DcObject._SYS_MODULE) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
-                columnNew
-                        .setCellRenderer(ModuleTableCellRenderer.getInstance());
+                columnNew.setCellRenderer(ModuleTableCellRenderer.getInstance());
             } else if (dco instanceof Loan
                     && field.getIndex() == Loan._C_CONTACTPERSONID) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
@@ -831,10 +842,22 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
+    public void saveSettings() {
+        DcTableSettings settings = (DcTableSettings) module.getSetting(DcRepository.ModuleSettings.stTableSettings);
+        
+        if (settings == null) return;
+        
+        for (Object key : columns.keySet()) {
+            if (key instanceof Integer)
+                settings.setColumnWidth(((Integer) key).intValue(), columns.get(key).getWidth());
+        }
+        
+        module.setSetting(DcRepository.ModuleSettings.stTableSettings, settings);
+    }
+    
     public void applySettings() {
         if (!ignoreSettings) {
-            int[] fields = module.getSettings().getIntArray(
-                    DcRepository.ModuleSettings.stTableColumnOrder);
+            int[] fields = module.getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder);
             setVisibleColumns(fields);
         }
     }
@@ -890,8 +913,15 @@ public class DcTable extends JTable implements IViewComponent {
             }
         }
 
+        applyColumnWidths();
         applyHeaders();
     }
+    
+    private int getPreferredWidth(int fieldIdx) {
+        DcTableSettings settings = (DcTableSettings) module.getSetting(DcRepository.ModuleSettings.stTableSettings);
+        // 75 is defined as the default width by Swing
+        return settings == null ? 75 : settings.getWidth(fieldIdx);
+    }    
 
     private void removeColumns() {
         for (TableColumn column : columns.values())
@@ -901,10 +931,8 @@ public class DcTable extends JTable implements IViewComponent {
     public void resetTable() {
         removeColumns();
 
-        for (DcFieldDefinition definition : module.getFieldDefinitions()
-                .getDefinitions()) {
-            TableColumn column = columns.get(Integer.valueOf(definition
-                    .getIndex()));
+        for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
+            TableColumn column = columns.get(Integer.valueOf(definition.getIndex()));
             addColumn(column);
         }
     }
@@ -919,6 +947,7 @@ public class DcTable extends JTable implements IViewComponent {
         setColumnSelectionAllowed(false);
         setRequestFocusEnabled(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        //setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         setAlignmentY(JTable.TOP_ALIGNMENT);
         getTableHeader().setReorderingAllowed(false);
 
@@ -929,6 +958,8 @@ public class DcTable extends JTable implements IViewComponent {
         setShowVerticalLines(false);
         setIntercellSpacing(new Dimension());
 
+        setRowHeight(DcSettings.getInt(DcRepository.Settings.stTableRowHeight));
+        
         applyHeaders();
 
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

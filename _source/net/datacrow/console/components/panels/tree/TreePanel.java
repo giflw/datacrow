@@ -334,13 +334,19 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
                     ne.clear();
                     
                 	// remove empty branches above (needed for the file tree panel)
-                	while (parent != null) {
-                		if (((NodeElement) node.getUserObject()).size() == 0 && parent.getChildCount() == 0) {
-                			DefaultMutableTreeNode newParent = (DefaultMutableTreeNode) parent.getParent();
-                			model.removeNodeFromParent(parent);
-                			parent = newParent;
+                    DefaultMutableTreeNode parentNode2 = parent;
+                	while (parentNode2 != null) {
+                		if (((NodeElement) node.getUserObject()).size() == 0 && parentNode2.getChildCount() == 0) {
+                			
+                		    DefaultMutableTreeNode newParent = null;
+                			try {
+                			    newParent = (DefaultMutableTreeNode) parentNode2.getParent();
+                			} catch (Exception e) {}
+                			    
+                			model.removeNodeFromParent(parentNode2);
+                			parentNode2 = newParent;
                 		} else {
-                			parent = null;
+                		    parentNode2 = null;
                 		}
                 	}
                     

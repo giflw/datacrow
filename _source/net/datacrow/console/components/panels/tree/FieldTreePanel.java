@@ -153,8 +153,6 @@ public class FieldTreePanel extends TreePanel {
         return selected;
     }    
     
-
-    
     @Override
     protected JMenuBar getMenu() {
         return new FieldTreePanelMenuBar(getModule(), this);
@@ -164,6 +162,13 @@ public class FieldTreePanel extends TreePanel {
     protected void revalidateTree(DcObject dco, int modus) {
         setListeningForSelection(false);
         setSaveChanges(false);
+        
+        // if the tree has not been initialized yet:
+        if (modus == _OBJECT_ADDED &&
+            top.getChildCount() == 0) {
+            buildTree();
+            return;
+        }
         
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
@@ -279,7 +284,7 @@ public class FieldTreePanel extends TreePanel {
             
             elements.add(node.getUserObject().toString());
             Collections.sort(elements);
-            int idx = elements.indexOf(node.getUserObject().toString());
+            int idx = parent.getChildCount() == 0 ? 0 : elements.indexOf(node.getUserObject().toString());
             
             model.insertNodeInto(node, parent, idx);
             tree.expandPath(new TreePath(model.getPathToRoot(node)));
@@ -399,20 +404,17 @@ public class FieldTreePanel extends TreePanel {
         for (DcObject dco : objects) {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 List<DcObject> references = (List<DcObject>) dco.getValue(field.getIndex());
-                
                 if (references == null || references.size() == 0) {
-                    
                     addKey(keys, new NodeElement(getModule(), empty, null), dco);
                 } else {
                     Collections.sort(references);
-                    for (DcObject reference : references)
+                    for (DcObject reference : references) {
                         addKey(keys, new NodeElement(getModule(), reference.toString(), reference.getIcon()), dco);
+                    }
                 }
             } else {
-
                 String key = dco.getDisplayString(field.getIndex());
                 key = key.trim().length() == 0 ? empty : key;
-
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                 	Object value = dco.getValue(field.getIndex());
                 	value = Utilities.isEmpty(value) ? null : value;
@@ -421,7 +423,13 @@ public class FieldTreePanel extends TreePanel {
 	                    addKey(keys, new NodeElement(getModule(), key, (ref != null ? ref.getIcon() : null)), dco);
                 	}
                 } else {
-                    addKey(keys, new NodeElement(getModule(), key, null), dco);
+                    ImageIcon icon = null;
+                    if (field.getIndex() == DcObject._SYS_MODULE) {
+                        Object o = dco.getValue(field.getIndex());
+                        icon = o instanceof String ? DcModules.get((String) o).getIcon16() : 
+                               o instanceof DcModule ? ((DcModule) o).getIcon16() : null;
+                    }
+                    addKey(keys, new NodeElement(getModule(), key, icon), dco);
                 }
             }
         }

@@ -34,19 +34,27 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import net.datacrow.console.components.renderers.DcTreeRenderer;
+import net.datacrow.core.DcRepository;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 
 public class DcTree extends JTree {
  
     public DcTree(DefaultMutableTreeNode node) {
         super(node);
-        setCellRenderer(new DcTreeRenderer());
+        setProperties();
     }
 
     public DcTree(DefaultTreeModel model) {
         super(model);
+        setProperties();
+    }   
+    
+    private void setProperties() {
         setCellRenderer(new DcTreeRenderer());
-    }    
+        
+        setRowHeight(DcSettings.getInt(DcRepository.Settings.stTreeNodeHeight));
+    }
     
     @Override
     public void removeTreeSelectionListener(TreeSelectionListener tsl) {

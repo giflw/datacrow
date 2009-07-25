@@ -99,6 +99,9 @@ public class DcObjectList extends DcList implements IViewComponent {
             setLayoutOrientation(JList.VERTICAL_WRAP);
     }    
     
+    public void saveSettings() {
+    }
+
     public int getOptimalItemAdditionBatchSize() {
         return 1;
     }
