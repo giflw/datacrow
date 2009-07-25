@@ -39,6 +39,7 @@ import net.datacrow.console.components.DcColorSelector;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcTableSettings;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.settings.definitions.Definition;
 import net.datacrow.settings.definitions.IDefinitions;
@@ -337,6 +338,9 @@ public class Setting {
                     String[] sFields = new String[fields.size()];
                     value = fields.toArray(sFields);
                     break;
+                case DcRepository.ValueTypes._TABLESETTINGS:
+                    value = new DcTableSettings(sValue);
+                    break;                    
                 default:
                     value = sValue;
             }

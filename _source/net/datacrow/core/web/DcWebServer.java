@@ -125,10 +125,10 @@ public class DcWebServer {
             if (xm == null) continue;
             
             if (xm.getIcon16() != null)
-                Utilities.writeToFile(module.getXmlModule().getIcon16(), new File(dir, module.getName() + "16.png"));
+                Utilities.writeToFile(module.getXmlModule().getIcon16(), new File(dir, module.getName().toLowerCase() + "16.png"));
             
             if (xm.getIcon32() != null)
-                Utilities.writeToFile(module.getXmlModule().getIcon32(), new File(dir, module.getName() + "32.png"));
+                Utilities.writeToFile(module.getXmlModule().getIcon32(), new File(dir, module.getName().toLowerCase() + "32.png"));
         }
     }	
 }

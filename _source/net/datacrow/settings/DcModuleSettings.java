@@ -141,6 +141,15 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             false,
                             false));
         getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._TABLESETTINGS,
+                            DcRepository.ModuleSettings.stTableSettings,
+                            new DcTableSettings(module.getIndex()),
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));
+        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings,
                             Boolean.FALSE,

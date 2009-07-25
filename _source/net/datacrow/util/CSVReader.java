@@ -47,6 +47,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.datacrow.console.windows.MigrationDialog;
+
 /**
  * A very simple CSV reader released under a commercial-friendly license.
  * 
@@ -60,12 +62,14 @@ public class CSVReader {
     private String separator;
     private char quotechar= '"';
     
+    private MigrationDialog dlg;
     public static final char DEFAULT_QUOTE_CHARACTER = '\"';
     public static final int DEFAULT_SKIP_LINES = 0;
 
-    public CSVReader(Reader reader, String separator) {
+    public CSVReader(Reader reader, String separator, MigrationDialog dlg) {
         this.br = new BufferedReader(reader);
-        this.separator = separator.equalsIgnoreCase("TAB") ? "\t" : separator;
+        this.separator = separator;
+        this.dlg = dlg;
     }
 
     /**
@@ -120,7 +124,7 @@ public class CSVReader {
         StringBuffer sb = new StringBuffer();
         boolean inQuotes = false;
         do {
-        	if (inQuotes) {
+            if (inQuotes) {
                 // continuing a quoted section, re-append newline
                 sb.append("\n");
                 nextLine = getNextLine();
@@ -129,26 +133,29 @@ public class CSVReader {
             }
             for (int i = 0; i < nextLine.length(); i++) {
 
+                if (dlg != null)
+                    dlg.updateProgressBar();
+                
                 char c = nextLine.charAt(i);
                 if (c == quotechar) {
-                	// the quote may end a quoted block, or escape another quote. do a 1-char lookahead:
-                	if( inQuotes  
-                	    && nextLine.length() > (i+1)  
-                	    && nextLine.charAt(i+1) == quotechar ){
+                    // the quote may end a quoted block, or escape another quote. do a 1-char lookahead:
+                    if( inQuotes  
+                        && nextLine.length() > (i+1)  
+                        && nextLine.charAt(i+1) == quotechar ){
 
                         sb.append(nextLine.charAt(i+1));
-                		i++;
-                	} else {
-                		inQuotes = !inQuotes;
-                		// the tricky case of an embedded quote in the middle: a,bc"d"ef,g
-                		if(i>2 //not on the beginning of the line
-                				&& this.separator.equals("" + nextLine.charAt(i-1)) //not at the beginning of an escape sequence 
-                				&& nextLine.length()>(i+1) &&
-                                   !this.separator.equals("" + nextLine.charAt(i+1)) //not at the	end of an escape sequence
-                		){
-                			sb.append(c);
-                		}
-                	}
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                        // the tricky case of an embedded quote in the middle: a,bc"d"ef,g
+                        if(i>2 //not on the beginning of the line
+                                && this.separator.equals("" + nextLine.charAt(i-1)) //not at the beginning of an escape sequence 
+                                && nextLine.length()>(i+1) &&
+                                   !this.separator.equals("" + nextLine.charAt(i+1)) //not at the   end of an escape sequence
+                        ){
+                            sb.append(c);
+                        }
+                    }
                 } else if (("" + c).equals(separator) && !inQuotes) {
                     String val = sb.toString();
                     tokensOnThisLine.add(val.startsWith("\"") ? val.substring(1, val.length()) : val);
@@ -167,6 +174,6 @@ public class CSVReader {
      * Closes the underlying reader.
      */
     public void close() throws IOException{
-    	br.close();
+        br.close();
     }
 }

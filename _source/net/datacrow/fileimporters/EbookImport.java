@@ -28,6 +28,7 @@ package net.datacrow.fileimporters;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -82,26 +83,32 @@ public class EbookImport extends FileImporter {
                 FileChannel channel = raf.getChannel();
                 ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
                 PDFFile pdffile = new PDFFile(buf);
-                
-                book.setValue(Book._T_NROFPAGES, Long.valueOf(pdffile.getNumPages()));
-                Iterator<String> it = pdffile.getMetadataKeys();
-                while (it.hasNext()) {
-                    String key = it.next();
-                    String value = pdffile.getStringMetadata(key);
-                    
-                    if (!Utilities.isEmpty(value)) {
-                        if (key.equalsIgnoreCase("Author"))
-                            DataManager.createReference(book, Book._G_AUTHOR, value);
-                        if (key.equalsIgnoreCase("Title") && !value.trim().equalsIgnoreCase("untitled"))
-                            book.setValue(Book._A_TITLE, value);
+
+                try {
+                    book.setValue(Book._T_NROFPAGES, Long.valueOf(pdffile.getNumPages()));
+                    Iterator<String> it = pdffile.getMetadataKeys();
+                    while (it.hasNext()) {
+                        String key = it.next();
+                        String value = pdffile.getStringMetadata(key);
+                        
+                        if (!Utilities.isEmpty(value)) {
+                            if (key.equalsIgnoreCase("Author"))
+                                DataManager.createReference(book, Book._G_AUTHOR, value);
+                            if (key.equalsIgnoreCase("Title") && !value.trim().equalsIgnoreCase("untitled"))
+                                book.setValue(Book._A_TITLE, value);
+                        }
                     }
+                } catch (IOException ioe) {
+                    listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
                 }
 
                 // draw the first page to an image
                 PDFPage page = pdffile.getPage(0);
-                Rectangle rect = new Rectangle(0,0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
-                Image front = page.getImage(rect.width, rect.height, rect, null, true, true);
-                book.setValue(Book._K_PICTUREFRONT, new DcImageIcon(Utilities.getBytes(new ImageIcon(front))));
+                if (page != null) {
+                    Rectangle rect = new Rectangle(0,0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
+                    Image front = page.getImage(rect.width, rect.height, rect, null, true, true);
+                    book.setValue(Book._K_PICTUREFRONT, new DcImageIcon(Utilities.getBytes(new ImageIcon(front))));
+                }
             }
             
             Hash.getInstance().calculateHash(book);
