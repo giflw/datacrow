@@ -162,7 +162,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.Settings.stTreeNodeHeight,
-                            Long.valueOf(25),
+                            Long.valueOf(20),
                             -1,
                             "",
                             "",

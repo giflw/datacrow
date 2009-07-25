@@ -161,12 +161,17 @@ public abstract class FileImporter {
                     for (String filename : sources) {
                         if  (listener.cancelled()) break;
                         
-                        parse(listener, filename);
+                        try {
+                            parse(listener, filename);
+                        } catch (Exception e) {
+                            listener.addError(e);
+                            logger.error("An unhandled error occured during the import of " + filename, e);
+                        }
                         listener.updateProgressBar(counter++);
                     }
+                    listener.addMessage(DcResources.getText("msgImportStops"));
                 } finally {
                     afterImport(listener);
-                    listener.addMessage(DcResources.getText("msgImportStops"));
                     listener.finish();
                 }
             }
