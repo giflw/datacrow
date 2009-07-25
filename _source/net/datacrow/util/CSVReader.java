@@ -47,8 +47,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.datacrow.console.windows.MigrationDialog;
-
 /**
  * A very simple CSV reader released under a commercial-friendly license.
  * 
@@ -62,14 +60,12 @@ public class CSVReader {
     private String separator;
     private char quotechar= '"';
     
-    private MigrationDialog dlg;
     public static final char DEFAULT_QUOTE_CHARACTER = '\"';
     public static final int DEFAULT_SKIP_LINES = 0;
 
-    public CSVReader(Reader reader, String separator, MigrationDialog dlg) {
+    public CSVReader(Reader reader, String separator) {
         this.br = new BufferedReader(reader);
-        this.separator = separator;
-        this.dlg = dlg;
+        this.separator = separator.equalsIgnoreCase("TAB") ? "\t" : separator;
     }
 
     /**
@@ -133,9 +129,6 @@ public class CSVReader {
             }
             for (int i = 0; i < nextLine.length(); i++) {
 
-                if (dlg != null)
-                    dlg.updateProgressBar();
-                
                 char c = nextLine.charAt(i);
                 if (c == quotechar) {
                 	// the quote may end a quoted block, or escape another quote. do a 1-char lookahead:
