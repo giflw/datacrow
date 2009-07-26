@@ -40,7 +40,8 @@ class FilePropertiesMKV extends FileProperties {
 	protected void process(RandomAccessFile raf, String filename) throws Exception {
         raf.seek(0);
         
-        MatroskaFile mkf = new MatroskaFile(new FileDataSource(filename));
+        FileDataSource fds = new FileDataSource(filename);
+        MatroskaFile mkf = new MatroskaFile(fds);
 		mkf.readFile();
 
 		double duration = mkf.getDuration();
@@ -73,6 +74,8 @@ class FilePropertiesMKV extends FileProperties {
     		    }
     		}
 		}
+		
+		fds.close();
 		setContainer("MKV (Matroska)");
 	}
 }
