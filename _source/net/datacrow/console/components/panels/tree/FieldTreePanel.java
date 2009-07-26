@@ -92,6 +92,7 @@ public class FieldTreePanel extends TreePanel {
         boolean oldPathExists = removed ? exists(oldPath) : false;
         
         String[] keys = removed || oldPathExists ? oldPath : new String[fields.length + 1];
+        keys = keys.length == 0 ?  new String[1] : keys;
         keys[0] = ((NodeElement) top.getUserObject()).getKey();
         
         if (!removed && !oldPathExists) {

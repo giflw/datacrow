@@ -62,9 +62,11 @@ public class ProgressDialog extends DcDialog {
     }
     
     public void update() {
-        int value = bar.getValue();
-        value = value < bar.getMaximum() ? value + 1 : 0; 
-        bar.setValue(value);
+        if (bar != null) {
+            int value = bar.getValue();
+            value = value < bar.getMaximum() ? value + 1 : 0; 
+            bar.setValue(value);
+        }
     }
     
     @Override
