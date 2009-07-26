@@ -43,7 +43,12 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.services.Region;
+import net.datacrow.core.services.SearchMode;
+import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.settings.Settings;
+import net.datacrow.synchronizers.ISynchronizerClient;
+import net.datacrow.synchronizers.Synchronizer;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Directory;
 import net.datacrow.util.StringUtils;
@@ -58,11 +63,20 @@ import org.apache.log4j.Logger;
  * 
  * @author Robert Jan van der Waals
  */
-public abstract class FileImporter {
+public abstract class FileImporter implements ISynchronizerClient {
 
     private static Logger logger = Logger.getLogger(FileImporter.class.getName());
     
     private final int module;
+    private IFileImportClient client;
+    
+    public void setClient(IFileImportClient client) {
+        this.client = client;
+    }
+    
+    public IFileImportClient getClient() {
+        return client;
+    }
     
     /**
      * Creates a new instance.
@@ -95,7 +109,7 @@ public abstract class FileImporter {
      * Depends on a specific implementation.
      * @throws ParseException
      */
-    public abstract DcObject parse(IFileImportClient listener, String filename, int directoryUsage);
+    public abstract DcObject parse(String filename, int directoryUsage);
     
     public abstract String[] getDefaultSupportedFileTypes();
 
@@ -135,12 +149,10 @@ public abstract class FileImporter {
     
     /**
      * Starts the parsing task.
-     * @param listener The listener to be updated on events and result.
      * @param sources The files to check.
      * @throws Exception
      */
-    public void parse(final IFileImportClient listener, 
-                      final Collection<String> sources) throws Exception {
+    public void parse(final Collection<String> sources) throws Exception {
         
         beforeParse();
         
@@ -149,30 +161,30 @@ public abstract class FileImporter {
         
         Thread thread = new Thread(new Runnable() {
             public void run() {
-                listener.addMessage(DcResources.getText("msgImportStarts"));
+                getClient().addMessage(DcResources.getText("msgImportStarts"));
                 DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
-                listener.addMessage(DcResources.getText("msgParsingXFiles", 
+                getClient().addMessage(DcResources.getText("msgParsingXFiles", 
                                     String.valueOf(sources.size())));
                 
-                listener.initProgressBar(sources.size());
+                getClient().initProgressBar(sources.size());
                 
                 try {
                     int counter = 1;
                     for (String filename : sources) {
-                        if  (listener.cancelled()) break;
+                        if  (getClient().cancelled()) break;
                         
                         try {
-                            parse(listener, filename);
+                            parse(filename);
                         } catch (Exception e) {
-                            listener.addError(e);
+                            getClient().addError(e);
                             logger.error("An unhandled error occured during the import of " + filename, e);
                         }
-                        listener.updateProgressBar(counter++);
+                        getClient().updateProgressBar(counter++);
                     }
-                    listener.addMessage(DcResources.getText("msgImportStops"));
+                    getClient().addMessage(DcResources.getText("msgImportStops"));
                 } finally {
-                    afterImport(listener);
-                    listener.finish();
+                    afterImport();
+                    getClient().finish();
                 }
             }
         });
@@ -185,12 +197,12 @@ public abstract class FileImporter {
      * @param listener
      * @param filename
      */
-    protected void parse(IFileImportClient listener, String filename) {
-        int module = listener.getModule().getIndex();
+    protected void parse(String filename) {
+        int module = getClient().getModule().getIndex();
         
         module = module == DcModules._MUSICALBUM ? DcModules._MUSICTRACK : module;
         
-        DataFilter df = new DataFilter(listener.getModule().getIndex());
+        DataFilter df = new DataFilter(getClient().getModule().getIndex());
         df.addEntry(new DataFilterEntry(
                 DataFilterEntry._AND, module, 
                 DcObject._SYS_FILENAME, Operator.EQUAL_TO, filename));
@@ -198,49 +210,48 @@ public abstract class FileImporter {
         DcObject[] objects = DataManager.get(module, df);
         
         if (objects.length > 0) {
-            listener.addMessage(DcResources.getText("msgSkippingAlreadyImportedFile", 
+            getClient().addMessage(DcResources.getText("msgSkippingAlreadyImportedFile", 
                                 new String[] {filename, objects[0].toString()}));
             
         } else {
-            listener.addMessage(DcResources.getText("msgProcessingFileX", filename));
-            DcObject dco = parse(listener, filename, listener.getDirectoryUsage());
+            getClient().addMessage(DcResources.getText("msgProcessingFileX", filename));
+            DcObject dco = parse(filename, getClient().getDirectoryUsage());
                 
-            if (listener.getStorageMedium() != null) { 
+            if (getClient().getStorageMedium() != null) { 
                 for (DcField  field : dco.getFields()) {
                     if (field.getSourceModuleIdx() == DcModules._STORAGEMEDIA)
-                        DataManager.createReference(dco, field.getIndex(), listener.getStorageMedium());
+                        DataManager.createReference(dco, field.getIndex(), getClient().getStorageMedium());
                 }
             }
     
-            if (listener.getDcContainer() != null && dco.getModule().isContainerManaged())
-                DataManager.createReference(dco, DcObject._SYS_CONTAINER, listener.getDcContainer());
+            if (getClient().getDcContainer() != null && dco.getModule().isContainerManaged())
+                DataManager.createReference(dco, DcObject._SYS_CONTAINER, getClient().getDcContainer());
             
             dco.applyTemplate();
             dco.setIDs();
-            afterParse(listener, dco);
+            afterParse(dco);
         }
     }
     
     /**
      * Called after finishing the whole parsing process.
      */
-    protected void afterImport(IFileImportClient listener) {}
+    protected void afterImport() {}
     
     /**
      * Called after parsing a single file.
      * @param listener
      * @param dco
      */
-    protected void afterParse(IFileImportClient listener, DcObject dco) {
-        if (listener.useOnlineServices()) {
-            listener.addMessage(DcResources.getText("msgSearchingOnlineFor", StringUtils.normalize(dco.toString())));
+    protected void afterParse(DcObject dco) {
+        if (getClient().useOnlineServices()) {
+            getClient().addMessage(DcResources.getText("msgSearchingOnlineFor", StringUtils.normalize(dco.toString())));
             
             String originalTitle = (String) dco.getValue(DcMediaObject._A_TITLE);
             dco.setValue(DcMediaObject._A_TITLE, StringUtils.normalize(originalTitle));
             
-            listener.getModule().getSynchronizer().onlineUpdate(dco, listener.getServer(), 
-                                                                listener.getRegion(), 
-                                                                listener.getSearchMode());
+            getClient().getModule().getSynchronizer().onlineUpdate(this, dco);
+            
             
             dco.setValue(DcMediaObject._A_TITLE, originalTitle);
         }
@@ -349,5 +360,46 @@ public abstract class FileImporter {
                 logger.error(e, e);
             }
         }
+    }
+
+    public void addMessage(String message) {
+        logger.info(message);
+    }
+
+    public void enableActions(boolean b) {}
+
+    public int getItemPickMode() {
+        return Synchronizer._ALL;
+    }
+
+    public Region getRegion() {
+        return getClient().getRegion();
+    }
+
+    public SearchMode getSearchMode() {
+        return getClient().getSearchMode();
+    }
+
+    public IServer getServer() {
+        // TODO Auto-generated method stub
+        return getClient().getServer();
+    }
+
+    public void initialize() {}
+
+    public void initProgressBar(int max) {}
+
+    public boolean isCancelled() {
+        return false;
+    }
+
+    public boolean isReparseFiles() {
+        return false;
+    }
+
+    public void updateProgressBar() {}
+
+    public boolean useOnlineService() {
+        return client.useOnlineServices();
     }
 }

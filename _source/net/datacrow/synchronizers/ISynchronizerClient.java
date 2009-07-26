@@ -23,56 +23,35 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.fileimporters;
+package net.datacrow.synchronizers;
 
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.helpers.Software;
-import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.Hash;
+import net.datacrow.core.services.Region;
+import net.datacrow.core.services.SearchMode;
+import net.datacrow.core.services.plugin.IServer;
 
-/**
- * Imports software files.
- * @author Robert Jan van der Waals
- */
-public class SoftwareImporter extends FileImporter {
-
-    public SoftwareImporter() {
-        super(DcModules._SOFTWARE);
-    }
-
-    @Override
-    public String[] getDefaultSupportedFileTypes() {
-        return new String[] {};
-    }
+public interface ISynchronizerClient {
     
-    @Override
-    public boolean allowDirectoryRegistration() {
-        return true;
-    }
+    public boolean isCancelled();
+    
+    public void initProgressBar(int max);
 
-    @Override
-    public boolean allowReparsing() {
-        return true;
-    }    
+    public void updateProgressBar();
     
-    @Override
-    public boolean canImportArt() {
-        return true;
-    }    
+    public void addMessage(String message);
     
-    @Override
-    public DcObject parse(String filename, int directoryUsage) {
-        Software software = new Software();
-        
-        try {
-            software.setValue(Software._A_TITLE, getName(filename, directoryUsage));
-            software.setValue(Software._SYS_FILENAME, filename);
-        	Hash.getInstance().calculateHash(software);
-        } catch (Exception exp) {
-            getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
-        }
-        
-        return software;
-    }
+    public boolean isReparseFiles();
+
+    public boolean useOnlineService();
+    
+    public void enableActions(boolean b);
+
+    public void initialize();
+    
+    public IServer getServer();
+
+    public Region getRegion();
+
+    public SearchMode getSearchMode();
+    
+    public int getItemPickMode();
 }

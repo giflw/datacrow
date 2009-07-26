@@ -77,12 +77,12 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
         
         boolean updated = false;
         
-        if (!isReparseFiles()) 
+        if (!client.isReparseFiles()) 
             return updated;
             
         for (DcObject child : dco.getChildren()) {
             
-            if (isCancelled()) break;
+            if (client.isCancelled()) break;
             
             String filename = child.getFilename();
             
@@ -93,7 +93,7 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
             if (!tst.exists())
                 filename = filename.replaceAll("`", "'");
             
-            addMessage(DcResources.getText("msgParsing", filename));
+            client.addMessage(DcResources.getText("msgParsing", filename));
             
             MusicFile musicFile = new MusicFile(filename);
 
@@ -125,7 +125,7 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
     @Override
     protected boolean matches(DcObject result, String searchString, int fieldIdx) {
         boolean matches = super.matches(result, searchString, fieldIdx);
-        if (matches && (getSearchMode() == null || getSearchMode().keywordSearch())) {
+        if (matches && (client.getSearchMode() == null || client.getSearchMode().keywordSearch())) {
             // Additionally one of the artists has to match. Only used for keyword searches!
             Collection<DcMapping> artists1 = (Collection<DcMapping>) result.getValue(MusicAlbum._F_ARTISTS);
             Collection<DcMapping> artists2 = (Collection<DcMapping>) getDcObject().getValue(MusicAlbum._F_ARTISTS);

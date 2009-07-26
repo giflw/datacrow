@@ -40,22 +40,22 @@ import net.datacrow.core.resources.DcResources;
  */
 public class ImportBatch extends Thread {
 
-    protected IFileImportClient listener;
+    protected IFileImportClient client;
     protected FileImporter importer;
     protected Collection<String> sources;
     
     /**
      * Creates a new import batch.
-     * @param listener 
+     * @param client 
      * @param importer
      * @param sources
      * @throws Exception
      */
-    public ImportBatch(IFileImportClient listener, 
+    public ImportBatch(IFileImportClient client, 
                        FileImporter importer, 
                        Collection<String> sources) throws Exception {
         
-        this.listener = listener;
+        this.client = client;
         this.importer = importer;
         this.sources = sources;
         
@@ -67,7 +67,7 @@ public class ImportBatch extends Thread {
         try {
             parse(sources);
         } catch (Exception e) {
-            listener.addError(e);
+            client.addError(e);
         }
     }    
     
@@ -77,22 +77,22 @@ public class ImportBatch extends Thread {
      */
     protected void parse(Collection<String> files) {
         try {
-            listener.addMessage(DcResources.getText("msgImportFoundXResults", "" + files.size()));
-            listener.initProgressBar(files.size());
+            client.addMessage(DcResources.getText("msgImportFoundXResults", "" + files.size()));
+            client.initProgressBar(files.size());
             int counter = 1;
             
             for (String filename : files) {
 
-                if  (listener.cancelled()) break;
+                if  (client.cancelled()) break;
 
                 DcObject dco = parse(filename);
                 
                 DcModules.getCurrent().getCurrentInsertView().add(dco, false);
-                listener.updateProgressBar(counter++);
+                client.updateProgressBar(counter++);
             }
         } finally {
-            listener.addMessage(DcResources.getText("msgImportStops"));
-            listener.finish();
+            client.addMessage(DcResources.getText("msgImportStops"));
+            client.finish();
             cleanup();
         }
     }   
@@ -101,7 +101,7 @@ public class ImportBatch extends Thread {
      * Free resources.
      */
     protected void cleanup() {
-        listener = null;
+        client = null;
         importer = null;
         sources.clear();
         sources = null;
@@ -114,18 +114,18 @@ public class ImportBatch extends Thread {
      * @return The result (never null)
      */
     protected DcObject parse(String filename) {
-        listener.addMessage(DcResources.getText("msgProcessingFileX", filename));
-        DcObject dco = importer.parse(listener, filename, listener.getDirectoryUsage()); 
+        client.addMessage(DcResources.getText("msgProcessingFileX", filename));
+        DcObject dco = importer.parse(filename, client.getDirectoryUsage()); 
             
-        if (listener.getStorageMedium() != null) { 
+        if (client.getStorageMedium() != null) { 
             for (DcField  field : dco.getFields()) {
                 if (field.getSourceModuleIdx() == DcModules._STORAGEMEDIA)
-                    dco.setValue(field.getIndex(), listener.getStorageMedium());
+                    dco.setValue(field.getIndex(), client.getStorageMedium());
             }
         }
 
-        if (listener.getDcContainer() != null && dco.getField(DcObject._SYS_CONTAINER) != null) {
-            dco.setValue(DcObject._SYS_CONTAINER, listener.getDcContainer());
+        if (client.getDcContainer() != null && dco.getField(DcObject._SYS_CONTAINER) != null) {
+            dco.setValue(DcObject._SYS_CONTAINER, client.getDcContainer());
         }
         
         dco.applyTemplate();

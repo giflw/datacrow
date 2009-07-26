@@ -28,8 +28,6 @@ package net.datacrow.synchronizers;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
@@ -41,12 +39,13 @@ import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
-import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
+
+import org.apache.log4j.Logger;
 
 public abstract class DefaultSynchronizer extends Synchronizer {
 
@@ -84,7 +83,8 @@ public abstract class DefaultSynchronizer extends Synchronizer {
     }
     
     @Override
-    public boolean onlineUpdate(DcObject dco, IServer server, Region region, SearchMode mode) {
+    public boolean onlineUpdate(ISynchronizerClient client, DcObject dco) {
+        this.client = client;
         this.dco = dco;
 
         // use the original service settings
@@ -93,14 +93,14 @@ public abstract class DefaultSynchronizer extends Synchronizer {
 
         } else { 
             boolean updated = false;
-            int fieldIdx = getSearchFieldIdx(mode);
-            String searchString = getSearchString(fieldIdx, server);
+            int fieldIdx = getSearchFieldIdx(client.getSearchMode());
+            String searchString = getSearchString(fieldIdx, client.getServer());
             if (Utilities.isEmpty(searchString)) return updated;
             
             OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
-            osh.setServer(server);
-            osh.setRegion(region);
-            osh.setMode(mode);
+            osh.setServer(client.getServer());
+            osh.setRegion(client.getRegion());
+            osh.setMode(client.getSearchMode());
             osh.setMaximum(2);
             
             Collection<DcObject> results = osh.query(searchString);
@@ -144,24 +144,24 @@ public abstract class DefaultSynchronizer extends Synchronizer {
         @Override
         public void run() {
             try {
-                initialize();
+                client.initialize();
                 
                 View view = DcModules.getCurrent().getCurrentSearchView();
                 Collection<DcObject> objects = new ArrayList<DcObject>();
-                objects.addAll(dlg.getItemPickMode() == _ALL ? view.getItems() : view.getSelectedItems());                
-                initProgressBar(objects.size());
+                objects.addAll(client.getItemPickMode() == _ALL ? view.getItems() : view.getSelectedItems());                
+                client.initProgressBar(objects.size());
                 
                 for (DcObject dco : objects) {
-                    if (isCancelled()) break;
+                    if (client.isCancelled()) break;
                     
                     boolean updated = false;
                     
-                    addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
+                    client.addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
                     
                     updated = parseFiles(dco);
-                    updated |= onlineUpdate(dco, getServer(), getRegion(), getSearchMode());
+                    updated |= onlineUpdate(client, dco);
                     
-                    updateProgressBar();
+                    client.updateProgressBar();
                     
                     try {
                         if (updated) {
@@ -175,12 +175,12 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                             }
                         }
                     } catch (ValidationException ve) {
-                        addMessage(ve.getMessage());
+                        client.addMessage(ve.getMessage());
                     }
                 }
             } finally {
-                addMessage(DcResources.getText("msgSynchronizerEnded"));
-                enableAction(true);
+                client.addMessage(DcResources.getText("msgSynchronizerEnded"));
+                client.enableActions(true);
             }  
         }
     }

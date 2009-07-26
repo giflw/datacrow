@@ -205,7 +205,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         saveSettings();
         try {
             cancelled = false;
-            importer.parse(this, panelFs.getFiles(false));
+            importer.setClient(this);
+            importer.parse(panelFs.getFiles(false));
         } catch (Exception e) {
             new MessageBox(e.getMessage(), MessageBox._INFORMATION);
             finish();

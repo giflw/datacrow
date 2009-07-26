@@ -87,22 +87,22 @@ public class MusicAlbumImporter extends FileImporter {
     }
     
     @Override
-    protected void afterParse(IFileImportClient listener, DcObject dco) {
+    protected void afterParse(DcObject dco) {
         if (!albums.contains(dco))
             albums.add(dco);
     }
 
     @Override
-    protected void afterImport(IFileImportClient listener) {
+    protected void afterImport() {
         for (DcObject dco : albums) {
         	Collection<DcObject> children = dco.getChildren();
         	if (children != null && children.size() > 0) 
-        		super.afterParse(listener, dco);
+        		super.afterParse(dco);
         }
     }
 
     @Override
-    public DcObject parse(IFileImportClient listener,  String filename, int directoryUsage) {
+    public DcObject parse(String filename, int directoryUsage) {
         DcObject ma = new MusicAlbum();
 
         try {
@@ -185,7 +185,7 @@ public class MusicAlbumImporter extends FileImporter {
             ma.addChild(mt);
             
         } catch (Exception exp) {
-            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+            getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
 
         ma.setIDs();

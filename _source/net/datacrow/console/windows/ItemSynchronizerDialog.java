@@ -54,9 +54,10 @@ import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.synchronizers.ISynchronizerClient;
 import net.datacrow.synchronizers.Synchronizer;
 
-public class ItemSynchronizerDialog extends DcDialog implements ActionListener {
+public class ItemSynchronizerDialog extends DcDialog implements ActionListener, ISynchronizerClient {
     
     private DcProgressBar progressBar = new DcProgressBar();
     private JTextArea textLog = ComponentFactory.getTextArea();

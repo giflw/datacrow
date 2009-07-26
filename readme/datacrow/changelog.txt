@@ -6,6 +6,7 @@ Data Crow 3.4.13 [Release on xx/07/2009] [testing: high] [target: production]
 - MKV files locked by the music file import process (fixed in the Matroska third party
   library).
 - Import of e-Books gets stuck when importing a large amount.  
+- NullPointerException during music album import in combination with an online service.
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.13 [Release on 25/07/2009] [testing: high] [target: production]

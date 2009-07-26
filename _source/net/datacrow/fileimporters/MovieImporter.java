@@ -61,7 +61,7 @@ public class MovieImporter extends FileImporter {
     }    
 
     @Override
-    public DcObject parse(IFileImportClient listener,  String filename, int directoryUsage) {
+    public DcObject parse(String filename, int directoryUsage) {
         Movie movie = new Movie();
 
         movie.setValue(Movie._SYS_FILENAME, filename);
@@ -102,7 +102,7 @@ public class MovieImporter extends FileImporter {
             movie.setValue(Movie._W_VIDEOBITRATE, Long.valueOf(bitrate));
 
         } catch (Exception exp) {
-            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+            getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
         
         return movie;

@@ -78,7 +78,7 @@ public class ImageImporter extends FileImporter {
     }    
     
     @Override
-    public DcObject parse(IFileImportClient listener, String filename, int directoryUsage) {
+    public DcObject parse(String filename, int directoryUsage) {
         Image image = new Image();
         
         try {
@@ -172,7 +172,7 @@ public class ImageImporter extends FileImporter {
             } catch (JpegProcessingException jpe) {}
             
         } catch (Exception exp) {
-            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+            getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
         
         return image;

@@ -70,7 +70,7 @@ public class EbookImport extends FileImporter {
     }    
     
     @Override
-    public DcObject parse(IFileImportClient listener, String filename, int directoryUsage) {
+    public DcObject parse(String filename, int directoryUsage) {
         Book book = new Book();
         
         try {
@@ -103,7 +103,7 @@ public class EbookImport extends FileImporter {
                             }
                         }
                     } catch (IOException ioe) {
-                        listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+                        getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
                     }
     
                     // draw the first page to an image
@@ -122,7 +122,7 @@ public class EbookImport extends FileImporter {
             
             Hash.getInstance().calculateHash(book);
         } catch (Exception exp) {
-            listener.addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+            getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
         
         return book;

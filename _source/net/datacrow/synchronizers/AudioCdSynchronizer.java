@@ -63,7 +63,7 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
     @Override
     protected boolean matches(DcObject result, String searchString, int fieldIdx) {
         boolean matches = super.matches(result, searchString, fieldIdx);
-        if (matches && (getSearchMode() == null || getSearchMode().keywordSearch())) {
+        if (matches && (client.getSearchMode() == null || client.getSearchMode().keywordSearch())) {
             // Additionally one of the artists has to match. Only used for keyword searches!
             Collection<DcMapping> artists1 = (Collection<DcMapping>) result.getValue(AudioCD._F_ARTIST);
             Collection<DcMapping> artists2 = (Collection<DcMapping>) getDcObject().getValue(AudioCD._F_ARTIST);
