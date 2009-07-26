@@ -4,6 +4,8 @@ Data Crow 3.4.13.1 [Release on 26/07/2009] [testing: high] [target: production]
 This patch fixes a couple of issues related to the mass update and the file 
 import functionality.
 
+Extract this patch to the installation folder of data crow, overwrite the existing files.
+
 [Fixed]
 - MKV files locked by the music file import process (fixed in the Matroska third party
   library).
