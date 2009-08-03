@@ -1,4 +1,24 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.13.2 [Release on 03/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Edit as new for users: when using this functionality the user is not created correctly.
+  The functionality has been removed for the users module.
+- The view is not populated (at all) when the grouping pane has been disabled.
+- Directories cannot be opened by the File Launcher.
+- [2788061] NPE while external images insert/delete.
+- [2825152] Not all files are imported (File Import > Books). The error handling has
+  been improved to catch out of memory errors (which can occur when dealing with large
+  files).
+- [2790438] Filename cannot be cleared. You can now right click on the file field to  
+  clear it.
+  
+[Changed]
+- Double clicking on the file field will now open the file / directory.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.13.1 [Release on 26/07/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 This patch fixes a couple of issues related to the mass update and the file 

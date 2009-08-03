@@ -30,11 +30,15 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JToolTip;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -45,7 +49,7 @@ import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.FileLauncher;
 import net.datacrow.util.Utilities;
 
-public class DcFileLauncherField extends JComponent implements IComponent, ActionListener {
+public class DcFileLauncherField extends JComponent implements IComponent, ActionListener, MouseListener {
 
     private DcShortTextField text;
     private JButton buttonBrowse;
@@ -74,6 +78,8 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         add( buttonLaunch, Layout.getGBC( 2, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.EAST, GridBagConstraints.NONE,
                  new Insets(0, 0, 0, 0), 0, 0));    
+        
+        text.addMouseListener(this);
     }
     
     public void clear() {
@@ -122,16 +128,22 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         dialog.dispose();
         dialog = null;
     }
-
-    public void actionPerformed(ActionEvent e) {
-        if (    e.getActionCommand().equals("launchFile") && 
-                text.getText() != null && text.getText().length() > 0) {
-            
+    
+    private void launch() {
+        if (!Utilities.isEmpty(text.getText())) {
             String filename = Utilities.getMappedFilename(text.getText());
             new FileLauncher(filename).launchFile();
-        } else if (e.getActionCommand().equals("showFileOpenDialog")) {
+        }
+    }
 
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("launchFile")) {
+            launch();
+        } else if (e.getActionCommand().equals("showFileOpenDialog")) {
             showFileOpenDialog();
+        } else if (e.getActionCommand().equals("clear")) {
+            file = null;
+            text.setText("");
         }
     }
     
@@ -143,5 +155,23 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
-    }    
+    }   
+    
+    public void mouseReleased(MouseEvent e) {
+        if (SwingUtilities.isRightMouseButton(e)) {
+            DcPopupMenu popup = new DcPopupMenu();
+            JMenuItem mi = ComponentFactory.getMenuItem(DcResources.getText("lblClear"));
+            mi.addActionListener(this);
+            mi.setActionCommand("clear");
+            popup.add(mi);
+            popup.show(this, e.getX(), e.getY());
+        } 
+
+        if (e.getClickCount() == 2)
+            launch();
+    }
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {}    
 }

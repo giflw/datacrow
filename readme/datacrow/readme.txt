@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.4.13 patch 1
-Created on 26/07/2009
+Version 3.4.13 patch 2
+Created on 03/08/2009
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
