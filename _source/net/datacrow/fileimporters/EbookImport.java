@@ -36,6 +36,8 @@ import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
@@ -55,6 +57,8 @@ import com.sun.pdfview.PDFPage;
  */
 public class EbookImport extends FileImporter {
 
+    private static Logger logger = Logger.getLogger(DataManager.class.getName());
+    
     public EbookImport() {
         super(DcModules._BOOK);
     }
@@ -121,10 +125,16 @@ public class EbookImport extends FileImporter {
             }
             
             Hash.getInstance().calculateHash(book);
+        } catch (OutOfMemoryError err) {
+            logger.error(err, err);
+            getClient().addMessage(DcResources.getText("msgOutOfMemory"));
         } catch (Exception exp) {
+            logger.error(exp, exp);
+            getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+        } catch (Error err) {
+            logger.error(err, err);
             getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
         }
-        
         return book;
     }    
 }

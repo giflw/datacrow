@@ -175,7 +175,7 @@ public abstract class FileImporter implements ISynchronizerClient {
                         
                         try {
                             parse(filename);
-                        } catch (Exception e) {
+                        } catch (Throwable e) {
                             getClient().addError(e);
                             logger.error("An unhandled error occured during the import of " + filename, e);
                         }

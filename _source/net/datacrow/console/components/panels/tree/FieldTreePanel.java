@@ -338,6 +338,13 @@ public class FieldTreePanel extends TreePanel {
         if (isShowing())
             setDefaultSelection();
         
+        // if the tree is not active (at all) make sure the view is at least filled.
+        // Fix for: 2831212
+        if (!isActive()) {
+            setListeningForSelection(true);
+            tree.setSelectionInterval(0, 0);
+        }
+        
         tree.setEnabled(true);
         revalidate();
         repaint();

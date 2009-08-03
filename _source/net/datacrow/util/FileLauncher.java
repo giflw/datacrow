@@ -56,16 +56,10 @@ public class FileLauncher {
             return;
         }
             
-        String extension = Utilities.getExtension(file);
-        if (extension == null || extension.length() == 0) {
-            new MessageBox(DcResources.getText("msgInvalidExtension", filename), MessageBox._WARNING);
-            return;
-        }
-        
-
         ProgramDefinitions definitions = (ProgramDefinitions) DcSettings.getDefinitions(DcRepository.Settings.stProgramDefinitions);
         String program = null;
-        if (definitions != null) 
+        String extension = Utilities.getExtension(file);
+        if (definitions != null && !Utilities.isEmpty(extension)) 
             program = definitions.getProgramForExtension(extension);
 
         if (program == null || program.trim().length() == 0) {

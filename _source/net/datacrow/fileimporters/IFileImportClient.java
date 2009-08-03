@@ -50,7 +50,7 @@ public interface IFileImportClient {
      * Adds an error.
      * @param e
      */
-    public void addError(Exception e);
+    public void addError(Throwable e);
     
     /**
      * Sets the expected result count.

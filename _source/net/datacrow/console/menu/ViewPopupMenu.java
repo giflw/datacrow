@@ -57,7 +57,9 @@ public class ViewPopupMenu extends DcPopupMenu {
                 PluginHelper.add(this, "SaveSelected");
             
             PluginHelper.add(this, "OpenItem");
-            PluginHelper.add(this, "EditAsNew", null, dco, null, -1, module.getIndex());
+            
+            if (module.getIndex() != DcModules._USER)
+                PluginHelper.add(this, "EditAsNew", null, dco, null, -1, module.getIndex());
         }
         
         if (viewIdx == View._TYPE_SEARCH) { 

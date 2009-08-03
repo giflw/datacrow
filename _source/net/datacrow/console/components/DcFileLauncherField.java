@@ -92,8 +92,8 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
 
     public void setFile(File file) {
         String filename = file == null ? "" : file.toString();
-        this.file = new File(filename);
-        text.setText(Utilities.getMappedFilename(filename));
+        this.file =  file;//new File(filename);
+        text.setText(file == null ? "" : Utilities.getMappedFilename(filename));
     }
     
     public void setValue(Object value) {
