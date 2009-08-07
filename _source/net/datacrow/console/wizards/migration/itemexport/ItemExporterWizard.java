@@ -32,7 +32,7 @@ public class ItemExporterWizard extends Wizard {
     @Override
     protected List<IWizardPanel> getWizardPanels() {
     	List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
-//    	panels
+    	panels.add(new ItemExporterSettingsPanel(this));
     	return panels;
     }
 

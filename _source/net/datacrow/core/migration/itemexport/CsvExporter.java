@@ -61,11 +61,9 @@ public class CsvExporter extends ItemExporter {
         
         bos.write(s.getBytes("UTF8"));
     }
-    
+
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        // return DcResources.getText("lblTextReport");
         return "TXT Exporter";
     }
 

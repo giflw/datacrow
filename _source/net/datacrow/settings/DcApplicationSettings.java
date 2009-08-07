@@ -178,14 +178,14 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false,
                             false));            
         getSettings().addSetting(_General,
-                new Setting(DcRepository.ValueTypes._LONG,
-                            DcRepository.Settings.stInputFieldHeight,
-                            Long.valueOf(25),
-                            -1,
+                new Setting(DcRepository.ValueTypes._STRING,
+                            DcRepository.Settings.stImportCharacterSet,
+                            "UTF-8",
+                            ComponentFactory._CHARACTERSETCOMBO,
                             "",
-                            "",
+                            "lblCharacterSet",
                             false,
-                            false));             
+                            false));           
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.Settings.stButtonHeight,
