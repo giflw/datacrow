@@ -242,17 +242,8 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false));  
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
-                            DcRepository.Settings.stImportCharacterSet,
-                            "UTF-8",
-                            -1,
-                            "",
-                            "",
-                            false,
-                            false));
-        getSettings().addSetting(_General,
-                new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stImportSeperator,
-                            ",",
+                            "TAB",
                             ComponentFactory._SHORTTEXTFIELD,
                             "",
                             "lblValueSeperator",
