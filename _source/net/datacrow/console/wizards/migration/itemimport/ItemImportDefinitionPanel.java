@@ -52,21 +52,19 @@ public class ItemImportDefinitionPanel extends ItemImporterWizardPanel {
 	        	
 	        	JLabel label = ComponentFactory.getLabel(setting.getLabelText());
 	
-	        	add(label, Layout.getGBC( 0, y, 1, 1, 1.0, 1.0
-	                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+	        	add(label, 
+	        	         Layout.getGBC( 0, y, 1, 1, 1.0, 1.0
+	                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
 	                     new Insets( 0, 5, 5, 5), 0, 0));
-	            add(c, Layout.getGBC( 1, y, 1, 1, 1.0, 1.0
-	                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+	            add(c,   Layout.getGBC( 1, y, 1, 1, 1.0, 1.0
+	                    ,GridBagConstraints.NORTHEAST, GridBagConstraints.HORIZONTAL,
 	                     new Insets( 0, 5, 5, 5), 0, 0));
-	            
-            	((IComponent) c).setValue(setting.getValue());
+            	
+	            ((IComponent) c).setValue(setting.getValue());
 	             
 	        	y++;
 	        }
 		}
-	        
-        revalidate();
-        repaint();
 	}
 
 	public Object apply() throws WizardException {

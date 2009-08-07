@@ -50,7 +50,7 @@ public class XmlImporter extends ItemImporter {
 
     @Override
     public String getName() {
-        return DcResources.getText("lblSourceReaderType", "XML");
+        return DcResources.getText("lblXImport", "XML");
     }
     
     private class Task extends DcThread {

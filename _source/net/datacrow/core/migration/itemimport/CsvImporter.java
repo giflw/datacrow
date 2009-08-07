@@ -77,7 +77,7 @@ public class CsvImporter extends ItemImporter {
 
     @Override
     public String getName() {
-        return DcResources.getText("lblSourceReaderType", "CSV");
+        return DcResources.getText("lblXImport", "CSV");
     }
     
     private class Task extends DcThread {
