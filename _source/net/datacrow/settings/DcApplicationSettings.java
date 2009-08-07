@@ -253,9 +253,9 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stImportSeperator,
                             ",",
-                            -1,
+                            ComponentFactory._SHORTTEXTFIELD,
                             "",
-                            "",
+                            "lblValueSeperator",
                             false,
                             false));
         getSettings().addSetting(_General,
@@ -837,8 +837,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblDecimalSeperatorSymbol",
                             true,
                             true));
-        
-        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stRestoreDatabase,

@@ -48,6 +48,11 @@ public class DcProperty extends DcObject {
         super(module);
     }
     
+    @Override
+    public int getSystemDisplayFieldIdx() {
+        return DcProperty._A_NAME;
+    }
+    
     /**
      * The filename on which this item is based.
      * @return Returns always null.

@@ -103,6 +103,11 @@ public class DcAssociate extends DcObject {
         super.beforeSave();
     }
 
+    @Override
+    public int getSystemDisplayFieldIdx() {
+        return DcAssociate._A_NAME;
+    }
+    
     /**
      * Retrieves the field on which associates are sorted. 
      * This depends on the {@link DcRepository.Settings#stPersonOrder} setting.

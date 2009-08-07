@@ -526,6 +526,16 @@ public class DcModules {
         return false;
     }
     
+    public static Collection<DcModule> getReferencedModules(int moduleIdx) {
+        Collection<DcModule> references = new ArrayList<DcModule>();
+        for (DcField field : DcModules.get(moduleIdx).getFields()) {
+            int referenceIdx = field.getReferenceIdx();
+            if (referenceIdx != moduleIdx && referenceIdx > 0)
+                references.add(DcModules.get(referenceIdx));
+        }
+        return references;
+    }  
+    
     /** 
      * Retrieves all modules having a reference to the specified modules.
      * Note: The check is based on the source module index (base module), 

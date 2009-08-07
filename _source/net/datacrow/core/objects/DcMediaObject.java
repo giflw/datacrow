@@ -70,6 +70,11 @@ public class DcMediaObject extends DcObject {
     } 
     
     @Override
+    public int getSystemDisplayFieldIdx() {
+        return DcMediaObject._A_TITLE;
+    }    
+    
+    @Override
     public String toString() {
         String s = (String) getValue(DcMediaObject._A_TITLE);
         if (s == null || s.trim().length() == 0)
