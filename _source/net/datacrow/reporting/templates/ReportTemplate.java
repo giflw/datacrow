@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+import net.datacrow.core.migration.itemexport.ItemExporterSettings;
 import net.datacrow.reporting.transformers.XmlTransformers;
 
 import org.apache.log4j.Logger;
@@ -40,7 +41,7 @@ public class ReportTemplate {
     private String name;
     private String filename;
     private int[] transformers;
-    private ReportTemplateProperties properties;
+    private ItemExporterSettings properties;
     
     public ReportTemplate(String filename) {
         this.filename = filename;
@@ -48,8 +49,8 @@ public class ReportTemplate {
         int start = filename.lastIndexOf(File.separator) > -1 ? filename.lastIndexOf(File.separator)  + 1 : 0;
         int end = filename.lastIndexOf(".") < start ? filename.length() : filename.lastIndexOf(".");
         
-        this.properties = new ReportTemplateProperties(filename);
-        name = properties.get(ReportTemplateProperties._NAME);
+        this.properties = new ItemExporterSettings(filename);
+        name = properties.get(ItemExporterSettings._NAME);
         if (name == null || name.trim().length() == 0)
             name = filename.substring(start, end).replaceAll("[_.]", " ");
         
@@ -68,7 +69,7 @@ public class ReportTemplate {
         return new File(filename);
     }
     
-    public ReportTemplateProperties getProperties() {
+    public ItemExporterSettings getProperties() {
         return properties;
     }
     

@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.reporting.writer;
+package net.datacrow.core.migration.itemexport;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -36,13 +36,9 @@ import javax.swing.ImageIcon;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcMapping;
-import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.reporting.templates.ReportTemplateProperties;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
@@ -52,9 +48,10 @@ public class XmlWriter extends XmlBaseWriter {
     
     private static Logger logger = Logger.getLogger(XmlWriter.class.getName());
     
+    private ItemExporterSettings settings;
+    
     private int tagIdent;
     private int valueIdent;
-    private ReportTemplateProperties properties;
     
     private String schemaFile;
     private final int stepSize = 4;
@@ -62,21 +59,21 @@ public class XmlWriter extends XmlBaseWriter {
     private final String reportName;
     private final String baseDir;
     
-    public XmlWriter(String filename, String schemaFile, ReportTemplateProperties properties) throws IOException {
+    public XmlWriter(String filename, String schemaFile, ItemExporterSettings properties) throws IOException {
         this(new BufferedOutputStream(new FileOutputStream(filename)), filename, schemaFile, properties);
     }
     
-    public XmlWriter(BufferedOutputStream bos, String filename, String schemaFile, ReportTemplateProperties properties) {
+    public XmlWriter(BufferedOutputStream bos, String filename, String schemaFile, ItemExporterSettings properties) {
         super(bos);
         
         this.baseDir = filename.substring(0, filename.lastIndexOf(File.separator) + 1);
         this.reportName = filename.substring(filename.lastIndexOf(File.separator) + 1, filename.lastIndexOf("."));
         this.schemaFile = schemaFile;
-        this.properties = properties;
+        this.settings = properties;
         
         resetIdent();
         
-        if (properties.getBoolean(ReportTemplateProperties._COPY_IMAGES))
+        if (properties.getBoolean(ItemExporterSettings._COPY_IMAGES))
             createImageDir();
     }    
     
@@ -161,12 +158,7 @@ public class XmlWriter extends XmlBaseWriter {
 
                 if (subDco != null) { 
 	                startEntity(subDco);
-	                
-	                int fieldIdx = subDco instanceof DcProperty ? DcProperty._A_NAME :
-	                               subDco instanceof DcAssociate ? DcAssociate._A_NAME :
-	                               subDco instanceof DcMediaObject ? DcMediaObject._A_TITLE :
-	                               subDco.getDisplayFieldIdx();
-	                
+	                int fieldIdx = subDco.getSystemDisplayFieldIdx();
 	                writeAttribute(subDco, fieldIdx);
 	                endEntity(subDco);
                 }
@@ -182,10 +174,10 @@ public class XmlWriter extends XmlBaseWriter {
             
             if (filename == null) {
                 filename = "";
-            } else if (properties.getBoolean(ReportTemplateProperties._COPY_IMAGES)) {
+            } else if (settings.getBoolean(ItemExporterSettings._COPY_IMAGES)) {
                 copyImage((Picture) o, getImageDir() + filename);
                 
-                if (properties.getBoolean(ReportTemplateProperties._ALLOWRELATIVEIMAGEPATHS))
+                if (settings.getBoolean(ItemExporterSettings._ALLOWRELATIVEIMAGEPATHS))
                     filename = "./" + reportName +  "_images/" + filename;
                 else 
                     filename = "file:///" + getImageDir() + filename;
@@ -198,7 +190,7 @@ public class XmlWriter extends XmlBaseWriter {
         } else {
             String text = dco.getDisplayString(field);
             
-            int maximumLength = properties.getInt(ReportTemplateProperties._MAX_TEXT_LENGTH);
+            int maximumLength = settings.getInt(ItemExporterSettings._MAX_TEXT_LENGTH);
             if (maximumLength > 0 && text.length() > maximumLength) {
                 text = text.substring(0, maximumLength);
                 text = text.substring(0, text.lastIndexOf(" ")) + "...";
@@ -214,9 +206,9 @@ public class XmlWriter extends XmlBaseWriter {
             ImageIcon icon = (ImageIcon) picture.getValue(Picture._D_IMAGE);
 
             if (icon != null) {
-                if (properties.getBoolean(ReportTemplateProperties._SCALE_IMAGES)) {
-                    int width = properties.getInt(ReportTemplateProperties._IMAGE_WIDTH);
-                    int height = properties.getInt(ReportTemplateProperties._IMAGE_HEIGHT);
+                if (settings.getBoolean(ItemExporterSettings._SCALE_IMAGES)) {
+                    int width = settings.getInt(ItemExporterSettings._IMAGE_WIDTH);
+                    int height = settings.getInt(ItemExporterSettings._IMAGE_HEIGHT);
                     Utilities.writeToFile(new DcImageIcon(Utilities.toBufferedImage(icon, DcImageIcon._TYPE_JPEG, width, height)), target);
                 } else {
                     Utilities.writeToFile(icon, target);

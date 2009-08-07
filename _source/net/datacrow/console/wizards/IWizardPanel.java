@@ -41,4 +41,8 @@ public interface IWizardPanel {
     public void revalidate();
     
     public void repaint();
+    
+    public void onActivation();
+    
+    public void onDeactivation();
 }

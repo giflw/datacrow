@@ -37,8 +37,8 @@ import javax.swing.JPanel;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcNumberField;
+import net.datacrow.core.migration.itemexport.ItemExporterSettings;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.reporting.templates.ReportTemplateProperties;
 
 public class ReportSettingsPanel extends JPanel {
     
@@ -62,22 +62,24 @@ public class ReportSettingsPanel extends JPanel {
         nfHeight.setEnabled(cbResizeImages.isSelected());
     }
     
-    public void saveSettings(ReportTemplateProperties properties) {
-        properties.set(ReportTemplateProperties._COPY_IMAGES, cbCopyImages.isSelected());
-        properties.set(ReportTemplateProperties._SCALE_IMAGES, cbResizeImages.isSelected());
-        properties.set(ReportTemplateProperties._MAX_TEXT_LENGTH, nfMaxTextLength.getValue());
-        properties.set(ReportTemplateProperties._IMAGE_WIDTH, nfWidth.getValue());
-        properties.set(ReportTemplateProperties._IMAGE_HEIGHT,nfHeight.getValue());
-        properties.save();
+    public void saveSettings(ItemExporterSettings properties, boolean saveToDisk) {
+        properties.set(ItemExporterSettings._COPY_IMAGES, cbCopyImages.isSelected());
+        properties.set(ItemExporterSettings._SCALE_IMAGES, cbResizeImages.isSelected());
+        properties.set(ItemExporterSettings._MAX_TEXT_LENGTH, nfMaxTextLength.getValue());
+        properties.set(ItemExporterSettings._IMAGE_WIDTH, nfWidth.getValue());
+        properties.set(ItemExporterSettings._IMAGE_HEIGHT,nfHeight.getValue());
+        
+        if (saveToDisk)
+            properties.save();
     }
     
-    public void applySettings(ReportTemplateProperties properties) {
-        cbCopyImages.setSelected(properties.getBoolean(ReportTemplateProperties._COPY_IMAGES));
-        cbResizeImages.setSelected(properties.getBoolean(ReportTemplateProperties._SCALE_IMAGES));
-        nfMaxTextLength.setValue(properties.getInt(ReportTemplateProperties._MAX_TEXT_LENGTH));
+    public void applySettings(ItemExporterSettings properties) {
+        cbCopyImages.setSelected(properties.getBoolean(ItemExporterSettings._COPY_IMAGES));
+        cbResizeImages.setSelected(properties.getBoolean(ItemExporterSettings._SCALE_IMAGES));
+        nfMaxTextLength.setValue(properties.getInt(ItemExporterSettings._MAX_TEXT_LENGTH));
         
-        nfWidth.setValue(properties.getInt(ReportTemplateProperties._IMAGE_WIDTH));
-        nfHeight.setValue(properties.getInt(ReportTemplateProperties._IMAGE_HEIGHT));
+        nfWidth.setValue(properties.getInt(ItemExporterSettings._IMAGE_WIDTH));
+        nfHeight.setValue(properties.getInt(ItemExporterSettings._IMAGE_HEIGHT));
         
         applySelection();
     }

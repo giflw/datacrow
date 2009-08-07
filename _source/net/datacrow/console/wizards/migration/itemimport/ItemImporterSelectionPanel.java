@@ -23,91 +23,87 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.item;
+package net.datacrow.console.wizards.migration.itemimport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import javax.swing.ListSelectionModel;
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.windows.onlinesearch.OnlineSearchForm;
-import net.datacrow.console.wizards.IWizardPanel;
+import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.WizardException;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.migration.itemimport.ItemImporter;
+import net.datacrow.core.migration.itemimport.ItemImporters;
 
-public class InternetWizardPanel extends ItemWizardPanel implements IWizardPanel, MouseListener {
+public class ItemImporterSelectionPanel extends ItemImporterWizardPanel implements MouseListener {
 
-    private OnlineSearchForm internetSearchForm = null;
-    private ItemWizard wizard;
-
-    public InternetWizardPanel(ItemWizard wizard, DcModule module) {
-        build(module);
-        this.wizard = wizard;
+	private ItemImporterWizard wizard;
+	private ButtonGroup bg;
+	private Collection<ItemImporter> readers = new ArrayList<ItemImporter>();
+	
+    public ItemImporterSelectionPanel(ItemImporterWizard wizard) {
+    	this.wizard = wizard;
+    	this.bg = new ButtonGroup();
+    	
+    	build();
     }
 
-    @Override
-    public Object apply() throws WizardException {
-        DcObject result = internetSearchForm.getSelectedObject();
-        
-        if (result == null) 
-            throw new WizardException(DcResources.getText("msgWizardSelectItem"));
-
-        internetSearchForm.stop();
-        return result;
-    }
-
-    @Override
     public String getHelpText() {
-        return DcResources.getText("msgInternetSearch");
+		return "";
+	}
+
+	public Object apply() {
+	    return wizard.getDefinition();
     }
 
     public void destroy() {
-        if (internetSearchForm != null)
-            internetSearchForm.close(false);
-        
         wizard = null;
-    }
+        bg  = null;
+        if (readers != null) readers.clear();
+        readers = null;
+    }      
     
-    @Override
-    public void setObject(DcObject dco) {}
+    private void build() {
+        setLayout(Layout.getGBL());
+        
+        int y = 0;
+        int x = 0;
+        
+        for (ItemImporter reader : ItemImporters.getInstance().getSourceReaders(wizard.getModuleIdx())) {
+        	readers.add(reader);
 
-    public void setFocus() {
-        internetSearchForm.setFocus();
-    }
-    
-    @Override
-    public void onActivation() {
-        if (internetSearchForm != null) 
-            internetSearchForm.setFocus();
-    }     
-    
-    private void build(DcModule module) {
-        if (module.deliversOnlineService())
-            internetSearchForm = module.getOnlineServices().getUI(null, null, false);
-
-        if (internetSearchForm != null) {
-            internetSearchForm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            internetSearchForm.addDoubleClickListener(this);
-            setLayout(Layout.getGBL());
-            add(internetSearchForm.getContentPanel(), Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-                           ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                            new Insets(5, 5, 5, 5), 0, 0));
+        	JRadioButton rb = ComponentFactory.getRadioButton(reader.getName(), reader.getIcon(), reader.getKey());
+            rb.addMouseListener(this);
+            bg.add(rb);
+            add(rb, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 0, 5, 5, 5), 0, 0));
         }
     }
     
-    public void mouseReleased(MouseEvent e) {
-        if (e.getClickCount() == 2) {
-            internetSearchForm.stop();
-            wizard.next();
-        }
-    }
+    public void mouseClicked(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent e) {}
-    public void mouseClicked(MouseEvent e) {}
+
+    public void mouseReleased(MouseEvent e) {
+        String command = bg.getSelection().getActionCommand();
+        for (ItemImporter reader : readers) {
+        	if (reader.getKey().equals(command)) {
+        		wizard.getDefinition().setReader(reader);
+        		try {
+        			wizard.next();
+        		} catch (WizardException we) {
+        			new MessageBox(we.getMessage(), MessageBox._WARNING);
+        		}
+        	}
+        }
+    }    
 }

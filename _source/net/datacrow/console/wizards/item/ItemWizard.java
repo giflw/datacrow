@@ -37,7 +37,6 @@ import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
@@ -48,7 +47,6 @@ import net.datacrow.settings.DcSettings;
 public class ItemWizard extends Wizard {
 
     private DcObject dco;
-    private DcModule module;
     private DcObject container;
 
     public ItemWizard() {
@@ -65,20 +63,19 @@ public class ItemWizard extends Wizard {
     
     @Override
     protected void initialize() {
-        module = DcModules.getCurrent();
-        if (module.isAbstract()) {
-            ItemTypeDialog dialog = new ItemTypeDialog();
+        if (getModule().isAbstract()) {
+            ItemTypeDialog dialog = new ItemTypeDialog(DcResources.getText("lblSelectModuleHelp"));
             dialog.setVisible(true);
 
             if (dialog.getSelectedModule() < 0) {
                 closed = true;
                 close();
             } else {
-                module = DcModules.get(dialog.getSelectedModule());
+                moduleIdx = DcModules.get(dialog.getSelectedModule()).getIndex();
             }
         }
         
-        if (DcModules.getCurrent().getIndex() == DcModules._ITEM &&
+        if (getModule().getIndex() == DcModules._ITEM &&
             DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule)).getIndex() == DcModules._CONTAINER) {
             
             SelectItemDialog dlg = new SelectItemDialog(DcModules.get(DcModules._CONTAINER), "Select a container");
@@ -86,16 +83,16 @@ public class ItemWizard extends Wizard {
             container = dlg.getItem();
         }
         
-        if (module != null)
-            dco = module.getDcObject();
+        if (getModule() != null)
+            dco = getModule().getDcObject();
     }
     
     @Override
     protected List<IWizardPanel> getWizardPanels() {
         List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
         
-        if (module.deliversOnlineService())
-            panels.add(new InternetWizardPanel(this, module));
+        if (getModule().deliversOnlineService())
+            panels.add(new InternetWizardPanel(this, getModule()));
 
         panels.add(new ItemDetailsWizardPanel(dco));
         return panels;
@@ -164,7 +161,6 @@ public class ItemWizard extends Wizard {
     @Override
     public void close() {
         dco = null;
-        module = null;
         super.close();
     }
 

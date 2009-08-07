@@ -142,7 +142,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         this.dcoOrig.setPartOfBatch(false);
 
         if (!update && !readonly && o.getModule().isAbstract()) {
-            ItemTypeDialog dialog = new ItemTypeDialog(this);
+            ItemTypeDialog dialog = new ItemTypeDialog(DcResources.getText("lblSelectModuleHelp"));
             dialog.setVisible(true);
             this.moduleIdx = dialog.getSelectedModule();
             

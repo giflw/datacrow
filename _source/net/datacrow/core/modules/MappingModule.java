@@ -25,6 +25,8 @@
 
 package net.datacrow.core.modules;
 
+import java.util.Collection;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
@@ -142,7 +144,7 @@ public class MappingModule extends DcModule {
      * @return Always null.
      */
     @Override
-    public DcObject[] getDefaultData() throws Exception  {
+    public Collection<DcObject> getDefaultData() throws Exception  {
         return null;
     }
 }

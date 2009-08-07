@@ -39,8 +39,12 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.apache.log4j.Logger;
 
 public class Xml2RtfTransformer extends XmlTransformer implements ErrorListener {
+    
+    private static Logger logger = Logger.getLogger(Xml2RtfTransformer.class.getName());
+
     
     @Override
     public void transform() throws Exception {
@@ -80,15 +84,18 @@ public class Xml2RtfTransformer extends XmlTransformer implements ErrorListener 
         return "Rtf";
     }
 
-    public void error(TransformerException arg0) {
-        dialog.addMessage(arg0.getMessage());
+    public void error(TransformerException e) {
+        client.notifyMessage(e.getMessage());
+        logger.error(e, e);
     }
 
-    public void fatalError(TransformerException arg0) {
-        dialog.addMessage(arg0.getMessage());
+    public void fatalError(TransformerException e) {
+        client.notifyMessage(e.getMessage());
+        logger.error(e, e);
     }
 
-    public void warning(TransformerException arg0) {
-        dialog.addMessage(arg0.getMessage());
+    public void warning(TransformerException e) {
+        client.notifyMessage(e.getMessage());
+        logger.error(e, e);
     }
 }

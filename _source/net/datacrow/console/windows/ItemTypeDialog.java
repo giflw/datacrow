@@ -32,9 +32,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -44,6 +46,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -54,15 +57,28 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
 
     private int selectedModule = -1;
     
-    public ItemTypeDialog() {
-        this(null);
+    private Collection<DcModule> modules;
+    
+    public ItemTypeDialog(String help) {
+        this(null, help);
     }
     
-    public ItemTypeDialog(JFrame frame) {
-        super(frame);
+    public ItemTypeDialog(Collection<DcModule> modules, String help) {
+        super();
+        
+        if (modules == null) {
+            this.modules = new ArrayList<DcModule>();
+            for (DcModule module : DcModules.getModules()) {
+                if (module instanceof DcMediaModule && module.isTopModule() && !module.isAbstract())
+                    this.modules.add(module);
+            }
+        } else {
+            this.modules = modules;
+        }
+        
         setTitle(DcResources.getText("lblSelectModule"));
         setModal(true);
-        buildDialog();
+        build(help);
     }
     
     public int getSelectedModule() {
@@ -76,7 +92,7 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
     }
     
     
-    private void buildDialog() {
+    private void build(String help) {
         getContentPane().setLayout(Layout.getGBL());
         
         //**********************************************************
@@ -100,23 +116,23 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         textHelp.setEditable(false);
-        textHelp.setText(DcResources.getText("lblSelectModuleHelp"));
+        textHelp.setText(help);
         panelModules.add(textHelp, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 5, 5, 5), 0, 0));        
         
         int y = 1;
-        for (DcModule module : DcModules.getModules()) {
-            if (module instanceof DcMediaModule && module.isTopModule() && !module.isAbstract()) {
-                JRadioButton radioButton = ComponentFactory.getRadioButton(module.getLabel(), module.getIcon32(), "" + module.getIndex());
-                
-                radioButton.addActionListener(this);
-                radioButton.addItemListener(new SelectModuleAction());
-                buttonGroup.add(radioButton);
-                panelModules.add(radioButton, Layout.getGBC( 0, y++, 1, 1, 1.0, 1.0
-                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                         new Insets( 0, 5, 5, 5), 0, 0));
-            }
+        for (DcModule module : modules) {
+            ImageIcon icon = module.getIcon32() == null ? module.getIcon16() : module.getIcon32();
+            icon = icon == null ? IconLibrary._icoModuleTypeProperty : icon;
+            JRadioButton radioButton = ComponentFactory.getRadioButton(module.getLabel(), icon, "" + module.getIndex());
+            
+            radioButton.addActionListener(this);
+            radioButton.addItemListener(new SelectModuleAction());
+            buttonGroup.add(radioButton);
+            panelModules.add(radioButton, Layout.getGBC( 0, y++, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets( 0, 5, 5, 5), 0, 0));
         }
 
         //**********************************************************

@@ -23,45 +23,36 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.reporting.writer;
+package net.datacrow.core.migration.itemexport;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import net.datacrow.util.Converter;
-
-public abstract class XmlBaseWriter {
-
-    protected final String uberTag = "data-crow-objects";
-    protected final BufferedOutputStream bos;
-
-    protected XmlBaseWriter(BufferedOutputStream bos) {
-        this.bos = bos;
-    }
-
-    protected XmlBaseWriter(String filename) throws IOException {
-        FileOutputStream fos = new FileOutputStream(filename);
-        bos = new BufferedOutputStream(fos);
-    }    
+public class XmlReference {
+        
+    private String name;
+    private String reference;
     
-    protected String getValidTag(String s) {
-        return Converter.getValidXmlTag(s);
+    public XmlReference(String name, String reference) {
+        this.name = name;
+        this.reference = reference;
     }
     
-    protected void newLine() throws IOException {
-        bos.write("\r\n".getBytes());
+    public String getName() {
+        return name;
     }
     
-    protected void writeLine(String s, int level) throws IOException {
-        for (int i = 0; i < level; i++)
-            bos.write("    ".getBytes());
-
-        writeTag(s);
-        newLine();
+    public String getReference() {
+        return reference;
     }
     
-    protected void writeTag(String s) throws IOException {
-        bos.write(s.getBytes("UTF8"));
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof XmlReference)
+            return ((XmlReference) o).getName().equals(name);
+        
+        return false;
     }
 }

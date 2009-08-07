@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.reporting.writer;
+package net.datacrow.core.migration.itemexport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,7 +38,6 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
-import net.datacrow.reporting.reports.XmlReference;
 
 public class XmlSchemaWriter extends XmlBaseWriter {
     

@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.reporting.templates;
+package net.datacrow.core.migration.itemexport;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,9 +32,9 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-public class ReportTemplateProperties {
+public class ItemExporterSettings {
 
-    private static Logger logger = Logger.getLogger(ReportTemplateProperties.class.getName());
+    private static Logger logger = Logger.getLogger(ItemExporterSettings.class.getName());
     
     public static final String _NAME = "report_name";
     public static final String _COPY_IMAGES = "copy_images";
@@ -48,12 +48,12 @@ public class ReportTemplateProperties {
     private final String filename;
     private final Properties properties;
     
-    public ReportTemplateProperties() {
+    public ItemExporterSettings() {
         filename = null;
         properties = new Properties();
     }    
     
-    public ReportTemplateProperties(String reportFile) {
+    public ItemExporterSettings(String reportFile) {
         filename = reportFile.substring(0, reportFile.toLowerCase().lastIndexOf(".xsl")) + ".properties";
         properties = new Properties();
         

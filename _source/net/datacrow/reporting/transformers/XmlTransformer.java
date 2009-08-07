@@ -27,14 +27,17 @@ package net.datacrow.reporting.transformers;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
-import net.datacrow.console.windows.reporting.ReportingDialog;
+import net.datacrow.core.migration.itemexport.IItemExporterClient;
+import net.datacrow.core.migration.itemexport.ItemExporter;
+import net.datacrow.core.migration.itemexport.ItemExporterSettings;
+import net.datacrow.core.migration.itemexport.ItemExporters;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.reporting.reports.XmlReport;
 import net.datacrow.reporting.templates.ReportTemplate;
-import net.datacrow.reporting.templates.ReportTemplateProperties;
 
 import org.apache.log4j.Logger;
 
@@ -47,29 +50,29 @@ public abstract class XmlTransformer {
     protected File template;
     
     protected Collection<DcObject> objects;
-    protected ReportingDialog dialog;
+    protected IItemExporterClient client;
     protected BufferedOutputStream bos;
     
-    private ReportTemplateProperties properties;
-    private XmlReport xmlReport;
+    private ItemExporterSettings settings;
+    private ItemExporter exporter;
 
-    protected boolean keepOnRunning = true;
+    protected boolean canceled = false;
 
     public XmlTransformer() {}
     
-    public void transform(  ReportingDialog dialog, 
-                            Collection<DcObject> objects, 
-                            File target, 
-                            ReportTemplate reportFile) {
+    public void transform(IItemExporterClient client, 
+                          Collection<DcObject> objects, 
+                          File target, 
+                          ReportTemplate reportFile) {
         
-        this.dialog = dialog;
+        this.client = client;
         this.objects = objects;
         
         this.target = target;
         this.template = new File(reportFile.getFilename());
-        this.properties = reportFile.getProperties();
+        this.settings = reportFile.getProperties();
         
-        setSettings(properties);
+        setSettings(settings);
         
         String s = target.toString();
         s = s.substring(0, s.lastIndexOf(".")) + ".xml";
@@ -80,48 +83,58 @@ public abstract class XmlTransformer {
     }
     
     public void cancel() {
-        keepOnRunning = false;
-        if (xmlReport != null)
-            xmlReport.cancel();
+        canceled = true;
+        if (exporter != null)
+            exporter.cancel();
     }    
     
     public abstract int getType();
     public abstract void transform() throws Exception ;
     public abstract String getFileType();
     
-    protected void setSettings(ReportTemplateProperties properties) {}
+    protected void setSettings(ItemExporterSettings properties) {}
     
     private class Transformer extends Thread {
         
         @Override
         public void run() {
-
-            keepOnRunning = true;
-            
-            xmlReport = new XmlReport(properties);
-            xmlReport.compile(dialog, objects, source);
-            xmlReport.join();
-
             try {
+                canceled = false;
+                
+                // export the items to an XML file
+                ItemExporter exporter = ItemExporters.getInstance().getExporter("XML", DcModules.getCurrent().getIndex(), ItemExporter._MODE_NON_THREADED);
+                exporter.setSettings(settings);
+                exporter.setFile(source);
+                exporter.setClient(client);
+                exporter.setItems(objects);
+                exporter.start();
 
-                if (xmlReport.isSuccessfull() && keepOnRunning) {
-                    dialog.allowActions(false);
-                    dialog.addMessage(DcResources.getText("msgTransformingOutput", getFileType()));
+                // create the report
+                if (exporter.isSuccessfull() && !canceled) {
+                    client.notifyMessage(DcResources.getText("msgTransformingOutput", getFileType()));
                     transform();
-                    dialog.addMessage(DcResources.getText("msgTransformationSuccessful", target.toString()));
+                    client.notifyMessage(DcResources.getText("msgTransformationSuccessful", target.toString()));
                 }
 
             } catch (Exception exp) {
                 logger.error(DcResources.getText("msgErrorWhileCreatingReport", exp.toString()), exp);
-                dialog.addMessage(DcResources.getText("msgErrorWhileCreatingReport", exp.toString()));
+                client.notifyMessage(DcResources.getText("msgErrorWhileCreatingReport", exp.toString()));
             } finally {
+                if (client != null) client.notifyStopped();
+                
                 source = null;
                 template = null;
                 objects = null;
                 target = null;
-                bos = null;
-                dialog.allowActions(true);
-                dialog = null;
+                client = null;
+                settings = null;
+                exporter = null;
+
+                try {
+                    if (bos != null) bos.close();
+                } catch (IOException ignore) {}
+                
+                bos = null;                   
             }
         }
     }

@@ -40,6 +40,17 @@ public abstract class ItemWizardPanel extends JPanel implements IWizardPanel {
     }
 
     public abstract String getHelpText();
+    
+    @Override
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+    	if (b) onActivation();
+    	else onDeactivation();
+    }
+
+	public void onDeactivation() {}
+	
+    public void onActivation() {}
 
     public abstract Object apply() throws WizardException;
 }

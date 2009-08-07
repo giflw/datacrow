@@ -38,13 +38,11 @@ import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -56,12 +54,12 @@ import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.migration.itemexport.IItemExporterClient;
+import net.datacrow.core.migration.itemexport.ItemExporter;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.reporting.ReportDictionaryGenerator;
-import net.datacrow.reporting.reports.Report;
-import net.datacrow.reporting.reports.Reports;
 import net.datacrow.reporting.templates.ReportTemplate;
 import net.datacrow.reporting.templates.ReportTemplates;
 import net.datacrow.reporting.transformers.XmlTransformer;
@@ -71,11 +69,11 @@ import net.datacrow.util.BrowserLauncher;
 
 import org.apache.log4j.Logger;
 
-public class ReportingDialog extends DcDialog {
+public class ReportingDialog extends DcDialog implements IItemExporterClient, ActionListener, ItemListener {
 
     private static Logger logger = Logger.getLogger(ReportingDialog.class.getName());
     
-    private Report report;
+    private ItemExporter exporter;
     private XmlTransformer transformer;
 
     private ReportSettingsPanel panelSettings = new ReportSettingsPanel();
@@ -85,31 +83,25 @@ public class ReportingDialog extends DcDialog {
     private JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
     private JButton buttonResults = ComponentFactory.getButton(DcResources.getText("lblOpenReport"));
 
-    private JComboBox cbExportType = ComponentFactory.getComboBox();
     private JComboBox cbTemplates = ComponentFactory.getComboBox();
     private JComboBox cbTransformer = ComponentFactory.getComboBox();
-
-    private JRadioButton rbReport = ComponentFactory.getRadioButton(DcResources.getText("lblPresentationReport"), null);
-    private JRadioButton rbExport = ComponentFactory.getRadioButton(DcResources.getText("lblDataReport"), null);
 
     private JTextArea textLog = ComponentFactory.getTextArea();
     private JProgressBar progressBar = new JProgressBar();
     private DcFileField fileField;
     
-    private ReportFileSelectionListener reportFileSelectionListener = new ReportFileSelectionListener();
-    
-    private List<DcObject> objects;
+    private List<DcObject> items;
 
-    public ReportingDialog(List<DcObject> objects) {
+    public ReportingDialog(List<DcObject> items) {
         super(DataCrow.mainFrame);
 
         new ReportDictionaryGenerator().generate();
         
         try {
-            this.objects = objects;
+            this.items = items;
             
-            DataFilters.getDefaultDataFilter(DcModules.getCurrent().getIndex()).sort(objects);
-            
+            DataFilters.getDefaultDataFilter(DcModules.getCurrent().getIndex()).sort(items);
+
             setHelpIndex("dc.reports");
     
             fileField = ComponentFactory.getFileField(true, false, null);
@@ -127,21 +119,26 @@ public class ReportingDialog extends DcDialog {
         DcSettings.set(DcRepository.Settings.stReportingDialogSize, getSize());
         DcSettings.set(DcRepository.Settings.stReportFile, fileField.getFilename());
     }
+    
+    public void notifyMessage(String message) {
+        if (textLog != null) { 
+            textLog.insert(message + '\n', 0);
+            textLog.setCaretPosition(0);
+        }
+    }
 
-    public void initProgressBar(int maxValue) {
+    public void notifyProcessed() {
+        progressBar.setValue(progressBar.getValue() + 1);
+    }
+
+    public void notifyStarted(int count) {
         progressBar.setValue(0);
-        progressBar.setMaximum(maxValue);
+        progressBar.setMaximum(count);
+        allowActions(false);
     }
 
-    public void updateProgressBar(int value) {
-        progressBar.setValue(value);
-    }
-
-    public void addMessage(String message) {
-    	if (textLog != null) { 
-    		textLog.insert(message + '\n', 0);
-    		textLog.setCaretPosition(0);
-    	}
+    public void notifyStopped() {
+        allowActions(true);
     }
 
     public void allowActions(boolean b) {
@@ -188,16 +185,11 @@ public class ReportingDialog extends DcDialog {
     
     private void createReport() {
         try {
-            if (rbExport.isSelected()) {
-                report = (Report) cbExportType.getSelectedItem();
-                report.compile(this, objects, getTarget(report.getFileType()));
-            } else {
-                transformer = (XmlTransformer) cbTransformer.getSelectedItem();
-                ReportTemplate template = (ReportTemplate) cbTemplates.getSelectedItem();
-                panelSettings.saveSettings(template.getProperties());
-                transformer.transform(this, objects, getTarget(transformer.getFileType()), template);
-            }
-            
+            transformer = (XmlTransformer) cbTransformer.getSelectedItem();
+            ReportTemplate template = (ReportTemplate) cbTemplates.getSelectedItem();
+            panelSettings.saveSettings(template.getProperties(), true);
+            transformer.transform(this, items, getTarget(transformer.getFileType()), template);
+
             allowActions(false);
             
         } catch (FileNotFoundException fnfe) {
@@ -206,8 +198,8 @@ public class ReportingDialog extends DcDialog {
     }
 
     private void cancel() {
-        if (report != null)
-            report.cancel();
+        if (exporter != null)
+            exporter.cancel();
         
         if (transformer != null)
             transformer.cancel();
@@ -222,27 +214,23 @@ public class ReportingDialog extends DcDialog {
         
         cancel();
 
-        if (objects != null) { 
-            objects.clear();
-            objects = null;
+        if (items != null) { 
+            items.clear();
+            items = null;
         }
         
-        report = null;
+        exporter = null;
         transformer = null;
         panelSettings = null;
         buttonRun = null;
         buttonStop = null;
         buttonClose = null;
         buttonResults = null;
-        cbExportType = null;
         cbTemplates = null;
         cbTransformer = null;
-        rbReport = null;
-        rbExport = null;
         textLog = null;
         progressBar = null;
         fileField = null;
-        reportFileSelectionListener = null;
         
         super.close();
     }
@@ -254,19 +242,13 @@ public class ReportingDialog extends DcDialog {
     
     private void saveReportFileProperties(ReportTemplate reportFile) {
         if (reportFile != null)
-            panelSettings.saveSettings(reportFile.getProperties());
+            panelSettings.saveSettings(reportFile.getProperties(), true);
     }    
     
     private void applyReportSelection() {
-        cbExportType.setEnabled(rbExport.isSelected());
-        cbTemplates.setEnabled(rbReport.isSelected());
-        cbTransformer.setEnabled(rbReport.isSelected());
-
-        panelSettings.setEnabled(rbReport.isSelected());
-        
         if (cbTransformer.isEnabled() && cbTransformer.getSelectedIndex() > -1) {
             
-            cbTemplates.removeItemListener(reportFileSelectionListener);
+            cbTemplates.removeItemListener(this);
             
             XmlTransformer transformer = (XmlTransformer) cbTransformer.getSelectedItem();
             cbTemplates.removeAllItems();
@@ -276,20 +258,11 @@ public class ReportingDialog extends DcDialog {
             for (ReportTemplate rt : templates)
                 cbTemplates.addItem(rt);
             
-            if (cbTemplates.getItemCount() == 0) {
-                cbTemplates.setEnabled(false);
-                cbTransformer.setEnabled(false);
-                
-                rbExport.setSelected(true);
-                rbReport.setEnabled(false);
-                cbExportType.setEnabled(true);
-            } else {
-                cbTemplates.setSelectedIndex(0);
-                applyReportFileProperties((ReportTemplate) cbTemplates.getSelectedItem());
-            }
+            cbTemplates.setSelectedIndex(0);
+            applyReportFileProperties((ReportTemplate) cbTemplates.getSelectedItem());
         }
         
-        cbTemplates.addItemListener(reportFileSelectionListener);
+        cbTemplates.addItemListener(this);
     }
     
     private void buildDialog() {
@@ -311,27 +284,15 @@ public class ReportingDialog extends DcDialog {
         //**********************************************************
         JPanel panelReport = new JPanel(false);
         panelReport.setLayout(Layout.getGBL());
-        
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(rbReport);
-        buttonGroup.add(rbExport);
-        
-        ReportSelectionListener rl = new ReportSelectionListener();
-        rbReport.addActionListener(rl);
-        rbExport.addActionListener(rl);
-        cbTransformer.addActionListener(rl);
+
+        cbTransformer.setActionCommand("applyReport");
+        cbTransformer.addActionListener(this);
 
         for (XmlTransformer transformer : XmlTransformers.getTransformers())
             cbTransformer.addItem(transformer);
-        
-        for (Report report : Reports.getReports()) 
-            cbExportType.addItem(report);
 
         JLabel lblTransformers = ComponentFactory.getLabel(DcResources.getText("lblReportFormat"));
         
-        panelReport.add(rbReport,       Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                       ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                        new Insets( 5, 5, 5, 5), 0, 0));
         panelReport.add(lblTransformers,Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets( 5, 5, 5, 5), 0, 0));
@@ -339,12 +300,6 @@ public class ReportingDialog extends DcDialog {
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets( 5, 5, 5, 5), 0, 0));
         panelReport.add(cbTemplates,      Layout.getGBC( 1, 1, 2, 1, 1.0, 1.0
-                       ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                        new Insets( 5, 5, 5, 5), 0, 0));
-        panelReport.add(rbExport,       Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
-                       ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                        new Insets( 5, 5, 5, 5), 0, 0));
-        panelReport.add(cbExportType,   Layout.getGBC( 1, 2, 2, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets( 5, 5, 5, 5), 0, 0));
         
@@ -356,10 +311,14 @@ public class ReportingDialog extends DcDialog {
         JPanel panelActions = new JPanel();
         panelActions.setLayout(Layout.getGBL());
 
-        buttonRun.addActionListener(new CreateReportAction());
-        buttonStop.addActionListener(new CancelButtonAction());
-        buttonResults.addActionListener(new ResultsButtonAction());
-        buttonClose.addActionListener(new CloseButtonAction());
+        buttonRun.setActionCommand("createReport");
+        buttonRun.addActionListener(this);
+        buttonStop.setActionCommand("cancel");
+        buttonStop.addActionListener(this);
+        buttonResults.setActionCommand("showResults");
+        buttonResults.addActionListener(this);
+        buttonClose.setActionCommand("close");
+        buttonClose.addActionListener(this);
 
         buttonRun.setMnemonic(KeyEvent.VK_R);
         buttonStop.setMnemonic(KeyEvent.VK_T);
@@ -413,7 +372,7 @@ public class ReportingDialog extends DcDialog {
         panel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSettings")));
 
         this.getContentPane().add(
-                panelReport,    Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                panelReport,    Layout.getGBC( 0, 0, 1, 1, 20.0, 20.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets( 5, 5, 5, 5), 0, 0));
         this.getContentPane().add(
@@ -444,50 +403,27 @@ public class ReportingDialog extends DcDialog {
         setSize(size);
 
         setCenteredLocation();
-
-        rbReport.setSelected(true);
         applyReportSelection();
     }
 
-    private class ResultsButtonAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getActionCommand().equals("showResults"))
             showResults();
-        }
-    }
-
-    private class CloseButtonAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        else if (ae.getActionCommand().equals("close"))
             close();
-        }
-    }
-
-    private class CancelButtonAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        else if (ae.getActionCommand().equals("cancel"))
             cancel();
-        }
+        else if (ae.getActionCommand().equals("createReport"))
+            createReport();      
+        else if (ae.getActionCommand().equals("applyReport"))
+            applyReportSelection();      
     }
 
-    private class CreateReportAction implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            createReport();
-        }
-    }
-    
-    
-    private class ReportFileSelectionListener implements ItemListener {
-
-        public void itemStateChanged(ItemEvent ie) {
-            if (ie.getStateChange() == ItemEvent.SELECTED)
-                applyReportFileProperties((ReportTemplate) ie.getItem());    
-            
-            if (ie.getStateChange() == ItemEvent.DESELECTED)
-                saveReportFileProperties((ReportTemplate) ie.getItem());
-        }
-    }
-    
-    private class ReportSelectionListener implements ActionListener {
-        public void actionPerformed(ActionEvent ae) {
-            applyReportSelection();
-        }
+    public void itemStateChanged(ItemEvent ie) {
+        if (ie.getStateChange() == ItemEvent.SELECTED)
+            applyReportFileProperties((ReportTemplate) ie.getItem());    
+        
+        if (ie.getStateChange() == ItemEvent.DESELECTED)
+            saveReportFileProperties((ReportTemplate) ie.getItem());
     }
 }

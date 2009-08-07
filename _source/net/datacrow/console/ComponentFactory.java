@@ -128,6 +128,7 @@ import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.plugin.Plugin;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -170,6 +171,7 @@ public final class ComponentFactory {
     public static final int _PERSONDISPLAYFORMATCOMBO = 30;
     public static final int _LANGUAGECOMBO = 31;
     public static final int _DRIVEMAPPING = 32;
+    public static final int _CHARACTERSETCOMBO = 33;    
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -418,6 +420,8 @@ public final class ComponentFactory {
                 return getLanguageCombobox();
             case _DRIVEMAPPING:
                 return getDriveMappingField();
+            case _CHARACTERSETCOMBO:
+                return getCharacterSetCombobox();
 
             default:
                 return getShortTextField(maxTextLength);
@@ -505,6 +509,15 @@ public final class ComponentFactory {
         for (String language : DcResources.getLanguages())
             cb.addItem(language);
         
+        cb.setSelectedIndex(0);
+        return cb;
+    }
+    
+    public static final JComboBox getCharacterSetCombobox() {
+        JComboBox cb = getComboBox();
+        for (String charSet : Utilities.getCharacterSets()) 
+            cb.addItem(charSet);
+
         cb.setSelectedIndex(0);
         return cb;
     }

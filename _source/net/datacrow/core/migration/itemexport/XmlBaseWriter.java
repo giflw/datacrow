@@ -23,23 +23,45 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.reporting.reports;
+package net.datacrow.core.migration.itemexport;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import net.datacrow.reporting.templates.ReportTemplateProperties;
+import net.datacrow.util.Converter;
 
-public abstract class Reports {
+public abstract class XmlBaseWriter {
 
-    private final static Collection<Report> reports = new ArrayList<Report>();
+    protected final String uberTag = "data-crow-objects";
+    protected final BufferedOutputStream bos;
+
+    protected XmlBaseWriter(BufferedOutputStream bos) {
+        this.bos = bos;
+    }
+
+    protected XmlBaseWriter(String filename) throws IOException {
+        FileOutputStream fos = new FileOutputStream(filename);
+        bos = new BufferedOutputStream(fos);
+    }    
     
-    static {
-        reports.add(new XmlReport(new ReportTemplateProperties()));
-        reports.add(new TextReport());
+    protected String getValidTag(String s) {
+        return Converter.getValidXmlTag(s);
     }
     
-    public static Collection<Report> getReports() {
-        return reports;
+    protected void newLine() throws IOException {
+        bos.write("\r\n".getBytes());
+    }
+    
+    protected void writeLine(String s, int level) throws IOException {
+        for (int i = 0; i < level; i++)
+            bos.write("    ".getBytes());
+
+        writeTag(s);
+        newLine();
+    }
+    
+    protected void writeTag(String s) throws IOException {
+        bos.write(s.getBytes("UTF8"));
     }
 }

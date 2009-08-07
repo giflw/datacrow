@@ -32,6 +32,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -46,6 +47,8 @@ import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.item.InternetWizardPanel;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
 
 /**
@@ -60,7 +63,6 @@ public abstract class Wizard extends DcFrame implements ActionListener {
     protected int current = 0;
 
     private DcLongTextField textHelp;
-    
     private List<IWizardPanel> wizardPanels;
     
     private JButton buttonNext;
@@ -72,28 +74,80 @@ public abstract class Wizard extends DcFrame implements ActionListener {
     private boolean cancelled = false;
     private boolean restarted = false;
     
+    /**  Steps to skip (dynamic, can be altered during the wizard process */
+    protected List<Integer> skip = new ArrayList<Integer>();
     protected boolean closed = false;
 
+    protected int moduleIdx;
+    
     public Wizard() {
+    	this(DcModules.getCurrent().getIndex());
+    }
+    
+    public Wizard(int moduleIdx) {
         super("", IconLibrary._icoWizard);
+        
+        this.moduleIdx = moduleIdx;
         
         initialize();
         
-        if (closed) 
-            return;
+        if (closed) return;
         
         wizardPanels = getWizardPanels();
         
         build();
         
+        setCenteredLocation();
+        
         addKeyListener(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), new NextOnEnterAction(), "next");
     }
     
+	public DcModule getModule() {
+		return DcModules.get(moduleIdx);
+	}
+	
+	public int getModuleIdx() {
+		return moduleIdx;
+	}  
+	
+	protected boolean isRestartSupported() {
+	    return true;
+	}
+	
     protected abstract String getWizardName();
     protected abstract void saveSettings();
     public abstract void finish() throws WizardException;
-    public abstract void next() throws WizardException;
-    protected abstract void restart();
+    
+    public void next() throws WizardException {
+        try {
+            Object o = getCurrent().apply();
+
+            if (o == null) return;
+            
+            current += 1;
+            
+            if (skip.contains(Integer.valueOf(current)))
+                current += 1;
+            
+            if (current <= getStepCount()) {
+                for (int i = 0; i < getStepCount(); i++) {
+                    IWizardPanel panel = getWizardPanel(i);
+                    panel.setVisible(i == current);
+                }
+            } else {
+                current -= 1;
+            }
+
+            applyPanel();
+        } catch (WizardException wzexp) {
+            if (wzexp.getMessage().length() > 1)
+                new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
+        }
+    }
+    
+    
+    protected void restart() {}
+    
     protected abstract void initialize();
     protected abstract List<IWizardPanel> getWizardPanels();    
 
@@ -122,7 +176,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
         buttonBack.setEnabled(current != 0);
         buttonNext.setVisible(current != wizardPanels.size() - 1);
         buttonFinish.setVisible(current == wizardPanels.size() - 1);
-        buttonRestart.setVisible(current == wizardPanels.size() - 1);
+        buttonRestart.setVisible(isRestartSupported() && current == wizardPanels.size() - 1);
         textHelp.setText(getCurrent().getHelpText());
         
         if (buttonFinish.isVisible())
@@ -156,14 +210,17 @@ public abstract class Wizard extends DcFrame implements ActionListener {
         return wizardPanels.size();
     }
     
-    protected IWizardPanel getWizardPanel(int step) {
+    public IWizardPanel getWizardPanel(int step) {
         return wizardPanels.get(step);
     }
     
     protected void back() {
         current -= 1;
+        
+        if (skip.contains(Integer.valueOf(current)))
+            current -= 1;
+        
         int counter = 0;
-
         if (current >= 0) {
             for (IWizardPanel panel : wizardPanels) {
                 panel.setVisible(counter == current);

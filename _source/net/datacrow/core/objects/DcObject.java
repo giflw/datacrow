@@ -135,6 +135,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         markAsUnchanged();
     }    
     
+    public int getSystemDisplayFieldIdx() {
+        return getDisplayFieldIdx();
+    }
+    
     /**
      * Educated guess..
      */

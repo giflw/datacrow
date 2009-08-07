@@ -61,6 +61,11 @@ public abstract class Settings {
     public boolean contains(String key) {
         return settings.getSetting(key) != null;
     }
+
+    public Setting getSetting(String key) {
+        return settings.getSetting(key);
+    }
+
     
     public net.datacrow.core.settings.Settings getSettings() {
         return settings;
@@ -90,7 +95,6 @@ public abstract class Settings {
         return (IDefinitions) get(key);
     }
 
-    
     public Font getFont(String key) {
         return (Font) get(key);
     }

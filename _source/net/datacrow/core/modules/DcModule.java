@@ -26,9 +26,6 @@
 package net.datacrow.core.modules;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,13 +55,14 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
+import net.datacrow.core.migration.itemimport.CsvImporter;
+import net.datacrow.core.migration.itemimport.ItemImporterHelper;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.resources.DcResources;
@@ -82,9 +80,6 @@ import net.datacrow.settings.definitions.QuickViewFieldDefinitions;
 import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinitions;
 import net.datacrow.synchronizers.Synchronizer;
-import net.datacrow.util.CSVReader;
-import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -1346,61 +1341,6 @@ public class DcModule implements Comparable<DcModule> {
         return getLabel().toLowerCase().compareTo(module.getLabel().toLowerCase());
     }
 
-    /**
-     * Retrieves the default data for this module.
-     * The default data is inserted on new installations. Default data is located
-     * in the data folder of the modules folder.
-     * @return The default data or null.
-     * @throws Exception
-     */
-    public DcObject[] getDefaultData() throws Exception  {
-        String filename = getTableName() + ".data";
-        File file = new File(DataCrow.moduleDir + "data/" + filename);
-        
-        DcObject[] data = null;
-        if (file.exists()) {
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
-            CSVReader csvReader = new CSVReader(reader, "\t", null);
-            List<String[]> lines = csvReader.readAll();  
-            
-            data = new DcObject[lines.size() - 1];
-            
-            String[] headers = lines.get(0);
-            for (int i = 1; i < lines.size(); i++) {
-                Object[] line = lines.get(i);
-                DcObject dco = getDcObject();
-                for (int j = 0; j < headers.length; j++) {
-                    Object value = line[j];
-                    if (value != null && !value.equals("")) {
-                        for (DcField field : dco.getFields()) {
-                        	
-                        	if (field.isUiOnly() && field.getFieldType() != ComponentFactory._PICTUREFIELD) continue;
-                        	
-                            if (field.getSystemName().equalsIgnoreCase(headers[j])) {
-                                if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                                    Picture picture = new Picture();
-                                    picture.isNew(true);
-                                    picture.setValue(Picture._C_FILENAME, DataCrow.installationDir + value);
-                                    picture.setValue(Picture._D_IMAGE, new DcImageIcon(DataCrow.installationDir + value));
-                                    value = picture;
-                                } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
-                                    String s = DataCrow.installationDir + value;
-                                    value = Utilities.fileToBase64String(new URL("file://" + s));
-                                }
-                                
-                                dco.setValue(field.getIndex(), value);
-                                break;
-                            }
-                        }                        
-                    }
-                }
-                data[i - 1] = dco;
-            }
-        }
-        
-        return data;
-    }
-
     @Override
     public String toString() {
         return getName();
@@ -1425,4 +1365,27 @@ public class DcModule implements Comparable<DcModule> {
                 getTemplateModule().delete();
         }
     }
+    
+    /**
+     * Retrieves the default data for this module.
+     * The default data is inserted on new installations. Default data is located
+     * in the data folder of the modules folder.
+     * @return The default data or null.
+     * @throws Exception
+     */
+    public Collection<DcObject> getDefaultData() throws Exception  {
+        String filename = getTableName() + ".data";
+        File file = new File(DataCrow.moduleDir + "data/", filename);
+        
+        Collection<DcObject> items = null;
+        if (file.exists()) {
+            ItemImporterHelper reader = new ItemImporterHelper("CSV", getIndex(), file);
+            reader.setSetting(CsvImporter._SEPERATOR, "\t");
+            reader.start();
+            items = reader.getItems();
+            reader.clear();
+        }
+        
+        return items;
+    }    
 }

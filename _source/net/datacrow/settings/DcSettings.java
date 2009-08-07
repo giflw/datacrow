@@ -37,6 +37,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.settings.Setting;
 import net.datacrow.settings.definitions.IDefinitions;
 
 /**
@@ -70,6 +71,14 @@ public class DcSettings {
         view.setSize(new Dimension(875, 470));
         return view;
     }  
+    
+    public static Settings getSettings() {
+    	return applicationSettings;
+    }
+    
+    public static Setting getSetting(String key) {
+        return applicationSettings.getSetting(key);
+    }
     
     public static void set(String key, Object value) {
         applicationSettings.set(key, value);

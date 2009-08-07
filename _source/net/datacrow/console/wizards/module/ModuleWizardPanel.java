@@ -51,6 +51,17 @@ public abstract class ModuleWizardPanel extends JPanel implements IWizardPanel {
     protected Wizard getWizard() {
         return wizard;
     }
+    
+    @Override
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+    	if (b) onActivation();
+    	else onDeactivation();
+    }
+
+	public void onDeactivation() {}
+	
+    public void onActivation() {}    
 
     public abstract String getHelpText();
 }
