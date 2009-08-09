@@ -10,10 +10,16 @@ import net.datacrow.core.resources.DcResources;
 
 public class ItemExporterWizard extends Wizard {
 
-	public ItemExporterWizard(int moduleIdx) {
-		super(moduleIdx);
+    private ItemExporterDefinition definition = new ItemExporterDefinition();
+    
+	public ItemExporterWizard() {
+		super();
 	}
-	
+
+    public ItemExporterDefinition getDefinition() {
+        return definition;
+    }
+
     @Override
     public void finish() throws WizardException {
         close();
@@ -32,7 +38,9 @@ public class ItemExporterWizard extends Wizard {
     @Override
     protected List<IWizardPanel> getWizardPanels() {
     	List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
+    	panels.add(new ItemExporterSelectionPanel(this));
     	panels.add(new ItemExporterSettingsPanel(this));
+    	panels.add(new ItemExporterPanel(this));
     	return panels;
     }
 

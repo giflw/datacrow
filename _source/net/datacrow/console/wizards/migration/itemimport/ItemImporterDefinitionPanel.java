@@ -18,13 +18,13 @@ import net.datacrow.core.settings.Setting;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcFileFilter;
 
-public class ItemImportDefinitionPanel extends ItemImporterWizardPanel {
+public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
 
     private DcFileField source;
     private ItemImporterWizard wizard;
     private Map<String, IComponent> settings = new HashMap<String, IComponent>();
     
-    public ItemImportDefinitionPanel(ItemImporterWizard wizard) {
+    public ItemImporterDefinitionPanel(ItemImporterWizard wizard) {
         this.wizard = wizard;
         build();
     }
@@ -35,15 +35,15 @@ public class ItemImportDefinitionPanel extends ItemImporterWizardPanel {
 		build();
 
 		if (	wizard.getDefinition() != null && 
-				wizard.getDefinition().getReader() != null) {
+				wizard.getDefinition().getImporter() != null) {
 			
 			settings.clear();
 			
-			source.setFileFilter(new DcFileFilter(wizard.getDefinition().getReader().getSupportedFileTypes()));
+			source.setFileFilter(new DcFileFilter(wizard.getDefinition().getImporter().getSupportedFileTypes()));
 			source.setFile(wizard.getDefinition().getFile());
 			
 			int y = 1;
-	        for (String key : wizard.getDefinition().getReader().getSettingKeys()) {
+	        for (String key : wizard.getDefinition().getImporter().getSettingKeys()) {
 	        	Setting setting = DcSettings.getSetting(key) != null ? DcSettings.getSetting(key) : 
 	        		wizard.getModule().getSettings().getSetting(key);
 	        	

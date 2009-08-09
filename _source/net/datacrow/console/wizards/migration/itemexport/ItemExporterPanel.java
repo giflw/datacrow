@@ -1,4 +1,4 @@
-package net.datacrow.console.wizards.migration.itemimport;
+package net.datacrow.console.wizards.migration.itemexport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -12,37 +12,34 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.data.DataManager;
-import net.datacrow.core.migration.itemimport.IItemImporterClient;
-import net.datacrow.core.migration.itemimport.ItemImporter;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.migration.itemexport.IItemExporterClient;
+import net.datacrow.core.migration.itemexport.ItemExporter;
 import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
 
-public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemImporterClient  {
+public class ItemExporterPanel extends ItemExporterWizardPanel implements IItemExporterClient  {
 
-	private static Logger logger = Logger.getLogger(ItemImporterPanel.class.getName());
+	private static Logger logger = Logger.getLogger(ItemExporterPanel.class.getName());
 	
-    private ItemImporterWizard wizard;
     private JTextArea textLog = ComponentFactory.getTextArea();
     private JProgressBar progressBar = new JProgressBar();
     
-    private ItemImporter importer;
+    private ItemExporter exporter;
     
-    public ItemImporterPanel(ItemImporterWizard wizard) {
-        this.wizard = wizard;
+    public ItemExporterPanel(ItemExporterWizard wizard) {
+        super(wizard);
         build();
     }
     
-	public Object apply() throws WizardException {
+    public Object apply() throws WizardException {
         return wizard.getDefinition();
     }
 
+	@Override
     public void destroy() {
-    	if (importer != null) importer.cancel();
-    	importer = null;
+    	if (exporter != null) exporter.cancel();
+    	exporter = null;
     	progressBar = null;
     	textLog = null;
     	wizard = null;
@@ -55,7 +52,7 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     @Override
     public void onActivation() {
     	if (wizard.getDefinition() != null) {
-    		this.importer = wizard.getDefinition().getImporter();
+    		this.exporter = wizard.getDefinition().getExporter();
     		start();
     	}
 	}
@@ -66,13 +63,15 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
 	}
 
     private void start() {
-    	importer.setClient(this);
+        exporter.setClient(this);
     	
     	try { 
-    	    if (importer.getFile() == null)
-    	        importer.setFile(wizard.getDefinition().getFile());
+    	    if (exporter.getFile() == null)
+    	        exporter.setFile(wizard.getDefinition().getFile());
     	    
-    	    importer.start();
+    	    exporter.setSettings(definition.getSettings());
+    	    exporter.setItems(definition.getItems());
+    	    exporter.start();
     	    
     	} catch (Exception e ) {
     	    notifyMessage(e.getMessage());
@@ -118,7 +117,7 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     }
     
     private void cancel() {
-        if (importer != null) importer.cancel();
+        if (exporter != null) exporter.cancel();
         notifyStopped();
     }    
     
@@ -137,29 +136,7 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
 
     public void notifyStopped() {}
 
-    public void notifyProcessed(DcObject item) {
-        if (    wizard.getModule().isTopModule() && 
-                wizard.getModule().getCurrentInsertView() != null) {
-            
-            wizard.getModule().getCurrentInsertView().add(item);
-        } else {
-            DcObject property = DataManager.getObjectForDisplayValue(item.getModule().getIndex(), item.toString());
-            // Check if the item exists and if so, update the item with the found values. Else just create a new item.
-            // This is to make sure the order in which XML files are processed (first software, then categories)
-            // is of no importance.
-            try {
-                if (property != null) {
-                    property.copy(item, true);
-                    property.saveUpdate(false);
-                } else {
-                    item.saveNew(false);
-                }
-            } catch (ValidationException ve) {
-                notifyMessage(ve.getMessage());
-            }
-        }
-        
-        progressBar.setValue(progressBar.getValue() + 1);
-        notifyMessage(DcResources.getText("msgAddedX", item.toString()));
+    public void notifyProcessed() {
+        progressBar.setValue(progressBar.getValue() + 1);       
     }
 }

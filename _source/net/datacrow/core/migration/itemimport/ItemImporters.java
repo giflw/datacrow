@@ -15,11 +15,11 @@ public class ItemImporters {
 	private static Logger logger = Logger.getLogger(ItemImporters.class.getName());
 	
     private static ItemImporters instance;
-    private Map<String, Class<?>> readers = new HashMap<String, Class<?>>(); 
+    private Map<String, Class<?>> importers = new HashMap<String, Class<?>>(); 
     
     private ItemImporters() {
-        readers.put("CSV", CsvImporter.class);
-        readers.put("XML", XmlImporter.class);
+        importers.put("CSV", CsvImporter.class);
+        importers.put("XML", XmlImporter.class);
     }
 
     public static ItemImporters getInstance() {
@@ -27,11 +27,11 @@ public class ItemImporters {
         return instance;
     }
 
-    public Collection<ItemImporter> getSourceReaders(int moduleIdx) {
+    public Collection<ItemImporter> getImporters(int moduleIdx) {
     	Collection<ItemImporter> c = new ArrayList<ItemImporter>();
-    	for (String key : readers.keySet()) {
+    	for (String key : importers.keySet()) {
     		try {
-    			c.add(getSourceReader(key, moduleIdx));
+    			c.add(getImporter(key, moduleIdx));
     		} catch (Exception e) {
     			logger.error(e, e);
     		}
@@ -46,8 +46,8 @@ public class ItemImporters {
      * @param moduleIdx
      * @throws Exception
      */
-    public ItemImporter getSourceReader(String type, int moduleIdx) throws Exception {
-        return getSourceReader(type, moduleIdx, ItemMigrater._MODE_THREADED);
+    public ItemImporter getImporter(String type, int moduleIdx) throws Exception {
+        return getImporter(type, moduleIdx, ItemMigrater._MODE_THREADED);
     }
     
     /**
@@ -58,8 +58,8 @@ public class ItemImporters {
      * @param mode
      * @throws Exception
      */
-    public ItemImporter getSourceReader(String type, int moduleIdx, int mode) throws Exception {
-        Class<?> clazz = readers.get(type.toUpperCase());
+    public ItemImporter getImporter(String type, int moduleIdx, int mode) throws Exception {
+        Class<?> clazz = importers.get(type.toUpperCase());
         if (clazz != null) {
             return (ItemImporter) clazz.getConstructors()[0].newInstance(
                     new Object[] {Integer.valueOf(moduleIdx), Integer.valueOf(mode)});

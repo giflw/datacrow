@@ -7,16 +7,16 @@ import net.datacrow.core.migration.itemimport.ItemImporter;
 public class ItemImporterDefinition {
     
     private File file;
-    private ItemImporter reader;
+    private ItemImporter importer;
     
     public ItemImporterDefinition() {}
     
-    public void setReader(ItemImporter reader) {
-        this.reader = reader;
+    public void setImporter(ItemImporter importer) {
+        this.importer = importer;
     }
 
-    public ItemImporter getReader() {
-        return reader;
+    public ItemImporter getImporter() {
+        return importer;
     }
     
     public void setFile(File file) {

@@ -17,9 +17,7 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
     }
     
     public Object apply() throws WizardException {
-        if (definition != null && definition.getSettings() != null)
-            settingsPanel.saveSettings(definition.getSettings(), false);
-        
+        settingsPanel.saveSettings(definition.getSettings(), false);
         return definition;
     }
 

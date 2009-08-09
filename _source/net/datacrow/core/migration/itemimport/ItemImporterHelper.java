@@ -19,7 +19,7 @@ public class ItemImporterHelper implements IItemImporterClient {
     
     public ItemImporterHelper(String type, int moduleIdx, File file) throws Exception {
         this.file = file;
-        this.reader = ItemImporters.getInstance().getSourceReader(type, moduleIdx, ItemMigrater._MODE_NON_THREADED);
+        this.reader = ItemImporters.getInstance().getImporter(type, moduleIdx, ItemMigrater._MODE_NON_THREADED);
         this.reader.setClient(this);
     }
 

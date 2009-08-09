@@ -40,8 +40,8 @@ public class ItemImporterWizard extends Wizard {
     
     @Override
     public void next() throws WizardException {
-        if (getDefinition() != null && getDefinition().getReader() != null) {
-            if (!getDefinition().getReader().requiresMapping()) {
+        if (getDefinition() != null && getDefinition().getImporter() != null) {
+            if (!getDefinition().getImporter().requiresMapping()) {
                 if (!skip.contains(Integer.valueOf(_STEP_MAPPING)))
                     skip.add(Integer.valueOf(_STEP_MAPPING));
             } else {
@@ -57,7 +57,7 @@ public class ItemImporterWizard extends Wizard {
     protected List<IWizardPanel> getWizardPanels() {
     	List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
     	panels.add(new ItemImporterSelectionPanel(this));
-    	panels.add(new ItemImportDefinitionPanel(this));
+    	panels.add(new ItemImporterDefinitionPanel(this));
     	panels.add(new ItemImporterMappingPanel(this));
     	panels.add(new ItemImporterPanel(this));
     	return panels;

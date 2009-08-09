@@ -3,7 +3,6 @@ package net.datacrow.console.wizards.migration.itemimport;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.File;
-import java.util.Collection;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -40,7 +39,7 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
     }
     
 	public Object apply() throws WizardException {
-        ItemImporter reader = wizard.getDefinition().getReader();
+        ItemImporter reader = wizard.getDefinition().getImporter();
         for (int i = 0; i < table.getRowCount(); i++) {
         	String source = (String) table.getValueAt(i, 0, true);
         	DcField target = (DcField) table.getValueAt(i, 1, true);
@@ -68,7 +67,7 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
 
             table.clear();
             try {
-                ItemImporter reader = wizard.getDefinition().getReader();
+                ItemImporter reader = wizard.getDefinition().getImporter();
                 reader.setFile(file);
                 int position = 0;
                 for (String source : reader.getSourceFields())  {
@@ -99,11 +98,10 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
         columnName.setHeaderValue(DcResources.getText("lblSourceName"));
 
         TableColumn columnField = table.getColumnModel().getColumn(1);
-        Collection<DcField> fields = wizard.getModule().getFields();
         JComboBox comboFields = ComponentFactory.getComboBox();
         columnField.setHeaderValue(DcResources.getText("lblTargetName"));
 
-        for (DcField field : fields) {
+        for (DcField field : wizard.getModule().getFields()) {
             if (    (!field.isUiOnly() || 
                       field.getValueType() == DcRepository.ValueTypes._PICTURE || 
                       field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
