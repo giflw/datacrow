@@ -29,11 +29,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.util.Collection;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcLabel;
@@ -111,13 +109,16 @@ public abstract class DcObjectListElement extends DcListElement {
     private String getDescription() {
         int[] fields = (int[]) dco.getModule().getSetting(DcRepository.ModuleSettings.stCardViewItemDescription);
         if (fields != null && fields.length > 0) {
-            String name = "";
+            StringBuilder sb = new StringBuilder();
             for (int field :  fields) {
                 String disp = dco.getDisplayString(field);
-                if (disp.length() > 0)
-                    name += (name.length() > 0 ? ", " + disp : disp);
+                if (disp.length() > 0) {
+                    if (sb.length() > 0)
+                        sb.append("/");
+                    sb.append(disp);
+                }
             }
-            return name;
+            return sb.toString();
         } 
         return dco.getName();
     }
@@ -134,10 +135,6 @@ public abstract class DcObjectListElement extends DcListElement {
         addPicture(getPictures());
         
         DcTextPane title = ComponentFactory.getTextPane();
-        JScrollPane scroller = new JScrollPane(title);
-        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        
         title.setText(getDescription());
         title.setPreferredSize(dimTxt);
         title.setMinimumSize(dimTxt);
@@ -150,11 +147,8 @@ public abstract class DcObjectListElement extends DcListElement {
     private void addPicture(Collection<Picture> pictures) {
         DcPictureField lbl = null;
         for (Picture p : pictures) {
-            if (p == null)
-                continue;
-            
-            if (lbl != null)
-                break;
+            if (p == null) continue;
+            if (lbl != null) break;
                 
             DcImageIcon scaledImage = p.getScaledPicture();
             DcImageIcon image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
@@ -189,8 +183,7 @@ public abstract class DcObjectListElement extends DcListElement {
     protected DcLabel getLabel(int field, boolean label, int width) {
         DcLabel lbl = new DcLabel();
         if (label) {
-            Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontBold);
-            lbl.setFont(new Font(font.getName(), Font.BOLD, font.getSize()));
+            lbl.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
             lbl.setText(dco.getLabel(field));
         } else {
             lbl.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));

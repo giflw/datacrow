@@ -30,24 +30,21 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.BorderFactory;
-
 import net.datacrow.console.components.DcTextPane;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.settings.DcSettings;
 
 public class DcCardObjectListElement extends DcObjectListElement {
 
+    private final static Dimension size = new Dimension(150, 200);
+    
     public DcCardObjectListElement(DcObject dco) {
         super(dco);
         
-        setPreferredSize(new Dimension(150, 200));
-        setMaximumSize(new Dimension(150, 200));
-        setMinimumSize(new Dimension(150, 200));
-        
-        setBorder(BorderFactory.createLineBorder(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor)));
+        setPreferredSize(size);
+        setMaximumSize(size);
+        setMinimumSize(size);
     }
     
     @Override
