@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.4.13 patch 2
-Created on 03/08/2009
+Version 3.4.14
+Created on xx/08/2009
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -111,7 +111,10 @@ Upgrade paths:
   [Versions between 2.9.5 and 3.0]  
   First install and run the 3.0 version prior to upgrading to the latest version. 
 
-  [Version 3.0 and higher]  
+  [Version 3.4.12 and lower]  
+  Install and run version 3.4.13 prior to installing the 3.4.14 version.
+
+  [Version 3.4.14 and higher]  
   Install and run the latest version.
 
 

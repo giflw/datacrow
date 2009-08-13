@@ -1,4 +1,21 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.14 [Release on xx/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+Be aware! Due to maintenance the upgrade process has been removed which means that old
+backups cannot be restored within this version (3.4.12 and older). This has been done 
+to get rid off old pieces of coding. Sorry for any inconvenience caused by this. 
+
+[New]
+- Item export wizard.
+- Item import wizard.
+
+[Changed]
+- The reporting dialog no longer offers the option to make an XML or CSV 'report'.
+  This functionality has been replaced by the item export tool.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.13.2 [Release on 03/08/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

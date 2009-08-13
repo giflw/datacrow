@@ -37,6 +37,7 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.db.upgrade.DatabaseUpgrade;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;

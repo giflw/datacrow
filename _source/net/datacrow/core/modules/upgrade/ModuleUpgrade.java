@@ -27,7 +27,6 @@ package net.datacrow.core.modules.upgrade;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -35,14 +34,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.Version;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.ModuleJar;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.modules.xml.XmlObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.StringUtils;
 import net.datacrow.util.XMLParser;
 
 import org.apache.log4j.Logger;
@@ -71,162 +67,8 @@ public class ModuleUpgrade extends XmlObject {
      * @throws ModuleUpgradeException
      */
     public byte[] upgrade(byte[] xml) throws ModuleUpgradeException {
-        String s;
-        try {
-            s = new String(xml, "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            s = new String(xml);
-        }
-        
-        // check the version. for older version; add the version if it does not exist yet.
-        String version = StringUtils.getValueBetween("<product-version>", "</product-version>", s);
-        if (version.length() == 0) {
-            int idx = s.indexOf("</index>") + 8;
-            s = s.substring(0, idx) + 
-                "\r\n        <product-version>" + DataCrow.getVersion().toString() + "</product-version>" + 
-                s.substring(idx);
-        }
-        
-        Version v = new Version(version);
-        if (v.equals(DataCrow.getVersion())) {
-            return xml;  
-        } else {
-            return upgrade(s, version);
-        } 
+        return xml;
     }
-    
-    private static byte[] upgrade(String s, String version)  {
-        int index = Integer.valueOf(StringUtils.getValueBetween("<index>", "</index>", s));
-        
-        if (index == DcModules._MUSICALBUM)
-            s = s.replaceAll("OnlineAudioCdSearchForm", "OnlineMusicAlbumSearchForm");
-        
-        s = s.replaceAll("online-search-ui-class", "onlinesearch-class");
-        s = s.replaceAll("import-ui-class", "importer-class");
-        
-        s = s.replaceAll("<readonly>true</readonly>", "<readonly>false</readonly>");
-        
-        // package names have changed
-        s = s.replaceAll("net.sf.dc", "net.datacrow");
-        
-        // object definitions have changed
-        s = s.replaceAll("net.datacrow.core.objects.audiocd", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("net.datacrow.core.objects.book", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("net.datacrow.core.objects.contactperson", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("net.datacrow.core.objects.generic", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("net.datacrow.core.objects.image", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("net.datacrow.core.objects.movie", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("net.datacrow.core.objects.musicalbum", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("net.datacrow.core.objects.software", "net.datacrow.core.objects.helpers");
-        s = s.replaceAll("GenericObject", "Media");
-        
-        // class location changes
-        s = s.replaceAll("net.datacrow.processes.synchronizer", "net.datacrow.synchronizers");
-        s = s.replaceAll("net.datacrow.console.onlinesearch", "net.datacrow.console.windows.onlinesearch");
-        
-        s = s.replaceAll("net.datacrow.console.windows.onlinesearch.OnlineSoftwareSearchForm", "net.datacrow.onlinesearch.OnlineSoftwareSearch");
-        s = s.replaceAll("net.datacrow.console.windows.onlinesearch.OnlineAudioCdSearchForm", "net.datacrow.onlinesearch.OnlineAudioCdSearch");
-        s = s.replaceAll("net.datacrow.console.windows.onlinesearch.OnlineBookSearchForm", "net.datacrow.onlinesearch.OnlineBookSearch");
-        s = s.replaceAll("net.datacrow.console.windows.onlinesearch.OnlineMoviePersonSearchForm", "net.datacrow.onlinesearch.OnlineMoviePersonSearch");
-        s = s.replaceAll("net.datacrow.console.windows.onlinesearch.OnlineMovieSearchForm", "net.datacrow.onlinesearch.OnlineMovieSearch");
-        s = s.replaceAll("net.datacrow.console.windows.onlinesearch.OnlineMusicAlbumSearchForm", "net.datacrow.onlinesearch.OnlineMusicAlbumSearch");
-
-        // person renamed to associate
-        s = s.replaceAll("DcPerson", "DcAssociate");
-        
-        if (index == DcModules._MUSICTRACK)
-            s = s.replaceAll("<importer-class />", 
-                             "<importer-class>net.datacrow.fileimporters.MusicAlbumImporter</importer-class>");
-        
-        if (index == DcModules._MUSICARTIST) {
-            s = s.replaceAll("<onlinesearch-class></onlinesearch-class>", 
-                             "<onlinesearch-class>net.datacrow.onlinesearch.OnlineArtistSearch</onlinesearch-class>");
-            s = s.replaceAll("<synchronizer-class></synchronizer-class>", 
-                             "<synchronizer-class>net.datacrow.synchronizers.AssociateSynchronizer</synchronizer-class>");
-            s = s.replaceAll("<is-serving-multiple-modules>false</is-serving-multiple-modules>", 
-                             "<is-serving-multiple-modules>true</is-serving-multiple-modules>");
-        }
-
-        if (    index == DcModules._ACTOR || index == DcModules._DEVELOPER ||
-                index == DcModules._SOFTWAREPUBLISHER || index == DcModules._DIRECTOR)
-            s = s.replaceAll("<synchronizer-class></synchronizer-class>", 
-                             "<synchronizer-class>net.datacrow.synchronizers.AssociateSynchronizer</synchronizer-class>");
-        
-        if (index == DcModules._BOOK)
-            s = s.replaceAll("<importer-class></importer-class>", "<importer-class>net.datacrow.fileimporters.EbookImport</importer-class>");
-        
-        if (index == DcModules._SOFTWAREPUBLISHER || index == DcModules._DEVELOPER) 
-            s = s.replaceAll("<onlinesearch-class></onlinesearch-class>", 
-                             "<onlinesearch-class>net.datacrow.onlinesearch.OnlineSoftwareCompanySearch</onlinesearch-class>");
-        
-        String currentVersion = DataCrow.getVersion().toString();
-        s = s.replace("<product-version>" + version + "</product-version>", 
-                      "<product-version>" + currentVersion + "</product-version>");
-        
-        if (s.indexOf("<is-file-backed>") == -1) {
-            boolean isFileBacked = index == DcModules._BOOK || index == DcModules._IMAGE ||
-                                   index == DcModules._MOVIE || index == DcModules._MUSICTRACK ||
-                                   index == DcModules._MUSICTRACK || index == DcModules._SOFTWARE;
-            
-            int idx = s.indexOf("</index>") + 8;
-            s = s.substring(0, idx) + 
-                "\r\n        <is-file-backed>" + isFileBacked + "</is-file-backed>" +
-                s.substring(idx);
-        }
-        
-        if (s.indexOf("<is-container-managed>") == -1) {
-            boolean isContainerManaged = 
-                s.indexOf("<module-class>net.datacrow.core.modules.DcMediaModule</module-class>") > -1 ||
-                index == DcModules._AUDIOCD || index == DcModules._BOOK || index == DcModules._IMAGE ||
-                index == DcModules._MOVIE || index == DcModules._MUSICALBUM || index == DcModules._SOFTWARE;
-                
-            int idx = s.indexOf("</index>") + 8;
-            s = s.substring(0, idx) + 
-                "\r\n        <is-container-managed>" + isContainerManaged + "</is-container-managed>" +
-                s.substring(idx);
-        }
-        
-        try {
-            return s.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            return s.getBytes();
-        }
-    }
-    
-    private void removeDuplicates() {
-        String[] modules = new File(DataCrow.moduleDir).list();
-        for (String module : modules) {
-            if (module.toLowerCase().endsWith(".jar")) {
-                
-                boolean containsUpper = false;
-                for (char c : module.toCharArray()) {
-                    if (Character.isUpperCase(c)) {
-                        containsUpper = true;
-                        break;
-                    }
-                }
-                
-                if (containsUpper)
-                    removeDuplicate(module.toLowerCase(), module);
-            }
-        }
-    }
-
-    private void removeDuplicate(String lowercase, String uppercase) {
-        String[] modules = new File(DataCrow.moduleDir).list();
-        boolean foundLowercase = false;
-        boolean foundUppercase = false;
-        for (String module : modules) {
-            if (module.equals(uppercase))
-                foundUppercase = true;
-            else if (module.equals(lowercase))
-                foundLowercase = true;
-        }
-        
-        if (foundLowercase && foundUppercase)
-            new File(DataCrow.moduleDir + uppercase).delete();
-    }
-
     
     public void upgrade() throws ModuleUpgradeException {
         removeDuplicates();
@@ -371,6 +213,40 @@ public class ModuleUpgrade extends XmlObject {
             save(xmlModule);
         }        
     }
+    
+    private void removeDuplicates() {
+        String[] modules = new File(DataCrow.moduleDir).list();
+        for (String module : modules) {
+            if (module.toLowerCase().endsWith(".jar")) {
+                
+                boolean containsUpper = false;
+                for (char c : module.toCharArray()) {
+                    if (Character.isUpperCase(c)) {
+                        containsUpper = true;
+                        break;
+                    }
+                }
+                
+                if (containsUpper)
+                    removeDuplicate(module.toLowerCase(), module);
+            }
+        }
+    }
+
+    private void removeDuplicate(String lowercase, String uppercase) {
+        String[] modules = new File(DataCrow.moduleDir).list();
+        boolean foundLowercase = false;
+        boolean foundUppercase = false;
+        for (String module : modules) {
+            if (module.equals(uppercase))
+                foundUppercase = true;
+            else if (module.equals(lowercase))
+                foundLowercase = true;
+        }
+        
+        if (foundLowercase && foundUppercase)
+            new File(DataCrow.moduleDir + uppercase).delete();
+    }    
     
     private Collection<XmlField> getFields(Element element, int module) throws Exception {
         Collection<XmlField> fields = new ArrayList<XmlField>(); 

@@ -23,41 +23,19 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core.settings.upgrade;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.StringTokenizer;
+package net.datacrow.core.db.upgrade;
 
 /**
- * Used for conversion purposes only.
- * 
- * @deprecated
+ * This exception is thrown when an exception occurs during a database upgrade.
  * @author Robert Jan van der Waals
  */
-@SuppressWarnings("dep-ann")
-public class LegacyFieldDefinitions {
-    
-    private java.util.List<LegacyFieldDefinition> definitions = new ArrayList<LegacyFieldDefinition>();
-    
-    protected java.util.List<LegacyFieldDefinition> getDefinitions() {
-        return definitions;
+public class DatabaseUpgradeException extends Exception {
+
+    public DatabaseUpgradeException(String message) {
+        super(message);
     }
     
-    protected void add(String s) {
-        StringTokenizer st = new StringTokenizer(s, "/&/");
-        Collection<String> c = new ArrayList<String>();
-        while (st.hasMoreTokens())
-            c.add((String) st.nextElement());
-        
-        String[] values = c.toArray(new String[0]);
-        int field = Integer.valueOf(values[0]).intValue();
-        String name = values[1] == null || values[1].toLowerCase().equals("null") ? "" : values[1];
-        boolean enabled = Boolean.valueOf(values[2]).booleanValue();
-        boolean required = Boolean.valueOf(values[3]).booleanValue();
-        boolean visible = Boolean.valueOf(values[4]).booleanValue();          
-        boolean descriptive = values.length > 5 ? Boolean.valueOf(values[5]).booleanValue() : false;
-        
-        definitions.add(new LegacyFieldDefinition(field, name, enabled, required, descriptive, visible));   
+    public DatabaseUpgradeException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

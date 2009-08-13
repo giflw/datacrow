@@ -66,7 +66,6 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.security.SecurityException;
 import net.datacrow.core.services.Servers;
-import net.datacrow.core.settings.upgrade.SettingsConversion;
 import net.datacrow.core.web.DcWebServer;
 import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.filerenamer.FilePatterns;
@@ -91,7 +90,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 13, 2);
+    private static Version version = new Version(3, 4, 14, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -295,9 +294,6 @@ public class DataCrow {
             
             if (nocache)
                 DataManager.setUseCache(false);
-            
-            // convert the settings
-            SettingsConversion.convert();
             
             // Start the UI
             if (splashScreen == null)

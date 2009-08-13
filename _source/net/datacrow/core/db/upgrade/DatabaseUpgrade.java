@@ -23,19 +23,19 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core.db;
+package net.datacrow.core.db.upgrade;
+
 
 /**
- * This exception is thrown when an exception occurs during a database upgrade.
+ * Converts the current database before the actual module tables are created / updated.
+ * This means that the code here defies workflow logic and is strictly to be used for
+ * table conversions and migration out of the scope of the normal module upgrade code.
+ * 
+ * The automatic database correction script runs after this manual upgrade.
+ * 
  * @author Robert Jan van der Waals
  */
-public class DatabaseUpgradeException extends Exception {
-
-    public DatabaseUpgradeException(String message) {
-        super(message);
-    }
+public class DatabaseUpgrade {
     
-    public DatabaseUpgradeException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    public void start() {}
 }
