@@ -37,10 +37,10 @@ import java.util.Map;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.ModuleUpgradeException;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.security.PermissionModule;
 import net.datacrow.core.modules.security.UserModule;
+import net.datacrow.core.modules.upgrade.ModuleUpgradeException;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;

@@ -5,7 +5,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.TableColumn;
 
@@ -77,7 +76,7 @@ public class ItemExporterModuleSelectionPanel extends ItemExporterWizardPanel im
         /*************************************
          * Actions 
          *************************************/
-        JPanel panelActions = new JPanel();
+        //JPanel panelActions = new JPanel();
 
         
         

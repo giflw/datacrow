@@ -33,10 +33,10 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import net.datacrow.core.ModuleUpgrade;
-import net.datacrow.core.ModuleUpgradeException;
 import net.datacrow.core.modules.InvalidModuleXmlException;
 import net.datacrow.core.modules.InvalidValueException;
+import net.datacrow.core.modules.upgrade.ModuleUpgrade;
+import net.datacrow.core.modules.upgrade.ModuleUpgradeException;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.synchronizers.DefaultSynchronizer;

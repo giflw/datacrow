@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core;
+package net.datacrow.core.modules.upgrade;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +34,8 @@ import java.util.Collection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.datacrow.core.DataCrow;
+import net.datacrow.core.Version;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.ModuleJar;
 import net.datacrow.core.modules.xml.XmlField;

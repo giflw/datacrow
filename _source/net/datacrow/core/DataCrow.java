@@ -58,6 +58,7 @@ import net.datacrow.core.data.Operator;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.upgrade.ModuleUpgrade;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.plugin.Plugins;

@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core;
+package net.datacrow.core.modules.upgrade;
 
 /**
  * This exception is thrown when an exception occurred during the upgrade of a module.

@@ -42,7 +42,7 @@ import java.util.zip.ZipOutputStream;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.ModuleUpgradeException;
+import net.datacrow.core.modules.upgrade.ModuleUpgradeException;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.modules.xml.XmlModuleWriter;
 import net.datacrow.util.DcImageIcon;
