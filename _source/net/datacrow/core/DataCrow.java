@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -111,6 +112,8 @@ public class DataCrow {
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
+        
+        long totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
         boolean nocache = false;
         boolean webserverMode = false; 
@@ -261,9 +264,21 @@ public class DataCrow {
     
             // Initialize all modules
             showSplashMsg(DcResources.getText("msgLoadingModules"));
+
+            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             new ModuleUpgrade().upgrade();
-            DcModules.load();
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Upgrading the modules took " + (end - start) + "ms");
+            }  
     
+            start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+            DcModules.load();
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Loading the modules took " + (end - start) + "ms");
+            }  
+            
             logger.info(DcResources.getText("msgModulesLoaded"));
     
             ValueEnhancers.initialize();
@@ -277,7 +292,12 @@ public class DataCrow {
             if (db != null && db.length() > 0)
                 DcSettings.set(DcRepository.Settings.stConnectionString, db);
             
+            start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             SecurityCentre.getInstance().initialize();
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Initilization of the security center took " + (end - start) + "ms");
+            } 
             
             if (DatabaseManager.isLocked()) {
                 new MessageBox(DcResources.getText("msgDatabaseIsLocked"), MessageBox._WARNING);
@@ -384,6 +404,11 @@ public class DataCrow {
         if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowTipsOnStartup)) {
             TipOfTheDayDialog dlg = new TipOfTheDayDialog();
             dlg.setVisible(true);
+        }  
+        
+        if (logger.isDebugEnabled()) {
+            long end = new Date().getTime();
+            logger.debug("Total startup time was " + (end - totalstart) + "ms");
         }  
     }
     
