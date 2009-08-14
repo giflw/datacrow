@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import net.datacrow.console.windows.messageboxes.MessageBox;
@@ -77,10 +78,34 @@ public class DatabaseManager {
     public static void initialize() {
         
         try {
+            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+
             db.initiliaze();
+            
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Initialization of the database (DcDatabase) took " + (end - start) + "ms");
+            }  
+            
+            start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+            
             db.getConversions().load();
             db.getConversions().execute();
+
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Execution of the database conversion scripts took " + (end - start) + "ms");
+            }  
+
+            start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+            
             db.cleanup();
+            
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Database cleanup took " + (end - start) + "ms");
+            }  
+
         } catch (Exception e) {
             logger.error("Could not find and connect to the database!", e);
             new MessageBox("Could not find or connect to the database!", MessageBox._ERROR);
@@ -529,8 +554,16 @@ public class DatabaseManager {
      * @param user
      */
     public static void setPriviliges(User user) {
+        
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        
         for (DcModule module : DcModules.getAllModules())
             setPriviliges(module, user);
+        
+        if (logger.isDebugEnabled()) {
+            long end = new Date().getTime();
+            logger.debug("Setting the correct database privileges " + (end - start) + "ms");
+        }  
     }
     
     /**
