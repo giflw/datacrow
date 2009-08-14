@@ -6,3 +6,5 @@ _data
 javadoc
 plugins
 services
+.classpath
+.project
