@@ -112,6 +112,8 @@ public class ItemForm extends DcFrame implements ActionListener {
     protected JTabbedPane tabbedPane = ComponentFactory.getTabbedPane();
     private DcMinimalisticItemView childView;
     
+    private IItemFormListener listener;
+    
     private DcTemplate template;
     
     public ItemForm(
@@ -121,7 +123,6 @@ public class ItemForm extends DcFrame implements ActionListener {
             boolean applyTemplate) {
         this(null, readonly, update, o, applyTemplate);
     }
-    
     
     public ItemForm(    DcTemplate template,
                         boolean readonly,
@@ -314,6 +315,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     	if (childView != null)
     	    childView.clear();
     	
+    	listener = null;
         childView = null;
         template = null;  
         
@@ -339,6 +341,15 @@ public class ItemForm extends DcFrame implements ActionListener {
         super.close();
     }
     
+    /**
+     * Adds a listener to this form. When a listener has been added the item will
+     * also be saved directly instead of queued (for obvious reasons).
+     * @param listener
+     */
+    public void setListener(IItemFormListener listener) {
+        this.listener = listener;
+    }
+
     protected void saveSettings() {
         DcModules.get(moduleIdx).setSetting(DcRepository.ModuleSettings.stItemFormSize, getSize());        
     }
@@ -571,12 +582,21 @@ public class ItemForm extends DcFrame implements ActionListener {
         dco.setPartOfBatch(false);
         
         try {
-            if (!update)
-                dco.saveNew(true);
-            else if (isChanged())
+            if (!update) {
+                dco.setIDs();
+                dco.saveNew(listener == null);
+                
+                if (listener != null) {
+                    listener.notifyItemSaved(dco);
+                    close();
+                }
+                
+            } else if (isChanged()) {
                 dco.saveUpdate(true);
-            else
+            } else {
             	new MessageBox(DcResources.getText("msgNoChangesToSave"), MessageBox._WARNING);
+            }
+            
         } catch (ValidationException vExp) {
             new MessageBox(vExp.getMessage(), MessageBox._WARNING);
         }

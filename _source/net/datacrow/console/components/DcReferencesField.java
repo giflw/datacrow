@@ -44,6 +44,7 @@ import javax.swing.ScrollPaneConstants;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcReferencesDialog;
+import net.datacrow.console.windows.itemforms.IItemFormListener;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModules;
@@ -54,7 +55,7 @@ import net.datacrow.util.DcObjectComparator;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
-public class DcReferencesField extends JComponent implements IComponent, ActionListener {
+public class DcReferencesField extends JComponent implements IComponent, ActionListener, IItemFormListener {
 
     private DcHtmlEditorPane fld = ComponentFactory.getHtmlEditorPane();
 
@@ -125,6 +126,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         MappingModule mm = (MappingModule) DcModules.get(mappingModIdx);
         DcObject dco = DcModules.get(mm.getReferencedModIdx()).getDcObject();
         ItemForm itemForm = new ItemForm(false, false, dco, true);
+        itemForm.setListener(this);
         itemForm.setVisible(true);
     }
         
@@ -168,6 +170,13 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         fld.setCaretPosition(0);
     }
     
+    public void notifyItemSaved(DcObject dco) {
+        DcObject mapping = DcModules.get(mappingModIdx).getDcObject();
+        mapping.setValue(DcMapping._B_REFERENCED_ID, dco.getID());
+        references.add(mapping);
+        setDescription();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));

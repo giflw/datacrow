@@ -25,9 +25,11 @@
 
 package net.datacrow.console.components.renderers;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
@@ -37,6 +39,8 @@ import net.datacrow.settings.DcSettings;
 
 public class DcTreeRenderer extends DefaultTreeCellRenderer {
 
+    private static final EmptyBorder border = new EmptyBorder(2, 5, 2, 2);
+    
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
         boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -44,6 +48,8 @@ public class DcTreeRenderer extends DefaultTreeCellRenderer {
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
     
         setBackgroundSelectionColor(DcSettings.getColor(DcRepository.Settings.stSelectionColor));
+        setForeground(Color.BLACK);
+        setBorder(border);
         
         if (value instanceof DefaultMutableTreeNode) {
             Object o = ((DefaultMutableTreeNode) value).getUserObject();

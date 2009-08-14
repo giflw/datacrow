@@ -37,6 +37,7 @@ import javax.swing.JComponent;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.windows.itemforms.IItemFormListener;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModules;
@@ -44,7 +45,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.util.DcSwingUtilities;
 
-public class DcReferenceField extends JComponent implements IComponent, ActionListener {
+public class DcReferenceField extends JComponent implements IComponent, ActionListener, IItemFormListener {
 
     private JComboBox cb;
     private JButton btCreate = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
@@ -97,9 +98,14 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         removeAll();
     }
     
+    public void notifyItemSaved(DcObject dco) {
+        cb.setSelectedItem(dco);
+    }
+
     private void create() {
         DcObject dco = DcModules.get(referenceModIdx).getDcObject();
         ItemForm itemForm = new ItemForm(false, false, dco, true);
+        itemForm.setListener(this);
         itemForm.setVisible(true);
     }
     

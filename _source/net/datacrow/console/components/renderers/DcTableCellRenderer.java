@@ -32,6 +32,7 @@ import java.awt.Font;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.ToolTipManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import net.datacrow.console.ComponentFactory;
@@ -44,6 +45,8 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
 
     private static final DcTableCellRenderer instance = new DcTableCellRenderer();
     private boolean disabled = false;
+    private static final EmptyBorder border = new EmptyBorder(0, 5, 0, 5);
+    
 
     protected DcTableCellRenderer() {}
     
@@ -122,12 +125,8 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
         		}
         	}
         }
-        
-    	if (hasFocus) {
-    		setBorder(getBorder());
-    	} else {
-    		setBorder(noFocusBorder);
-    	}
+    	
+    	setBorder(border);
     
     	return c;
 

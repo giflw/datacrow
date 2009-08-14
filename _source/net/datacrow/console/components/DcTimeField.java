@@ -43,6 +43,7 @@ public class DcTimeField extends JComponent implements IComponent {
     
     private static Logger logger = Logger.getLogger(DcTimeField.class.getName());
     
+    private static final Calendar cal = Calendar.getInstance();
     private DcNumberField fldMinutes = ComponentFactory.getNumberField();
     private DcNumberField fldSeconds = ComponentFactory.getNumberField();
     private DcNumberField fldHours = ComponentFactory.getNumberField();
@@ -52,7 +53,6 @@ public class DcTimeField extends JComponent implements IComponent {
     }
     
     public void setValue(Object o) {
-        Calendar cal = Calendar.getInstance();
         cal.clear();
         
         int value = 0;
@@ -75,7 +75,7 @@ public class DcTimeField extends JComponent implements IComponent {
         	cal.set(Calendar.SECOND, value);
         	minutes = cal.get(Calendar.MINUTE);
         	seconds = cal.get(Calendar.SECOND);
-            hours = cal.get(Calendar.HOUR);
+            hours = cal.get(Calendar.HOUR_OF_DAY);
             days = cal.get(Calendar.DATE) - 1;
             
         }

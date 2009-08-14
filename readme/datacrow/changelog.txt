@@ -6,6 +6,10 @@ Be aware! Due to maintenance the upgrade process has been removed which means th
 backups cannot be restored within this version (3.4.12 and older). This has been done 
 to get rid off old pieces of coding. Sorry for any inconvenience caused by this. 
 
+[Fixed]
+- Table view fix: images were never displayed after adding them to an existing item.
+- [2837111] Long play length is displayed / saved incorrectly
+
 [New]
 - Item export wizard.
 - Item import wizard.
@@ -13,6 +17,11 @@ to get rid off old pieces of coding. Sorry for any inconvenience caused by this.
 [Changed]
 - The reporting dialog no longer offers the option to make an XML or CSV 'report'.
   This functionality has been replaced by the item export tool.
+- When using the add item button from the item form will not only create the item but
+  also set it on the field.
+- Indentation for text in the grouping pane has been adjusted. 
+- Text color for selected tree nodes has been set to black.
+- Better indentation in the table view.
 
 
 -----------------------------------------------------------------------------------------

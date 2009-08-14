@@ -23,65 +23,11 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.renderers;
+package net.datacrow.console.windows.itemforms;
 
-import java.util.Calendar;
+import net.datacrow.core.objects.DcObject;
 
-
-public class TimeFieldTableCellRenderer extends DcTableCellRenderer {
+public interface IItemFormListener {
     
-    private static final Calendar cal = Calendar.getInstance();
-    private static final TimeFieldTableCellRenderer instance = new TimeFieldTableCellRenderer();
-
-    private TimeFieldTableCellRenderer() {
-        setOpaque(true);
-
-        setHorizontalAlignment(LEFT);
-        setVerticalAlignment(CENTER);
-    }
-    
-    public static TimeFieldTableCellRenderer getInstance() {
-        return instance;
-    }
-    
-    @Override
-    public void setText(String str) {
-        int minutes = 0;
-        int seconds = 0;
-        int hours = 0;
-        int days = 0;
-        
-        cal.clear();
-        
-        if (str != null && str.length() > 0) {
-        	int value = Integer.parseInt(str);
-        	cal.set(Calendar.SECOND, value);
-        	minutes = cal.get(Calendar.MINUTE);
-        	seconds = cal.get(Calendar.SECOND);
-            hours = cal.get(Calendar.HOUR_OF_DAY);
-            days = cal.get(Calendar.DATE) - 1;
-        }
-        
-        StringBuffer sb = new StringBuffer();
-        sb.append(hours + (days > 0 ? days * 24 : 0));
-        sb.append(":");
-        sb.append(getDoubleDigitString(minutes));
-        sb.append(":");
-        sb.append(getDoubleDigitString(seconds));
-        
-        super.setText(sb.toString());
-    } 
-    
-    private String getDoubleDigitString(int value) {
-        if (value == 0) {
-            return "00";
-        } else if (value > 0 && value < 10) {
-            StringBuffer sb = new StringBuffer();
-            sb.append(0);
-            sb.append(value);
-            return sb.toString();
-        } else {
-        	return String.valueOf(value);
-        }
-    }
+    public void notifyItemSaved(DcObject dco);
 }

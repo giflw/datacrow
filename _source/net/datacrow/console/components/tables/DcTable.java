@@ -386,6 +386,7 @@ public class DcTable extends JTable implements IViewComponent {
         Collection<DcObject> objects = new ArrayList<DcObject>();
         for (int row = 0; row < getRowCount(); row++)
             objects.add(getItemAt(row));
+        
         return objects;
     }
 
@@ -406,6 +407,7 @@ public class DcTable extends JTable implements IViewComponent {
             for (TableColumn column : columns.values()) {
                 col = column.getModelIndex();
                 int field = getFieldForColumnIndex(col);
+
                 Object value = getValueAt(row, col, true);
                 dco.setValue(field, value);
             }
@@ -469,10 +471,8 @@ public class DcTable extends JTable implements IViewComponent {
         Object value = null;
         try {
             if (row > -1 && col > -1)
-                value = hidden ? getDcModel().getValueAt(row, col) : super
-                        .getValueAt(row, col);
-        } catch (Exception ignore) {
-        }
+                value = hidden ? getDcModel().getValueAt(row, col) : super.getValueAt(row, col);
+        } catch (Exception ignore) {}
 
         return value;
     }
@@ -556,15 +556,14 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
-    public void updateItem(String ID, DcObject dco, boolean overwrite,
-            boolean allowDeletes, boolean mark) {
+    public void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
         int index = getIndex(ID);
         if (index > -1)
             updateItemAt(index, dco, overwrite, allowDeletes, mark);
     }
 
-    public void updateItemAt(int row, DcObject dco, boolean overwrite,
-            boolean allowDeletes, boolean mark) {
+    public void updateItemAt(int row, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
+
         cancelEdit();
 
         if (!mark) {
@@ -577,44 +576,37 @@ public class DcTable extends JTable implements IViewComponent {
         try {
             setSelected(row);
         } catch (Exception e) {
-            logger.error(
-                    "Error while trying to set the selected row in the table to "
-                            + row, e);
+            logger.error("Error while trying to set the selected row in the table to " + row, e);
         }
 
         for (int i = 0; i < indices.length; i++) {
             try {
-
-                // media module does not have all columns available for
-                // specialized objects. Skip if the
+                // media module does not have all columns available for specialized objects. Skip if the
                 // column is not available.
-                if (module != null && module.isAbstract()
-                        && !columns.containsKey(indices[i]))
-                    continue;
+                if (module != null && module.isAbstract() && !columns.containsKey(indices[i])) continue;
 
                 TableColumn column = columns.get(indices[i]);
                 int col = column.getModelIndex();
 
-                Object oNew = dco.getValue(indices[i]);
-                Object oOld = getDcModel().getValueAt(row, col);
-                oNew = oNew instanceof Picture && ((Picture) oNew).isDeleted() ? null
-                        : oNew;
+                Object newValue = dco.getValue(indices[i]);
+                Object existingValue = getDcModel().getValueAt(row, col);
 
-                String sNewValue = Utilities.getComparableString(oNew);
-                String sOldValue = Utilities.getComparableString(oOld);
-                boolean isNewEmpty = sNewValue.equals("");
-                boolean isOldEmpty = sOldValue.equals("");
-
-                if (!sNewValue.equals(sOldValue)
-                        && (isOldEmpty || (overwrite && (!isNewEmpty || allowDeletes))))
-                    getDcModel().setValueAt(oNew, row, col);
+                boolean isNewEmpty = Utilities.isEmpty(newValue);
+                boolean isOldEmpty = Utilities.isEmpty(existingValue);
+                
+                if (newValue instanceof Picture)
+                    newValue = ((Picture) newValue).isDeleted() ? null : newValue;
+                
+                if ((overwrite && !isNewEmpty) || allowDeletes) {
+                    getDcModel().setValueAt(newValue, row, col);
+                } else if (isOldEmpty) {
+                    getDcModel().setValueAt(newValue, row, col);
+                }
 
             } catch (Exception e) {
                 Integer key = indices[i];
-                TableColumn column = columns.containsKey(key) ? columns
-                        .get(key) : null;
-                logger.error("Error while setting value for column " + column
-                        + " module: " + module, e);
+                TableColumn column = columns.containsKey(key) ? columns.get(key) : null;
+                logger.error("Error while setting value for column " + column + " module: " + module, e);
             }
         }
 
@@ -668,16 +660,14 @@ public class DcTable extends JTable implements IViewComponent {
                         dco = cache.get(id);
 
                         int field = getFieldForColumnIndex(column);
-                        Object valueOld = dco.getValue(field) == null ? ""
-                                : dco.getValue(field);
+                        Object valueOld = dco.getValue(field) == null ? "" : dco.getValue(field);
                         Object valueNew = getDcModel().getValueAt(row, column);
 
                         if (valueOld.equals(valueNew))
                             return;
                     }
 
-                    dco.setValue(getFieldForColumnIndex(column), getDcModel()
-                            .getValueAt(row, column));
+                    dco.setValue(getFieldForColumnIndex(column), getDcModel().getValueAt(row, column));
                     cache.put(id, dco);
                 }
             }
