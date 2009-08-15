@@ -29,7 +29,6 @@ import java.util.Collection;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcMenu;
-import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
@@ -77,11 +76,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         
         // view menu
         DcMenu menuView = ComponentFactory.getMenu(DcResources.getText("lblView"));
-        if (module.getSearchView().get(MasterView._TABLE_VIEW) != null)
-            PluginHelper.add(menuView, "ChangeView", null, null, null, MasterView._TABLE_VIEW, -1);
-        
-        if (module.getSearchView().get(MasterView._LIST_VIEW) != null)
-            PluginHelper.add(menuView, "ChangeView", null, null, null, MasterView._LIST_VIEW, -1);
+        for (int view : module.getSupportedViews())
+            PluginHelper.add(menuView, "ChangeView", null, null, null, view, -1);   
         
         menuView.addSeparator();
         PluginHelper.add(menuView, "ToggleQuickFilterBar");

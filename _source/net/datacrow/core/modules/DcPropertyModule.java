@@ -136,6 +136,10 @@ public class DcPropertyModule extends DcModule {
             form = new DcMinimalisticItemView(getIndex(), false);
     }
     
+    public int[] getSupportedViews() {
+        return new int[] {};
+    }
+    
     /**
      * Creates a new instance of an item belonging to this module.
      */

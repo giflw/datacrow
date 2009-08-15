@@ -15,6 +15,8 @@ to get rid off old pieces of coding. Sorry for any inconvenience caused by this.
 - Item import wizard.
 
 [Changed]
+- Increased startup speed (15 to 20 seconds faster).
+- Improved opening time of item forms (3 to 5 seconds faster).
 - The reporting dialog no longer offers the option to make an XML or CSV 'report'.
   This functionality has been replaced by the item export tool.
 - When using the add item button from the item form will not only create the item but

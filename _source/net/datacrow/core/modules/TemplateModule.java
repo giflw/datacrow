@@ -173,6 +173,11 @@ public class TemplateModule extends DcModule {
     }
     
     @Override
+    public int[] getSupportedViews() {
+        return new int[] {};
+    }
+    
+    @Override
     public boolean equals(Object o) {
         return (o instanceof TemplateModule ? ((TemplateModule) o).getIndex() == getIndex() : false);
     }     

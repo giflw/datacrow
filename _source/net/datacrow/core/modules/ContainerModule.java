@@ -74,6 +74,11 @@ public class ContainerModule extends DcParentModule {
     public ContainerModule(XmlModule module) {
         super(module);
     }
+    
+    @Override
+    public int[] getSupportedViews() {
+        return new int[] {MasterView._LIST_VIEW};
+    }
 
     /**
      * Initializes the various views.

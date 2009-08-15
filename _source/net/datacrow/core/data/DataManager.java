@@ -646,22 +646,25 @@ public class DataManager {
         
         if (c == null) return;
 
-        for (JComboBox cb : c) {
-            Object o = cb.getSelectedItem();
-            cb.removeAllItems();
-            cb.addItem(" ");
+        for (JComboBox cb : c)
+            updateUiComponent(module, cb);
+    }
+    
+    private static void updateUiComponent(int module, JComboBox cb) {
+        Object o = cb.getSelectedItem();
+        cb.removeAllItems();
+        cb.addItem(" ");
 
-            DcObject[] objects = get(module, null);
-            for (int i = 0; i < objects.length; i++)
-                cb.addItem(objects[i]);
+        DcObject[] objects = get(module, null);
+        for (int i = 0; i < objects.length; i++)
+            cb.addItem(objects[i]);
 
-            if (o != null)
-                cb.setSelectedItem(o);
-            else
-                cb.setSelectedIndex(0);
-            
-            cb.revalidate();
-        }
+        if (o != null)
+            cb.setSelectedItem(o);
+        else
+            cb.setSelectedIndex(0);
+        
+        cb.revalidate();
     }
     
     /**
@@ -675,7 +678,7 @@ public class DataManager {
         c = c == null ? new ArrayList<JComboBox>() : c;
         c.add(component);
         listeners.put(module, c);
-        updateUiComponents(module);
+        updateUiComponent(module, component);
     }
     
     /**
@@ -863,7 +866,7 @@ public class DataManager {
      ***************************************/
 
     private static final int[] cacheTypes =  
-        new int[] {CacheJob._OBJECTS, CacheJob._LOANS, CacheJob._PICTURES, CacheJob._REFERENCES, CacheJob._CHILDREN};
+        new int[] {CacheJob._OBJECTS, CacheJob._LOANS, CacheJob._PICTURES, CacheJob._REFERENCES, CacheJob._CHILDREN, CacheJob._ALLBYID};
     
     public static void clearCache() {
     	try {
@@ -893,13 +896,29 @@ public class DataManager {
         if (!file.exists()) return false;
 
         try {
+            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+            
             CacheLoader loader = new CacheLoader();
             loader.start();
             loader.join();
+
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Items were loaded from disk in " + (end - start) + "ms");
+            }
+
+            start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             
-            DataSetCreator dsc = new DataSetCreator(objects);
-            dsc.start();
-            dsc.join();
+            if (objectsByID.size() == 0) {
+                DataSetCreator dsc = new DataSetCreator(objects);
+                dsc.start();
+                dsc.join();
+                
+                if (logger.isDebugEnabled()) {
+                    long end = new Date().getTime();
+                    logger.debug("Item sets were created in " + (end - start) + "ms");
+                }
+            }
             
             return loader.isSuccess();
         } catch (InterruptedException e) {
@@ -941,8 +960,6 @@ public class DataManager {
         
         @Override
         public void run() {
-            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-            
             ThreadGroup tg = new ThreadGroup("Cache Loader");
             Collection<CacheJob> jobs = new ArrayList<CacheJob>();
             for (int cacheType : cacheTypes) {
@@ -956,11 +973,6 @@ public class DataManager {
             
             for (CacheJob cj : jobs) 
                 success &= cj.isSuccess();
-            
-            if (logger.isDebugEnabled()) {
-                long end = new Date().getTime();
-                logger.debug("Items were loaded from disk in " + (end - start) + "ms");
-            }
         }
     }
     
@@ -974,6 +986,7 @@ public class DataManager {
         public static int _PICTURES = 2;
         public static int _REFERENCES = 3;
         public static int _CHILDREN = 4;
+        public static int _ALLBYID = 5;
 
         private int cacheType;
         private int jobType;
@@ -982,7 +995,7 @@ public class DataManager {
         
         private final String[] cache = new String[] {
                 "objects.dat", "loans.dat", "pictures.dat",
-                "references.dat", "children.dat"};
+                "references.dat", "children.dat", "objectsbyid.dat"};
         
         public CacheJob(ThreadGroup tg, int cacheType, int jobType) {
             super(tg,  "Cache Job - " + cacheType);
@@ -1018,6 +1031,8 @@ public class DataManager {
                 write(references);
             if (cacheType == _CHILDREN)
                 write(children);
+            if (cacheType == _ALLBYID)
+                write(objectsByID);
         }
         
         private void write(Object o) {
@@ -1035,7 +1050,11 @@ public class DataManager {
         
         private void read() {
             try {
-                InputStream is = new FileInputStream(DataCrow.cacheDir + cache[cacheType]);
+                File file = new File(DataCrow.cacheDir + cache[cacheType]);
+                
+                if (!file.exists()) return;
+                
+                InputStream is = new FileInputStream(file);
                 BufferedInputStream bis = new BufferedInputStream(is);
                 ObjectInput oi = new ObjectInputStream(bis);
                 
@@ -1049,8 +1068,12 @@ public class DataManager {
                     loadReferences(oi);
                 if (cacheType == _CHILDREN)
                     loadChildren(oi);
+                if (cacheType == _ALLBYID)
+                    loadAllByID(oi);                
                                 
                 oi.close();
+                bis.close();
+                is.close();
                 success = true;
             } catch (Exception e) {
                 logger.error(e, e);
@@ -1081,6 +1104,11 @@ public class DataManager {
         private void loadChildren(ObjectInput oi) throws ClassNotFoundException, IOException {
             children = (Map<Integer, Map<String, List<DcObject>>>) oi.readObject();
         }
+        
+        @SuppressWarnings("unchecked")
+        private void loadAllByID(ObjectInput oi) throws ClassNotFoundException, IOException {
+            objectsByID = (Map<Integer, Map<String,DcObject>>) oi.readObject();
+        }        
     }
     
 

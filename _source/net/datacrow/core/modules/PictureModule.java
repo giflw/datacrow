@@ -70,6 +70,10 @@ public class PictureModule extends DcModule {
     @Override
     protected void initializeUI() {}
     
+    public int[] getSupportedViews() {
+        return new int[] {};
+    }
+    
     /**
      * Initializes the default fields.
      */

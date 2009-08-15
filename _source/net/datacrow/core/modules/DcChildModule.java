@@ -84,6 +84,12 @@ public class DcChildModule extends DcModule implements IChildModule {
         return new ChildForm(parent, module, readonly);
     }
     
+    @Override
+    public int[] getSupportedViews() {
+        return new int[] {MasterView._TABLE_VIEW};
+    }
+
+    
     /**
      * Initializes the various views.
      */

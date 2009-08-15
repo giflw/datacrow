@@ -317,6 +317,10 @@ public class DcModule implements Comparable<DcModule> {
         return getIndex() == DcModules._ITEM ||
                getIndex() == DcModules._MEDIA;
     }
+    
+    public int[] getSupportedViews() {
+        return new int[] {MasterView._LIST_VIEW, MasterView._TABLE_VIEW};
+    }
 
     /**
      * Indicates if the user is allowed to edit items belonging to this module.

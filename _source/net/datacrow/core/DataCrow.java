@@ -338,9 +338,18 @@ public class DataCrow {
                 
                 SwingUtilities.invokeAndWait(new Runnable() {
                     public void run() {
+
+                        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+
                         DataCrow.mainFrame.initialize();
                         DataCrow.mainFrame.setVisible(true);
                         mainFrame.setViews();
+                        
+                        if (logger.isDebugEnabled()) {
+                            long end = new Date().getTime();
+                            logger.debug("Initilization of the UI took " + (end - start) + "ms");
+                        } 
+
                     }
                 });
             } else {
@@ -431,7 +440,7 @@ public class DataCrow {
     
     private static void showSplashMsg(String msg) {
         if (!noSplash)
-            splashScreen.setStatusMsg(DcResources.getText("msgInitializingDB"));
+            splashScreen.setStatusMsg(msg);
     }
     
     /**

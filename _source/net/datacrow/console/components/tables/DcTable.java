@@ -686,6 +686,27 @@ public class DcTable extends JTable implements IViewComponent {
                 }
         }
     }
+    
+    private JComponent getEditor(DcField field) {
+        JComponent c;
+        
+        if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD || 
+            field.getFieldType() == ComponentFactory._URLFIELD) {
+            c = ComponentFactory.getComponent(module.getIndex(), field.getReferenceIdx(), 
+                    ComponentFactory._SHORTTEXTFIELD, field.getLabel(), field.getMaximumLength());
+        } else if (field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
+            c = ComponentFactory.getObjectCombo(field.getReferenceIdx());
+        } else {
+            c = ComponentFactory.getComponent(module.getIndex(),
+                    field.getReferenceIdx(), field.getFieldType(), field.getLabel(), field.getMaximumLength());
+        }
+        c.setAutoscrolls(false);
+        c.setBorder(null);
+        c.setIgnoreRepaint(true);
+        c.setVerifyInputWhenFocusTarget(false);
+        c.setEnabled(!field.isReadOnly() && !readonly);
+        return c;
+    }
 
     // *************************************************************************
     // Private methods and classes
@@ -702,25 +723,7 @@ public class DcTable extends JTable implements IViewComponent {
 
             columnNew.setPreferredWidth(getPreferredWidth(field.getIndex()));
             
-            JComponent comp = ComponentFactory.getComponent(module.getIndex(),
-                    field.getReferenceIdx(), field.getFieldType(), field.getLabel(), field.getMaximumLength());
-            comp.setAutoscrolls(false);
-            comp.setBorder(null);
-            comp.setIgnoreRepaint(true);
-            comp.setVerifyInputWhenFocusTarget(false);
-
-            if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD || 
-                field.getFieldType() == ComponentFactory._URLFIELD) {
-
-                comp = ComponentFactory.getComponent(module.getIndex(), field
-                        .getReferenceIdx(), ComponentFactory._SHORTTEXTFIELD,
-                        field.getLabel(), field.getMaximumLength());
-            } else if (field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
-                
-                comp = ComponentFactory.getObjectCombo(field.getReferenceIdx());
-            }
-
-            if (field.getIndex() == DcObject._ID
+            if (       field.getIndex() == DcObject._ID
                     || field.getIndex() == DcObject._SYS_LENDBY
                     || field.getIndex() == DcObject._SYS_LOANDURATION
                     || field.getIndex() == DcObject._SYS_CREATED
@@ -728,26 +731,21 @@ public class DcTable extends JTable implements IViewComponent {
 
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
-                DcTableCellRenderer renderer = DcTableCellRenderer
-                        .getInstance();
+                DcTableCellRenderer renderer = DcTableCellRenderer.getInstance();
                 renderer.setFont(ComponentFactory.getSystemFont());
                 columnNew.setCellRenderer(renderer);
             } else if (field.getFieldType() == ComponentFactory._REFERENCESFIELD) {
-                columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory
-                        .getTextFieldDisabled()));
+                columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
                 columnNew.setMaxWidth(100);
-                columnNew.setCellRenderer(ReferencesTableCellRenderer
-                        .getInstance());
+                columnNew.setCellRenderer(ReferencesTableCellRenderer.getInstance());
             } else if (field.getIndex() == DcObject._SYS_MODULE) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
                 columnNew.setCellRenderer(ModuleTableCellRenderer.getInstance());
-            } else if (dco instanceof Loan
-                    && field.getIndex() == Loan._C_CONTACTPERSONID) {
+            } else if (dco instanceof Loan && field.getIndex() == Loan._C_CONTACTPERSONID) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
-                columnNew.setCellRenderer(ContactPersonTableCellRenderer
-                        .getInstance());
+                columnNew.setCellRenderer(ContactPersonTableCellRenderer.getInstance());
             } else {
                 switch (field.getFieldType()) {
                 case ComponentFactory._DATEFIELD:
@@ -759,27 +757,23 @@ public class DcTable extends JTable implements IViewComponent {
                     columnNew.setCellRenderer(AvailabilityCheckBoxTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._CHECKBOX:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            ComponentFactory.getTextFieldDisabled()));
-                    columnNew.setCellRenderer(CheckBoxTableCellRenderer
-                            .getInstance());
+                    columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
+                    columnNew.setCellRenderer(CheckBoxTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._FILESIZEFIELD:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (JTextField) comp));
+                    columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
                     columnNew.setMaxWidth(100);
                     columnNew.setCellRenderer(FileSizeTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._NUMBERFIELD:
                 case ComponentFactory._DECIMALFIELD:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (JTextField) comp));
+                    columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
                     columnNew.setMaxWidth(100);
                     columnNew.setCellRenderer(NumberTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._LONGTEXTFIELD:
                 case ComponentFactory._SHORTTEXTFIELD:
-                    columnNew.setCellEditor(new DefaultCellEditor((JTextField) comp));
+                    columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
                     break;
                 case ComponentFactory._TIMEFIELD:
                     DcNumberField numberField = ComponentFactory.getNumberField();
@@ -787,16 +781,13 @@ public class DcTable extends JTable implements IViewComponent {
                     columnNew.setCellRenderer(TimeFieldTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._URLFIELD:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (JTextField) comp));
-                    DcTableCellRenderer renderer = DcTableCellRenderer
-                            .getInstance();
+                    columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
+                    DcTableCellRenderer renderer = DcTableCellRenderer.getInstance();
                     renderer.setForeground(new Color(0, 0, 255));
                     columnNew.setCellRenderer(renderer);
                     break;
                 case ComponentFactory._PICTUREFIELD:
-                    DcShortTextField text = ComponentFactory
-                            .getTextFieldDisabled();
+                    DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                     text.setEditable(false);
                     text.setFont(ComponentFactory.getUnreadableFont());
                     columnNew.setCellEditor(new DefaultCellEditor(text));
@@ -804,28 +795,21 @@ public class DcTable extends JTable implements IViewComponent {
                             .getInstance());
                     break;
                 case ComponentFactory._REFERENCEFIELD:
-                    columnNew.setCellRenderer(ComboBoxTableCellRenderer
-                            .getInstance());
-                    columnNew.setCellEditor(new DefaultCellEditor((JComboBox) comp));
+                    columnNew.setCellRenderer(ComboBoxTableCellRenderer.getInstance());
+                    columnNew.setCellEditor(new DefaultCellEditor((JComboBox) getEditor(field)));
                     break;
                 case ComponentFactory._RATINGCOMBOBOX:
                     columnNew.setMinWidth(70);
-                    columnNew.setCellRenderer(RatingTableCellRenderer
-                            .getInstance());
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (DcRatingComboBox) comp));
+                    columnNew.setCellRenderer(RatingTableCellRenderer.getInstance());
+                    columnNew.setCellEditor(new DefaultCellEditor((DcRatingComboBox) getEditor(field)));
                     break;
                 case ComponentFactory._YESNOCOMBO:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (JComboBox) comp));
+                    columnNew.setCellEditor(new DefaultCellEditor((JComboBox) getEditor(field)));
                     break;
                 case ComponentFactory._LOGINNAMEFIELD:
-                    columnNew.setCellEditor(new DefaultCellEditor(
-                            (DcLoginNameField) comp));
+                    columnNew.setCellEditor(new DefaultCellEditor((DcLoginNameField) getEditor(field)));
                     break;
                 }
-
-                comp.setEnabled(!field.isReadOnly() && !readonly);
             }
 
             counter++;
