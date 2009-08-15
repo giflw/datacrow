@@ -17,6 +17,7 @@ public class ItemExporterWizard extends Wizard {
     
 	public ItemExporterWizard(int module, Collection<DcObject> items) {
 		super(module);
+		setTitle(getWizardName());
 		this.items = items;
 	}
 
@@ -46,7 +47,7 @@ public class ItemExporterWizard extends Wizard {
     
     @Override
     protected String getWizardName() {
-        return DcResources.getText("lblMigrationWizard");
+        return DcResources.getText("lblItemExportWizard");
     }
     
     @Override

@@ -187,8 +187,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         PluginHelper.add(menuTools, "Report");
         
         menuTools.addSeparator();
-        PluginHelper.add(menuTools, "ItemImporterWizard");
         PluginHelper.add(menuTools, "ItemExporterWizard");
+        PluginHelper.add(menuTools, "ItemImporterWizard");
         
         if (!module.isAbstract()) {
             menuTools.addSeparator();

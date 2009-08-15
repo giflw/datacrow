@@ -16,6 +16,7 @@ public class ItemImporterWizard extends Wizard {
 	
 	public ItemImporterWizard(int moduleIdx) {
 		super(moduleIdx);
+		setTitle(getWizardName());
 		this.definition = new ItemImporterDefinition();
 	}
 	
@@ -39,7 +40,7 @@ public class ItemImporterWizard extends Wizard {
 
     @Override
     protected String getWizardName() {
-        return DcResources.getText("lblMigrationWizard");
+        return DcResources.getText("lblItemImportWizard");
     }
     
     @Override
