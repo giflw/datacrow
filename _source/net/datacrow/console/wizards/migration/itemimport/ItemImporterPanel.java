@@ -15,6 +15,7 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.itemimport.IItemImporterClient;
 import net.datacrow.core.migration.itemimport.ItemImporter;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
@@ -130,27 +131,33 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     }
 
     public void notifyStarted(int count) {
-        progressBar.setValue(0);
-        progressBar.setMaximum(count);
-        DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
+        if (progressBar != null) {
+            progressBar.setValue(0);
+            progressBar.setMaximum(count);
+            
+            if (wizard.getModule().getIndex() != DcModules._CONTAINER && wizard.getModule().isSelectableInUI())
+                DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
+        }
     }
 
     public void notifyStopped() {}
 
     public void notifyProcessed(DcObject item) {
-        if (    wizard.getModule().isTopModule() && 
+        if (    1 == 0 &&
+                wizard != null && 
+                wizard.getModule().isSelectableInUI() && 
                 wizard.getModule().getCurrentInsertView() != null) {
             
             wizard.getModule().getCurrentInsertView().add(item);
         } else {
-            DcObject property = DataManager.getObjectForDisplayValue(item.getModule().getIndex(), item.toString());
+            DcObject other = DataManager.getObjectForDisplayValue(item.getModule().getIndex(), item.toString());
             // Check if the item exists and if so, update the item with the found values. Else just create a new item.
             // This is to make sure the order in which XML files are processed (first software, then categories)
             // is of no importance.
             try {
-                if (property != null) {
-                    property.copy(item, true);
-                    property.saveUpdate(false);
+                if (other != null) {
+                    other.copy(item, true);
+                    other.saveUpdate(false);
                 } else {
                     item.saveNew(false);
                 }

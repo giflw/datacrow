@@ -340,6 +340,8 @@ public class DataManager {
                                dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchSubItems);  
             } else if (ref instanceof DcProperty) {
                 ref.setValue(DcProperty._A_NAME, name);
+            } else {
+                ref.setValue(ref.getDisplayFieldIdx(), name);
             }
             
             if (onlinesearch) {
@@ -733,6 +735,8 @@ public class DataManager {
             dco.setValue(DcProperty._A_NAME, s);
         else if (dco instanceof DcAssociate)
             dco.setValue(DcAssociate._A_NAME, s);
+        else 
+            dco.setValue(dco.getDisplayFieldIdx(), s);
         
         try {
             List<DcObject> c = DatabaseManager.executeQuery(dco, false);

@@ -400,10 +400,13 @@ public class Query {
                                    DataManager.getObjectForDisplayValue(reference.getModule().getIndex(), reference.toString()) : 
                                    existing;
 
-                    if (existing == null)
+                    if (existing == null) {
+                        reference.setValidate(false);
                         reference.saveNew(false);
-                    else
+                        reference.setValidate(true);
+                    } else {
                         dco.setValue(field.getIndex(), existing);
+                    }
 
                 } catch (Exception e) {
                     logger.error("Error (" + e + ") while creating a new reference item; " + reference, e);

@@ -105,6 +105,11 @@ public class ContainerModule extends DcParentModule {
     public boolean isSelectableInUI() {
         return true;
     }
+    
+    @Override
+    public int getDefaultSortFieldIdx() {
+        return Container._A_NAME;
+    }
 
     /**
      * Creates a new instance of an item belonging to this module.

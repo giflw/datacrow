@@ -6,10 +6,8 @@ import java.io.FileInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.DcThread;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -68,12 +66,12 @@ public class XmlImporter extends ItemImporter {
     
         private DcObject parseItem(DcModule module, Element eItem) throws Exception {
             DcObject dco = module.getDcObject();
-            
+            dco.setIDs();
             // get the object
             for (DcField field : module.getFields()) {
 
-                if ((field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) || 
-                    field.getIndex() == DcObject._ID) continue;
+                if ((field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION && field.getValueType() != DcRepository.ValueTypes._PICTURE) ||  
+                     field.getIndex() == DcObject._ID) continue;
                 
                 String fieldName = Converter.getValidXmlTag(field.getSystemName());
                 NodeList nlField = eItem.getElementsByTagName(fieldName);
@@ -94,47 +92,13 @@ public class XmlImporter extends ItemImporter {
                         NodeList nlRefField = eReference.getElementsByTagName(referenceField);
                         if (nlRefField != null && nlRefField.getLength() > 0) {
                             Node eRefField = nlRefField.item(0);
-                            DataManager.createReference(dco, field.getIndex(), eRefField.getTextContent());
+                            setValue(dco, field.getIndex(), eRefField.getTextContent());
                         } else {
-                            logger.debug("Could not set value for field " + referenceField + 
-                                         ". The field name does not exist in the XML file");
-                        }
-                    }
-                } else if (field.getFieldType() == ComponentFactory._TIMEFIELD) {
-                    String time = eField.getTextContent();
-                    
-                    if (!Utilities.isEmpty(time)) { 
-                        try {
-                            dco.setValue(field.getIndex(), Long.valueOf(eField.getTextContent()));
-                        } catch (NumberFormatException nfe) {
-                            if (time.indexOf(":") > -1) {
-                                int hours = Integer.parseInt(time.substring(0, time.indexOf(":")));
-                                int minutes = Integer.parseInt(time.substring(time.indexOf(":") + 1, time.lastIndexOf(":")));
-                                int seconds = Integer.parseInt(time.substring(time.lastIndexOf(":") + 1));
-
-                                int value = seconds + (minutes *60) + (hours * 60 * 60);
-                                dco.setValue(field.getIndex(), Long.valueOf(value));
-                            }
+                            logger.debug("Could not set value for field " + referenceField + ". The field name does not exist in the XML file");
                         }
                     }
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                    DataManager.createReference(dco, field.getIndex(), eField.getTextContent());
-                } else if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX) {
-                    String rating = eField.getTextContent();
-                    if (!Utilities.isEmpty(rating)) {
-                        try {
-                            dco.setValue(field.getIndex(), Long.valueOf(rating));
-                        } catch (NumberFormatException nfe) {
-                            String sRating = ""; 
-                            for (char c : rating.toCharArray()) {
-                                if (Character.isDigit(c))
-                                    sRating += c;
-                                else 
-                                    break;
-                            }
-                            dco.setValue(field.getIndex(), Long.valueOf(sRating));
-                        }
-                    }
+                    setValue(dco, field.getIndex(), eField.getTextContent());
                 } else {
                     String value = eField.getTextContent();
                     if (!Utilities.isEmpty(value))
@@ -161,26 +125,29 @@ public class XmlImporter extends ItemImporter {
                 listener.notifyStarted(nlItems != null ? nlItems.getLength() : 0);
                 
                 for (int i = 0; !isCanceled() && nlItems != null && i < nlItems.getLength(); i++) {
-                	Element eItem = (Element) nlItems.item(i);
-                	DcObject dco = parseItem(module, eItem);
-                	
-                	DcModule cm = module.getChild();
-                	if (cm != null) {
-                	    String childName = Converter.getValidXmlTag(cm.getSystemObjectName());
-                        NodeList nlChildren = eItem.getElementsByTagName(childName);
-                        
-                        for (int j = 0; nlChildren != null && j < nlChildren.getLength(); j++) {
-                            Element eChild = (Element) nlChildren.item(j);
-                            dco.addChild(parseItem(cm, eChild));
-                        }
-                	}
-                	
-                	dco.setIDs();
-                	listener.notifyProcessed(dco);
+                    try {
+                    	Element eItem = (Element) nlItems.item(i);
+                    	DcObject dco = parseItem(module, eItem);
+                    	
+                    	DcModule cm = module.getChild();
+                    	if (cm != null) {
+                    	    String childName = Converter.getValidXmlTag(cm.getSystemObjectName());
+                            NodeList nlChildren = eItem.getElementsByTagName(childName);
+                            
+                            for (int j = 0; nlChildren != null && j < nlChildren.getLength(); j++) {
+                                Element eChild = (Element) nlChildren.item(j);
+                                dco.addChild(parseItem(cm, eChild));
+                            }
+                    	}
+                    	listener.notifyProcessed(dco);
+                    } catch (Exception e) {
+                        listener.notifyMessage(e.getMessage());
+                        logger.error(e, e) ;
+                    }
                 }
-             } catch (Exception e) {
-            	 logger.error(e, e) ;
-             }
+            } catch (Exception e) {
+                logger.error(e, e) ;
+            }
         }
     }
 }

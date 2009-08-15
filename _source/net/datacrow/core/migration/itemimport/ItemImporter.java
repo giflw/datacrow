@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
@@ -95,17 +96,47 @@ public abstract class ItemImporter extends ItemMigrater {
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
             field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
             DataManager.createReference(dco, field.getIndex(), value);
+            
+        } else if (field.getFieldType() == ComponentFactory._TIMEFIELD) { 
+            try {
+                dco.setValue(field.getIndex(), Long.valueOf(value));
+            } catch (NumberFormatException nfe) {
+                if (value.indexOf(":") > -1) {
+                    int hours = Integer.parseInt(value.substring(0, value.indexOf(":")));
+                    int minutes = Integer.parseInt(value.substring(value.indexOf(":") + 1, value.lastIndexOf(":")));
+                    int seconds = Integer.parseInt(value.substring(value.lastIndexOf(":") + 1));
+                    dco.setValue(field.getIndex(), Long.valueOf(seconds + (minutes *60) + (hours * 60 * 60)));
+                }
+            }
+         } else if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
+                    field.getFieldType() == ComponentFactory._FILESIZEFIELD) {
+
+             value = value.replaceAll(".", "");
+             
+             try {
+                 dco.setValue(field.getIndex(), Long.valueOf(value));
+             } catch (NumberFormatException nfe) {
+                 String sValue = ""; 
+                 for (char c : value.toCharArray()) {
+                     if (Character.isDigit(c))
+                         sValue += c;
+                     else 
+                         break;
+                 }
+                 
+                 if (!Utilities.isEmpty(sValue))
+                     dco.setValue(field.getIndex(), Long.valueOf(sValue));
+            }
         } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
             try {
                 byte[] image = Base64.decode(value.toCharArray());
                 dco.setValue(field.getIndex(), new DcImageIcon(image));
             } catch (Exception e) {
-                if (value.trim().length() > 0) {
-                    File file = new File(value);
-                    file = file.exists() ? file : new File(DataCrow.installationDir, value);
-                    byte[] image = Utilities.readFile(file);
-                    dco.setValue(field.getIndex(), new DcImageIcon(image));
-                }
+                value = value.startsWith("file://") ? value.substring("file://".length()) : value;
+                File file = new File(value); 
+                file = file.exists() ? file : new File(DataCrow.installationDir, value);
+                byte[] image = Utilities.readFile(file);
+                dco.setValue(field.getIndex(), new DcImageIcon(image));
             }
         } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
             File file = new File(DataCrow.installationDir, value);

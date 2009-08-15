@@ -30,6 +30,10 @@ public class ItemImporterWizard extends Wizard {
 	
     @Override
     public void finish() throws WizardException {
+        if (definition != null && definition.getImporter() != null)
+            definition.getImporter().cancel();
+
+        definition = null;
         close();
     }
 

@@ -28,22 +28,15 @@ package net.datacrow.console.wizards.migration.itemexport;
 import java.io.File;
 
 import net.datacrow.core.migration.itemexport.ItemExporter;
-import net.datacrow.core.modules.DcModule;
 
 public class ModuleExportDefinition {
     
-    private DcModule module;
     private File file;
     private ItemExporter exporter;
     
-    public ModuleExportDefinition(DcModule module, File file, ItemExporter exporter) {
-        this.module = module;
+    public ModuleExportDefinition(File file, ItemExporter exporter) {
         this.file = file;
         this.exporter = exporter;
-    }
-
-    public DcModule getModule() {
-        return module;
     }
 
     public File getFile() {

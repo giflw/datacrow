@@ -19,7 +19,7 @@ import net.datacrow.core.migration.itemexport.ItemExporters;
 
 public class ItemExporterSelectionPanel extends ItemExporterWizardPanel implements MouseListener {
 
-    private ButtonGroup bg;
+    private ButtonGroup bg = new ButtonGroup();
     private Collection<ItemExporter> exporters = new ArrayList<ItemExporter>();
     
     public ItemExporterSelectionPanel(ItemExporterWizard wizard) {

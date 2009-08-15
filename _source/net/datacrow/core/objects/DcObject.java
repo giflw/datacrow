@@ -1111,6 +1111,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
     
     protected void validateRequiredFields(boolean update) throws ValidationException {
+        
+        if (!validate) return;
+        
         String s = "";
         for (DcField field : getFields()) {
             if (field.isRequired()) {

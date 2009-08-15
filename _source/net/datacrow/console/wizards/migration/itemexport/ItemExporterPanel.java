@@ -11,7 +11,6 @@ import javax.swing.JTextArea;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.WizardException;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.migration.itemexport.IItemExporterClient;
 import net.datacrow.core.migration.itemexport.ItemExporter;
 import net.datacrow.core.resources.DcResources;
@@ -51,7 +50,7 @@ public class ItemExporterPanel extends ItemExporterWizardPanel implements IItemE
     
     @Override
     public void onActivation() {
-    	if (wizard.getDefinition() != null) {
+    	if (definition != null && definition.getExporter() != null) {
     		this.exporter = wizard.getDefinition().getExporter();
     		start();
     	}
@@ -70,7 +69,7 @@ public class ItemExporterPanel extends ItemExporterWizardPanel implements IItemE
     	        exporter.setFile(wizard.getDefinition().getFile());
     	    
     	    exporter.setSettings(definition.getSettings());
-    	    exporter.setItems(definition.getItems());
+    	    exporter.setItems(wizard.getItems());
     	    exporter.start();
     	    
     	} catch (Exception e ) {
@@ -131,7 +130,6 @@ public class ItemExporterPanel extends ItemExporterWizardPanel implements IItemE
     public void notifyStarted(int count) {
         progressBar.setValue(0);
         progressBar.setMaximum(count);
-        DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
     }
 
     public void notifyStopped() {}
