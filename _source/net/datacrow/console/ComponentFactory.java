@@ -232,6 +232,9 @@ public final class ComponentFactory {
             c.removeAll();
             c.removeNotify();
             c.invalidate();
+            
+            if (c instanceof JComboBox)
+                DataManager.unregisterUiComponent((JComboBox) c);
         }
     }    
     

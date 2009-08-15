@@ -681,6 +681,11 @@ public class DataManager {
         updateUiComponent(module, component);
     }
     
+    public static void unregisterUiComponent(JComboBox cb) {
+        for (Collection<JComboBox> cbs : listeners.values())
+            cbs.remove(cbs);
+    }
+    
     /**
      * Item count.
      * @param module
