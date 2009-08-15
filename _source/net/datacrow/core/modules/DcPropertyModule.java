@@ -136,6 +136,7 @@ public class DcPropertyModule extends DcModule {
             form = new DcMinimalisticItemView(getIndex(), false);
     }
     
+    @Override
     public int[] getSupportedViews() {
         return new int[] {};
     }

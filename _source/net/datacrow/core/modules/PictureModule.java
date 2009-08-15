@@ -70,6 +70,7 @@ public class PictureModule extends DcModule {
     @Override
     protected void initializeUI() {}
     
+    @Override
     public int[] getSupportedViews() {
         return new int[] {};
     }
