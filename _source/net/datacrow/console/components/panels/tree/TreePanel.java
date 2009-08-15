@@ -343,8 +343,12 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
                 			    newParent = (DefaultMutableTreeNode) parentNode2.getParent();
                 			} catch (Exception e) {}
                 			    
-                			model.removeNodeFromParent(parentNode2);
-                			parentNode2 = newParent;
+                			try {
+                			    model.removeNodeFromParent(parentNode2);
+                			    parentNode2 = newParent;
+                			} catch (IllegalArgumentException iae) {
+                			    parentNode2 = null;
+                			}
                 		} else {
                 		    parentNode2 = null;
                 		}

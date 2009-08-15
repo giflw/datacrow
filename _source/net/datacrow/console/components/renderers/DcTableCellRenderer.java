@@ -111,23 +111,17 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
                 setBackground(colorOddRow);
             }
         } else {
-        	if ((row % 2) == 0) {
-        		if (hasFocus) {
-        			setBackground(colorEvenRow);
-        		} else {
-        			setBackground(colorRowSelection);
-        		}
-        	} else {
-        		if (hasFocus) {
-        			setBackground(colorOddRow);
-        		} else {
-        			setBackground(colorRowSelection);
-        		}
-        	}
+            setBackground(colorRowSelection);
+            
+            if (hasFocus) {
+                int red = colorRowSelection.getRed() > 20 ? colorRowSelection.getRed() - 20 : colorRowSelection.getRed();
+                int green = colorRowSelection.getGreen() > 20 ? colorRowSelection.getGreen() - 20 : colorRowSelection.getGreen();
+                int blue = colorRowSelection.getBlue() > 20 ? colorRowSelection.getBlue() - 20 : colorRowSelection.getBlue();
+                setBackground(new Color(red, green, blue));
+            }
         }
     	
-    	setBorder(border);
-    
+        setBorder(border);
     	return c;
 
     }

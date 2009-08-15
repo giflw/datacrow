@@ -169,6 +169,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         size = null;
         insets = null;
         menu = null;
+        img = null;
     } 
     
     private void clearImage() {
