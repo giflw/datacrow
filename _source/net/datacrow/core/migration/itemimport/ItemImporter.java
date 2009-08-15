@@ -87,6 +87,9 @@ public abstract class ItemImporter extends ItemMigrater {
     }
 
     protected void setValue(DcObject dco, int fieldIdx, String value) throws Exception {
+        if (Utilities.isEmpty(value))
+            return;
+        
         DcField field = dco.getModule().getField(fieldIdx);
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
@@ -109,6 +112,8 @@ public abstract class ItemImporter extends ItemMigrater {
             String s = Utilities.fileToBase64String(new URL("file://" + file));
             s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new URL("file://" + value)) : s;
             dco.setValue(field.getIndex(), s);
+        } else if (field.getValueType() == DcRepository.ValueTypes._BOOLEAN) {
+            dco.setValue(field.getIndex(), Boolean.valueOf(value));
         } else {
             dco.setValue(field.getIndex(), value);
         }
