@@ -550,9 +550,7 @@ public class DcTable extends JTable implements IViewComponent {
             }
 
         } catch (Exception e) {
-            logger.debug(
-                    "Error while trying to set the selected row in the table to "
-                            + row, e);
+            logger.debug("Error while trying to set the selected row in the table to " + row, e);
         }
     }
 
