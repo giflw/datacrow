@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components;
 
+import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Date;
@@ -116,6 +117,11 @@ public class DcDialog extends JDialog {
     public void setCenteredLocation() {
         setLocation(Utilities.getCenteredWindowLocation(getSize()));
     }
+    
+    @Override
+    public void paint(Graphics g) {
+        super.paint(DcSwingUtilities.setRenderingHint(g));
+    }    
     
     protected void addKeyListener(KeyStroke keyStroke, Action action, String name) {
         rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);

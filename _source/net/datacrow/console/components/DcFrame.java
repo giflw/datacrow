@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components;
 
+import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -50,10 +51,7 @@ public class DcFrame extends JFrame implements WindowFocusListener {
     public DcFrame(String title, ImageIcon icon) {
         super(title);
         
-        if (icon != null)
-            setIconImage(icon.getImage());
-        else
-            setIconImage(IconLibrary._icoMain.getImage());
+        setIconImage(icon == null ? IconLibrary._icoMain.getImage() : icon.getImage());
         
         DcSwingUtilities.setRootFrame(this);
         addWindowListener(new WindowAdapter() {
@@ -119,5 +117,10 @@ public class DcFrame extends JFrame implements WindowFocusListener {
     }
 
     public void windowLostFocus(WindowEvent e) {
+    }
+    
+    @Override
+    public void paint(Graphics g) {
+        super.paint(DcSwingUtilities.setRenderingHint(g));
     }
 }

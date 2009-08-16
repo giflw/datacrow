@@ -11,11 +11,9 @@ import javax.swing.JTextArea;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.WizardException;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.itemimport.IItemImporterClient;
 import net.datacrow.core.migration.itemimport.ItemImporter;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
@@ -134,9 +132,6 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
         if (progressBar != null) {
             progressBar.setValue(0);
             progressBar.setMaximum(count);
-            
-            if (wizard.getModule().getIndex() != DcModules._CONTAINER && wizard.getModule().isSelectableInUI())
-                DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
         }
     }
 

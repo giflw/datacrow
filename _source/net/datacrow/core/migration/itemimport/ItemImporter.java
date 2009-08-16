@@ -118,7 +118,7 @@ public abstract class ItemImporter extends ItemMigrater {
          } else if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
                     field.getFieldType() == ComponentFactory._FILESIZEFIELD) {
 
-             value = value.replaceAll(".", "");
+             value = value.replaceAll("\\.", "");
              
              try {
                  dco.setValue(field.getIndex(), Long.valueOf(value));
