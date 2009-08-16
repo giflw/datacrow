@@ -27,8 +27,6 @@ package net.datacrow.console.wizards.migration.itemimport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -37,12 +35,10 @@ import javax.swing.JRadioButton;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.migration.itemimport.ItemImporter;
 import net.datacrow.core.migration.itemimport.ItemImporters;
 
-public class ItemImporterSelectionPanel extends ItemImporterWizardPanel implements MouseListener {
+public class ItemImporterSelectionPanel extends ItemImporterWizardPanel {
 
 	private ItemImporterWizard wizard;
 	private ButtonGroup bg;
@@ -60,6 +56,12 @@ public class ItemImporterSelectionPanel extends ItemImporterWizardPanel implemen
 	}
 
 	public Object apply() {
+        String command = bg.getSelection().getActionCommand();
+        for (ItemImporter reader : readers) {
+            if (reader.getKey().equals(command))
+                wizard.getDefinition().setImporter(reader);
+        }
+        
 	    return wizard.getDefinition();
     }
 
@@ -80,30 +82,13 @@ public class ItemImporterSelectionPanel extends ItemImporterWizardPanel implemen
         	readers.add(reader);
 
         	JRadioButton rb = ComponentFactory.getRadioButton(reader.getName(), reader.getIcon(), reader.getKey());
-            rb.addMouseListener(this);
             bg.add(rb);
             add(rb, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets( 0, 5, 5, 5), 0, 0));
+            
+            if (y == 1)
+                rb.setSelected(true);
         }
     }
-    
-    public void mouseClicked(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
-    public void mousePressed(MouseEvent e) {}
-
-    public void mouseReleased(MouseEvent e) {
-        String command = bg.getSelection().getActionCommand();
-        for (ItemImporter reader : readers) {
-        	if (reader.getKey().equals(command)) {
-        		wizard.getDefinition().setImporter(reader);
-        		try {
-        			wizard.next();
-        		} catch (WizardException we) {
-        			new MessageBox(we.getMessage(), MessageBox._WARNING);
-        		}
-        	}
-        }
-    }    
 }

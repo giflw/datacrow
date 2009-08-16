@@ -14,6 +14,10 @@ public class ItemImporterFieldMappings {
     
     public ItemImporterFieldMappings() {}
     
+    public void clear() {
+        mappings.clear();
+    }
+    
     public void setMapping(String source, DcField target) {
         mappings.put(source, target);
     }

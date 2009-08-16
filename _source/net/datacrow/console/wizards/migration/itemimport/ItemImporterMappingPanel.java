@@ -39,12 +39,13 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
     }
     
 	public Object apply() throws WizardException {
-        ItemImporter reader = wizard.getDefinition().getImporter();
+        ItemImporter importer = wizard.getDefinition().getImporter();
+        
         for (int i = 0; i < table.getRowCount(); i++) {
         	String source = (String) table.getValueAt(i, 0, true);
         	DcField target = (DcField) table.getValueAt(i, 1, true);
         	if (target != null)
-        		reader.addMapping(source,  target);
+        		importer.addMapping(source,  target);
         }
         return wizard.getDefinition();
     }
@@ -66,6 +67,8 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
     		File file = wizard.getDefinition().getFile();
 
             table.clear();
+            wizard.getDefinition().getImporter().clearMappings();
+            
             try {
                 ItemImporter reader = wizard.getDefinition().getImporter();
                 reader.setFile(file);

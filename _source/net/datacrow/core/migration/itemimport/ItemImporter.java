@@ -61,6 +61,13 @@ public abstract class ItemImporter extends ItemMigrater {
     /**
      * Adds a field mapping.
      */
+    public void clearMappings() {
+        mappings.clear();
+    }
+    
+    /**
+     * Adds a field mapping.
+     */
     public void addMapping(String source, DcField target) {
         mappings.setMapping(source, target);
     }
