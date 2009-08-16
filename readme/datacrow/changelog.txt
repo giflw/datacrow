@@ -1,8 +1,7 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.14 [Release on xx/08/2009] [testing: high] [target: production]
+Data Crow 3.4.14 [Release on 16/08/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-
-Be aware! Due to maintenance the upgrade process has been removed which means that old
+Important: Due to maintenance the upgrade process has been removed which means that old
 backups cannot be restored within this version (3.4.12 and older). This has been done 
 to get rid off old pieces of coding. Sorry for any inconvenience caused by this. 
 
@@ -11,8 +10,8 @@ to get rid off old pieces of coding. Sorry for any inconvenience caused by this.
 - [2837111] Long play length is displayed / saved incorrectly
 
 [New]
-- Item export wizard.
-- Item import wizard.
+- Item export wizard. You can now export any items form any module to a text or XML file.
+- Item import wizard. You can now import items for any module from a text or XML file.
 
 [Changed]
 - Increased startup speed (15 to 20 seconds faster).

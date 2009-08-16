@@ -88,8 +88,10 @@ public class ViewPopupMenu extends DcPopupMenu {
             PluginHelper.add(this, "SetPassword", "", dco, null, viewType, DcModules.getCurrent().getIndex());
         }
 
-        addSeparator();
-        PluginHelper.add(this, "ItemExporterWizard", "", dco, null, viewIdx, dco.getModule().getIndex());
+        if (!DcModules.getCurrent().isAbstract()) {
+            addSeparator();
+            PluginHelper.add(this, "ItemExporterWizard", "", dco, null, viewIdx, dco.getModule().getIndex());
+        }
         
         addSeparator();
         PluginHelper.add(this, "Sort");

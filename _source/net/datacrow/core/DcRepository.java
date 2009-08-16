@@ -116,7 +116,7 @@ public abstract class DcRepository {
         public static final String stXpMode = "xp_mode";
         public static final String stRestoreDatabase = "restore_database";
         public static final String stRestoreModules = "restore_modules";
-        public static final String stRestoreReports = "restore_modules";
+        public static final String stRestoreReports = "restore_reports";
         public static final String stDecimalGroupingSymbol = "decimal_grouping_symbol";
         public static final String stDecimalSeparatorSymbol = "decimal_seperator_symbol";
         public static final String stModuleSettings = "module_settings";

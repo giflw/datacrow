@@ -64,11 +64,9 @@ public class XmlExporter extends ItemExporter {
         return new Task(items);
     }
 
-    // TODO: Change this
     @Override
     public String getName() {
-        // return DcResources.getText("lblXmlReport");
-        return "XML Exporter";
+        return DcResources.getText("lblXmlExport");
     }    
     
     private class Task extends DcThread {
@@ -133,7 +131,7 @@ public class XmlExporter extends ItemExporter {
                     dco.reload();
                 
                 writer.startEntity(dco);
-                client.notifyMessage(DcResources.getText("msgAddingToReport", dco.toString()));
+                client.notifyMessage(DcResources.getText("msgExportingX", dco.toString()));
 
                 writer.writeAttribute(dco, DcObject._SYS_MODULE);
                 

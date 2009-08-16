@@ -32,6 +32,7 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
         String filename = target.getFilename();
         filename = filename.endsWith(definition.getExporter().getFileType()) ? filename : filename + "." + definition.getExporter().getFileType();
         
+        target.getFile().delete();
         File file = new File(filename);
         
         try {

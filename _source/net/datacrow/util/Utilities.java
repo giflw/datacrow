@@ -146,7 +146,6 @@ public class Utilities {
         return s;
     }
     
-    
     public static DcImageIcon getImageFromClipboard() {
         Transferable clipData = clipboard.getContents(clipboard);
         if (clipData != null) {

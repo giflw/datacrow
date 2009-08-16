@@ -30,15 +30,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcThread;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.resources.DcResources;
+
+import org.apache.log4j.Logger;
 
 public class CsvExporter extends ItemExporter {
     
@@ -64,7 +63,7 @@ public class CsvExporter extends ItemExporter {
 
     @Override
     public String getName() {
-        return "TXT Exporter";
+        return DcResources.getText("lblTextExport");
     }
 
     @Override
@@ -104,8 +103,10 @@ public class CsvExporter extends ItemExporter {
             items = null;
         }
         
-       public void create() throws Exception {
+        public void create() throws Exception {
             
+            ItemExporterUtilities utilities = new ItemExporterUtilities(file.toString(), settings);
+           
             if (items == null || items.size() == 0) return;
             
             // create the table and the header
@@ -113,7 +114,7 @@ public class CsvExporter extends ItemExporter {
             int counter = 0;
             
             for (DcField field : dco.getFields()) {
-                if (isCanceled()) break;
+               if (isCanceled()) break;
             
                 if (field.isEnabled()) {
                     writeBytes(field.getSystemName(), counter != 0);
@@ -129,7 +130,7 @@ public class CsvExporter extends ItemExporter {
                 
                 if (isCanceled()) break;
                 
-                client.notifyMessage(DcResources.getText("msgAddingToReport", o.toString()));
+                client.notifyMessage(DcResources.getText("msgExportingX", o.toString()));
                 int fieldCounter = 0;
                 
                 for (DcField field : dco.getFields()) {
@@ -138,10 +139,8 @@ public class CsvExporter extends ItemExporter {
                     if (field.isEnabled()) { 
                         String s = "";
                         if (field.getFieldType() == ComponentFactory._PICTUREFIELD) {
-                            if (o.getValue(field.getIndex()) == null || o.getValue(field.getIndex()).toString().length() < 10)
-                                s = "";
-                            else 
-                                s = DataCrow.imageDir + ((Picture) o.getValue(field.getIndex())).getFilename();
+                            if (o.getValue(field.getIndex()) != null && o.getValue(field.getIndex()).toString().length() >= 10)
+                               s = utilities.getImageURL((Picture) o.getValue(field.getIndex()));
                         } else {
                             s = o.getDisplayString(field.getIndex());
                         }

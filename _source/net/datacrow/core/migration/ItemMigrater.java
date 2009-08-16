@@ -63,8 +63,6 @@ public abstract class ItemMigrater {
         return DcModules.get(moduleIdx);
     }
     
- 
-    
     public void start() throws Exception {
         if (task != null && task.isAlive())
             task.cancel();

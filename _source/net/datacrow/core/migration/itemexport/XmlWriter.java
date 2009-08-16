@@ -26,64 +26,40 @@
 package net.datacrow.core.migration.itemexport;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.swing.ImageIcon;
-
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.Utilities;
-
-import org.apache.log4j.Logger;
 
 public class XmlWriter extends XmlBaseWriter {
-    
-    private static Logger logger = Logger.getLogger(XmlWriter.class.getName());
     
     private ItemExporterSettings settings;
     
     private int tagIdent;
     private int valueIdent;
     
+    private ItemExporterUtilities utilities;
     private String schemaFile;
     private final int stepSize = 4;
-    
-    private final String reportName;
-    private final String baseDir;
     
     public XmlWriter(String filename, String schemaFile, ItemExporterSettings properties) throws IOException {
         this(new BufferedOutputStream(new FileOutputStream(filename)), filename, schemaFile, properties);
     }
     
-    public XmlWriter(BufferedOutputStream bos, String filename, String schemaFile, ItemExporterSettings properties) {
+    public XmlWriter(BufferedOutputStream bos, String filename, String schemaFile, ItemExporterSettings settings) {
         super(bos);
         
-        this.baseDir = filename.substring(0, filename.lastIndexOf(File.separator) + 1);
-        this.reportName = filename.substring(filename.lastIndexOf(File.separator) + 1, filename.lastIndexOf("."));
+        this.utilities = new ItemExporterUtilities(filename, settings);
         this.schemaFile = schemaFile;
-        this.settings = properties;
+        this.settings = settings;
         
         resetIdent();
-        
-        if (properties.getBoolean(ItemExporterSettings._COPY_IMAGES))
-            createImageDir();
     }    
-    
-    private String getImageDir() {
-        return baseDir + reportName +  "_images/";
-    }
-    
-    private void createImageDir() {
-        new File(getImageDir()).mkdirs();
-    }
     
     public void resetIdent() {
         tagIdent = stepSize * 1;
@@ -169,55 +145,24 @@ public class XmlWriter extends XmlBaseWriter {
             
         } else if (o instanceof Picture) {
             Picture picture = (Picture) o;
-
-            String filename = (String) picture.getValue(Picture._C_FILENAME);
-            
-            if (filename == null) {
-                filename = "";
-            } else if (settings.getBoolean(ItemExporterSettings._COPY_IMAGES)) {
-                copyImage((Picture) o, getImageDir() + filename);
-                
-                if (settings.getBoolean(ItemExporterSettings._ALLOWRELATIVEIMAGEPATHS))
-                    filename = "./" + reportName +  "_images/" + filename;
-                else 
-                    filename = "file:///" + getImageDir() + filename;
-            } else {
-                filename = "file:///" + DataCrow.imageDir + picture.getValue(Picture._C_FILENAME);
-            }
-            
+            String filename = utilities.getImageURL(picture);
             write(filename);
-            
         } else {
             String text = dco.getDisplayString(field);
             
             int maximumLength = settings.getInt(ItemExporterSettings._MAX_TEXT_LENGTH);
             if (maximumLength > 0 && text.length() > maximumLength) {
                 text = text.substring(0, maximumLength);
-                text = text.substring(0, text.lastIndexOf(" ")) + "...";
+                
+                if (text.lastIndexOf(" ") > -1)
+                    text = text.substring(0, text.lastIndexOf(" ")) + "...";
             }
             
             write(text);
         }
     }
     
-    private void copyImage(Picture picture, String target) {
-        try {
-            picture.loadImage();
-            ImageIcon icon = (ImageIcon) picture.getValue(Picture._D_IMAGE);
 
-            if (icon != null) {
-                if (settings.getBoolean(ItemExporterSettings._SCALE_IMAGES)) {
-                    int width = settings.getInt(ItemExporterSettings._IMAGE_WIDTH);
-                    int height = settings.getInt(ItemExporterSettings._IMAGE_HEIGHT);
-                    Utilities.writeToFile(new DcImageIcon(Utilities.toBufferedImage(icon, DcImageIcon._TYPE_JPEG, width, height)), target);
-                } else {
-                    Utilities.writeToFile(icon, target);
-                }
-            }
-        } catch (Exception e) {
-            logger.error("An error occurred while copying image to " + target, e);
-        }
-    }
     
     private void ident(int x) throws IOException {
         String s = "";

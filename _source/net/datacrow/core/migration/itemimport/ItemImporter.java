@@ -93,6 +93,21 @@ public abstract class ItemImporter extends ItemMigrater {
     public void setClient(IItemImporterClient client) {
         this.client = client;
     }
+    
+    private File getImagePath(String s) {
+        String value = s; 
+        value = value.startsWith("file://") ? value.substring("file://".length()) : value;
+        File file = new File(value); 
+        file = file.exists() ? file : new File(DataCrow.installationDir, value);
+        
+        if (!file.exists()) {
+            // maybe the path is relative ?
+            String importName = getFile().getName();
+            importName = importName.lastIndexOf(".") > -1 ?  importName.substring(0, importName.lastIndexOf(".")) : importName; 
+            file = new File(getFile().getParent(), importName + "_images/" + file.getName());    
+        }
+        return file;
+    }
 
     protected void setValue(DcObject dco, int fieldIdx, String value) throws Exception {
         if (Utilities.isEmpty(value))
@@ -139,17 +154,19 @@ public abstract class ItemImporter extends ItemMigrater {
                 byte[] image = Base64.decode(value.toCharArray());
                 dco.setValue(field.getIndex(), new DcImageIcon(image));
             } catch (Exception e) {
-                value = value.startsWith("file://") ? value.substring("file://".length()) : value;
-                File file = new File(value); 
-                file = file.exists() ? file : new File(DataCrow.installationDir, value);
-                byte[] image = Utilities.readFile(file);
-                dco.setValue(field.getIndex(), new DcImageIcon(image));
+                File file = getImagePath(value);
+                if (file.exists()) {
+                    byte[] image = Utilities.readFile(file);
+                    dco.setValue(field.getIndex(), new DcImageIcon(image));
+                }
             }
         } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
-            File file = new File(DataCrow.installationDir, value);
-            String s = Utilities.fileToBase64String(new URL("file://" + file));
-            s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new URL("file://" + value)) : s;
-            dco.setValue(field.getIndex(), s);
+            File file = getImagePath(value);
+            if (file.exists()) {
+                String s = Utilities.fileToBase64String(new URL("file://" + file));
+                s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new URL("file://" + value)) : s;
+                dco.setValue(field.getIndex(), s);
+            }
         } else if (field.getValueType() == DcRepository.ValueTypes._BOOLEAN) {
             dco.setValue(field.getIndex(), Boolean.valueOf(value));
         } else {
