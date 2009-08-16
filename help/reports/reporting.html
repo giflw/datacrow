@@ -7,25 +7,17 @@
 
     <h1>Reporting</h1>
 
-    The reporting tool creates PDF, XML, HTML and Text files based on items retrieved via a search. There are two types of reports;
-    presentation reports and data reports (also known as exports).
-
-    <h2>Data Reports (Exports)</h2>
-
-    Data reports come in two flavors, XML and text. You can select either one from the dropdown box. Select a target file and press "run " to start the report generation process.
-
-    <h2>Presentation Reports</h2>
-
-    To create a presentation report select a format (either PDF or HTML) and a report from the dropdown box. Select a target file and press "run" to start the report generation.
-    
-    <br><br>
-
-    The dropdown box with the reports can be extended with your own. The reports are actually XSLT (XSL Transformation) files so you need to know the syntax before you can create your own report file(s).
+    The reporting tool creates PDF amd HTML files based on items retrieved via a search.
+    To create a report select a format (either PDF or HTML) and a report type from the dropdown box. Select a target file and press "run" to start the report generation.
 
     <br><br>
 
-    A good place to start would be <a href="http://www.w3schools.com/xsl/">http://www.w3schools.com/xsl/</a>. The fields you can add to your report are all mentioned in &lt;data crow directory&gt;/reports/dictionary.txt (if this file is not there or you are not sure it is up to date, open and close the report dialog. This (re-)creates the before mentioned file). 
-    
+    Note that the dropdown box with the report types can be extended with your own. The reports are actually XSLT (XSL Transformation) files so you need to know the syntax before you can create your own report file(s).
+
+    <br><br>
+
+    A good place to start would be <a href="http://www.w3schools.com/xsl/">http://www.w3schools.com/xsl/</a>. The fields you can add to your report are all mentioned in &lt;data crow directory&gt;/reports/dictionary.txt (if this file is not there or you are not sure it is up to date, open and close the report dialog. This (re-)creates the before mentioned file).
+
     <br><br>
 
     After you have created a XSLT file, place it in the &lt;data crow directory&gt;/reports/&lt;module name&gt; directory (or in any of its sub directories).
