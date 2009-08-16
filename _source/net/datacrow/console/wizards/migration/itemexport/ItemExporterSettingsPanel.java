@@ -12,6 +12,7 @@ import net.datacrow.console.windows.reporting.ReportSettingsPanel;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcFileFilter;
+import net.datacrow.util.Utilities;
 
 public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
 
@@ -25,7 +26,7 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
     
     public Object apply() throws WizardException {
 
-        if (target.getFile() == null)
+        if (target.getFile() == null || Utilities.isEmpty(target.getFilename()))
             throw new WizardException(DcResources.getText("msgNoFileSelected"));
         
         String filename = target.getFilename();
@@ -55,7 +56,7 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
     }
 
     public String getHelpText() {
-        return null;
+        return DcResources.getText("msgExportSettings");
     }
 
     private void build() {

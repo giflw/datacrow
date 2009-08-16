@@ -47,7 +47,8 @@
     <mapID target="dc.modules.relate" url="modules/relatemodulewizard.html"/>
     <mapID target="dc.modules.delete" url="modules/deletemodulewizard.html"/>
     
-    <mapID target="dc.tools.migration" url="tools/migration.html"/>
+    <mapID target="dc.migration.wizard.importer" url="tools/item_import.html"/>
+    <mapID target="dc.migration.wizard.exporter" url="tools/item_export.html"/>
     <mapID target="dc.tools.fileinfoimport" url="tools/fileinformationimport.html"/>
     <mapID target="dc.tools.massupdate" url="tools/mass_update.html"/>
     <mapID target="dc.tools.expertuser" url="tools/expert_user.html"/>

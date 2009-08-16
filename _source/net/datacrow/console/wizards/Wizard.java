@@ -154,6 +154,8 @@ public abstract class Wizard extends DcFrame implements ActionListener {
     @Override
     public void close() {
         
+        saveSettings();
+        
         if (wizardPanels != null) {
             for (IWizardPanel panel : wizardPanels)
                 panel.destroy();
@@ -353,8 +355,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
                 new MessageBox(exp.getMessage(), MessageBox._WARNING);
             }
         } else if (e.getActionCommand().equals("close")) {
-            saveSettings();
-            cancelled = true;
+           cancelled = true;
             close();
         } else if (e.getActionCommand().equals("back")) {
             back();

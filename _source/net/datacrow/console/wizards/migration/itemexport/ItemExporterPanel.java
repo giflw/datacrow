@@ -45,7 +45,7 @@ public class ItemExporterPanel extends ItemExporterWizardPanel implements IItemE
     }
 
     public String getHelpText() {
-        return null;
+        return DcResources.getText("msgExportProcess");
     }
     
     @Override

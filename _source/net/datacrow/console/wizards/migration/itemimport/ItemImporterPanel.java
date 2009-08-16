@@ -50,7 +50,7 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     }
 
     public String getHelpText() {
-        return null;
+        return DcResources.getText("msgImportProcess");
     }
     
     @Override

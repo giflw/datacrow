@@ -37,6 +37,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.migration.itemimport.ItemImporter;
 import net.datacrow.core.migration.itemimport.ItemImporters;
+import net.datacrow.core.resources.DcResources;
 
 public class ItemImporterSelectionPanel extends ItemImporterWizardPanel {
 
@@ -52,7 +53,7 @@ public class ItemImporterSelectionPanel extends ItemImporterWizardPanel {
     }
 
     public String getHelpText() {
-		return "";
+        return DcResources.getText("msgSelectImportMethod");
 	}
 
 	public Object apply() {

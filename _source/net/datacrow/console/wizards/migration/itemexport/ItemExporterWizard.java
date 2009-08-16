@@ -7,8 +7,10 @@ import java.util.List;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 
 public class ItemExporterWizard extends Wizard {
 
@@ -17,8 +19,13 @@ public class ItemExporterWizard extends Wizard {
     
 	public ItemExporterWizard(int module, Collection<DcObject> items) {
 		super(module);
+		
 		setTitle(getWizardName());
+		setHelpIndex("dc.migration.wizard.exporter");
+		
 		this.items = items;
+		setSize(DcSettings.getDimension(DcRepository.Settings.stItemExporterWizardFormSize));
+		setCenteredLocation();
 	}
 
     public ItemExporterDefinition getDefinition() {
@@ -65,5 +72,7 @@ public class ItemExporterWizard extends Wizard {
     protected void initialize() {}
 
     @Override
-    protected void saveSettings() {}
+    protected void saveSettings() {
+        DcSettings.set(DcRepository.Settings.stItemExporterWizardFormSize, getSize());
+    }
 }

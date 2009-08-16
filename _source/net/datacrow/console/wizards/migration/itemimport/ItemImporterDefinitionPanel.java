@@ -95,7 +95,7 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
     }
 
     public String getHelpText() {
-        return null;
+        return DcResources.getText("msgImportSettings");
     }
 
     private void build() {

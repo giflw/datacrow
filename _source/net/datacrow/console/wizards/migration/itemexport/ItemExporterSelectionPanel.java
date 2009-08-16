@@ -13,6 +13,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.migration.itemexport.ItemExporter;
 import net.datacrow.core.migration.itemexport.ItemExporters;
+import net.datacrow.core.resources.DcResources;
 
 public class ItemExporterSelectionPanel extends ItemExporterWizardPanel {
 
@@ -35,7 +36,7 @@ public class ItemExporterSelectionPanel extends ItemExporterWizardPanel {
     }
 
     public String getHelpText() {
-        return null;
+        return DcResources.getText("msgSelectExportMethod");
     }
     
     @Override

@@ -55,7 +55,7 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
     }
 
     public String getHelpText() {
-        return null;
+        return DcResources.getText("msgImportFieldMapping");
     }
     
     @Override

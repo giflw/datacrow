@@ -57,7 +57,8 @@
     </tocitem> 
 
     <tocitem target="dc.Tools" text="Tools">
-      <tocitem target="dc.tools.migration" text="Migration Tool"/>
+      <tocitem target="dc.migration.wizard.importer" text="Item Import Wizard"/>
+      <tocitem target="dc.migration.wizard.exporter" text="Item Export Wizard"/>
       <tocitem target="dc.tools.fileinfoimport" text="File Import"/>
       <tocitem target="dc.tools.massupdate" text="Mass Update"/>
       <tocitem target="dc.tools.backup_restore" text="Backup &amp; Restore" />
