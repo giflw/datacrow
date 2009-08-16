@@ -1,9 +1,11 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.14 [Release on 16/08/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-Important: Due to maintenance the upgrade process has been removed which means that old
-backups cannot be restored within this version (3.4.12 and older). This has been done 
-to get rid off old pieces of coding. Sorry for any inconvenience caused by this. 
+
+! Due to maintenance the upgrade process has been removed. This means that old
+  backups cannot be restored within this version (3.4.12 and older). Sorry for any 
+  inconvenience caused by this. 
+! The startup time has been significantly improved by this version.
 
 [Fixed]
 - Table view fix: images were never displayed after adding them to an existing item.
@@ -16,6 +18,9 @@ to get rid off old pieces of coding. Sorry for any inconvenience caused by this.
 [Changed]
 - Increased startup speed (15 to 20 seconds faster).
 - Improved opening time of item forms (3 to 5 seconds faster).
+- The migration tool has been removed. This tools has been replaced by the new wizard(s).
+- The right-click menu in the item views now offers the option to export the selected 
+  items.
 - The reporting dialog no longer offers the option to make an XML or CSV 'report'.
   This functionality has been replaced by the item export tool.
 - When using the add item button from the item form will not only create the item but
