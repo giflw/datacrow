@@ -5,6 +5,7 @@ Data Crow 3.4.15 [Release on 16/08/2009] [testing: high] [target: production]
 [Fixed]
 - Tabs could not be created.
 - Tab order not remembered correctly.
+- Children of items were not imported (XML import).
 
 
 -----------------------------------------------------------------------------------------

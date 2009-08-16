@@ -26,6 +26,7 @@
 package net.datacrow.core.modules;
 
 import net.datacrow.core.modules.xml.XmlModule;
+import net.datacrow.core.objects.DcObject;
 
 /**
  * The item module represents container managed items. The container module is
@@ -59,6 +60,11 @@ public class ItemModule extends DcChildModule {
         
         super(index, topModule, name, description, objectName, objectNamePlural,
               tableName, tableShortName);
+    }
+
+    @Override
+    public int getParentReferenceFieldIndex() {
+        return DcObject._SYS_CONTAINER;
     }
     
     /**

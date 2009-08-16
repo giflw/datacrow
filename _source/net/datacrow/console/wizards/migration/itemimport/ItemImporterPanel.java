@@ -152,9 +152,9 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
             try {
                 if (other != null) {
                     other.copy(item, true);
-                    other.saveUpdate(false);
+                    other.saveUpdate(true);
                 } else {
-                    item.saveNew(false);
+                    item.saveNew(true);
                 }
             } catch (ValidationException ve) {
                 notifyMessage(ve.getMessage());

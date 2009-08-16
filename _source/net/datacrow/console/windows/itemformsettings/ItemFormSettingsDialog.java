@@ -121,7 +121,7 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
                  new Insets( 5, 5, 5, 5), 0, 0));
         getContentPane().add(panelActions,  Layout.getGBC( 0, 1, 1, 1, 0.0, 0.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                 new Insets( 5, 5, 5, 5), 0, 0));
+                 new Insets( 5, 5, 5, 12), 0, 0));
 
         pack();
         

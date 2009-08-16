@@ -145,6 +145,10 @@ public class XmlImporter extends ItemImporter {
                         logger.error(e, e) ;
                     }
                 }
+
+                listener.notifyMessage(DcResources.getText("msgImportFinished"));
+                listener.notifyStopped();
+                
             } catch (Exception e) {
                 logger.error(e, e) ;
             }

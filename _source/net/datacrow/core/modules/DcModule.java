@@ -751,9 +751,6 @@ public class DcModule implements Comparable<DcModule> {
      * @return The field index or -1 if not found.
      */
     public int getParentReferenceFieldIndex() {
-        if (isContainerManaged())
-            return DcObject._SYS_CONTAINER;
-        
         for (DcField field : getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._DCPARENTREFERENCE)
                 return field.getIndex();

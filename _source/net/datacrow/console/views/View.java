@@ -284,6 +284,9 @@ public class View extends DcPanel implements ListSelectionListener {
     }    
 
     public void add(final DcObject dco, final boolean select) {
+        if (getType() == View._TYPE_INSERT)
+            dco.setIDs();
+        
         vc.add(dco);
         
         if (getType() == View._TYPE_INSERT && isParent())  {
