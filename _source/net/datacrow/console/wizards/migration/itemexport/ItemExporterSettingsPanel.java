@@ -29,6 +29,10 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
         if (!target.getFile().exists() || !target.getFile().canRead())
             throw new WizardException(DcResources.getText("msgFileCannotBeUsed"));
         
+        
+        String filename = target.getFilename();
+        filename = filename.endsWith(definition.getExporter().getFileType()) ? filename : filename + definition.getExporter().getFileType();
+        
         definition.setFile(target.getFile());
         settingsPanel.saveSettings(definition.getSettings(), false);
         return definition;
