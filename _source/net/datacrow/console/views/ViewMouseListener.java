@@ -24,7 +24,7 @@ public class ViewMouseListener implements MouseListener {
             }
 
             if (vc.getSelectedIndex() > -1) {
-                ViewPopupMenu menu = new ViewPopupMenu(vc.getSelectedItem(), view.getType()); 
+                ViewPopupMenu menu = new ViewPopupMenu(vc.getSelectedItem(), view.getType(), view.getIndex()); 
                 Component component = (Component) vc;
                 menu.setInvoker(component);
                 menu.show(component, e.getX(), e.getY());

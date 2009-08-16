@@ -44,11 +44,11 @@ import net.datacrow.settings.definitions.DcFieldDefinition;
 
 public class ViewPopupMenu extends DcPopupMenu {
 
-    public ViewPopupMenu(DcObject dco, int viewIdx) {
+    public ViewPopupMenu(DcObject dco, int viewType, int viewIdx) {
         DcModule current = DcModules.getCurrent();
         
         DcModule module = dco.getModule();
-        if (viewIdx == View._TYPE_SEARCH && 
+        if (viewType == View._TYPE_SEARCH && 
             !module.isChildModule() &&
             !(current.getIndex() == DcModules._CONTAINER && 
               dco.getModule().getIndex() != DcModules._CONTAINER)) {
@@ -62,7 +62,7 @@ public class ViewPopupMenu extends DcPopupMenu {
                 PluginHelper.add(this, "EditAsNew", null, dco, null, -1, module.getIndex());
         }
         
-        if (viewIdx == View._TYPE_SEARCH) { 
+        if (viewType == View._TYPE_SEARCH) { 
             if (dco.getModule().getParent() != null) {
                 // in case a child is selected, make sure its the child which is going to be deleted
                 // and not the parent (via the DcModules.getCurrent(), which returns the parent).
@@ -80,18 +80,21 @@ public class ViewPopupMenu extends DcPopupMenu {
             PluginHelper.add(this, "AddRow", DcModules.getCurrent().getIndex());
         }   
         
-        if (viewIdx == View._TYPE_SEARCH && 
+        if (viewType == View._TYPE_SEARCH && 
             module.getIndex() == DcModules._USER &&
             SecurityCentre.getInstance().getUser().isAuthorized("SetPassword")) {
 
             addSeparator();
-            PluginHelper.add(this, "SetPassword", "", dco, null, viewIdx, DcModules.getCurrent().getIndex());
+            PluginHelper.add(this, "SetPassword", "", dco, null, viewType, DcModules.getCurrent().getIndex());
         }
+
+        addSeparator();
+        PluginHelper.add(this, "ItemExporterWizard", "", dco, null, viewIdx, dco.getModule().getIndex());
         
         addSeparator();
         PluginHelper.add(this, "Sort");
         
-        if (	viewIdx == View._TYPE_SEARCH && 
+        if (	viewType == View._TYPE_SEARCH && 
         		module.canBeLend() &&
         		SecurityCentre.getInstance().getUser().isAuthorized("Loan")) {
         	
@@ -110,7 +113,7 @@ public class ViewPopupMenu extends DcPopupMenu {
         addSeparator();
         PluginHelper.add(this, "ViewSettings");
         
-        if (viewIdx == View._TYPE_SEARCH) {
+        if (viewType == View._TYPE_SEARCH) {
             FileImporter importer = module.getImporter();
             if (importer != null && importer.allowReparsing() && module.getDcObject().getFileField() != null) { 
                 addSeparator();
@@ -128,7 +131,7 @@ public class ViewPopupMenu extends DcPopupMenu {
         addSeparator();
         PluginHelper.add(this, "Report");
         
-        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(dco, viewIdx, module.getIndex());
+        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(dco, viewType, module.getIndex());
         for (Plugin plugin : plugins) {
             if (plugin.isShowInPopupMenu()) {
                 addSeparator();
