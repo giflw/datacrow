@@ -2,6 +2,8 @@ package net.datacrow.console.wizards.migration.itemexport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -26,15 +28,20 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
         if (target.getFile() == null)
             throw new WizardException(DcResources.getText("msgNoFileSelected"));
         
-        if (!target.getFile().exists() || !target.getFile().canRead())
-            throw new WizardException(DcResources.getText("msgFileCannotBeUsed"));
-        
-        
         String filename = target.getFilename();
-        filename = filename.endsWith(definition.getExporter().getFileType()) ? filename : filename + definition.getExporter().getFileType();
+        filename = filename.endsWith(definition.getExporter().getFileType()) ? filename : filename + "." + definition.getExporter().getFileType();
         
-        definition.setFile(target.getFile());
-        settingsPanel.saveSettings(definition.getSettings(), false);
+        File file = new File(filename);
+        
+        try {
+            file.createNewFile();
+        
+            definition.setFile(file);
+            settingsPanel.saveSettings(definition.getSettings(), false);
+        } catch (IOException ie) {
+            throw new WizardException(DcResources.getText("msgFileCannotBeUsed"));
+        }
+            
         return definition;
     }
 

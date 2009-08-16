@@ -65,9 +65,8 @@ public class ItemExporterPanel extends ItemExporterWizardPanel implements IItemE
         exporter.setClient(this);
     	
     	try { 
-    	    if (exporter.getFile() == null)
-    	        exporter.setFile(wizard.getDefinition().getFile());
-    	    
+    	    //if (exporter.getFile() == null)
+	        exporter.setFile(wizard.getDefinition().getFile());
     	    exporter.setSettings(definition.getSettings());
     	    exporter.setItems(wizard.getItems());
     	    exporter.start();
