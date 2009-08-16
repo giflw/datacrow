@@ -200,6 +200,17 @@ public class DataManager {
         o.removeRequests();
         o.reload();
         o.initializeReferences();
+
+        // avoid synchronization issues: makes sure the main containers have the same object
+        if (objectsByID.get(module) != null) {
+            objectsByID.get(module).remove(o.getID());
+            objectsByID.get(module).put(o.getID(), o);
+        }
+        
+        if (objects.get(module) != null) {
+            objects.get(module).remove(o);
+            objects.get(module).add(o);
+        }
         
         updateUiComponents(o.getModule().getIndex());
         updateView(o, 0, module, MainFrame._SEARCHTAB);
