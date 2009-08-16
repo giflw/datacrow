@@ -130,7 +130,8 @@ public class ItemForm extends DcFrame implements ActionListener {
                         DcObject o,
                         boolean applyTemplate) {
 
-        super("", o.getModule().getIcon16());
+        super("", null);
+        setIconImage(o.getModule().getIcon32() != null ? o.getModule().getIcon32().getImage() : o.getModule().getIcon16().getImage());
         this.applyTemplate =  applyTemplate && !update;
         
         setHelpIndex("dc.items.itemform");
@@ -821,7 +822,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 SecurityCentre.getInstance().getUser().isEditingAllowed(module)) {
         	
             buttonInternet = ComponentFactory.getButton(DcResources.getText("lblOnlineUpdate"));
-            buttonInternet.setIcon(IconLibrary._icoSearchOnline);
+            buttonInternet.setIcon(IconLibrary._icoSearchOnline16);
             buttonInternet.setMnemonic(KeyEvent.VK_U);
             buttonInternet.addActionListener(this);
             buttonInternet.setActionCommand("onlineSearch");

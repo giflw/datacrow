@@ -479,7 +479,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         tp.addTab(DcResources.getText("lblTitleCleanup"),  IconLibrary._icoSettings, getTitleCleanupPanel());
         
         if (module.deliversOnlineService())
-            tp.addTab(DcResources.getText("lblOnlineSearch"), IconLibrary._icoSearchOnline,panelOs);
+            tp.addTab(DcResources.getText("lblOnlineSearch"), IconLibrary._icoSearchOnline16,panelOs);
         
         tp.addTab(DcResources.getText("lblLocalArt"), IconLibrary._icoPicture, panelLocalArt);
 

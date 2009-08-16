@@ -40,7 +40,7 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoGrayscale = new ImageIcon(picPath + "grayscale.png");
     public static final ImageIcon _icoRotateLeft = new ImageIcon(picPath + "rotate_left.png");
     public static final ImageIcon _icoRotateRight = new ImageIcon(picPath + "rotate_right.png");
-    public static final ImageIcon _icoMain = new ImageIcon(picPath + "datacrow.png");
+    public static final ImageIcon _icoMain = new ImageIcon(picPath + "datacrow64.png");
     public static final ImageIcon _icoIcon16 = new ImageIcon(picPath + "icon16.png");
     public static final ImageIcon _icoIcon32 = new ImageIcon(picPath + "icon32.png");
     public static final ImageIcon _icoChart = new ImageIcon(picPath + "chart.png");
@@ -80,7 +80,6 @@ public abstract class IconLibrary {
 	public static final ImageIcon _icoLabels = new ImageIcon(picPath + "labels.gif");
     public static final ImageIcon _icoTooltips = new ImageIcon(picPath + "tooltips.gif");
     public static final ImageIcon _icoSQLTool = new ImageIcon(picPath + "sqltool.png");
-	public static final ImageIcon _icoFileImport = new ImageIcon(picPath + "importfile.png");
 	public static final ImageIcon _icoImport = new ImageIcon(picPath + "import.png");
     public static final ImageIcon _icoReport = new ImageIcon(picPath + "report.png");
     public static final ImageIcon _icoNote = new ImageIcon(picPath + "note.png");
@@ -106,7 +105,9 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoQuestion = new ImageIcon(picPath + "help.png");
     public static final ImageIcon _icoError = new ImageIcon(picPath + "error.png");
     public static final ImageIcon _icoHelp = new ImageIcon(picPath + "help.png");
-    public static final ImageIcon _icoSearchOnline = new ImageIcon(picPath + "searchonline.png");
+    public static final ImageIcon _icoSearchOnline16 = new ImageIcon(picPath + "searchonline16.png");
+    public static final ImageIcon _icoSearchOnline32 = new ImageIcon(picPath + "searchonline32.png");
+    public static final ImageIcon _icoSearchOnline64 = new ImageIcon(picPath + "searchonline64.png");
     public static final ImageIcon _icoWarning = new ImageIcon(picPath + "warning.png");
     public static final ImageIcon _icoSettings = new ImageIcon(picPath + "settings.png");
     public static final ImageIcon _icoAbout = new ImageIcon(picPath + "about.png");
