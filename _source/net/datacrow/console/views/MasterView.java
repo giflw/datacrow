@@ -55,7 +55,8 @@ public class MasterView {
     private GroupingPane groupingPane;
     
     public void setTreePanel(DcModule module) {
-    	this.groupingPane = new GroupingPane(module.getIndex(), this);
+        if (!module.isChildModule())
+            this.groupingPane = new GroupingPane(module.getIndex(), this);
     }
     
     public GroupingPane getGroupingPane() {
