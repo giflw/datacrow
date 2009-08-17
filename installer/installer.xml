@@ -4,7 +4,7 @@
 
     <info>
         <appname>Data Crow</appname>
-        <appversion>3.4.14</appversion>
+        <appversion>3.4.15</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
@@ -46,7 +46,7 @@
     
     <packs>
         <pack name="Core" required="yes">
-            <description>Data Crow base files</description>
+            <description>Data Crow</description>
             <file src="log4j.properties" targetdir="$INSTALL_PATH"/>
             <file src="datacrow.exe" targetdir="$INSTALL_PATH"/>
             <file src="datacrow.jar" targetdir="$INSTALL_PATH"/>
@@ -79,12 +79,12 @@
         </pack>
 
         <pack name="Modules" required="no">
-            <description>Data Crow modules</description>
+            <description>Data Crow Modules</description>
             <file src="modules" targetdir="$INSTALL_PATH"/>
         </pack>  
         
         <pack name="Reports" required="no">
-            <description>Data Crow report files</description>
+            <description>Data Crow Reports</description>
             <file src="reports" targetdir="$INSTALL_PATH"/>
         </pack>        
         

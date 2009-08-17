@@ -40,6 +40,7 @@ Features:
 
 * Skinnable UI.
 * Platform independent.
+* Completel portable.
 * Internal help system (F1).
 * Nice looking and easy to use UI.
 * Loan administration.
