@@ -318,7 +318,7 @@ public class DcValue implements Serializable {
                         cal.set(Calendar.SECOND, value);
                         minutes = cal.get(Calendar.MINUTE);
                         seconds = cal.get(Calendar.SECOND);
-                        hours = cal.get(Calendar.HOUR);
+                        hours = cal.get(Calendar.HOUR_OF_DAY);
                     }
     
                     String sSeconds = getDoubleDigitString(seconds);
