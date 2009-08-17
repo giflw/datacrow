@@ -475,8 +475,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         //**********************************************************
         JTabbedPane tp = ComponentFactory.getTabbedPane();
         tp.addTab(DcResources.getText("lblDirectoriesFiles"), IconLibrary._icoOpen , panelFs);
-        tp.addTab(DcResources.getText("lblSettings"), IconLibrary._icoSettings, getSettingsPanel());
-        tp.addTab(DcResources.getText("lblTitleCleanup"),  IconLibrary._icoSettings, getTitleCleanupPanel());
+        tp.addTab(DcResources.getText("lblSettings"), IconLibrary._icoSettings16, getSettingsPanel());
+        tp.addTab(DcResources.getText("lblTitleCleanup"),  IconLibrary._icoSettings16, getTitleCleanupPanel());
         
         if (module.deliversOnlineService())
             tp.addTab(DcResources.getText("lblOnlineSearch"), IconLibrary._icoSearchOnline16,panelOs);

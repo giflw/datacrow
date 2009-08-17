@@ -75,7 +75,7 @@ public class WebServerControlPanel extends JPanel implements java.awt.event.Acti
     }
     
     public ImageIcon getIcon() {
-        return IconLibrary._icoSettings;
+        return IconLibrary._icoSettings16;
     }
     
     public void saveSettings() {

@@ -125,7 +125,7 @@ public class PanelModuleType extends ModuleWizardPanel {
         JRadioButton rbMediaMod = ComponentFactory.getRadioButton(
                 DcResources.getText("lblMediaModule"),  IconLibrary._icoModuleTypeMedia, "" + _MEDIAMODULE);
         JRadioButton rbPropertyMod = ComponentFactory.getRadioButton(
-                DcResources.getText("lblPropertyModule"), IconLibrary._icoModuleTypeProperty, "" + _PROPERTYMODULE);
+                DcResources.getText("lblPropertyModule"), IconLibrary._icoModuleTypeProperty32, "" + _PROPERTYMODULE);
         
         rbPlainMod.addMouseListener(new ModuleTypeSelectionListener());
         rbMediaMod.addMouseListener(new ModuleTypeSelectionListener());

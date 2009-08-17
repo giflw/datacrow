@@ -519,7 +519,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                  new Insets(10, 5, 5, 5), 0, 0));
         
         tp.addTab(DcResources.getText("lblSearch"), IconLibrary._icoSearch, contentPanel);
-        tp.addTab(DcResources.getText("lblSettings"), IconLibrary._icoSettings, panel2);
+        tp.addTab(DcResources.getText("lblSettings"), IconLibrary._icoSettings16, panel2);
         
         getContentPane().add(tp, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

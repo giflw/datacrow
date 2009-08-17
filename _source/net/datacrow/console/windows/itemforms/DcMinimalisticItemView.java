@@ -55,7 +55,6 @@ import net.datacrow.console.windows.CreateMultipleItemsDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
@@ -94,7 +93,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     private DcPanel panel = new DcPanel();
     
     public DcMinimalisticItemView(int module, boolean readonly) {
-        super(DcModules.get(module).getObjectNamePlural(), IconLibrary._icoAnchor);
+        super(DcModules.get(module).getObjectNamePlural(), DcModules.get(module).getIcon32());
         
         this.list = new DcObjectList(DcObjectList._LISTING, false, true);
         this.readonly = readonly;

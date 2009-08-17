@@ -45,7 +45,8 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoIcon32 = new ImageIcon(picPath + "icon32.png");
     public static final ImageIcon _icoChart = new ImageIcon(picPath + "chart.png");
     public static final ImageIcon _icoPersons = new ImageIcon(picPath + "persons.png");
-    public static final ImageIcon _icoModuleTypeProperty = new ImageIcon(picPath + "moduletype_property.png");
+    public static final ImageIcon _icoModuleTypeProperty16 = new ImageIcon(picPath + "property16.png");
+    public static final ImageIcon _icoModuleTypeProperty32 = new ImageIcon(picPath + "property32.png");
     public static final ImageIcon _icoModuleTypePlain = new ImageIcon(picPath + "moduletype_other.png");
     public static final ImageIcon _icoModuleTypeMedia = new ImageIcon(picPath + "moduletype_media.png");
     public static final ImageIcon _icoTreeLeaf = new ImageIcon(picPath + "tree_leaf.png");
@@ -75,12 +76,15 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoPermission16 = new ImageIcon(picPath + "permission16.png");
     public static final ImageIcon _icoPermission32 = new ImageIcon(picPath + "permission32.png");
     public static final ImageIcon _icoPicture = new ImageIcon(picPath + "picture.png");
-    public static final ImageIcon _icoAnchor = new ImageIcon(picPath + "anchor.png");
     public static final ImageIcon _icoMessages = new ImageIcon(picPath + "messages.gif");
 	public static final ImageIcon _icoLabels = new ImageIcon(picPath + "labels.gif");
     public static final ImageIcon _icoTooltips = new ImageIcon(picPath + "tooltips.gif");
     public static final ImageIcon _icoSQLTool = new ImageIcon(picPath + "sqltool.png");
-	public static final ImageIcon _icoImport = new ImageIcon(picPath + "import.png");
+    public static final ImageIcon _icoItemImport16 = new ImageIcon(picPath + "itemimport16.png");
+    public static final ImageIcon _icoItemImport32 = new ImageIcon(picPath + "itemimport32.png");
+    public static final ImageIcon _icoItemExport16 = new ImageIcon(picPath + "itemexport16.png");
+    public static final ImageIcon _icoItemExport32 = new ImageIcon(picPath + "itemexport32.png");
+    public static final ImageIcon _icoImport = new ImageIcon(picPath + "import.png");
     public static final ImageIcon _icoReport = new ImageIcon(picPath + "report.png");
     public static final ImageIcon _icoNote = new ImageIcon(picPath + "note.png");
     public static final ImageIcon _icoLoan = new ImageIcon(picPath + "loan.png");
@@ -109,7 +113,8 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoSearchOnline32 = new ImageIcon(picPath + "searchonline32.png");
     public static final ImageIcon _icoSearchOnline64 = new ImageIcon(picPath + "searchonline64.png");
     public static final ImageIcon _icoWarning = new ImageIcon(picPath + "warning.png");
-    public static final ImageIcon _icoSettings = new ImageIcon(picPath + "settings.png");
+    public static final ImageIcon _icoSettings16 = new ImageIcon(picPath + "settings16.png");
+    public static final ImageIcon _icoSettings32= new ImageIcon(picPath + "settings32.png");
     public static final ImageIcon _icoAbout = new ImageIcon(picPath + "about.png");
     public static final ImageIcon _icoSave = new ImageIcon(picPath + "save.png");
     public static final ImageIcon _icoSaveAll = new ImageIcon(picPath + "saveall.png");

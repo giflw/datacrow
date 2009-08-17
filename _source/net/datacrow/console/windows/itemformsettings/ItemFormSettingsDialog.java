@@ -52,7 +52,7 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
     private TabFieldsPanel panelTabFields;
     
     public ItemFormSettingsDialog(int module) {
-        super(DcResources.getText("lblItemFormSettings"), IconLibrary._icoSettings);
+        super(DcResources.getText("lblItemFormSettings"), IconLibrary._icoSettings16);
         
         this.module = module;
         

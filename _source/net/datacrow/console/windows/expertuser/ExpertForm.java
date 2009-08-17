@@ -45,7 +45,7 @@ import net.datacrow.settings.DcSettings;
 public class ExpertForm extends DcFrame implements ActionListener {
 
     public ExpertForm() {
-        super(DcResources.getText("lblExpertUser"), IconLibrary._icoSettings);
+        super(DcResources.getText("lblExpertUser"), IconLibrary._icoSettings32);
         
         buildForm();
         setHelpIndex("dc.tools.expertuser");
@@ -88,7 +88,7 @@ public class ExpertForm extends DcFrame implements ActionListener {
         buttonClose.addActionListener(this);
         panelActions.add(buttonClose);
         
-        tabbedPane.addTab(DcResources.getText("lblSystem"), IconLibrary._icoSettings, systemPanel);
+        tabbedPane.addTab(DcResources.getText("lblSystem"), IconLibrary._icoSettings16, systemPanel);
         tabbedPane.addTab(DcResources.getText("lblSQLTool"), IconLibrary._icoSQLTool, queryPanel);
 
         getContentPane().setLayout(Layout.getGBL());

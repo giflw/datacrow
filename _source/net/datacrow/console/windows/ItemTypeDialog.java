@@ -124,7 +124,7 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
         int y = 1;
         for (DcModule module : modules) {
             ImageIcon icon = module.getIcon32() == null ? module.getIcon16() : module.getIcon32();
-            icon = icon == null ? IconLibrary._icoModuleTypeProperty : icon;
+            icon = icon == null ? IconLibrary._icoModuleTypeProperty32 : icon;
             JRadioButton radioButton = ComponentFactory.getRadioButton(module.getLabel(), icon, "" + module.getIndex());
             
             radioButton.addActionListener(this);

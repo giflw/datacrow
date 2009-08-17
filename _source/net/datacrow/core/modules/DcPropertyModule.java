@@ -27,11 +27,14 @@ package net.datacrow.core.modules;
 
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcReferencesField;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
 import net.datacrow.core.db.QueryOptions;
@@ -176,6 +179,16 @@ public class DcPropertyModule extends DcModule {
         getField(DcObject._ID).setEnabled(false);
     }  
     
+    @Override
+    public ImageIcon getIcon16() {
+        return  super.getIcon16() == null ? IconLibrary._icoModuleTypeProperty16 : super.getIcon16();
+    }
+
+    @Override
+    public ImageIcon getIcon32() {
+        return  super.getIcon32() == null ? IconLibrary._icoModuleTypeProperty32 : super.getIcon32();
+    }
+
     /**
      * Returns the template module.
      * @return Always returns null.

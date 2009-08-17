@@ -11,6 +11,7 @@ wrong source tree which resulted in a corrupted Item Form.
 - The table view did no longer work correctly for parent <> child modules 
   (multiple issues).
 - Categories and other properties could no longer be created.
+- Long play lengths are displayed incorrectly in the quick view and in the reports.
 
 
 -----------------------------------------------------------------------------------------

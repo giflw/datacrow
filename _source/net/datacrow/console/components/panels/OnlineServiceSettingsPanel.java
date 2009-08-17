@@ -48,7 +48,7 @@ import net.datacrow.settings.Settings;
 
 public class OnlineServiceSettingsPanel extends JPanel implements ActionListener {
     
-    private JButton buttonSettings = ComponentFactory.getButton(IconLibrary._icoSettings);
+    private JButton buttonSettings = ComponentFactory.getButton(IconLibrary._icoSettings16);
     private JCheckBox checkOverwrite;
     private JCheckBox checkAutoCreateSubItems;
     private JCheckBox checkAutoAdd;
