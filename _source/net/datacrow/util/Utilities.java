@@ -50,7 +50,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -605,16 +604,13 @@ public class Utilities {
      * @param url URL of file
      * @return base64 content of the file
      */
-    public static String fileToBase64String(URL url) {
+    public static String fileToBase64String(File file) {
         try {
-            if (url != null) {
-                File file = new File(url.getFile());
-                byte[] b = Utilities.readFile(file);
-                file = null;
-                return String.valueOf(Base64.encode(b));
-            }
+            byte[] b = Utilities.readFile(file);
+            file = null;
+            return String.valueOf(Base64.encode(b));
         } catch (Exception e) {
-            logger.error("Error while converting content from " + url + " to base64", e);
+            logger.error("Error while converting content from " + file + " to base64", e);
         }
         return "";
     }

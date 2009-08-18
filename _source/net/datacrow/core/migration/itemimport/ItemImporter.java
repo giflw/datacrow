@@ -1,7 +1,6 @@
 package net.datacrow.core.migration.itemimport;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -105,6 +104,10 @@ public abstract class ItemImporter extends ItemMigrater {
             String importName = getFile().getName();
             importName = importName.lastIndexOf(".") > -1 ?  importName.substring(0, importName.lastIndexOf(".")) : importName; 
             file = new File(getFile().getParent(), importName + "_images/" + file.getName());    
+            
+            if (!file.exists())
+                file = new File(DataCrow.installationDir , value);
+            
         }
         return file;
     }
@@ -163,8 +166,8 @@ public abstract class ItemImporter extends ItemMigrater {
         } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
             File file = getImagePath(value);
             if (file.exists()) {
-                String s = Utilities.fileToBase64String(new URL("file://" + file));
-                s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new URL("file://" + value)) : s;
+                String s = Utilities.fileToBase64String(file);
+                s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new File(value)) : s;
                 dco.setValue(field.getIndex(), s);
             }
         } else if (field.getValueType() == DcRepository.ValueTypes._BOOLEAN) {
