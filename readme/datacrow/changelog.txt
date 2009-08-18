@@ -1,4 +1,12 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.17 [Release on xx/xx/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[New]
+- Japanese Amazon Search.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.16 [Release on 18/08/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 Another day another version. Unfortunately the Amazon service API was changed just after 
