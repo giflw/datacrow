@@ -99,6 +99,7 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
     }
     
     protected void synchronize() {
+        panelOnlineServiceSettings.save();
         synchronizer.synchronize(this);
     }
     

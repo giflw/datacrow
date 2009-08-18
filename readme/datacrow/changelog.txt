@@ -1,4 +1,14 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.16 [Release on 18/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+Another day another version. Unfortunately the Amazon service API was changed just after 
+I released yesterdays version. 
+
+[Fixed]
+- Amazon service does not work anymore.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.15 [Release on 17/08/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 Apologies for the previous version. Somehow I managed to release a version based on the
