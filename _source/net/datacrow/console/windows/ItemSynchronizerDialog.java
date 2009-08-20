@@ -293,10 +293,6 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         panelActions.add(buttonStop);
         panelActions.add(buttonClose);
         
-        buttonStart.setMnemonic('S');
-        buttonStop.setMnemonic('T');
-        buttonClose.setMnemonic('C');  
-        
         //**********************************************************
         //Main
         //**********************************************************

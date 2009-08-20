@@ -109,9 +109,6 @@ public class WebFieldDefinitionsDialog extends DcDialog implements ActionListene
         JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
 
-        buttonSave.setMnemonic('S');
-        buttonClose.setMnemonic('C');
-        
         buttonSave.addActionListener(this);
         buttonSave.setActionCommand("save");
         

@@ -94,9 +94,6 @@ public class PictureSelectDialog extends DcDialog implements ActionListener {
         buttonOk.setActionCommand("Ok");
         buttonCancel.setActionCommand("Cancel");
         
-        buttonOk.setMnemonic('O');
-        buttonCancel.setMnemonic('C');
-        
         buttonOk.addActionListener(this);
         buttonCancel.addActionListener(this);
         

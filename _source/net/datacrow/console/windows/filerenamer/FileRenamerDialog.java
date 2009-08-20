@@ -425,13 +425,8 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         //Action panel
         //**********************************************************
         JPanel panelAction = new JPanel();
-
-        buttonClose.setMnemonic('C');
-        buttonStart.setMnemonic('S');
-        
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
-        
         panelAction.add(buttonClose);
 
         //**********************************************************

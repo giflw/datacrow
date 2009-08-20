@@ -121,7 +121,6 @@ public class DriveManagerDialog extends DcFrame implements ActionListener {
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
-        buttonClose.setMnemonic('C');
         panelActions.add(buttonClose);
         
         getContentPane().setLayout(Layout.getGBL());

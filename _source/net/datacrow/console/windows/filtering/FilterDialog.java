@@ -295,8 +295,6 @@ public class FilterDialog extends DcDialog implements ActionListener {
         buttonClose.addActionListener(this);
         buttonApply.setActionCommand("filter");
         buttonClose.setActionCommand("close");
-        buttonClose.setMnemonic('C');
-        buttonApply.setMnemonic('A');
 
         panel.add(buttonApply);
         panel.add(buttonClose);

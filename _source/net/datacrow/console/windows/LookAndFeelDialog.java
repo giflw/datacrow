@@ -58,7 +58,6 @@ public class LookAndFeelDialog extends DcDialog implements ActionListener  {
         
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
         buttonClose.addActionListener(this);
-        buttonClose.setMnemonic('C');
         
         getContentPane().add(lafSelector,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
              ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

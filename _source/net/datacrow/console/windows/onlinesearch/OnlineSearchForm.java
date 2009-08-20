@@ -604,10 +604,6 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         buttonAddNew.setToolTipText(DcResources.getText("tpAddNew"));
         
         buttonDetails.setMnemonic('E');
-        buttonClose.setMnemonic('C');        
-        buttonUpdate.setMnemonic('U');
-        buttonAddNew.setMnemonic('A');
-        buttonClear.setMnemonic('L');
 
         buttonDetails.addActionListener(this);
         buttonDetails.setActionCommand("open");

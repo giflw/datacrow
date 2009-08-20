@@ -100,13 +100,11 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
         
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
-        buttonClose.setMnemonic('C');
 
         JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
         
         buttonSave.addActionListener(this);
         buttonSave.setActionCommand("save");
-        buttonSave.setMnemonic('S');
         
         JPanel panelActions = new JPanel();
         panelActions.add(buttonSave);

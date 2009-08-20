@@ -31,7 +31,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.sql.ResultSet;
@@ -300,9 +299,6 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
 
         buttonRunSql = ComponentFactory.getButton(DcResources.getText("lblRun"));
         buttonClear = ComponentFactory.getButton(DcResources.getText("lblClear"));
-
-        buttonRunSql.setMnemonic(KeyEvent.VK_R);
-        buttonClear.setMnemonic(KeyEvent.VK_C);
 
         buttonRunSql.addActionListener(this);
         buttonClear.addActionListener(this);

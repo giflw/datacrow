@@ -29,7 +29,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -413,10 +412,6 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
-
-        buttonRun.setMnemonic(KeyEvent.VK_R);
-        buttonStop.setMnemonic(KeyEvent.VK_T);
-        buttonClose.setMnemonic(KeyEvent.VK_C);
 
         panelActions.add(buttonRun,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

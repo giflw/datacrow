@@ -304,11 +304,8 @@ public abstract class Wizard extends DcFrame implements ActionListener {
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
         
-        buttonNext.setMnemonic('N');
-        buttonBack.setMnemonic('B');
         buttonFinish.setMnemonic('F');
         buttonRestart.setMnemonic('R');
-        buttonClose.setMnemonic('C');
         
         buttonBack.setEnabled(false);
         buttonFinish.setVisible(false);

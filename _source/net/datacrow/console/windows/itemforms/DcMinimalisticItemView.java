@@ -84,7 +84,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     private JPanel statusPanel;
     
     private JButton buttonCreateMultiple = ComponentFactory.getButton(DcResources.getText("lblAddMultiple"));
-    private JButton buttonCreate = ComponentFactory.getButton(DcResources.getText("lblNew"));
+    private JButton buttonNew = ComponentFactory.getButton(DcResources.getText("lblNew"));
     private JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
     
     protected DcObjectList list;
@@ -182,7 +182,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         scroller = null;
         panelActions = null;
         statusPanel = null;
-        buttonCreate = null;
+        buttonNew = null;
         buttonCreateMultiple = null;
         buttonClose = null;
         list.clear();
@@ -207,7 +207,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         if (panel != null) {
             panel.setFont(fontSystem);
             buttonClose.setFont(fontSystem);
-            buttonCreate.setFont(fontSystem);
+            buttonNew.setFont(fontSystem);
             buttonCreateMultiple.setFont(fontSystem);
             list.setFont(fontNormal);
         }
@@ -257,19 +257,16 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         buttonCreateMultiple.addActionListener(this);
         buttonCreateMultiple.setActionCommand("createMultiple");
         
-        buttonCreate.addActionListener(this);
-        buttonCreate.setActionCommand("createNew");
+        buttonNew.addActionListener(this);
+        buttonNew.setActionCommand("createNew");
         
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
         
-        buttonCreate.setMnemonic('N');
-        buttonClose.setMnemonic('C');
-        
         if (!getModule().isAbstract() && !(getModule() instanceof TemplateModule))
             panelActions.add(buttonCreateMultiple);
         
-        panelActions.add(buttonCreate);
+        panelActions.add(buttonNew);
         panelActions.add(buttonClose);
         
         //**********************************************************

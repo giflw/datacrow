@@ -90,9 +90,6 @@ public class InsertTextDialog extends DcDialog implements ActionListener {
         JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
         JButton buttonOk = ComponentFactory.getButton(DcResources.getText("lblOK"));
 
-        buttonCancel.setMnemonic('C');
-        buttonOk.setMnemonic('O');
-        
         buttonCancel.addActionListener(this);
         buttonCancel.setActionCommand("close");
 

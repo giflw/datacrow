@@ -40,7 +40,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
 
     private DcTable table = ComponentFactory.getDCTable(true, false);
     private JProgressBar progressBar = new JProgressBar();
-    private JButton buttonOk = ComponentFactory.getButton(DcResources.getText("lblStart"));
+    private JButton buttonStart = ComponentFactory.getButton(DcResources.getText("lblStart"));
     private JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
 
     private PreviewGenerator generator;
@@ -82,7 +82,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
     }
     
     protected void setBusy(boolean b) {
-        buttonOk.setEnabled(!b);
+        buttonStart.setEnabled(!b);
     }
 
     protected void initProgressBar(int max) {
@@ -117,7 +117,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         
         generator = null;
         buttonCancel = null;
-        buttonOk = null;
+        buttonStart = null;
         progressBar = null;
         
         super.close();
@@ -191,18 +191,15 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         //**********************************************************
         JPanel panelAction = new JPanel();
         
-        buttonOk.setEnabled(false);
+        buttonStart.setEnabled(false);
         
-        buttonOk.setMnemonic('O');
-        buttonCancel.setMnemonic('C');
-        
-        buttonOk.addActionListener(this);
+        buttonStart.addActionListener(this);
         buttonCancel.addActionListener(this);
         
-        buttonOk.setActionCommand("confirm");
+        buttonStart.setActionCommand("confirm");
         buttonCancel.setActionCommand("cancel");
         
-        panelAction.add(buttonOk);
+        panelAction.add(buttonStart);
         panelAction.add(buttonCancel);
         
         //**********************************************************

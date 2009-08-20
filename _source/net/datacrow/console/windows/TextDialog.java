@@ -128,9 +128,6 @@ public class TextDialog extends DcDialog implements ActionListener {
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
         JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
 
-        buttonClose.setMnemonic('C');
-        buttonSave.setMnemonic('S');
-        
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
         buttonSave.addActionListener(this);

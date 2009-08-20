@@ -100,9 +100,6 @@ public class GroupByDialog extends DcDialog implements ActionListener {
         JButton buttonApply = ComponentFactory.getButton(DcResources.getText("lblApply"));
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
         
-        buttonApply.setMnemonic('A');
-        buttonClose.setMnemonic('C');
-        
         buttonApply.addActionListener(this);
         buttonApply.setActionCommand("groupBy");
         buttonClose.addActionListener(this);

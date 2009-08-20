@@ -77,15 +77,13 @@ public class RestartDataCrowDialog extends DcDialog implements ActionListener {
         scrollIn.setPreferredSize(new Dimension(350,50));
         scrollIn.setBorder(null);
         
-        JButton buttonOk = ComponentFactory.getButton(DcResources.getText("lblYes"));
-        buttonOk.addActionListener(this);
-        buttonOk.setActionCommand("restart");
-        buttonOk.setMnemonic('O');
+        JButton buttonYes = ComponentFactory.getButton(DcResources.getText("lblYes"));
+        buttonYes.addActionListener(this);
+        buttonYes.setActionCommand("restart");
 
-        JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblNo"));
-        buttonCancel.addActionListener(this);
-        buttonCancel.setActionCommand("close");
-        buttonCancel.setMnemonic('C');
+        JButton buttonNo = ComponentFactory.getButton(DcResources.getText("lblNo"));
+        buttonNo.addActionListener(this);
+        buttonNo.setActionCommand("close");
         
         getContentPane().add(ComponentFactory.getLabel(IconLibrary._icoAbout),  
                              Layout.getGBC( 0, 0, 1, 1, 0.0, 0.0
@@ -97,8 +95,8 @@ public class RestartDataCrowDialog extends DcDialog implements ActionListener {
         
         JPanel panelActions = new JPanel();
         panelActions.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        panelActions.add(buttonCancel);
-        panelActions.add(buttonOk);
+        panelActions.add(buttonNo);
+        panelActions.add(buttonYes);
         
         getContentPane().add(panelActions,  Layout.getGBC( 2, 3, 1, 1, 0.0, 0.0
                             ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,

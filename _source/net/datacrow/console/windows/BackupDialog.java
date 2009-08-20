@@ -254,7 +254,6 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         this.getContentPane().setLayout(Layout.getGBL());
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
-        buttonClose.setMnemonic('C');
         buttonBackup.setMnemonic('B');
         buttonRestore.setMnemonic('R');
 

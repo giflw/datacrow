@@ -104,9 +104,6 @@ public class TipOfTheDayDialog extends DcDialog implements ActionListener {
         panelActions.add(buttonNext);
         panelActions.add(buttonClose);
         
-        buttonNext.setMnemonic('N');
-        buttonClose.setMnemonic('C');
-        
         getContentPane().add(scroller,      Layout.getGBC( 0, 0, 4, 1, 30.0, 30.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 5, 5, 5, 5), 0, 0));

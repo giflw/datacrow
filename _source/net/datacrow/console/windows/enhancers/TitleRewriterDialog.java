@@ -146,7 +146,6 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
         panelSettings.setLayout(Layout.getGBL());
         
         JLabel lblWords = ComponentFactory.getLabel(DcResources.getText("lblWords"));
-        buttonSave.setMnemonic('S');
         buttonSave.addActionListener(this);
         buttonSave.setActionCommand("save");
         
@@ -183,12 +182,10 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
 
         buttonRun.addActionListener(this);
         buttonRun.setActionCommand("rewrite");
-        buttonRun.setMnemonic('R');
         
         JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
         buttonCancel.addActionListener(this);
         buttonCancel.setActionCommand("cancel");
-        buttonCancel.setMnemonic('C');
         
         JPanel panel = new JPanel();
         panel.add(buttonRun);
@@ -208,7 +205,6 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
         panelRewrite.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblRewriteAll")));
         panelSettings.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSettings")));
         
-        buttonClose.setMnemonic('C');
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
 

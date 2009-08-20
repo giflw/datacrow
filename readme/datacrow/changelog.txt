@@ -1,9 +1,17 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.17 [Release on xx/xx/2009] [testing: high] [target: production]
+Data Crow 3.4.17 [Release on xx/xx/2009] [testing: very high] [target: production]
 -----------------------------------------------------------------------------------------
+A small release containing minor changes and fixes only. Note that there is also a
+new web module release (1.4)! 
 
-[New]
-- Japanese Amazon Search.
+[Fixed]
+- A possible cache mechanism error; no further implications.
+
+[Changed]
+- All windows now have the following shortcut keys (if applicable):
+  (S)ave, (C)ancel, (C)lose, R(un), (O)k, A(pply), (N)ew, N(ext), 
+  (D)elete, (A)add, C(lear), S(t)op, S(tart), (Y)es, (N)o, (R)emove, (B)ack. 
+- Some dialogs and buttons will now have new icons.
 
 
 -----------------------------------------------------------------------------------------

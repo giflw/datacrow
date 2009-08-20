@@ -124,9 +124,6 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         JButton buttonClose = ComponentFactory.getButton(DcResources
                 .getText("lblClose"));
 
-        buttonSave.setMnemonic('S');
-        buttonClose.setMnemonic('C');
-
         buttonSave.addActionListener(this);
         buttonSave.setActionCommand("save");
 

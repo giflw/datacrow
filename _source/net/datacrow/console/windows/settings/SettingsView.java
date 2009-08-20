@@ -121,9 +121,6 @@ public class SettingsView extends DcDialog implements ActionListener {
         
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
-        
-        buttonSave.setMnemonic('S');
-        buttonClose.setMnemonic('C');
 
         return panelActions;
     }

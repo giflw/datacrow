@@ -802,6 +802,45 @@ public final class ComponentFactory {
         
         int height = getPreferredButtonHeight();
         
+        if (buttonText != null) {
+            if (buttonText.equals(DcResources.getText("lblSave")))
+                button.setMnemonic('S');
+            else if (buttonText.equals(DcResources.getText("lblCancel")))
+                button.setMnemonic('C');
+            else if (buttonText.equals(DcResources.getText("lblClose")))
+                button.setMnemonic('C');
+            else if (buttonText.equals(DcResources.getText("lblRun")))
+                button.setMnemonic('R');
+            else if (buttonText.equals(DcResources.getText("lblOK")))
+                button.setMnemonic('O');
+            else if (buttonText.equals(DcResources.getText("lblApply")))
+                button.setMnemonic('A');
+            else if (buttonText.equals(DcResources.getText("lblNew")))
+                button.setMnemonic('N');
+            else if (buttonText.equals(DcResources.getText("lblNext")))
+                button.setMnemonic('N');
+            else if (buttonText.equals(DcResources.getText("lblDelete")))
+                button.setMnemonic('D');
+            else if (buttonText.equals(DcResources.getText("lblAddNew")))
+                button.setMnemonic('A');
+            else if (buttonText.equals(DcResources.getText("lblAdd")))
+                button.setMnemonic('A');
+            else if (buttonText.equals(DcResources.getText("lblClear")))
+                button.setMnemonic('L');
+            else if (buttonText.equals(DcResources.getText("lblStop")))
+                button.setMnemonic('T');
+            else if (buttonText.equals(DcResources.getText("lblStart")))
+                button.setMnemonic('S');
+            else if (buttonText.equals(DcResources.getText("lblYes")))
+                button.setMnemonic('Y');
+            else if (buttonText.equals(DcResources.getText("lblNo")))
+                button.setMnemonic('N');
+            else if (buttonText.equals(DcResources.getText("lblRemove")))
+                button.setMnemonic('R');
+            else if (buttonText.equals(DcResources.getText("lblBack")))
+                button.setMnemonic('B');
+        }
+        
         button.setPreferredSize(new Dimension(120, height));
         button.setMaximumSize(new Dimension(120, height));
         button.setMinimumSize(new Dimension(120, height));

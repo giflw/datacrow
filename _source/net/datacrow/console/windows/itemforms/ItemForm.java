@@ -815,11 +815,9 @@ public class ItemForm extends DcFrame implements ActionListener {
         JButton buttonInternet = null;
 
         JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
-        buttonSave.setMnemonic(KeyEvent.VK_S);
         buttonSave.addActionListener(this);
         buttonSave.setActionCommand("save");
 
-        buttonClose.setMnemonic(KeyEvent.VK_C);
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
 
@@ -844,7 +842,6 @@ public class ItemForm extends DcFrame implements ActionListener {
         }
 
         if (SecurityCentre.getInstance().getUser().isAdmin() && update && !readonly) {
-            buttonDelete.setMnemonic(KeyEvent.VK_D);
             buttonDelete.addActionListener(this);
             buttonDelete.setActionCommand("delete");
             panel.add(buttonDelete, Layout.getGBC(2, 0, 1, 1, 1.0, 1.0

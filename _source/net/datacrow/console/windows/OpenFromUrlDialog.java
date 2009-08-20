@@ -120,8 +120,6 @@ public class OpenFromUrlDialog extends DcDialog implements ActionListener {
         
         buttonOk.setActionCommand("ok");
         buttonCancel.setActionCommand("cancel");
-        buttonOk.setMnemonic('O');
-        buttonCancel.setMnemonic('C');
 
         buttonOk.addActionListener(this);
         buttonCancel.addActionListener(this);

@@ -76,7 +76,6 @@ public class PerformancePanel extends DcPanel implements ActionListener {
         JButton buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
         buttonSave.addActionListener(this);
         buttonSave.setActionCommand("save");
-        buttonSave.setMnemonic('S');
         
         add(labelHSqlCacheScale,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

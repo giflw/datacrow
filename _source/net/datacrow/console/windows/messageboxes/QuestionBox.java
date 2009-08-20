@@ -133,9 +133,6 @@ public class QuestionBox extends DcDialog implements ActionListener {
         buttonNo.addActionListener(this);
         buttonNo.setActionCommand("cancel");
         
-        buttonYes.setMnemonic('Y');
-        buttonNo.setMnemonic('N');
-        
         JPanel panelAction = new JPanel();
         panelAction.add(buttonYes);
         panelAction.add(buttonNo);

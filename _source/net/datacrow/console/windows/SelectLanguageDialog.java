@@ -86,7 +86,6 @@ public class SelectLanguageDialog extends JDialog implements ActionListener {
 
         JButton buttonOk = new JButton("Ok");
         buttonOk.addActionListener(this);
-        buttonOk.setMnemonic('O');
 
         getContentPane().add(label,   Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,

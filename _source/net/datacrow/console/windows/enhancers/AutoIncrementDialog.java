@@ -131,7 +131,6 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
         JPanel panelRenumber = new JPanel(false);
         panelRenumber.setLayout(Layout.getGBL());
         
-        buttonRun.setMnemonic('R');
         buttonRun.addActionListener(this);
         buttonRun.setActionCommand("renumber");
         
@@ -186,7 +185,6 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
         JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
         buttonCancel.addActionListener(this);
         buttonCancel.setActionCommand("cancel");
-        buttonCancel.setMnemonic('C');
         
         JPanel panel = new JPanel();
         panel.add(buttonRun);
@@ -204,9 +202,6 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
          **********************************************************************/
         pSettings.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSettings")));
         panelRenumber.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblRenumberAll")));
-        
-        buttonSave.setMnemonic('S');
-        buttonClose.setMnemonic('C');
         
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");

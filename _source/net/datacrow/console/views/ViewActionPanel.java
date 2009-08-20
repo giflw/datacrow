@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -65,12 +64,6 @@ public class ViewActionPanel extends JPanel implements ActionListener {
         buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
         buttonSave = ComponentFactory.getButton(DcResources.getText("lblSave"));
         buttonRemove = ComponentFactory.getButton(DcResources.getText("lblRemove"));
-    
-        buttonAdd.setMnemonic(KeyEvent.VK_A);
-        buttonClear.setMnemonic(KeyEvent.VK_L);
-        buttonCancel.setMnemonic(KeyEvent.VK_C);
-        buttonSave.setMnemonic(KeyEvent.VK_S);
-        buttonRemove.setMnemonic(KeyEvent.VK_R);
     
         buttonAdd.setToolTipText(DcResources.getText("tpAddRow"));
         buttonClear.setToolTipText(DcResources.getText("tpClear"));

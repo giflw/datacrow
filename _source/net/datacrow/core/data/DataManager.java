@@ -200,17 +200,6 @@ public class DataManager {
         o.removeRequests();
         o.reload();
         o.initializeReferences();
-
-        // avoid synchronization issues: makes sure the main containers have the same object
-        if (objectsByID.get(module) != null) {
-            objectsByID.get(module).remove(o.getID());
-            objectsByID.get(module).put(o.getID(), o);
-        }
-        
-        if (objects.get(module) != null) {
-            objects.get(module).remove(o);
-            objects.get(module).add(o);
-        }
         
         updateUiComponents(o.getModule().getIndex());
         updateView(o, 0, module, MainFrame._SEARCHTAB);
@@ -287,11 +276,13 @@ public class DataManager {
             if (c != null) c.remove(dco);
             
             Map<String, DcObject> map = objectsByID.get(dco.getModule().getIndex());
-            
             if (map != null) map.remove(dco.getID());
         } else if (children.containsKey(dco.getModule().getIndex())) {
             List<DcObject> c = children.get(dco.getModule().getIndex()).get(dco.getValue(dco.getParentReferenceFieldIndex()));
             if (c != null) c.remove(dco);
+            
+            Map<String, DcObject> map = objectsByID.get(dco.getModule().getIndex());
+            if (map != null) map.remove(dco.getID());
         } else if (module == DcModules._PICTURE) {
             Collection<Picture> c = pictures.get(getKey(dco));
             if (c != null) c.remove(dco);
@@ -886,7 +877,7 @@ public class DataManager {
      ***************************************/
 
     private static final int[] cacheTypes =  
-        new int[] {CacheJob._OBJECTS, CacheJob._LOANS, CacheJob._PICTURES, CacheJob._REFERENCES, CacheJob._CHILDREN, CacheJob._ALLBYID};
+        new int[] {CacheJob._OBJECTS, CacheJob._LOANS, CacheJob._PICTURES, CacheJob._REFERENCES, CacheJob._CHILDREN};
     
     public static void clearCache() {
     	try {
@@ -929,15 +920,13 @@ public class DataManager {
 
             start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             
-            if (objectsByID.size() == 0) {
-                DataSetCreator dsc = new DataSetCreator(objects);
-                dsc.start();
-                dsc.join();
-                
-                if (logger.isDebugEnabled()) {
-                    long end = new Date().getTime();
-                    logger.debug("Item sets were created in " + (end - start) + "ms");
-                }
+            DataSetCreator dsc = new DataSetCreator(objects);
+            dsc.start();
+            dsc.join();
+            
+            if (logger.isDebugEnabled()) {
+                long end = new Date().getTime();
+                logger.debug("Item sets were created in " + (end - start) + "ms");
             }
             
             return loader.isSuccess();
@@ -996,6 +985,11 @@ public class DataManager {
         }
     }
     
+    /**
+     * Loads all items from cache. Note that ObjectsByID cannot be cached as these would get other
+     * instance IDs which will result in incorrect cached items (mismatch).
+     * @author Robert Jan van der Waals
+     */
     private final static class CacheJob extends Thread {
         
         public static int _JOBTYPE_READ = 0;
@@ -1006,7 +1000,6 @@ public class DataManager {
         public static int _PICTURES = 2;
         public static int _REFERENCES = 3;
         public static int _CHILDREN = 4;
-        public static int _ALLBYID = 5;
 
         private int cacheType;
         private int jobType;
@@ -1015,7 +1008,7 @@ public class DataManager {
         
         private final String[] cache = new String[] {
                 "objects.dat", "loans.dat", "pictures.dat",
-                "references.dat", "children.dat", "objectsbyid.dat"};
+                "references.dat", "children.dat"};
         
         public CacheJob(ThreadGroup tg, int cacheType, int jobType) {
             super(tg,  "Cache Job - " + cacheType);
@@ -1051,8 +1044,6 @@ public class DataManager {
                 write(references);
             if (cacheType == _CHILDREN)
                 write(children);
-            if (cacheType == _ALLBYID)
-                write(objectsByID);
         }
         
         private void write(Object o) {
@@ -1088,8 +1079,6 @@ public class DataManager {
                     loadReferences(oi);
                 if (cacheType == _CHILDREN)
                     loadChildren(oi);
-                if (cacheType == _ALLBYID)
-                    loadAllByID(oi);                
                                 
                 oi.close();
                 bis.close();
@@ -1124,11 +1113,6 @@ public class DataManager {
         private void loadChildren(ObjectInput oi) throws ClassNotFoundException, IOException {
             children = (Map<Integer, Map<String, List<DcObject>>>) oi.readObject();
         }
-        
-        @SuppressWarnings("unchecked")
-        private void loadAllByID(ObjectInput oi) throws ClassNotFoundException, IOException {
-            objectsByID = (Map<Integer, Map<String,DcObject>>) oi.readObject();
-        }        
     }
     
 

@@ -367,7 +367,6 @@ public class LoanPanel extends JPanel implements ActionListener {
  
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
         buttonClose.addActionListener(this);
-        buttonClose.setMnemonic('C');
         
         if (owner != null && objects.size() > 1)
             panelActions.add(buttonClose);

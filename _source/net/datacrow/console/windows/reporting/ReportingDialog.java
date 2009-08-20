@@ -320,9 +320,6 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
         buttonClose.setActionCommand("close");
         buttonClose.addActionListener(this);
 
-        buttonRun.setMnemonic(KeyEvent.VK_R);
-        buttonStop.setMnemonic(KeyEvent.VK_T);
-        buttonClose.setMnemonic(KeyEvent.VK_C);
         buttonResults.setMnemonic(KeyEvent.VK_O);
 
         panelActions.add(buttonRun,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0

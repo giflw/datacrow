@@ -209,7 +209,6 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         
             buttonStop.addActionListener(osf);
             buttonStop.setActionCommand("stopsearch");
-            buttonStop.setMnemonic('T');
             
             comboServers.setActionCommand("changeserver");
             

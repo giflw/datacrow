@@ -130,7 +130,6 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
         scrollIn.setBorder(null);
         buttonOk = ComponentFactory.getButton(DcResources.getText("lblOK"));
         buttonOk.addActionListener(this);
-        buttonOk.setMnemonic('O');
 
         panel.setLayout(Layout.getGBL());
         panel.addKeyListener(this);
