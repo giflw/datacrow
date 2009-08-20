@@ -163,6 +163,15 @@ public class HttpConnection {
      * Create an output stream for uploading purposes.
      * @throws IOException
      */
+    public InputStream getInputStream() throws IOException {
+        uc.setDoOutput(true);
+        return uc.getInputStream();
+    }
+    
+    /**
+     * Create an output stream for uploading purposes.
+     * @throws IOException
+     */
     public OutputStream getOutputStream() throws IOException {
         uc.setDoOutput(true);
         return uc.getOutputStream();
