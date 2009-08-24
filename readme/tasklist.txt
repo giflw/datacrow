@@ -1,14 +1,3 @@
-General
----------------------------------------------------------------------------------------------------------
-[ ] Build scripts: one script to generate the release files.
-
-
-Documentation
----------------------------------------------------------------------------------------------------------
-[ ] Documentation on plugin development. 
-[ ] Documentation on online service development.
-
-
 Online services
 ---------------------------------------------------------------------------------------------------------
 [ ] MovieMeter.nl online search
@@ -24,11 +13,8 @@ Online services
 [ ] Upgrade of the Container module / Container Hierarchy.
 [ ] Upgrade of the Container module / Global Importer.
 [ ] Store table layout.
-[ ] Export to: for views (XLS, XML, TXT).
 [ ] Book Module / Additional import.
-[ ] Volume name: Do something with the volume name......
 [ ] Clone a module wizard
-[ ] PreparedStatement re-usage.
 [ ] Provide the option to revert back to the default settings (per module + general settings).
     Provide this option as a parameter.
 [ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
