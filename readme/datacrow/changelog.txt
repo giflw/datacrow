@@ -12,6 +12,7 @@ new web module release (1.4)!
   (S)ave, (C)ancel, (C)lose, R(un), (O)k, A(pply), (N)ew, N(ext), 
   (D)elete, (A)add, C(lear), S(t)op, S(tart), (Y)es, (N)o, (R)emove, (B)ack. 
 - Some dialogs and buttons will now have new icons.
+- Imdb search has been improved.
 
 
 -----------------------------------------------------------------------------------------

@@ -52,7 +52,7 @@ public class HtmlUtils {
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         InputStream in = connection.getInputStream();
 
-        Reader reader = new InputStreamReader(in, charset);
+        Reader reader = charset != null ? new InputStreamReader(in, charset) : new InputStreamReader(in);
         Document document = builder.newDocument();
 
         HtmlParser parser = new HtmlParser(uacontext, document);
