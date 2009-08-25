@@ -74,6 +74,14 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
         if (!source.getFile().exists() || !source.getFile().canRead())
             throw new WizardException(DcResources.getText("msgFileCannotBeUsed"));
         
+        wizard.getDefinition().getImporter().clearMappings();
+        
+        try {
+            wizard.getDefinition().getImporter().setFile(source.getFile());
+        } catch (Exception e) {
+            throw new WizardException(e.getMessage());
+        }
+            
         wizard.getDefinition().setFile(source.getFile());
         
         // store the settings

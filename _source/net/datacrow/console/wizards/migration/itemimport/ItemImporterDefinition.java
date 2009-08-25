@@ -26,5 +26,4 @@ public class ItemImporterDefinition {
     public File getFile() {
         return file;
     }
-
 }

@@ -2,13 +2,11 @@ package net.datacrow.console.wizards.migration.itemimport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.io.File;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.table.TableColumn;
 
 import net.datacrow.console.ComponentFactory;
@@ -42,8 +40,8 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
         ItemImporter importer = wizard.getDefinition().getImporter();
         
         for (int i = 0; i < table.getRowCount(); i++) {
-        	String source = (String) table.getValueAt(i, 0, true);
-        	DcField target = (DcField) table.getValueAt(i, 1, true);
+        	String source = (String) table.getValueAt(i, 1, true);
+        	DcField target = (DcField) table.getValueAt(i, 2, true);
         	if (target != null)
         		importer.addMapping(source,  target);
         }
@@ -63,20 +61,14 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
     	if (wizard.getDefinition() != null && 
     	    wizard.getDefinition().getFile() != null) {
     	    
-    		// determine the mappings
-    		File file = wizard.getDefinition().getFile();
-
             table.clear();
-            wizard.getDefinition().getImporter().clearMappings();
             
             try {
                 ItemImporter reader = wizard.getDefinition().getImporter();
-                reader.setFile(file);
-                int position = 0;
-                for (String source : reader.getSourceFields())  {
-                    table.addRow(new Object[] {DcResources.getText("lblField") + " " + 
-                                         (position++) + " (" + source + ")", reader.getTargetField(source)});
-                }
+                int veld = 1;
+                for (String source : reader.getSourceFields())
+                    table.addRow(new Object[] {Integer.valueOf(veld++), source, reader.getTargetField(source)});
+
             } catch (Exception exp) {
                 new MessageBox(DcResources.getText("msgFileCannotBeUsed") + ": " + exp.getMessage(), MessageBox._ERROR);
                 logger.error("Error while reading from file", exp);
@@ -93,14 +85,17 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
         table = ComponentFactory.getDCTable(false, false);
 
         DcTableModel model = (DcTableModel) table.getModel();
-        model.setColumnCount(2);
+        model.setColumnCount(3);
 
-        TableColumn columnName = table.getColumnModel().getColumn(0);
-        JTextField text = ComponentFactory.getTextFieldDisabled();
-        columnName.setCellEditor(new DefaultCellEditor(text));
+        TableColumn columnNr = table.getColumnModel().getColumn(0);
+        columnNr.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
+        columnNr.setHeaderValue(DcResources.getText("lblField"));
+        
+        TableColumn columnName = table.getColumnModel().getColumn(1);
+        columnName.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
         columnName.setHeaderValue(DcResources.getText("lblSourceName"));
 
-        TableColumn columnField = table.getColumnModel().getColumn(1);
+        TableColumn columnField = table.getColumnModel().getColumn(2);
         JComboBox comboFields = ComponentFactory.getComboBox();
         columnField.setHeaderValue(DcResources.getText("lblTargetName"));
 

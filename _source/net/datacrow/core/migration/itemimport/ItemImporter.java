@@ -158,10 +158,7 @@ public abstract class ItemImporter extends ItemMigrater {
                 dco.setValue(field.getIndex(), new DcImageIcon(image));
             } catch (Exception e) {
                 File file = getImagePath(value);
-                if (file.exists()) {
-                    byte[] image = Utilities.readFile(file);
-                    dco.setValue(field.getIndex(), new DcImageIcon(image));
-                }
+                if (file.exists()) dco.setValue(field.getIndex(), new DcImageIcon(value));
             }
         } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
             File file = getImagePath(value);
