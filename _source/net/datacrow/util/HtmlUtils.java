@@ -33,6 +33,7 @@ import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.datacrow.core.http.HttpConnection;
 import net.datacrow.core.http.HttpConnectionUtil;
 
 import org.lobobrowser.html.UserAgentContext;
@@ -48,16 +49,18 @@ public class HtmlUtils {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         
-        
-        InputStream in =  HttpConnectionUtil.getConnection(url).getInputStream();//url.openConnection().getInputStream();
+        HttpConnection connection = HttpConnectionUtil.getConnection(url);
+        InputStream in = connection.getInputStream();
 
         Reader reader = new InputStreamReader(in, charset);
         Document document = builder.newDocument();
 
         HtmlParser parser = new HtmlParser(uacontext, document);
         parser.parse(reader);
+        
         in.close();
-
+        connection.close();
+        
         return document;
     }
 }

@@ -75,6 +75,7 @@ import net.datacrow.core.services.SearchTask;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -324,9 +325,9 @@ public class DataManager {
      * returned. Else null will be returned.
      */
     public static DcObject createReference(DcObject dco, int fieldIdx, Object value) {
-        String name = value != null ? StringUtils.toPlainText(value.toString()) : null;
-        if (name == null || name.trim().length() == 0)
-            return null;
+        String name = value != null ? StringUtils.toPlainText(value instanceof String ? (String) value : value.toString()) : null;
+        
+        if (Utilities.isEmpty(name)) return null;
         
         int module = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
         DcObject ref = value instanceof DcObject ? 
