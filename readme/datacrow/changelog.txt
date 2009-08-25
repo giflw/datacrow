@@ -1,19 +1,22 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.17 [Release on xx/xx/2009] [testing: very high] [target: production]
+Data Crow 3.4.17 [Release on 25/08/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-A small release containing minor changes and fixes only. Note that there is also a
-new web module release (1.4)! 
+A small release containing minor changes and fixes only. 
 
 [Fixed]
-- A possible cache mechanism error; no further implications.
+- A possible cache mechanism error.
+- The CSV importer did not allow fields to be mapped. Furthermore it did forget the 
+  mappings while navigating back and forth through the wizard.
 
 [Changed]
 - All windows now have the following shortcut keys (if applicable):
   (S)ave, (C)ancel, (C)lose, R(un), (O)k, A(pply), (N)ew, N(ext), 
   (D)elete, (A)add, C(lear), S(t)op, S(tart), (Y)es, (N)o, (R)emove, (B)ack. 
 - Some dialogs and buttons will now have new icons.
-- Imdb search has been improved.
-
+- IMDB movie search has been improved to ensure future compatibility. The old 
+  implementation did not always deal well with the HTML formatted text and the localized 
+  versions of this wonderful site.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.16 [Release on 18/08/2009] [testing: high] [target: production]

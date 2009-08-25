@@ -92,17 +92,17 @@ public class XmlImporter extends ItemImporter {
                         NodeList nlRefField = eReference.getElementsByTagName(referenceField);
                         if (nlRefField != null && nlRefField.getLength() > 0) {
                             Node eRefField = nlRefField.item(0);
-                            setValue(dco, field.getIndex(), eRefField.getTextContent());
+                            setValue(dco, field.getIndex(), eRefField.getTextContent(), listener);
                         } else {
                             logger.debug("Could not set value for field " + referenceField + ". The field name does not exist in the XML file");
                         }
                     }
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                    setValue(dco, field.getIndex(), eField.getTextContent());
+                    setValue(dco, field.getIndex(), eField.getTextContent(), listener);
                 } else {
                     String value = eField.getTextContent();
                     if (!Utilities.isEmpty(value))
-                        setValue(dco, field.getIndex(), value);
+                        setValue(dco, field.getIndex(), value, listener);
                 }
             }
             

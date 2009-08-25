@@ -121,7 +121,7 @@ public class CsvImporter extends ItemImporter {
                         
                         if (field == null) continue;
                         
-                        setValue(dco, field.getIndex(), value);
+                        setValue(dco, field.getIndex(), value, listener);
                     }
                     
                     dco.setIDs();

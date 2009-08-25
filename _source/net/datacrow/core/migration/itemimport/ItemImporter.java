@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -13,6 +15,7 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.ItemMigrater;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
@@ -26,6 +29,8 @@ import net.datacrow.util.Utilities;
  * @author Robert Jan van der Waals
  */
 public abstract class ItemImporter extends ItemMigrater {
+    
+    private static Logger logger = Logger.getLogger(ItemImporter.class.getName());
     
     protected IItemImporterClient client;
     protected ItemImporterFieldMappings mappings = new ItemImporterFieldMappings();
@@ -112,65 +117,72 @@ public abstract class ItemImporter extends ItemMigrater {
         return file;
     }
 
-    protected void setValue(DcObject dco, int fieldIdx, String value) throws Exception {
-        if (Utilities.isEmpty(value))
-            return;
+    protected void setValue(DcObject dco, int fieldIdx, String value, IItemImporterClient listener) {
+        
+        if (Utilities.isEmpty(value)) return;
         
         DcField field = dco.getModule().getField(fieldIdx);
         
-        if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-            field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-            DataManager.createReference(dco, field.getIndex(), value);
-            
-        } else if (field.getFieldType() == ComponentFactory._TIMEFIELD) { 
-            try {
-                dco.setValue(field.getIndex(), Long.valueOf(value));
-            } catch (NumberFormatException nfe) {
-                if (value.indexOf(":") > -1) {
-                    int hours = Integer.parseInt(value.substring(0, value.indexOf(":")));
-                    int minutes = Integer.parseInt(value.substring(value.indexOf(":") + 1, value.lastIndexOf(":")));
-                    int seconds = Integer.parseInt(value.substring(value.lastIndexOf(":") + 1));
-                    dco.setValue(field.getIndex(), Long.valueOf(seconds + (minutes *60) + (hours * 60 * 60)));
-                }
-            }
-         } else if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
-                    field.getFieldType() == ComponentFactory._FILESIZEFIELD) {
+        try {
 
-             value = value.replaceAll("\\.", "");
-             
-             try {
-                 dco.setValue(field.getIndex(), Long.valueOf(value));
-             } catch (NumberFormatException nfe) {
-                 String sValue = ""; 
-                 for (char c : value.toCharArray()) {
-                     if (Character.isDigit(c))
-                         sValue += c;
-                     else 
-                         break;
-                 }
+            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+                DataManager.createReference(dco, field.getIndex(), value);
+                
+            } else if (field.getFieldType() == ComponentFactory._TIMEFIELD) { 
+                try {
+                    dco.setValue(field.getIndex(), Long.valueOf(value));
+                } catch (NumberFormatException nfe) {
+                    if (value.indexOf(":") > -1) {
+                        int hours = Integer.parseInt(value.substring(0, value.indexOf(":")));
+                        int minutes = Integer.parseInt(value.substring(value.indexOf(":") + 1, value.lastIndexOf(":")));
+                        int seconds = Integer.parseInt(value.substring(value.lastIndexOf(":") + 1));
+                        dco.setValue(field.getIndex(), Long.valueOf(seconds + (minutes *60) + (hours * 60 * 60)));
+                    }
+                }
+             } else if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
+                        field.getFieldType() == ComponentFactory._FILESIZEFIELD) {
+    
+                 value = value.replaceAll("\\.", "");
                  
-                 if (!Utilities.isEmpty(sValue))
-                     dco.setValue(field.getIndex(), Long.valueOf(sValue));
-            }
-        } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-            try {
-                byte[] image = Base64.decode(value.toCharArray());
-                dco.setValue(field.getIndex(), new DcImageIcon(image));
-            } catch (Exception e) {
+                 try {
+                     dco.setValue(field.getIndex(), Long.valueOf(value));
+                 } catch (NumberFormatException nfe) {
+                     String sValue = ""; 
+                     for (char c : value.toCharArray()) {
+                         if (Character.isDigit(c))
+                             sValue += c;
+                         else 
+                             break;
+                     }
+                     
+                     if (!Utilities.isEmpty(sValue))
+                         dco.setValue(field.getIndex(), Long.valueOf(sValue));
+                }
+            } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                try {
+                    byte[] image = Base64.decode(value.toCharArray());
+                    dco.setValue(field.getIndex(), new DcImageIcon(image));
+                } catch (Exception e) {
+                    File file = getImagePath(value);
+                    if (file.exists()) dco.setValue(field.getIndex(), new DcImageIcon(value));
+                }
+            } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
                 File file = getImagePath(value);
-                if (file.exists()) dco.setValue(field.getIndex(), new DcImageIcon(value));
+                if (file.exists()) {
+                    String s = Utilities.fileToBase64String(file);
+                    s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new File(value)) : s;
+                    dco.setValue(field.getIndex(), s);
+                }
+            } else if (field.getValueType() == DcRepository.ValueTypes._BOOLEAN) {
+                dco.setValue(field.getIndex(), Boolean.valueOf(value));
+            } else {
+                dco.setValue(field.getIndex(), value);
             }
-        } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
-            File file = getImagePath(value);
-            if (file.exists()) {
-                String s = Utilities.fileToBase64String(file);
-                s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new File(value)) : s;
-                dco.setValue(field.getIndex(), s);
-            }
-        } else if (field.getValueType() == DcRepository.ValueTypes._BOOLEAN) {
-            dco.setValue(field.getIndex(), Boolean.valueOf(value));
-        } else {
-            dco.setValue(field.getIndex(), value);
-        }
+        } catch (Exception e) {
+            String message = DcResources.getText("msgErrorWhileSettingValue", new String[] {value, field.getLabel()});
+            listener.notifyMessage(message);
+            logger.error(message, e);
+        }                             
     }
 }
