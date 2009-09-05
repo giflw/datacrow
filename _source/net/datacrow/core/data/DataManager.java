@@ -1383,6 +1383,16 @@ public class DataManager {
             } else {
                 // after an update make sure that the quick view of the main item is updated with
                 // the changed information (as well as the grouping pane).
+                if (dco.getModule().getParent() != null) {
+                    if (dco.getModule().getParent().getSearchView() != null) {
+                        dco.getModule().getParent().getSearchView().refreshQuickView();
+                        if (dco.getModule().getParent().getSearchView().getGroupingPane() != null) {
+                            dco.getModule().getParent().getSearchView().getGroupingPane().revalidate();
+                            dco.getModule().getParent().getSearchView().getGroupingPane().repaint();
+                        }
+                    }
+                }
+                
                 if (dco.getModule().hasDependingModules()) {
                     for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
                         if (module.getSearchView() != null) {
