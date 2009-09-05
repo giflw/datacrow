@@ -11,18 +11,16 @@ import net.datacrow.core.objects.DcObject;
 
 public class NodeElement {
         
-    private String key;
-    private String keyComparable;
+    private Object key;
     private ImageIcon icon;
     private int module;
     
     private List<DcObject> values = new ArrayList<DcObject>();
     
-    public NodeElement(int module, String key, ImageIcon icon) {
+    public NodeElement(int module, Object key, ImageIcon icon) {
         this.module = module;
         this.key = key;
         this.icon = icon;
-        this.keyComparable = key.toLowerCase();        
     }
 
     public void setValues(List<DcObject> values) {
@@ -71,16 +69,15 @@ public class NodeElement {
     }
     
     public String getComparableKey() {
-        return keyComparable;
+        return key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
     }
     
     public String getKey() {
-        return key;
+        return key instanceof DcObject ? ((DcObject) key).toString() : key instanceof String ? (String) key : key.toString();
     }
     
     public void clear() {
         key = null;
-        keyComparable = null;
         
         if (values != null)
             values.clear();
@@ -91,9 +88,9 @@ public class NodeElement {
     @Override
     public String toString() {
         if (values == null || values.size() == 1) 
-            return key;
+            return getKey();
         else 
-            return key + " (" + String.valueOf(values.size()) + ")";    
+            return getKey() + " (" + String.valueOf(values.size()) + ")";    
     }
 
     @Override
@@ -101,11 +98,11 @@ public class NodeElement {
         if (o == null || !(o instanceof NodeElement))
             return false;
         else 
-            return getKey().equals(((NodeElement) o).getKey());
+            return getComparableKey().equals(((NodeElement) o).getComparableKey());
     }
 
     @Override
     public int hashCode() {
-        return key.hashCode();
+        return getComparableKey().hashCode();
     }
 }

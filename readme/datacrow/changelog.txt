@@ -1,4 +1,21 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.18 [Release on xx/09/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Black image backgrounds for icons of new modules (now transparent).
+- General Field Settings: the field names are always displayed in English.  
+- The application crashes when closing the 'select language' dialog without using the 
+  buttons 
+- Item is not removed from the new items tab when saving it from within the item form.
+- Quick View is now updated when a related item has been changed.
+- The grouping pane does not update when the name of, for example, an artist has changed.
+  (movie module > group by artist > change artist name = not reflected in the grouping 
+  pane).
+- Incorrect lower and upper case sorting in the grouping pane.
+  
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.17 [Release on 25/08/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 A small release containing minor changes and fixes only. 

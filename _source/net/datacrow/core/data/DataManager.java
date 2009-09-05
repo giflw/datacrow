@@ -1381,10 +1381,17 @@ public class DataManager {
             if (mode != 0) { // only for inserts and removals
                 dco.freeResources();
             } else {
+                // after an update make sure that the quick view of the main item is updated with
+                // the changed information (as well as the grouping pane).
                 if (dco.getModule().hasDependingModules()) {
                     for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
-                        if (module.getSearchView() != null)
+                        if (module.getSearchView() != null) {
                             module.getSearchView().refreshQuickView();
+                            if (module.getSearchView().getGroupingPane() != null) {
+                                module.getSearchView().getGroupingPane().revalidate();
+                                module.getSearchView().getGroupingPane().repaint();
+                            }
+                        }
                     }
                 }
             }

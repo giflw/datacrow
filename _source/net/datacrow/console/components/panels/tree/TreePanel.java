@@ -275,25 +275,30 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected void insertNode(DefaultMutableTreeNode node, DefaultMutableTreeNode parent) {
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         
-        List<String> elements = new ArrayList<String>();
-        for (int i = 0; i < parent.getChildCount(); i++)
-            elements.add(((DefaultMutableTreeNode) parent.getChildAt(i)).getUserObject().toString());
+        NodeElement ne = (NodeElement) node.getUserObject();
         
-        elements.add(node.getUserObject().toString());
+        List<String> elements = new ArrayList<String>();
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            NodeElement child = ((NodeElement) ((DefaultMutableTreeNode) parent.getChildAt(i)).getUserObject());
+            elements.add(child.getComparableKey());
+        }
+        
+        elements.add(ne.getComparableKey());
         Collections.sort(elements);
-        int idx = elements.indexOf(node.getUserObject().toString());
+        int idx = elements.indexOf(ne.getComparableKey());
         
         model.insertNodeInto(node, parent, idx);
     }
     
-    protected DefaultMutableTreeNode findNode(String key, DefaultMutableTreeNode parentNode) {
+    protected DefaultMutableTreeNode findNode(Object key, DefaultMutableTreeNode parentNode) {
         int count = parentNode != null ? parentNode.getChildCount() : 0;
         for (int i = 0; i < count; i++) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
             
             if (node.getUserObject() instanceof NodeElement) {
                 NodeElement ne = (NodeElement) node.getUserObject();
-                if (ne.getComparableKey().equals(key.toLowerCase()))
+                String s = key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
+                if (ne.getComparableKey().equals(s))
                     return node;
             }
         }

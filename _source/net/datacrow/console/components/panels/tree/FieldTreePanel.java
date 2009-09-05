@@ -231,8 +231,7 @@ public class FieldTreePanel extends TreePanel {
                 Collection<DcObject> references = (Collection<DcObject>) dco.getValue(field.getIndex());
                 if (references != null && references.size() > 0) {
                     for (DcObject reference : references) {
-                        String key = reference.toString();
-                        DefaultMutableTreeNode node = addElement(key, reference.getIcon(), dco, parent);
+                        DefaultMutableTreeNode node = addElement(reference, reference.getIcon(), dco, parent);
                         if (level + 1 < fields.length)
                             addElement(dco, node, level + 1);
                     }
@@ -245,11 +244,10 @@ public class FieldTreePanel extends TreePanel {
                 String key = dco.getDisplayString(field.getIndex());
                 key = key.trim().length() == 0 ? empty : key;
                 
-                
                 DefaultMutableTreeNode node;
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                     DcObject ref = (DcObject) dco.getValue(field.getIndex());
-                    node = addElement(key, (ref != null ? ref.getIcon() : null), dco, parent);    
+                    node = addElement((ref == null ? key : ref), (ref != null ? ref.getIcon() : null), dco, parent);    
                 } else {
                     node = addElement(key, null, dco, parent);
                 }
@@ -270,7 +268,7 @@ public class FieldTreePanel extends TreePanel {
      * @param parent
      * @return
      */
-    private DefaultMutableTreeNode addElement(String key, ImageIcon icon, DcObject dco, DefaultMutableTreeNode parent) {
+    private DefaultMutableTreeNode addElement(Object key, ImageIcon icon, DcObject dco, DefaultMutableTreeNode parent) {
         DefaultMutableTreeNode node = findNode(key, parent);
         if (node == null) {
             NodeElement ne = new NodeElement(getModule(), key, icon);
@@ -417,7 +415,7 @@ public class FieldTreePanel extends TreePanel {
                 } else {
                     Collections.sort(references);
                     for (DcObject reference : references) {
-                        addKey(keys, new NodeElement(getModule(), reference.toString(), reference.getIcon()), dco);
+                        addKey(keys, new NodeElement(getModule(), reference, reference.getIcon()), dco);
                     }
                 }
             } else {
@@ -428,7 +426,7 @@ public class FieldTreePanel extends TreePanel {
                 	value = Utilities.isEmpty(value) ? null : value;
                 	if (value instanceof DcObject || value == null) {
 	                    DcObject ref = (DcObject) value;
-	                    addKey(keys, new NodeElement(getModule(), key, (ref != null ? ref.getIcon() : null)), dco);
+	                    addKey(keys, new NodeElement(getModule(), (ref == null ? key : ref), (ref != null ? ref.getIcon() : null)), dco);
                 	}
                 } else {
                     ImageIcon icon = null;
