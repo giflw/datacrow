@@ -74,7 +74,7 @@ public class FillerTask extends DataTask {
           }
           
           try {
-              sleep(10);
+              sleep(1);
           } catch (Exception e) {
               logger.error(e, e);
           }
