@@ -163,6 +163,10 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         return dco != null;
     }
     
+    public void refresh() {
+        setObject(dco, true);
+    }
+    
     public void setObject(final DcObject dco, boolean allowSame) {
         if (dco == null || (!allowSame && dco.equals(this.dco)))
             return;

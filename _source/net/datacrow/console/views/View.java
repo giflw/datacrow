@@ -177,6 +177,11 @@ public class View extends DcPanel implements ListSelectionListener {
         return vc.allowsHorizontalTraversel();
     }
     
+    public void refreshQuickView() {
+        if (quickView != null)
+            quickView.refresh();
+    }
+    
     protected boolean allowsVerticalTraversel() {
         return vc.allowsVerticalTraversel();
     }
@@ -748,15 +753,6 @@ public class View extends DcPanel implements ListSelectionListener {
             repaint();
         }
     }
-    
-//    private void removeChildView() {
-//        if (childView != null) {
-//            childView.setVisible(false);
-//            panelResult.remove(spChildView);
-//            revalidate();
-//            repaint();
-//        }
-//    }
     
     private void build() {
         //**********************************************************

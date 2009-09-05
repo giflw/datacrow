@@ -104,6 +104,11 @@ public class MasterView {
         return views.get(index);
     }
     
+    public void refreshQuickView() {
+        for (View view : views.values())
+            view.refreshQuickView();
+    }
+    
     public View getCurrent() {
         int view = DcModules.getCurrent().getSettings().getInt(DcRepository.ModuleSettings.stDefaultView);
         View current = get(view);

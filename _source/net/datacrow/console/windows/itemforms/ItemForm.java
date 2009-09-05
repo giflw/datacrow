@@ -535,7 +535,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     public void apply() {
-        // do not remove requests
+        // do not remove requests (!)
         // dco.removeRequests();
         
         dco.removeChildren();

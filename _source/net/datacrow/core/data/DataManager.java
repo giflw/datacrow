@@ -464,9 +464,6 @@ public class DataManager {
      * @param tab The tab to update. Either {@link MainFrame#_INSERTTAB} or {@link MainFrame#_SEARCHTAB}.
      */
     private static void updateView(final DcObject dco, final int mode, final int module, final int tab) {
-        if (dco instanceof DcProperty)
-            return;
-        
         // Thread-safe view update
         ViewUpdater updater = new ViewUpdater(dco, module, tab, mode);
         if (!SwingUtilities.isEventDispatchThread())
@@ -1336,8 +1333,7 @@ public class DataManager {
                         
                         DcModules.get(module).getSearchView().add(dco);
                         
-                        if (!DcModules.get(module).isAbstract() && 
-                             dco.getModule().isTopModule()) {
+                        if (!DcModules.get(module).isAbstract() && dco.getModule().isTopModule()) {
 
                             if (dco instanceof DcMediaObject)
                                 DcModules.get(DcModules._MEDIA).getSearchView().add(dco);
@@ -1358,7 +1354,8 @@ public class DataManager {
                     if (m instanceof DcMediaModule)
                         modules.add(DcModules.get(DcModules._MEDIA));
                     
-                    modules.add(DcModules.get(DcModules._CONTAINER));
+                    if (m.isContainerManaged())
+                        modules.add(DcModules.get(DcModules._CONTAINER));
                 }
                 
                 if (m.isAbstract())
@@ -1381,9 +1378,16 @@ public class DataManager {
                 }
             }
             
-            if (mode != 0) // only for inserts and removals
+            if (mode != 0) { // only for inserts and removals
                 dco.freeResources();
-            
+            } else {
+                if (dco.getModule().hasDependingModules()) {
+                    for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
+                        if (module.getSearchView() != null)
+                            module.getSearchView().refreshQuickView();
+                    }
+                }
+            }
             dco = null;
         }
     }
