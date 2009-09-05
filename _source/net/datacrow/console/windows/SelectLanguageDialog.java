@@ -52,7 +52,7 @@ public class SelectLanguageDialog extends JDialog implements ActionListener {
         build();
         pack();
         setTitle("Select the preferred language");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setModal(true);
         setLocation(Utilities.getCenteredWindowLocation(getSize()));
     }

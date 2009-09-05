@@ -219,7 +219,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             c = table.getColumnModel().getColumn(_COL_CUSTOM_LABEL);
             DcShortTextField textName = ComponentFactory.getShortTextField(20);
             c.setCellEditor(new DefaultCellEditor(textName));
-            c.setHeaderValue(DcResources.getText("lblLabel"));
+            c.setHeaderValue(DcResources.getText("lblCustomLabel"));
 
             c = table.getColumnModel().getColumn(_COL_ENABLED);
             JCheckBox checkEnabled = new JCheckBox();
@@ -288,8 +288,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
 
         private void save() {
             DcFieldDefinitions definitions = getDefinitions();
-            module.setSetting(DcRepository.ModuleSettings.stFieldDefinitions,
-                    definitions);
+            module.setSetting(DcRepository.ModuleSettings.stFieldDefinitions, definitions);
 
             // other settings depend on the global definitions settings
             definitions.checkDependencies();
@@ -313,7 +312,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
                 
                 Object[] row = new Object[8];
-                row[_COL_ORIG_LABEL] = module.getField(definition.getIndex()).getSystemName();
+                row[_COL_ORIG_LABEL] = module.getField(definition.getIndex()).getLabel();
                 row[_COL_CUSTOM_LABEL] = definition.getLabel();
                 row[_COL_ENABLED] = Boolean.valueOf(definition.isEnabled());
                 row[_COL_REQUIRED] = Boolean.valueOf(definition.isRequired());
