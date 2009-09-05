@@ -238,12 +238,13 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                 super.paintComponent(g);
                 return;
             }
-                
+
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
             try {
                 if (scalingAllowed(imageWidth, imageHeight)) {
                     
-                    ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                  
                     int newWidth = 0;
                     int newHeight = 0;
                     if (thumbnail) {

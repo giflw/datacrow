@@ -440,11 +440,15 @@ public class Utilities {
     public static Image getScaledImage(ImageIcon icon) {
         return getScaledImage(icon, 190, 145);
     }    
-    
+
     public static Image getScaledImage(byte[] bytes, int width, int height) {
         return toBufferedImage(new ImageIcon(bytes), DcImageIcon._TYPE_JPEG, width, height);
     }    
 
+    public static Image getScaledImage(byte[] bytes, int type, int width, int height) {
+        return toBufferedImage(new ImageIcon(bytes), type, width, height);
+    }    
+    
     public static Image getScaledImage(ImageIcon icon, int width, int height) {
         return toBufferedImage(icon, DcImageIcon._TYPE_JPEG, width, height);
     }    

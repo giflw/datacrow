@@ -25,9 +25,7 @@
 
 package net.datacrow.core.objects;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +33,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import net.datacrow.console.ComponentFactory;
@@ -46,6 +43,8 @@ import net.datacrow.core.db.Query;
 import net.datacrow.core.db.QueryQueue;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.helpers.Movie;
+import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.WorkFlow;
@@ -587,23 +586,13 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             
             if (value != null && value.length() > 0) {
                 byte[] bytes = Base64.decode(value.toCharArray());
-                
                 ImageIcon current = new ImageIcon(bytes);
                 
                 if (current.getIconHeight() > 16 || current.getIconWidth() > 16) {
-                    Image img = Utilities.getScaledImage(bytes, 16, 16);
-                    BufferedImage buffImg = Utilities.toBufferedImage(new ImageIcon(img));
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        
+                    BufferedImage img = Utilities.toBufferedImage(current, DcImageIcon._TYPE_PNG, 16, 16);
                     try {
-                        ImageIO.write(buffImg, "jpg", baos );
-                        baos.flush();
-                        bytes = baos.toByteArray();
-                        baos.close();
+                        bytes = Utilities.getBytes(new DcImageIcon(img), DcImageIcon._TYPE_PNG);
                         setValue(field.getIndex(), new String(Base64.encode(bytes)));
-                        
-                        img = null;
-                        buffImg = null;
                     } catch (Exception e) {
                         logger.error("Could not save scaled image for object with ID " + getID(), e);
                     }
