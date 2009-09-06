@@ -75,6 +75,7 @@ import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.isbn.Isbn;
 
 import org.apache.log4j.Logger;
 
@@ -448,7 +449,25 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         saveSettings();
         processing();
 
-        task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
+        // if the query is actually an ISBN number
+        Isbn isbn = new Isbn();
+        String query = panelService.getQuery();
+        String isbnCheck = String.valueOf(StringUtils.getContainedNumber(query));
+        
+        SearchMode mode = panelService.getMode();
+        if (isbn.isIsbn10(isbnCheck) || isbn.isIsbn13(isbnCheck)) {
+            
+            for (SearchMode m : panelService.getServer().getSearchModes()) {
+                if (m.singleIsPerfect() && !m.keywordSearch() &&
+                   (m.getDisplayName().toLowerCase().contains("isbn"))) {
+                    
+                    mode = m;
+                    query = isbnCheck;
+                }
+            }
+        }
+        
+        task = panelService.getServer().getSearchTask(this, mode, panelService.getRegion(), query);
         task.setPriority(Thread.NORM_PRIORITY);
         task.setItemMode(panelSettings.isQueryFullDetails() ? SearchTask._ITEM_MODE_FULL : SearchTask._ITEM_MODE_SIMPLE);
         task.start();

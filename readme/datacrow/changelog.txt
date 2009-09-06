@@ -25,6 +25,8 @@ Data Crow 3.4.18 [Release on 07/09/2009] [testing: high] [target: production]
   using an ISBN number.
 - You can now also create a report for only the selected items.
 - XML and XSD files are now removed after a report has been created.
+- After entering an ISBN in the online search form the ISBN search mode will automatically 
+  be used.
 
 [New]
 - Version check on startup. The version check can be disabled.
