@@ -13,7 +13,12 @@ Data Crow 3.4.18 [Release on xx/09/2009] [testing: high] [target: production]
   (movie module > group by artist > change artist name = not reflected in the grouping 
   pane).
 - Incorrect lower and upper case sorting in the grouping pane.
-  
+- 'languages.properties' not found message on startup on non Windows systems.
+- Sample image not loaded on new installations (non Windows systems).
+
+[Changed]
+- 
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.17 [Release on 25/08/2009] [testing: high] [target: production]

@@ -67,6 +67,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileSystemView;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.ImageStore;
 import net.datacrow.core.objects.Picture;
@@ -93,7 +94,7 @@ public class Utilities {
     
     static {
         try {
-            FileInputStream fis = new FileInputStream("resources/languages.properties");
+            FileInputStream fis = new FileInputStream(new File(DataCrow.installationDir, "resources/languages.properties"));
             languages.load(fis);
             fis.close();
         } catch (Exception e) {
