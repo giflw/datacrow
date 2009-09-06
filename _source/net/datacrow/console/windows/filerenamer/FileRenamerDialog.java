@@ -69,7 +69,6 @@ import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.filerenamer.FileRenamer;
 import net.datacrow.filerenamer.IFileRenamerListener;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -123,7 +122,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         build();
 
         setSize(DcSettings.getDimension(DcRepository.Settings.stFileRenamerDialogSize));
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
+        setCenteredLocation();
 
         patternFld.setText(DcModules.get(module).getSettings().getString(DcRepository.ModuleSettings.stFileRenamerPattern));
     }

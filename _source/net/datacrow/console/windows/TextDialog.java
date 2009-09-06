@@ -48,7 +48,6 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.Utilities;
 
 public class TextDialog extends DcDialog implements ActionListener {
 
@@ -68,7 +67,7 @@ public class TextDialog extends DcDialog implements ActionListener {
         textArea.setEditable(edit);
         textArea.setText(s);
         setSize(DcSettings.getDimension(DcRepository.Settings.stTextViewerSize));
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
+        setCenteredLocation();
 
         if (edit) {
             JMenu editMenu = new TextEditMenu(textArea);

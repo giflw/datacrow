@@ -91,7 +91,7 @@ public class NativeMessageBox extends JDialog implements ActionListener {
         
         textMessage.setText(message);
         pack();
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
+        setLocation(Utilities.getCenteredWindowLocation(getSize(), true));
         toFront();
         buttonOk.requestFocus();
         setModal(true);

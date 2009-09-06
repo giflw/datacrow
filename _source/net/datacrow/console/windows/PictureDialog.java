@@ -42,7 +42,6 @@ import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.Utilities;
 
 public class PictureDialog extends DcDialog implements ActionListener {
     
@@ -82,8 +81,7 @@ public class PictureDialog extends DcDialog implements ActionListener {
         pack();
         
         setSize(500, 500);
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
-        
+        setCenteredLocation();
         setModal(true);
         setVisible(true);
     }

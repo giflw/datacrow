@@ -665,6 +665,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stMainViewLocation,
+                            null,
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));        
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stTextViewerSize,
                             new Dimension(500, 700),
                             -1,

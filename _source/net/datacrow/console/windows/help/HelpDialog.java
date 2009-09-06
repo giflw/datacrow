@@ -65,7 +65,7 @@ public class HelpDialog {
             hb.setActivationWindow(window);
             hb.setCurrentID(helpIndex);
             hb.setSize(DcSettings.getDimension(DcRepository.Settings.stHelpFormSize));
-            hb.setLocation(Utilities.getCenteredWindowLocation(hb.getSize()));
+            hb.setLocation(Utilities.getCenteredWindowLocation(hb.getSize(), false));
             hb.setFont(ComponentFactory.getSystemFont());
             hb.setDisplayed(true);
             

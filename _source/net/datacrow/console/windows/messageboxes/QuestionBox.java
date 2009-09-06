@@ -29,7 +29,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -45,11 +44,9 @@ import javax.swing.ScrollPaneConstants;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcDialog;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.Utilities;
 
 public class QuestionBox extends DcDialog implements ActionListener {
 
@@ -94,15 +91,7 @@ public class QuestionBox extends DcDialog implements ActionListener {
         this.pack();
         this.setModal(true);
 
-        if (DataCrow.mainFrame != null) {
-            Dimension size = DataCrow.mainFrame.getSize();
-            Point location = DataCrow.mainFrame.getLocation();
-            int x = ((location.x + size.width - getSize().width) / 2);
-            int y = ((location.y + size.height  - getSize().height) / 2);
-            setLocation(x, y);
-        } else {
-        	setLocation(Utilities.getCenteredWindowLocation(getSize()));
-        }
+        setCenteredLocation();
 
         buttonYes.requestFocus();
         this.setVisible(true);

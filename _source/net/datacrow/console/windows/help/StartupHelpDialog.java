@@ -47,7 +47,7 @@ public class StartupHelpDialog extends JDialog implements ActionListener {
         build();
         setSize(400, 300);
         setModal(true);
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
+        setLocation(Utilities.getCenteredWindowLocation(getSize(), true));
     }
     
     private void build() {

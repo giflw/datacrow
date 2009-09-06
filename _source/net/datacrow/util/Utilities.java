@@ -168,10 +168,22 @@ public class Utilities {
      * @param windowSize size of the window
      * @return centered location
      */
-    public static Point getCenteredWindowLocation(Dimension windowSize) {
-        Dimension dim = tk.getScreenSize();
-        dim.height = (dim.height-windowSize.height)/2;
-        dim.width = (dim.width-windowSize.width) /2;
+    public static Point getCenteredWindowLocation(Dimension windowSize, boolean main) {
+        main = main || DataCrow.mainFrame == null;
+        
+        Dimension dim;
+        if (main) {
+            dim = tk.getScreenSize();
+            dim.height = (dim.height - windowSize.height) / 2;
+            dim.width = (dim.width - windowSize.width) / 2;
+        } else {
+            // relative to the mainframe
+            dim = tk.getScreenSize();
+            Point p = DataCrow.mainFrame.getLocation();
+            dim.height = (p.y) + ((DataCrow.mainFrame.getSize().height - windowSize.height )  / 2);
+            dim.width = (p.x) + ((DataCrow.mainFrame.getSize().width - windowSize.width ) / 2);
+        }
+
         return new Point(dim.width, dim.height);
     }
     

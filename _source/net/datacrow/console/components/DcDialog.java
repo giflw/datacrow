@@ -115,7 +115,7 @@ public class DcDialog extends JDialog {
     }
 
     public void setCenteredLocation() {
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
+        setLocation(Utilities.getCenteredWindowLocation(getSize(), false));
     }
     
     @Override

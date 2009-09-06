@@ -41,7 +41,6 @@ import net.datacrow.console.components.DcFilePatternTextField;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.Utilities;
 
 public class InsertTextDialog extends DcDialog implements ActionListener {
 
@@ -52,7 +51,7 @@ public class InsertTextDialog extends DcDialog implements ActionListener {
         setTitle(DcResources.getText("lblInsertText"));
         
         build();
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
+        setCenteredLocation();
         setVisible(true);
     }
 

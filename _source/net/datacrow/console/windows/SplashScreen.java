@@ -88,7 +88,7 @@ public final class SplashScreen extends JWindow {
         		                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
 											 new Insets( 2, 0, 0, 0), 0, 0));
         pack();
-        setLocation(Utilities.getCenteredWindowLocation(getSize()));
+        setLocation(Utilities.getCenteredWindowLocation(getSize(), true));
     }
 }
 
