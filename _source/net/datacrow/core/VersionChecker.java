@@ -90,7 +90,7 @@ public class VersionChecker extends Thread {
                         DcResources.getText("msgNewVersion", 
                                 new String[] {version, 
                                               "<a href=\"" + downloadUrl + "\">http://www.datacrow.net</a>", 
-                                              "<a href=\"" + infoUrl + "\">here</a>"}) +
+                                              "<a href=\"" + infoUrl + "\">" + DcResources.getText("lblHere") +  "</a>"}) +
                         "</body> </html>";
 
                     SwingUtilities.invokeAndWait(new Runnable() {
