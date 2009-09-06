@@ -16,11 +16,15 @@ Data Crow 3.4.18 [Release on 07/09/2009] [testing: high] [target: production]
 - 'languages.properties' not found message on startup on non Windows systems.
 - Sample image not loaded on new installations (non Windows systems).
 - Item Import Wizard: changing the separator character has no immediate effect. 
+- When there are no reports for a module the reports menu option will not be available 
+  anymore.
 
 [Changed]
 - Additional information when importing items.
 - Non digits are now removed from the search string when performing an online search
   using an ISBN number.
+- You can now also create a report for only the selected items.
+- XML and XSD files are now removed after a report has been created.
 
 [New]
 - Version check on startup. The version check can be disabled.

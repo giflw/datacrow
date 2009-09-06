@@ -93,6 +93,10 @@ public class ViewPopupMenu extends DcPopupMenu {
             PluginHelper.add(this, "ItemExporterWizard", "", dco, null, viewIdx, dco.getModule().getIndex());
         }
         
+        if (viewType == View._TYPE_SEARCH && DcModules.getCurrent().hasReports()) {
+            PluginHelper.add(this, "Report", "", dco, null, viewIdx, DcModules.getCurrent().getIndex());
+        }
+        
         addSeparator();
         PluginHelper.add(this, "Sort");
         

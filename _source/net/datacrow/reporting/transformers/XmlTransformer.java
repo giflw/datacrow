@@ -122,6 +122,16 @@ public abstract class XmlTransformer {
             } finally {
                 if (client != null) client.notifyStopped();
                 
+                try {
+                    source.delete();
+                    String name = source.getName();
+                    name = name.lastIndexOf(".") > -1 ? name.substring(0, name.lastIndexOf(".")) : name;
+                    new File(source.getParent(), name).delete();
+                    new File(source.getParent(), name + ".xsd").delete();
+                } catch (Exception ignore) {
+                    logger.debug("Could not cleanup reporting files.", ignore);
+                }
+                
                 source = null;
                 template = null;
                 objects = null;
@@ -129,6 +139,8 @@ public abstract class XmlTransformer {
                 client = null;
                 settings = null;
                 exporter = null;
+                
+
 
                 try {
                     if (bos != null) bos.close();
