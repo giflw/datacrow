@@ -164,7 +164,14 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }
     
     public void refresh() {
+        int caret = descriptionPane.getCaretPosition();
         setObject(dco, true);
+        
+        try {
+            descriptionPane.setCaretPosition(caret);
+        } catch (Exception e) {
+            logger.debug("Error while setting the quick view caret position", e);
+        }
     }
     
     public void setObject(final DcObject dco, boolean allowSame) {
@@ -240,7 +247,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     private void clearImages() {
         removeTabs();
-        tabbedPane.addTab(DcResources.getText("lblDescription"), IconLibrary._icoInformation ,scroller);
+        tabbedPane.addTab(DcResources.getText("lblDescription"), IconLibrary._icoInformation, scroller);
         
         for (JPanel panel : imagePanels) {
             Component[] components = panel.getComponents();
