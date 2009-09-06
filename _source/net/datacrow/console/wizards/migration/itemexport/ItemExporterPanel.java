@@ -97,7 +97,6 @@ public class ItemExporterPanel extends ItemExporterWizardPanel implements IItemE
 
         JScrollPane scroller = new JScrollPane(textLog);
         textLog.setEditable(false);
-        textLog.setEnabled(false);
 
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelLog.add(scroller, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
