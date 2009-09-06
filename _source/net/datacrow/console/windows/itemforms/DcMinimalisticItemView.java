@@ -170,8 +170,10 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        if (b)
+        if (b) {
             loadItems();
+            setCenteredLocation();
+        }
     }    
     
     public void clear() {
