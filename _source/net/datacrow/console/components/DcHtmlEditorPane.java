@@ -113,7 +113,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             String query = url.getQuery();
             
             String file = url.toString();
-            if (file.toLowerCase().startsWith("http") || file.toLowerCase().startsWith("file")) {
+            if (query == null || !query.contains("module=")) {
                 try {
                     BrowserLauncher.openURL(file);
                 } catch (Exception exp) {

@@ -92,6 +92,9 @@ public class VersionCheckerDialog extends DcFrame implements ActionListener {
         getContentPane().add(buttonClose, Layout.getGBC(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                 new Insets(5, 5, 5, 5), 0, 0));
+        
+        pack();
+        setSize(400, 400);
     }
 
     public void actionPerformed(ActionEvent e) {
