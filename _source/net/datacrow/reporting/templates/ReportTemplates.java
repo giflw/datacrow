@@ -61,6 +61,16 @@ public class ReportTemplates {
         return folders.values();
     }
     
+    public boolean hasReports(int module) {
+        String folder = folders.get(module);
+        if (folder != null) {
+            String[] extensions = {"xsl", "xslt"};
+            Collection<String> files = Directory.read(folder, true, false, extensions);
+            if (files.size() > 0) return true;
+        }
+        return false;
+    }
+    
     public Collection<ReportTemplate> getReportFiles(int transformer) {
         return getReportFiles(DcModules.getCurrent().getIndex(), transformer);
     }

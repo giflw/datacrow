@@ -72,6 +72,7 @@ import net.datacrow.core.services.Servers;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.fileimporters.FileImporter;
+import net.datacrow.reporting.templates.ReportTemplates;
 import net.datacrow.settings.DcModuleSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
@@ -307,6 +308,10 @@ public class DcModule implements Comparable<DcModule> {
         if (!module.isEnabled()) isEnabled(false);
     }
 
+    public boolean hasReports() {
+        return new ReportTemplates(true).hasReports(index);       
+    }
+    
     /**
      * Indicates if the module is abstract. An abstract module represents items belonging
      * to other modules; it represents items from multiple modules. An abstract module does
