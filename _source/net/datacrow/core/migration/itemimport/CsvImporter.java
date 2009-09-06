@@ -129,11 +129,12 @@ public class CsvImporter extends ItemImporter {
                 }
                 
                 reader.close();
-                listener.notifyMessage(DcResources.getText("msgImportFinished"));
             } catch (Exception e) {
                 listener.notifyMessage("Error while importing file " + file + ": " + e);
                 logger.error("Error while importing file " + file, e);
             }  
+            
+            listener.notifyStopped();
             
             module = null;
             file = null;

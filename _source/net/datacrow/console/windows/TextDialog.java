@@ -66,7 +66,6 @@ public class TextDialog extends DcDialog implements ActionListener {
         buildDialog(edit);
 
         textArea.setEditable(edit);
-        textArea.setEnabled(edit);
         textArea.setText(s);
         setSize(DcSettings.getDimension(DcRepository.Settings.stTextViewerSize));
         setLocation(Utilities.getCenteredWindowLocation(getSize()));

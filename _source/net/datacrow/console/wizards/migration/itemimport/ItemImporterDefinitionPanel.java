@@ -76,6 +76,13 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
         
         wizard.getDefinition().getImporter().clearMappings();
         
+        // store the settings
+        // note: I have made sure this works for both module and application settings 
+        for (String key : settings.keySet()) {
+            Setting setting = DcSettings.getSetting(key) != null ? DcSettings.getSetting(key) : wizard.getModule().getSettings().getSetting(key);
+            setting.setValue(settings.get(key).getValue());
+        }        
+        
         try {
             wizard.getDefinition().getImporter().setFile(source.getFile());
         } catch (Exception e) {
@@ -83,15 +90,6 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
         }
             
         wizard.getDefinition().setFile(source.getFile());
-        
-        // store the settings
-        // note: I have made sure this works for both module and application settings 
-        for (String key : settings.keySet()) {
-        	Setting setting = DcSettings.getSetting(key) != null ? DcSettings.getSetting(key) : 
-        		wizard.getModule().getSettings().getSetting(key);
-        	setting.setValue(settings.get(key).getValue());
-        }
-        
         return wizard.getDefinition();
     }
 

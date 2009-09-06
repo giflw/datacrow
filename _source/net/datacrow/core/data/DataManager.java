@@ -201,6 +201,7 @@ public class DataManager {
         o.removeRequests();
         o.reload();
         o.initializeReferences();
+        o.setValidate(true);
         
         updateUiComponents(o.getModule().getIndex());
         updateView(o, 0, module, MainFrame._SEARCHTAB);
@@ -212,8 +213,8 @@ public class DataManager {
      * @param module The module to which the item belongs.
      */
     public static void add(DcObject dco, int module) {
-        
         dco.removeRequests();
+        dco.setValidate(true);
         
         updatePictures(dco);
         

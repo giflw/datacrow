@@ -24,6 +24,9 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
 
 	private static Logger logger = Logger.getLogger(ItemImporterPanel.class.getName());
 	
+	private int created = 0;
+	private int updated = 0;
+	
     private ItemImporterWizard wizard;
     private JTextArea textLog = ComponentFactory.getTextArea();
     private JProgressBar progressBar = new JProgressBar();
@@ -68,6 +71,10 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     	importer.setClient(this);
     	
     	try { 
+    	    
+    	    created = 0;
+    	    updated = 0;
+    	    
     	    if (importer.getFile() == null)
     	        importer.setFile(wizard.getDefinition().getFile());
     	    
@@ -99,7 +106,6 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
 
         JScrollPane scroller = new JScrollPane(textLog);
         textLog.setEditable(false);
-        textLog.setEnabled(false);
 
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelLog.add(scroller, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
@@ -129,13 +135,23 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     }
 
     public void notifyStarted(int count) {
+        if (textLog != null)
+            textLog.setText("");
+        
         if (progressBar != null) {
             progressBar.setValue(0);
             progressBar.setMaximum(count);
         }
     }
 
-    public void notifyStopped() {}
+    public void notifyStopped() {
+        notifyMessage("\n");
+        notifyMessage(DcResources.getText("msgItemsCreated", String.valueOf(created)));
+        notifyMessage(DcResources.getText("msgItemsUpdated", String.valueOf(updated)));
+        notifyMessage(DcResources.getText("msgItemsImported", String.valueOf(updated + created)));
+        notifyMessage("\n");
+        notifyMessage(DcResources.getText("msgImportFinished"));
+    }
 
     public void notifyProcessed(DcObject item) {
         if (    1 == 0 &&
@@ -148,20 +164,24 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
             DcObject other = DataManager.getObjectForDisplayValue(item.getModule().getIndex(), item.toString());
             // Check if the item exists and if so, update the item with the found values. Else just create a new item.
             // This is to make sure the order in which XML files are processed (first software, then categories)
-            // is of no importance.
+            // is of no importance (!).
             try {
                 if (other != null) {
+                    updated++;
                     other.copy(item, true);
-                    other.saveUpdate(true);
+                    other.saveUpdate(true, false);
                 } else {
+                    created++;
+                    item.setValidate(false);
                     item.saveNew(true);
                 }
             } catch (ValidationException ve) {
+                // will not occur as validation has been disabled.
                 notifyMessage(ve.getMessage());
             }
         }
         
         progressBar.setValue(progressBar.getValue() + 1);
-        notifyMessage(DcResources.getText("msgAddedX", item.toString()));
+        notifyMessage(DcResources.getText("msgImportedX", item.toString()));
     }
 }
