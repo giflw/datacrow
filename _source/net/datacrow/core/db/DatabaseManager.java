@@ -223,6 +223,7 @@ public class DatabaseManager {
             return connection;
             
         } catch (Exception e) {
+            logger.debug(e, e);
         	logger.info("User '" + username + "' with password '" + password + "' cannot login");
         }
         

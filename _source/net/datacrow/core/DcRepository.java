@@ -92,6 +92,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
+        public static final String stCheckForNewVersion = "check_for_new_version_on_startup";
         public static final String stItemExporterWizardFormSize = "item_exporter_wizard_form_size";
         public static final String stItemImporterWizardFormSize = "item_importer_wizard_form_size";
         public static final String stDriveMappings = "drive_mappings";

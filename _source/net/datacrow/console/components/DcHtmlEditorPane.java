@@ -40,6 +40,7 @@ import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.util.BrowserLauncher;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
@@ -111,12 +112,21 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             String ID = url.getAuthority();
             String query = url.getQuery();
             
-            int module = Integer.valueOf(query.substring(query.indexOf("=") + 1));
-            DcObject dco = DataManager.getObject(module, ID);
-            
-            if (dco != null) {
-                dco.markAsUnchanged();
-                new ItemForm(false, true, dco, false).setVisible(true);
+            String file = url.toString();
+            if (file.toLowerCase().startsWith("http") || file.toLowerCase().startsWith("file")) {
+                try {
+                    BrowserLauncher.openURL(file);
+                } catch (Exception exp) {
+                    logger.error(exp, exp);
+                }
+            } else {
+                int module = Integer.valueOf(query.substring(query.indexOf("=") + 1));
+                DcObject dco = DataManager.getObject(module, ID);
+                
+                if (dco != null) {
+                    dco.markAsUnchanged();
+                    new ItemForm(false, true, dco, false).setVisible(true);
+                }
             }
         }
     }     

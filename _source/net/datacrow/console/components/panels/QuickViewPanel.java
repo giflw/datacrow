@@ -227,10 +227,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 tabbedPane.setSelectedIndex(0);
             } catch (Exception e) {}
             
-            descriptionPane.setHtml("<html><body " + 
-                    Utilities.getHtmlStyle("", 
-                            DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + 
-                                    ">\n</body> </html>");
+            descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
         	clearImages();
         }
     }

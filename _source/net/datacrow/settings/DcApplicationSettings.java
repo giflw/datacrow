@@ -755,6 +755,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false,
                             true));
         getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stCheckForNewVersion,
+                            Boolean.TRUE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "msgVersionCheckOnStartup",
+                            false,
+                            true));         
+        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.Settings.stQuickViewDividerLocation,
                             419,

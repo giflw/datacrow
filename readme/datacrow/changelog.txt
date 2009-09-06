@@ -15,9 +15,13 @@ Data Crow 3.4.18 [Release on xx/09/2009] [testing: high] [target: production]
 - Incorrect lower and upper case sorting in the grouping pane.
 - 'languages.properties' not found message on startup on non Windows systems.
 - Sample image not loaded on new installations (non Windows systems).
+- Item Import Wizard: changing the separator character has no immediate effect. 
 
 [Changed]
-- 
+- Additional information when importing items.
+
+[New]
+- Version check on startup. The version check can be disabled.
 
 
 -----------------------------------------------------------------------------------------

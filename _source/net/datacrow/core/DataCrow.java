@@ -91,7 +91,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 17, 0);
+    private static Version version = new Version(3, 4, 18, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -376,6 +376,10 @@ public class DataCrow {
 
             Thread splashCloser = new Thread(new SplashScreenCloser());
             splashCloser.start();
+            
+            
+            if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
+                new VersionChecker().start();
             
             if (!webserverMode) {
                 DataFilter df = new DataFilter(DcModules._LOAN);
