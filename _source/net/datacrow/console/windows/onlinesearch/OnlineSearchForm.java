@@ -455,7 +455,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         String isbnCheck = String.valueOf(StringUtils.getContainedNumber(query));
         
         SearchMode mode = panelService.getMode();
-        if (isbn.isIsbn10(isbnCheck) || isbn.isIsbn13(isbnCheck)) {
+        if (panelService.getServer().getSearchModes() != null &&
+            (isbn.isIsbn10(isbnCheck) || isbn.isIsbn13(isbnCheck))) {
             
             for (SearchMode m : panelService.getServer().getSearchModes()) {
                 if (m.singleIsPerfect() && !m.keywordSearch() &&

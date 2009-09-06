@@ -18,6 +18,8 @@ Data Crow 3.4.18 [Release on 07/09/2009] [testing: high] [target: production]
 - Item Import Wizard: changing the separator character has no immediate effect. 
 - When there are no reports for a module the reports menu option will not be available 
   anymore.
+- The main form's locations is now remembered. Other dialogs and windows are placed in the 
+  center of this form. This fixes the dual monitor issue.
 
 [Changed]
 - Additional information when importing items.
