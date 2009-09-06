@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.18 [Release on xx/09/2009] [testing: high] [target: production]
+Data Crow 3.4.18 [Release on 07/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -19,6 +19,8 @@ Data Crow 3.4.18 [Release on xx/09/2009] [testing: high] [target: production]
 
 [Changed]
 - Additional information when importing items.
+- Non digits are now removed from the search string when performing an online search
+  using an ISBN number.
 
 [New]
 - Version check on startup. The version check can be disabled.

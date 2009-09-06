@@ -105,7 +105,7 @@ public abstract class Synchronizer {
     
     @SuppressWarnings("unchecked")
     protected void setValue(DcObject dco, int field, Object value) {
-        
+
         // empty value, no need to update
         if (Utilities.isEmpty(value))
             return;

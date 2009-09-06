@@ -25,6 +25,8 @@
 
 package net.datacrow.core.services;
 
+import net.datacrow.util.StringUtils;
+
 /**
  * A search mode indicates a specific search such as a title, isbn, ean search.
  * 
@@ -45,11 +47,13 @@ public abstract class SearchMode {
     public abstract String getDisplayName();
 
     /**
-     * Builds the URL / search command. 
+     * Builds the URL / search command.
      * @param query The search string or query which needs to be incorporated in the search command.
      * @return fully qualified URL.
      */
-    public abstract String getSearchCommand(String query);
+    public String getSearchCommand(String query) {
+        return !keywordSearch() && singleIsPerfect() ? String.valueOf(StringUtils.getContainedNumber(query)) : query;
+    }
     
     @Override
     public String toString() {

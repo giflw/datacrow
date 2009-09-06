@@ -140,7 +140,7 @@ public class StringUtils {
     public static Long getContainedNumber(String s) {
         String number = "";
         for (int i = 0; i < s.length(); i++)
-            number += Character.isDigit(s.charAt(i)) ? "" + s.charAt(i) : "";  
+            number += Character.isDigit(s.charAt(i)) && s.charAt(i) != '-' && s.charAt(i) != '+' ? s.charAt(i) : "";  
     	
         return number.length() > 0 ? Long.valueOf(number) : null;
     }

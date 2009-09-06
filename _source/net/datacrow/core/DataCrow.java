@@ -91,7 +91,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 17, 0);
+    private static Version version = new Version(3, 4, 18, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -121,6 +121,7 @@ public class DataCrow {
         String password = null;
         String username = null;
 
+        // legacy stuff.. but it still works.
         installationDir = System.getenv("DATACROW_HOME");
         
         if (installationDir == null || installationDir.length() == 0)
