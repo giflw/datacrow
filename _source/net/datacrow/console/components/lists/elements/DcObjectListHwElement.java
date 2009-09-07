@@ -85,7 +85,7 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
         
         red = red < 0 ? 0 : red > 255 ? 255 : red;
         green = green < 0 ? 0 : green > 255 ? 255 : green;
-        green = blue < 0 ? 0 : blue > 255 ? 255 : blue;
+        blue = blue < 0 ? 0 : blue > 255 ? 255 : blue;
         
         return new Color(red, green, blue);
     }
