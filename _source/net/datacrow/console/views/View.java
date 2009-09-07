@@ -628,6 +628,11 @@ public class View extends DcPanel implements ListSelectionListener {
             setActionsAllowed(true);                
             setDefaultSelection();
             
+            if (isParent() && childView instanceof CachedChildView) {
+                for (String ID : IDs)
+                    ((CachedChildView) childView).removeChildren(ID);
+            }
+            
             if (getItemCount() == 0) {
                 if (quickView != null) quickView.clear();
                 if (isParent()) childView.clear(false);

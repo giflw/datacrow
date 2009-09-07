@@ -117,6 +117,11 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
                 int red = colorRowSelection.getRed() > 20 ? colorRowSelection.getRed() - 20 : colorRowSelection.getRed();
                 int green = colorRowSelection.getGreen() > 20 ? colorRowSelection.getGreen() - 20 : colorRowSelection.getGreen();
                 int blue = colorRowSelection.getBlue() > 20 ? colorRowSelection.getBlue() - 20 : colorRowSelection.getBlue();
+                
+                red = red < 0 ? 0 : red > 255 ? 255 : red;
+                green = green < 0 ? 0 : green > 255 ? 255 : green;
+                blue = blue < 0 ? 0 : blue > 255 ? 255 : blue;
+                
                 setBackground(new Color(red, green, blue));
             }
         }

@@ -579,7 +579,7 @@ public class DataManager {
         
         // make sure children are also removed
         if (dco.getModule().getChild() != null) {
-            for (DcObject child : dco.getChildren())
+            for (DcObject child : getChildren(dco.getID(), dco.getModule().getChild().getIndex()))
                 remove(child, child.getModule().getIndex());
         }
         
@@ -731,8 +731,8 @@ public class DataManager {
                     return o;
             }
             
-            for (DcObject o : c)
-                return o;
+//            for (DcObject o : c)
+//                return o;
 
         } catch (SQLException e) {
             logger.error(e, e);

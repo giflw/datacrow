@@ -77,13 +77,17 @@ public class CachedChildView extends View implements ActionListener {
     
     @Override
     public void add(Collection<DcObject> c) {
-        children.addAll(c);
+        for (DcObject dco : c) {
+            dco.setIDs();
+            if (!children.contains(dco))
+                children.add(dco);
+        }
     }
     
     @Override
     public void setParentID(String ID, boolean show) {
-        syncCache();
         if (ID != null && (vc.getItemCount() == 0 || !ID.equals(getParentID()))) {
+            syncCache();
             super.setParentID(ID, show);
             if (show) 
                 loadChildren();
@@ -111,7 +115,6 @@ public class CachedChildView extends View implements ActionListener {
     public void removeChildren(String parentID) {
         Collection<DcObject> c = getChildren(parentID);
         children.removeAll(c);
-        clear(false);
     }
 
     @Override

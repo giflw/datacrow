@@ -82,6 +82,11 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
         int red = color.getRed() > 10 ? color.getRed() - 10 : color.getRed();
         int green = color.getGreen() > 10 ? color.getGreen() - 10 : color.getGreen();
         int blue = color.getBlue() > 10 ? color.getBlue() - 10 : color.getBlue();
+        
+        red = red < 0 ? 0 : red > 255 ? 255 : red;
+        green = green < 0 ? 0 : green > 255 ? 255 : green;
+        green = blue < 0 ? 0 : blue > 255 ? 255 : blue;
+        
         return new Color(red, green, blue);
     }
     

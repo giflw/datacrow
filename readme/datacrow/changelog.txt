@@ -21,6 +21,9 @@ Data Crow 3.4.18 [Release on 07/09/2009] [testing: high] [target: production]
 - The main form's locations is now remembered. Other dialogs and windows are placed in the 
   center of this form. This fixes the dual monitor issue.
 - Images not saved when saving new items from the table view.
+- Child records were not removed from the cache.
+- The item form for music albums and audio CD sometimes incorrectly mentions that there
+  are unsaved changes.
 
 [Changed]
 - Additional information when importing items.

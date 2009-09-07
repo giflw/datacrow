@@ -63,8 +63,17 @@ public class DcMusicAlbumListHwElement extends DcObjectListHwElement {
     @Override
     public void setBackground(Color color) {
         super.setBackground(color);
-        if (tracksField != null)
-            tracksField.setBackground(new Color(color.getRed() - 20, color.getGreen() - 20, color.getBlue() - 20));
+        if (tracksField != null) {
+            int red = color.getRed() - 20;
+            int green = color.getGreen() - 20;
+            int blue = color.getBlue() - 20;
+            
+            red = red < 0 ? 0 : red > 255 ? 255 : red;
+            green = green < 0 ? 0 : green > 255 ? 255 : green;
+            blue = blue < 0 ? 0 : blue > 255 ? 255 : blue;
+            
+            tracksField.setBackground(new Color(red, green, blue));
+        }
     }    
     
     @Override
