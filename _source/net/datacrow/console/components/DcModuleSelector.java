@@ -96,7 +96,9 @@ public class DcModuleSelector extends JComponent implements IComponent {
         add(panel,      Layout.getGBC( 1, y, 1, 1, 1.0, 1.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
             new Insets( 0, 5, 5, 5), 0, 0));
-    }    
+    }   
+    
+    public void refresh() {}
 
     private static class ToggleModuleAction implements ActionListener {
         

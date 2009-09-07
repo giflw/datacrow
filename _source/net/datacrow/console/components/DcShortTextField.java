@@ -99,5 +99,7 @@ public class DcShortTextField extends JTextField implements IComponent {
                 super.insertString(i, s, attributeset);
             }
         }
-    }    
+    }
+
+    public void refresh() {}  
 }

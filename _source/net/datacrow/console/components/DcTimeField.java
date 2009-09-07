@@ -143,4 +143,6 @@ public class DcTimeField extends JComponent implements IComponent {
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
 					    new Insets( 0, 0, 0, 0), 0, 0));
     }
+    
+    public void refresh() {}  
 }

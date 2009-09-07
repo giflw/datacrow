@@ -52,4 +52,6 @@ public class DcPasswordField extends JPasswordField implements IComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }    
+    
+    public void refresh() {}
 }

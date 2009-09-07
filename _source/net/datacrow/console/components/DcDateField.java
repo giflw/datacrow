@@ -150,4 +150,6 @@ public class DcDateField extends JComponent implements IComponent, ActionListene
         
         setValue(dp.getDate() != null ? dp.getDate().getTime() : null);
     }
+    
+    public void refresh() {}
 }

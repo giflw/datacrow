@@ -130,4 +130,5 @@ public class DcUrlField extends JComponent implements IComponent, ActionListener
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}    
+    public void refresh() {}  
 }

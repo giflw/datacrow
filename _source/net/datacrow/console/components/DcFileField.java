@@ -209,4 +209,6 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         else if (e.getActionCommand().equals("showFileSaveDialog"))
             showFileSaveDialog();
     }    
+    
+    public void refresh() {}
 }

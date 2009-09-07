@@ -189,5 +189,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
             create();        
     }
     
-   
+    public void refresh() {
+        setDescription();
+    }    
 }

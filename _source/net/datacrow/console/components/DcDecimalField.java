@@ -98,4 +98,6 @@ public class DcDecimalField extends JTextField implements IComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }    
+    
+    public void refresh() {}
 }

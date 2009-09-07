@@ -107,4 +107,6 @@ public class DcLongTextField extends JTextArea implements IComponent, MouseListe
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }
+    
+    public void refresh() {}
 }

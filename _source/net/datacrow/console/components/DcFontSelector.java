@@ -288,4 +288,6 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
             setSampleText();
         }
     }
+    
+    public void refresh() {}
 }

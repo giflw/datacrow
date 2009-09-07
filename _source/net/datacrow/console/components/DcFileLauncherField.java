@@ -170,8 +170,11 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         if (e.getClickCount() == 2)
             launch();
     }
+    
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent e) {}
-    public void mouseClicked(MouseEvent e) {}    
+    public void mouseClicked(MouseEvent e) {}  
+    
+    public void refresh() {}
 }

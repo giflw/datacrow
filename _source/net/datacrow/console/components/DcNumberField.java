@@ -85,5 +85,7 @@ public class DcNumberField extends JTextField implements IComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
-    }    
+    }  
+    
+    public void refresh() {}
 }

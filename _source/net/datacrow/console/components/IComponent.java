@@ -31,7 +31,9 @@ public interface IComponent {
     
     public void setValue(Object value);
 
-    public Object getValue();    
+    public Object getValue();
+    
+    public void refresh();
     
     public void clear();
 }

@@ -69,4 +69,6 @@ public class DcColorSelector extends JColorChooser implements IComponent, Change
             DcSettings.set(settingsKey, color);
         }
     }
+    
+    public void refresh() {}
 }

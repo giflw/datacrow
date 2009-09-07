@@ -345,4 +345,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
             applyLAF();
         }
     }
+    
+    public void refresh() {}
 }

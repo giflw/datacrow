@@ -47,7 +47,7 @@ import net.datacrow.util.DcSwingUtilities;
 
 public class DcReferenceField extends JComponent implements IComponent, ActionListener, IItemFormListener {
 
-    private JComboBox cb;
+    private DcObjectComboBox cb;
     private JButton btCreate = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
     
     private final int referenceModIdx;
@@ -58,7 +58,6 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         setFont(ComponentFactory.getStandardFont());
         
         this.referenceModIdx = referenceModIdx;
-        
         cb = ComponentFactory.getObjectCombo(referenceModIdx);
         
         setLayout(Layout.getGBL());
@@ -98,6 +97,10 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         removeAll();
     }
     
+    public void refresh() {
+        cb.refresh();
+    }
+
     public void notifyItemSaved(DcObject dco) {
         cb.setSelectedItem(dco);
     }

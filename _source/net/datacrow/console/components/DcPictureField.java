@@ -542,4 +542,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
+    
+    public void refresh() {}
 }

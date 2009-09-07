@@ -25,81 +25,33 @@
 
 package net.datacrow.console.components;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.objects.DcObject;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JToolTip;
+public class DcObjectComboBox extends DcComboBox implements IComponent {
 
-public class DcImageLabel extends JComponent implements IComponent {
+    private final int module;
     
-    protected ImageIcon icon;
-
-    public DcImageLabel() {
-        setOpaque(false);
-    }
-    
-    public void setIcon(ImageIcon icon) {
-        setImage(icon);
-    }
-    
-    public ImageIcon getIcon() {
-        return icon;
-    }
-    
-    public DcImageLabel(ImageIcon icon) {
-        this();
-        setImage(icon);
-    }
-    
-    private void setImage(ImageIcon icon) {
-        this.icon = icon;
-        repaint();
-    }
-    
-    @Override
-    public JToolTip createToolTip() {
-        return new DcMultiLineToolTip();
-    }
-
-    public void clear() {
-        flush();
-    }
-
-    public Object getValue() {
-        return getIcon();
-    }
-
-    public void setEditable(boolean b) {}
-
-    public void setValue(Object value) {
-        setIcon((ImageIcon) value);
+    public DcObjectComboBox(int module) {
+        super();
+        this.module = module;
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    public void refresh() {
+        Object o = getSelectedItem();
+        removeAllItems();
+        addItem(" ");
 
-        g2d.setColor(this.getBackground());
-        g2d.fillRect(0, 0, getWidth(), getHeight());
-        
-        if (icon != null) {
-            int centerX = ((super.getWidth() - icon.getIconWidth()) / 2);
-            int centerY = ((super.getHeight() - icon.getIconHeight()) / 2);
-            g2d.drawImage(icon.getImage(), centerX, centerY, this);
-        }
-        g2d.dispose();
-    }    
+        DcObject[] objects = DataManager.get(module, null);
+        for (int i = 0; i < objects.length; i++)
+            addItem(objects[i]);
 
-    public void flush() {
-        if (icon != null)
-            icon.getImage().flush();
+        if (o != null)
+            setSelectedItem(o);
+        else
+            setSelectedIndex(0);
         
-        icon = null;
+        revalidate();
     }
-    
-    public void refresh() {}
 }

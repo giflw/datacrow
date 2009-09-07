@@ -45,10 +45,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.MainFrame;
+import net.datacrow.console.components.IComponent;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
@@ -121,8 +121,8 @@ public class DataManager {
     private static Map<Integer, Map<String, List<DcObject>>> children = 
         new HashMap<Integer, Map<String, List<DcObject>>>();
     
-    private static Map<Integer, Collection<JComboBox>> listeners = 
-        new HashMap<Integer, Collection<JComboBox>>();
+    private static Map<Integer, Collection<IComponent>> listeners = 
+        new HashMap<Integer, Collection<IComponent>>();
     
     private static boolean initialized = false;
     
@@ -645,48 +645,31 @@ public class DataManager {
      * @param module The module for which the registered listeners should be updated.
      */
     private static void updateUiComponents(int module) {
-        Collection<JComboBox> c = listeners.get(module);
+        Collection<IComponent> components = listeners.get(module);
         
-        if (c == null) return;
+        if (components == null) return;
 
-        for (JComboBox cb : c)
-            updateUiComponent(module, cb);
-    }
-    
-    private static void updateUiComponent(int module, JComboBox cb) {
-        Object o = cb.getSelectedItem();
-        cb.removeAllItems();
-        cb.addItem(" ");
-
-        DcObject[] objects = get(module, null);
-        for (int i = 0; i < objects.length; i++)
-            cb.addItem(objects[i]);
-
-        if (o != null)
-            cb.setSelectedItem(o);
-        else
-            cb.setSelectedIndex(0);
-        
-        cb.revalidate();
+        for (IComponent c : components)
+            c.refresh();
     }
     
     /**
-     * Register a combobox. The registered combobox will be updated with the module items.
+     * Register a component. The registered component will be updated with the module items.
      * Changed, removal and additions will be reflected on the registered components. 
      * @param component
      * @param module
      */
-    public static void registerUiComponent(JComboBox component, int module) {
-        Collection<JComboBox> c = listeners.get(module);
-        c = c == null ? new ArrayList<JComboBox>() : c;
+    public static void registerUiComponent(IComponent component, int module) {
+        Collection<IComponent> c = listeners.get(module);
+        c = c == null ? new ArrayList<IComponent>() : c;
         c.add(component);
         listeners.put(module, c);
-        updateUiComponent(module, component);
+        component.refresh();
     }
     
-    public static void unregisterUiComponent(JComboBox cb) {
-        for (Collection<JComboBox> cbs : listeners.values())
-            cbs.remove(cbs);
+    public static void unregisterUiComponent(IComponent c) {
+        for (Collection<IComponent> components : listeners.values())
+            components.remove(c);
     }
     
     /**

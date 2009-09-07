@@ -262,4 +262,6 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
             edit();
         }            
     }
+    
+    public void refresh() {}
 }

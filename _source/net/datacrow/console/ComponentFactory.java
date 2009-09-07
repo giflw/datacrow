@@ -97,6 +97,7 @@ import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcModuleSelector;
 import net.datacrow.console.components.DcNumberField;
+import net.datacrow.console.components.DcObjectComboBox;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.DcPasswordField;
 import net.datacrow.console.components.DcPictureField;
@@ -124,6 +125,7 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
+import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.plugin.Plugin;
 import net.datacrow.core.resources.DcResources;
@@ -233,8 +235,8 @@ public final class ComponentFactory {
             c.removeNotify();
             c.invalidate();
             
-            if (c instanceof JComboBox)
-                DataManager.unregisterUiComponent((JComboBox) c);
+            if (c instanceof IComponent)
+                DataManager.unregisterUiComponent((IComponent) c);
         }
     }    
     
@@ -466,7 +468,9 @@ public final class ComponentFactory {
     }
 
     public static final DcReferencesField getReferencesField(int mappingModIdx) {
-        return new DcReferencesField(mappingModIdx);
+        DcReferencesField referencesField = new DcReferencesField(mappingModIdx);
+        DataManager.registerUiComponent(referencesField, ((MappingModule) DcModules.get(mappingModIdx)).getReferencedModIdx());
+        return referencesField;
     }
     
     public static final DcPasswordField getPasswordField() {
@@ -556,8 +560,8 @@ public final class ComponentFactory {
         return comboBox;
     }
 
-    public static final DcComboBox getObjectCombo(int module) {
-        DcComboBox comboBox = getComboBox();
+    public static final DcObjectComboBox getObjectCombo(int module) {
+        DcObjectComboBox comboBox = new DcObjectComboBox(module);
         DataManager.registerUiComponent(comboBox, module);
         return comboBox;
     }

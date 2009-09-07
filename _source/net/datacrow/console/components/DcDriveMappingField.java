@@ -221,4 +221,6 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
             remove();
             
     }
+    
+    public void refresh() {}
 }
