@@ -579,6 +579,7 @@ public class View extends DcPanel implements ListSelectionListener {
             if (isParent() && getType() == View._TYPE_INSERT) {
                 dco.removeChildren();
                 dco.setChildren(((CachedChildView) childView).getChildren(dco.getID()));
+                dco.setIDs();
             }
         }        
         

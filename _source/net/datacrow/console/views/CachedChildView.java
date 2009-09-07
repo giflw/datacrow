@@ -124,6 +124,7 @@ public class CachedChildView extends View implements ActionListener {
     }
     
     public Collection<DcObject> getChildren(String parentID) {
+        syncCache();
         ArrayList<DcObject> c = new ArrayList<DcObject>();
         for (int i = 0; i < children.size(); i++) {
             DcObject dco = children.get(i);

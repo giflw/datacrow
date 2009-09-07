@@ -1364,7 +1364,9 @@ public class DataManager {
             
             if (mode != 0) { // only for inserts and removals
                 dco.freeResources();
-            } else {
+            } 
+            
+            if (mode == 0) {
                 // after an update make sure that the quick view of the main item is updated with
                 // the changed information (as well as the grouping pane).
                 if (dco.getModule().getParent() != null) {

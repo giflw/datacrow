@@ -392,8 +392,7 @@ public class DatabaseManager {
      */
     public static void insert(DcObject dco) {
         try {
-            if (dco.getID() == null || dco.getID().equals(""))
-                dco.setIDs();
+            dco.setIDs();
     
             Query query = new Query(Query._INSERT, dco, null, dco.getRequests());
             query.setSilence(dco.isSilent());
@@ -403,9 +402,7 @@ public class DatabaseManager {
             
             if (children != null) {
                 for (DcObject child : children) {
-                    child.addRequest(new SynchronizeWithManagerRequest(
-                            SynchronizeWithManagerRequest._ADD, child));
-                    
+                    child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
                     child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
                     query = new Query(Query._INSERT, child, null, child.getRequests());
                     query.setSilence(true);
