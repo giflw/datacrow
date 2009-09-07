@@ -88,6 +88,7 @@ import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.DcTableSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
@@ -242,7 +243,26 @@ public class DcTable extends JTable implements IViewComponent {
             int field = fields[i];
             int col = getColumnIndexForField(field);
             Object value = dco.getValue(fields[i]);
-            getDcModel().setValueAt(value, row, col);
+            
+            if (view != null && view.getType() == View._TYPE_INSERT &&  value instanceof Picture) {
+                // keep images save
+                Picture picture = (Picture) value;
+                byte[] bytes = picture.getBytes();
+                
+                if (bytes != null) {
+                    Picture p = new Picture();
+                    p.setValue(Picture._A_OBJECTID, picture.getValue(Picture._A_OBJECTID));
+                    p.setValue(Picture._B_FIELD, picture.getValue(Picture._B_FIELD));
+                    p.setValue(Picture._C_FILENAME, picture.getValue(Picture._C_FILENAME));
+                    p.setValue(Picture._E_HEIGHT, picture.getValue(Picture._E_HEIGHT));
+                    p.setValue(Picture._F_WIDTH, picture.getValue(Picture._F_WIDTH));
+                    p.setValue(Picture._D_IMAGE, new DcImageIcon(bytes));
+                    picture = p;
+                }
+                getDcModel().setValueAt(picture, row, col);
+            } else {
+                getDcModel().setValueAt(value, row, col);    
+            }
         }
 
         if (module.isAbstract()) {
