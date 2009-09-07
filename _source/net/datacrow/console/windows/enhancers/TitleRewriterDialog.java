@@ -86,6 +86,7 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
         setHelpIndex("dc.tools.titlerewriter");
         setTitle(DcResources.getText("lblTitleRewriter"));
         
+        setCenteredLocation();
         setModal(true);
     }
 

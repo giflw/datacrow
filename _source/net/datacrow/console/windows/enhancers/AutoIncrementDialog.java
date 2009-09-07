@@ -91,6 +91,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
 
         setSize(new Dimension(600, 600));
         setModal(true);
+        setCenteredLocation();
     }
 
     @Override
