@@ -69,6 +69,7 @@ public class DcSettings {
         view.setDisclaimer(icon);
 
         view.setSize(new Dimension(875, 470));
+        view.setCenteredLocation();
         return view;
     }  
     

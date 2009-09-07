@@ -84,8 +84,10 @@ public class SettingsView extends DcDialog implements ActionListener {
         setTitle(title);
         
         this.settings = settings;
+        
         buildView();
-        this.setTitle(title);
+        setTitle(title);
+        setCenteredLocation();
     }
 
     @Override
@@ -235,7 +237,6 @@ public class SettingsView extends DcDialog implements ActionListener {
                              new Insets(5, 5, 5, 5), 0, 0));
         initializeSettings();
         this.pack();
-        setCenteredLocation();
     }    
     
     /**
