@@ -298,7 +298,7 @@ public class View extends DcPanel implements ListSelectionListener {
             // add the children to the cached child view..
             childView.add(dco.getChildren());
             // and load them
-            childView.setParentID(dco.getID(), false);
+            childView.setParentID(dco.getID(), true);
         }
 
         if (select)

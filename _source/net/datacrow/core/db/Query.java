@@ -188,6 +188,8 @@ public class Query {
     @SuppressWarnings({"unchecked"})
     private List<PreparedStatement> getInsertQueries(DcObject dco) throws SQLException {
         
+        dco.setIDs();
+        
         Collection<Object> values = new ArrayList<Object>();
         StringBuffer columns = new StringBuffer();
 

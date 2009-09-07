@@ -245,15 +245,18 @@ public abstract class FileImporter implements ISynchronizerClient {
      */
     protected void afterParse(DcObject dco) {
         if (getClient().useOnlineServices()) {
-            getClient().addMessage(DcResources.getText("msgSearchingOnlineFor", StringUtils.normalize(dco.toString())));
-            
-            String originalTitle = (String) dco.getValue(DcMediaObject._A_TITLE);
-            dco.setValue(DcMediaObject._A_TITLE, StringUtils.normalize(originalTitle));
-            
-            getClient().getModule().getSynchronizer().onlineUpdate(this, dco);
-            
-            
-            dco.setValue(DcMediaObject._A_TITLE, originalTitle);
+            try {
+                getClient().addMessage(DcResources.getText("msgSearchingOnlineFor", StringUtils.normalize(dco.toString())));
+                
+                String originalTitle = (String) dco.getValue(DcMediaObject._A_TITLE);
+                dco.setValue(DcMediaObject._A_TITLE, StringUtils.normalize(originalTitle));
+                
+                getClient().getModule().getSynchronizer().onlineUpdate(this, dco);
+                
+                dco.setValue(DcMediaObject._A_TITLE, originalTitle);
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
         }
 
         DcModules.getCurrent().getCurrentInsertView().add(dco, false);

@@ -64,12 +64,13 @@ public class SaveTask extends DataTask {
 
                     if (dco.isEndOfBatch()) {
                         dco.setSilent(false);
-                        dco.addRequest(new StatusUpdateRequest(dco.getModule().getIndex(), MainFrame._INSERTTAB, "msgDataSaved"));
+                        dco.addRequest(new StatusUpdateRequest(dco.getModule().getIndex(), 
+                                       view.getType() == View._TYPE_SEARCH ? MainFrame._SEARCHTAB : MainFrame._INSERTTAB, "msgDataSaved"));
                     }
 
                     if (view.getType() == View._TYPE_SEARCH) {
                         view.updateProgressBar(counter);
-                        dco.addRequest(new RemoveFromCacheRequest(view.getModule().getIndex(), dco.getID()));
+                        dco.addRequest(new RemoveFromCacheRequest(dco.getModule().getIndex(), dco.getID()));
                         dco.saveUpdate(true);
                     } else {
                         dco.addRequest(new UpdateStatusProgressBarRequest(dco.getModule().getIndex(), MainFrame._INSERTTAB, counter));
