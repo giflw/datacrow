@@ -358,9 +358,14 @@ public class Query {
         
         for (Picture picture : pictures) {
             Collection<Picture> currentPics = DataManager.getPictures(dco.getID());
+            
             boolean isReallyNew = picture.isNew() && (currentPics == null || !currentPics.contains(picture));
             if (!isReallyNew && picture.isNew())
                 picture.isUpdated(!isReallyNew);
+            
+            // no images = create this image instead of updating it (3.4.19)
+            if (picture.isUpdated() && (currentPics == null || currentPics.isEmpty()))
+                picture.isNew(true);
             
             if (picture.isUpdated()) {
                 queries.addAll(getUpdateQueries(picture));

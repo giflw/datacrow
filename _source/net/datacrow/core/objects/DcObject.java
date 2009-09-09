@@ -647,7 +647,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public void setValueLowLevel(int index, Object o) {
         DcValue value = getValueDef(index);
-        value.setValueLowLevel(o, getModule().getField(index));
+        if (value != null)
+            value.setValueLowLevel(o, getModule().getField(index));
     }
 
     /**
