@@ -36,7 +36,7 @@
                                 </xsl:for-each></td></tr>
         
                             <tr><th>Genre</th>
-                                <td><xsl:for-each select="genres/genre">
+                                <td><xsl:for-each select="genres/music-genre">
                                         <xsl:value-of select="name"/>
                                     </xsl:for-each></td></tr>
         

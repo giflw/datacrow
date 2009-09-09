@@ -179,6 +179,9 @@ public class DatabaseManager {
                 
                 stmt.close();
                 connection.close();
+                
+                // just to make sure the database is really released..
+                org.hsqldb.DatabaseManager.closeDatabases(0);
             }
         } catch (Exception exp) {
             logger.error("Error while closing the database (compact = " + compact + ")", exp);

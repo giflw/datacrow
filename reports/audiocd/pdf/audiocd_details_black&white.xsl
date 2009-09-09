@@ -65,7 +65,7 @@
                       <fo:table-cell><fo:block font-weight="bold">Genre</fo:block></fo:table-cell>
                       <fo:table-cell>
                         <fo:block>
-                          <xsl:for-each select="genres/genre">
+                          <xsl:for-each select="genres/music-genre">
                             <xsl:value-of select="name"/>&#160;
                           </xsl:for-each>
                         </fo:block>

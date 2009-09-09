@@ -70,7 +70,7 @@
                        
                     <fo:table-cell border-bottom-style="solid" border-bottom-color="#FFEA96" border-before-width="1" padding-top="2" padding-left="2">
                       <fo:block>
-                        <xsl:for-each select="genres/genre"><xsl:value-of select="name"/></xsl:for-each>
+                        <xsl:for-each select="genres/music-genre"><xsl:value-of select="name"/></xsl:for-each>
                       </fo:block>
                     </fo:table-cell>
 
