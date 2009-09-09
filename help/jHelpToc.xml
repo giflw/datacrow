@@ -41,7 +41,7 @@
       <tocitem target="dc.settings.general" text="General Settings"/>
       <tocitem target="dc.settings.cardview" text="Card View Settings"/>
       <tocitem target="dc.settings.tableview" text="Table View Settings"/>
-      <tocitem target="dc.settings.fields" text="Field Settings"/>
+      <tocitem target="dc.settings.fields" text="General Field Settings"/>
       <tocitem target="dc.settings.webfields" text="Web Field Settings"/>
       <tocitem target="dc.settings.font" text="Fonts"/>
       <tocitem target="dc.settings.http" text="Internet"/>

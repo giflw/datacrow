@@ -5,6 +5,10 @@ Data Crow 3.4.19 [Release on 09/09/2009] [testing: high] [target: production]
 [Fixed]
 - Locking issue. The HSQL engine has been upgraded to the latest version. 
 - Reports for audio CDs now contain the genre(s).
+- PDF front page not added when using 'Attach File Info'.
+
+[Changed]
+- The help has been reviewed and updated.
 
 
 -----------------------------------------------------------------------------------------
