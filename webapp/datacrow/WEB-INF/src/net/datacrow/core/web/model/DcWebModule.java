@@ -55,6 +55,7 @@ public class DcWebModule implements Serializable {
         boolean main = DcModules.isTopModule(index);
         String filename = main ? getIcon32() : getIcon16();
         File file = new File(DataCrow.webDir, filename);
+        file.deleteOnExit();
         
         if (!file.exists()) {
             try {

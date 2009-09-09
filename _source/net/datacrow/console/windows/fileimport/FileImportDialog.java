@@ -325,7 +325,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         fldContainer = ComponentFactory.getObjectCombo(DcModules._CONTAINER);
         
         JLabel labelMedium = ComponentFactory.getLabel(DcResources.getText("lblStorageMedium"));
-        fldStorageMedium = ComponentFactory.getMediaCombo(DcModules.get(importer.getModule()).getPropertyModule(DcModules._STORAGEMEDIA).getIndex());
+        fldStorageMedium = ComponentFactory.getObjectCombo(DcModules.get(importer.getModule()).getPropertyModule(DcModules._STORAGEMEDIA).getIndex());
 
         panelMediaInfo.add(lblContainer,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,

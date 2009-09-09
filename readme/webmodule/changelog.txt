@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Web Module 1.4   [Release on 09/09/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Module icons are not refreshed when changing the icons using the module wizards.
+- Large module icons shown for helper modules. 
+
+
+-----------------------------------------------------------------------------------------
 Web Module 1.3   [Release on 25/01/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

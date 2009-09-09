@@ -536,15 +536,6 @@ public final class ComponentFactory {
         return cb;
     }
     
-    public static final DcComboBox getMediaCombo(int module) {
-        DcModule m = DcModules.get(module);
-        int modIx = !(m instanceof DcPropertyModule) ? m.getPropertyModule(DcModules._STORAGEMEDIA).getIndex() : m.getIndex();
-
-        DcComboBox combo = getComboBox();
-        DataManager.registerUiComponent(combo, modIx);
-        return combo;
-    }    
-    
     public static final JComboBox getStateCombo(int module) {
         DcModule m = DcModules.get(module);
         int modIx = !(m instanceof DcPropertyModule) ? m.getPropertyModule(DcModules._STATE).getIndex() : m.getIndex();
