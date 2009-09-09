@@ -57,9 +57,9 @@
                     <h:outputText rendered="#{not empty webObjects.columnValue}" value="link"/>
                 </h:outputLink>
 
-                <h:outputLink rendered="#{not empty webObjects.columnValue and webObjects.file}" value="file://#{webObjects.columnValue}" target="new">
-                    <h:outputText rendered="#{not empty webObjects.columnValue}" value="link"/>
-                </h:outputLink>
+                <h:commandLink rendered="#{not empty webObjects.columnValue and webObjects.file}" action="#{download.open}">
+                    <h:outputText rendered="#{not empty webObjects.columnValue}" value="download"/>
+                </h:commandLink>
 
                 <h:outputText rendered="#{not empty webObjects.columnValue and webObjects.text}" value="#{webObjects.columnValue}" />
                 <t:graphicImage rendered="#{not empty webObjects.columnValue and webObjects.image}" url="#{webObjects.columnValue}" />
