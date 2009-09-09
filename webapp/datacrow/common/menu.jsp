@@ -17,7 +17,7 @@
                  cellspacing="0">
 
         <t:column style="text-align:right;">
-            <t:graphicImage value="#{module.icon32}" rendered="true" border="0"/>
+            <t:graphicImage value="#{module.icon}" rendered="true" border="0"/>
         </t:column>    
 
         <t:column>

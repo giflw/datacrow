@@ -25,9 +25,13 @@
 
 package net.datacrow.core.web.model;
 
+import java.io.File;
 import java.io.Serializable;
 
+import net.datacrow.core.DataCrow;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.util.Utilities;
 
 /**
  * A lightweight version of DcModule. 
@@ -45,6 +49,24 @@ public class DcWebModule implements Serializable {
         this.label = label;
     }
 
+    public String getIcon() {
+        DcModule module = DcModules.get(index);
+        
+        boolean main = DcModules.isTopModule(index);
+        String filename = main ? getIcon32() : getIcon16();
+        File file = new File(DataCrow.webDir, filename);
+        
+        if (!file.exists()) {
+            try {
+                Utilities.writeToFile(main ? module.getXmlModule().getIcon32() : module.getXmlModule().getIcon16(), file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return filename; 
+    }
+    
     public String getIcon16() {
         return "/images/modules/" + DcModules.get(index).getName().toLowerCase() + "16.png";
     }

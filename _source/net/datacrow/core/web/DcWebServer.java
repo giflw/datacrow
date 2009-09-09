@@ -25,17 +25,10 @@
 
 package net.datacrow.core.web;
 
-import java.io.File;
-
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.Utilities;
 
-import org.apache.log4j.Logger;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
@@ -50,7 +43,6 @@ public class DcWebServer {
     
     private static final String context = "/datacrow";
     
-    private static Logger logger = Logger.getLogger(DcWebServer.class.getName());
 	private static DcWebServer instance = new DcWebServer();
 	
 	private boolean isRunning;
@@ -67,13 +59,7 @@ public class DcWebServer {
 	/**
 	 * Creates a new instance.
 	 */
-	private DcWebServer() {
-	    try {
-	        copyIcons();
-	    } catch (Exception e) {
-	        logger.error(e, e);
-	    }
-	}
+	private DcWebServer() {}
 	
 	/**
 	 * Indicates if the server is currently up and running.
@@ -114,21 +100,21 @@ public class DcWebServer {
 	    isRunning = true;
 	}
 	
-    private void copyIcons() throws Exception {
-        File dir = new File(DataCrow.webDir + "images" + File.separator + "modules");
-        if (!dir.exists())
-            dir.mkdirs();
-        
-        for (DcModule module : DcModules.getAllModules()) {
-            XmlModule xm = module.getXmlModule();
-            
-            if (xm == null) continue;
-            
-            if (xm.getIcon16() != null)
-                Utilities.writeToFile(module.getXmlModule().getIcon16(), new File(dir, module.getName().toLowerCase() + "16.png"));
-            
-            if (xm.getIcon32() != null)
-                Utilities.writeToFile(module.getXmlModule().getIcon32(), new File(dir, module.getName().toLowerCase() + "32.png"));
-        }
-    }	
+//    private void copyIcons() throws Exception {
+//        File dir = new File(DataCrow.webDir + "images" + File.separator + "modules");
+//        if (!dir.exists())
+//            dir.mkdirs();
+//        
+//        for (DcModule module : DcModules.getAllModules()) {
+//            XmlModule xm = module.getXmlModule();
+//            
+//            if (xm == null) continue;
+//            
+//            if (xm.getIcon16() != null)
+//                Utilities.writeToFile(module.getXmlModule().getIcon16(), new File(dir, module.getName().toLowerCase() + "16.png"));
+//            
+//            if (xm.getIcon32() != null)
+//                Utilities.writeToFile(module.getXmlModule().getIcon32(), new File(dir, module.getName().toLowerCase() + "32.png"));
+//        }
+//    }	
 }

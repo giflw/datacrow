@@ -1,4 +1,196 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.4.19 [Release on 09/09/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Locking issue. The HSQL engine has been upgraded to the latest version. 
+- Reports for audio CDs now contain the genre(s).
+- PDF front page not added when using 'Attach File Info'.
+
+[New]
+- A new parameter has been added: -debug.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.18 [Release on 07/09/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Black image backgrounds for icons of new modules (now transparent).
+- General Field Settings: the field names are always displayed in English.  
+- The application crashes when closing the 'select language' dialog without using the 
+  buttons 
+- Item is not removed from the new items tab when saving it from within the item form.
+- Quick View is now updated when a related item has been changed.
+- The grouping pane does not update when the name of, for example, an artist has changed.
+  (movie module > group by artist > change artist name = not reflected in the grouping 
+  pane).
+- Incorrect lower and upper case sorting in the grouping pane.
+- 'languages.properties' not found message on startup on non Windows systems.
+- Sample image not loaded on new installations (non Windows systems).
+- Item Import Wizard: changing the separator character has no immediate effect. 
+- When there are no reports for a module the reports menu option will not be available 
+  anymore.
+- The main form's locations is now remembered. Other dialogs and windows are placed in the 
+  center of this form. This fixes the dual monitor issue.
+- Images not saved when saving new items from the table view.
+- Child records were not removed from the cache.
+- The item form for music albums and audio CD sometimes incorrectly mentions that there
+  are unsaved changes.
+- Several minor problems with the table view in when used for saving new music albums, 
+  imported by the file importer.
+
+[Changed]
+- Additional information when importing items.
+- Non digits are now removed from the search string when performing an online search
+  using an ISBN number.
+- You can now also create a report for only the selected items.
+- XML and XSD files are now removed after a report has been created.
+- After entering an ISBN in the online search form the ISBN search mode will automatically 
+  be used.
+- The user reviews have been removed from the Amazon search.
+
+[New]
+- Version check on startup. The version check can be disabled.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.17 [Release on 25/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+A small release containing minor changes and fixes only. 
+
+[Fixed]
+- A possible cache mechanism error.
+- The CSV importer did not allow fields to be mapped. Furthermore it did forget the 
+  mappings while navigating back and forth through the wizard.
+
+[Changed]
+- All windows now have the following shortcut keys (if applicable):
+  (S)ave, (C)ancel, (C)lose, R(un), (O)k, A(pply), (N)ew, N(ext), 
+  (D)elete, (A)add, C(lear), S(t)op, S(tart), (Y)es, (N)o, (R)emove, (B)ack. 
+- Some dialogs and buttons will now have new icons.
+- IMDB movie search has been improved to ensure future compatibility. The old 
+  implementation did not always deal well with the HTML formatted text and the localized 
+  versions of this wonderful site.
+  
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.16 [Release on 18/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+Another day another version. Unfortunately the Amazon service API was changed just after 
+I released yesterdays version. 
+
+[Fixed]
+- Amazon service does not work anymore.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.15 [Release on 17/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+Apologies for the previous version. Somehow I managed to release a version based on the
+wrong source tree which resulted in a corrupted Item Form.
+
+[Fixed]
+- Tabs could not be created.
+- Tab order not remembered correctly.
+- Children of items were not imported (XML import).
+- The table view did no longer work correctly for parent <> child modules 
+  (multiple issues).
+- Categories and other properties could no longer be created.
+- Long play lengths are displayed incorrectly in the quick view and in the reports.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.14 [Release on 16/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+! Due to maintenance the upgrade process has been removed. This means that old
+  backups cannot be restored within this version (3.4.12 and older). Sorry for any 
+  inconvenience caused by this. 
+! The startup time has been significantly improved by this version.
+
+[Fixed]
+- Table view fix: images were never displayed after adding them to an existing item.
+- [2837111] Long play length is displayed / saved incorrectly
+
+[New]
+- Item export wizard. You can now export any items form any module to a text or XML file.
+- Item import wizard. You can now import items for any module from a text or XML file.
+
+[Changed]
+- Increased startup speed (15 to 20 seconds faster).
+- Improved opening time of item forms (3 to 5 seconds faster).
+- The migration tool has been removed. This tools has been replaced by the new wizard(s).
+- The right-click menu in the item views now offers the option to export the selected 
+  items.
+- The reporting dialog no longer offers the option to make an XML or CSV 'report'.
+  This functionality has been replaced by the item export tool.
+- When using the add item button from the item form will not only create the item but
+  also set it on the field.
+- Indentation for text in the grouping pane has been adjusted. 
+- Text color for selected tree nodes has been set to black.
+- Better indentation in the table view.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.13.2 [Release on 03/08/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Edit as new for users: when using this functionality the user is not created correctly.
+  The functionality has been removed for the users module.
+- The view is not populated (at all) when the grouping pane has been disabled.
+- Directories cannot be opened by the File Launcher.
+- [2788061] NPE while external images insert/delete.
+- [2825152] Not all files are imported (File Import > Books). The error handling has
+  been improved to catch out of memory errors (which can occur when dealing with large
+  files).
+- [2790438] Filename cannot be cleared. You can now right click on the file field to  
+  clear it.
+  
+[Changed]
+- Double clicking on the file field will now open the file / directory.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.13.1 [Release on 26/07/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+This patch fixes a couple of issues related to the mass update and the file 
+import functionality.
+
+Extract this patch to the installation folder of data crow, overwrite the existing files.
+
+[Fixed]
+- MKV files locked by the music file import process (fixed in the Matroska third party
+  library).
+- Import of e-Books gets stuck when importing a large amount of files.  
+- NullPointerException during music album import in combination with an online service.
+- ProgressDialog enters infinite loop on disconnect.
+- Error while removing an item: 
+  java.lang.IllegalArgumentException: node does not have a parent
+  
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.13 [Release on 25/07/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Icons for multiple reference fields are not shown in the tree / grouping pane.
+- Removing an item did not remove all the empty paths from the tree / grouping.
+- The mass update feature failed to retrieve / update multiple reference fields 
+  (like artists, authors, publishers).
+- Improved the error handling of the import (exception hiding issue).
+
+[Changed]
+- Column widths are now remembered.
+- The Look and Feel settings dialog now allows you to set the table row height and the
+  tree node height. This dialog already allowed you to change the look and feel and set
+  the button and input field height.
+- 'Number of pages' is now retrieved from amazon.
+- Changed the icons for the file structure tree.  
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.4.12 [Release on 19/07/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

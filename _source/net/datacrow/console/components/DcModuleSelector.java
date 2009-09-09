@@ -68,12 +68,7 @@ public class DcModuleSelector extends JComponent implements IComponent {
         int y = 0;
         int x = 0;
         for (DcModule module : DcModules.getAllModules()) {
-
-            if (module.getIndex() == DcModules._CONTACTPERSON || 
-                module.getIndex() == DcModules._MEDIA ||
-                module.getIndex() == DcModules._CONTAINER || 
-               (module.isTopModule() && !module.hasDependingModules())) {
-                
+            if (DcModules.isTopModule(module.getIndex())) {
                 JCheckBox checkBox = ComponentFactory.getCheckBox("");
                 checkBox.setSelected(module.isEnabled());
                 checkBox.addActionListener(new ToggleModuleAction(module.getIndex()));
@@ -93,7 +88,7 @@ public class DcModuleSelector extends JComponent implements IComponent {
             }
         }
         
-        add(panel,      Layout.getGBC( 1, y, 1, 1, 1.0, 1.0
+        add(panel, Layout.getGBC( 1, y, 1, 1, 1.0, 1.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
             new Insets( 0, 5, 5, 5), 0, 0));
     }   

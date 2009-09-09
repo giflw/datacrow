@@ -123,6 +123,14 @@ public class DcModules {
         loadModuleJars();
     }
     
+    public static boolean isTopModule(int moduleIdx) {
+        DcModule module = get(moduleIdx);
+        return moduleIdx == DcModules._CONTACTPERSON || 
+               moduleIdx == DcModules._MEDIA ||
+               moduleIdx == DcModules._CONTAINER || 
+              (module.isTopModule() && !module.hasDependingModules());      
+    }
+    
     /**
      * Save all module jar files
      */
