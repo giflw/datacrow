@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.4.18
-Created on 07/09/2009
+Version 3.4.19
+Created on 09/09/2009
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -163,6 +163,9 @@ Additional parameters:
      
     -nosplash
      Hides the splashscreen on startup.
+     
+    -debug
+     For additional logging information.     
 
 
 ----------------------------------------------------------------------------------------

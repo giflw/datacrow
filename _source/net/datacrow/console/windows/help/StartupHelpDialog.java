@@ -92,6 +92,9 @@ public class StartupHelpDialog extends JDialog implements ActionListener {
                 "<tr><td>-webserver</td></tr>" +
                 "<tr><td>Starts the web server without starting the Data Crow GUI. Specify -credentials to avoid the login dialog.</td></tr>" +
                 "<tr><td><br></td></tr>" +
+                "<tr><td>-debug</td></tr>" +
+                "<tr><td>Debug mode for additional logging information.</td></tr>" +
+                "<tr><td><br></td></tr>" +
                 "<tr><td>-nocache</td></tr>" +
                 "<tr><td>Forces Data Crow to ignore the cached items and load everything fresh from the database.</td></tr>" +
                 "<tr><td><br></td></tr>" +

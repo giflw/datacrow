@@ -91,7 +91,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 4, 18, 0);
+    private static Version version = new Version(3, 4, 19, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -104,6 +104,7 @@ public class DataCrow {
     public static String cacheDir;
     public static String resourcesDir;
     
+    private static boolean debug = false;
     private static boolean noSplash = false;
     private static boolean isWebModuleInstalled = false;
     
@@ -139,6 +140,8 @@ public class DataCrow {
             } else if (args[i].toLowerCase().startsWith("-help")) {
                 new StartupHelpDialog().setVisible(true);
                 System.exit(0);
+            } else if (args[i].toLowerCase().startsWith("-debug")) {
+                debug = true;
             } else if (args[i].toLowerCase().startsWith("-nosplash")) {
                 noSplash = true;
             } else if (args[i].toLowerCase().startsWith("-webserver")) {
@@ -166,6 +169,10 @@ public class DataCrow {
                 System.out.println("-webserver");
                 System.out.println("Starts the web server without starting the Data Crow GUI. Specify -credentials to avoid the login dialog.");
                 System.out.println("Example: java -jar datacrow.jar -webserver");
+                System.out.println("");
+                System.out.println("-debug");
+                System.out.println("Debug mode for additional logging information.");
+                System.out.println("Example: java -jar datacrow.jar -debug");                
                 System.out.println("");
                 System.out.println("-nocache");
                 System.out.println("Starts Data Crow without loading the items from the cache. This will cause the items to be loaded from the database (slow).");
@@ -669,6 +676,12 @@ public class DataCrow {
             Properties properties = new Properties();
             properties.load(new FileInputStream(DataCrow.installationDir + "log4j.properties"));
             properties.setProperty("log4j.appender.logfile.File", DataCrow.dataDir + "data_crow.log");
+            
+            if (DataCrow.debug)
+                properties.setProperty("log4j.rootLogger", "debug, textpane, logfile");
+            else
+                properties.setProperty("log4j.rootLogger", "info, textpane, logfile");
+            
             properties.store(new FileOutputStream(DataCrow.installationDir + "log4j.properties"), "");
         } catch (Exception e) {
             logger.error("Could not find the log4j properties file.", e);
