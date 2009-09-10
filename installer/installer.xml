@@ -79,6 +79,28 @@
             <file src="help" targetdir="$INSTALL_PATH"/>
         </pack>
 
+	<pack name="Web" required="no">
+            <description>Web Module</description>
+            <file src="lib/jetty" targetdir="$INSTALL_PATH/lib"/>
+            <file src="webapp/datacrow/common" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/css" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/images" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/WEB-INF" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/advancedfind.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/childdetails.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/form.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/images.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/index.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/input.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/itemdetails.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/itemdetailsimages.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/itemimage.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/itemimages.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/itemrelate.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/login.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+            <file src="webapp/datacrow/search.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
+	</pack>
+
         <pack name="Modules" required="no">
             <description>Data Crow Modules</description>
             <file src="modules" targetdir="$INSTALL_PATH"/>

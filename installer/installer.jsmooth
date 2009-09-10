@@ -6,12 +6,13 @@
 <JVMSearchPath>jdkpath</JVMSearchPath>
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
+<arguments></arguments>
+<classPath>installer.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
-<embeddedJar>true</embeddedJar>
+<embeddedJar>false</embeddedJar>
 <executableName>setup.exe</executableName>
 <iconLocation>..\icons_system\datacrow.png</iconLocation>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<jarLocation>installer.jar</jarLocation>
 <mainClassName>com.izforge.izpack.installer.Installer</mainClassName>
 <maximumMemoryHeap>-1</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
