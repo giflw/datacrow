@@ -326,7 +326,7 @@ public class DataManager {
      * returned. Else null will be returned.
      */
     public static DcObject createReference(DcObject dco, int fieldIdx, Object value) {
-        String name = value != null ? StringUtils.toPlainText(value instanceof String ? (String) value : value.toString()) : null;
+        String name = value != null ? value instanceof String ? (String) value : value.toString() : null;
         
         if (Utilities.isEmpty(name)) return null;
         
@@ -724,15 +724,10 @@ public class DataManager {
         
         try {
             List<DcObject> c = DatabaseManager.executeQuery(dco, false);
-            
-            // precise check
             for (DcObject o : c) {
-                if (o.toString().toLowerCase().equals(dco.toString().toLowerCase()))
+                if (StringUtils.normalize(o.toString()).equals(StringUtils.normalize(dco.toString())))
                     return o;
             }
-            
-//            for (DcObject o : c)
-//                return o;
 
         } catch (SQLException e) {
             logger.error(e, e);

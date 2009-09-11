@@ -211,9 +211,9 @@ public class StringUtils {
         	StringBuffer sb = new StringBuffer(html);
         	sb.insert(0, "<html><body>");
         	sb.append("</body></html>");
-        
+        	
         	Document document = kit.createDefaultDocument();
-        	StringReader sr = new StringReader(sb.toString());
+        	StringReader sr = new StringReader(sb.toString().replaceAll("\n", "<br>"));
         	kit.read(sr, document, 0);
         	sr.close();
         	html = document.getText(0, document.getLength());
