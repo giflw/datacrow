@@ -171,6 +171,14 @@ public abstract class SearchTask extends Thread {
     public final Region getRegion() {
         return region;
     }
+    
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public void setMode(SearchMode searchMode) {
+        this.searchMode = searchMode;
+    }
 
     /**
      * The used query as specified by the user.
@@ -265,12 +273,17 @@ public abstract class SearchTask extends Thread {
      */
     protected abstract Collection<Object> getItemKeys() throws Exception ;
     
+    protected void preSearchCheck() {}
+    
     /**
      * Here the actual search is performed. This is a standard implementation suited for
-     * all online searches. This method can however be overridden for very specific implementations.
+     * all online searches. 
      */
     @Override
     public void run() {
+        
+        preSearchCheck();
+        
         Collection<Object> keys = new ArrayList<Object>();
 
         listener.addMessage(DcResources.getText("msgConnectingToServer", getAddress()));

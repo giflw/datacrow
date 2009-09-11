@@ -36,9 +36,8 @@ public abstract class ISBN {
     public static String getISBN13(String isbn10) throws InvalidBarCodeException {
         String s = "978";
         char[] chars = isbn10.toCharArray();
-        
         for (int i = 0; i < chars.length; i++) {
-            if ("1234567890".indexOf(chars[i]) > -1) 
+            if (Character.isDigit(chars[i]))
                 s += chars[i];
         }
         
@@ -59,9 +58,10 @@ public abstract class ISBN {
         char[] chars = isbn13.toCharArray();
         String s = "";
         for (int i = 0; i < chars.length; i++) {
-            if ("1234567890".indexOf(chars[i]) > -1) 
+            if (Character.isDigit(chars[i])) 
                 s += chars[i];
         }
+        
         
         if (s.length() < 10)
             throw new InvalidBarCodeException();
@@ -94,7 +94,7 @@ public abstract class ISBN {
             sum += digit * (10 - i);
         }
         
-        return sum % 11 != 0; 
+        return sum % 11 == 0; 
     }
 
     /**
@@ -116,7 +116,7 @@ public abstract class ISBN {
             sum += i % 2 == 0 ? digit : digit * 3;
         }
 
-        return sum % 10 != 0;
+        return sum % 10 == 0;
     }
     
     private static String convertToISBN10(int[] isbn13) {

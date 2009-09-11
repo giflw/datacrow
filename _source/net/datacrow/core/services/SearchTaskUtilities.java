@@ -1,0 +1,65 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.core.services;
+
+import org.apache.log4j.Logger;
+
+import net.datacrow.util.StringUtils;
+import net.datacrow.util.isbn.ISBN;
+import net.datacrow.util.isbn.InvalidBarCodeException;
+
+public abstract class SearchTaskUtilities {
+
+    private static Logger logger = Logger.getLogger(SearchTaskUtilities.class.getName());
+    
+    public static final void checkForIsbn(SearchTask task) {
+
+        // Already using a very specific search mode or the online service does not support 
+        // search modes.
+        if (task.getMode() == null || task.getMode().singleIsPerfect()) return;
+        
+        String isbn = String.valueOf(StringUtils.getContainedNumber(task.getQuery())); 
+        boolean isbn10 = ISBN.isISBN10(isbn);
+        boolean isbn13 = ISBN.isISBN13(isbn);
+
+        try {
+            if (isbn10 || isbn13) {
+                isbn = isbn10 ? ISBN.getISBN13(isbn) : isbn; 
+                if (task.getServer().getSearchModes() != null) {
+                    for (SearchMode m : task.getServer().getSearchModes()) {
+                        if (m instanceof IsbnSearchMode) {
+                            task.setMode(m);
+                            task.setQuery(isbn);
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (InvalidBarCodeException e) {
+            logger.error("Invalid barcode " + isbn + ". Online search will be using original settings.", e);
+        }        
+    }
+}
