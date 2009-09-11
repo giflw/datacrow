@@ -68,6 +68,7 @@ public abstract class IsbnSearchMode extends SearchMode {
      * retrieved. This is useful for ISBN and EAN searches. This is used for the 
      * 'Automatically add or update the item when a perfect match has occurred' setting. 
      */
+    @Override
     public boolean singleIsPerfect() {
         return true;
     }
@@ -76,6 +77,7 @@ public abstract class IsbnSearchMode extends SearchMode {
      * Indicates whether the search is a free form search (such as a title search).
      * ISBN, EAN and other specific search modes should set this method to return false. 
      */
+    @Override
     public boolean keywordSearch() {
         return false;
     }
