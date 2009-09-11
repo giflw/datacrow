@@ -239,7 +239,7 @@ public abstract class SearchTask extends Thread {
      * @param key The item key (The specific implementation decides the meaning of a key)
      * @param full Indicates if the full details should be retrieved.
      */
-    protected Collection<DcObject> getItems(String key, boolean full) throws Exception {
+    protected Collection<DcObject> getItems(Object key, boolean full) throws Exception {
         Collection<DcObject> items = new ArrayList<DcObject>();
         items.add(getItem(key, full));
         return items;
@@ -250,7 +250,7 @@ public abstract class SearchTask extends Thread {
      * @param key The item key (The specific implementation decides the meaning of a key)
      * @param full Indicates if the full details should be retrieved.
      */
-    protected abstract DcObject getItem(String key, boolean full) throws Exception;
+    protected abstract DcObject getItem(Object key, boolean full) throws Exception;
     
     /**
      * Query for the item via the URL 
@@ -263,7 +263,7 @@ public abstract class SearchTask extends Thread {
      * get to the detailed item information. 
      * @return The item keys or an empty collection.
      */
-    protected abstract Collection<String> getItemKeys() throws Exception ;
+    protected abstract Collection<Object> getItemKeys() throws Exception ;
     
     /**
      * Here the actual search is performed. This is a standard implementation suited for
@@ -271,7 +271,7 @@ public abstract class SearchTask extends Thread {
      */
     @Override
     public void run() {
-        Collection<String> keys = new ArrayList<String>();
+        Collection<Object> keys = new ArrayList<Object>();
 
         listener.addMessage(DcResources.getText("msgConnectingToServer", getAddress()));
 
@@ -294,7 +294,7 @@ public abstract class SearchTask extends Thread {
         listener.addMessage(DcResources.getText("msgStartParsingXResults", String.valueOf(keys.size())));
         int counter = 0;
         
-        for (String key : keys) {
+        for (Object key : keys) {
             
             if (isCancelled() || counter == getMaximum()) break;
             

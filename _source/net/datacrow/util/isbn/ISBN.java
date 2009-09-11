@@ -25,13 +25,15 @@
 
 package net.datacrow.util.isbn;
 
-public class Isbn {
+import net.datacrow.util.StringUtils;
 
-    private final int[] weight13 = {1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3};
-    //private final int[] weight10 = {0, 9, 4, 0, 0, 1, 6, 6, 1};
-    private final int[] weight10 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+public abstract class ISBN {
+
+    private static final int[] weight13 = {1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3};
+    private static final int[] weight10 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     
-    public String getIsbn13(String isbn10) throws InvalidBarCodeException {
+    public static String getISBN13(String isbn10) throws InvalidBarCodeException {
         String s = "978";
         char[] chars = isbn10.toCharArray();
         
@@ -50,10 +52,10 @@ public class Isbn {
             digits[i] = Integer.parseInt("" + chars[i]);
         }
         
-        return convertToIsbn13(digits);
+        return convertToISBN13(digits);
     }
     
-    public String getIsbn10(String isbn13) throws InvalidBarCodeException {
+    public static String getISBN10(String isbn13) throws InvalidBarCodeException {
         char[] chars = isbn13.toCharArray();
         String s = "";
         for (int i = 0; i < chars.length; i++) {
@@ -71,38 +73,53 @@ public class Isbn {
             digits[counter++] = Integer.parseInt("" + chars[i]);
         }
         
-        return convertToIsbn10(digits);
+        return convertToISBN10(digits);
     }    
     
-    public boolean isIsbn13(String isbn) {
-        String s = "";
+    public static boolean isISBN10(String s) {
         
-        if (isbn != null) {
-            char[] chars = isbn.toCharArray();
-            for (int i = 0; i < chars.length; i++) {
-                if ("1234567890".indexOf(chars[i]) > -1) 
-                    s += chars[i];
-            }
+        if (s == null) return false;
+        
+        String isbn = String.valueOf(StringUtils.getContainedNumber(s.substring(0, s.length() - 1)));
+
+        char c = s.charAt(s.length() - 1);
+        isbn += Character.isDigit(c) || c == 'X' ? c : "";
+
+        if (isbn.length() != 10) return false;
+
+        long sum = 0;
+        for (int i = 0; i < 10; i++) {
+            String ch = isbn.substring(i, i + 1);
+            int digit = ch.equals("X") ? 10 : Integer.parseInt(ch);
+            sum += digit * (10 - i);
         }
         
-        return s.length() == 13;
+        return sum % 11 != 0; 
     }
 
-    public boolean isIsbn10(String isbn) {
-        String s = "";
+    /**
+     * Check if given string is a valid isbn13
+     * @param isbn
+     */
+    public static boolean isISBN13(String s) {
         
-        if (isbn != null) {
-            char[] chars = isbn.toCharArray();
-            for (int i = 0; i < chars.length; i++) {
-                if ("1234567890".indexOf(chars[i]) > -1) 
-                    s += chars[i];
-            }
+        if (s == null) return false;
+        
+        String isbn = String.valueOf(StringUtils.getContainedNumber(s));
+        
+        if (isbn.length() != 13) return false;
+        
+        int sum = 0;
+        for (int i = 0; i < 13; i++) {
+            String ch = isbn.substring(i, i + 1);
+            int digit = Integer.parseInt(ch);
+            sum += i % 2 == 0 ? digit : digit * 3;
         }
-        
-        return s.length() == 10;
+
+        return sum % 10 != 0;
     }
     
-    private String convertToIsbn10(int[] isbn13) {
+    private static String convertToISBN10(int[] isbn13) {
         String isbn10 = "";
         
         int sum = 0;
@@ -118,13 +135,12 @@ public class Isbn {
         return isbn10;
     }    
     
-    private String convertToIsbn13(int[] isbn10) {
+    private static String convertToISBN13(int[] isbn10) {
         String isbn13 = "";
         
         int sum = 0;
-        for (int i = 0; i < isbn10.length; i++) {
+        for (int i = 0; i < isbn10.length; i++)
             sum += isbn10[i] * weight13[i];
-        }
         
         int remainder = sum % 10;
         
@@ -132,12 +148,10 @@ public class Isbn {
         if (remainder > 0)
             checkdigit = 10 - remainder;
         
-        for (int i = 0; i < isbn10.length; i++) {
+        for (int i = 0; i < isbn10.length; i++)
             isbn13 += "" + isbn10[i];
-        }
         
         isbn13 += "" + checkdigit;
         return isbn13;
     }
 }
-

@@ -23,59 +23,60 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core.objects.helpers;
+package net.datacrow.core.services;
 
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcMediaObject;
-import net.datacrow.core.objects.ValidationException;
-import net.datacrow.util.isbn.InvalidBarCodeException;
 import net.datacrow.util.isbn.ISBN;
 
 import org.apache.log4j.Logger;
 
-public class Book extends DcMediaObject {
-
-    private static final long serialVersionUID = 8019536746874888487L;
-
-    private static Logger logger = Logger.getLogger(Book.class.getName());
+/**
+ * A search mode indicates a specific search such as a title, isbn, ean search.
+ * 
+ * @author Robert Jan van der Waals
+ */
+public abstract class IsbnSearchMode extends SearchMode {
     
-    public static final int _F_PUBLISHER  = 1;
-    public static final int _G_AUTHOR = 2;
-    public static final int _H_WEBPAGE = 3;
-    public static final int _I_CATEGORY = 4;
-    public static final int _J_ISBN10 = 5;
-    public static final int _K_PICTUREFRONT = 6;
-    public static final int _L_STATE = 7;
-    public static final int _N_ISBN13 = 9;
-    public static final int _O_SERIES = 10;
-    public static final int _P_VOLUME_NR = 11;
-    public static final int _Q_VOLUME_TITLE = 12;
-    public static final int _R_STORAGE_MEDIUM = 13;
-    public static final int _T_NROFPAGES = 15;
+    private static Logger logger = Logger.getLogger(IsbnSearchMode.class.getName());
     
-    public Book() {
-       super(DcModules._BOOK);
+    public IsbnSearchMode(int fieldBinding) {
+        super(fieldBinding);
+    }
+    
+    @Override
+    public String getDisplayName() {
+        return "ISBN";
     }
 
-    @Override
-    protected void beforeSave() throws ValidationException {
-        super.beforeSave();
-        
-        String s10 = (String) getValue(_J_ISBN10);
-        String s13 = (String) getValue(_N_ISBN13);
-
+    public String getIsbn(String s) {
+        String isbn = super.getSearchCommand(s);
         try {
-            boolean isBarcode13 = ISBN.isISBN13(s13);
-            boolean isBarcode10 = ISBN.isISBN10(s10);
-            if (isBarcode10 && !isBarcode13) {
-                String isbn13 = ISBN.getISBN13(s10);  
-                setValue(_N_ISBN13, isbn13);
-            } else if (isBarcode13 && !isBarcode10) {
-                String isbn10 = ISBN.getISBN10(s13);  
-                setValue(_J_ISBN10, isbn10);
-            }
-        } catch (InvalidBarCodeException ibce) {
-            logger.error("Supplied barcodes are invalid", ibce);
+            if (ISBN.isISBN10(isbn))
+                isbn = ISBN.getISBN13(isbn);
+        } catch (Exception e) {
+            logger.debug("Invalid ISBN " + isbn, e);
         }
+        return s;
+    }
+    
+    @Override
+    public String toString() {
+        return getDisplayName();
+    }
+    
+    /**
+     * Indicates if a match should be considered as perfect when only one result is
+     * retrieved. This is useful for ISBN and EAN searches. This is used for the 
+     * 'Automatically add or update the item when a perfect match has occurred' setting. 
+     */
+    public boolean singleIsPerfect() {
+        return true;
+    }
+    
+    /**
+     * Indicates whether the search is a free form search (such as a title search).
+     * ISBN, EAN and other specific search modes should set this method to return false. 
+     */
+    public boolean keywordSearch() {
+        return false;
     }
 }

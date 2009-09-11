@@ -138,11 +138,11 @@ public class StringUtils {
     }      
     
     public static Long getContainedNumber(String s) {
-        String number = "";
+        StringBuffer sb = new StringBuffer();
         for (int i = 0; i < s.length(); i++)
-            number += Character.isDigit(s.charAt(i)) && s.charAt(i) != '-' && s.charAt(i) != '+' ? s.charAt(i) : "";  
+            sb.append(Character.isDigit(s.charAt(i)) ? s.charAt(i) : "");  
     	
-        return number.length() > 0 ? Long.valueOf(number) : null;
+        return sb.length() > 0 ? Long.valueOf(sb.toString()) : null;
     }
     
     public static int backtrack(String s, int start, String to) {

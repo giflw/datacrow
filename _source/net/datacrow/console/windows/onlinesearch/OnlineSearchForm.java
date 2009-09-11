@@ -75,7 +75,7 @@ import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
-import net.datacrow.util.isbn.Isbn;
+import net.datacrow.util.isbn.ISBN;
 
 import org.apache.log4j.Logger;
 
@@ -450,13 +450,12 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         processing();
 
         // if the query is actually an ISBN number
-        Isbn isbn = new Isbn();
         String query = panelService.getQuery();
         String isbnCheck = String.valueOf(StringUtils.getContainedNumber(query));
         
         SearchMode mode = panelService.getMode();
         if (panelService.getServer().getSearchModes() != null &&
-            (isbn.isIsbn10(isbnCheck) || isbn.isIsbn13(isbnCheck))) {
+            (ISBN.isISBN10(isbnCheck) || ISBN.isISBN13(isbnCheck))) {
             
             for (SearchMode m : panelService.getServer().getSearchModes()) {
                 if (m.singleIsPerfect() && !m.keywordSearch() &&
