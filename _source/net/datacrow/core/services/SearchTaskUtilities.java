@@ -59,7 +59,7 @@ public abstract class SearchTaskUtilities {
                 }
             }
         } catch (InvalidBarCodeException e) {
-            logger.error("Invalid barcode " + isbn + ". Online search will be using original settings.", e);
+            logger.error("Invalid barcode " + isbn + ". Online search will be using original information.", e);
         }        
     }
 }

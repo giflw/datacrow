@@ -45,7 +45,9 @@ import net.datacrow.core.objects.helpers.Book;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Hash;
+import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.isbn.ISBN;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -80,6 +82,15 @@ public class EbookImport extends FileImporter {
         try {
             book.setValue(Book._A_TITLE, getName(filename, directoryUsage));
             book.setValue(Book._SYS_FILENAME, filename);
+            
+            // check if the filename contains an ISBN
+            String isbn = String.valueOf(StringUtils.getContainedNumber(filename));
+            boolean isbn10 = ISBN.isISBN10(isbn);
+            boolean isbn13 = ISBN.isISBN13(isbn);
+            
+            // this can be used later on by the online search
+            if (isbn10 || isbn13) 
+                book.setValue(isbn10 ? Book._J_ISBN10 : Book._N_ISBN13, isbn);
             
             if (filename.toLowerCase().endsWith("pdf")) {
                 RandomAccessFile raf = null;
