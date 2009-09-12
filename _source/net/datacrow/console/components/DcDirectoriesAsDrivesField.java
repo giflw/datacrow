@@ -145,8 +145,6 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(5, 5, 5, 5), 0, 0));
         
-        tableDirectoriesAsDrives.applyHeaders();
-        
     }
     
     public void setEditable(boolean b) {}
