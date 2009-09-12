@@ -18,7 +18,7 @@ Data Crow 3.4.20 [Release on xx/09/2009] [testing: high] [target: production]
   longer duplicated. Instead all tracks are added to one album 
   (with the correct numbering). 
 - Amazon search has been updated and (coding wise) simplified. 
- 
+- TODO: Server Settings 
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.19 [Release on 09/09/2009] [testing: high] [target: production]
