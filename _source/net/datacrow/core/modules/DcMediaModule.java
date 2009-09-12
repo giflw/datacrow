@@ -90,19 +90,19 @@ public class DcMediaModule extends DcModule {
                 "Year"));
 
         if (getIndex() != DcModules._IMAGE)
-            addField(new DcField(DcMediaObject._D_LANGUAGE, getIndex(), "Language", 
+            addField(new DcField(DcMediaObject._D_LANGUAGE, getIndex(), "Languages", 
                     true, true, false, true, false, 
                     255, ComponentFactory._REFERENCESFIELD, DcModules._LANGUAGE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
-                    "Language"));
+                    "Languages"));
         
         addField(new DcField(DcMediaObject._E_RATING, getIndex(), "Rating", 
                 false, true, false, true, false, 
                 255, ComponentFactory._RATINGCOMBOBOX, getIndex(), DcRepository.ValueTypes._LONG,
                 "Rating"));
-        addField(new DcField(DcMediaObject._F_COUNTRY, getIndex(), "Country", 
+        addField(new DcField(DcMediaObject._F_COUNTRY, getIndex(), "Countries", 
                 true, true, false, true, false, 
                 255, ComponentFactory._REFERENCESFIELD, DcModules._COUNTRY, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
-                "Country"));           
+                "Countries"));           
     }  
 
     @Override
