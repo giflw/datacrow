@@ -36,8 +36,7 @@ public class Drive {
     
     public Drive(File path) {
         this.path = path;
-        
-        String s = Utilities.getSystemName(path);
+        String s = Utilities.isSystemDrive(path) ? Utilities.getSystemName(path) : path.toString();
         displayValue = Utilities.isEmpty(s) ? path.getPath() : s;
     }
 

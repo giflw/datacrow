@@ -45,10 +45,10 @@ public class Drives {
 
     private void initialize() {
         drives.clear();
-        File[] roots = File.listRoots();
-        for (File root : roots) {
-            if (!Utilities.isFloppyDrive(root) && Utilities.isDriveTraversable(root))
-                drives.add(new Drive(root));
+        Collection<File> drives = Utilities.getDrives();
+        for (File drive : drives) {
+            if (!Utilities.isFloppyDrive(drive) && Utilities.isDriveTraversable(drive))
+                this.drives.add(new Drive(drive));
         }
     }
 }

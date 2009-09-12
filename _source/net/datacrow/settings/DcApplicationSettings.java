@@ -57,6 +57,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     public static final String _Regional = "lblGroupRegional";
     public static final String _Module = "lblModuleSettings";
     public static final String _DriveMappings = "lblDriveMappings";
+    public static final String _DirectoriesAsDrives = "lblDirectoriesAsDrives";
     public static final String _FileHandlers = "lblProgramDefinitions";
     public static final String _SelectionColor = "lblSelectionColor";
     public static final String _HTTP = "lblHTTPSettings";
@@ -83,6 +84,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         SettingsGroup fontGroup = new SettingsGroup(_Font, "dc.settings.font");
         SettingsGroup fileHashingGroup = new SettingsGroup(_FileHashing, "dc.settings.filehash");
         SettingsGroup driveMappings = new SettingsGroup(_DriveMappings, "dc.settings.drivemappings");
+        SettingsGroup directoriesAsDrives = new SettingsGroup(_DirectoriesAsDrives, "dc.settings.directoriesasdrives");
 
         getSettings().addGroup(_Module, moduleGroup);
         getSettings().addGroup(_Regional, regionalGroup);
@@ -92,6 +94,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addGroup(_SelectionColor, colorGroup);
         getSettings().addGroup(_FileHandlers, fileHandlers);
         getSettings().addGroup(_DriveMappings, driveMappings);
+        getSettings().addGroup(_DirectoriesAsDrives, directoriesAsDrives);
         getSettings().addGroup(_FileHashing, fileHashingGroup);
     }
 
@@ -130,6 +133,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             ComponentFactory._DRIVEMAPPING,
                             "",
                             "lblDriveMappings",
+                            false,
+                            true));          
+        getSettings().addSetting(_DirectoriesAsDrives,
+                new Setting(DcRepository.ValueTypes._STRINGARRAY,
+                            DcRepository.Settings.stDirectoriesAsDrives,
+                            null,
+                            ComponentFactory._DIRECTORIESASDRIVES,
+                            "",
+                            "lblDirectoriesAsDrive",
                             false,
                             true));          
         getSettings().addSetting(_Module,

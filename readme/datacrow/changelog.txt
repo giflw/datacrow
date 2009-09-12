@@ -1,6 +1,9 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.20 [Release on xx/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+I would like to thank François Rey for supplying the code for the 'directory as drives'
+setting. Additionally, although I implemented it differentle, I would like to thank him
+for the idea of using the ISBNs in the online search (ISBN auto detection).
 
 [Fixed]
 - Movie import "settings" Tab: Storage Medium items are gone.

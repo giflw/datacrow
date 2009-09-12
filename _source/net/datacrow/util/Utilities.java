@@ -199,16 +199,27 @@ public class Utilities {
         return fsv.isFloppyDrive(drive);
     }
     
-    public static Collection<File> getDrives() {
+    public static boolean isSystemDrive(File drive) {
+    	return getSystemDrives().contains(drive);
+    }
+    
+    public static Collection<File> getSystemDrives() {
         Collection<File> drives = new ArrayList<File>();
         for (File file : File.listRoots())
             drives.add(file);
-
+        return drives;
+    }
+    
+    public static Collection<File> getDrives() {
+        Collection<File> drives = getSystemDrives();
+        String[] dirs = DcSettings.getStringArray(DcRepository.Settings.stDirectoriesAsDrives);
+        for (String dir: dirs)
+        	drives.add(new File(dir));
         return drives;
     }
     
     public static String getSystemName(File f) {
-        return fsv.getSystemDisplayName(f);
+    	return fsv.getSystemDisplayName(f);
     }
     
     public static boolean sameImage(byte[] img1, byte[] img2) {
