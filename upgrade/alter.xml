@@ -1,0 +1,39 @@
+<modules>
+    <module>
+        <module-jar>movie.jar</module-jar>
+        <module-index>51</module-index>
+        <fields>
+            <field>
+                <index>23</index>
+                <name>Audio Languages</name>
+                <database-column-name>AudioLanguage</database-column-name>
+                <ui-only>true</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>50</maximum-length>
+                <field-type>21</field-type>
+                <module-reference>1100000</module-reference>
+                <value-type>18</value-type>
+                <overwritable>false</overwritable>
+            </field>
+            <field>
+                <index>24</index>
+                <name>Subtitle Languages</name>
+                <database-column-name>SubtitleLanguage</database-column-name>
+                <ui-only>true</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>500</maximum-length>
+                <field-type>21</field-type>
+                <module-reference>1100000</module-reference>
+                <value-type>18</value-type>
+                <overwritable>false</overwritable>
+            </field>
+        </fields>
+    </module>
+</modules> 
+		

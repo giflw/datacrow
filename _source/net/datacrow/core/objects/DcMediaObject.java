@@ -44,7 +44,9 @@ public class DcMediaObject extends DcObject {
     public static final int _A_TITLE = 150;
     public static final int _B_DESCRIPTION = 151;
     public static final int _C_YEAR = 152;
+    public static final int _D_LANGUAGE = 153;
     public static final int _E_RATING = 154;
+    public static final int _F_COUNTRY = 155;
     
     public static final int _U1_USER_LONGTEXT = 101;
     public static final int _U2_USER_SHORTTEXT1 = 102;

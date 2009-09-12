@@ -1053,6 +1053,13 @@ public class DcModule implements Comparable<DcModule> {
                         255, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                         "UserInteger2"));            
             }
+            
+            if (isTopModule()) {
+                addField(new DcField(DcMediaObject._CURRENCY_VALUE, getIndex(), "Value",  
+                        false, true, false, true, false, 
+                        255, ComponentFactory._DECIMALFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                        "CurrencyValue"));            
+            }
     
             if (isContainerManaged())
                 addField(getField(DcObject._SYS_CONTAINER));

@@ -1,0 +1,54 @@
+<modules>
+    <module>
+        <module-jar>book.jar</module-jar>
+        <module-index>54</module-index>
+        <fields>
+            <field>
+                <index>16</index>
+                <name>Binding</name>
+                <database-column-name>Publishers</database-column-name>
+                <ui-only>true</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>20</maximum-length>
+                <field-type>20</field-type>
+                <module-reference>1200000</module-reference>
+                <value-type>8</value-type>
+                <overwritable>false</overwritable>
+             </field>
+             <field>
+                <index>17</index>
+                <name>Edition Type</name>
+                <database-column-name>EditionType</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>20</maximum-length>
+                <field-type>20</field-type>
+                <module-reference>1300000</module-reference>
+                <value-type>8</value-type>
+                <overwritable>false</overwritable>
+            </field>                     
+            <field>
+                <index>18</index>
+                <name>Edition Comment</name>
+                <database-column-name>EditionComment</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>false</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>5</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>0</value-type>
+                <overwritable>false</overwritable>
+            </field>            
+        </fields>
+    </module>   
+</modules> 
+		

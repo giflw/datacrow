@@ -52,6 +52,9 @@ public class Book extends DcMediaObject {
     public static final int _Q_VOLUME_TITLE = 12;
     public static final int _R_STORAGE_MEDIUM = 13;
     public static final int _T_NROFPAGES = 15;
+    public static final int _U_BINDING = 16;
+    public static final int _V_EDITION_TYPE = 17;
+    public static final int _W_EDITION_COMMENT = 18;
     
     public Book() {
        super(DcModules._BOOK);

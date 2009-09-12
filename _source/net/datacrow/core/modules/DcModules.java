@@ -103,6 +103,11 @@ public class DcModules {
     public static final int _DEVELOPER = 35000;
     public static final int _MUSICARTIST = 36000;
     
+    public static final int _COUNTRY = 1000000;
+    public static final int _LANGUAGE = 1100000;
+    public static final int _BINDING = 1200000;
+    public static final int _EDITIONTYPE = 1300000;
+    
     public static final int _MAPPING = 50000;
 
     private static final Map<Integer, DcPropertyModule> propertyBaseModules = new HashMap<Integer, DcPropertyModule>();
@@ -188,6 +193,15 @@ public class DcModules {
         
         musicGenreMod.setServingMultipleModules(true);
         propertyBaseModules.put(DcModules._MUSICGENRE, musicGenreMod);
+        
+        
+        DcPropertyModule countryModule = new DcPropertyModule(DcModules._COUNTRY, "Country", "country", "country", "Country", "Countries");
+        countryModule.setServingMultipleModules(true);
+        propertyBaseModules.put(DcModules._COUNTRY, countryModule);
+        
+        DcPropertyModule languageModule = new DcPropertyModule(DcModules._LANGUAGE, "Language", "language", "language", "Language", "Languages");
+        languageModule.setServingMultipleModules(true);
+        propertyBaseModules.put(DcModules._LANGUAGE, languageModule);        
     }
     
     /**

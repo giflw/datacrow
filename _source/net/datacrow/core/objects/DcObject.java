@@ -99,6 +99,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     protected boolean synchronizeWithDM = true;
     
     public static final int _ID = 0;
+    
     public static final int _SYS_MODULE = 201;
     public static final int _SYS_AVAILABLE = 202;
     public static final int _SYS_LENDBY = 203;
@@ -118,6 +119,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     public static final int _SYS_LOANDUEDATE = 215;
     public static final int _SYS_LOANDAYSTILLOVERDUE = 216;
+    
+    public static final int _CURRENCY_VALUE = 217;
     
     /**
      * Creates a new instance.

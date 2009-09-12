@@ -76,22 +76,33 @@ public class DcMediaModule extends DcModule {
     protected void initializeFields() {
     	super.initializeFields();
 
-        addField(new DcField(DcMediaObject._A_TITLE, getIndex(), "Title", 
-                             false, true, false, true, false,
-                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-                             "Title"));
+    	addField(new DcField(DcMediaObject._A_TITLE, getIndex(), "Title", 
+                false, true, false, true, false,
+                255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                "Title"));
         addField(new DcField(DcMediaObject._B_DESCRIPTION, getIndex(), "Description", 
-                             false, true, false, true, false, 
-                             8000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-                             "Description"));
+                false, true, false, true, false, 
+                8000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                "Description"));
         addField(new DcField(DcMediaObject._C_YEAR, getIndex(), "Year", 
-                             false, true, false, true, false, 
-                             4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
-                             "Year"));
+                false, true, false, true, false, 
+                4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                "Year"));
+
+        if (getIndex() != DcModules._IMAGE)
+            addField(new DcField(DcMediaObject._D_LANGUAGE, getIndex(), "Language", 
+                    true, true, false, true, false, 
+                    255, ComponentFactory._REFERENCESFIELD, DcModules._LANGUAGE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
+                    "Language"));
+        
         addField(new DcField(DcMediaObject._E_RATING, getIndex(), "Rating", 
-                             false, true, false, true, false, 
-                             255, ComponentFactory._RATINGCOMBOBOX, getIndex(), DcRepository.ValueTypes._LONG,
-                             "Rating"));    
+                false, true, false, true, false, 
+                255, ComponentFactory._RATINGCOMBOBOX, getIndex(), DcRepository.ValueTypes._LONG,
+                "Rating"));
+        addField(new DcField(DcMediaObject._F_COUNTRY, getIndex(), "Country", 
+                true, true, false, true, false, 
+                255, ComponentFactory._REFERENCESFIELD, DcModules._COUNTRY, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
+                "Country"));           
     }  
 
     @Override

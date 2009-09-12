@@ -4,17 +4,13 @@ md ..\..\release\datacrow
 rd webapp\datacrow\mediaimages /S /Q
 rd data /S /Q
 rd _build /S /Q
-rd _classes /S /Q
-del datacrow.jar
 call build.bat
 del installer\*.jar
 del installer\*.exe
-rd ..\services\_build /S /Q
-rd ..\services\_classes /S /Q
 cd ..\services
 call build.bat
-copy standard_services_pack.jar .\services\ /Y
 cd ..\datacrow
+del plugins\*.class
 copy ..\plugins\_build\\plugins\*.* .\plugins\ /Y
 xcopy * ..\..\release\datacrow /s /EXCLUDE:release.exclude
 cd ..\..\release\datacrow
