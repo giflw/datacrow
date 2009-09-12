@@ -15,8 +15,10 @@ Data Crow 3.4.20 [Release on xx/09/2009] [testing: high] [target: production]
 - Online Search: if the query contains an ISBN it is used to query the item.
 - Mass Update: if the item contains an ISBN it is used to query the item.
 - Audio CD search (Amazon): when an album consists of multiple CD's the album is no 
-  longer duplicated. Instead all tracks are added to one album. 
-
+  longer duplicated. Instead all tracks are added to one album 
+  (with the correct numbering). 
+- Amazon search has been updated and (coding wise) simplified. 
+ 
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.19 [Release on 09/09/2009] [testing: high] [target: production]
