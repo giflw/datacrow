@@ -112,6 +112,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false));   
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stAmazonRetrieveFeatureListing,
+                            Boolean.TRUE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblRetrieveFeatureListing",
+                            false,
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stAmazonRetrieveEditorialReviews,
                             Boolean.TRUE,
                             ComponentFactory._CHECKBOX,
