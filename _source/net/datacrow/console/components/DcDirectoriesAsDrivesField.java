@@ -141,9 +141,11 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
                 new Insets(0, 0, 0, 0), 0, 0));
         
         // main
-        add(panelDirs, Layout.getGBC(0, 3, 1, 1, 5.0, 5.0,
+        add(panelDirs, Layout.getGBC(0, 3, 1, 1, 30.0, 30.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(5, 5, 5, 5), 0, 0));
+        
+        tableDirectoriesAsDrives.applyHeaders();
         
     }
     

@@ -79,6 +79,7 @@ import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcDateField;
 import net.datacrow.console.components.DcDecimalField;
 import net.datacrow.console.components.DcDriveMappingField;
+import net.datacrow.console.components.DcDirectoriesAsDrivesField;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcFileLauncherField;
 import net.datacrow.console.components.DcFilePatternField;
@@ -174,6 +175,7 @@ public final class ComponentFactory {
     public static final int _LANGUAGECOMBO = 31;
     public static final int _DRIVEMAPPING = 32;
     public static final int _CHARACTERSETCOMBO = 33;    
+    public static final int _DIRECTORIESASDRIVES = 34;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -427,6 +429,8 @@ public final class ComponentFactory {
                 return getDriveMappingField();
             case _CHARACTERSETCOMBO:
                 return getCharacterSetCombobox();
+            case _DIRECTORIESASDRIVES:
+                return getDirectoriesAsDrivesField();
 
             default:
                 return getShortTextField(maxTextLength);
@@ -509,6 +513,10 @@ public final class ComponentFactory {
     
     public static final DcDriveMappingField getDriveMappingField() {
         return new DcDriveMappingField();
+    }
+    
+    public static final DcDirectoriesAsDrivesField getDirectoriesAsDrivesField() {
+        return new DcDirectoriesAsDrivesField();
     }
     
     public static final JComboBox getLanguageCombobox() {
