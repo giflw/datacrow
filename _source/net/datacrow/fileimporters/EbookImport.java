@@ -85,12 +85,16 @@ public class EbookImport extends FileImporter {
             
             // check if the filename contains an ISBN
             String isbn = String.valueOf(StringUtils.getContainedNumber(filename));
-            boolean isbn10 = ISBN.isISBN10(isbn);
-            boolean isbn13 = ISBN.isISBN13(isbn);
+            boolean isIsbn10 = ISBN.isISBN10(isbn);
+            boolean isIsbn13 = ISBN.isISBN13(isbn);
             
             // this can be used later on by the online search
-            if (isbn10 || isbn13) 
-                book.setValue(isbn10 ? Book._J_ISBN10 : Book._N_ISBN13, isbn);
+            if (isIsbn10 || isIsbn13) {
+                String isbn10 = isIsbn10 ? isbn : ISBN.getISBN10(isbn);
+                String isbn13 = isIsbn13 ? isbn : ISBN.getISBN13(isbn);
+                book.setValue(Book._J_ISBN10, isbn10);
+                book.setValue(Book._N_ISBN13, isbn13);
+            }
             
             if (filename.toLowerCase().endsWith("pdf")) {
                 RandomAccessFile raf = null;

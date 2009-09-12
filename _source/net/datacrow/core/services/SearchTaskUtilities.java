@@ -27,6 +27,8 @@ package net.datacrow.core.services;
 
 import org.apache.log4j.Logger;
 
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.helpers.Book;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.isbn.ISBN;
 import net.datacrow.util.isbn.InvalidBarCodeException;
@@ -41,7 +43,16 @@ public abstract class SearchTaskUtilities {
         // search modes.
         if (task.getMode() == null || task.getMode().singleIsPerfect()) return;
         
-        String isbn = String.valueOf(StringUtils.getContainedNumber(task.getQuery())); 
+        DcObject dco = task.getClient();
+        
+        String isbn;
+        if (dco instanceof Book && (dco.isFilled(Book._N_ISBN13) || dco.isFilled(Book._J_ISBN10))) {
+            isbn = (String) dco.getValue(Book._N_ISBN13);
+            isbn = isbn == null ? (String) dco.getValue(Book._J_ISBN10) : isbn;
+        } else {
+            isbn = String.valueOf(StringUtils.getContainedNumber(task.getQuery()));
+        }
+        
         boolean isbn10 = ISBN.isISBN10(isbn);
         boolean isbn13 = ISBN.isISBN13(isbn);
 

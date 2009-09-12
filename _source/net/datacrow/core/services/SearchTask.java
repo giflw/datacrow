@@ -83,6 +83,8 @@ public abstract class SearchTask extends Thread {
     // The selected item retrieval mode
     private int itemMode = _ITEM_MODE_SIMPLE;
     
+    private DcObject client;
+    
     /**
      * Creates the search task.
      * @param listener
@@ -172,6 +174,14 @@ public abstract class SearchTask extends Thread {
         return region;
     }
     
+    public DcObject getClient() {
+        return client;
+    }
+
+    public void setClient(DcObject client) {
+        this.client = client;
+    }
+
     public void setQuery(String query) {
         this.query = query;
     }

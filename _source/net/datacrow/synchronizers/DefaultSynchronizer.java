@@ -103,7 +103,7 @@ public abstract class DefaultSynchronizer extends Synchronizer {
             osh.setMode(client.getSearchMode());
             osh.setMaximum(2);
             
-            Collection<DcObject> results = osh.query(searchString);
+            Collection<DcObject> results = osh.query(searchString, dco);
             for (DcObject result : results) {
                 if (matches(result, searchString, fieldIdx)) {
                     merge(dco, result, osh);

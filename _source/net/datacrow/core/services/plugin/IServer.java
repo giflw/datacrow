@@ -26,6 +26,7 @@
 package net.datacrow.core.services.plugin;
 
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.services.IOnlineSearchClient;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
@@ -85,5 +86,6 @@ public interface IServer {
     SearchTask getSearchTask(IOnlineSearchClient listener, 
                              SearchMode mode, 
                              Region region,
-                             String query);    
+                             String query,
+                             DcObject client);    
 }

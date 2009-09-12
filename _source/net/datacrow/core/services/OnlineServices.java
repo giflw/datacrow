@@ -257,7 +257,7 @@ public class OnlineServices {
         Region region = getRegion(dco);
         
         if (server != null) {
-            SearchTask task = server.getSearchTask(null, null, region, null);
+            SearchTask task = server.getSearchTask(null, null, region, null, dco);
             return task.query(dco);
         }
         

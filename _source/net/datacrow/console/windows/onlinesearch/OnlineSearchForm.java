@@ -93,6 +93,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private ItemForm itemForm;
     private DcObjectList list;
     private DcTable table;
+    private DcObject client;
     
     private List<DcObject> items = new ArrayList<DcObject>();
     private Map<Integer, Boolean> loadedItems = new HashMap<Integer, Boolean>();
@@ -118,6 +119,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         this.itemForm = itemForm;
         this.module = dco != null ? dco.getModule().getIndex() : os.getModule();
         this.os = os;
+        
+        // the object for which the online search is being performed.
+        this.client = dco;
         
         buildDialog(advanced);
 
@@ -149,8 +153,6 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                 
             if (ID == null)
                 removeValues(dco);
-            
-            //dco.setValue(DcObject._ID, ID);
             
             list.add(dco);
             table.add(dco);
@@ -203,8 +205,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
     private DcObject fill(final DcObject dco) { 
         if (!loadedItems.get(items.indexOf(dco)).booleanValue()) {
-            SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery());
-            
+            SearchTask task = panelService.getServer().getSearchTask(this, panelService.getMode(), panelService.getRegion(), panelService.getQuery(), dco);
             OnlineItemRetriever oir = new OnlineItemRetriever(task, dco);
             if (!SwingUtilities.isEventDispatchThread()) {
                 oir.start();
@@ -451,7 +452,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         String query = panelService.getQuery();
         SearchMode mode = panelService.getMode();
         
-        task = panelService.getServer().getSearchTask(this, mode, panelService.getRegion(), query);
+        task = panelService.getServer().getSearchTask(this, mode, panelService.getRegion(), query, client);
         task.setPriority(Thread.NORM_PRIORITY);
         task.setItemMode(panelSettings.isQueryFullDetails() ? SearchTask._ITEM_MODE_FULL : SearchTask._ITEM_MODE_SIMPLE);
         task.start();
