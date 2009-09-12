@@ -11,6 +11,7 @@ web module).
 - Movie import "settings" Tab: Storage Medium items are gone.
 - Encoding issue in "Description"s IMDB import. 
 - Bol.com did no longer retrieve the description (page was changed).
+- Incorrect font for dropdown / list boxes.
 
 [Changed]
 - Alapage.com has been redesigned. I am currently working on re-implementing this 

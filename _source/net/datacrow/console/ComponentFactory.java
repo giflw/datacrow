@@ -561,6 +561,7 @@ public final class ComponentFactory {
 
     public static final DcObjectComboBox getObjectCombo(int module) {
         DcObjectComboBox comboBox = new DcObjectComboBox(module);
+        comboBox.setFont(getStandardFont());
         DataManager.registerUiComponent(comboBox, module);
         return comboBox;
     }
