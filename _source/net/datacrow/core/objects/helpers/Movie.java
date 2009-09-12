@@ -37,7 +37,6 @@ public class Movie extends DcMediaObject {
     public static final int _H_GENRES = 3;
     public static final int _I_ACTORS = 4;
     public static final int _J_DIRECTOR = 5;
-    public static final int _K_COUNTRY = 6;
     public static final int _L_PLAYLENGTH = 7;
     public static final int _N_VIDEOCODEC = 9;
     public static final int _O_AUDIOCODEC = 10;
@@ -52,7 +51,6 @@ public class Movie extends DcMediaObject {
     public static final int _X_PICTUREFRONT = 19;
     public static final int _Y_PICTUREBACK = 20;
     public static final int _Z_PICTURECD = 21;
-    public static final int _0_LANGUAGE = 22;
     public static final int _1_AUDIOLANGUAGE = 23;
     public static final int _2_SUBTITLELANGUAGE = 24;
     public static final int _3_CERTIFICATION = 25;

@@ -25,6 +25,7 @@
 
 package net.datacrow.fileimporters;
 
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Movie;
@@ -78,7 +79,8 @@ public class MovieImporter extends FileImporter {
             if (directoryUsage != 1 && fpm.getName() != null && fpm.getName().trim().length() > 0)
                 movie.setValue(Movie._A_TITLE, fpm.getName());
             
-            movie.setValue(Movie._0_LANGUAGE, fpm.getLanguage());
+            DataManager.createReference(movie, Movie._D_LANGUAGE, fpm.getLanguage());
+            
             movie.setValue(Movie._L_PLAYLENGTH, playlength);
             movie.setValue(Movie._N_VIDEOCODEC, fpm.getVideoCodec());
             movie.setValue(Movie._O_AUDIOCODEC, fpm.getAudioCodec());
@@ -89,7 +91,8 @@ public class MovieImporter extends FileImporter {
             movie.setValue(Movie._T_AUDIOBITRATE, Long.valueOf(fpm.getAudioBitRate()));
             movie.setValue(Movie._U_AUDIOSAMPLINGRATE, Long.valueOf(fpm.getAudioRate()));
             movie.setValue(Movie._V_AUDIOCHANNEL, Long.valueOf(fpm.getAudioChannels()));
-            movie.setValue(Movie._2_SUBTITLELANGUAGE, fpm.getSubtitles());
+            
+            DataManager.createReference(movie, Movie._2_SUBTITLELANGUAGE, fpm.getSubtitles());
             
             setImages(filename, movie, Movie._X_PICTUREFRONT, Movie._Y_PICTUREBACK, Movie._Z_PICTURECD);
             

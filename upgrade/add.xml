@@ -7,7 +7,7 @@
                 <index>16</index>
                 <name>Binding</name>
                 <database-column-name>Binding</database-column-name>
-                <ui-only>true</ui-only>
+                <ui-only>false</ui-only>
                 <enabled>true</enabled>
                 <readonly>false</readonly>
                 <searchable>true</searchable>
