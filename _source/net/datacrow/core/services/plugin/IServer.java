@@ -25,12 +25,16 @@
 
 package net.datacrow.core.services.plugin;
 
+import java.util.Collection;
+
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.services.IOnlineSearchClient;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.SearchTask;
+import net.datacrow.core.settings.Setting;
 
 /**
  * This interface should be implemented for new (and custom) online services.
@@ -65,6 +69,12 @@ public interface IServer {
      * @return Unique name of the server
      */
     String getName();
+    
+    /**
+     * Specific settings for this server. 
+     * Returns null of there are no settings available.
+     */
+    Collection<Setting> getSettings();
     
     /**
      * The URL of the main server.
