@@ -26,6 +26,7 @@
 package net.datacrow.util.isbn;
 
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 
 public abstract class ISBN {
@@ -78,7 +79,7 @@ public abstract class ISBN {
     
     public static boolean isISBN10(String s) {
         
-        if (s == null) return false;
+        if (Utilities.isEmpty(s)) return false;
         
         String isbn = String.valueOf(StringUtils.getContainedNumber(s.substring(0, s.length() - 1)));
 
@@ -103,7 +104,7 @@ public abstract class ISBN {
      */
     public static boolean isISBN13(String s) {
         
-        if (s == null) return false;
+        if (Utilities.isEmpty(s)) return false;
         
         String isbn = String.valueOf(StringUtils.getContainedNumber(s));
         
