@@ -105,6 +105,16 @@ public class DcPropertyModule extends DcModule {
         return form;
     }
     
+    @Override
+    public boolean isTopModule() {
+        return false;
+    }    
+    
+    @Override
+    public boolean hasDependingModules() {
+        return true;
+    }
+
     /**
      * Loads the default data. Default data is inserted for new installation.
      */

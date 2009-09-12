@@ -1054,10 +1054,10 @@ public class DcModule implements Comparable<DcModule> {
                         "UserInteger2"));            
             }
             
-            if (isTopModule()) {
-                addField(new DcField(DcMediaObject._CURRENCY_VALUE, getIndex(), "Value",  
+            if (isTopModule() && !hasDependingModules()) {
+                addField(new DcField(DcMediaObject._VALUE, getIndex(), "Item Value",  
                         false, true, false, true, false, 
-                        255, ComponentFactory._DECIMALFIELD, getIndex(), DcRepository.ValueTypes._LONG,
+                        255, ComponentFactory._DECIMALFIELD, getIndex(), DcRepository.ValueTypes._DOUBLE,
                         "CurrencyValue"));            
             }
     

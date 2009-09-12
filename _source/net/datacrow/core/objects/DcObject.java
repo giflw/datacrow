@@ -120,7 +120,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public static final int _SYS_LOANDUEDATE = 215;
     public static final int _SYS_LOANDAYSTILLOVERDUE = 216;
     
-    public static final int _CURRENCY_VALUE = 217;
+    public static final int _VALUE = 217;
     
     /**
      * Creates a new instance.
