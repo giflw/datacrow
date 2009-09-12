@@ -581,7 +581,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stServerSettingsDialogSize,
-                            new Dimension(400, 200),
+                            new Dimension(400, 300),
                             -1,
                             "",
                             "",
