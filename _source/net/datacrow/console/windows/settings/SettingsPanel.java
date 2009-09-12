@@ -62,9 +62,14 @@ public class SettingsPanel extends JPanel {
     private SettingsGroup group;
     private Hashtable<Setting, Component> components = new Hashtable<Setting, Component>();
     
+    
     public SettingsPanel(SettingsGroup group) {
+        this(group, false);
+    }
+    
+    public SettingsPanel(SettingsGroup group, boolean ignoreUISettings) {
         this.group = group;
-        buildPanel(group.getSettings());
+        buildPanel(group.getSettings(), ignoreUISettings);
     }
     
     public String getHelpIndex() {
@@ -75,12 +80,12 @@ public class SettingsPanel extends JPanel {
      * Creates the panel with its components to allow changing the
      * values of the settings. The components are stored in each Setting
      */
-    private void buildPanel(Map<String, Setting> settings) {
+    private void buildPanel(Map<String, Setting> settings, boolean ignoreUISettings) {
         int y = 0;
         this.setLayout(Layout.getGBL());
         
         for (Setting setting : settings.values()) {
-            if (setting.showToUser()) {
+            if (ignoreUISettings || setting.showToUser()) {
                 JLabel label = ComponentFactory.getLabel(setting.getLabelText());
                 JComponent c = setting.getUIComponent();
                 

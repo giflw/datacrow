@@ -43,6 +43,7 @@ import javax.swing.JTextField;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineServices;
@@ -188,6 +189,11 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         if (os.getDefaultSearchMode() != null)
             comboModes.setSelectedItem(os.getDefaultSearchMode());
     }
+    
+    private void openServerSettingsDialog() {
+        ServerSettingsDialog dlg = new ServerSettingsDialog(osf, getServer());
+        dlg.setVisible(true);
+    }
         
     private void rebuild() {
         listenForServerChanges = false;
@@ -248,13 +254,31 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         buttonSearch.addActionListener(osf);
         buttonSearch.setActionCommand("search");
         buttonSearch.setMnemonic('F');
+        
+        
+        // servers panel
+        JPanel panelServers = new JPanel();
+        panelServers.setLayout(Layout.getGBL());
+        JButton btServerSettings = ComponentFactory.getIconButton(IconLibrary._icoSettings16);
+        btServerSettings.setActionCommand("serversettings");
+        btServerSettings.addActionListener(this);
+        panelServers.add(comboServers, Layout.getGBC( 0, 0, 1, 1, 100.0, 100.0
+                ,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        
+        if (server.getSettings() != null)
+            panelServers.add(btServerSettings, Layout.getGBC( 1, 0, 1, 1, 1.0, 10.0
+                    ,GridBagConstraints.EAST, GridBagConstraints.NONE,
+                     new Insets(5, 0, 5, 0), 0, 0));
+        
 
+        // main panel
         add(labelServer,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                          ,GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
                           new Insets(5, 5, 5, 5), 0, 0));
-        add(comboServers, Layout.getGBC( 1, 1, 1, 1, 10.0, 10.0
+        add(panelServers, Layout.getGBC( 1, 1, 1, 1, 10.0, 10.0
                          ,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
-                          new Insets(5, 5, 5, 5), 0, 0));
+                          new Insets(0, 0, 0, 0), 0, 0));
         add(comboRegions, Layout.getGBC( 2, 1, 1, 1, 10.0, 10.0
                          ,GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL,
                           new Insets(5, 5, 5, 5), 0, 0));
@@ -274,6 +298,8 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         } else if (e.getActionCommand().equals("search")) {
             perfectMatchOccured = false;
             osf.start();
+        } else if (e.getActionCommand().equals("serversettings")) {
+            openServerSettingsDialog();
         }
     }
 

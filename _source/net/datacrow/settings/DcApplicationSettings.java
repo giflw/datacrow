@@ -99,6 +99,26 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     }
 
     protected void createSettings() {
+        
+
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stAmazonRetrieveUserReviews,
+                            Boolean.FALSE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblRetrieveUserReviews",
+                            false,
+                            false));   
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stAmazonRetrieveEditorialReviews,
+                            Boolean.TRUE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblRetrieveEditorialReviews",
+                            false,
+                            false));   
         getSettings().addSetting(_Regional,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stLanguage,
@@ -544,6 +564,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stExpertFormSize,
                             new Dimension(700, 600),
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stServerSettingsDialogSize,
+                            new Dimension(400, 200),
                             -1,
                             "",
                             "",

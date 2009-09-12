@@ -95,7 +95,7 @@ public class SettingsGroup {
         return setting;
     }
     
-    protected void add(Setting setting) {
+    public void add(Setting setting) {
         htSettings.put(setting.getKey(), setting);
     }
     

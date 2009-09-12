@@ -1,9 +1,11 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.20 [Release on xx/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-I would like to thank François Rey for supplying the code for the 'directory as drives'
-setting. Additionally, although I implemented it differentle, I would like to thank him
-for the idea of using the ISBNs in the online search (ISBN auto detection).
+The distribution has been changed. There is no longer a separate Web Module package.
+Instead all have been merged together. This makes the distribution a bit larger but puts
+the web module a bit more into the spotlight. The installer offers the option to exclude
+the web module. The zipped distribution contains, of course, everything (including the
+web module).
 
 [Fixed]
 - Movie import "settings" Tab: Storage Medium items are gone.
@@ -21,7 +23,12 @@ for the idea of using the ISBNs in the online search (ISBN auto detection).
   longer duplicated. Instead all tracks are added to one album 
   (with the correct numbering). 
 - Amazon search has been updated and (coding wise) simplified. 
-- TODO: Server Settings 
+- Server Settings; online servers can now have individual settings. The amazon
+  server can now be configured to retrieve user reviews (or not). 
+
+I would like to thank François Rey for supplying the code for the 'directory as drives'
+setting.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.19 [Release on 09/09/2009] [testing: high] [target: production]
