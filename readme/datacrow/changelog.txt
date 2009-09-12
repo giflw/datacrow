@@ -3,7 +3,19 @@ Data Crow 3.4.20 [Release on xx/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- 
+- Movie import "settings" Tab: Storage Medium items are gone.
+- Encoding issue in "Description"s IMDB import. 
+- Bol.com did no longer retrieve the description (page was changed).
+
+[Changed]
+- Alapage.com has been redesigned. I am currently working on re-implementing this 
+  search engine but, as you will notice, it is not yet part of this release.
+- File import for e-books: if the filename contains an ISBN it is used to query the
+  online service.
+- Online Search: if the query contains an ISBN it is used to query the item.
+- Mass Update: if the item contains an ISBN it is used to query the item.
+- Audio CD search (Amazon): when an album consists of multiple CD's the album is no 
+  longer duplicated. Instead all tracks are added to one album. 
 
 
 -----------------------------------------------------------------------------------------

@@ -81,8 +81,8 @@ public class DcAudioCDListHwElement extends DcObjectListHwElement {
         addComponent(getLabel(AudioCD._G_GENRES, true, label2Length), 2, 0);
         addComponent(getLabel(AudioCD._G_GENRES, false, field2Length), 3, 0);
         
-        addComponent(getLabel(AudioCD._F_ARTIST, true, label1Length), 0, 1);
-        addComponent(getLabel(AudioCD._F_ARTIST, false, field1Length), 1, 1);
+        addComponent(getLabel(AudioCD._F_ARTISTS, true, label1Length), 0, 1);
+        addComponent(getLabel(AudioCD._F_ARTISTS, false, field1Length), 1, 1);
         addComponent(getLabel(DcMediaObject._E_RATING, true, label2Length), 2, 1);
         addComponent(getRatingValueLabel(), 3, 1);        
         

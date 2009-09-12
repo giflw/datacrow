@@ -32,7 +32,7 @@ public class AudioCD extends DcMediaObject {
 
     private static final long serialVersionUID = -9181349541953148790L;
     
-    public static final int _F_ARTIST = 1;
+    public static final int _F_ARTISTS = 1;
     public static final int _G_GENRES = 2;
     public static final int _H_PICTUREFRONT = 3;
     public static final int _I_PICTUREBACK = 4;

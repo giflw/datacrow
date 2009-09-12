@@ -225,7 +225,7 @@ public class Freedb {
     public AudioCD convertToDcObject(FreedbQueryResult result) {
         AudioCD audioCD = new AudioCD();
         audioCD.setValue(AudioCD._A_TITLE, result.getAlbum());
-        audioCD.setValue(AudioCD._F_ARTIST, result.getArtist());
+        audioCD.setValue(AudioCD._F_ARTISTS, result.getArtist());
         audioCD.setValue(AudioCD._G_GENRES, result.getCategory());
         audioCD.setValue(AudioCD._K_DISCID, result.getDiscId());
         return audioCD;
@@ -248,7 +248,7 @@ public class Freedb {
         
         audioCD.setValue(AudioCD._A_TITLE, title);
         
-        DataManager.createReference(audioCD, AudioCD._F_ARTIST, result.getArtist());
+        DataManager.createReference(audioCD, AudioCD._F_ARTISTS, result.getArtist());
         audioCD.setValue(AudioCD._K_DISCID, result.getDiscId());
         setGenres(audioCD, result.getCategory());        
         

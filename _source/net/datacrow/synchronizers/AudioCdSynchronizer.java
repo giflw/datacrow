@@ -65,8 +65,8 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
         boolean matches = super.matches(result, searchString, fieldIdx);
         if (matches && (client.getSearchMode() == null || client.getSearchMode().keywordSearch())) {
             // Additionally one of the artists has to match. Only used for keyword searches!
-            Collection<DcMapping> artists1 = (Collection<DcMapping>) result.getValue(AudioCD._F_ARTIST);
-            Collection<DcMapping> artists2 = (Collection<DcMapping>) getDcObject().getValue(AudioCD._F_ARTIST);
+            Collection<DcMapping> artists1 = (Collection<DcMapping>) result.getValue(AudioCD._F_ARTISTS);
+            Collection<DcMapping> artists2 = (Collection<DcMapping>) getDcObject().getValue(AudioCD._F_ARTISTS);
             artists1 = artists1 == null ? new ArrayList<DcMapping>() : artists1;
             artists2 = artists2 == null ? new ArrayList<DcMapping>() : artists2;
             for (DcObject person1 : artists1) {
