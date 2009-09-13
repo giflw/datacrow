@@ -25,6 +25,9 @@
 
 package net.datacrow.console.components;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcObject;
 
@@ -40,8 +43,19 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
     @Override
     public void refresh() {
         Object o = getSelectedItem();
+  
+        Collection<DcObject> newValues = new ArrayList<DcObject>();
+        for (int i = 0; i < dataModel.getSize(); i++) {
+            Object value = dataModel.getElementAt(i);
+            if (value instanceof DcObject && ((DcObject) value).isNew())
+                newValues.add((DcObject) value);
+        }
+        
         removeAllItems();
         addItem(" ");
+        
+        for (DcObject dco : newValues)
+            addItem(dco);
 
         DcObject[] objects = DataManager.get(module, null);
         for (int i = 0; i < objects.length; i++)
