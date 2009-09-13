@@ -36,7 +36,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.DcEditorMouseListener;
 import net.datacrow.console.windows.TextDialog;
 import net.datacrow.util.DcSwingUtilities;
@@ -50,7 +49,6 @@ public class DcLongTextField extends JTextArea implements IComponent, MouseListe
         addMouseListener(this);
         undoListener = new DcUndoListenerer(this);
         addMouseListener(new DcEditorMouseListener());
-        ComponentFactory.setBorder(this);
     }
     
     public DcUndoListenerer getUndoListener() {

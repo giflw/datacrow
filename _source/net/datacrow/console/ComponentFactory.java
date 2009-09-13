@@ -65,7 +65,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileFilter;
@@ -78,8 +78,8 @@ import net.datacrow.console.components.DcColorSelector;
 import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcDateField;
 import net.datacrow.console.components.DcDecimalField;
-import net.datacrow.console.components.DcDriveMappingField;
 import net.datacrow.console.components.DcDirectoriesAsDrivesField;
+import net.datacrow.console.components.DcDriveMappingField;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcFileLauncherField;
 import net.datacrow.console.components.DcFilePatternField;
@@ -949,12 +949,7 @@ public final class ComponentFactory {
     }
     
     public static final void setBorder(JComponent c) {
-    	Border border = c.getBorder();
-    	if (!(border instanceof javax.swing.border.CompoundBorder)) {
-        	c.setBorder(BorderFactory.createCompoundBorder(
-    				c.getBorder(), 
-    				BorderFactory.createEmptyBorder(2, 2, 2, 2)));
-    	}
+        c.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     }
     
     public static final DcNumberField getIdFieldDisabled() {

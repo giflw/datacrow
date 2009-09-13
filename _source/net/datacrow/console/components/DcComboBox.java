@@ -44,6 +44,7 @@ public class DcComboBox extends JComboBox implements IComponent {
         setMinimumSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
         setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
         setRenderer(ComboBoxRenderer.getInstance());
+        ComponentFactory.setBorder(this);
     }
     
     public DcComboBox(Object[] items) {
@@ -53,6 +54,7 @@ public class DcComboBox extends JComboBox implements IComponent {
         setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
         setRenderer(ComboBoxRenderer.getInstance());
         setEditor(new DcComboBoxEditor());
+        ComponentFactory.setBorder(this);
     }  
 	
     public DcComboBox() {
@@ -63,6 +65,7 @@ public class DcComboBox extends JComboBox implements IComponent {
         ComponentFactory.setBorder(this);
         setRenderer(ComboBoxRenderer.getInstance());
         setEditor(new DcComboBoxEditor());
+        ComponentFactory.setBorder(this);
     }
     
     public void clear() {

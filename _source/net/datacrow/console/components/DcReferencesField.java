@@ -76,6 +76,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         scrollIn.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollIn.setPreferredSize(new Dimension(350,50));
+        ComponentFactory.setBorder(scrollIn);
         
         add(scrollIn, Layout.getGBC( 0, 0, 1, 2, 80.0, 80.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

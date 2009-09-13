@@ -710,10 +710,10 @@ public class ItemForm extends DcFrame implements ActionListener {
                 int space = y == 0 ? 5 : 0; 
                 panel.add(label,     Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                         ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                         new Insets(space, 2, 0, 5), 0, 0));
+                         new Insets(space, 2, 2, 5), 0, 0));
                 panel.add(component, Layout.getGBC(1, y, 1, 1, factor, factor
                         ,GridBagConstraints.NORTHWEST, stretch,
-                         new Insets(space, 0, 0, 2), 0, 0));
+                         new Insets(space, 2, 2, 2), 0, 0));
                 
                 positions.put(definition.getTab(moduleIdx), Integer.valueOf(y + 1));
                 

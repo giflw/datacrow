@@ -34,6 +34,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
@@ -43,6 +44,7 @@ public class DcDecimalField extends JTextField implements IComponent {
 
     public DcDecimalField() {
         super();
+        ComponentFactory.setBorder(this);
     }
 
     @Override
