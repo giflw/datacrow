@@ -33,6 +33,8 @@ web module).
   server can now be configured to retrieve user reviews (or not). 
 - Web Server: Files are now downloadable links.
 - Fields on the item form are now styled more appropriately.
+- Added a summary tab (for new installations only) as the item form was getting a tad
+  cluttered with fields.
 
 [New]
 - Directories can now be marked as being drives. This is essentially a fix for non 

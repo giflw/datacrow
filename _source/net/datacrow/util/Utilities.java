@@ -213,8 +213,12 @@ public class Utilities {
     public static Collection<File> getDrives() {
         Collection<File> drives = getSystemDrives();
         String[] dirs = DcSettings.getStringArray(DcRepository.Settings.stDirectoriesAsDrives);
-        for (String dir: dirs)
-        	drives.add(new File(dir));
+        
+        if (dirs != null) {
+            for (String dir: dirs)
+                drives.add(new File(dir));
+        }
+        
         return drives;
     }
     
