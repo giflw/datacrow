@@ -45,6 +45,8 @@ public abstract class SearchTaskUtilities {
         
         DcObject dco = task.getClient();
         
+        if (dco == null) return;
+        
         String isbn;
         if (dco instanceof Book && (dco.isFilled(Book._N_ISBN13) || dco.isFilled(Book._J_ISBN10))) {
             isbn = (String) dco.getValue(Book._N_ISBN13);
