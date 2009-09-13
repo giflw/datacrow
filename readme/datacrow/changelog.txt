@@ -13,6 +13,7 @@ web module).
 - Bol.com did no longer retrieve the description (page was changed).
 - Incorrect font for dropdown / list boxes.
 - Contact person dropdown / list box remains empty (loan administration).
+- Could not set an empty value for a dropdown field.
 
 [Changed]
 - Alapage.com has been redesigned. I am currently working on re-implementing this 

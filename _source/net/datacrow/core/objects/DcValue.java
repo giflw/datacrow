@@ -155,7 +155,10 @@ public class DcValue implements Serializable {
                     else 
                         logger.error("Trying to set " + o + " while expecting a collection of mappings object");
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                    if (o instanceof DcObject) {
+                    
+                    if (Utilities.isEmpty(o)) { 
+                        setValueNative(null, field);
+                    } else if (o instanceof DcObject) {
                         setValueNative(o, field);
                     } else if (!Utilities.isEmpty(o)) {
                         setValueNative(DataManager.getObject(field.getReferenceIdx(), o.toString()), field);
@@ -165,7 +168,7 @@ public class DcValue implements Serializable {
                     if (getValue() == null && !Utilities.isEmpty(o)) {
                         setValueNative(o, field); // allow string reference to be set
                         logger.debug("Value is still null but new value not empty. Setting value for reference field (" + field + ") value '" + o + "')");
-                    }
+                    } 
 
                 } else if ( (field.getValueType() == DcRepository.ValueTypes._LONG ||
                              field.getValueType() == DcRepository.ValueTypes._DOUBLE ) 

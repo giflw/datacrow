@@ -87,7 +87,8 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
     }
     
     public void setValue(Object o) {
-        cb.setSelectedItem(o);
+        cb.setValue(o);
+        //cb.setSelectedItem(o);
     }
     
     public void clear() {
