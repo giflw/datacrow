@@ -89,7 +89,7 @@ public class DcMediaModule extends DcModule {
                 4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                 "Year"));
 
-        if (getIndex() != DcModules._IMAGE)
+        if (getIndex() != DcModules._IMAGE && !isAbstract())
             addField(new DcField(DcMediaObject._D_LANGUAGE, getIndex(), "Languages", 
                     true, true, false, true, false, 
                     255, ComponentFactory._REFERENCESFIELD, DcModules._LANGUAGE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,

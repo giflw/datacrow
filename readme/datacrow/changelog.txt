@@ -33,7 +33,8 @@ web module).
 - Directories can now be marked as being drives. This is essentially a fix for non 
   Windows platforms. I would like to thank François Rey for supplying the code for the 
   'directory as drives' functionality.
-
+- The software, music album, audio CD, book and movie module have 2 new fields:
+  language and country.  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.19 [Release on 09/09/2009] [testing: high] [target: production]
