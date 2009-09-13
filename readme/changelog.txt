@@ -14,6 +14,9 @@ web module).
 - Incorrect font for dropdown / list boxes.
 - Contact person dropdown / list box remains empty (loan administration).
 - Could not set an empty value for a dropdown field.
+- Web Server: Module icons are not refreshed when changing the icons using the 
+  module wizards.
+- Web Server: Large module icons shown for helper modules. 
 
 [Changed]
 - Alapage.com has been redesigned. I am currently working on re-implementing this 
@@ -28,6 +31,8 @@ web module).
 - Amazon search has been updated and (coding wise) simplified. 
 - Server Settings; online servers can now have individual settings. The amazon
   server can now be configured to retrieve user reviews (or not). 
+- Web Server: Files are now downloadable links.
+- Fields on the item form are now styled more appropriately.
 
 [New]
 - Directories can now be marked as being drives. This is essentially a fix for non 
@@ -35,6 +40,7 @@ web module).
   'directory as drives' functionality.
 - The software, music album, audio CD, book and movie module have 2 new fields:
   language and country.  
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.4.19 [Release on 09/09/2009] [testing: high] [target: production]
