@@ -201,12 +201,12 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
         //**********************************************************
         
         add(panelInput,      Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                              new Insets( 0, 0, 0, 0), 0, 0));        
         add(panelActions,    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                              new Insets( 0, 0, 0, 0), 0, 0));        
-        add(scroller,        Layout.getGBC( 0, 2, 2, 1, 20.0, 20.0
+        add(scroller,        Layout.getGBC( 0, 2, 2, 1, 10.0, 10.0
                             ,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
                              new Insets( 0, 0, 0, 0), 0, 0));
         

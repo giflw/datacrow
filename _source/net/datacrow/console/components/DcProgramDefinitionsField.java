@@ -181,7 +181,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));        
         panelInput.add(extensionField,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 1, 0, 0, 5), 0, 0));
         panelInput.add(programField,    Layout.getGBC( 1, 1, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,

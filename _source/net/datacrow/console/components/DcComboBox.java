@@ -90,18 +90,6 @@ public class DcComboBox extends JComboBox implements IComponent {
 
     public void setValue(Object value) {
         setSelectedItem(value);
-        
-        if (value != null) {
-            boolean exists = false;
-            for (int i = 0; i < dataModel.getSize(); i++)
-                if (value.equals(dataModel.getElementAt(i)))
-                    exists = true;
-            
-            if (!exists) {
-                addItem(value);
-                setSelectedItem(value);
-            }
-        }
     }
 
     @Override
