@@ -25,8 +25,6 @@
 
 package net.datacrow.util.isbn;
 
-import net.datacrow.util.StringUtils;
-import net.datacrow.util.Utilities;
 
 
 public abstract class ISBN {
@@ -77,47 +75,32 @@ public abstract class ISBN {
         return convertToISBN10(digits);
     }    
     
-    public static boolean isISBN10(String s) {
+    public static boolean isISBN13(String isbn) {
+        String s = "";
         
-        if (Utilities.isEmpty(s)) return false;
-        
-        String isbn = String.valueOf(StringUtils.getContainedNumber(s.substring(0, s.length() - 1)));
-
-        char c = s.charAt(s.length() - 1);
-        isbn += Character.isDigit(c) || c == 'X' ? c : "";
-
-        if (isbn.length() != 10) return false;
-
-        long sum = 0;
-        for (int i = 0; i < 10; i++) {
-            String ch = isbn.substring(i, i + 1);
-            int digit = ch.equals("X") ? 10 : Integer.parseInt(ch);
-            sum += digit * (10 - i);
+        if (isbn != null) {
+            char[] chars = isbn.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if ("1234567890".indexOf(chars[i]) > -1) 
+                    s += chars[i];
+            }
         }
         
-        return sum % 11 == 0; 
+        return s.length() == 13;
     }
 
-    /**
-     * Check if given string is a valid isbn13
-     * @param isbn
-     */
-    public static boolean isISBN13(String s) {
+    public static boolean isISBN10(String isbn) {
+        String s = "";
         
-        if (Utilities.isEmpty(s)) return false;
-        
-        String isbn = String.valueOf(StringUtils.getContainedNumber(s));
-        
-        if (isbn.length() != 13) return false;
-        
-        int sum = 0;
-        for (int i = 0; i < 13; i++) {
-            String ch = isbn.substring(i, i + 1);
-            int digit = Integer.parseInt(ch);
-            sum += i % 2 == 0 ? digit : digit * 3;
+        if (isbn != null) {
+            char[] chars = isbn.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if ("1234567890".indexOf(chars[i]) > -1) 
+                    s += chars[i];
+            }
         }
-
-        return sum % 10 == 0;
+        
+        return s.length() == 10;
     }
     
     private static String convertToISBN10(int[] isbn13) {
