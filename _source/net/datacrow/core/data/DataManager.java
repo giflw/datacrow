@@ -402,10 +402,13 @@ public class DataManager {
                 tab.setValue(Tab._A_NAME, name);
                 tab.setValue(Tab._D_MODULE, Long.valueOf(module));
                 
-                int order = name.equals(DcResources.getText("lblInformation")) ? 0 : 1;
+                int order = name.equals(DcResources.getText("lblInformation")) ? 1 : 
+                            name.equals(DcResources.getText("lblSummary")) ? 0 : 
+                            2;
+                
                 tab.setValue(Tab._C_ORDER, Long.valueOf(order));
                 
-                if (name.equalsIgnoreCase(DcResources.getText("lblInformation")))
+                if (name.equalsIgnoreCase(DcResources.getText("lblInformation")) || name.equals(DcResources.getText("lblSummary")))
                     tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons_system" + File.separator + "information.png"));
                 else if (name.equalsIgnoreCase(DcResources.getText("lblTechnicalInfo")))
                     tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons_system" + File.separator + "informationtechnical.png"));

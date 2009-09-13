@@ -94,7 +94,7 @@ public class DcFieldDefinition extends Definition {
             DcField field = DcModules.get(module).getField(index);
             
             if (field.isTechnicalInfo()) {
-                tab = "lblTechnicalInfo";// DcResources.getText("lblTechnicalInfo"); 
+                tab = "lblTechnicalInfo"; 
             } else if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
                   field.isEnabled() && 
                   field.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
@@ -102,9 +102,12 @@ public class DcFieldDefinition extends Definition {
                  (index != DcModules.get(module).getParentReferenceFieldIndex() || 
                   index == DcObject._SYS_CONTAINER )) { // not a reference field
                 
-                tab = "lblInformation";//DcResources.getText();
+                tab = "lblInformation";
             }
         }
+        
+        if (tab != null && !tab.startsWith("lbl"))
+            tab = DcResources.getText("lbl" + tab) != null ? DcResources.getText("lbl" + tab) : tab;
         
         return tab != null && tab.startsWith("lbl") ? DcResources.getText(tab) : tab;
     }
