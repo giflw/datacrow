@@ -30,10 +30,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.helpers.ContactPerson;
 import net.datacrow.core.objects.helpers.Movie;
 import net.datacrow.util.Utilities;
 
@@ -71,9 +71,6 @@ public class DataManagerUpgrade {
             conn.close();
             return;
         }
-        
-        QuestionBox qb = new QuestionBox("The counties and languages of the movie module will be converted to the new standard.");
-        if (!qb.isAffirmative()) return;
         
         rs = stmt.executeQuery("SELECT ID, COUNTRY FROM MOVIE WHERE COUNTRY IS NOT NULL");
         while (rs.next()) {
@@ -121,6 +118,18 @@ public class DataManagerUpgrade {
             }   
         }
         
+        rs.close();
+        rs = stmt.executeQuery("SELECT ID, COUNTRY FROM PERSON WHERE COUNTRY IS NOT NULL");
+        while (rs.next()) {
+            String id = rs.getString(1);
+            String language = rs.getString(2);
+            if (!Utilities.isEmpty(language)) {
+                DcObject person = DataManager.getObject(DcModules._CONTACTPERSON, id);
+                DataManager.createReference(person, ContactPerson._K_COUNTRY, language);
+                person.saveUpdate(false, false);
+            }   
+        }        
+        
         try {
             stmt.close();
             conn.close();
@@ -128,6 +137,5 @@ public class DataManagerUpgrade {
         } catch (Exception e) {
             logger.error(e, e);
         }
-
     }
 }

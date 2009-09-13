@@ -35,5 +35,26 @@
             </field>
         </fields>
     </module>
+    <module>
+        <module-jar>contactperson.jar</module-jar>
+        <module-index>56</module-index>
+        <fields>
+            <field>
+                <index>10</index>
+                <name>Country</name>
+                <database-column-name>Country</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>20</field-type>
+                <module-reference>1000000</module-reference>
+                <value-type>8</value-type>
+                <overwritable>true</overwritable>
+            </field>
+        </fields>
+    </module>        
 </modules> 
 		

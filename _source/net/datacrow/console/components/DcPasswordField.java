@@ -29,10 +29,16 @@ import java.awt.Graphics;
 
 import javax.swing.JPasswordField;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.util.DcSwingUtilities;
 
 public class DcPasswordField extends JPasswordField implements IComponent {
 
+    public DcPasswordField() {
+        super();
+        ComponentFactory.setBorder(this);
+    }
+    
 	public void setValue(Object value) {
         String s = value == null ? "" : value.toString();
 		super.setText(s);
