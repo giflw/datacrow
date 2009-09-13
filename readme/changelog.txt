@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.20 [Release on xx/09/2009] [testing: high] [target: production]
+Data Crow 3.4.20 [Release on 13/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 The distribution has been changed. There is no longer a separate Web Module package.
 Instead all have been merged together. This makes the distribution a bit larger but puts
