@@ -39,10 +39,11 @@ rd _classes /S /Q
 cd ..
 7z a -tZip datacrow_x_zipped .\datacrow
 7z a -tZip datacrow_x_nstaller installer.jar installer.sh installer.txt
-7z a -tZip datacrow_x_windows_installer installer.jar installer.exe
+7z a -tZip datacrow_x_windows_installer installer.jar setup.exe
 del installer.sh
 del installer.txt
 del installer.jar
+del setup.exe
 pause
 
 
