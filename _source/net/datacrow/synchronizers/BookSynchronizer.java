@@ -25,11 +25,18 @@
 
 package net.datacrow.synchronizers;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.helpers.Book;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.isbn.ISBN;
 
 public class BookSynchronizer extends DefaultSynchronizer {
 
+    private static Logger logger = Logger.getLogger(BookSynchronizer.class.getName());
+    
     public BookSynchronizer() {
         super(DcResources.getText("lblMassItemUpdate", DcModules.get(DcModules._BOOK).getObjectName()),
               DcModules._BOOK);
@@ -38,5 +45,35 @@ public class BookSynchronizer extends DefaultSynchronizer {
     @Override
     public String getHelpText() {
         return DcResources.getText("msgBookMassUpdateHelp");
+    }
+
+    @Override
+    protected boolean matches(DcObject result, String searchString, int fieldIdx) {
+        boolean matches = false;
+        
+        try {
+            
+            boolean isISBN10 = ISBN.isISBN10(searchString);
+            boolean isISBN13 = ISBN.isISBN13(searchString);
+            
+            String check = null;
+            if (isISBN10 || isISBN13) {
+                check = isISBN10 ? ISBN.getISBN13(searchString) : searchString;
+            } else {
+                check = dco.isFilled(Book._N_ISBN13) ? (String) dco.getValue(Book._N_ISBN13) :
+                        dco.isFilled(Book._J_ISBN10) ? ISBN.getISBN13((String) dco.getValue(Book._J_ISBN10)) :
+                        null;
+            }
+            
+            if (check != null) {
+                String isbn = (String) result.getValue(Book._N_ISBN13);
+                matches = check.equals(isbn);
+            }
+
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+        
+        return matches ? true : super.matches(result, searchString, fieldIdx); 
     }
 }

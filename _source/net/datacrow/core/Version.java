@@ -110,7 +110,7 @@ public class Version {
      * @param v
      */
     public boolean isNewer(Version v) {
-        return v.hashCode() > hashCode();
+        return hashCode() > v.hashCode();
     }
 
     /**

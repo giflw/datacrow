@@ -134,6 +134,10 @@ public class DataManager {
     public DataManager() {
         initialized = false;
         initialize();
+        
+        // perform conversions.
+        new DataManagerUpgrade().start();
+        
         initialized = true;
     }
     

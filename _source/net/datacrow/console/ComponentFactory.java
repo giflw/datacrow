@@ -554,7 +554,7 @@ public final class ComponentFactory {
     }    
 
     public static final DcComboBox getContactPersonCombo() {
-        DcComboBox comboBox = getComboBox();
+        DcComboBox comboBox = getObjectCombo(DcModules._CONTACTPERSON);
         DataManager.registerUiComponent(comboBox, DcModules._CONTACTPERSON);
         return comboBox;
     }

@@ -148,6 +148,12 @@ public class DcDatabase {
      * Removes unused columns.
      */
     protected void cleanup() {
+        
+        // As we might still need the info during the upgrade..... 
+        // we'll clean this all up after the database has been upgraded!
+        if (DataCrow.getVersion().isNewer(DatabaseManager.getOriginalVersion()))
+            return;
+        
         for (DcModule module : DcModules.getAllModules()) {
             
             if (module.isAbstract()) continue;
