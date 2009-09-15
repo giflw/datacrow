@@ -21,7 +21,6 @@ web module).
 - Web Server: Large module icons shown for helper modules. 
 - General errors while retrieving results from IMDB.com and Amazon
   (empty message pops up and a NullPointerException is logged).
-  I eventually has to change the Cobra code of the Lobo Browser project.
  
 [Changed]
 - Alapage.com online search has been removed. The page has been redesigned making 

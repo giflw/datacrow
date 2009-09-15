@@ -59,8 +59,6 @@ public class HtmlUtils {
         return document;
     }
     
-    
-    
 
     public static String toPlainText(String html) {
         return toPlainText(html, "ISO-8859-1");
@@ -93,17 +91,16 @@ public class HtmlUtils {
         return html;
     }   
     
-    protected static Document getDocument(String s, String charset) throws Exception { 
+    protected static Document getDocument(String html, String charset) throws Exception { 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         
+        String s = html;
         ByteArrayInputStream in;
         if (s.contains("<html") || s.contains("<HTML")) {
             String title = StringUtils.getValueBetween("<title>", "</title>", s);
             s = StringUtils.getValueBetween("<body", "</body>", s);
             s = s.substring(s.indexOf(">") + 1);
-            s = s.replaceAll("&copy;", " ");
-            s = s.replaceAll("€", " ");
     
             // start the document
             StringBuffer sb = new StringBuffer();
@@ -124,7 +121,7 @@ public class HtmlUtils {
             sb.append("</body>\n");
             sb.append("</html>\n");
             
-            // remove all script parts (don't need them and just confuse lobobrowser)
+            // remove all script parts (don't need them and they just confuse lobo browser)
             int idx;
             while((idx = sb.indexOf("<script")) > 0) {
                 String part1 = sb.substring(0, idx);
@@ -140,12 +137,15 @@ public class HtmlUtils {
         }
 
         // construct all and create a parser
-        
         Reader reader = new InputStreamReader(in);
         Document document = builder.newDocument();
-
-        HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
-        parser.parse(reader);
+        
+        try {
+            HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
+            parser.parse(reader);
+        } catch (Exception e) {
+           // Utilities.writeToFile(html.getBytes(), "d:/temp.html");
+        }
         
         in.close();
         
