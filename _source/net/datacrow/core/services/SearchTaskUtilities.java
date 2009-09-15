@@ -39,10 +39,15 @@ public abstract class SearchTaskUtilities {
     
     public static final void checkForIsbn(SearchTask task) {
 
-        // Already using a very specific search mode or the online service does not support 
+        // clean search query (removed non digits)
+        if (task.getMode() instanceof IsbnSearchMode)
+            task.setQuery(String.valueOf(StringUtils.getContainedNumber(task.getQuery())));
+
+        // already using a very specific search mode or the online service does not support 
         // search modes.
         if (task.getMode() == null || task.getMode().singleIsPerfect()) return;
         
+        // check whether an ISBN is available.
         DcObject dco = task.getClient();
         
         if (dco == null) return;
@@ -58,6 +63,7 @@ public abstract class SearchTaskUtilities {
         boolean isbn10 = ISBN.isISBN10(isbn);
         boolean isbn13 = ISBN.isISBN13(isbn);
 
+        // If so, set the appropriate search mode
         try {
             if (isbn10 || isbn13) {
                 isbn = isbn10 ? ISBN.getISBN13(isbn) : isbn; 
