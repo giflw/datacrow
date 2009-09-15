@@ -26,12 +26,9 @@
 package net.datacrow.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.util.Collection;
-import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,11 +50,52 @@ public class HtmlUtils {
     private static Logger logger = Logger.getLogger(HtmlUtils.class.getName());
 
     public static Document getDocument(URL url, String charset) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         String s = connection.getString(charset);
+        connection.close();        
+
+        Document document = getDocument(s, charset);
+        return document;
+    }
+    
+    
+    
+
+    public static String toPlainText(String html) {
+        return toPlainText(html, "ISO-8859-1");
+    }
+    
+    /**
+     * Clean the string of any unwanted characters
+     * @param s string to clean
+     */
+    public static String toPlainText(String html, String charset) {
+        try {
+            String s = html;
+            if (!s.toUpperCase().startsWith("<HTML")) {
+                StringBuffer sb = new StringBuffer(s);
+                sb.insert(0, "<html><body>");
+                sb.append("</body></html>");
+                s = sb.toString();
+            }
+            
+            Document document = getDocument(s, charset);
+                
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            Node node = (Node) xpath.evaluate("/html/body", document, XPathConstants.NODE);
+            return node.getTextContent();
+            
+        } catch (Exception e) {
+            logger.debug("Failed to parse: " + html);
+        }
+
+        return html;
+    }   
+    
+    protected static Document getDocument(String s, String charset) throws Exception { 
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
         
         ByteArrayInputStream in;
         if (s.contains("<html") || s.contains("<HTML")) {
@@ -96,83 +134,21 @@ public class HtmlUtils {
                 sb.append(part2);
             }
             
-            in = new ByteArrayInputStream(sb.toString().getBytes());
+            in = new ByteArrayInputStream(sb.toString().getBytes(charset));
         } else {
-            in = new ByteArrayInputStream(s.getBytes());
+            in = new ByteArrayInputStream(s.getBytes(charset));
         }
 
         // construct all and create a parser
         
-        Reader reader = getReader(in, charset, url);
+        Reader reader = new InputStreamReader(in);
         Document document = builder.newDocument();
 
         HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
         parser.parse(reader);
         
         in.close();
-        connection.close();
         
         return document;
-    }
-    
-    private static Reader getReader(InputStream in, String suggestedCharSet, URL url) {
-        Collection<String> encodings = new LinkedList<String>();
-        if (suggestedCharSet != null) encodings.add(suggestedCharSet);
-        if (!encodings.contains("ISO-8859-1")) encodings.add("ISO-8859-1");
-        if (!encodings.contains("UTF-8") && !encodings.contains("UTF8")) encodings.add("UTF-8");
-        if (!encodings.contains("UTF-16") && !encodings.contains("UTF-16")) encodings.add("UTF16");
-        
-        for (String encoding : encodings) {
-//            try {
-                Reader reader = new InputStreamReader(in);
-                logger.debug("Using " + encoding + " to read content of " + url);
-                return reader;
-//            } catch (UnsupportedEncodingException uee) {
-//                logger.debug("Failed to use " + encoding + " to read content of " + url);
-//            }
-        }
-        
-        return null;
-    }
-    
-
-    public static String toPlainText(String html) {
-        return toPlainText(html, "ISO-8859-1");
-    }
-    
-    /**
-     * Clean the string of any unwanted characters
-     * @param s string to clean
-     */
-    public static String toPlainText(String html, String encoding) {
-        try {
-            String s = html;
-            if (!s.toUpperCase().startsWith("<HTML")) {
-                StringBuffer sb = new StringBuffer(s);
-                sb.insert(0, "<html><body>");
-                sb.append("</body></html>");
-                s = sb.toString();
-            }
-            
-            ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes());
-            
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            
-            Reader reader = getReader(in, encoding, null);
-            Document document = builder.newDocument();        
-                
-            HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
-            parser.parse(reader);
-            
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            Node node = (Node) xpath.evaluate("/html/body", document, XPathConstants.NODE);
-            return node.getTextContent();
-            
-        } catch (Exception e) {
-            logger.debug("Failed to parse: " + html);
-        }
-
-        return html;
-    }   
+    }    
 }
