@@ -32,6 +32,7 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.util.StringUtils;
 
 /**
  * A mapping module creates a link between two modules. Used for many to many
@@ -47,14 +48,15 @@ public class MappingModule extends DcModule {
    
     /**
      * Creates a new mapping module to link the specified modules.
+     * The table is named / formed as follows: X_main module_fieldname
      * @param parentMod The parent module.
      * @param referencedMod The child/referenced module. 
      */
-    public MappingModule(DcModule parentMod, DcModule referencedMod) {
+    public MappingModule(DcModule parentMod, DcModule referencedMod, int fieldIdx) {
         super(referencedMod.getIndex() + DcModules._MAPPING + parentMod.getIndex(), 
               "", "", "", "", 
-              "X_" + parentMod.getTableName() + "_"  + referencedMod.getTableName(), 
-              "X" + parentMod.getTableShortName() + referencedMod.getTableShortName(), 
+              "X_" + parentMod.getTableName() + "_" + StringUtils.normalize(parentMod.getField(fieldIdx).getSystemName()).replaceAll(" ", "").replaceAll("[\\-]", ""), 
+              "X_" + parentMod.getTableShortName() + "_" + StringUtils.normalize(parentMod.getField(fieldIdx).getSystemName()).replaceAll(" ", "").replaceAll("[\\-]", ""), 
               false);
         
         this.parentMod = parentMod;

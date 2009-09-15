@@ -25,37 +25,88 @@
 
 package net.datacrow.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import net.datacrow.core.http.HttpConnection;
 import net.datacrow.core.http.HttpConnectionUtil;
 
-import org.lobobrowser.html.UserAgentContext;
+import org.apache.log4j.Logger;
 import org.lobobrowser.html.parser.HtmlParser;
 import org.lobobrowser.html.test.SimpleUserAgentContext;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 public class HtmlUtils {
     
-    private final static UserAgentContext uacontext = new SimpleUserAgentContext();
+    private static Logger logger = Logger.getLogger(HtmlUtils.class.getName());
 
     public static Document getDocument(URL url, String charset) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
-        InputStream in = connection.getInputStream();
+        String s = connection.getString(charset);
+        
+        ByteArrayInputStream in;
+        if (s.contains("<html") || s.contains("<HTML")) {
+            String title = StringUtils.getValueBetween("<title>", "</title>", s);
+            s = StringUtils.getValueBetween("<body", "</body>", s);
+            s = s.substring(s.indexOf(">") + 1);
+            s = s.replaceAll("&copy;", " ");
+            s = s.replaceAll("€", " ");
+    
+            // start the document
+            StringBuffer sb = new StringBuffer();
+            sb.append("<html>\n");
+            
+            // create the title part
+            if (!Utilities.isEmpty(title)) {
+                sb.append("<head>\n");
+                sb.append("<title>");
+                sb.append(title);
+                sb.append("</title>\n");
+                sb.append("<head>\n");
+            }
+            
+            // create the body
+            sb.append("<body>\n");
+            sb.append(s);
+            sb.append("</body>\n");
+            sb.append("</html>\n");
+            
+            // remove all script parts (don't need them and just confuse lobobrowser)
+            int idx;
+            while((idx = sb.indexOf("<script")) > 0) {
+                String part1 = sb.substring(0, idx);
+                String part2 = sb.substring(sb.indexOf("</script>") + 9);
+                sb.setLength(0);
+                sb.append(part1);
+                sb.append(part2);
+            }
+            
+            in = new ByteArrayInputStream(sb.toString().getBytes());
+        } else {
+            in = new ByteArrayInputStream(s.getBytes());
+        }
 
-        Reader reader = charset != null ? new InputStreamReader(in, charset) : new InputStreamReader(in);
+        // construct all and create a parser
+        
+        Reader reader = getReader(in, charset, url);
         Document document = builder.newDocument();
 
-        HtmlParser parser = new HtmlParser(uacontext, document);
+        HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
         parser.parse(reader);
         
         in.close();
@@ -63,4 +114,65 @@ public class HtmlUtils {
         
         return document;
     }
+    
+    private static Reader getReader(InputStream in, String suggestedCharSet, URL url) {
+        Collection<String> encodings = new LinkedList<String>();
+        if (suggestedCharSet != null) encodings.add(suggestedCharSet);
+        if (!encodings.contains("ISO-8859-1")) encodings.add("ISO-8859-1");
+        if (!encodings.contains("UTF-8") && !encodings.contains("UTF8")) encodings.add("UTF-8");
+        if (!encodings.contains("UTF-16") && !encodings.contains("UTF-16")) encodings.add("UTF16");
+        
+        for (String encoding : encodings) {
+//            try {
+                Reader reader = new InputStreamReader(in);
+                logger.debug("Using " + encoding + " to read content of " + url);
+                return reader;
+//            } catch (UnsupportedEncodingException uee) {
+//                logger.debug("Failed to use " + encoding + " to read content of " + url);
+//            }
+        }
+        
+        return null;
+    }
+    
+
+    public static String toPlainText(String html) {
+        return toPlainText(html, "ISO-8859-1");
+    }
+    
+    /**
+     * Clean the string of any unwanted characters
+     * @param s string to clean
+     */
+    public static String toPlainText(String html, String encoding) {
+        try {
+            String s = html;
+            if (!s.toUpperCase().startsWith("<HTML")) {
+                StringBuffer sb = new StringBuffer(s);
+                sb.insert(0, "<html><body>");
+                sb.append("</body></html>");
+                s = sb.toString();
+            }
+            
+            ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes());
+            
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            
+            Reader reader = getReader(in, encoding, null);
+            Document document = builder.newDocument();        
+                
+            HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
+            parser.parse(reader);
+            
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            Node node = (Node) xpath.evaluate("/html/body", document, XPathConstants.NODE);
+            return node.getTextContent();
+            
+        } catch (Exception e) {
+            logger.debug("Failed to parse: " + html);
+        }
+
+        return html;
+    }   
 }

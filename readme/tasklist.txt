@@ -5,60 +5,24 @@ Online services
 [ ] Wikipedia
 [ ] Bibtext implementation (as it is easy to implement and there seem to be a large user group for it).
 
-3.5
+4.0
 ---------------------------------------------------------------------------------------------------------
 [ ] Flexible Online Services model (scripting).
 [ ] Additional online services (using the new model).
-[ ] Country and Language drop down / modules.
 [ ] Upgrade of the Container module / Container Hierarchy.
 [ ] Upgrade of the Container module / Global Importer.
-[ ] Store table layout.
 [ ] Book Module / Additional import.
 [ ] Clone a module wizard
-[ ] Provide the option to revert back to the default settings (per module + general settings).
-    Provide this option as a parameter.
-[ ] Scanning those barcodes, some books have the barcodes appended by the price (xxxxxxxx yyyyy). 
-    It would be nice, if datacrow used only the first part of the entered number. 
 [ ] Zoom in out for the chart panel.
 [ ] Exporting a module. Exporting the module definition itself currently requires manually copying the 
     module jar file and its property files. Functionality will be provided which makes it easy to export 
     and import a module (definition). This functionality will also allow users to export default/demo data 
     with their module. This functionality will also be used to provide additional custom modules. 
 
-
-3.4.11
+3.5 
 ---------------------------------------------------------------------------------------------------------
-[ ] UPDATE ALL + CONTAINER = DOES NOT WORK
-[ ] CHECK WITH APPLYING A SAVED FILTER
-
-
-3.4.10
----------------------------------------------------------------------------------------------------------
-[x] SVG compatibility / Conversion.
-[x] Get the first image from PDF files (e-Book).
-
-
-3.4.9
----------------------------------------------------------------------------------------------------------
-[x] Check the sort order in the web module; is it still broken or is this because of the old version?
-[x] Silent strart of the web server: -password -username = hides log screens.
-[x] The Java from Sun check should only be a warnign after which the user can continue (setting is saved).
-    (perform check twice and update settings).
-[x] Mass update functionality: allow update by ISBN.
-[x] Java help: search
-[x] Use system variables for the path configuration (programs).
-[x] Allow changing a field definition of a module.
-[x] Default view does not seem to be remembered correctly!!!!
-[x] Alter fields: Make sure to warn about incompatible backups!
-
-
-3.4.8
----------------------------------------------------------------------------------------------------------
-[x] Re-test ASF for movies
-[x] Translate the web module
-[x] Refresh of screen for the module wizard after adding fields.
-[x] Module name; special characters?
-[x] Image from clip board (CTRL-V)
+[ ] Amazon search: Blu-Ray
+[ ] 
 
 
 Unplanned

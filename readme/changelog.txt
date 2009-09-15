@@ -1,6 +1,7 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.4.20 [Release on 13/09/2009] [testing: high] [target: production]
+Data Crow 3.5 [Release on xx/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+
 The distribution has been changed. There is no longer a separate Web Module package.
 Instead all have been merged together. This makes the distribution a bit larger but puts
 the web module a bit more into the spotlight. The installer offers the option to exclude
@@ -8,8 +9,9 @@ the web module. The zipped distribution contains, of course, everything (includi
 web module).
 
 [Fixed]
+- ISBN search with ISBN's containing non-digits now also (finally) works.
 - Movie import "settings" Tab: Storage Medium items are gone.
-- Encoding issue in "Description"s IMDB import. 
+- Encoding issue in IMDB import. 
 - Bol.com did no longer retrieve the description (page was changed).
 - Incorrect font for dropdown / list boxes.
 - Contact person dropdown / list box remains empty (loan administration).
@@ -17,10 +19,13 @@ web module).
 - Web Server: Module icons are not refreshed when changing the icons using the 
   module wizards.
 - Web Server: Large module icons shown for helper modules. 
-
+- General errors while retrieving results from IMDB.com and Amazon
+  (empty message pops up and a NullPointerException is logged).
+  I eventually has to change the Cobra code of the Lobo Browser project.
+ 
 [Changed]
-- Alapage.com has been redesigned. I am currently working on re-implementing this 
-  search engine but, as you will notice, it is not yet part of this release.
+- Alapage.com online search has been removed. The page has been redesigned making 
+  it necessary to create a new implementation. This will be done in a later version. 
 - File import for e-books: if the filename contains an ISBN it is used to query the
   online service.
 - Online Search: if the query contains an ISBN it is used to query the item.
@@ -42,6 +47,13 @@ web module).
   'directory as drives' functionality.
 - The software, music album, audio CD, book and movie module have 2 new fields:
   language and country.  
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.4.20 [Release on 13/09/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+CANCELED. Contains most of the fixes as part of the 3.5 version but was canceled shortly 
+after its release due to technical problems. 
 
 
 -----------------------------------------------------------------------------------------

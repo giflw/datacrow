@@ -530,15 +530,6 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             false));           
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
-                            DcRepository.ModuleSettings.stAutoCreateSubItems,
-                            true,
-                            ComponentFactory._CHECKBOX,
-                            DcResources.getText("tpAutoCreateMissingItems"),
-                            DcResources.getText("lblAutoCreateMissingItems"),
-                            false,
-                            false));     
-        getSettings().addSetting(_General,
-                new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stOnlineSearchSubItems,
                             false,
                             ComponentFactory._CHECKBOX,

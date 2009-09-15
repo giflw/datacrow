@@ -134,10 +134,6 @@ public class DataManager {
     public DataManager() {
         initialized = false;
         initialize();
-        
-        // perform conversions.
-        new DataManagerUpgrade().start();
-        
         initialized = true;
     }
     
@@ -732,7 +728,7 @@ public class DataManager {
         try {
             List<DcObject> c = DatabaseManager.executeQuery(dco, false);
             for (DcObject o : c) {
-                if (StringUtils.normalize(o.toString()).equals(StringUtils.normalize(dco.toString())))
+                if (StringUtils.equals(o.toString(), dco.toString()))
                     return o;
             }
 

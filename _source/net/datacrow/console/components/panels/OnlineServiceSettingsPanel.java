@@ -50,7 +50,6 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     
     private JButton buttonSettings = ComponentFactory.getButton(IconLibrary._icoSettings16);
     private JCheckBox checkOverwrite;
-    private JCheckBox checkAutoCreateSubItems;
     private JCheckBox checkAutoAdd;
     private JCheckBox checkOnlineSearchSubItems;
     private JCheckBox checkQueryFullDetails;
@@ -84,7 +83,6 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         
         Settings settings = DcModules.get(module).getSettings();
         setOverwrite(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite));
-        setAutoCreateSubItems(settings.getBoolean(DcRepository.ModuleSettings.stAutoCreateSubItems));
         setOnlineSearchSubItems(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchSubItems));
         setQueryFullDetails(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially));
         setUseOriginalSettings(settings.getBoolean(DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings));
@@ -99,15 +97,10 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     public void save() {
         Settings settings = DcModules.get(module).getSettings();
         settings.set(DcRepository.ModuleSettings.stOnlineSearchOverwrite, checkOverwrite.isSelected());
-        settings.set(DcRepository.ModuleSettings.stAutoCreateSubItems, checkAutoCreateSubItems.isSelected());
         settings.set(DcRepository.ModuleSettings.stAutoAddPerfectMatch, checkAutoAdd.isSelected());
         settings.set(DcRepository.ModuleSettings.stOnlineSearchSubItems, checkOnlineSearchSubItems.isSelected());
         settings.set(DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially, checkQueryFullDetails.isSelected());
         settings.set(DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings, checkUseOriginalSettings.isSelected());
-    }
-
-    private void setAutoCreateSubItems(boolean b) {
-        checkAutoCreateSubItems.setSelected(b);
     }
     
     private void setOverwrite(boolean b) {
@@ -150,7 +143,6 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         buttonSettings = null;
         checkOverwrite = null;
         checkOnlineSearchSubItems = null;
-        checkAutoCreateSubItems = null;
         checkAutoAdd = null;
         checkQueryFullDetails = null;
         checkUseOriginalSettings = null;
@@ -163,9 +155,6 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         setLayout(Layout.getGBL());
-
-        checkAutoCreateSubItems = ComponentFactory.getCheckBox(DcResources.getText("lblAutoCreateMissingItems"));
-        checkAutoCreateSubItems.setToolTipText(DcResources.getText("tpAutoCreateMissingItems"));
 
         checkAutoAdd = ComponentFactory.getCheckBox(DcResources.getText("lblAutoAddPerfectMatch"));
         checkAutoAdd.setToolTipText(DcResources.getText("tpAutoAddPerfectMatch"));
@@ -227,10 +216,6 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(0, 5, 0, 0), 0, 0));            
         
-        add(checkAutoCreateSubItems, Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
-           ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-            new Insets(0, 5, 0, 0), 0, 0));
-
         setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblOnlineServiceSettings")));        
     }
     

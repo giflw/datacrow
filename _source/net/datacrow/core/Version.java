@@ -135,7 +135,7 @@ public class Version {
     
     @Override
     public int hashCode() {
-        return (major * 10000) + (minor * 1000) + (build * 100) + (patch * 10);
+        return (major * 10000000) + (minor * 100000) + (build * 100) + (patch);
     }
     
     @Override

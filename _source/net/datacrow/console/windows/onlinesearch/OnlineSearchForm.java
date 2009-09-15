@@ -210,7 +210,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             if (!SwingUtilities.isEventDispatchThread()) {
                 oir.start();
                 try { 
-                    oir.join();
+                    oir.join(10000);
                 } catch (Exception e) {
                     logger.error(e, e);
                 }

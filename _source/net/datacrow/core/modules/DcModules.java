@@ -372,7 +372,7 @@ public class DcModules {
             
             // register the mapping module using the derived index.
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
-                register(new MappingModule(mod, DcModules.get(derivedIdx)));
+                register(new MappingModule(mod, DcModules.get(derivedIdx), field.getIndex()));
         }
         
         if (module.isTopModule() || module.isChildModule())
