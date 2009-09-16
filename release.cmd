@@ -28,7 +28,12 @@ move *.exe ..\..\
 move installer.sh ..\..\
 move installer.txt ..\..\
 rd installer /S /Q
-cd ..\..
+cd ..
+del manifest.mf
+del release.cmd
+del release.exclude
+del build-javadoc.bat
+cd ..
 7z a -tZip datacrow_x_source .\datacrow
 7z a -tZip datacrow_x_javadoc .\javadoc
 rd javadoc /S /Q
@@ -36,6 +41,10 @@ cd datacrow
 call build.bat
 rd _source /S /Q
 rd _classes /S /Q
+del build.bat
+del build.xml
+del .classpath
+del .project
 cd ..
 7z a -tZip datacrow_x_zipped .\datacrow
 7z a -tZip datacrow_x_nstaller installer.jar installer.sh installer.txt
