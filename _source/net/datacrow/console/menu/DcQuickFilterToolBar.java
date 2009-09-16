@@ -145,7 +145,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     }
 
     private void setSearchField(DcField field) {
-        JComponent c = ComponentFactory.getComponent(field.getModule(), field.getReferenceIdx(), field.getFieldType(), field.getLabel(), 255);
+        JComponent c = ComponentFactory.getComponent(field.getModule(), field.getReferenceIdx(), field.getIndex(), field.getFieldType(), field.getLabel(), 255);
         
         if (c instanceof DcReferenceField) 
             c = ((DcReferenceField) c).getComboBox();

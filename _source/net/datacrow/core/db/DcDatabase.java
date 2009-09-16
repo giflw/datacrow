@@ -164,16 +164,20 @@ public class DcDatabase {
                 ResultSetMetaData md = rs.getMetaData();
                 
                 for (int i = 1; i < md.getColumnCount() + 1; i++) {
-                    boolean remove = true;
-                    for (DcField field : module.getFields()) {
-                        if (md.getColumnName(i).equalsIgnoreCase(field.getDatabaseFieldName())) 
-                            remove = field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ? true : false; 
-                    }
+                    String columnName = md.getColumnName(i);
                     
-                    // the column is not used.. remove!
-                    if (remove) {
-                        logger.info("Removing column " + md.getColumnName(i) + " for module " + module.getName() + " as it is no longer in use");
-                        DatabaseManager.executeSQL("alter table " + module.getTableName() + " drop column " + md.getColumnName(i), true);
+                    if (!columnName.startsWith("_KEEP_")) { 
+                        boolean remove = true;
+                        for (DcField field : module.getFields()) {
+                            if (columnName.equalsIgnoreCase(field.getDatabaseFieldName())) 
+                                remove = field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ? true : false; 
+                        }
+                        
+                        // the column is not used.. remove!
+                        if (remove) {
+                            logger.info("Removing column " + columnName + " for module " + module.getName() + " as it is no longer in use");
+                            DatabaseManager.executeSQL("alter table " + module.getTableName() + " drop column " + columnName, true);
+                        }
                     }
                 }
                 

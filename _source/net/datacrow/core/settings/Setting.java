@@ -137,7 +137,7 @@ public class Setting {
         if (componentType == ComponentFactory._COLORSELECTOR)
             return new DcColorSelector(key);
         
-        return ComponentFactory.getComponent(-1, -1, componentType, getLabelText(), 400);
+        return ComponentFactory.getComponent(-1, -1, -1, componentType, getLabelText(), 400);
     }
 
     /**

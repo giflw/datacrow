@@ -115,7 +115,7 @@ public class SettingsPanel extends JPanel {
                     int stretch = simplecomp ? GridBagConstraints.HORIZONTAL : GridBagConstraints.BOTH;
                     double weigth = simplecomp ? 1.0 : 10.0;
                     
-                    add(c,  Layout.getGBC( 0, y, 1, 1, weigth, weigth,
+                    add(c,  Layout.getGBC( 0, y, 2, 1, weigth, weigth,
                         GridBagConstraints.NORTHWEST, stretch, new Insets( 5, 5, 5, 5), 0, 0));
                 }
                 y++;

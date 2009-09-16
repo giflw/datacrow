@@ -208,11 +208,11 @@ public class DcModules {
      * Determines the correct index for the mapping module. Note that these indices are
      * also used to determine the mapped modules indices.
      */
-    public static int getMappingModIdx(int module, int referenceModIdx) {
+    public static int getMappingModIdx(int module, int referenceModIdx, int fieldIdx) {
         int baseModIdx = DcModules.get(module) instanceof TemplateModule ? 
                         ((TemplateModule) DcModules.get(module)).getTemplatedModule().getIndex() : module;
         
-        return baseModIdx + referenceModIdx + DcModules._MAPPING;
+        return baseModIdx + referenceModIdx + DcModules._MAPPING + fieldIdx;
     }
 
     /**

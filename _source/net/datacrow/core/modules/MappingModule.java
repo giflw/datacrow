@@ -53,7 +53,7 @@ public class MappingModule extends DcModule {
      * @param referencedMod The child/referenced module. 
      */
     public MappingModule(DcModule parentMod, DcModule referencedMod, int fieldIdx) {
-        super(referencedMod.getIndex() + DcModules._MAPPING + parentMod.getIndex(), 
+        super(referencedMod.getIndex() + DcModules._MAPPING + parentMod.getIndex() + fieldIdx, 
               "", "", "", "", 
               "X_" + parentMod.getTableName() + "_" + StringUtils.normalize(parentMod.getField(fieldIdx).getSystemName()).replaceAll(" ", "").replaceAll("[\\-]", ""), 
               "X_" + parentMod.getTableShortName() + "_" + StringUtils.normalize(parentMod.getField(fieldIdx).getSystemName()).replaceAll(" ", "").replaceAll("[\\-]", ""), 

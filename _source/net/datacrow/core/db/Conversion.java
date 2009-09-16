@@ -220,7 +220,8 @@ public class Conversion {
                      "WHERE " + getColumnName() + " IS NOT NULL";
         try {
             ResultSet rs = DatabaseManager.executeSQL(sql, true);
-            DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, refMod.getIndex()));
+            DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(
+                    moduleIdx, refMod.getIndex(), DcModules.get(moduleIdx).getField(columnName).getIndex()));
         
             DcObject mapping = mappingMod.getDcObject();
             while (rs.next()) {
@@ -275,7 +276,8 @@ public class Conversion {
                     String propertyID = rs2.getString(2);
                     
                     if (getNewFieldType() == ComponentFactory._REFERENCESFIELD) {
-                        DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(moduleIdx, refMod.getIndex()));
+                        DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(
+                                moduleIdx, refMod.getIndex(), DcModules.get(moduleIdx).getField(columnName).getIndex()));
                         
                         DcObject mapping = mappingMod.getDcObject();
                         mapping.setValue(DcMapping._A_PARENT_ID, itemID);

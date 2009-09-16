@@ -711,12 +711,12 @@ public class DcTable extends JTable implements IViewComponent {
         if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD || 
             field.getFieldType() == ComponentFactory._URLFIELD) {
             c = ComponentFactory.getComponent(module.getIndex(), field.getReferenceIdx(), 
-                    ComponentFactory._SHORTTEXTFIELD, field.getLabel(), field.getMaximumLength());
+                    field.getIndex(), ComponentFactory._SHORTTEXTFIELD, field.getLabel(), field.getMaximumLength());
         } else if (field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
             c = ComponentFactory.getObjectCombo(field.getReferenceIdx());
         } else {
             c = ComponentFactory.getComponent(module.getIndex(),
-                    field.getReferenceIdx(), field.getFieldType(), field.getLabel(), field.getMaximumLength());
+                    field.getReferenceIdx(), field.getIndex(), field.getFieldType(), field.getLabel(), field.getMaximumLength());
         }
         c.setAutoscrolls(false);
         c.setBorder(null);

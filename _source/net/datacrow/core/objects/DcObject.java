@@ -299,7 +299,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         for (int i = 0; i < fields.length; i++) {
             DcField field = getField(fields[i]);
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                int mappingModIdx = DcModules.getMappingModIdx(getModule().getIndex(), field.getReferenceIdx());
+                int mappingModIdx = DcModules.getMappingModIdx(getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
                 Collection<DcMapping> mo = DataManager.getReferences(mappingModIdx, getID());
                 setValue(fields[i], mo);
             }

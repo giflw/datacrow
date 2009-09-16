@@ -201,7 +201,8 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         		   field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
         	c = ComponentFactory.getShortTextField(255);
         } else {
-        	c = ComponentFactory.getComponent(field.getModule(), field.getReferenceIdx(), field.getFieldType(), field.getLabel(), field.getMaximumLength());	
+        	c = ComponentFactory.getComponent(field.getModule(), field.getReferenceIdx(), field.getIndex(), 
+        	        field.getFieldType(), field.getLabel(), field.getMaximumLength());	
         }
         
         c = c instanceof DcLongTextField ? ComponentFactory.getShortTextField(field.getMaximumLength()) : c;

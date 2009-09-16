@@ -54,6 +54,7 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
         
         setCenteredLocation();
         setModal(true);
+        
         setVisible(true);
     }
 
@@ -82,6 +83,8 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
         //Settings panel
         //**********************************************************
         pnlSettings = new SettingsPanel(settings, true);
+        pnlSettings.setVisible(true);
+        pnlSettings.initializeSettings();
 
         //**********************************************************
         //Action panel
@@ -107,7 +110,7 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
         this.getContentPane().add(spHelp,      Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));
-        this.getContentPane().add(pnlSettings, Layout.getGBC( 0, 1, 1, 1, 15.0, 15.0
+        this.getContentPane().add(pnlSettings, Layout.getGBC( 0, 1, 1, 1, 30.0, 30.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));
         this.getContentPane().add(pnlActions,  Layout.getGBC( 0, 2, 1, 1, 0.0, 0.0
@@ -119,11 +122,12 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("cancel"))
+        if (ae.getActionCommand().equals("cancel")) {
             affirmative = false;
-        else if (ae.getActionCommand().equals("ok"))
+        } else if (ae.getActionCommand().equals("ok")) {
+            pnlSettings.saveSettings();
             affirmative = true;
-
+        }
         close();
     }
 }

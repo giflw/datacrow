@@ -441,7 +441,8 @@ public class DataManager {
      */
     @SuppressWarnings("unchecked")
     public static void addMapping(DcObject parent, DcObject child, int fieldIdx) {
-        DcMapping mapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(parent.getModule().getIndex(), child.getModule().getIndex())).getDcObject();
+        DcMapping mapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(
+                parent.getModule().getIndex(), child.getModule().getIndex(), fieldIdx)).getDcObject();
         mapping.setValue(DcMapping._A_PARENT_ID, parent.getID());
         mapping.setValue(DcMapping._B_REFERENCED_ID, child.getID());
         mapping.setReferencedObject(child);
@@ -492,7 +493,7 @@ public class DataManager {
         // updated or create the references
         for (DcField field : dco.getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                int mappingIdx = DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx());
+                int mappingIdx = DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex());
                 Collection<DcMapping> c = getReferences(mappingIdx, dco.getID());
                 c = c == null ? c = new ArrayList<DcMapping>() : c;
                 Collection<DcMapping> mappings = (Collection<DcMapping>) dco.getValue(field.getIndex());
@@ -506,7 +507,7 @@ public class DataManager {
                 }
                 
                 if (c.size() > 0) {
-                    int mappingModIdx = DcModules.getMappingModIdx(dco.getModule().getIndex(), field.getReferenceIdx());
+                    int mappingModIdx = DcModules.getMappingModIdx(dco.getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
                     Map<String, Collection<DcMapping>> map = references.get(mappingModIdx);
                     map.put(dco.getID(), c);
                 }

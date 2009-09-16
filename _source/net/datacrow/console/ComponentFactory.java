@@ -364,11 +364,12 @@ public final class ComponentFactory {
     }
     
     public static final JComponent getComponent(int majormodule, 
-                                                int minormodule, 
-                                                int index, 
+                                                int minormodule,
+                                                int fieldIdx,
+                                                int fieldType, 
                                                 String label, 
                                                 int maxTextLength) {
-        switch (index) {
+        switch (fieldType) {
             case _YESNOCOMBO:
                 return getYesNoCombo();
             case _LONGTEXTFIELD:
@@ -410,7 +411,7 @@ public final class ComponentFactory {
             case _FILELAUNCHFIELD:
                 return getFileLaunchField();
             case _REFERENCESFIELD:
-                return getReferencesField(DcModules.getMappingModIdx(majormodule, minormodule));
+                return getReferencesField(DcModules.getMappingModIdx(majormodule, minormodule, fieldIdx));
             case _DATEFIELD:
                 return getDateField();          
             case _FILESIZEFIELD:

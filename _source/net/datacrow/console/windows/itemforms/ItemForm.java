@@ -624,6 +624,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             } else {
                 JComponent c = ComponentFactory.getComponent(field.getModule(),
                                                              field.getReferenceIdx(),
+                                                             field.getIndex(),
                                                              field.getFieldType(),
                                                              field.getLabel(),
                                                              field.getMaximumLength());

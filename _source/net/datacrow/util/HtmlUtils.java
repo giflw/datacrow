@@ -58,7 +58,6 @@ public class HtmlUtils {
         Document document = getDocument(s, charset);
         return document;
     }
-    
 
     public static String toPlainText(String html) {
         return toPlainText(html, "ISO-8859-1");

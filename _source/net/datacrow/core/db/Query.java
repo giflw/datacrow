@@ -313,7 +313,7 @@ public class Query {
                 if (c != null) references.add(c);
                 
                 if (dco.isChanged(field.getIndex())) {
-                    DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx()));
+                    DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
                     String sql = "DELETE FROM " + mappingMod.getTableName() + " WHERE " +  
                                  mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = " + dco.getID();
                     queries.add(getPreparedStatement(sql));
