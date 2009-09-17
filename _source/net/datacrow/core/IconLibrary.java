@@ -134,4 +134,7 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoArrowDown = new ImageIcon(picPath + "arrow_down.png");
     public static final ImageIcon _icoFileSystemExists = new ImageIcon(picPath + "filesystem_exists.png");
     public static final ImageIcon _icoFileSystemNotExists = new ImageIcon(picPath + "filesystem_not_exists.png");
+    public static final ImageIcon _icoLanguage16 = new ImageIcon(picPath + "language16.png");
+    public static final ImageIcon _icoLanguage32 = new ImageIcon(picPath + "language32.png");
+    
 }

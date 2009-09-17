@@ -37,6 +37,7 @@ import java.util.Map;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.security.PermissionModule;
 import net.datacrow.core.modules.security.UserModule;
@@ -201,6 +202,9 @@ public class DcModules {
         
         DcPropertyModule languageModule = new DcPropertyModule(DcModules._LANGUAGE, "Language", "language", "language", "Language", "Languages");
         languageModule.setServingMultipleModules(true);
+        languageModule.setIcon16(IconLibrary._icoLanguage16);
+        languageModule.setIcon32(IconLibrary._icoLanguage32);
+        
         propertyBaseModules.put(DcModules._LANGUAGE, languageModule);        
     }
     
