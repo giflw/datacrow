@@ -136,5 +136,6 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoFileSystemNotExists = new ImageIcon(picPath + "filesystem_not_exists.png");
     public static final ImageIcon _icoLanguage16 = new ImageIcon(picPath + "language16.png");
     public static final ImageIcon _icoLanguage32 = new ImageIcon(picPath + "language32.png");
-    
+    public static final ImageIcon _icoCountry16 = new ImageIcon(picPath + "country16.png");
+    public static final ImageIcon _icoCountry32 = new ImageIcon(picPath + "country32.png");
 }

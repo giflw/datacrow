@@ -199,6 +199,8 @@ public class DcModules {
         DcPropertyModule countryModule = new DcPropertyModule(DcModules._COUNTRY, "Country", "country", "country", "Country", "Countries");
         countryModule.setServingMultipleModules(true);
         propertyBaseModules.put(DcModules._COUNTRY, countryModule);
+        countryModule.setIcon16(IconLibrary._icoCountry16);
+        countryModule.setIcon32(IconLibrary._icoCountry32);
         
         DcPropertyModule languageModule = new DcPropertyModule(DcModules._LANGUAGE, "Language", "language", "language", "Language", "Languages");
         languageModule.setServingMultipleModules(true);
