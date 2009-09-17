@@ -215,8 +215,15 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         comboFields.addActionListener(this);
         comboFields.setActionCommand("fieldSelected");
         
-        comboFilters.setPreferredSize(new Dimension(200, ComponentFactory.getPreferredFieldHeight()));
-        comboFields.setPreferredSize(new Dimension(200, ComponentFactory.getPreferredFieldHeight()));
+        comboFields.setMinimumSize(new Dimension(175, ComponentFactory.getPreferredFieldHeight()));
+        comboFields.setPreferredSize(new Dimension(175, ComponentFactory.getPreferredFieldHeight()));
+        
+        comboFilters.setPreferredSize(new Dimension(175, ComponentFactory.getPreferredFieldHeight()));
+        comboFilters.setMinimumSize(new Dimension(175, ComponentFactory.getPreferredFieldHeight()));
+        
+        comboCriteria.setMinimumSize(new Dimension(175, ComponentFactory.getPreferredFieldHeight()));
+        comboCriteria.setPreferredSize(new Dimension(175, ComponentFactory.getPreferredFieldHeight()));
+
         
         add(ComponentFactory.getLabel(DcResources.getText("lblQuickFilter") + " "));
         add(comboFields);

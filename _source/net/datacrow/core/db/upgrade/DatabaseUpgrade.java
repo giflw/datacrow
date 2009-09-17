@@ -74,7 +74,9 @@ public class DatabaseUpgrade {
     
 private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName());
     
-    private static final String _SETTING_SEPARATOR_CHAR = "separator_char";
+    private static final String _SETTING_SEPARATOR_CHAR_LAN = "separator_char_lan";
+    private static final String _SETTING_SEPARATOR_CHAR_CTR = "separator_char_ctr";
+
     private static final String _SETTING_SAFEGUARD_COLUMNS = "safeguard_columns";
     private static final String _SETTING_REMOVE_SRT = "remove_srt";
     private static final String _SETTING_CLEANUP_VALUES = "cleanup_values";
@@ -144,8 +146,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         }
 
         SettingsGroup group = new SettingsGroup("1", "");
-        group.add(new Setting(DcRepository.ValueTypes._STRING, _SETTING_SEPARATOR_CHAR, "", 
-                ComponentFactory._SHORTTEXTFIELD, "", "Separator Character", true, true));
+        group.add(new Setting(DcRepository.ValueTypes._STRING, _SETTING_SEPARATOR_CHAR_LAN, "", 
+                ComponentFactory._SHORTTEXTFIELD, "", "Separator Character for Languages", true, true));
+        group.add(new Setting(DcRepository.ValueTypes._STRING, _SETTING_SEPARATOR_CHAR_CTR, "", 
+                ComponentFactory._SHORTTEXTFIELD, "", "Separator Character for Countries", true, true));
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN, _SETTING_SAFEGUARD_COLUMNS, Boolean.FALSE, 
                 ComponentFactory._CHECKBOX, "", "Safeguard the columns (rename them to _KEEP_ + orginal name)", false, true));
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN, _SETTING_REMOVE_SRT, Boolean.TRUE, 
@@ -188,11 +192,16 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         createTable(movAudLan);
         createTable(movSubLan);
         
-        fill(DcModules.get(DcModules._MOVIE), ctr, movCtr, Movie._F_COUNTRY, "COUNTRY", group.getSettings());
-        fill(DcModules.get(DcModules._CONTACTPERSON), ctr, null, ContactPerson._K_COUNTRY, "_KEEP_COUNTRY", group.getSettings());
-        fill(DcModules.get(DcModules._MOVIE), lan, movLan, Movie._D_LANGUAGE, "LANGUAGE", group.getSettings());
-        fill(DcModules.get(DcModules._MOVIE), lan, movAudLan, Movie._1_AUDIOLANGUAGE,  "AUDIOLANGUAGE", group.getSettings());
-        fill(DcModules.get(DcModules._MOVIE), lan, movSubLan, Movie._2_SUBTITLELANGUAGE, "SUBTITLELANGUAGE", group.getSettings());
+        String sepLan = group.getSettings().get(_SETTING_SEPARATOR_CHAR_LAN).getValueAsString();
+        String sepCtr= group.getSettings().get(_SETTING_SEPARATOR_CHAR_CTR).getValueAsString();
+        
+        fill(DcModules.get(DcModules._MOVIE), ctr, movCtr, Movie._F_COUNTRY, "COUNTRY", group.getSettings(), sepCtr);
+        
+        fill(DcModules.get(DcModules._CONTACTPERSON), ctr, null, ContactPerson._K_COUNTRY, "_KEEP_COUNTRY", group.getSettings(), null);
+        
+        fill(DcModules.get(DcModules._MOVIE), lan, movLan, Movie._D_LANGUAGE, "LANGUAGE", group.getSettings(), sepLan);
+        fill(DcModules.get(DcModules._MOVIE), lan, movAudLan, Movie._1_AUDIOLANGUAGE,  "AUDIOLANGUAGE", group.getSettings(), sepLan);
+        fill(DcModules.get(DcModules._MOVIE), lan, movSubLan, Movie._2_SUBTITLELANGUAGE, "SUBTITLELANGUAGE", group.getSettings(), sepLan);
         
         LogForm.getInstance().setVisible(false);
     }
@@ -209,7 +218,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
      * 
      * @throws Exception A generic exception. 
      */
-    private void fill(DcModule mod, DcModule refMod, DcModule mapMod, int fieldIdx, String oldName, Map<String, Setting> settings) throws Exception {
+    private void fill(DcModule mod, DcModule refMod, DcModule mapMod, int fieldIdx, String oldName, Map<String, Setting> settings, String sep) throws Exception {
         
         boolean multiRef = mapMod != null;
         
@@ -219,7 +228,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         String sql = "SELECT ID, " + oldName + " FROM " + mod.getTableName() + " WHERE " + oldName + " IS NOT NULL";
         ResultSet rs = stmt.executeQuery(sql);
         
-        String sep = settings.get(_SETTING_SEPARATOR_CHAR).getValueAsString();
         boolean cleanup = Boolean.valueOf(settings.get(_SETTING_CLEANUP_VALUES).getValueAsString());
         boolean removeSrt = Boolean.valueOf(settings.get(_SETTING_REMOVE_SRT).getValueAsString());
         boolean safeguard = Boolean.valueOf(settings.get(_SETTING_SAFEGUARD_COLUMNS).getValueAsString());
@@ -231,7 +239,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 s = s.trim();
 
                 Collection<String> values = new ArrayList<String>();
-                if (multiRef && !Utilities.isEmpty(sep) && s.indexOf(sep) != -1) {
+                if (multiRef && (sep != null && sep.length() > 0) && s.indexOf(sep) != -1) {
                     StringTokenizer st = new StringTokenizer(s, sep);
                     while (st.hasMoreElements())
                         values.add((String) st.nextElement());
@@ -245,6 +253,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                         continue;
                     
                     value = value.trim();
+                    
+                    if (value.length() == 0)
+                        continue;
                     
                     // cleanup (length check to safeguard abbreviations like US and USA)
                     if (cleanup && value.length() > 3) {

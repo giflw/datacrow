@@ -49,6 +49,7 @@ public class Software extends DcMediaObject {
     public static final int _V_STATE = 17;
     public static final int _W_STORAGEMEDIUM = 18;
     public static final int _X_EAN = 19;
+    public static final int _Y_VERSION = 20;
 
     public Software() {
        super(DcModules._SOFTWARE);
