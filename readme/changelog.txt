@@ -1,7 +1,6 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.5 [Release on xx/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-
 The distribution has been changed. There is no longer a separate Web Module package.
 Instead all have been merged together. This makes the distribution a bit larger but puts
 the web module a bit more into the spotlight. The installer offers the option to exclude
@@ -13,9 +12,9 @@ web module).
 - Movie import "settings" Tab: Storage Medium items are gone.
 - Encoding issue in IMDB import. 
 - Bol.com did no longer retrieve the description (page was changed).
-- Incorrect font for dropdown / list boxes.
-- Contact person dropdown / list box remains empty (loan administration).
-- Could not set an empty value for a dropdown field.
+- Incorrect font for drop-down / list boxes.
+- Contact person drop-down / list box remains empty (loan administration).
+- Could not set an empty value for a drop-down field.
 - Web Server: Module icons are not refreshed when changing the icons using the 
   module wizards.
 - Web Server: Large module icons shown for helper modules. 
@@ -39,6 +38,7 @@ web module).
 - Fields on the item form are now styled more appropriately.
 - Added a summary tab (for new installations only) as the item form was getting a tad
   cluttered with fields.
+- File privileges checks are now performed on the files in the distributions.
 
 [New]
 - Directories can now be marked as being drives. This is essentially a fix for non 

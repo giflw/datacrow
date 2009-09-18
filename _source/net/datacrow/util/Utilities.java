@@ -294,32 +294,6 @@ public class Utilities {
         return fileSize;  
     }
     
-    public static String getSubtitles(String filename) {
-        String s = "";
-        try {
-            File f = new File(filename);
-            File dir = f.getParentFile();
-            String movieName = f.getName().substring(0,f.getName().lastIndexOf("."));
-            String [] allFiles = dir.list();
-            for (int i = 0; i < allFiles.length; i++){
-                String name = allFiles[i];
-                if (    name.startsWith(movieName) && 
-                        ( name.toUpperCase().endsWith("SRT") ||
-                          name.toUpperCase().endsWith("SUB") ||
-                          name.toUpperCase().endsWith("SSA"))) {
-                    
-                    if (!s.equals("")) {
-                        s = s + " ";
-                    }
-                    s = s + name.substring(movieName.length());
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Could not determine the subtitles for " + filename, e);
-        }
-        return s;
-    }
-    
     /**
      * Creates a unique ID. Can be used for custom IDs in the database.
      * Based on date / time + random number

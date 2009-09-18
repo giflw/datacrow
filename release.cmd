@@ -12,8 +12,9 @@ call build.bat
 cd ..\datacrow
 del plugins\*.class
 copy ..\plugins\_build\\plugins\*.* .\plugins\ /Y
-xcopy * ..\..\release\datacrow /s /EXCLUDE:release.exclude
+xcopy * ..\..\release\datacrow /s /o /EXCLUDE:release.exclude
 cd ..\..\release\datacrow
+chmod -R +r+w *
 rd _classes /S /Q
 rd homepage /S /Q
 rd logo_design /S /Q

@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -558,8 +557,11 @@ public class DcModules {
         Collection<DcModule> references = new ArrayList<DcModule>();
         for (DcField field : DcModules.get(moduleIdx).getFields()) {
             int referenceIdx = field.getReferenceIdx();
-            if (referenceIdx != moduleIdx && referenceIdx > 0)
-                references.add(DcModules.get(referenceIdx));
+            if (referenceIdx != moduleIdx && referenceIdx > 0) {
+                DcModule module = DcModules.get(referenceIdx);
+                if (!references.contains(module))
+                    references.add(module);
+            }
         }
         return references;
     }  
@@ -605,9 +607,9 @@ public class DcModules {
      */
     public static Collection<DcModule> getAllModules() {
         List<DcModule> c = new ArrayList<DcModule>();
-        for (Iterator<DcModule> iter = modules.values().iterator(); iter.hasNext(); )
-            c.add(iter.next());
-        
+        for (DcModule module : modules.values())
+                c.add(module);
+
         Collections.sort(c); 
         return c;
     }

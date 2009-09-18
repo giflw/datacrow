@@ -29,8 +29,6 @@ import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.List;
 
-import net.datacrow.util.Utilities;
-
 public class FilePropertiesMovie extends FileProperties {
     
     private static final int[][] MAGIC_BYTES = { 
@@ -97,9 +95,6 @@ public class FilePropertiesMovie extends FileProperties {
 				setMetaData(fileProperties.getMetaData());
 			}
 			
-			if (getSubtitles().length() == 0)
-	            setSubtitles(Utilities.getSubtitles(filename));
-            
 		} catch (Exception e) {
 			throw new Exception("File is corrupted. Some info may have been saved.");
 		} finally {
