@@ -187,6 +187,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         public DefinitionPanel(DcModule module) {
             this.module = module;
             table = ComponentFactory.getDCTable(false, false);
+            table.setShowVerticalLines(true);
             buildPanel();
         }
 
