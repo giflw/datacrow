@@ -301,7 +301,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,        
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially,
-                            Boolean.FALSE,
+                            Boolean.TRUE,
                             -1,
                             "",
                             "",
