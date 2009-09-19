@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.Serializable;
 
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.Utilities;
 
@@ -47,25 +46,30 @@ public class DcWebModule implements Serializable {
         super();
         this.index = index;
         this.label = label;
+        
+        
+        createIcon(new File(DataCrow.webDir, getIcon16()).toString(), DcModules.get(index).getXmlModule().getIcon16());
+        createIcon(new File(DataCrow.webDir, getIcon32()).toString(), DcModules.get(index).getXmlModule().getIcon32());
     }
 
-    public String getIcon() {
-        DcModule module = DcModules.get(index);
-        
-        boolean main = DcModules.isTopModule(index);
-        String filename = main ? getIcon32() : getIcon16();
+    private void createIcon(String filename, byte[] icon) {
         File file = new File(DataCrow.webDir, filename);
-        file.deleteOnExit();
         
-        if (!file.exists()) {
-            try {
-                Utilities.writeToFile(main ? module.getXmlModule().getIcon32() : module.getXmlModule().getIcon16(), file);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (file.exists()) {
+            file.delete();
+            file = new File(DataCrow.webDir, filename);
         }
-        
-        return filename; 
+            
+        file.deleteOnExit();
+        try {
+            Utilities.writeToFile(icon, filename);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public String getIcon() {
+        return DcModules.isTopModule(index) ? getIcon32() : getIcon16(); 
     }
     
     public String getIcon16() {

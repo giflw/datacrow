@@ -25,10 +25,12 @@
 
 package net.datacrow.core.web.model;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
@@ -51,6 +53,12 @@ public class DcWebModules extends DcSecured implements Serializable  {
         modules.clear();
         
         if (!isLoggedIn()) return;
+        
+        String[] files = new File(DataCrow.webDir, "/images/modules/").list();
+        if (files != null) {
+            for (String file : files)
+                new File(DataCrow.webDir, "/images/modules/" + file).delete();
+        }
         
         for (DcModule module : DcModules.getAllModules()) {
             if (    getUser().isAuthorized(module) &&
