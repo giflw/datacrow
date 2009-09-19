@@ -54,6 +54,7 @@
       <tocitem target="dc.settings.filehash" text="File Hashing"/>
       <tocitem target="dc.settings.itemformsettings" text="Item Form Settings"/>
       <tocitem target="dc.settings.drivemappings" text="Drive Mappings"/>
+      <tocitem target="dc.settings.directoriesasdrives" text="Directories as Drives"/>
     </tocitem> 
 
     <tocitem target="dc.Tools" text="Tools">

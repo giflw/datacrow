@@ -41,6 +41,7 @@
     <mapID target="dc.settings.tableview" url="settings/tableview.html"/>
     <mapID target="dc.settings.itemformsettings" url="settings/itemformsettings.html"/>
     <mapID target="dc.settings.drivemappings" url="settings/drivemappings.html"/>
+    <mapID target="dc.settings.directoriesasdrives" url="settings/directoriesasdrives.html"/>    
 
     <mapID target="dc.modules.create" url="modules/createmodulewizard.html"/>
     <mapID target="dc.modules.alter" url="modules/altermodulewizard.html"/>
