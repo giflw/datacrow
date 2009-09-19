@@ -85,7 +85,7 @@ public class ItemSearch extends DcBean {
         
         if (getUser().isEditingAllowed(DcModules.get(objects.getModule()))) {
             NavigationMenuItem edit = getMenuItem(DcResources.getText("lblEdit"), null, null);
-            edit.add(getMenuItem(DcResources.getText("lblCreateNew"), "#{itemDetails.create}", "modules/" + DcModules.get(objects.getModule()).getName() + "16.png"));
+            edit.add(getMenuItem(DcResources.getText("lblCreateNew"), "#{itemDetails.create}", "/images/modules/" + DcModules.get(objects.getModule()).getName().toLowerCase() + "16.png"));
             menu.add(edit);
         }
         
