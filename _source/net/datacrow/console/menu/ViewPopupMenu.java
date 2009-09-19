@@ -134,9 +134,6 @@ public class ViewPopupMenu extends DcPopupMenu {
         
         PluginHelper.add(this, "FileLauncher", module.getIndex());
         
-        addSeparator();
-        PluginHelper.add(this, "Report");
-        
         Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(dco, viewType, module.getIndex());
         for (Plugin plugin : plugins) {
             if (plugin.isShowInPopupMenu()) {
