@@ -7,6 +7,9 @@ the web module a bit more into the spotlight. The installer offers the option to
 the web module. The zipped distribution contains, of course, everything (including the
 web module).
 
+Thanks to Ingo Macherius for designing and donating the new movie report 
+(List Report (xvids) and for helping to test the upgrade process.
+
 [Fixed]
 - ISBN search with ISBN's containing non-digits now also (finally) works.
 - Movie import "settings" Tab: Storage Medium items are gone.
@@ -20,10 +23,11 @@ web module).
 - Web Server: Large module icons shown for helper modules. 
 - General errors while retrieving results from IMDB.com and Amazon
   (empty message pops up and a NullPointerException is logged).
- 
-[Changed]
+- Year was not always set for IMDB movie results.
 - Alapage.com online search has been removed. The page has been redesigned making 
   it necessary to create a new implementation. This will be done in a later version. 
+ 
+[Changed]
 - File import for e-books: if the filename contains an ISBN it is used to query the
   online service.
 - Online Search: if the query contains an ISBN it is used to query the item.
@@ -46,6 +50,8 @@ web module).
   'directory as drives' functionality.
 - The software, music album, audio CD, book and movie module have 2 new fields:
   language and country.  
+- An additional movie report has been added. This report was created by 
+  Ingo Macherius
 
 
 -----------------------------------------------------------------------------------------

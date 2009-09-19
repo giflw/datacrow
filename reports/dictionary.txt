@@ -51,6 +51,7 @@ xsl reference name  [audio-cd]
   Artists                 = artists
   Available               = available
   Container               = container
+  Countries               = countries
   Created                 = created
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
@@ -61,7 +62,9 @@ xsl reference name  [audio-cd]
   Genres                  = genres
   ID                      = id
   Item                    = item
+  Item Value              = item-value
   Label                   = label
+  Languages               = languages
   Lend By                 = lend-by
   Modified                = modified
   Picture Back            = picture-back
@@ -107,13 +110,17 @@ xsl reference name  [book]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Authors                 = authors
   Available               = available
+  Binding                 = binding
   Category                = category
   Container               = container
+  Countries               = countries
   Created                 = created
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
   Description             = description
   Due Date                = due-date
+  Edition Comment         = edition-comment
+  Edition Type            = edition-type
   Filehash                = filehash
   Filehash Type           = filehash-type
   Filename                = filename
@@ -122,7 +129,9 @@ xsl reference name  [book]
   Isbn 10                 = isbn-10
   Isbn 13                 = isbn-13
   Item                    = item
+  Item Value              = item-value
   Label                   = label
+  Languages               = languages
   Lend By                 = lend-by
   Modified                = modified
   Pages                   = pages
@@ -254,6 +263,7 @@ xsl reference name  [image]
   Category                = category
   Compression (Bits)      = compression-bits
   Container               = container
+  Countries               = countries
   Created                 = created
   Date                    = date
   Days Loaned             = days-loaned
@@ -268,6 +278,7 @@ xsl reference name  [image]
   ID                      = id
   Image                   = image
   Item                    = item
+  Item Value              = item-value
   Label                   = label
   Lend By                 = lend-by
   Modified                = modified
@@ -290,6 +301,7 @@ xsl reference name  [media-item]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Available               = available
   Container               = container
+  Countries               = countries
   Created                 = created
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
@@ -297,6 +309,7 @@ xsl reference name  [media-item]
   Due Date                = due-date
   ID                      = id
   Item                    = item
+  Item Value              = item-value
   Label                   = label
   Lend By                 = lend-by
   Modified                = modified
@@ -318,12 +331,12 @@ xsl reference name  [movie]
   Audio Bitrate           = audio-bitrate
   Audio Channels          = audio-channels
   Audio Codec             = audio-codec
-  Audio Language          = audio-language
+  Audio Languages         = audio-languages
   Audio Sample Rate       = audio-sample-rate
   Available               = available
   Certification           = certification
   Container               = container
-  Country                 = country
+  Countries               = countries
   Created                 = created
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
@@ -343,8 +356,9 @@ xsl reference name  [movie]
   Height                  = height
   ID                      = id
   Item                    = item
+  Item Value              = item-value
   Label                   = label
-  Language                = language
+  Languages               = languages
   Lend By                 = lend-by
   Modified                = modified
   Picture Back            = picture-back
@@ -358,7 +372,7 @@ xsl reference name  [movie]
   Service URL             = service-url
   State                   = state
   Storage Medium          = storage-medium
-  Subtitle Language       = subtitle-language
+  Subtitle Languages      = subtitle-languages
   Title                   = title
   Title (local)           = title-local
   User Long Text Field    = user-long-text-field
@@ -380,6 +394,7 @@ xsl reference name  [music-album]
   Artists                 = artists
   Available               = available
   Container               = container
+  Countries               = countries
   Created                 = created
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
@@ -390,7 +405,9 @@ xsl reference name  [music-album]
   Genres                  = genres
   ID                      = id
   Item                    = item
+  Item Value              = item-value
   Label                   = label
+  Languages               = languages
   Lend By                 = lend-by
   Modified                = modified
   Picture Back            = picture-back
@@ -462,6 +479,7 @@ xsl reference name  [software-item]
   Available               = available
   Category                = category
   Container               = container
+  Countries               = countries
   Created                 = created
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
@@ -475,7 +493,9 @@ xsl reference name  [software-item]
   Filesize                = filesize
   ID                      = id
   Item                    = item
+  Item Value              = item-value
   Label                   = label
+  Languages               = languages
   Lend By                 = lend-by
   Modified                = modified
   Multiplayer ?           = multiplayer-
@@ -499,6 +519,7 @@ xsl reference name  [software-item]
   User Numeric Field 2    = user-numeric-field-2
   User Short Text Field 1 = user-short-text-field-1
   User Short Text Field 2 = user-short-text-field-2
+  Version                 = version
   Webpage                 = webpage
   Year                    = year
 
@@ -516,6 +537,7 @@ xsl reference name  [user]
   Enabled      = enabled
   ID           = id
   Item         = item
+  Item Value   = item-value
   Label        = label
   Login Name   = login-name
   Modified     = modified
