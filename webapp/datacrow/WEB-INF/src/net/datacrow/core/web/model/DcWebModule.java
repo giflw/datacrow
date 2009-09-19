@@ -47,7 +47,6 @@ public class DcWebModule implements Serializable {
         this.index = index;
         this.label = label;
         
-        
         createIcon(new File(DataCrow.webDir, getIcon16()).toString(), DcModules.get(index).getXmlModule().getIcon16());
         createIcon(new File(DataCrow.webDir, getIcon32()).toString(), DcModules.get(index).getXmlModule().getIcon32());
     }
