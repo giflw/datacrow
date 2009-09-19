@@ -52,7 +52,13 @@ public class HtmlUtils {
     public static Document getDocument(URL url, String charset) throws Exception {
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
-        String s = connection.getString(charset);
+        
+        String s;
+        if ("ISO-8859-1".equals(charset))
+            s = connection.getString();
+        else 
+            s = connection.getString(charset);
+        
         connection.close();        
 
         Document document = getDocument(s, charset);
@@ -81,7 +87,16 @@ public class HtmlUtils {
                 
             XPath xpath = XPathFactory.newInstance().newXPath();
             Node node = (Node) xpath.evaluate("/html/body", document, XPathConstants.NODE);
-            return node.getTextContent();
+
+            String text = node.getTextContent();
+            
+            while (text.length() > 1 && (text.startsWith("\r") || text.startsWith("\n")))
+                text = text.substring(1);
+
+            while (text.length() > 1 && (text.endsWith("\r") || text.endsWith("\n")))
+                text = text.substring(0, text.length() - 1);
+            
+            return text;
             
         } catch (Exception e) {
             logger.debug("Failed to parse: " + html);

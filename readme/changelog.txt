@@ -26,6 +26,7 @@ Thanks to Ingo Macherius for designing and donating the new movie report
 - Year was not always set for IMDB movie results.
 - Alapage.com online search has been removed. The page has been redesigned making 
   it necessary to create a new implementation. This will be done in a later version. 
+- MusicBrainz search: titles of album and tracks start with a new line character.
  
 [Changed]
 - File import for e-books: if the filename contains an ISBN it is used to query the
