@@ -46,9 +46,6 @@ Thanks to Ingo Macherius for designing and donating the new movie report
   cluttered with fields.
 - File privileges checks are now performed on the files in the distributions.
 - <.SRT> will no longer be added as a language for movies (Movie File Import).
-- A new field has been added to the software module: version.
-- Three new fields have been added the book module: binding, edition type and
-  edition comment. 
 
 [New]
 - Directories can now be marked as being drives. This is essentially a fix for non 
@@ -56,9 +53,8 @@ Thanks to Ingo Macherius for designing and donating the new movie report
   'directory as drives' functionality.
 - The software, music album, audio CD, book and movie module have 2 new fields:
   language and country.  
-- Two new property modules: country and language.
-- An additional movie report (List Report (xvids)) has been added. 
-  This report is created by Ingo Macherius
+- An additional movie report has been added. This report was created by 
+  Ingo Macherius
 
 
 -----------------------------------------------------------------------------------------
