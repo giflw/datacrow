@@ -347,6 +347,7 @@ public class View extends DcPanel implements ListSelectionListener {
             boolean saved = isChangesSaved();
             if (!saved && getCurrentTask() != null) {
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
+                qb.setVisible(true);
                 if (qb.isAffirmative())
                     save();
                 else

@@ -66,6 +66,7 @@ public class ContactPerson extends DcObject {
             super.delete();
         } else {
             QuestionBox qb = new QuestionBox(DcResources.getText("msgDeletePersonLendItems"));
+            qb.setVisible(true);
             if (qb.isAffirmative()) {
                 DatabaseManager.executeQuery("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
                                              loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 

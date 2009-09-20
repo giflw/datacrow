@@ -84,6 +84,7 @@ public class DeleteModuleWizard extends Wizard {
     public void finish() throws WizardException {
         
         QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteModuleConfirmation"));
+        qb.setVisible(true);
         if (!qb.isAffirmative())
             return;
         

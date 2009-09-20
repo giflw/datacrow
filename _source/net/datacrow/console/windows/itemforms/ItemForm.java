@@ -305,6 +305,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     public void close(boolean aftersave) {
         if (!aftersave && update && dco != null && (!readonly && isChanged())) {
             QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
+            qb.setVisible(true);
             if (qb.isAffirmative()) {
                 saveValues();
                 return;
@@ -414,7 +415,8 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     protected void deleteValues() {
         QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion"), this);
-
+        qb.setVisible(true);
+        
         if (qb.isAffirmative()) {
             String id = dco.getID();
             dco.clearValues();

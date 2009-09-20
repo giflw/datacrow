@@ -70,7 +70,9 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         super();
         createSettings();
         getSettings().setSettingsFile(new File(DataCrow.installationDir + "data/data_crow.properties"));
-        load();
+        
+        if (DataCrow.loadSettings)
+            load();
     }
 
     @Override

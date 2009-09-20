@@ -54,11 +54,19 @@ public class QuestionBox extends DcDialog implements ActionListener {
     private JButton buttonYes;
     private JButton buttonNo;
     private JPanel panel = new JPanel();
+    
+    private java.util.concurrent.atomic.AtomicBoolean activeDialog;
 
     private boolean affirmative = false;
     
     private final JLabel labelIcon = ComponentFactory.getLabel("");
 
+    public QuestionBox(String message, java.util.concurrent.atomic.AtomicBoolean activeDialog) {
+        super();
+        this.activeDialog = activeDialog;
+        init(message);
+    }
+    
     public QuestionBox(String message) {
         super(DcSwingUtilities.getRootFrame());
         init(message);
@@ -80,7 +88,19 @@ public class QuestionBox extends DcDialog implements ActionListener {
         buttonNo = null;
         panel = null;        
         super.close();
+        
+        setVisible(false);
+        dispose();
     }
+    
+    @Override
+    public void dispose() {
+        synchronized (activeDialog) {
+            activeDialog.set(false);
+            activeDialog.notifyAll();
+        }
+        super.dispose();
+    }    
     
     private void init(String message) {
         buildDialog();
@@ -94,7 +114,6 @@ public class QuestionBox extends DcDialog implements ActionListener {
         setCenteredLocation();
 
         buttonYes.requestFocus();
-        this.setVisible(true);
     }
 
     private void buildDialog() {

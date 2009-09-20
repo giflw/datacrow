@@ -320,6 +320,7 @@ public class FilterDialog extends DcDialog implements ActionListener {
             
             if (!saved && view.getCurrentTask() != null) {
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
+                qb.setVisible(true);
                 if (qb.isAffirmative())
                     view.save();
                 

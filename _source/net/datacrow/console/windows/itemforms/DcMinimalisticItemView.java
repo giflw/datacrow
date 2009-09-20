@@ -334,6 +334,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 denyActions();
                 
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion")); 
+                qb.setVisible(true);
                 if (!qb.isAffirmative()) {
                     stopRunning();
                 } else {

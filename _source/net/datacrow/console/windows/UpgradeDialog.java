@@ -47,15 +47,17 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
 
     private SettingsPanel pnlSettings;
     private boolean affirmative = false;
+    private java.util.concurrent.atomic.AtomicBoolean activeDialog;
     
-    public UpgradeDialog(String help, SettingsGroup settings) {
+    public UpgradeDialog(String help, SettingsGroup settings, java.util.concurrent.atomic.AtomicBoolean activeDialog) {
         super();
+        
+        this.activeDialog = activeDialog;
+        
         build(help, settings);
         
         setCenteredLocation();
         setModal(true);
-        
-        setVisible(true);
     }
 
     public boolean isAffirmative() {
@@ -66,6 +68,11 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
     public void close() {
         pnlSettings = null;
         super.close();
+        
+        synchronized (activeDialog) {
+            activeDialog.set(false);
+            activeDialog.notifyAll();
+        }
     }
 
     protected void build(String help, SettingsGroup settings) {

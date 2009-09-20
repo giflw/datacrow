@@ -47,8 +47,16 @@ import net.datacrow.settings.definitions.IDefinitions;
  */
 public class DcSettings {
 
-    private static final DcApplicationSettings applicationSettings = new DcApplicationSettings();
+    private static DcApplicationSettings applicationSettings = new DcApplicationSettings();
 
+    /**
+     * Saves all settings to file.
+     */
+    public static void reset() {
+        applicationSettings = new DcApplicationSettings();
+    }
+
+    
     /**
      * Saves all settings to file.
      */

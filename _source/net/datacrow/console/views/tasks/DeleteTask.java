@@ -52,6 +52,7 @@ public class DeleteTask extends DataTask {
                 SwingUtilities.invokeAndWait(new Runnable() {
                     public void run() {
                         QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion")); 
+                        qb.setVisible(true);
                         if (!qb.isAffirmative())
                             stopRunning();
                     }

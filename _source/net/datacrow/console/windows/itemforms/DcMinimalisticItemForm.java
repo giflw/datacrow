@@ -89,6 +89,7 @@ public class DcMinimalisticItemForm extends ItemForm {
     @Override
     protected void deleteValues() {
         QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion"), this);
+        qb.setVisible(true);
         
         if (qb.isAffirmative()) {
             String id = dco.getID();

@@ -167,10 +167,12 @@ public class Restore extends Thread {
         
         if (version == null || version.isUndetermined()) {
             QuestionBox qb = new QuestionBox(DcResources.getText("msgCouldNotDetermineVersion"));
+            qb.setVisible(true);
             if (!qb.isAffirmative())
                 return false;
         } else if (version != null && version.isOlder(new Version(3, 4, 13, 0))) {
             QuestionBox qb = new QuestionBox(DcResources.getText("msgOldVersion3.4.12"));
+            qb.setVisible(true);
             if (!qb.isAffirmative())
                 return false;
         }

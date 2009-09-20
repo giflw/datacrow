@@ -50,6 +50,7 @@ import net.datacrow.console.windows.help.StartupHelpDialog;
 import net.datacrow.console.windows.loan.LoanInformationForm;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
+import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.console.windows.security.LoginDialog;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
@@ -108,6 +109,8 @@ public class DataCrow {
     private static boolean noSplash = false;
     private static boolean isWebModuleInstalled = false;
     
+    public static boolean loadSettings = true;
+    
     public static MainFrame mainFrame;
     private static SplashScreen splashScreen;
 
@@ -146,6 +149,8 @@ public class DataCrow {
                 noSplash = true;
             } else if (args[i].toLowerCase().startsWith("-webserver")) {
                 webserverMode = true;
+            } else if (args[i].toLowerCase().startsWith("-clearsettings")) {
+                loadSettings = false;
             } else if (args[i].toLowerCase().startsWith("-credentials:")) {
                 
                 String credentials = args[i].substring("-credentials:".length());
@@ -223,11 +228,34 @@ public class DataCrow {
             
             // load resources
             new DcResources();
+            new DcSettings();
+            checkPlatform();
             
             // load the settings
-            new DcSettings();
-            
-            checkPlatform();
+            Version old = DatabaseManager.getVersion();
+            if (old.getMajor() > 0 && old.isOlder(version)) {
+                final java.util.concurrent.atomic.AtomicBoolean activeDialog = new java.util.concurrent.atomic.AtomicBoolean(true);
+                final QuestionBox qb = new QuestionBox("Please be aware that with this new version changes have been made to several modules. These " +
+                        "changes combined with the old settings can impact the movie IMDB search. It is therefor recommended to load the new default " +
+                        "settings. If you do not wish to do this make sure to check all the settings as available in the online search form. " +
+                        "Loading the default settings also improves the default layout of the item form, which migth look cluttered otherwise " +
+                        "with the old settings. Do you want to use the new default settings?", activeDialog);
+                
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        qb.setVisible(true);
+                    }
+                });
+                
+                synchronized (activeDialog) {
+                    while (activeDialog.get() == true)
+                        activeDialog.wait();
+                }
+                
+                loadSettings = !qb.isAffirmative();
+                if (!loadSettings)
+	                DcSettings.reset();
+            }
             
             if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
                 DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {

@@ -225,6 +225,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             
             if (field.isOverwritable()) {
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteField"));
+                qb.setVisible(true);
                 if (qb.isAffirmative())
                     table.removeRow(table.getSelectedRow());
             } else {
