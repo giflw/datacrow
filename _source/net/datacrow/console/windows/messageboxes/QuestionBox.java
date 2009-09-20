@@ -95,9 +95,11 @@ public class QuestionBox extends DcDialog implements ActionListener {
     
     @Override
     public void dispose() {
-        synchronized (activeDialog) {
-            activeDialog.set(false);
-            activeDialog.notifyAll();
+        if (activeDialog != null) {
+            synchronized (activeDialog) {
+                activeDialog.set(false);
+                activeDialog.notifyAll();
+            }
         }
         super.dispose();
     }    
