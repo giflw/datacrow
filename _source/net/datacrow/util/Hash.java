@@ -94,8 +94,9 @@ public class Hash {
                     fileSize = currentFilesize;
                 }
                 
+                long max = DcSettings.getLong(DcRepository.Settings.stHashMaxFileSizeKb);
                 // check if the hash should be changed
-                if ( fileSize < DcSettings.getInt(DcRepository.Settings.stHashMaxFileSizeKb) &&
+                if ( (max == 0 || fileSize <= max) &&
                     ((currentHash == null || (dco.isChanged(DcObject._SYS_FILENAME)  && 
                                              !dco.isChanged(DcObject._SYS_FILEHASH))) || 
                     !checksum.getName().equals(currentHashType))) {

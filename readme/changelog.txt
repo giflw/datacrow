@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.5.1 [Release on xx/09/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- File size for file hashing now allows larger file sizes to be set. Setting the value to
+  zero will now allow hashes to be created for files of any size.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.5 [Release on 20/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 The distribution has been changed. There is no longer a separate Web Module package.

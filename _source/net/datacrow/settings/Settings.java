@@ -103,11 +103,15 @@ public abstract class Settings {
         return (DcLookAndFeel) get(key);
     }
     
+    public long getLong(String key) {
+        Object o = get(key);
+        return o instanceof Long ? ((Long) o).longValue() : 0l;
+    }    
+    
     public int getInt(String key) {
         Object o = get(key);
         return o instanceof Integer ? ((Integer) o).intValue() :
                o instanceof Long ? ((Long) o).intValue() : 0;
-               //o instanceof String ? Integer.valueOf((String) o) : 0;
     }
 
     public boolean getBoolean(String key) {

@@ -113,6 +113,10 @@ public class DcSettings {
         return applicationSettings.getLookAndFeel(key);
     }
     
+    public static long getLong(String key) {
+        return applicationSettings.getLong(key);
+    }    
+    
     public static int getInt(String key) {
         return applicationSettings.getInt(key);
     }
