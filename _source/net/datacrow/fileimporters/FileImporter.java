@@ -384,7 +384,6 @@ public abstract class FileImporter implements ISynchronizerClient {
     }
 
     public IServer getServer() {
-        // TODO Auto-generated method stub
         return getClient().getServer();
     }
 
