@@ -129,11 +129,9 @@ public abstract class Synchronizer {
                     for (Iterator iter = ((Collection) value).iterator(); iter.hasNext(); ) {
                         DcObject o = (DcObject) iter.next();
                         if (o instanceof DcMapping) {
-                            o.setValue(DcMapping._A_PARENT_ID, dco.getID());
                             Collection c = (Collection) dco.getValue(field);
                             c = c == null ? new ArrayList<DcMapping>() : c;
-                            c.add(o);
-                            dco.setValue(field, c);
+                            DataManager.createReference(dco, field, ((DcMapping) o).getReferencedObject());
                         } else {
                             DataManager.createReference(dco, field, o);
                         }

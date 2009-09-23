@@ -452,8 +452,9 @@ public class DataManager {
         
         // check if a mapping exists already
         for (DcMapping m : mappings) {
-            if ((m.getReferencedObject() != null && m.getReferencedObject().equals(child)) || 
-                (m.getReferencedObject() != null && m.getReferencedObject().toString().equals(child.toString()))     )
+            if (m.getReferencedObject() == null) continue;
+
+            if (m.getReferencedObject().equals(child) || m.getReferencedObject().toString().equals(child.toString()))
                 return;
         }
         
