@@ -44,6 +44,8 @@ public class OnlineItemRetriever extends Thread {
     
     private SearchTask task;
     private DcObject dco;
+    
+    private boolean finished = false;
 
     public OnlineItemRetriever(SearchTask task, DcObject dco) {
         this.task = task;
@@ -56,6 +58,10 @@ public class OnlineItemRetriever extends Thread {
         return dco;
     }
     
+    private boolean finished() {
+        return finished;
+    }
+    
     @Override
     public void run() {
         PollerTask poller = new PollerTask(this);
@@ -63,6 +69,7 @@ public class OnlineItemRetriever extends Thread {
         
         try {
             dco = task.query(dco);
+            finished = true;
         } catch (Exception e) {
             new MessageBox(e.getMessage(), MessageBox._ERROR);
             logger.error(e, e);
@@ -71,10 +78,7 @@ public class OnlineItemRetriever extends Thread {
 
     private class PollerTask extends Thread {
         
-        private Thread thread;
-        
         public PollerTask(Thread thread) {
-            this.thread = thread;
             setPriority(Thread.MIN_PRIORITY);
         }
         
@@ -82,7 +86,7 @@ public class OnlineItemRetriever extends Thread {
         public void run() {
             
             final ProgressDialog dlg = new ProgressDialog(DcResources.getText("msgRetrievingItemDetails", dco.getName()));
-            while (thread.isAlive()) {
+            while (!finished()) {
                 SwingUtilities.invokeLater(
                         new Thread(new Runnable() { 
                             public void run() {
