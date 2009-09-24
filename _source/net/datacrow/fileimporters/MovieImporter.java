@@ -86,8 +86,8 @@ public class MovieImporter extends FileImporter {
             movie.setValue(Movie._O_AUDIOCODEC, fpm.getAudioCodec());
             movie.setValue(Movie._P_WIDTH, Long.valueOf(fpm.getVideoWidth()));
             movie.setValue(Movie._Q_HEIGHT, Long.valueOf(fpm.getVideoHeight()));
-            movie.setValue(Movie._R_FPS, Long.valueOf(fpm.getVideoRate()));
-            movie.setValue(Movie._S_FRAMES, Long.valueOf(fpm.getDuration() * fpm.getVideoRate()));
+            movie.setValue(Movie._R_FPS, Double.valueOf(fpm.getVideoRate()));
+            movie.setValue(Movie._S_FRAMES, (long) (fpm.getDuration() * fpm.getVideoRate()));
             movie.setValue(Movie._T_AUDIOBITRATE, Long.valueOf(fpm.getAudioBitRate()));
             movie.setValue(Movie._U_AUDIOSAMPLINGRATE, Long.valueOf(fpm.getAudioRate()));
             movie.setValue(Movie._V_AUDIOCHANNEL, Long.valueOf(fpm.getAudioChannels()));

@@ -188,25 +188,25 @@ class FilePropertiesMPEG extends FileProperties {
             case (0): 
                 return false;
             case (1):
-                setVideoRate(23976);
+                setVideoRate(23.976);
                 break; // 24000/1001
             case (2):
-                setVideoRate(24000);
+                setVideoRate(24.00);
                 break;
             case (3):
-                setVideoRate(25000);
+                setVideoRate(25.00);
                 break;
             case (4):
-                setVideoRate(29970);
+                setVideoRate(29.97);
                 break; // 30000/1001 
             case (5):
-                setVideoRate(30000);
+                setVideoRate(30);
                 break;
             case (6):
-                setVideoRate(50000);
+                setVideoRate(50);
                 break;
             case (7):
-                setVideoRate(59940);
+                setVideoRate(59.94);
                 break; // 60000/1001 
             case (8):
                 setVideoRate(60000);

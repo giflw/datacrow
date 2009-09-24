@@ -40,7 +40,7 @@ abstract class FileProperties {
     private String subtitles = "";
     private String videoResolution = "";
     private String videoCodec = "";
-    private int videoRate = 0;
+    private double videoRate = 0;
     private int videoBitRate = 0;
     private int duration = -1;
     private String audioCodec = "";
@@ -100,7 +100,7 @@ abstract class FileProperties {
     /**
      * Returns the video rate.
      */
-    public int getVideoRate() {
+    public double getVideoRate() {
         return videoRate;
     }
 
@@ -170,7 +170,7 @@ abstract class FileProperties {
     /**
      * Sets the video rate.
      */
-    protected void setVideoRate(int videoRate) {
+    protected void setVideoRate(double videoRate) {
         this.videoRate = videoRate;
     }
 
