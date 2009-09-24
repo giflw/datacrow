@@ -5,6 +5,14 @@ Data Crow 3.5.1 [Release on xx/09/2009] [testing: high] [target: production]
 [Fixed]
 - File size for file hashing now allows larger file sizes to be set. Setting the value to
   zero will now allow hashes to be created for files of any size.
+- After doing a mass update of, for example, audio CD's the artists and such were 
+  mentioned twice. After a restart everything returned to normal.
+- The FPS for MPEG 1 and 2 movies was off by a factor of a thousand frames. There is
+  no update performed on old information; the fix only works for newly imported movies.
+- Timeout on online searches has been removed; the result was a not updated movie after
+  10 seconds without knowing the reason why. Especially true when performing and online
+  search in combination with the "retrieve additional information for companies 
+  and persons" setting (which might actually take more then 10 seconds).
 
 
 -----------------------------------------------------------------------------------------

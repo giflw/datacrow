@@ -33,6 +33,21 @@
                 <value-type>18</value-type>
                 <overwritable>false</overwritable>
             </field>
+            <field>
+                <index>13</index>
+                <name>Fps</name>
+                <database-column-name>Fps</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>true</techinfo>
+                <maximum-length>10</maximum-length>
+                <field-type>24</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>20</value-type>
+                <overwritable>false</overwritable>
+            </field>            
         </fields>
     </module>
     <module>
