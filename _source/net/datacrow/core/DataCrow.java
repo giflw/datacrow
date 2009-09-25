@@ -209,6 +209,7 @@ public class DataCrow {
             checkCurrentDir();
             createDirectories();
             initLog4j();
+            initDbProperties();
             
             installLafs();
             
@@ -717,6 +718,27 @@ public class DataCrow {
         
         PropertyConfigurator.configure(DataCrow.installationDir + "log4j.properties");        
     }
+    
+    private static void initDbProperties() {
+        try {
+            File file = new File(DataCrow.dataDir, "dc.properties");
+            if (file.exists()) {
+                Properties properties = new Properties();
+                properties.load(new FileInputStream(file));
+                
+                properties.setProperty("hsqldb.script_format", "3");
+                properties.setProperty("readonly", "false");
+                properties.setProperty("hsqldb.nio_data_file", "true");
+                properties.setProperty("hsqldb.default_table_type", "memory");
+                properties.setProperty("hsqldb.lock_file", "false");
+                properties.setProperty("hsqldb.log_size", "1000");
+
+                properties.store(new FileOutputStream(file), "Default properties for the DC database of Data Crow.");
+            }
+        } catch (Exception e) {
+            logger.error("Could not set the default database properties.", e);
+        }
+    }    
     
     private static void checkPlatform() {
         logger.info(version.getFullString());
