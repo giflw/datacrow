@@ -227,7 +227,7 @@ public class DatabaseManager {
             
         } catch (Exception e) {
             logger.debug(e, e);
-        	logger.info("User '" + username + "' with password '" + password + "' cannot login");
+        	logger.debug("User '" + username + "' with password '" + password + "' cannot login");
         }
         
         return null;
