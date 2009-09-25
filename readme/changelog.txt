@@ -18,7 +18,7 @@ Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
 - Splitting the names of IMDB persons is incorrect. Only true for names ending with 
   a number like so: Harry Potter (1).
 - Sorting did not work correctly for the container module.
-- Possible issue with scrolling (inverted up and down scrolling).
+- Possible issue with scrolling in views (inverted up and down scrolling).
 
 [Changed]
 - The database no longer runs in a locked mode. This means you can start multiple 
