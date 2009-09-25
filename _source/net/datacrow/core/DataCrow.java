@@ -92,7 +92,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 5, 0, 0);
+    private static Version version = new Version(3, 5, 1, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -183,6 +183,10 @@ public class DataCrow {
                 System.out.println("Starts Data Crow without loading the items from the cache. This will cause the items to be loaded from the database (slow).");
                 System.out.println("Example: java -jar datacrow.jar -nocache");                
                 System.out.println("");
+                System.out.println("-clearsettings");
+                System.out.println("Loads the default Data Crow settings. Disgards all user settings.");
+                System.out.println("Example: java -jar datacrow.jar -clearsettings");                
+                System.out.println("");
                 System.out.println("-credentials:username/password");
                 System.out.println("Specify the login credentials to start Data Crow without displaying the login dialog.");
                 System.out.println("Example (username and password): java -jar datacrow.jar -credentials:sa/12345");                
@@ -232,31 +236,7 @@ public class DataCrow {
             new DcSettings();
             checkPlatform();
             
-            // load the settings
-            Version old = DatabaseManager.getVersion();
-            if (old.getMajor() > 0 && old.isOlder(version)) {
-                final java.util.concurrent.atomic.AtomicBoolean activeDialog = new java.util.concurrent.atomic.AtomicBoolean(true);
-                final QuestionBox qb = new QuestionBox("Please be aware that with this new version changes have been made to several modules. These " +
-                        "changes combined with the old settings can impact the movie IMDB search. It is therefor recommended to load the new default " +
-                        "settings. If you do not wish to do this make sure to check all the settings as available in the online search form. " +
-                        "Loading the default settings also improves the default layout of the item form, which migth look cluttered otherwise " +
-                        "with the old settings. Do you want to use the new default settings?", activeDialog);
-                
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-                        qb.setVisible(true);
-                    }
-                });
-                
-                synchronized (activeDialog) {
-                    while (activeDialog.get() == true)
-                        activeDialog.wait();
-                }
-                
-                loadSettings = !qb.isAffirmative();
-                if (!loadSettings)
-	                DcSettings.reset();
-            }
+            //resetSettings();
             
             if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
                 DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
@@ -769,6 +749,36 @@ public class DataCrow {
         UIManager.installLookAndFeel("JTattoo - Mint", "com.jtattoo.plaf.mint.MintLookAndFeel");
         UIManager.installLookAndFeel("JTattoo - Noire", "com.jtattoo.plaf.mint.MintLookAndFeel");
         UIManager.installLookAndFeel("JTattoo - Luna", "com.jtattoo.plaf.luna.LunaLookAndFeel");
+    }
+    
+    @SuppressWarnings("unused")
+    private static void resetSettings() throws Exception {
+        Version old = DatabaseManager.getVersion();
+        if (old.getMajor() > 0 && old.isOlder(version) && old.isOlder(new Version(3, 5, 0, 0))) {
+            final java.util.concurrent.atomic.AtomicBoolean activeDialog = new java.util.concurrent.atomic.AtomicBoolean(true);
+            final QuestionBox qb = new QuestionBox(
+                             "Please be aware that with this new version changes have been made to several modules. These "
+                            + "changes combined with the old settings can impact the movie IMDB search. It is therefor recommended to load the new default "
+                            + "settings. If you do not wish to do this make sure to check all the settings as available in the online search form. "
+                            + "Loading the default settings also improves the default layout of the item form, which migth look cluttered otherwise "
+                            + "with the old settings. Do you want to use the new default settings?",
+                    activeDialog);
+
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    qb.setVisible(true);
+                }
+            });
+
+            synchronized (activeDialog) {
+                while (activeDialog.get() == true)
+                    activeDialog.wait();
+            }
+
+            loadSettings = !qb.isAffirmative();
+            if (!loadSettings)
+                DcSettings.reset();
+        }
     }
     
     private static class ShutdownThread extends Thread {

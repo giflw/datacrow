@@ -98,6 +98,12 @@ public class StartupHelpDialog extends JDialog implements ActionListener {
                 "<tr><td>-nocache</td></tr>" +
                 "<tr><td>Forces Data Crow to ignore the cached items and load everything fresh from the database.</td></tr>" +
                 "<tr><td><br></td></tr>" +
+                "<tr><td>-clearsettings</td></tr>" +
+                "<tr><td>Loads the default Data Crow settings. Disgards all user settings.</td></tr>" +
+                "<tr><td><br></td></tr>" +
+                "<tr><td>-debug</td></tr>" +
+                "<tr><td>Runs Data Crow in debug mode meaning that more information will be logged.</td></tr>" +
+                "<tr><td><br></td></tr>" +
                 "<tr><td>-credentials:username/password</td></tr>" +
                 "<tr><td>Specify the login credentials to start Data Crow without displaying the login dialog.</td></tr>" +
                 "<tr><td>Example (username and password): java -jar datacrow.jar -credentials:sa/12345</td></tr>" +

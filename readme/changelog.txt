@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.5.1 [Release on xx/09/2009] [testing: high] [target: production]
+Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -13,7 +13,19 @@ Data Crow 3.5.1 [Release on xx/09/2009] [testing: high] [target: production]
   10 seconds without knowing the reason why. Especially true when performing and online
   search in combination with the "retrieve additional information for companies 
   and persons" setting (which might actually take more then 10 seconds).
+- Additional check for locked databases. Added a check for the settings of the database.
+- IMDB import: some runtime of the imported run times are incorrect (of by tens of hours).
+- Splitting the names of IMDB persons is incorrect. Only true for names ending with 
+  a number like so: Harry Potter (1).
+- Sorting did not work correctly for the container module.
+- Possible issue with scrolling (inverted up and down scrolling).
 
+[Changed]
+- The database no longer runs in a locked mode. This means you can start multiple 
+  sessions of Data Crow or run both the web server in console mode and the Data Crow 
+  GUI. Optimistic locking is used for database records (who ever saves the data 
+  overwrites data saved by the other user working on the same record).
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.5 [Release on 20/09/2009] [testing: high] [target: production]
