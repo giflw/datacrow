@@ -227,7 +227,7 @@ public class DataFilter {
      */
     public void sort(List<DcObject> c) {
         DcModule mod = DcModules.get(module);
-        if (mod.getDefaultSortFieldIdx() > 0) {
+        if ((order == null || order.length == 0) && mod.getDefaultSortFieldIdx() > 0) {
             order = new DcField[1];
             order[0] = mod.getField(mod.getDefaultSortFieldIdx());
         }

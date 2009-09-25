@@ -126,6 +126,11 @@ public class DcList extends JList implements ComponentListener {
             firePropertyChange("columnsPerRow", oldValue, columnsPerRow);
     }    
 
+    @Override
+    public int locationToIndex(Point location) {
+        return locationToNearestIndex(location);
+    }
+
     public int locationToNearestIndex(Point location) {
         ListUI ui = getUI();
         if(ui == null || !(ui instanceof DcListUI))
@@ -208,6 +213,13 @@ public class DcList extends JList implements ComponentListener {
         }
     }
     
+    @Override
+    public int getScrollableBlockIncrement(Rectangle visibleRect,
+            int orientation, int direction) {
+        // TODO Auto-generated method stub
+        return super.getScrollableBlockIncrement(visibleRect, orientation, direction);
+    }
+
     @Override
     public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
         

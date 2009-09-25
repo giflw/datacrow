@@ -82,8 +82,8 @@ public class DcAssociate extends DcObject {
             lastname = lastname == null ? "" : lastname.trim();
             setValue(DcAssociate._A_NAME, firstname + " " + lastname);
         } else if (isNameSet && (!isLastNameSet || !isFirstNameSet)) {
+            name = name.indexOf("(") > 0 ? name.substring(0, name.indexOf("(")).trim() : name;
             StringTokenizer st = new StringTokenizer(name);
-            name = name.indexOf("(") > 0 ? name.substring(0, name.indexOf("(")) : name;
             int i = 0;
             while (st.hasMoreElements()) {
                 if ((i + 1) != st.countTokens()) {
