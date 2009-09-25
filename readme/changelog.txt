@@ -25,7 +25,10 @@ Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
   sessions of Data Crow or run both the web server in console mode and the Data Crow 
   GUI. Optimistic locking is used for database records (who ever saves the data 
   overwrites data saved by the other user working on the same record).
-  
+- Changed the description retrieved for actors (better styled, removed boilerplate 
+  text).
+- Removed boilerplate text for movies retrieved by Imdb.com and ofdb.de.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.5 [Release on 20/09/2009] [testing: high] [target: production]
