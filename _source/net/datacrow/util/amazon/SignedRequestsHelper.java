@@ -206,6 +206,8 @@ public class SignedRequestsHelper {
      */
     private Map<String, String> createParameterMap(String queryString) {
         Map<String, String> map = new HashMap<String, String>();
+        
+        queryString = queryString.indexOf("&Signature") > -1 ? queryString.substring(0, queryString.indexOf("&Signature")) : queryString;
         String[] pairs = queryString.split("&");
 
         for (String pair: pairs) {

@@ -78,15 +78,18 @@ public class OnlineItemRetriever extends Thread {
 
     private class PollerTask extends Thread {
         
+        private Thread thread;
+        
         public PollerTask(Thread thread) {
             setPriority(Thread.MIN_PRIORITY);
+            this.thread = thread;
         }
         
         @Override
         public void run() {
             
             final ProgressDialog dlg = new ProgressDialog(DcResources.getText("msgRetrievingItemDetails", dco.getName()));
-            while (!finished()) {
+            while (!finished() && thread.isAlive()) {
                 SwingUtilities.invokeLater(
                         new Thread(new Runnable() { 
                             public void run() {
@@ -103,6 +106,8 @@ public class OnlineItemRetriever extends Thread {
                         dlg.close();
                     }
                 }));
+            
+            thread = null;
         }
     }
 }

@@ -19,6 +19,9 @@ Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
   a number like so: Harry Potter (1).
 - Sorting did not work correctly for the container module.
 - Possible issue with scrolling in views (inverted up and down scrolling).
+- Occasional error while performing an amazon online search: 
+  Incomplete trailing escape (%) pattern 
+- Barnes & Nobles online search was once again broken.
 
 [Changed]
 - The database no longer runs in a locked mode. This means you can start multiple 

@@ -43,6 +43,7 @@ import net.datacrow.console.windows.UpgradeDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.Version;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModule;
@@ -86,9 +87,13 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
 
     public void start() {
         try {
-            convertMappingModules();
-            convertMovieCountriesAndLanguages();
-            DataCrow.showSplashScreen(true);
+            
+            if (DatabaseManager.getVersion().isOlder(new Version(3, 5, 0, 0))) {
+                convertMappingModules();
+                convertMovieCountriesAndLanguages();
+                DataCrow.showSplashScreen(true);
+            }
+            
         } catch (Exception e) {
             String msg = e.getMessage() + ". Data conversion failed. " +
                 "Please restore your latest Backup and retry. Contact the developer " +
