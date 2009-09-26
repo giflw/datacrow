@@ -96,12 +96,10 @@ public class CreateModuleWizard extends Wizard {
                 }
             }
             
-            if (module.getModuleClass().equals(DcPropertyModule.class)) {
-                DcModules.registerBasePropertyModule((DcPropertyModule) DcModules.convert(module));
-            } else {
-                DcModules.register(DcModules.convert(module));
-                DcModules.registerPropertyModules(DcModules.convert(module));
-            }
+            module.setServingMultipleModules(true);
+
+            DcModules.register(DcModules.convert(module));
+            DcModules.registerPropertyModules(DcModules.convert(module));
             
             close();
         } catch (Exception e) {

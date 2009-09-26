@@ -28,7 +28,11 @@ Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
 - Changed the description retrieved for actors (better styled, removed boilerplate 
   text).
 - Removed boilerplate text for movies retrieved by Imdb.com and ofdb.de.
-
+- Module wizard: from now on newly created modules can be reused within relationships.
+  In previous versions a created module, such as a property module, could only be used
+  once for a reference field. Now you can actually create one property module and use 
+  this module (and it's data) for reference fields of multiple other modules.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.5 [Release on 20/09/2009] [testing: high] [target: production]
