@@ -1,4 +1,6 @@
 rd ..\..\release /S /Q
+rd _data /S /Q
+rd __data /S /Q
 md ..\..\release
 md ..\..\release\datacrow
 rd webapp\datacrow\mediaimages /S /Q
