@@ -54,5 +54,10 @@
 	<classpathentry kind="lib" path="lib/xml/xmlgraphics-commons-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jaudiotagger_1.0.9.jar"/>
 	<classpathentry kind="lib" path="lib/PDFRenderer.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/bcmail-jdk14-132.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/bcprov-jdk14-132.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/FontBox-0.1.0-dev.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/ISBNExtractor-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/PDFBox-0.7.3.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

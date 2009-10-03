@@ -37,6 +37,9 @@ import java.util.Iterator;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
+import org.chabanois.isbn.extractor.FileISBNExtractor;
+import org.chabanois.isbn.extractor.ISBNCandidates;
+import org.chabanois.isbn.extractor.PDFBoxTextExtractor;
 
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
@@ -97,10 +100,26 @@ public class EbookImport extends FileImporter {
             }
             
             if (filename.toLowerCase().endsWith("pdf")) {
+                
+                File file = new File(filename);
+                FileISBNExtractor fileISBNExtractor = new FileISBNExtractor();
+                fileISBNExtractor.setSearchMinBytes(30000);
+                fileISBNExtractor.getTextReaderFactory().setPreferredPdfExtractor(new PDFBoxTextExtractor());
+                ISBNCandidates isbnCandidates = fileISBNExtractor.getIsbnCandidates(file);
+                org.chabanois.isbn.extractor.ISBN extractedISBN = isbnCandidates.getHighestScoreISBN();
+                
+                if (extractedISBN != null ) {
+                    String s = extractedISBN.getIsbn();
+                    if (s != null && s.length() > 0)
+                        book.setValue(Book._N_ISBN13, ISBN.isISBN10(s) ? ISBN.getISBN13(s) : 
+                                                      ISBN.isISBN13(s) ? s : null);
+                }
+                
+                
                 RandomAccessFile raf = null;
                 PDFFile pdffile;
                 try {
-                    File file = new File(filename);
+                    
                     raf = new RandomAccessFile(file, "r");
                     FileChannel channel = raf.getChannel();
                     ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());

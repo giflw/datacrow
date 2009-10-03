@@ -68,6 +68,7 @@
             <file src="lib/commons-codec-1.3.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/laf" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/xml" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/pdf" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/html" targetdir="$INSTALL_PATH/lib"/>
             <file src="services" targetdir="$INSTALL_PATH"/>
             <file src="themes" targetdir="$INSTALL_PATH"/>
