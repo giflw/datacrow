@@ -135,7 +135,7 @@ public class FileSynchronizerPanel extends DriveManagerPanel {
         
         @Override
         public String toString() {
-            return description;
+            return getDescription();
         }
     }
 }

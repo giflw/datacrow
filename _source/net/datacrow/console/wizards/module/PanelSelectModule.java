@@ -67,6 +67,10 @@ public class PanelSelectModule extends ModuleWizardPanel {
         return DcModules.get(selectedModule).getXmlModule();
     }
 
+    public int getSelectedModule() {
+        return selectedModule;
+    }
+
     @Override
     public String getHelpText() {
         return DcResources.getText("msgSelectModuleToAlter");

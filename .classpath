@@ -13,7 +13,6 @@
 	<classpathentry kind="lib" path="lib/laf/jtattoo.jar"/>
 	<classpathentry kind="lib" path="lib/laf/skinlf.jar"/>
 	<classpathentry kind="lib" path="lib/openchart_1_2.jar"/>
-	<classpathentry kind="lib" path="lib/browserlauncher2.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib/jebml.jar"/>
 	<classpathentry kind="lib" path="lib/jhall.jar"/>

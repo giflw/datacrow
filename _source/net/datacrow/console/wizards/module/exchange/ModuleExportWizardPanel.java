@@ -23,34 +23,36 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.tables;
+package net.datacrow.console.wizards.module.exchange;
 
-import java.util.List;
+import javax.swing.JPanel;
 
-import javax.swing.table.DefaultTableModel;
+import net.datacrow.console.wizards.IWizardPanel;
 
-public class DcTableModel extends DefaultTableModel {
+public abstract class ModuleExportWizardPanel extends JPanel implements IWizardPanel {
+
+    private ExportDefinition definition;
+
+    public ModuleExportWizardPanel() {}
     
-    public DcTableModel() {
-        super();
+    public void setDefinition(ExportDefinition definition) {
+        this.definition = definition;
     }
     
-    @SuppressWarnings("unchecked")
+    public ExportDefinition getDefinition() {
+        return definition == null ? new ExportDefinition() : definition;
+    }
+    
     @Override
-    public void setValueAt(Object o, int row, int column) {
-        if (getRowCount() > 0 && row != -1 && column != -1) {
-            Object old = getValueAt(row, column);
-            
-            if (old instanceof Boolean && o instanceof String)
-                o = Boolean.valueOf((String) o);
-
-            if (old instanceof Long && o instanceof String)
-                o = Long.valueOf((String) o);
-            
-            if ((old != null && old instanceof List) && o != null && !(o instanceof List)) 
-                return;
-            
-            super.setValueAt(o, row, column);
-        }
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+    	if (b) onActivation();
+    	else onDeactivation();
     }
+
+	public void onDeactivation() {}
+	
+    public void onActivation() {}    
+
+    public abstract String getHelpText();
 }

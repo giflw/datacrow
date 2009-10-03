@@ -23,34 +23,41 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.tables;
+package net.datacrow.console.wizards.module.exchange;
 
-import java.util.List;
+import net.datacrow.console.Layout;
+import net.datacrow.console.wizards.Wizard;
+import net.datacrow.console.wizards.WizardException;
 
-import javax.swing.table.DefaultTableModel;
+public class PanelExportConfiguration extends ModuleExportWizardPanel {
 
-public class DcTableModel extends DefaultTableModel {
-    
-    public DcTableModel() {
-        super();
+    public PanelExportConfiguration(Wizard wizard, boolean exists) {
+        build();
     }
     
-    @SuppressWarnings("unchecked")
-    @Override
-    public void setValueAt(Object o, int row, int column) {
-        if (getRowCount() > 0 && row != -1 && column != -1) {
-            Object old = getValueAt(row, column);
-            
-            if (old instanceof Boolean && o instanceof String)
-                o = Boolean.valueOf((String) o);
+    public Object apply() throws WizardException {
+        
+        return null;
+    }
 
-            if (old instanceof Long && o instanceof String)
-                o = Long.valueOf((String) o);
-            
-            if ((old != null && old instanceof List) && o != null && !(o instanceof List)) 
-                return;
-            
-            super.setValueAt(o, row, column);
-        }
+    @Override
+    public String getHelpText() {
+        return "";//DcResources.getText("msgBasicModuleInfo");
+    }
+    
+    public void destroy() {
+    }    
+    
+    private void build() {
+        setLayout(Layout.getGBL());
+        
+//        add(checkCanBeLended, 
+//                Layout.getGBC(1, 4, 1, 1, 1.0, 1.0
+//               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+//                new Insets( 5, 5, 5, 5), 0, 0));
+//        add(ComponentFactory.getLabel(DcResources.getText("lblDescription")), 
+//                Layout.getGBC(0, 5, 1, 1, 1.0, 1.0
+//               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+//                new Insets( 5, 5, 5, 5), 0, 0));  
     }
 }

@@ -23,34 +23,38 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.tables;
+package net.datacrow.console.wizards.module.exchange;
 
-import java.util.List;
+import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.wizards.Wizard;
+import net.datacrow.console.wizards.module.PanelSelectModule;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.resources.DcResources;
 
-import javax.swing.table.DefaultTableModel;
+public class PanelSelectModuleToExport extends PanelSelectModule {
 
-public class DcTableModel extends DefaultTableModel {
-    
-    public DcTableModel() {
-        super();
+    public PanelSelectModuleToExport(Wizard wizard) {
+        super(wizard);
+    }
+
+    @Override
+    public Object apply() {
+        if (getSelectedModule() == -1) {
+            new MessageBox(DcResources.getText("msgSelectModuleFirst"), MessageBox._INFORMATION);
+            return null;
+        }
+        
+        return DcModules.get(getSelectedModule());
+    }
+
+    @Override
+    public String getHelpText() {
+        return DcResources.getText("msgSelectModuleToExport");
     }
     
-    @SuppressWarnings("unchecked")
     @Override
-    public void setValueAt(Object o, int row, int column) {
-        if (getRowCount() > 0 && row != -1 && column != -1) {
-            Object old = getValueAt(row, column);
-            
-            if (old instanceof Boolean && o instanceof String)
-                o = Boolean.valueOf((String) o);
-
-            if (old instanceof Long && o instanceof String)
-                o = Long.valueOf((String) o);
-            
-            if ((old != null && old instanceof List) && o != null && !(o instanceof List)) 
-                return;
-            
-            super.setValueAt(o, row, column);
-        }
+    protected boolean isModuleAllowed(DcModule module) {
+        return module.isCustomModule() && module.getXmlModule() != null && module.isTopModule();
     }
 }

@@ -1,0 +1,124 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
+package net.datacrow.console.wizards.module.exchange;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.wizards.IWizardPanel;
+import net.datacrow.console.wizards.Wizard;
+import net.datacrow.console.wizards.WizardException;
+import net.datacrow.console.wizards.module.CreateModuleWizard;
+import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
+
+public class ExportModuleWizard extends Wizard {
+    
+    public ExportModuleWizard() {
+        super();
+        
+        setTitle(DcResources.getText("lblModuleExportWizard"));
+        //setHelpIndex("dc.modules.export");
+
+        setSize(DcSettings.getDimension(DcRepository.Settings.stModuleExportWizardFormSize));
+        setCenteredLocation();
+    }
+    
+    @Override
+    protected void initialize() {
+    }
+    
+    @Override
+    protected List<IWizardPanel> getWizardPanels() {
+        List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
+        panels.add(new PanelSelectModuleToExport(this));
+        return panels;
+    }
+
+    @Override
+    protected void saveSettings() {
+        DcSettings.set(DcRepository.Settings.stModuleExportWizardFormSize, getSize());
+    }
+
+    @Override
+    public void finish() throws WizardException {
+        close();
+    }
+
+    @Override
+    public void next() {
+        try {
+            
+            ExportDefinition definition;
+            if (getCurrent() instanceof PanelSelectModuleToExport) {
+                definition = new ExportDefinition();
+                definition.setModule((DcModule) getCurrent().apply());
+            } else {
+                definition = (ExportDefinition) getCurrent().apply();
+            }
+            
+            current += 1;
+            if (current <= getStepCount()) {
+                for (int i = 0; i < getStepCount(); i++) {
+                    IWizardPanel panel = getWizardPanel(i);
+                    
+                    if (panel instanceof ModuleExportWizardPanel) {
+                        ((ModuleExportWizardPanel) panel).setDefinition(definition);
+                        panel.setVisible(i == current);
+                    }
+                }
+            } else {
+                current -= 1;
+            }
+
+            applyPanel();
+        } catch (WizardException wzexp) {
+            if (wzexp.getMessage().length() > 1)
+                new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
+        }
+    }
+
+    @Override
+    protected String getWizardName() {
+        return DcResources.getText("msgModuleWizard",
+                                   new String[] {String.valueOf(current + 1), String.valueOf(getStepCount())});
+    }
+
+    @Override
+    protected void restart() {
+        try {
+            finish();
+            saveSettings();
+            CreateModuleWizard wizard = new CreateModuleWizard();
+            wizard.setVisible(true);
+        } catch (WizardException exp) {
+            new MessageBox(exp.getMessage(), MessageBox._WARNING);
+        }
+    }
+}

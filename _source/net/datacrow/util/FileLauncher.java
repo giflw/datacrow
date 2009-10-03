@@ -25,6 +25,7 @@
 
 package net.datacrow.util;
 
+import java.awt.Desktop;
 import java.io.File;
 
 import net.datacrow.console.windows.messageboxes.MessageBox;
@@ -33,17 +34,20 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.ProgramDefinitions;
-import edu.stanford.ejalbert.BrowserLauncher;
 
 public class FileLauncher {
 
+    
+    private static Desktop desktop;
     private final String filename;
     
     public FileLauncher(String filename) {
         this.filename = filename;
+        
+        if (desktop == null && Desktop.isDesktopSupported())
+            desktop = Desktop.getDesktop();
     }
     
-    @SuppressWarnings("deprecation")
     public void launchFile() {
         if (filename == null || filename.trim().length() == 0) {
             new MessageBox(DcResources.getText("msgNoFilename"), MessageBox._WARNING);
@@ -63,23 +67,36 @@ public class FileLauncher {
             program = definitions.getProgramForExtension(extension);
 
         if (program == null || program.trim().length() == 0) {
-            try {
+            boolean launched = true;
+            if (desktop != null) {
                 try {
-                    // use the browser launcer (v2)
-                    BrowserLauncher.openURL("file://" + filename);
+                    desktop.open(file);
                 } catch (Exception exp) {
-                    // last change: just start it on the command line
-                    runCmd(getLaunchableName());
+                    launched = false;
                 }
-            } catch (Exception exp) {
-                new MessageBox(DcResources.getText("msgNoProgramDefinedForExtension", extension), MessageBox._WARNING);  
+            }
+
+            if (!launched) {
+                try {
+                    runCmd(filename);
+                } catch (Exception ignore) {
+                    try {
+                        runCmd(getLaunchableName());
+                    } catch (Exception exp) {
+                        new MessageBox(DcResources.getText("msgNoProgramDefinedForExtension", extension), MessageBox._WARNING);    
+                    }
+                }
             }
         } else {
             String cmd = program + " " + getLaunchableName();
             try {
                 runCmd(cmd);
-            } catch (Exception exp) {
-                new MessageBox(DcResources.getText("msgErrorWhileExecuting", cmd), MessageBox._WARNING);
+            } catch (Exception ignore) {
+                try {
+                    runCmd("'" + cmd + "' " + getLaunchableName());
+                } catch (Exception exp) {
+                    new MessageBox(DcResources.getText("msgErrorWhileExecuting", cmd), MessageBox._WARNING);
+                }
             } 
         }
     }   
