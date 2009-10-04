@@ -1,4 +1,15 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Changed]
+- Added additional font rendering options (Settings > Settings > Font).
+
+[New]
+- ISBN Extraction from PDF documents (ADD REF HERE).
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
