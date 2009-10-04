@@ -43,8 +43,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
@@ -61,7 +59,8 @@ import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
+
+import org.apache.log4j.Logger;
 
 import com.approximatrix.charting.CoordSystem;
 import com.approximatrix.charting.charting.model.ObjectChartDataModel;
@@ -335,8 +334,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
                 // create the model
                 ObjectChartDataModel model = new ObjectChartDataModel(
                         data, new String[] {field.getLabel()}, labels, 
-                        ComponentFactory.getSystemFont(), 
-                        DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));
+                        ComponentFactory.getSystemFont(), true);
                 
                 // create the chart
                 CoordSystem coord = new CoordSystem(model);
@@ -397,8 +395,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
                 ObjectChartDataModel model = 
                     new ObjectChartDataModel(data, labels, 
                             new String[] {DcModules.get(module).getField(fieldIdx).getLabel()}, 
-                            ComponentFactory.getSystemFont(), 
-                            DcSettings.getBoolean(DcRepository.Settings.stFontAntiAliasing));  
+                            ComponentFactory.getSystemFont(), true);  
                 
                 // create the chart
                 CoordSystem coord = new CoordSystem(model);

@@ -85,6 +85,7 @@ import net.datacrow.console.components.DcFileLauncherField;
 import net.datacrow.console.components.DcFilePatternField;
 import net.datacrow.console.components.DcFilePatternTextField;
 import net.datacrow.console.components.DcFileSizeField;
+import net.datacrow.console.components.DcFontRenderingComboBox;
 import net.datacrow.console.components.DcFontSelector;
 import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.console.components.DcIconSelectField;
@@ -176,6 +177,7 @@ public final class ComponentFactory {
     public static final int _DRIVEMAPPING = 32;
     public static final int _CHARACTERSETCOMBO = 33;    
     public static final int _DIRECTORIESASDRIVES = 34;
+    public static final int _FONTRENDERINGCOMBO = 35;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -432,6 +434,8 @@ public final class ComponentFactory {
                 return getCharacterSetCombobox();
             case _DIRECTORIESASDRIVES:
                 return getDirectoriesAsDrivesField();
+            case _FONTRENDERINGCOMBO:
+                return getFontRenderingCombo();
 
             default:
                 return getShortTextField(maxTextLength);
@@ -504,6 +508,11 @@ public final class ComponentFactory {
         return cb;
     }
 
+    public static final JComboBox getFontRenderingCombo() {
+        return new DcFontRenderingComboBox();
+    }
+
+    
     public static final JComboBox getPersonOrderComboBox() {
         JComboBox cb = getComboBox();
         cb.addItem(DcResources.getText("lblPersonOrginalOrder"));

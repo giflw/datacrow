@@ -132,7 +132,7 @@ public abstract class DcRepository {
         public static final String stHsqlCacheScale = "hsql_cache_scale";
         public static final String stHsqlCacheSizeScale = "hsql_cache_size_scale";
         public static final String stGarbageCollectionIntervalMs = "gargabe_collection_interval_milliseconds";
-        public static final String stFontAntiAliasing = "font_anti_aliasing";
+        public static final String stFontRendering = "font_rendering";
         public static final String stImportCharacterSet = "import_character_set";
         public static final String stImportSeperator = "import_seperator";
         public static final String stSortDialogSize = "sort_dialog_size";

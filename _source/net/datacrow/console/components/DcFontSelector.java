@@ -49,7 +49,7 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
     private JComboBox comboFontSize = ComponentFactory.getComboBox();
     private DcLongTextField textField = ComponentFactory.getLongTextField();
     private JComboBox comboFontStyle = ComponentFactory.getComboBox();
-    //private JButton buttonUseSystemDefault = ComponentFactory.getButton(DcResources.getText("lblUseSystemFont"));
+
     private JLabel labelFont = ComponentFactory.getLabel(DcResources.getText("lblFont"));
     private JLabel labelFontSize = ComponentFactory.getLabel(DcResources.getText("lblFontSize"));
     private JLabel labelExample = ComponentFactory.getLabel(DcResources.getText("lblPreview"));
@@ -70,7 +70,6 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         comboFontSize.setFont(ComponentFactory.getStandardFont());
         comboFontStyle.setFont(ComponentFactory.getStandardFont());
         
-       // buttonUseSystemDefault.setFont(ComponentFactory.getSystemFont());
         labelExample.setFont(ComponentFactory.getSystemFont());
         labelFontSize.setFont(ComponentFactory.getSystemFont());
         labelFont.setFont(ComponentFactory.getSystemFont());
@@ -196,7 +195,6 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         comboFontSize.setEditable(b);
         textField.setEditable(b);
         comboFontStyle.setEditable(b);
-     //   buttonUseSystemDefault.setEnabled(b);
     }
     
     /**
@@ -205,10 +203,6 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
     private void buildComponent() {
         setLayout(Layout.getGBL());
         fillFontStyleCombo();
-        
-       // buttonUseSystemDefault.setToolTipText(DcResources.getText("tpUseSystemFont"));
-      //  buttonUseSystemDefault.addActionListener(this);
-       // buttonUseSystemDefault.setActionCommand("applyDefault");
         
         comboFontName.addActionListener(this);
         comboFontName.setActionCommand("showSampleText");
@@ -244,10 +238,6 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         add(comboFontStyle,  Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
 							 new Insets( 0, 0, 0, 0), 0, 0));
-       // add(buttonUseSystemDefault,  
-       //                      Layout.getGBC( 2, 2, 1, 1, 1.0, 1.0
-      //                      ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-      //                       new Insets( 0, 5, 0, 0), 0, 0));
         add(labelExample,    Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                              new Insets( 0, 0, 0, 5), 0, 0));
