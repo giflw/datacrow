@@ -13,6 +13,7 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - File Importer now remembers whether it should use online services or not + the selected
   server, search mode and region.
 - File Importer now remembers the selected directory usage. 
+- Quick View: filename is now a click-able link.
 
 [New]
 - File Import for Books: ISBN Extraction from PDF documents using ISBNExtractor 
