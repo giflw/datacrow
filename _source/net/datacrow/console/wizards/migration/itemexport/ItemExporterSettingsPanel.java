@@ -11,8 +11,8 @@ import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.windows.reporting.ReportSettingsPanel;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.DcFileFilter;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.filefilters.DcFileFilter;
 
 public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
 

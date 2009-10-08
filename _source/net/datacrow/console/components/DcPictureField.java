@@ -65,10 +65,10 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Base64;
-import net.datacrow.util.DcFileFilter;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.PictureFileFilter;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.filefilters.DcFileFilter;
+import net.datacrow.util.filefilters.PictureFileFilter;
 import net.datacrow.util.svg.SVGtoBufferedImageConverter;
 
 import org.apache.log4j.Logger;

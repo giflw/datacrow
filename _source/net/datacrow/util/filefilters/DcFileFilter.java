@@ -23,54 +23,55 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.util;
+package net.datacrow.util.filefilters;
 
-import java.util.Comparator;
-import java.util.Date;
+import java.io.File;
 
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 
-public class DcObjectComparator implements Comparator<DcObject> {
+public class DcFileFilter extends javax.swing.filechooser.FileFilter {
+	
+	private final String[] extensions;
+	
+    /** 
+     * Create a file filter for the give extension
+     * @param extension criterium to filter
+     */
+	public DcFileFilter(String extension) {
+		this.extensions = new String[] {extension};
+	}
 
-    private final int field;
-    
-    public DcObjectComparator(int field) {
-        this.field = field;
+    public DcFileFilter(String[] extensions) {
+        this.extensions = extensions;
     }
     
-    public int compare(DcObject dco1, DcObject dco2) {
-        Object o1 = dco1.getValue(field);
-        Object o2 = dco2.getValue(field);
-
-        if (o1 == null && o2 == null)
-            return 0;
-        else if (o1 == null)
-            return -1;
-        else if (o2 == null)
-            return 1;
-        
-        DcField fld = dco1.getField(field);
-        if (o1 instanceof Number && o2 instanceof Number &&
-            fld.getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
-            fld.getValueType() == DcRepository.ValueTypes._DOUBLE ||
-            fld.getValueType() == DcRepository.ValueTypes._LONG) {
-        
-            Number n1 = (Number) o1;
-            Number n2 = (Number) o2;
-            
-            return (int) (n1.longValue() - n2.longValue());
-
-        } else if (fld.getValueType() == DcRepository.ValueTypes._DATE) {
-            Date d1 = (Date) o1;
-            Date d2 = (Date) o2;
-        
-            return d1.compareTo(d2);
-
+    /**
+     * Check the file with the filter
+     * @param file file to check on
+     */
+    @Override
+    public boolean accept(File file) {
+        if (file.isDirectory()) {
+            return true;
         } else {
-            return dco1.getDisplayString(field).toLowerCase().compareTo(
-                   dco2.getDisplayString(field).toLowerCase());
+            String filename = file.toString().toLowerCase();
+            for (int i = 0; i < extensions.length; i++) {
+                if (filename.endsWith(extensions[i].toLowerCase()))
+                    return true;
+            }
         }
+        return false;
     }
-}
+    
+    /**
+     * Get the description of this filter for displaying purposes
+     */
+    @Override
+    public String getDescription() {
+        String files = "";
+        for (int i = 0; i < extensions.length; i++)
+            files += (i > 0 ? ", " : "") + extensions[i];
+        
+        return DcResources.getText("lblFileFiler", files);
+    }
+} 

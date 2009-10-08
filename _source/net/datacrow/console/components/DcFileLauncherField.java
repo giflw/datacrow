@@ -46,8 +46,8 @@ import net.datacrow.console.windows.BrowserDialog;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.FileLauncher;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.launcher.FileLauncher;
 
 public class DcFileLauncherField extends JComponent implements IComponent, ActionListener, MouseListener {
 
@@ -132,7 +132,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     private void launch() {
         if (!Utilities.isEmpty(text.getText())) {
             String filename = Utilities.getMappedFilename(text.getText());
-            new FileLauncher(filename).launchFile();
+            new FileLauncher(filename).launch();
         }
     }
 

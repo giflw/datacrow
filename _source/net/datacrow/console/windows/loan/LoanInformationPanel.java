@@ -51,7 +51,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.DcObjectComparator;
+import net.datacrow.util.comparators.DcObjectComparator;
 
 public class LoanInformationPanel extends DcPanel implements ISimpleItemView, MouseListener {
 	

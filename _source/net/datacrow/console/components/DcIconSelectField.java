@@ -36,8 +36,8 @@ import javax.swing.ImageIcon;
 import net.datacrow.console.windows.BrowserDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.PictureFileFilter;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.filefilters.PictureFileFilter;
 
 public class DcIconSelectField extends DcImageLabel implements MouseListener {
 

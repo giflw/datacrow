@@ -32,7 +32,7 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import net.datacrow.util.FileNameFilter;
+import net.datacrow.util.filefilters.FileNameFilter;
 
 public class FileSystemTreeNode extends DefaultMutableTreeNode {
 

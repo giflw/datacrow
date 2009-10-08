@@ -36,7 +36,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import net.datacrow.util.FileNameFilter;
+import net.datacrow.util.filefilters.FileNameFilter;
 
 public class FileSystemTreeModel extends DefaultTreeModel {
 

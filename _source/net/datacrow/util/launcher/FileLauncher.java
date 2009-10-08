@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.util;
+package net.datacrow.util.launcher;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -34,22 +34,26 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.ProgramDefinitions;
+import net.datacrow.util.Utilities;
 
-public class FileLauncher {
+import org.apache.log4j.Logger;
 
-    
-    private static Desktop desktop;
+public class FileLauncher extends Launcher {
+
+	private static Logger logger = Logger.getLogger(FileLauncher.class.getName());
+	
     private final String filename;
+    
+    public FileLauncher(File file) {
+        this.filename = file != null ? file.toString() : null;
+    }
     
     public FileLauncher(String filename) {
         this.filename = filename;
-        
-        if (desktop == null && Desktop.isDesktopSupported())
-            desktop = Desktop.getDesktop();
     }
     
-    public void launchFile() {
-        if (filename == null || filename.trim().length() == 0) {
+    public void launch() {
+        if (Utilities.isEmpty(filename)) {
             new MessageBox(DcResources.getText("msgNoFilename"), MessageBox._WARNING);
             return;
         }
@@ -66,12 +70,14 @@ public class FileLauncher {
         if (definitions != null && !Utilities.isEmpty(extension)) 
             program = definitions.getProgramForExtension(extension);
 
+        Desktop desktop = getDesktop();
         if (program == null || program.trim().length() == 0) {
             boolean launched = true;
             if (desktop != null) {
                 try {
                     desktop.open(file);
                 } catch (Exception exp) {
+                	logger.debug("Could not launch file using the Dekstop class [" + file + "]", exp);
                     launched = false;
                 }
             }
@@ -115,10 +121,5 @@ public class FileLauncher {
         }
     	
     	return name;
-    }
-    
-    private void runCmd(String cmd) throws Exception {
-        Process p = Runtime.getRuntime().exec(cmd);
-        p.waitFor();
     }
 }

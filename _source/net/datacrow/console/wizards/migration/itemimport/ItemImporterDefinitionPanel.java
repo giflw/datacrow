@@ -16,7 +16,7 @@ import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.DcFileFilter;
+import net.datacrow.util.filefilters.DcFileFilter;
 
 public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
 

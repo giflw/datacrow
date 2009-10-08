@@ -46,7 +46,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
 import net.datacrow.drivemanager.Drive;
 import net.datacrow.drivemanager.Drives;
-import net.datacrow.util.FileNameFilter;
+import net.datacrow.util.filefilters.FileNameFilter;
 
 public abstract class FileSystemTreePanel extends JPanel implements ActionListener {
     

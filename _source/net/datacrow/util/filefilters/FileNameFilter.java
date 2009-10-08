@@ -23,30 +23,39 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.util;
+package net.datacrow.util.filefilters;
 
-import java.util.Collection;
-import java.util.Comparator;
+import java.io.File;
+import java.io.FilenameFilter;
 
-import net.datacrow.core.objects.DcObject;
+public class FileNameFilter implements FilenameFilter {
 
-public class DcObjectCompositeComparator implements Comparator<DcObject> {
-
-    private Collection<DcObjectComparator> dcocs;
+    private String[] extensions;
+    private boolean allowDirs;
     
-
-    public DcObjectCompositeComparator(Collection<DcObjectComparator> dcocs) {
-        this.dcocs = dcocs;
+    public FileNameFilter(String[] extensions, boolean allowDirs) {
+        this.extensions = extensions;
+        this.allowDirs = allowDirs;
     }
     
-    public int compare(DcObject dco1, DcObject dco2) {
-        for (DcObjectComparator dcoc : dcocs) {
-            int result = dcoc.compare(dco1, dco2);
-            
-            if (result != 0)
-                return result;
-        }
+    public FileNameFilter(String extension, boolean allowDirs) {
+        this.extensions = new String[1];
+        extensions[0] = extension;
+    }
+    
+    public boolean accept(File dir, String name) {
+        boolean isDir = new File(dir, name).isDirectory();
         
-        return 0;
+        if (isDir && allowDirs) {
+            return true;
+        } else if (isDir) {
+            return false;
+        } else {
+            for (int i = 0; i < extensions.length; i++) {
+                if (name.toLowerCase().endsWith(extensions[i].toLowerCase()))
+                    return true;
+            }
+        }
+        return false;
     }
-} 
+}

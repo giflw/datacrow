@@ -41,8 +41,8 @@ import net.datacrow.core.DcThread;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.DcObjectComparator;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.comparators.DcObjectComparator;
 
 import org.apache.log4j.Logger;
 

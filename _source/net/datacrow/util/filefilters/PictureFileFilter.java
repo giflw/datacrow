@@ -23,39 +23,35 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.util;
+package net.datacrow.util.filefilters;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
-public class FileNameFilter implements FilenameFilter {
+import javax.swing.filechooser.FileFilter;
 
-    private String[] extensions;
-    private boolean allowDirs;
-    
-    public FileNameFilter(String[] extensions, boolean allowDirs) {
-        this.extensions = extensions;
-        this.allowDirs = allowDirs;
-    }
-    
-    public FileNameFilter(String extension, boolean allowDirs) {
-        this.extensions = new String[1];
-        extensions[0] = extension;
-    }
-    
-    public boolean accept(File dir, String name) {
-        boolean isDir = new File(dir, name).isDirectory();
-        
-        if (isDir && allowDirs) {
+import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.Utilities;
+
+public class PictureFileFilter extends FileFilter {
+
+    @Override
+    public boolean accept(File file) {
+        if (file.isDirectory()) {
             return true;
-        } else if (isDir) {
-            return false;
+        } else if (Utilities.getExtension(file).equals("jpg") ||
+                   Utilities.getExtension(file).equals("jpeg")||
+                   Utilities.getExtension(file).equals("png") ||
+                   Utilities.getExtension(file).equals("gif") ||
+                   Utilities.getExtension(file).equals("svg") ||
+                   Utilities.getExtension(file).equals("bmp")) {
+            return true;
         } else {
-            for (int i = 0; i < extensions.length; i++) {
-                if (name.toLowerCase().endsWith(extensions[i].toLowerCase()))
-                    return true;
-            }
+            return false;
         }
-        return false;
+    }
+
+    @Override
+    public String getDescription() {
+        return DcResources.getText("lblPicFileFilter");
     }
 }

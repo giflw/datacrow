@@ -32,7 +32,7 @@ public class ExportDefinition {
     private String path;
     
     private int module;
-    private boolean exportRelatedModules = false;
+    private boolean exportRelatedModules = true;
     private boolean exportDataMainModules = false;
     private boolean exportDataRelatedModules = true;
 

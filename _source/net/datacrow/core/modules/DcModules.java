@@ -47,7 +47,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.FileNameFilter;
+import net.datacrow.util.filefilters.FileNameFilter;
 
 import org.apache.log4j.Logger;
 

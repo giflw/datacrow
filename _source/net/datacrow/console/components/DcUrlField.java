@@ -45,8 +45,8 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.menu.DcEditorMouseListener;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.util.BrowserLauncher;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.launcher.URLLauncher;
 
 public class DcUrlField extends JComponent implements IComponent, ActionListener, MouseListener {
 
@@ -100,8 +100,10 @@ public class DcUrlField extends JComponent implements IComponent, ActionListener
     public void openURL() {
         try {
             URL url = getURL();
-            if (url != null)
-                BrowserLauncher.openURL(url.toString());
+            if (url != null) {
+            	URLLauncher launcher = new URLLauncher(url);
+            	launcher.launch();
+            }
         } catch (Exception exp) {
             new MessageBox(exp.getMessage(), MessageBox._ERROR);
         }

@@ -48,7 +48,7 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.DcWebServer;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.BrowserLauncher;
+import net.datacrow.util.launcher.URLLauncher;
 
 import org.apache.log4j.Logger;
 
@@ -116,7 +116,8 @@ public class WebServerControlPanel extends JPanel implements java.awt.event.Acti
     private void launch() {
         try {
             URL url = new URL("http://localhost:" + fldPort.getValue() + "/datacrow");
-            BrowserLauncher.openURL(url.toString());
+            URLLauncher launcher = new URLLauncher(url);
+            launcher.launch();
         } catch (Exception exp) {
             new MessageBox(exp.getMessage(), MessageBox._ERROR);
         }

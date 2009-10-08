@@ -40,9 +40,9 @@ import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.util.BrowserLauncher;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.launcher.URLLauncher;
 
 import org.apache.log4j.Logger;
 
@@ -112,10 +112,10 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             String ID = url.getAuthority();
             String query = url.getQuery();
             
-            String file = url.toString();
             if (query == null || !query.contains("module=")) {
                 try {
-                    BrowserLauncher.openURL(file);
+                	URLLauncher launcher = new URLLauncher(url);
+                	launcher.launch();
                 } catch (Exception exp) {
                     logger.error(exp, exp);
                 }

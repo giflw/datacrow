@@ -65,7 +65,7 @@ import net.datacrow.reporting.templates.ReportTemplates;
 import net.datacrow.reporting.transformers.XmlTransformer;
 import net.datacrow.reporting.transformers.XmlTransformers;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.BrowserLauncher;
+import net.datacrow.util.launcher.FileLauncher;
 
 import org.apache.log4j.Logger;
 
@@ -152,7 +152,8 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
     	File file = fileField.getFile();
         if (file != null && file.exists()) {
             try {
-            	BrowserLauncher.openURL(file.toString());
+            	FileLauncher launcher = new FileLauncher(file);
+            	launcher.launch();
             } catch (Exception e) {
                 String msg = DcResources.getText("msgErrorWhileOpeningX",
                                         new String[] {file.toString(), e.getMessage()});

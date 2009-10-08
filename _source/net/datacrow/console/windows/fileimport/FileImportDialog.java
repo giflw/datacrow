@@ -62,7 +62,7 @@ import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.fileimporters.IFileImportClient;
 import net.datacrow.settings.Settings;
-import net.datacrow.util.FileNameFilter;
+import net.datacrow.util.filefilters.FileNameFilter;
 
 import org.apache.log4j.Logger;
 

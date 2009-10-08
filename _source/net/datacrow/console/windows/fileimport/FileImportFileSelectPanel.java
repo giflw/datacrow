@@ -38,7 +38,7 @@ import net.datacrow.console.components.fstree.FileSystemTreePanel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.FileNameFilter;
+import net.datacrow.util.filefilters.FileNameFilter;
 
 public class FileImportFileSelectPanel extends FileSystemTreePanel implements ActionListener {
     

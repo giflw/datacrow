@@ -23,55 +23,30 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.util;
+package net.datacrow.util.comparators;
 
-import java.io.File;
+import java.util.Collection;
+import java.util.Comparator;
 
-import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.objects.DcObject;
 
-public class DcFileFilter extends javax.swing.filechooser.FileFilter {
-	
-	private final String[] extensions;
-	
-    /** 
-     * Create a file filter for the give extension
-     * @param extension criterium to filter
-     */
-	public DcFileFilter(String extension) {
-		this.extensions = new String[] {extension};
-	}
+public class DcObjectCompositeComparator implements Comparator<DcObject> {
 
-    public DcFileFilter(String[] extensions) {
-        this.extensions = extensions;
+    private Collection<DcObjectComparator> dcocs;
+    
+
+    public DcObjectCompositeComparator(Collection<DcObjectComparator> dcocs) {
+        this.dcocs = dcocs;
     }
     
-    /**
-     * Check the file with the filter
-     * @param file file to check on
-     */
-    @Override
-    public boolean accept(File file) {
-        if (file.isDirectory()) {
-            return true;
-        } else {
-            String filename = file.toString().toLowerCase();
-            for (int i = 0; i < extensions.length; i++) {
-                if (filename.endsWith(extensions[i].toLowerCase()))
-                    return true;
-            }
+    public int compare(DcObject dco1, DcObject dco2) {
+        for (DcObjectComparator dcoc : dcocs) {
+            int result = dcoc.compare(dco1, dco2);
+            
+            if (result != 0)
+                return result;
         }
-        return false;
-    }
-    
-    /**
-     * Get the description of this filter for displaying purposes
-     */
-    @Override
-    public String getDescription() {
-        String files = "";
-        for (int i = 0; i < extensions.length; i++)
-            files += (i > 0 ? ", " : "") + extensions[i];
         
-        return DcResources.getText("lblFileFiler", files);
+        return 0;
     }
 } 

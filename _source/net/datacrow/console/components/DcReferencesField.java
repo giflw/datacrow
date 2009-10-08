@@ -51,9 +51,9 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.util.DcObjectComparator;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.comparators.DcObjectComparator;
 
 public class DcReferencesField extends JComponent implements IComponent, ActionListener, IItemFormListener {
 

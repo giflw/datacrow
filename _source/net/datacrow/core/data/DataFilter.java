@@ -38,9 +38,9 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.util.DcObjectComparator;
-import net.datacrow.util.DcObjectCompositeComparator;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.comparators.DcObjectComparator;
+import net.datacrow.util.comparators.DcObjectCompositeComparator;
 
 /**
  * Used when searching for items. 
