@@ -74,6 +74,34 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
                 (SearchMode) comboModes.getSelectedItem() : null;
     }
     
+    public void setServer(String name) {
+        for (int idx = 0; idx < comboServers.getItemCount(); idx++) {
+            IServer server = (IServer) comboServers.getItemAt(idx);
+            if (server.getName().equals(name))
+                comboServers.setSelectedItem(server);
+        }
+    }
+    
+    public void setRegion(String code) {
+        if (comboRegions == null || comboRegions.getItemCount() == 0) return;
+        
+        for (int idx = 0; idx < comboRegions.getItemCount(); idx++) {
+            Region region = (Region) comboRegions.getItemAt(idx);
+            if (region.getCode().equals(code))
+                comboRegions.setSelectedItem(region);
+        }
+    }
+    
+    public void setMode(String displayName) {
+        if (comboModes == null || comboModes.getItemCount() == 0) return;
+        
+        for (int idx = 0; idx < comboModes.getItemCount(); idx++) {
+            SearchMode mode = (SearchMode) comboModes.getItemAt(idx);
+            if (mode.getDisplayName().equals(displayName))
+                comboModes.setSelectedItem(mode);
+        }
+    }    
+    
     private void applyServer() {
         IServer server = getServer();
         comboRegions.removeAllItems();
@@ -84,10 +112,8 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
         		comboRegions.addItem(region);
         	
         	if (server.getSearchModes() != null) {
-            	for (SearchMode mode : server.getSearchModes()) {
-            	    //if (mode.keywordSearch())
-            	        comboModes.addItem(mode);
-            	}
+            	for (SearchMode mode : server.getSearchModes())
+        	        comboModes.addItem(mode);
         	}
         	
         	comboModes.setVisible(comboModes.getItemCount() > 0);
@@ -100,6 +126,10 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
         comboServers = null;
         comboRegions = null;
         comboModes = null;
+    }
+    
+    public void setUseOnlineService(boolean b) {
+        checkUseOnlineService.setSelected(b);
     }
     
     private void toggleServer() {

@@ -10,6 +10,9 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
   or URL cannot be opened.
 - Quick View: URLs are now displayed as "link" instead of mentioning the full URL.
   This also fixes the issue where text in the Quick View is not being wrapped.
+- File Importer now remembers whether it should use online services or not + the selected
+  server, search mode and region.
+- File Importer now remembers the selected directory usage. 
 
 [New]
 - ISBN Extraction from PDF documents using ISBNExtractor 

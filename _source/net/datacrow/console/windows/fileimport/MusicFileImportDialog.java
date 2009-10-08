@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcRadioButton;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.fileimporters.FileImporter;
 
@@ -56,11 +57,11 @@ public class MusicFileImportDialog extends FileImportDialog {
     
     @Override
     public void close() {
+        super.close();
         radioDoNotUseDir = null;
         radio1stDirAlbum = null;
         radio1stDirArtist = null;
         radio1stDirAlbum2ndDirArtist = null;
-        super.close();
     }
     
     @Override
@@ -96,8 +97,11 @@ public class MusicFileImportDialog extends FileImportDialog {
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 0, 5), 0, 0));
 
-        radioDoNotUseDir.setSelected(true);
-        
+        int dirUsage = settings.getInt(DcRepository.ModuleSettings.stFileImportDirectoryUsage);
+        radioDoNotUseDir.setSelected(dirUsage <= 0);
+        radio1stDirAlbum.setSelected(dirUsage == 1);
+        radio1stDirArtist.setSelected(dirUsage == 2);
+        radio1stDirAlbum2ndDirArtist.setSelected(dirUsage == 3);
         return panelDirs;
     }    
 }

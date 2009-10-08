@@ -212,10 +212,23 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         }
     }
     
-    private void saveSettings() {
+    protected void saveSettings() {
         settings.set(DcRepository.ModuleSettings.stImportCDDialogSize, getSize());
         settings.set(DcRepository.ModuleSettings.stTitleCleanup, textTitleCleanup.getText());
         settings.set(DcRepository.ModuleSettings.stTitleCleanupRegex, textTitleCleanupRegex.getText());
+        settings.set(DcRepository.ModuleSettings.stFileImportDirectoryUsage, Long.valueOf(getDirectoryUsage()));
+        
+        if (panelServer != null) {
+            settings.set(DcRepository.ModuleSettings.stFileImportUseOnlineService,  Boolean.valueOf(panelServer.useOnlineService()));
+            
+            if (panelServer.getServer() != null) {
+                settings.set(DcRepository.ModuleSettings.stFileImportOnlineService, panelServer.getServer().getName());
+                if (panelServer.getMode() != null) 
+                    settings.set(DcRepository.ModuleSettings.stFileImportOnlineServiceMode, panelServer.getMode().getDisplayName());
+                if (panelServer.getRegion() != null) 
+                    settings.set(DcRepository.ModuleSettings.stFileImportOnlineServiceRegion, panelServer.getRegion().getCode());
+            }
+        }
     }
     
     public void denyActions() {
@@ -270,7 +283,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 0, 5), 0, 0));
         
-        checkDirNameAsTitle.setSelected(false);
+        int dirUsage = settings.getInt(DcRepository.ModuleSettings.stFileImportDirectoryUsage);
+        checkDirNameAsTitle.setSelected(dirUsage == 1);
         return panelDirs;
     }
     
@@ -396,6 +410,11 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             panelOs.add(panelServerSettings,     Layout.getGBC( 0, 4, 3, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(15, 5, 0, 5), 0, 0));
+            
+            panelServer.setUseOnlineService(settings.getBoolean(DcRepository.ModuleSettings.stFileImportUseOnlineService));
+            panelServer.setServer(settings.getString(DcRepository.ModuleSettings.stFileImportOnlineService));
+            panelServer.setMode(settings.getString(DcRepository.ModuleSettings.stFileImportOnlineServiceMode));
+            panelServer.setRegion(settings.getString(DcRepository.ModuleSettings.stFileImportOnlineServiceRegion));
         }
 
         //**********************************************************
@@ -474,7 +493,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         tp.addTab(DcResources.getText("lblTitleCleanup"),  IconLibrary._icoSettings16, getTitleCleanupPanel());
         
         if (module.deliversOnlineService())
-            tp.addTab(DcResources.getText("lblOnlineSearch"), IconLibrary._icoSearchOnline16,panelOs);
+            tp.addTab(DcResources.getText("lblOnlineSearch"), IconLibrary._icoSearchOnline16, panelOs);
         
         tp.addTab(DcResources.getText("lblLocalArt"), IconLibrary._icoPicture, panelLocalArt);
 

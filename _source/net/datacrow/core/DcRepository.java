@@ -40,6 +40,11 @@ public abstract class DcRepository {
         public static final String stMassUpdateUseOriginalServiceSettings = "mass_update_use_original_service_settings";
         public static final String stDefaultView = "default_view";
         public static final String stFileImportFileTypes = "file_import_file_types";
+        public static final String stFileImportUseOnlineService = "file_import_use_online_service";
+        public static final String stFileImportOnlineService = "file_import_online_service";
+        public static final String stFileImportOnlineServiceMode = "file_import_online_service_mode";
+        public static final String stFileImportOnlineServiceRegion = "file_import_online_service_region";
+        public static final String stFileImportDirectoryUsage = "file_import_directory_usage";
         public static final String stCardViewPictureOrder = "card_view_picture_order";
         public static final String stTableColumnOrder = "table_column_order";
         public static final String stCardViewItemDescription = "card_view_item_description";
