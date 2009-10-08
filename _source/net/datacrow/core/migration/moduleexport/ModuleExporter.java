@@ -123,13 +123,15 @@ public class ModuleExporter {
 			canceled = true;
 		}
 		
+		@Override
 		public void run() {
 			Collection<DcModule> modules = new ArrayList<DcModule>();
 			modules.add(DcModules.get(module));
 			
 			if (parent.isExportRelatedMods()) {
 				for (DcModule reference : DcModules.getReferencedModules(module))
-					modules.add(reference);
+				    if (!reference.isAbstract() && reference.getIndex() != DcModules._CONTACTPERSON)
+				        modules.add(reference);
 			}
 
 			client.notifyStarted(modules.size());
@@ -153,9 +155,8 @@ public class ModuleExporter {
 					}
 
 					// item export
-					if ( !module.isAbstract() && module.getIndex() != DcModules._CONTACTPERSON &&
-					    ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
-					     (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods()))) {
+					if ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
+					    (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
 					
 					    try {
     					    exportData(module.getIndex());

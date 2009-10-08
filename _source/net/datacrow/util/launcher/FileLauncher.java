@@ -52,6 +52,7 @@ public class FileLauncher extends Launcher {
         this.filename = filename;
     }
     
+    @Override
     public void launch() {
         if (Utilities.isEmpty(filename)) {
             new MessageBox(DcResources.getText("msgNoFilename"), MessageBox._WARNING);

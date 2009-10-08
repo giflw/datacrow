@@ -72,6 +72,7 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
         textLog = null;
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgModuleExportHelp");
     }

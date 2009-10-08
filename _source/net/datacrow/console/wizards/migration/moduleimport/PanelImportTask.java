@@ -69,6 +69,7 @@ public class PanelImportTask extends ModuleImportWizardPanel implements IModuleI
         textLog = null;
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgModuleImportHelp");
     }
