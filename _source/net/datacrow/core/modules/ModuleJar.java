@@ -26,11 +26,8 @@
 package net.datacrow.core.modules;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -38,7 +35,6 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;
@@ -87,22 +83,6 @@ public class ModuleJar {
         return module;
     }
     
-    private void addEntry(ZipOutputStream zout, String name, byte[] bytes) throws IOException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        
-        ZipEntry ze = new ZipEntry(name);
-        zout.putNextEntry(ze);
-        
-        byte b[] = new byte[512];
-        int len = 0;
-        while ((len = bais.read(b)) != -1) {
-            zout.write(b, 0, len);
-        }
-        
-        zout.closeEntry();
-        bais.close();
-    }
-
     /**
      * Physically stores the module jar to disk.
      * @see #filename
@@ -118,9 +98,7 @@ public class ModuleJar {
             icon16 = icon16 == null ? Utilities.getBytes(IconLibrary._icoIcon16, DcImageIcon._TYPE_PNG) : icon16;
             icon32 = icon32 == null ? Utilities.getBytes(IconLibrary._icoIcon32, DcImageIcon._TYPE_PNG) : icon32;
 
-            FileOutputStream fos = new FileOutputStream(DataCrow.moduleDir + filename);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            ZipOutputStream zout = new ZipOutputStream(bos);
+            net.datacrow.util.zip.ZipFile zf = new net.datacrow.util.zip.ZipFile(DataCrow.moduleDir, filename);
             
             module.setIcon16Filename("icon16.png");
             module.setIcon32Filename("icon32.png");
@@ -130,12 +108,10 @@ public class ModuleJar {
             
             writer.close();
             
-            addEntry(zout, "module.xml", xml);
-        	addEntry(zout, "icon16.png", icon16);
-        	addEntry(zout, "icon32.png", icon32);
-
-            zout.close();
-            bos.close();
+            zf.addEntry("module.xml", xml);
+            zf.addEntry("icon16.png", icon16);
+            zf.addEntry("icon32.png", icon32);
+            zf.close();
 
         } catch (Exception exp) {
             throw new ModuleJarException(exp);

@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.module.exchange;
+package net.datacrow.console.wizards.migration.moduleexport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -31,40 +31,74 @@ import java.awt.Insets;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.settings.SettingsPanel;
-import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
+import net.datacrow.util.Utilities;
 
 public class PanelExportConfiguration extends ModuleExportWizardPanel {
 
 	private static final String _EXPORT_RELATED_MODULES = "export_related_modules";
 	private static final String _EXPORT_DATA_RELATED_MODULES = "export_data_related_modules";
-	private static final String _EXPORT_DATA_MAIN_MODULE = "export_data_related_modules";
+	private static final String _EXPORT_DATA_MAIN_MODULE = "export_data_main_module";
 	private static final String _PATH = "export_path";
 	
-    public PanelExportConfiguration(Wizard wizard, boolean exists) {
+	private SettingsGroup group;
+	private SettingsPanel settingsPanel;
+	
+    public PanelExportConfiguration() {
         build();
     }
     
     public Object apply() throws WizardException {
-        
-        return null;
+    	ExportDefinition definition = getDefinition();
+    	
+    	settingsPanel.saveSettings();
+    	
+    	String path = group.getSettings().get(_PATH).getValueAsString();
+    	
+    	if (Utilities.isEmpty(path)) {
+    		// TODO: use resources
+    		throw new WizardException("Select a path first!");
+    	} else {
+	    	definition.setExportDataRelatedModules(((Boolean) group.getSettings().get(_EXPORT_DATA_RELATED_MODULES).getValue()).booleanValue());
+	    	definition.setExportDataMainModule(((Boolean) group.getSettings().get(_EXPORT_DATA_MAIN_MODULE).getValue()).booleanValue());
+	    	definition.setExportDataRelatedModules(((Boolean) group.getSettings().get(_EXPORT_RELATED_MODULES).getValue()).booleanValue());
+	    	definition.setPath(path);
+    	}
+    	
+        return definition;
     }
 
     @Override
+    public void onActivation() {
+		ExportDefinition definition = getDefinition();
+		
+		if (definition != null) {
+			group.getSettings().get(_EXPORT_RELATED_MODULES).setValue(definition.isExportRelatedModules());
+			group.getSettings().get(_EXPORT_DATA_RELATED_MODULES).setValue(definition.isExportDataRelatedModules());
+			group.getSettings().get(_EXPORT_DATA_MAIN_MODULE).setValue(definition.isExportDataMainModule());
+		}
+	}
+
+	@Override
     public String getHelpText() {
     	// TODO: Add text here.
         return "";//DcResources.getText("msgBasicModuleInfo");
     }
     
-    public void destroy() {}    
+    public void destroy() {
+    	group = null;
+    	settingsPanel = null;
+    }    
     
     private void build() {
         setLayout(Layout.getGBL());
         
-        SettingsGroup group = new SettingsGroup("", "");
+        group = new SettingsGroup("", "");
+        
+        // TODO: Use resources
         
         group.add(
         		new Setting(DcRepository.ValueTypes._BOOLEAN,
@@ -72,42 +106,43 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
                 Boolean.FALSE,
                 ComponentFactory._CHECKBOX,
                 "",
-                "lblRetrieveFeatureListing",
+                "Export data of the main module",
                 false,
                 false));
         group.add(
         		new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_RELATED_MODULES,
-                Boolean.FALSE,
+                Boolean.TRUE,
                 ComponentFactory._CHECKBOX,
                 "",
-                "lblRetrieveFeatureListing",
+                "Export related modules (property modules and such). Recommended.",
                 false,
                 false));
         group.add(
         		new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_DATA_RELATED_MODULES,
-                Boolean.FALSE,
+                Boolean.TRUE,
                 ComponentFactory._CHECKBOX,
                 "",
-                "lblRetrieveFeatureListing",
+                "Export the data of the related modules (property modules and such). Recommended.",
                 false,
                 false));     
         group.add(
         		new Setting(DcRepository.ValueTypes._STRING,
         		PanelExportConfiguration._PATH,
-                Boolean.FALSE,
-                ComponentFactory._FILEFIELD,
+                null,
+                ComponentFactory._DIRECTORYFIELD,
                 "",
-                "lblRetrieveFeatureListing",
-                false,
-                false));         
+                "Export path. Location where the export file will be placed.",
+                true,
+                true));         
         
-        SettingsPanel settingsPanel = new SettingsPanel(group, true);
+        settingsPanel = new SettingsPanel(group, true);
+        settingsPanel.setVisible(true);
         settingsPanel.initializeSettings();
         
-        add(settingsPanel, Layout.getGBC(1, 4, 1, 1, 1.0, 1.0
-               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+        add(settingsPanel, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets( 5, 5, 5, 5), 0, 0));
     }
 }

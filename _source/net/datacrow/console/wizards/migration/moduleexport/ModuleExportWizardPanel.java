@@ -23,58 +23,42 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.module.exchange;
+package net.datacrow.console.wizards.migration.moduleexport;
 
-import net.datacrow.core.modules.DcModule;
+import javax.swing.JPanel;
 
-public class ExportDefinition {
+import net.datacrow.console.wizards.IWizardPanel;
+
+/**
+ * This panel is the base of all panels of the Module Export Wizard.
+ * Data is stored in the ExportDefinition {@link ExportDefinition}.
+ * 
+ * @author Robert Jan van der Waals
+ */
+public abstract class ModuleExportWizardPanel extends JPanel implements IWizardPanel {
+
+    private ExportDefinition definition;
+
+    public ModuleExportWizardPanel() {}
     
-    private String path;
+    public void setDefinition(ExportDefinition definition) {
+        this.definition = definition;
+    }
     
-    private int module;
-    private boolean exportRelatedModules = true;
-    private boolean exportDataMainModules = false;
-    private boolean exportDataRelatedModules = true;
-
-    public ExportDefinition() {}
-
-    public int getModule() {
-        return module;
+    public ExportDefinition getDefinition() {
+        return definition == null ? new ExportDefinition() : definition;
+    }
+    
+    @Override
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+    	if (b) onActivation();
+    	else onDeactivation();
     }
 
-    public void setModule(DcModule module) {
-        this.module = module.getIndex();
-    }
+	public void onDeactivation() {}
+	
+    public void onActivation() {}    
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public boolean isExportRelatedModules() {
-        return exportRelatedModules;
-    }
-
-    public void setExportRelatedModules(boolean exportRelatedModules) {
-        this.exportRelatedModules = exportRelatedModules;
-    }
-
-    public boolean isExportDataMainModules() {
-        return exportDataMainModules;
-    }
-
-    public void setExportDataMainModules(boolean exportDataMainModules) {
-        this.exportDataMainModules = exportDataMainModules;
-    }
-
-    public boolean isExportDataRelatedModules() {
-        return exportDataRelatedModules;
-    }
-
-    public void setExportDataRelatedModules(boolean exportDataRelatedModules) {
-        this.exportDataRelatedModules = exportDataRelatedModules;
-    }
+    public abstract String getHelpText();
 }

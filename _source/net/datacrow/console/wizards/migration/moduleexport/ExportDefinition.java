@@ -23,38 +23,58 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.module.exchange;
+package net.datacrow.console.wizards.migration.moduleexport;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.wizards.Wizard;
-import net.datacrow.console.wizards.module.PanelSelectModule;
 import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.resources.DcResources;
 
-public class PanelSelectModuleToExport extends PanelSelectModule {
-
-    public PanelSelectModuleToExport(Wizard wizard) {
-        super(wizard);
-    }
-
-    @Override
-    public Object apply() {
-        if (getSelectedModule() == -1) {
-            new MessageBox(DcResources.getText("msgSelectModuleFirst"), MessageBox._INFORMATION);
-            return null;
-        }
-        
-        return DcModules.get(getSelectedModule());
-    }
-
-    @Override
-    public String getHelpText() {
-        return DcResources.getText("msgSelectModuleToExport");
-    }
+public class ExportDefinition {
     
-    @Override
-    protected boolean isModuleAllowed(DcModule module) {
-        return module.isCustomModule() && module.getXmlModule() != null && module.isTopModule();
+    private String path;
+    
+    private int module;
+    private boolean exportRelatedModules = true;
+    private boolean exportDataMainModule = false;
+    private boolean exportDataRelatedModules = true;
+
+    public ExportDefinition() {}
+
+    public int getModule() {
+        return module;
+    }
+
+    public void setModule(DcModule module) {
+        this.module = module.getIndex();
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public boolean isExportRelatedModules() {
+        return exportRelatedModules;
+    }
+
+    public void setExportRelatedModules(boolean exportRelatedModules) {
+        this.exportRelatedModules = exportRelatedModules;
+    }
+
+    public boolean isExportDataMainModule() {
+        return exportDataMainModule;
+    }
+
+    public void setExportDataMainModule(boolean exportDataMainModule) {
+        this.exportDataMainModule = exportDataMainModule;
+    }
+
+    public boolean isExportDataRelatedModules() {
+        return exportDataRelatedModules;
+    }
+
+    public void setExportDataRelatedModules(boolean exportDataRelatedModules) {
+        this.exportDataRelatedModules = exportDataRelatedModules;
     }
 }

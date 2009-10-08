@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.module.exchange;
+package net.datacrow.console.wizards.migration.moduleexport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +38,14 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
+/**
+ * The Module Export Wizard exports a custom module. The wizard is capable of exporting
+ * not only the module itself but also its related custom modules. The data of the module can 
+ * also be exported. Everything is exported to module archive which can be imported using
+ * the Module Import Wizard. 
+ *  
+ * @author Robert Jan van der Waals
+ */
 public class ExportModuleWizard extends Wizard {
     
     public ExportModuleWizard() {
@@ -51,13 +59,14 @@ public class ExportModuleWizard extends Wizard {
     }
     
     @Override
-    protected void initialize() {
-    }
+    protected void initialize() {}
     
     @Override
     protected List<IWizardPanel> getWizardPanels() {
         List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
         panels.add(new PanelSelectModuleToExport(this));
+        panels.add(new PanelExportConfiguration());
+        panels.add(new PanelExportTask());
         return panels;
     }
 
@@ -77,8 +86,12 @@ public class ExportModuleWizard extends Wizard {
             
             ExportDefinition definition;
             if (getCurrent() instanceof PanelSelectModuleToExport) {
+                DcModule module = (DcModule) getCurrent().apply();
+                
+                if (module == null) return;
+                
                 definition = new ExportDefinition();
-                definition.setModule((DcModule) getCurrent().apply());
+                definition.setModule(module);
             } else {
                 definition = (ExportDefinition) getCurrent().apply();
             }
@@ -88,10 +101,10 @@ public class ExportModuleWizard extends Wizard {
                 for (int i = 0; i < getStepCount(); i++) {
                     IWizardPanel panel = getWizardPanel(i);
                     
-                    if (panel instanceof ModuleExportWizardPanel) {
+                    if (panel instanceof ModuleExportWizardPanel)
                         ((ModuleExportWizardPanel) panel).setDefinition(definition);
-                        panel.setVisible(i == current);
-                    }
+
+                    panel.setVisible(i == current);
                 }
             } else {
                 current -= 1;

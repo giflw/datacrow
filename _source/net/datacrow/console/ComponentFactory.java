@@ -178,6 +178,7 @@ public final class ComponentFactory {
     public static final int _CHARACTERSETCOMBO = 33;    
     public static final int _DIRECTORIESASDRIVES = 34;
     public static final int _FONTRENDERINGCOMBO = 35;
+    public static final int _DIRECTORYFIELD = 36;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -400,6 +401,8 @@ public final class ComponentFactory {
                 return getRatingComboBox();
             case _FILEFIELD:
                 return getFileField(false, false);
+            case _DIRECTORYFIELD:
+                return getFileField(false, true);
             case _PASSWORDFIELD:
                 return getPasswordField();
             case _REFERENCEFIELD:

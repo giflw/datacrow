@@ -23,36 +23,41 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.module.exchange;
+package net.datacrow.console.wizards.migration.moduleexport;
 
-import javax.swing.JPanel;
+import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.wizards.Wizard;
+import net.datacrow.console.wizards.module.PanelSelectModule;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.resources.DcResources;
 
-import net.datacrow.console.wizards.IWizardPanel;
+/**
+ * @author Robert Jan van der Waals 
+ */
+public class PanelSelectModuleToExport extends PanelSelectModule {
 
-public abstract class ModuleExportWizardPanel extends JPanel implements IWizardPanel {
-
-    private ExportDefinition definition;
-
-    public ModuleExportWizardPanel() {}
-    
-    public void setDefinition(ExportDefinition definition) {
-        this.definition = definition;
+    public PanelSelectModuleToExport(Wizard wizard) {
+        super(wizard);
     }
-    
-    public ExportDefinition getDefinition() {
-        return definition == null ? new ExportDefinition() : definition;
+
+    @Override
+    public Object apply() {
+        if (getSelectedModule() == -1) {
+            new MessageBox(DcResources.getText("msgSelectModuleFirst"), MessageBox._INFORMATION);
+            return null;
+        }
+        
+        return DcModules.get(getSelectedModule());
+    }
+
+    @Override
+    public String getHelpText() {
+        return DcResources.getText("msgSelectModuleToExport");
     }
     
     @Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
-    	if (b) onActivation();
-    	else onDeactivation();
+    protected boolean isModuleAllowed(DcModule module) {
+        return module.isCustomModule() && module.getXmlModule() != null && module.isTopModule();
     }
-
-	public void onDeactivation() {}
-	
-    public void onActivation() {}    
-
-    public abstract String getHelpText();
 }
