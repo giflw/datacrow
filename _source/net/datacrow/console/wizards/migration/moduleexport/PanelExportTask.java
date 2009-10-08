@@ -50,6 +50,7 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
     
     private JTextArea textLog = ComponentFactory.getTextArea();
     private JProgressBar progressBar = new JProgressBar();
+    private JProgressBar progressBarSub = new JProgressBar();
     
     private ModuleExporter exporter;
     
@@ -67,6 +68,7 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
         
         exporter = null;
         progressBar = null;
+        progressBarSub = null;
         textLog = null;
     }
 
@@ -113,8 +115,11 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
         JPanel panelProgress = new JPanel();
         panelProgress.setLayout(Layout.getGBL());
         panelProgress.add(progressBar, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                         ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                          new Insets(5, 5, 5, 5), 0, 0));
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        panelProgress.add(progressBarSub, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(5, 5, 5, 5), 0, 0));
         
         //**********************************************************
         //Log Panel
@@ -132,11 +137,11 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
 
         panelLog.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblLog")));
 
-        add(panelProgress,  Layout.getGBC( 0, 0, 1, 1, 10.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 5, 5, 5, 5), 0, 0));
-        add(panelLog,     Layout.getGBC( 0, 1, 1, 1, 20.0, 20.0
+        add(panelLog,      Layout.getGBC( 0, 0, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        add(panelProgress, Layout.getGBC( 0, 1, 1, 1, 10.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 5, 5, 5, 5), 0, 0));
     }
     
@@ -161,7 +166,13 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
         if (progressBar != null) {
             progressBar.setValue(0);
             progressBar.setMaximum(count);
+            
+            progressBarSub.setValue(0);
         }
+    }
+
+    public void notifySubProcessed() {
+        progressBarSub.setValue(progressBarSub.getValue() + 1);
     }
 
     public void notifyProcessed() {
@@ -175,5 +186,12 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
 
     public void notifyFinished() {
         notifyMessage(DcResources.getText("msgModuleExportFinished"));
+    }
+
+    public void notifyFinishedSubProcess() {}
+
+    public void notifyStartedSubProcess(int count) {
+        progressBarSub.setValue(0);
+        progressBarSub.setMaximum(count);
     }
 }

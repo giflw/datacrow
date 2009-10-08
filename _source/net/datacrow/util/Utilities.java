@@ -368,6 +368,8 @@ public class Utilities {
             throw new IOException("Could not completely read file " + file.getName());
     
         bis.close();
+        is.close();
+        
         return bytes;    
     }
 

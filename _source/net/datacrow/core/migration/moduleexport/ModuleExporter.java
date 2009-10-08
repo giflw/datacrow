@@ -13,9 +13,17 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.zip.ZipFile;
 
+/**
+ * This exporter is capable of exporting a module and the related information.
+ * The related custom modules and the data can be exported (based on the user settings).
+ * The exported module zip file can be imported using the ModuleImporter class.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ModuleExporter {
 
 	private int module;
@@ -28,27 +36,51 @@ public class ModuleExporter {
 	
 	private Exporter exporter;
 	
+	/**
+	 * Creates a new instance for the specific module. 
+	 * The module must be a main module ({@link DcModule#isTopModule()}).
+	 * @param module Main module
+	 * @param path The export path
+	 */
 	public ModuleExporter(int module, File path) {
 		this.module = module;
 		this.path = path;
 	}
 
+	/**
+	 * Indicates whether the related custom modules should also be exported.
+	 * @param exportRelatedMods
+	 */
 	public void setExportRelatedMods(boolean exportRelatedMods) {
 		this.exportRelatedMods = exportRelatedMods;
 	}
 
+    /**
+     * Indicates whether the data (items) of the main module should be exported.
+     * @param exportRelatedMods
+     */	
 	public void setExportData(boolean exportData) {
 		this.exportData = exportData;
 	}
 
+    /**
+     * Indicates whether the data (items) of the related modules should be exported.
+     * @param exportRelatedMods
+     */ 	
 	public void setExportDataRelatedMods(boolean exportDataRelatedMods) {
 		this.exportDataRelatedMods = exportDataRelatedMods;
 	}
 	
+	/**
+	 * The main module index.
+	 */
 	private int getModule() {
 		return module;
 	}
 
+	/**
+	 * The export path.
+	 */
 	private File getPath() {
 		return path;
 	}
@@ -96,12 +128,12 @@ public class ModuleExporter {
 			modules.add(DcModules.get(module));
 			
 			if (parent.isExportRelatedMods()) {
-				for (DcModule reference : DcModules.getReferencedModules(module)) {
-					if (reference.isCustomModule())
-						modules.add(reference);
-				}
+				for (DcModule reference : DcModules.getReferencedModules(module))
+					modules.add(reference);
 			}
 
+			client.notifyStarted(modules.size());
+			
 			try {
 				ZipFile zf = new ZipFile(new File(parent.getPath(), DcModules.get(module).getName().toLowerCase() + "_export.zip"));
 			
@@ -109,35 +141,52 @@ public class ModuleExporter {
 					
 					if (canceled) break;
 					
-					XmlModule xmlModule = module.getXmlModule();
-					if (xmlModule != null) {
-					    String modName = xmlModule.getName().toLowerCase();
-						String jarName = xmlModule.getJarFilename();
-						byte[] content = Utilities.readFile(new File(DataCrow.moduleDir, jarName));
-						zf.addEntry(jarName, content);
-						
-						if ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
-						    (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
-						
-						    exportData(module.getIndex());
-						    File file = new File(parent.getPath(), modName + ".xml");
-						    if (file.exists() && !canceled) {
-						        byte[] data = Utilities.readFile(file);
-						        zf.addEntry(modName + ".xml", data);
-						        
-						        File imgPath = new File(file.getPath(), modName + "_images");
-						        if (imgPath.exists()) {
-						            for (String image : imgPath.list()) {
-						                
-						                if (canceled) break;
-						                
-						                byte[] img = Utilities.readFile(new File(imgPath.toString(), image));
-						                zf.addEntry(modName + "_" + image, img);
-						            }
-						        }
-						    }
-						}
+					String modName = module.getName().toLowerCase();
+					
+					// only export custom modules
+					if (module.isCustomModule()) {
+    					XmlModule xmlModule = module.getXmlModule();
+    					if (xmlModule != null) {
+    					    
+    						String jarName = xmlModule.getJarFilename();
+    						byte[] content = Utilities.readFile(new File(DataCrow.moduleDir, jarName));
+    						zf.addEntry(jarName, content);
+    					}
 					}
+						
+					if ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
+					    (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
+					
+					    // export the items
+					    
+					    try {
+    					    exportData(module.getIndex());
+    					    
+    					    // get the XML
+    					    File file = new File(parent.getPath(), modName + ".xml");
+    					    if (file.exists() && !canceled) {
+    					        byte[] data = Utilities.readFile(file);
+    					        zf.addEntry(modName + ".xml", data);
+    					        
+    					        // get the images
+    					        File imgPath = new File(parent.getPath(), modName + "_images");
+    					        if (imgPath.exists()) {
+    					            for (String image : imgPath.list()) {
+    					                
+    					                if (canceled) break;
+    					                
+    					                // add the image
+    					                byte[] img = Utilities.readFile(new File(imgPath.toString(), image));
+    					                zf.addEntry(modName + "_" + image, img);
+    					            }
+    					        }
+    					    }
+					    } catch (Exception e) {
+					        client.notifyError(e);
+					    }
+					}
+					client.notifyMessage(DcResources.getText("msgExportedModule", module.getLabel()));
+					client.notifyProcessed();
 				}
 				
 				zf.close();
@@ -151,16 +200,19 @@ public class ModuleExporter {
 		}
 
 		public void notifyMessage(String message) {
+		    client.notifyMessage(message);
 		}
 
 		public void notifyProcessed() {
+		    client.notifySubProcessed();
 		}
 
 		public void notifyStarted(int count) {
-			
+		    client.notifyStartedSubProcess(count);
 		}
 
 		public void notifyStopped() {
+		    client.notifyFinishedSubProcess();
 		}
 		
 		private void exportData(int module) throws Exception {

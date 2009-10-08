@@ -81,6 +81,11 @@ public class ExportModuleWizard extends Wizard {
     }
 
     @Override
+    protected boolean isRestartSupported() {
+        return false;
+    }
+
+    @Override
     public void next() {
         try {
             
