@@ -129,8 +129,8 @@ public class NavigationPanel extends JPanel implements ActionListener {
     
     private void setYearComboBox(Calendar c) {
         int y = c.get(Calendar.YEAR); 
-        years = new Integer[7];
-        for(int i = y - 3, j = 0; i <= y+3; i++, j++) {
+        years = new Integer[101];
+        for(int i = y - 50, j = 0; i <= y+50; i++, j++) {
             years[j] = i;
         }
         
@@ -141,7 +141,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
         }
         
         yearBox.setModel(new DefaultComboBoxModel(years));
-        yearBox.setSelectedItem(years[3]);
+        yearBox.setSelectedItem(years[50]);
     }
 
     public void clear() {
@@ -165,7 +165,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
             if (e.getActionCommand().equals("prevYear"))
                 c.add(Calendar.YEAR, -1);
             if (e.getActionCommand().equals("nextYear"))
-                c.add(Calendar.YEAR, -1);
+                c.add(Calendar.YEAR, 1);
             
             parent.updateScreen(c);
         } else {
