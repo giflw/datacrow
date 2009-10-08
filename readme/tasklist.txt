@@ -20,10 +20,9 @@
 [ ] MovieMeter.nl online search
 [ ] Book online search in www.isbndb.com (1886661)
 [ ] File operations
-[ ] Data matching for online services
 [ ] [2860480] Arch package for data crow
 [x] [2860913] Extract ISBN from PDF (isbnextractor)
-[ ] [2862681] New "IMDB ID" field for Names and Movies
+[ ] [2862681] New "IMDB ID" field for Names and Movies / Data matching for online services
 [ ] [2862698] Add fields "Aspect Ratio" and "Color" to movie fields
 [ ] [2862688] IMDB wrapper doesn't fill in "Languages" field
 [x] [2874556] Date field
