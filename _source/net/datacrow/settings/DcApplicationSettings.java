@@ -669,6 +669,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
+                            false));  
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stModuleImportWizardFormSize,
+                            new Dimension(800, 550),
+                            -1,
+                            "",
+                            "",
+                            false,
                             false));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,

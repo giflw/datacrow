@@ -98,7 +98,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         PluginHelper.add(menuModules, "RelateModuleWizard");
         PluginHelper.add(menuModules, "DeleteModuleWizard");
         menuModules.addSeparator();
-        PluginHelper.add(menuModules, "ExportModuleWizard");   
+        PluginHelper.add(menuModules, "ExportModuleWizard");
+        PluginHelper.add(menuModules, "ImportModuleWizard");   
         menuModules.addSeparator();
         menuModules.add(subMenuModule);
         

@@ -97,6 +97,7 @@ public abstract class DcRepository {
      */
     public static final class Settings {
         public static final String stModuleExportWizardFormSize = "module_export_wizard_form_size";
+        public static final String stModuleImportWizardFormSize = "module_import_wizard_form_size";
         public static final String stServerSettingsDialogSize = "server_settings_dialog_size";
         public static final String stAmazonRetrieveFeatureListing = "retrieve_feature_listing";
         public static final String stAmazonRetrieveUserReviews = "retrieve_user_reviews";

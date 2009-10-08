@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.migration.moduleexport;
+package net.datacrow.console.wizards.migration.moduleimport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -37,35 +37,29 @@ import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.util.Utilities;
 
-public class PanelExportConfiguration extends ModuleExportWizardPanel {
+public class PanelImportConfiguration extends ModuleImportWizardPanel {
 
-	private static final String _EXPORT_RELATED_MODULES = "export_related_modules";
-	private static final String _EXPORT_DATA_RELATED_MODULES = "export_data_related_modules";
-	private static final String _EXPORT_DATA_MAIN_MODULE = "export_data_main_module";
-	private static final String _PATH = "export_path";
+	private static final String _IMPORT_FILE = "import_file";
 	
 	private SettingsGroup group;
 	private SettingsPanel settingsPanel;
 	
-    public PanelExportConfiguration() {
+    public PanelImportConfiguration() {
         build();
     }
     
     public Object apply() throws WizardException {
-    	ExportDefinition definition = getDefinition();
+    	ImportDefinition definition = getDefinition();
     	
     	settingsPanel.saveSettings();
     	
-    	String path = group.getSettings().get(_PATH).getValueAsString();
+    	String filename = group.getSettings().get(_IMPORT_FILE).getValueAsString();
     	
-    	if (Utilities.isEmpty(path)) {
+    	if (Utilities.isEmpty(filename)) {
     		// TODO: use resources
-    		throw new WizardException("Select a path first!");
+    		throw new WizardException("Select a file first!");
     	} else {
-	    	definition.setExportDataRelatedModules(((Boolean) group.getSettings().get(_EXPORT_DATA_RELATED_MODULES).getValue()).booleanValue());
-	    	definition.setExportDataMainModule(((Boolean) group.getSettings().get(_EXPORT_DATA_MAIN_MODULE).getValue()).booleanValue());
-	    	definition.setExportDataRelatedModules(((Boolean) group.getSettings().get(_EXPORT_RELATED_MODULES).getValue()).booleanValue());
-	    	definition.setPath(path);
+	    	definition.setFile(filename);
     	}
     	
         return definition;
@@ -73,13 +67,10 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
 
     @Override
     public void onActivation() {
-		ExportDefinition definition = getDefinition();
+        ImportDefinition definition = getDefinition();
 		
-		if (definition != null) {
-			group.getSettings().get(_EXPORT_RELATED_MODULES).setValue(definition.isExportRelatedModules());
-			group.getSettings().get(_EXPORT_DATA_RELATED_MODULES).setValue(definition.isExportDataRelatedModules());
-			group.getSettings().get(_EXPORT_DATA_MAIN_MODULE).setValue(definition.isExportDataMainModule());
-		}
+		if (definition != null && definition.getFile() != null)
+			group.getSettings().get(_IMPORT_FILE).setValue(definition.getFile().toString());
 	}
 
 	@Override
@@ -97,19 +88,10 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
         setLayout(Layout.getGBL());
 
         // TODO: Use resources
-
         group = new SettingsGroup("", "");
-        group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
-        		PanelExportConfiguration._EXPORT_DATA_MAIN_MODULE, Boolean.FALSE, ComponentFactory._CHECKBOX,
-                "", "Export data of the main module", false, false));
-        group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
-        		PanelExportConfiguration._EXPORT_RELATED_MODULES, Boolean.TRUE, ComponentFactory._CHECKBOX,
-                "", "Export related modules (property modules and such). Recommended.", false, false));
-        group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
-        		PanelExportConfiguration._EXPORT_DATA_RELATED_MODULES, Boolean.TRUE, ComponentFactory._CHECKBOX,
-                "", "Export the data of the related modules (property modules and such). Recommended.", false, false));     
-        group.add(new Setting(DcRepository.ValueTypes._STRING, PanelExportConfiguration._PATH, null, ComponentFactory._DIRECTORYFIELD,
-                "", "Export path. Location where the export file will be placed.", true, true));         
+        group.add(new Setting(DcRepository.ValueTypes._STRING,
+                PanelImportConfiguration._IMPORT_FILE, null, ComponentFactory._FILEFIELD,
+                "", "The import file", true, true));         
         
         settingsPanel = new SettingsPanel(group, true);
         settingsPanel.setVisible(true);

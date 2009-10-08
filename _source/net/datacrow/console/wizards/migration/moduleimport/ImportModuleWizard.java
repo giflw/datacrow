@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.migration.moduleexport;
+package net.datacrow.console.wizards.migration.moduleimport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,6 @@ import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.console.wizards.module.CreateModuleWizard;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
@@ -46,16 +45,16 @@ import net.datacrow.settings.DcSettings;
  *  
  * @author Robert Jan van der Waals
  */
-public class ExportModuleWizard extends Wizard {
+public class ImportModuleWizard extends Wizard {
     
-    public ExportModuleWizard() {
+    public ImportModuleWizard() {
         super();
         
-        setTitle(DcResources.getText("lblModuleExportWizard"));
+        setTitle(DcResources.getText("lblModuleImportWizard"));
         //TODO: Add help
-        //setHelpIndex("dc.modules.export");
+        //setHelpIndex("dc.modules.import");
 
-        setSize(DcSettings.getDimension(DcRepository.Settings.stModuleExportWizardFormSize));
+        setSize(DcSettings.getDimension(DcRepository.Settings.stModuleImportWizardFormSize));
         setCenteredLocation();
     }
     
@@ -65,15 +64,14 @@ public class ExportModuleWizard extends Wizard {
     @Override
     protected List<IWizardPanel> getWizardPanels() {
         List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
-        panels.add(new PanelSelectModuleToExport(this));
-        panels.add(new PanelExportConfiguration());
-        panels.add(new PanelExportTask());
+        panels.add(new PanelImportConfiguration());
+        panels.add(new PanelImportTask());
         return panels;
     }
 
     @Override
     protected void saveSettings() {
-        DcSettings.set(DcRepository.Settings.stModuleExportWizardFormSize, getSize());
+        DcSettings.set(DcRepository.Settings.stModuleImportWizardFormSize, getSize());
     }
 
     @Override
@@ -89,27 +87,13 @@ public class ExportModuleWizard extends Wizard {
     @Override
     public void next() {
         try {
-            
-            ExportDefinition definition;
-            if (getCurrent() instanceof PanelSelectModuleToExport) {
-                DcModule module = (DcModule) getCurrent().apply();
-                
-                if (module == null) return;
-                
-                definition = new ExportDefinition();
-                definition.setModule(module);
-            } else {
-                definition = (ExportDefinition) getCurrent().apply();
-            }
+            ImportDefinition definition = (ImportDefinition) getCurrent().apply();
             
             current += 1;
             if (current <= getStepCount()) {
                 for (int i = 0; i < getStepCount(); i++) {
-                    IWizardPanel panel = getWizardPanel(i);
-                    
-                    if (panel instanceof ModuleExportWizardPanel)
-                        ((ModuleExportWizardPanel) panel).setDefinition(definition);
-
+                    ModuleImportWizardPanel panel = (ModuleImportWizardPanel) getWizardPanel(i);
+                    panel.setDefinition(definition);
                     panel.setVisible(i == current);
                 }
             } else {
@@ -125,7 +109,7 @@ public class ExportModuleWizard extends Wizard {
 
     @Override
     protected String getWizardName() {
-        return DcResources.getText("msgExportModuleWizard",
+        return DcResources.getText("msgImportModuleWizard",
                                    new String[] {String.valueOf(current + 1), String.valueOf(getStepCount())});
     }
 
