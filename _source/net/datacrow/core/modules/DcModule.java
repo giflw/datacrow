@@ -1386,14 +1386,21 @@ public class DcModule implements Comparable<DcModule> {
      * @return The default data or null.
      * @throws Exception
      */
-    public Collection<DcObject> getDefaultData() throws Exception  {
-        String filename = getTableName() + ".data";
-        File file = new File(DataCrow.moduleDir + "data/", filename);
+    public Collection<DcObject> getDefaultData() throws Exception {
+        //String filename = ;
+        File csvFile = new File(DataCrow.moduleDir + "data", getTableName() + ".data");
+        File xmlFile = new File(DataCrow.moduleDir + "data", getTableName() + ".xml");
         
         Collection<DcObject> items = null;
-        if (file.exists()) {
-            ItemImporterHelper reader = new ItemImporterHelper("CSV", getIndex(), file);
+        ItemImporterHelper reader = null;
+        if (csvFile.exists()) {
+            reader = new ItemImporterHelper("CSV", getIndex(), csvFile);
             reader.setSetting(CsvImporter._SEPERATOR, "\t");
+        } else if (xmlFile.exists()) {
+            reader = new ItemImporterHelper("XML", getIndex(), xmlFile);
+        }
+        
+        if (reader != null) {
             reader.start();
             items = reader.getItems();
             reader.clear();
