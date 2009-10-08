@@ -348,7 +348,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 String value = "";
                 
                 // Create links
-                if (dco.getField(index).getReferenceIdx() > 0 && 
+                if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
+                	value = "<a href=\"" +  dco.getValue(index) + "\">" + DcResources.getText("lblLink") + "</a>";
+                } else if (dco.getField(index).getReferenceIdx() > 0 && 
                     dco.getField(index).getReferenceIdx() != dco.getModule().getIndex()) {
                     
                     if (dco.getField(index).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {

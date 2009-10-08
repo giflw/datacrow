@@ -1,13 +1,24 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+! Note: The minimum Java version is not Java 6 (also known as Java 1.6).
 
 [Changed]
 - Added additional font rendering options (Settings > Settings > Font).
+- File and URL launcher: both have been updated to use the Java 1.6 methods for launching 
+  files and URLs. Additionally the feedback to the user has been improved in case the file
+  or URL cannot be opened.
+- Quick View: URLs are now displayed as "link" instead of mentioning the full URL.
+  This also fixes the issue where text in the Quick View is not being wrapped.
 
 [New]
-- ISBN Extraction from PDF documents (ADD REF HERE).
+- ISBN Extraction from PDF documents using ISBNExtractor 
+  (http://isbnextractor.sourceforge.net).
 
+[Fixed]
+- "Pick a Date": larger set of years to make the navigation easier + a fix for the up and 
+  down error of the year (both went back in time). 
+   
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
