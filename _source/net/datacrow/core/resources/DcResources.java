@@ -75,7 +75,7 @@ public class DcResources {
                     p.load(getClass().getResourceAsStream("/net/sf/dc/core/resources/" + propertyFile));
                 } catch (Exception e) {
                     logger.error("Could not load sustom resource files. Falling back to the default resources.", e);
-                    new MessageBox("Unable to load custom resources! " + e.getMessage(), MessageBox._ERROR);
+                    new MessageBox("Unable to load custom resources! " + e.toString(), MessageBox._ERROR);
                 }
             }
             

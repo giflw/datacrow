@@ -181,7 +181,7 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleE
 
     public void notifyError(Exception e) {
         logger.error(e, e);
-        notifyMessage(DcResources.getText("msgModuleExportError", e.getMessage()));
+        notifyMessage(DcResources.getText("msgModuleExportError", e.toString()));
     }
 
     public void notifyFinished() {

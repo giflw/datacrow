@@ -144,21 +144,19 @@ public class ModuleExporter {
 					String modName = module.getName().toLowerCase();
 					
 					// only export custom modules
-					if (module.isCustomModule()) {
+					// adds the module jar file to the distribution
+					if (module.isCustomModule() && module.getXmlModule() != null) {
     					XmlModule xmlModule = module.getXmlModule();
-    					if (xmlModule != null) {
-    					    
-    						String jarName = xmlModule.getJarFilename();
-    						byte[] content = Utilities.readFile(new File(DataCrow.moduleDir, jarName));
-    						zf.addEntry(jarName, content);
-    					}
+						String jarName = xmlModule.getJarFilename();
+						byte[] content = Utilities.readFile(new File(DataCrow.moduleDir, jarName));
+						zf.addEntry(jarName, content);
 					}
-						
-					if ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
-					    (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
+
+					// item export
+					if ( !module.isAbstract() && module.getIndex() != DcModules._CONTACTPERSON &&
+					    ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
+					     (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods()))) {
 					
-					    // export the items
-					    
 					    try {
     					    exportData(module.getIndex());
     					    
@@ -216,8 +214,7 @@ public class ModuleExporter {
 		}
 		
 		private void exportData(int module) throws Exception {
-			XmlModule xmlModule = DcModules.get(module).getXmlModule();
-			String modName = xmlModule.getName().toLowerCase();
+			String modName = DcModules.get(module).getName().toLowerCase();
 			
 			XmlExporter itemExporter = new XmlExporter(parent.getModule(), XmlExporter._MODE_NON_THREADED);
 			

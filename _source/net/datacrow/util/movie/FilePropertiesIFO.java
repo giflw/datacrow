@@ -297,7 +297,7 @@ class FilePropertiesIFO extends FileProperties {
 			setSubtitles(subtitles);
 
 		} catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e, e);
 		}
 	}
 }

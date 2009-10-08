@@ -62,6 +62,7 @@ import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.fileimporters.IFileImportClient;
 import net.datacrow.settings.Settings;
+import net.datacrow.util.Utilities;
 import net.datacrow.util.filefilters.FileNameFilter;
 
 import org.apache.log4j.Logger;
@@ -148,7 +149,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
 
     public void addError(Throwable e) {
         logger.error(e, e);
-        new MessageBox(DcResources.getText("msgUnexpectedProblemDuringFileImport", e.getMessage()), 
+        new MessageBox(DcResources.getText("msgUnexpectedProblemDuringFileImport", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()), 
                        MessageBox._ERROR);
     }
 
@@ -207,7 +208,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             importer.setClient(this);
             importer.parse(panelFs.getFiles(false));
         } catch (Exception e) {
-            new MessageBox(e.getMessage(), MessageBox._INFORMATION);
+            new MessageBox(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage(), MessageBox._INFORMATION);
             finish();
         }
     }

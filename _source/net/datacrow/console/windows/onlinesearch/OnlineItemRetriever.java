@@ -31,6 +31,7 @@ import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.SearchTask;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -71,7 +72,7 @@ public class OnlineItemRetriever extends Thread {
             dco = task.query(dco);
             finished = true;
         } catch (Exception e) {
-            new MessageBox(e.getMessage(), MessageBox._ERROR);
+            new MessageBox(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage(), MessageBox._ERROR);
             logger.error(e, e);
         }
     }

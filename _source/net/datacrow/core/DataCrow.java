@@ -419,7 +419,7 @@ public class DataCrow {
         } catch (Exception e) {
             logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
             e.printStackTrace();
-            new NativeMessageBox("Error", e.getMessage());
+            new NativeMessageBox("Error", e.toString());
             System.exit(0);
         }
         
@@ -494,7 +494,7 @@ public class DataCrow {
                     try {
                         success = SecurityCentre.getInstance().login(dlg.getLoginName(), dlg.getPassword(), false) != null;
                     } catch (SecurityException se) {
-                        new MessageBox(se.getMessage(), MessageBox._INFORMATION);
+                        new MessageBox(se.toString(), MessageBox._INFORMATION);
                         retry ++;
                     }
                 }
@@ -510,7 +510,7 @@ public class DataCrow {
                 SecurityCentre.getInstance().login(username, password, false);
             } catch (SecurityException se) {
                 logger.info(se, se);
-                System.out.println(se.getMessage());
+                System.out.println(se.toString());
                 System.exit(0);
             }
         }

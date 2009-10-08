@@ -364,7 +364,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                     Utilities.writeToFile(picture, filename);
                 }
             } catch (Exception e) {
-                new MessageBox(e.getMessage(), MessageBox._ERROR);
+                new MessageBox(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage(), MessageBox._ERROR);
                 logger.error("An error occurred while saving the image", e);
             }
         }
