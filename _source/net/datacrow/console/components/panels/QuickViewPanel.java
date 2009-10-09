@@ -31,6 +31,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -353,7 +354,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 
                     String filename = dco.getDisplayString(index);
                     filename = filename.replaceAll(" ", "%20");
-                    value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + DcResources.getText("lblLink") + "</a>";
+                    value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(filename).getName() + "</a>";
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
                 	value = "<a " + Utilities.getHtmlStyle() + "  href=\"" +  dco.getValue(index) + "\">" + DcResources.getText("lblLink") + "</a>";
                 } else if (dco.getField(index).getReferenceIdx() > 0 && 
