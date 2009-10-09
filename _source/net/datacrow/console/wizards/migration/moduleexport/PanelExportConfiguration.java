@@ -33,6 +33,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.windows.settings.SettingsPanel;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.util.Utilities;
@@ -59,8 +60,7 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
     	String path = group.getSettings().get(_PATH).getValueAsString();
     	
     	if (Utilities.isEmpty(path)) {
-    		// TODO: use resources
-    		throw new WizardException("Select a path first!");
+    		throw new WizardException(DcResources.getText("msgSelectDirFirst"));
     	} else {
 	    	definition.setExportDataRelatedModules(((Boolean) group.getSettings().get(_EXPORT_DATA_RELATED_MODULES).getValue()).booleanValue());
 	    	definition.setExportDataMainModule(((Boolean) group.getSettings().get(_EXPORT_DATA_MAIN_MODULE).getValue()).booleanValue());
@@ -84,8 +84,7 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
 
 	@Override
     public String getHelpText() {
-    	// TODO: Add text here.
-        return "";//DcResources.getText("msgBasicModuleInfo");
+        return DcResources.getText("msgExportConfigurationHelp");
     }
     
     public void destroy() {
@@ -96,20 +95,18 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
     private void build() {
         setLayout(Layout.getGBL());
 
-        // TODO: Use resources
-
         group = new SettingsGroup("", "");
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_DATA_MAIN_MODULE, Boolean.FALSE, ComponentFactory._CHECKBOX,
-                "", "Export data of the main module", false, false));
+                "",  DcResources.getText("lblExportModuleItemsMain"), false, false));
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_RELATED_MODULES, Boolean.TRUE, ComponentFactory._CHECKBOX,
-                "", "Export related modules (property modules and such). Recommended.", false, false));
+                "", DcResources.getText("lblExportRelatedModules"), false, false));
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_DATA_RELATED_MODULES, Boolean.TRUE, ComponentFactory._CHECKBOX,
-                "", "Export the data of the related modules (property modules and such). Recommended.", false, false));     
+                "", DcResources.getText("lblExportModuleItemsSub"), false, false));     
         group.add(new Setting(DcRepository.ValueTypes._STRING, PanelExportConfiguration._PATH, null, ComponentFactory._DIRECTORYFIELD,
-                "", "Export path. Location where the export file will be placed.", true, true));         
+                "", DcResources.getText("lblExportModulePath"), true, true));         
         
         settingsPanel = new SettingsPanel(group, true);
         settingsPanel.setVisible(true);

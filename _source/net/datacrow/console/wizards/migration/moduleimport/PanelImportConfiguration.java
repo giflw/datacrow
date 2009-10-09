@@ -33,6 +33,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.windows.settings.SettingsPanel;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.util.Utilities;
@@ -56,8 +57,7 @@ public class PanelImportConfiguration extends ModuleImportWizardPanel {
     	String filename = group.getSettings().get(_IMPORT_FILE).getValueAsString();
     	
     	if (Utilities.isEmpty(filename)) {
-    		// TODO: use resources
-    		throw new WizardException("Select a file first!");
+    		throw new WizardException(DcResources.getText("msgNoFileSelected"));
     	} else {
 	    	definition.setFile(filename);
     	}
@@ -75,8 +75,7 @@ public class PanelImportConfiguration extends ModuleImportWizardPanel {
 
 	@Override
     public String getHelpText() {
-    	// TODO: Add text here.
-        return "";//DcResources.getText("msgBasicModuleInfo");
+        return DcResources.getText("msgImportModuleConfigurationHelp");
     }
     
     public void destroy() {
@@ -87,11 +86,10 @@ public class PanelImportConfiguration extends ModuleImportWizardPanel {
     private void build() {
         setLayout(Layout.getGBL());
 
-        // TODO: Use resources
         group = new SettingsGroup("", "");
         group.add(new Setting(DcRepository.ValueTypes._STRING,
                 PanelImportConfiguration._IMPORT_FILE, null, ComponentFactory._FILEFIELD,
-                "", "The import file", true, true));         
+                "", DcResources.getText("lblModuleImportFile"), true, true));         
         
         settingsPanel = new SettingsPanel(group, true);
         settingsPanel.setVisible(true);

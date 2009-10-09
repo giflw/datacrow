@@ -1,6 +1,6 @@
-package net.datacrow.core.migration.moduleexport;
+package net.datacrow.core.migration;
 
-public interface IModuleExporterClient {
+public interface IModuleWizardClient {
 
 	public void notifyStarted(int count);
 	

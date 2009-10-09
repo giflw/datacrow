@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.migration.IModuleWizardClient;
 import net.datacrow.core.migration.itemexport.IItemExporterClient;
 import net.datacrow.core.migration.itemexport.ItemExporterSettings;
 import net.datacrow.core.migration.itemexport.XmlExporter;
@@ -97,7 +98,7 @@ public class ModuleExporter {
 		return exportDataRelatedMods;
 	}
 
-	public void start(IModuleExporterClient client) {
+	public void start(IModuleWizardClient client) {
 		Exporter exporter = new Exporter(client, this);
 		exporter.start();
 	}
@@ -109,12 +110,12 @@ public class ModuleExporter {
 	
 	private class Exporter extends Thread implements IItemExporterClient {
 		
-		private IModuleExporterClient client;
+		private IModuleWizardClient client;
 		private ModuleExporter parent;
 		
 		private boolean canceled = false;
 		
-		protected Exporter(IModuleExporterClient client, ModuleExporter parent) {
+		protected Exporter(IModuleWizardClient client, ModuleExporter parent) {
 			this.client = client;
 			this.parent = parent;
 		}

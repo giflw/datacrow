@@ -15,6 +15,7 @@ import java.util.zip.ZipFile;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.migration.IModuleWizardClient;
 import net.datacrow.core.migration.itemimport.ItemImporterHelper;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -23,6 +24,7 @@ import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
@@ -43,7 +45,7 @@ public class ModuleImporter {
 		this.file = file;
 	}
 	
-	public void start(IModuleImporterClient client) {
+	public void start(IModuleWizardClient client) {
 	    Importer importer = new Importer(client, file);
 		importer.start();
 	}
@@ -58,9 +60,9 @@ public class ModuleImporter {
 		private boolean canceled = false;
 		
 		private File file;
-		private IModuleImporterClient client;
+		private IModuleWizardClient client;
 		
-		protected Importer(IModuleImporterClient client, File file) {
+		protected Importer(IModuleWizardClient client, File file) {
 			this.client = client;
 			this.file = file;
 		}
@@ -79,11 +81,16 @@ public class ModuleImporter {
                 Map<String, File> data = new HashMap<String, File>();
                 
                 Enumeration<? extends ZipEntry> list = zf.entries();
+                
+                client.notifyStarted(zf.size());
                 while (list.hasMoreElements() && !canceled) {
                     ZipEntry ze = list.nextElement();
     
                     BufferedInputStream bis = new BufferedInputStream(zf.getInputStream(ze));
                     String name = ze.getName();
+                    
+                    client.notifyMessage(DcResources.getText("msgProcessingFileX", name));
+                    
                     if (name.toLowerCase().endsWith(".jpg")) {
                         String moduleName = name.substring(0, name.indexOf("_"));
                         Collection<DcImageIcon> c = icons.get(moduleName);
@@ -109,7 +116,7 @@ public class ModuleImporter {
                         moduleJar.load();
                         modules.add(moduleJar);
                     }
-                    
+                    client.notifyProcessed();
                     bis.close();
                 }
                 
@@ -150,31 +157,44 @@ public class ModuleImporter {
 		}
 		
 		private void processData(Map<String, Collection<DcImageIcon>> icons, 
-		                     Map<String, File> data) {
+		                         Map<String, File> data) {
+		    
+		    client.notifyStarted(data.size());
+		    
+		    client.notifyMessage(DcResources.getText("msgProcessingModuleItems"));
 		    
 		    for (String key : data.keySet()) {
 		        DcModule module = DcModules.get(key);
+		        
+		        client.notifyMessage(DcResources.getText("msgProcessingItemsForX", key));
+		        
                 // for existing module data has to be loaded manually.
                 // new modules can use the demo data / default data functionality.
 		        if (module != null) {
+		            
+		            client.notifyMessage(DcResources.getText("msgModuleExistsMergingItems"));
+		            
 		            // place the images in the correct folder
 		            storeImages(key, icons.get(key), true);
 		            // start the import process
 		            loadItems(file, module.getIndex());
+		            
+		            
 		        } else { 
 		            try {
+		                client.notifyMessage(DcResources.getText("msgModuleIsNewCreatingItems"));
 		                storeImages(key, icons.get(key), false);
                         Utilities.rename(file, new File(DataCrow.moduleDir + "data", key + ".xml"));
                     } catch (IOException e) {
-                        // TODO: meaningful message goes here...
                         client.notifyError(e);
                     }
 		        }
+		        client.notifyProcessed();
 		    }
 		}
 		
 		private void storeImages(String moduleName, Collection<DcImageIcon> icons, boolean temp) {
-		    
+
 		    if (icons == null || icons.size() == 0) return;
 		    
 		    File dir;
@@ -186,22 +206,32 @@ public class ModuleImporter {
 		    }
 		    dir.mkdirs();
 		    
+		    client.notifyStartedSubProcess(icons.size());
+		    client.notifyMessage("Storing images to " + dir);
+		    
 		    for (DcImageIcon icon : icons) {
 		        try {
 		            Utilities.writeToFile(icon.getBytes(), new File(dir, icon.getFilename()));
+		            client.notifyMessage("Saving image " + icon.getFilename());
+		            client.notifySubProcessed();
 		        } catch (Exception e) {
-		            // TODO: Add meaningful message.. (could not save image x to y)
 		            client.notifyError(e);
 		        }
 		    }
+		    client.notifyFinishedSubProcess();
 		}
 		
 		private void loadItems(File file, int moduleIdx) {
 		    try {
-    	        ItemImporterHelper reader = new ItemImporterHelper("XML", moduleIdx, file);
+    	        
+		        client.notifyMessage("Loading items");
+		        
+		        ItemImporterHelper reader = new ItemImporterHelper("XML", moduleIdx, file);
                 reader.start();
                 Collection<DcObject> items = reader.getItems();
                 reader.clear();
+                
+                client.notifyStartedSubProcess(items.size());
                 
                 for (DcObject item : items) {
                     DcObject other = DataManager.getObjectForDisplayValue(item.getModule().getIndex(), item.toString());
@@ -210,18 +240,19 @@ public class ModuleImporter {
                     // is of no importance (!).
                     try {
                         if (other != null) {
+                            client.notifyMessage("Item " + other + " exists. Information will be merged.");
                             other.copy(item, true);
                             other.saveUpdate(true, false);
                         } else {
+                            client.notifyMessage("Item " + item + " does not exist. Item will be saved.");
                             item.setValidate(false);
                             item.saveNew(true);
                         }
-                    } catch (ValidationException ve) {
-                        // will not occur as validation has been disabled.
-                    }
+                    } catch (ValidationException ignore) {} // cannot occur (for real!)
+                    
+                    client.notifySubProcessed();
                 }
 		    } catch (Exception e) {
-		        // TODO: Add meaningful message: Could not load items for module X
 		        client.notifyError(e);
 		    }
 		}

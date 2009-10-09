@@ -214,13 +214,6 @@ public class DcList extends JList implements ComponentListener {
     }
     
     @Override
-    public int getScrollableBlockIncrement(Rectangle visibleRect,
-            int orientation, int direction) {
-        // TODO Auto-generated method stub
-        return super.getScrollableBlockIncrement(visibleRect, orientation, direction);
-    }
-
-    @Override
     public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
         
         int firstIndex = getFirstVisibleIndex();

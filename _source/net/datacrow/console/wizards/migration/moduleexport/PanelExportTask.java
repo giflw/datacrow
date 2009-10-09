@@ -38,13 +38,13 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.console.wizards.migration.itemimport.ItemImporterPanel;
-import net.datacrow.core.migration.moduleexport.IModuleExporterClient;
+import net.datacrow.core.migration.IModuleWizardClient;
 import net.datacrow.core.migration.moduleexport.ModuleExporter;
 import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
 
-public class PanelExportTask extends ModuleExportWizardPanel implements IModuleExporterClient {
+public class PanelExportTask extends ModuleExportWizardPanel implements IModuleWizardClient {
 
     private static Logger logger = Logger.getLogger(ItemImporterPanel.class.getName());
     
