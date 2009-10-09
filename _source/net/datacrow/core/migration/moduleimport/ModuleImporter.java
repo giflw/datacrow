@@ -106,10 +106,10 @@ public class ModuleImporter {
                         c.add(icon);
                         icons.put(moduleName, c);
                     } else if (name.toLowerCase().endsWith(".xml")) {
-                        File file = File.createTempFile(name.substring(name.toLowerCase().indexOf(".xml")), "xml");
+                        File file =  new File(System.getProperty("java.io.tmpdir"), name);
                         writeToFile(bis, file);
                         file.deleteOnExit();
-                        data.put(name.substring(name.toLowerCase().indexOf(".xml")), file);
+                        data.put(name.substring(0, name.toLowerCase().indexOf(".xml")), file);
                     } else if (name.toLowerCase().endsWith(".jar")) {
                         writeToFile(bis, new File(DataCrow.moduleDir, name));
                         ModuleJar moduleJar = new ModuleJar(name);
