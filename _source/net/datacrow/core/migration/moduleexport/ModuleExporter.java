@@ -214,9 +214,7 @@ public class ModuleExporter {
 		    client.notifyStartedSubProcess(count);
 		}
 
-		public void notifyStopped() {
-		    client.notifyFinishedSubProcess();
-		}
+		public void notifyStopped() {}
 		
 		private void exportData(int module) throws Exception {
 			String modName = DcModules.get(module).getName().toLowerCase();

@@ -224,7 +224,6 @@ public class ModuleImporter {
 		            client.notifyError(e);
 		        }
 		    }
-		    client.notifyFinishedSubProcess();
 		}
 		
 		private void loadItems(File file, int moduleIdx) {

@@ -28,13 +28,8 @@ package net.datacrow.console.wizards.moduleimport;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.panels.TaskPanel;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.console.wizards.itemimport.ItemImporterPanel;
 import net.datacrow.core.migration.IModuleWizardClient;
@@ -47,9 +42,7 @@ public class PanelImportTask extends ModuleImportWizardPanel implements IModuleW
 
     private static Logger logger = Logger.getLogger(ItemImporterPanel.class.getName());
     
-    private JTextArea textLog = ComponentFactory.getTextArea();
-    private JProgressBar progressBar = new JProgressBar();
-    private JProgressBar progressBarSub = new JProgressBar();
+    private TaskPanel tp = new TaskPanel(TaskPanel._DUPLICATE_PROGRESSBAR);
     
     private ModuleImporter importer;
     
@@ -66,8 +59,11 @@ public class PanelImportTask extends ModuleImportWizardPanel implements IModuleW
             importer.cancel();
         
         importer = null;
-        progressBar = null;
-        textLog = null;
+        
+        if (tp != null)
+            tp.destroy();
+        
+        tp = null;
     }
 
     @Override
@@ -104,41 +100,9 @@ public class PanelImportTask extends ModuleImportWizardPanel implements IModuleW
     
     private void build() {
         setLayout(Layout.getGBL());
-
-        //**********************************************************
-        //Progress panel
-        //**********************************************************
-        JPanel panelProgress = new JPanel();
-        panelProgress.setLayout(Layout.getGBL());
-        panelProgress.add(progressBar, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets(5, 5, 5, 5), 0, 0));
-        panelProgress.add(progressBarSub, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets(5, 5, 5, 5), 0, 0));
-        
-        //**********************************************************
-        //Log Panel
-        //**********************************************************        
-        JPanel panelLog = new JPanel();
-        panelLog.setLayout(Layout.getGBL());
-
-        JScrollPane scroller = new JScrollPane(textLog);
-        textLog.setEditable(false);
-
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        panelLog.add(scroller, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                     new Insets(5, 5, 5, 5), 0, 0));
-
-        panelLog.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblLog")));
-
-        add(panelLog,      Layout.getGBC( 0, 0, 1, 1, 20.0, 20.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
-        add(panelProgress, Layout.getGBC( 0, 1, 1, 1, 10.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 5, 5, 5, 5), 0, 0));
+        add(tp, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                new Insets( 5, 5, 5, 5), 0, 0));
     }
     
     private void cancel() {
@@ -148,47 +112,36 @@ public class PanelImportTask extends ModuleImportWizardPanel implements IModuleW
         notifyFinished();
     }    
     
-    public void notifyMessage(String message) {
-        if (textLog != null) {
-            textLog.insert(message + '\n', 0);
-            textLog.setCaretPosition(0);
-        }
+    public void notifyMessage(String msg) {
+        tp.addMessage(msg);
     }
 
     public void notifyNewTask() {
-        if (textLog != null)
-            textLog.setText("");
+        tp.clear();
     }
     
     public void notifyStarted(int count) {
-        if (progressBar != null) {
-            progressBar.setValue(0);
-            progressBarSub.setValue(0);
-            progressBar.setMaximum(count);
-        }
+        tp.initializeTask(count);
+    }
+
+    public void notifyStartedSubProcess(int count) {
+        tp.initializeSubTask(count);
     }
 
     public void notifyProcessed() {
-        progressBar.setValue(progressBar.getValue() + 1);
+        tp.updateProgressTask();
+    }
+
+    public void notifySubProcessed() {
+        tp.updateProgressSubTask();
     }
 
     public void notifyError(Exception e) {
         logger.error(e, e);
-        notifyMessage(DcResources.getText("msgModuleImportError", e.getMessage()));
+        notifyMessage(DcResources.getText("msgModuleExportError", e.toString()));
     }
 
     public void notifyFinished() {
-        notifyMessage(DcResources.getText("msgModuleImportFinished"));
+        notifyMessage(DcResources.getText("msgModuleExportFinished"));
     }
-
-    public void notifyFinishedSubProcess() {}
-
-    public void notifyStartedSubProcess(int count) {
-        progressBarSub.setValue(0);
-        progressBarSub.setMaximum(count);
-    }
-    
-    public void notifySubProcessed() {
-        progressBarSub.setValue(progressBarSub.getValue() + 1);
-    }    
 }
