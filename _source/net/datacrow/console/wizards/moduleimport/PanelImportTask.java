@@ -138,10 +138,10 @@ public class PanelImportTask extends ModuleImportWizardPanel implements IModuleW
 
     public void notifyError(Exception e) {
         logger.error(e, e);
-        notifyMessage(DcResources.getText("msgModuleExportError", e.toString()));
+        notifyMessage(DcResources.getText("msgModuleImportError", e.toString()));
     }
 
     public void notifyFinished() {
-        notifyMessage(DcResources.getText("msgModuleExportFinished"));
+        notifyMessage(DcResources.getText("msgModuleImportFinished"));
     }
 }
