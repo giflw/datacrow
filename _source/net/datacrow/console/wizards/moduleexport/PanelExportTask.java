@@ -32,7 +32,7 @@ import java.io.File;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.TaskPanel;
 import net.datacrow.console.wizards.WizardException;
-import net.datacrow.console.wizards.itemimport.ItemImporterPanel;
+import net.datacrow.console.wizards.itemimport.ItemImporterTaskPanel;
 import net.datacrow.core.migration.IModuleWizardClient;
 import net.datacrow.core.migration.moduleexport.ModuleExporter;
 import net.datacrow.core.resources.DcResources;
@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
 
 public class PanelExportTask extends ModuleExportWizardPanel implements IModuleWizardClient {
 
-    private static Logger logger = Logger.getLogger(ItemImporterPanel.class.getName());
+    private static Logger logger = Logger.getLogger(ItemImporterTaskPanel.class.getName());
 
     private TaskPanel tp = new TaskPanel(TaskPanel._DUPLICATE_PROGRESSBAR);
     

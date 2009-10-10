@@ -71,7 +71,7 @@ public class ItemImporterWizard extends Wizard {
     	panels.add(new ItemImporterSelectionPanel(this));
     	panels.add(new ItemImporterDefinitionPanel(this));
     	panels.add(new ItemImporterMappingPanel(this));
-    	panels.add(new ItemImporterPanel(this));
+    	panels.add(new ItemImporterTaskPanel(this));
     	return panels;
     }
 

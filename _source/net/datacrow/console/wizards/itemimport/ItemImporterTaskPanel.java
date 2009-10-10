@@ -3,13 +3,8 @@ package net.datacrow.console.wizards.itemimport;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.panels.TaskPanel;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.itemimport.IItemImporterClient;
@@ -20,20 +15,19 @@ import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
 
-public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemImporterClient  {
+public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements IItemImporterClient  {
 
-	private static Logger logger = Logger.getLogger(ItemImporterPanel.class.getName());
+	private static Logger logger = Logger.getLogger(ItemImporterTaskPanel.class.getName());
 	
 	private int created = 0;
 	private int updated = 0;
 	
     private ItemImporterWizard wizard;
-    private JTextArea textLog = ComponentFactory.getTextArea();
-    private JProgressBar progressBar = new JProgressBar();
-    
     private ItemImporter importer;
     
-    public ItemImporterPanel(ItemImporterWizard wizard) {
+    private TaskPanel tp = new TaskPanel(TaskPanel._SINGLE_PROGRESSBAR);
+    
+    public ItemImporterTaskPanel(ItemImporterWizard wizard) {
         this.wizard = wizard;
         build();
     }
@@ -45,8 +39,8 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     public void destroy() {
     	if (importer != null) importer.cancel();
     	importer = null;
-    	progressBar = null;
-    	textLog = null;
+        if (tp != null) tp.destroy();
+        tp = null;
     	wizard = null;
     }
 
@@ -88,38 +82,9 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
     
     private void build() {
         setLayout(Layout.getGBL());
-
-        //**********************************************************
-        //Progress panel
-        //**********************************************************
-        JPanel panelProgress = new JPanel();
-        panelProgress.setLayout(Layout.getGBL());
-        panelProgress.add(progressBar, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                         ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                          new Insets(5, 5, 5, 5), 0, 0));
-        
-        //**********************************************************
-        //Log Panel
-        //**********************************************************        
-        JPanel panelLog = new JPanel();
-        panelLog.setLayout(Layout.getGBL());
-
-        JScrollPane scroller = new JScrollPane(textLog);
-        textLog.setEditable(false);
-
-        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        panelLog.add(scroller, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                     new Insets(5, 5, 5, 5), 0, 0));
-
-        panelLog.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblLog")));
-
-		add(panelProgress,  Layout.getGBC( 0, 0, 1, 1, 10.0, 1.0
-		        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-		         new Insets( 5, 5, 5, 5), 0, 0));
-		add(panelLog,     Layout.getGBC( 0, 1, 1, 1, 20.0, 20.0
-				,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-				 new Insets( 5, 5, 5, 5), 0, 0));
+        add(tp,  Layout.getGBC( 0, 01, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets( 5, 5, 5, 5), 0, 0));
     }
     
     private void cancel() {
@@ -127,21 +92,13 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
         notifyStopped();
     }    
     
-    public void notifyMessage(String message) {
-        if (textLog != null) {
-            textLog.insert(message + '\n', 0);
-            textLog.setCaretPosition(0);
-        }
+    public void notifyMessage(String msg) {
+        tp.addMessage(msg);
     }
 
     public void notifyStarted(int count) {
-        if (textLog != null)
-            textLog.setText("");
-        
-        if (progressBar != null) {
-            progressBar.setValue(0);
-            progressBar.setMaximum(count);
-        }
+        tp.clear();
+        tp.initializeTask(count);
     }
 
     public void notifyStopped() {
@@ -181,7 +138,7 @@ public class ItemImporterPanel extends ItemImporterWizardPanel implements IItemI
             }
         }
         
-        progressBar.setValue(progressBar.getValue() + 1);
+        tp.updateProgressTask();
         notifyMessage(DcResources.getText("msgImportedX", item.toString()));
     }
 }

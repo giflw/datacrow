@@ -92,10 +92,10 @@ public class TaskPanel extends JPanel {
 
         add(panelLog,      Layout.getGBC( 0, 0, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
+                 new Insets( 0, 0, 5, 0), 0, 0));
         add(panelProgress, Layout.getGBC( 0, 1, 1, 1, 10.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 5, 5, 5, 5), 0, 0));
+                 new Insets( 5, 0, 0, 0), 0, 0));
     }
     
     public void addMessage(String msg) {
