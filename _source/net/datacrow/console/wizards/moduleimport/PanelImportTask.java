@@ -23,11 +23,10 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.migration.moduleexport;
+package net.datacrow.console.wizards.moduleimport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.io.File;
 
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -37,14 +36,14 @@ import javax.swing.JTextArea;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.WizardException;
-import net.datacrow.console.wizards.migration.itemimport.ItemImporterPanel;
+import net.datacrow.console.wizards.itemimport.ItemImporterPanel;
 import net.datacrow.core.migration.IModuleWizardClient;
-import net.datacrow.core.migration.moduleexport.ModuleExporter;
+import net.datacrow.core.migration.moduleimport.ModuleImporter;
 import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
 
-public class PanelExportTask extends ModuleExportWizardPanel implements IModuleWizardClient {
+public class PanelImportTask extends ModuleImportWizardPanel implements IModuleWizardClient {
 
     private static Logger logger = Logger.getLogger(ItemImporterPanel.class.getName());
     
@@ -52,9 +51,9 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
     private JProgressBar progressBar = new JProgressBar();
     private JProgressBar progressBarSub = new JProgressBar();
     
-    private ModuleExporter exporter;
+    private ModuleImporter importer;
     
-    public PanelExportTask() {
+    public PanelImportTask() {
         build();
     }
     
@@ -63,23 +62,22 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
     }
 
     public void destroy() {
-        if (exporter != null) 
-            exporter.cancel();
+        if (importer != null) 
+            importer.cancel();
         
-        exporter = null;
+        importer = null;
         progressBar = null;
-        progressBarSub = null;
         textLog = null;
     }
 
     @Override
     public String getHelpText() {
-        return DcResources.getText("msgModuleExportHelp");
+        return DcResources.getText("msgModuleImportHelp");
     }
     
     @Override
     public void onActivation() {
-        if (getDefinition() != null && getDefinition().getModule() != 0)
+        if (getDefinition() != null && getDefinition().getFile() != null)
             start();
     }
 
@@ -89,18 +87,15 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
     }
 
     private void start() {
-        ExportDefinition def = getDefinition();
+        ImportDefinition def = getDefinition();
         
-        if (exporter != null)
-            exporter.cancel();
+        if (importer != null)
+            importer.cancel();
         
-        exporter = new ModuleExporter(def.getModule(), new File(def.getPath()));
-        exporter.setExportData(def.isExportDataMainModule());
-        exporter.setExportDataRelatedMods(def.isExportDataRelatedModules());
-        exporter.setExportRelatedMods(def.isExportRelatedModules());
+        importer = new ModuleImporter(def.getFile());
         
         try { 
-            exporter.start(this);
+            importer.start(this);
         } catch (Exception e ) {
             notifyMessage(e.getMessage());
             logger.error(e, e);
@@ -115,10 +110,10 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
         //**********************************************************
         JPanel panelProgress = new JPanel();
         panelProgress.setLayout(Layout.getGBL());
-        panelProgress.add(progressBar, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+        panelProgress.add(progressBar, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(5, 5, 5, 5), 0, 0));
-        panelProgress.add(progressBarSub, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+        panelProgress.add(progressBarSub, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(5, 5, 5, 5), 0, 0));
         
@@ -147,8 +142,8 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
     }
     
     private void cancel() {
-        if (exporter != null) 
-            exporter.cancel();
+        if (importer != null) 
+            importer.cancel();
         
         notifyFinished();
     }    
@@ -160,20 +155,17 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
         }
     }
 
-    public void notifyStarted(int count) {
+    public void notifyNewTask() {
         if (textLog != null)
             textLog.setText("");
-        
+    }
+    
+    public void notifyStarted(int count) {
         if (progressBar != null) {
             progressBar.setValue(0);
-            progressBar.setMaximum(count);
-            
             progressBarSub.setValue(0);
+            progressBar.setMaximum(count);
         }
-    }
-
-    public void notifySubProcessed() {
-        progressBarSub.setValue(progressBarSub.getValue() + 1);
     }
 
     public void notifyProcessed() {
@@ -182,11 +174,11 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
 
     public void notifyError(Exception e) {
         logger.error(e, e);
-        notifyMessage(DcResources.getText("msgModuleExportError", e.toString()));
+        notifyMessage(DcResources.getText("msgModuleImportError", e.getMessage()));
     }
 
     public void notifyFinished() {
-        notifyMessage(DcResources.getText("msgModuleExportFinished"));
+        notifyMessage(DcResources.getText("msgModuleImportFinished"));
     }
 
     public void notifyFinishedSubProcess() {}
@@ -195,4 +187,8 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
         progressBarSub.setValue(0);
         progressBarSub.setMaximum(count);
     }
+    
+    public void notifySubProcessed() {
+        progressBarSub.setValue(progressBarSub.getValue() + 1);
+    }    
 }

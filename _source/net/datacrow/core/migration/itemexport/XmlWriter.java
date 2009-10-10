@@ -26,6 +26,7 @@
 package net.datacrow.core.migration.itemexport;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -72,9 +73,11 @@ public class XmlWriter extends XmlBaseWriter {
     }
     
     public void startDocument() throws IOException {
-        writeTag("<?xml version=\"1.0\"?>");
+        writeTag("<?xml version=\"1.0\" enconding=\"UTF-8\" ?>");
         newLine();
-        writeTag("<" + uberTag + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"file://" + schemaFile + "\">");
+        
+        String xsd = new File(schemaFile).getName();
+        writeTag("<" + uberTag + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"" + xsd + "\">");
         newLine();
     }
     

@@ -23,42 +23,41 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.migration.moduleexport;
+package net.datacrow.console.wizards.moduleexport;
 
-import javax.swing.JPanel;
-
-import net.datacrow.console.wizards.IWizardPanel;
+import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.wizards.Wizard;
+import net.datacrow.console.wizards.module.PanelSelectModule;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.resources.DcResources;
 
 /**
- * This panel is the base of all panels of the Module Export Wizard.
- * Data is stored in the ExportDefinition {@link ExportDefinition}.
- * 
- * @author Robert Jan van der Waals
+ * @author Robert Jan van der Waals 
  */
-public abstract class ModuleExportWizardPanel extends JPanel implements IWizardPanel {
+public class PanelSelectModuleToExport extends PanelSelectModule {
 
-    private ExportDefinition definition;
-
-    public ModuleExportWizardPanel() {}
-    
-    public void setDefinition(ExportDefinition definition) {
-        this.definition = definition;
+    public PanelSelectModuleToExport(Wizard wizard) {
+        super(wizard);
     }
-    
-    public ExportDefinition getDefinition() {
-        return definition == null ? new ExportDefinition() : definition;
+
+    @Override
+    public Object apply() {
+        if (getSelectedModule() == -1) {
+            new MessageBox(DcResources.getText("msgSelectModuleFirst"), MessageBox._INFORMATION);
+            return null;
+        }
+        
+        return DcModules.get(getSelectedModule());
+    }
+
+    @Override
+    public String getHelpText() {
+        return DcResources.getText("msgSelectModuleToExport");
     }
     
     @Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
-    	if (b) onActivation();
-    	else onDeactivation();
+    protected boolean isModuleAllowed(DcModule module) {
+        return module.isCustomModule() && module.getXmlModule() != null && module.isTopModule();
     }
-
-	public void onDeactivation() {}
-	
-    public void onActivation() {}    
-
-    public abstract String getHelpText();
 }

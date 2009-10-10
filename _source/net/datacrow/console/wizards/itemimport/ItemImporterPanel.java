@@ -1,4 +1,4 @@
-package net.datacrow.console.wizards.migration.itemimport;
+package net.datacrow.console.wizards.itemimport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;

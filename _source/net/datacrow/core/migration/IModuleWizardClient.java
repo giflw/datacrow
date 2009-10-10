@@ -2,6 +2,8 @@ package net.datacrow.core.migration;
 
 public interface IModuleWizardClient {
 
+    public void notifyNewTask();
+    
 	public void notifyStarted(int count);
 	
 	public void notifyFinished();

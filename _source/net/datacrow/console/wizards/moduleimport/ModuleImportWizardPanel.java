@@ -23,41 +23,42 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.migration.moduleexport;
+package net.datacrow.console.wizards.moduleimport;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.wizards.Wizard;
-import net.datacrow.console.wizards.module.PanelSelectModule;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.resources.DcResources;
+import javax.swing.JPanel;
+
+import net.datacrow.console.wizards.IWizardPanel;
 
 /**
- * @author Robert Jan van der Waals 
+ * This panel is the base of all panels of the Module Export Wizard.
+ * Data is stored in the ExportDefinition {@link ExportDefinition}.
+ * 
+ * @author Robert Jan van der Waals
  */
-public class PanelSelectModuleToExport extends PanelSelectModule {
+public abstract class ModuleImportWizardPanel extends JPanel implements IWizardPanel {
 
-    public PanelSelectModuleToExport(Wizard wizard) {
-        super(wizard);
+    private ImportDefinition definition;
+
+    public ModuleImportWizardPanel() {}
+    
+    public void setDefinition(ImportDefinition definition) {
+        this.definition = definition;
     }
-
-    @Override
-    public Object apply() {
-        if (getSelectedModule() == -1) {
-            new MessageBox(DcResources.getText("msgSelectModuleFirst"), MessageBox._INFORMATION);
-            return null;
-        }
-        
-        return DcModules.get(getSelectedModule());
-    }
-
-    @Override
-    public String getHelpText() {
-        return DcResources.getText("msgSelectModuleToExport");
+    
+    public ImportDefinition getDefinition() {
+        return definition == null ? new ImportDefinition() : definition;
     }
     
     @Override
-    protected boolean isModuleAllowed(DcModule module) {
-        return module.isCustomModule() && module.getXmlModule() != null && module.isTopModule();
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+    	if (b) onActivation();
+    	else onDeactivation();
     }
+
+	public void onDeactivation() {}
+	
+    public void onActivation() {}    
+
+    public abstract String getHelpText();
 }

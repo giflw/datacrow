@@ -23,80 +23,73 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.migration.moduleimport;
+package net.datacrow.console.wizards.itemimport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.windows.settings.SettingsPanel;
-import net.datacrow.console.wizards.WizardException;
-import net.datacrow.core.DcRepository;
+import net.datacrow.core.migration.itemimport.ItemImporter;
+import net.datacrow.core.migration.itemimport.ItemImporters;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.settings.Setting;
-import net.datacrow.core.settings.SettingsGroup;
-import net.datacrow.util.Utilities;
 
-public class PanelImportConfiguration extends ModuleImportWizardPanel {
+public class ItemImporterSelectionPanel extends ItemImporterWizardPanel {
 
-	private static final String _IMPORT_FILE = "import_file";
+	private ItemImporterWizard wizard;
+	private ButtonGroup bg;
+	private Collection<ItemImporter> readers = new ArrayList<ItemImporter>();
 	
-	private SettingsGroup group;
-	private SettingsPanel settingsPanel;
-	
-    public PanelImportConfiguration() {
-        build();
-    }
-    
-    public Object apply() throws WizardException {
-    	ImportDefinition definition = getDefinition();
+    public ItemImporterSelectionPanel(ItemImporterWizard wizard) {
+    	this.wizard = wizard;
+    	this.bg = new ButtonGroup();
     	
-    	settingsPanel.saveSettings();
-    	
-    	String filename = group.getSettings().get(_IMPORT_FILE).getValueAsString();
-    	
-    	if (Utilities.isEmpty(filename)) {
-    		throw new WizardException(DcResources.getText("msgNoFileSelected"));
-    	} else {
-	    	definition.setFile(filename);
-    	}
-    	
-        return definition;
+    	build();
     }
 
-    @Override
-    public void onActivation() {
-        ImportDefinition definition = getDefinition();
-		
-		if (definition != null && definition.getFile() != null)
-			group.getSettings().get(_IMPORT_FILE).setValue(definition.getFile().toString());
+    public String getHelpText() {
+        return DcResources.getText("msgSelectImportMethod");
 	}
 
-	@Override
-    public String getHelpText() {
-        return DcResources.getText("msgImportModuleConfigurationHelp");
+	public Object apply() {
+        String command = bg.getSelection().getActionCommand();
+        for (ItemImporter reader : readers) {
+            if (reader.getKey().equals(command))
+                wizard.getDefinition().setImporter(reader);
+        }
+        
+	    return wizard.getDefinition();
     }
-    
+
     public void destroy() {
-    	group = null;
-    	settingsPanel = null;
-    }    
+        wizard = null;
+        bg  = null;
+        if (readers != null) readers.clear();
+        readers = null;
+    }      
     
     private void build() {
         setLayout(Layout.getGBL());
+        
+        int y = 0;
+        int x = 0;
+        
+        for (ItemImporter reader : ItemImporters.getInstance().getImporters(wizard.getModuleIdx())) {
+        	readers.add(reader);
 
-        group = new SettingsGroup("", "");
-        group.add(new Setting(DcRepository.ValueTypes._STRING,
-                PanelImportConfiguration._IMPORT_FILE, null, ComponentFactory._FILEFIELD,
-                "", DcResources.getText("lblModuleImportFile"), true, true));         
-        
-        settingsPanel = new SettingsPanel(group, true);
-        settingsPanel.setVisible(true);
-        settingsPanel.initializeSettings();
-        
-        add(settingsPanel, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                new Insets( 5, 5, 5, 5), 0, 0));
+        	JRadioButton rb = ComponentFactory.getRadioButton(reader.getName(), reader.getIcon(), reader.getKey());
+            bg.add(rb);
+            add(rb, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 0, 5, 5, 5), 0, 0));
+            
+            if (y == 1)
+                rb.setSelected(true);
+        }
     }
 }

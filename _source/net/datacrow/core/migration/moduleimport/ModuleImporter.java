@@ -74,6 +74,9 @@ public class ModuleImporter {
 		@Override
 		public void run() {
 		    try {
+		        
+		        client.notifyNewTask();
+		        
     		    ZipFile zf = new ZipFile(file);
     
                 Collection<ModuleJar> modules = new ArrayList<ModuleJar>();

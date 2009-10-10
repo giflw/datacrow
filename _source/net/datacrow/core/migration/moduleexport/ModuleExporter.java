@@ -126,6 +126,9 @@ public class ModuleExporter {
 		
 		@Override
 		public void run() {
+		    
+		    client.notifyNewTask();
+		    
 			Collection<DcModule> modules = new ArrayList<DcModule>();
 			modules.add(DcModules.get(module));
 			

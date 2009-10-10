@@ -1,4 +1,4 @@
-package net.datacrow.console.wizards.migration.itemexport;
+package net.datacrow.console.wizards.itemexport;
 
 import java.io.File;
 

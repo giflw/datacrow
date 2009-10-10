@@ -1,4 +1,4 @@
-package net.datacrow.console.wizards.migration.moduleimport;
+package net.datacrow.console.wizards.moduleimport;
 
 import java.io.File;
 

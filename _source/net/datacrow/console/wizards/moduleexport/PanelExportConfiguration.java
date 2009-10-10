@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.wizards.migration.moduleexport;
+package net.datacrow.console.wizards.moduleexport;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
