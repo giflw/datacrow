@@ -111,10 +111,13 @@ public class ModuleImporter {
                         file.deleteOnExit();
                         data.put(name.substring(0, name.toLowerCase().indexOf(".xml")), file);
                     } else if (name.toLowerCase().endsWith(".jar")) {
-                        writeToFile(bis, new File(DataCrow.moduleDir, name));
-                        ModuleJar moduleJar = new ModuleJar(name);
-                        moduleJar.load();
-                        modules.add(moduleJar);
+                        // check if the custom module does not already exist
+                        if (DcModules.get(name.substring(0, name.indexOf(".jar"))) == null) {
+                            writeToFile(bis, new File(DataCrow.moduleDir, name));
+                            ModuleJar moduleJar = new ModuleJar(name);
+                            moduleJar.load();
+                            modules.add(moduleJar);
+                        }
                     }
                     client.notifyProcessed();
                     bis.close();
@@ -177,7 +180,7 @@ public class ModuleImporter {
 		            // place the images in the correct folder
 		            storeImages(key, icons.get(key), true);
 		            // start the import process
-		            loadItems(file, module.getIndex());
+		            loadItems(data.get(key), module.getIndex());
 		            
 		            
 		        } else { 
@@ -207,12 +210,12 @@ public class ModuleImporter {
 		    dir.mkdirs();
 		    
 		    client.notifyStartedSubProcess(icons.size());
-		    client.notifyMessage("Storing images to " + dir);
+		    client.notifyMessage(DcResources.getText("msgSavingImagesTo", dir.toString()));
 		    
 		    for (DcImageIcon icon : icons) {
 		        try {
 		            Utilities.writeToFile(icon.getBytes(), new File(dir, icon.getFilename()));
-		            client.notifyMessage("Saving image " + icon.getFilename());
+		            client.notifyMessage(DcResources.getText("msgSavingImage", icon.getFilename()));
 		            client.notifySubProcessed();
 		        } catch (Exception e) {
 		            client.notifyError(e);
@@ -240,11 +243,11 @@ public class ModuleImporter {
                     // is of no importance (!).
                     try {
                         if (other != null) {
-                            client.notifyMessage("Item " + other + " exists. Information will be merged.");
+                            client.notifyMessage(DcResources.getText("msgItemExistsMerged", other.toString()));
                             other.copy(item, true);
                             other.saveUpdate(true, false);
                         } else {
-                            client.notifyMessage("Item " + item + " does not exist. Item will be saved.");
+                            client.notifyMessage(DcResources.getText("msgItemNoExistsCreated", item.toString()));
                             item.setValidate(false);
                             item.saveNew(true);
                         }

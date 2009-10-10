@@ -58,7 +58,7 @@ public class XmlImporter extends ItemImporter {
         private DcModule module;
         
         public Task(File file, DcModule module, IItemImporterClient listener) {
-            super(null, "CVS import for " + file);
+            super(null, "XML import for " + file);
             this.file = file;
             this.module = module;
             this.listener = listener;
