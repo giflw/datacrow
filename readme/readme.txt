@@ -169,6 +169,9 @@ Additional parameters:
      
     -clearsettings
      Loads the default Data Crow settings. Disgards all user settings.
+     
+    -datadir:
+     Specifies an alternative location for the data folder. Spaces need to be substituted by %20.
 
 
 ----------------------------------------------------------------------------------------

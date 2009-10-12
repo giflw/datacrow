@@ -902,9 +902,13 @@ public class DataManager {
 
             start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             
-            DataSetCreator dsc = new DataSetCreator(objects);
-            dsc.start();
-            dsc.join();
+            try {
+                DataSetCreator dsc = new DataSetCreator(objects);
+                dsc.start();
+                dsc.join();
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
             
             if (logger.isDebugEnabled()) {
                 long end = new Date().getTime();

@@ -84,7 +84,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
             load();
         }
 
-        settings.setSettingsFile(new File(DataCrow.installationDir + "/data/" + filename));
+        settings.setSettingsFile(new File(DataCrow.dataDir, filename));
         
         if (DataCrow.loadSettings)
             load();

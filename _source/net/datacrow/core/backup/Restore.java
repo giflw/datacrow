@@ -238,8 +238,7 @@ public class Restore extends Thread {
                         filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
                         filename = DataCrow.installationDir + filename;
                     } else if (isData && restoreDatabase) {
-                        filename = DataCrow.installationDir + "data/" + 
-                                   filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+                        filename = DataCrow.dataDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
                     } else {
                         if (logger.isDebugEnabled())
                             logger.debug("Skipping " + filename);

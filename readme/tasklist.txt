@@ -16,11 +16,11 @@
     and import a module (definition). This functionality will also allow users to export default/demo data 
     with their module. This functionality will also be used to provide additional custom modules. 
 [ ] Upgrade of the Container module / Container Hierarchy.
-[ ] Clone a module wizard
+[x] Clone a module wizard
 [ ] MovieMeter.nl online search
 [ ] Book online search in www.isbndb.com (1886661)
 [ ] File operations
-[ ] [2860480] Arch package for data crow
+[x] [2860480] Arch package for data crow
 [x] [2860913] Extract ISBN from PDF (isbnextractor)
 [ ] [2862681] New "IMDB ID" field for Names and Movies / Data matching for online services
 [ ] [2862698] Add fields "Aspect Ratio" and "Color" to movie fields

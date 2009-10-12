@@ -48,19 +48,19 @@ public class FilePatterns {
     private static Logger logger = Logger.getLogger(FilePatterns.class.getName());
     
     private static final Map<Integer, Collection<FilePattern>> patterns = new HashMap<Integer, Collection<FilePattern>>();
-    private static final String filename = DataCrow.installationDir + "data" + File.separator + "filepatterns.xml";
+    private static final File file = new File(DataCrow.dataDir, "filepatterns.xml");
     
     /**
      * Loads the file patterns from file (XML format).
      */
     public static void load() {
-        if (!new File(filename).exists())
+        if (!file.exists())
             return;
         
         try {
             patterns.clear();
             
-            byte[] b = Utilities.readFile(new File(filename));
+            byte[] b = Utilities.readFile(file);
             String xml = new String(b, "UTF-8");
             
             while (xml.indexOf("<FILE-PATTERN>") > -1) {
@@ -79,7 +79,7 @@ public class FilePatterns {
                 xml = xml.substring(xml.indexOf(part) + part.length());
             }
         } catch (Exception exp) {
-            logger.error("An error occurred while loading filters from " + filename, exp);
+            logger.error("An error occurred while loading filters from " + file, exp);
         }
     }
     
@@ -103,11 +103,11 @@ public class FilePatterns {
         xml += "</FILE-PATTERNS>";
         
         try {
-            FileOutputStream fos = new FileOutputStream(filename);
+            FileOutputStream fos = new FileOutputStream(file);
             fos.write(xml.getBytes("UTF-8"));
             fos.close();
         } catch (Exception exp) {
-            logger.error("An error occurred while saving filters to " + filename, exp);
+            logger.error("An error occurred while saving filters to " + file, exp);
         }         
     }
     

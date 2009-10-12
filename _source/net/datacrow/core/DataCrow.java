@@ -152,12 +152,12 @@ public class DataCrow {
             } else if (args[i].toLowerCase().startsWith("-clearsettings")) {
                 loadSettings = false;
             } else if (args[i].toLowerCase().startsWith("-credentials:")) {
-                
                 String credentials = args[i].substring("-credentials:".length());
                 int index = credentials.indexOf("/");
                 username = index > -1 ? credentials.substring(0, index) : credentials;
                 password = index > -1 ? credentials.substring(index + 1) : "";
-                
+            } else if (args[i].toLowerCase().startsWith("-datadir:")) {
+                dataDir = args[i].substring(args[i].indexOf(":") + 1).replaceAll("%20", " ");
             } else if (dir != null) {
                 dir += " " + args[i];
             } else { 
@@ -186,6 +186,10 @@ public class DataCrow {
                 System.out.println("-clearsettings");
                 System.out.println("Loads the default Data Crow settings. Disgards all user settings.");
                 System.out.println("Example: java -jar datacrow.jar -clearsettings");                
+                System.out.println("");
+                System.out.println("-datadir");
+                System.out.println("Specifies an alternative location for the data folder. Spaces need to be substituted by %20.");
+                System.out.println("Example: java -jar datacrow.jar -datadir:d:\\data%20crow\\data");                
                 System.out.println("");
                 System.out.println("-credentials:username/password");
                 System.out.println("Specify the login credentials to start Data Crow without displaying the login dialog.");
@@ -301,7 +305,7 @@ public class DataCrow {
             ValueEnhancers.initialize();
 
             // delete lock file
-            for (String file : Directory.read(installationDir + "data", false, false, new String[] {"lck"}))
+            for (String file : Directory.read(dataDir, false, false, new String[] {"lck"}))
             	new File(file).delete();
             
             // set the database name
@@ -627,19 +631,23 @@ public class DataCrow {
      * Determines the current directory.
      */
     private static void createDirectories() {
-        dataDir = DataCrow.installationDir + "data/";
+        if (dataDir == null)
+            dataDir = DataCrow.installationDir + "data/";
+        else 
+            dataDir = !dataDir.endsWith("/") && !dataDir.endsWith("\\") ? dataDir + "/" : dataDir;
+        
         webDir = DataCrow.installationDir + "webapp/datacrow/";
         imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/";
         reportDir = DataCrow.installationDir + "reports/";
         moduleDir = DataCrow.installationDir + "modules/";
         pluginsDir = DataCrow.installationDir + "plugins/";
         servicesDir = DataCrow.installationDir + "services/";
-        cacheDir = DataCrow.installationDir + "data/cache/";
+        cacheDir = DataCrow.dataDir + "cache/";
         resourcesDir = DataCrow.installationDir + "resources/";
         
         DataCrow.createDirectory(new File(dataDir), "data");
         DataCrow.createDirectory(new File(cacheDir), "cache");
-        DataCrow.createDirectory(new File(installationDir + "data/temp"), "temp");
+        DataCrow.createDirectory(new File(dataDir, "temp"), "temp");
         DataCrow.createDirectory(new File(imageDir), "images");
         DataCrow.createDirectory(new File(reportDir), "reports");
         DataCrow.createDirectory(new File(servicesDir), "services");

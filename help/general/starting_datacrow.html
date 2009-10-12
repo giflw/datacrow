@@ -31,8 +31,15 @@
 
     <h2>Avoiding the use of cached items</h2>
     Data Crow creates cache files instead of loading all items from the database on every startup.
-    In case there are issues Data Crow can be forced to disgard the cache and load all the items 
+    In case there are issues Data Crow can be forced to discard the cache and load all the items 
     from the database instead: -nocache
-
+    
+    <h2>Add additional information to log (debug)</h2>
+    Append -debug to the startup command of Data Crow to log debug information.
+    
+    <h2>Using an alternative data folder</h2>
+    Specify an alternative data folder by using the -datadir: parameter (followed by the data folder like so:
+    -datadir:d:\data%20crow\data). Spaces need to be substituted by %20.
+    
 </body>
 </html>

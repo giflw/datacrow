@@ -168,7 +168,7 @@ public class DriveManager {
     }
     
     protected String getTempDir() {
-        return DataCrow.installationDir + "data/temp/";
+        return DataCrow.dataDir + "temp/";
     }    
     
     private void initializeScanners() {
@@ -207,6 +207,7 @@ public class DriveManager {
     
     public synchronized Collection<File> getDrives() {
         if (drives == null || drives.size() == 0) {
+            drives = drives == null ? new ArrayList<File>() : drives;
             for (Drive drive : new Drives().getDrives())
                 drives.add(drive.getPath());
         }

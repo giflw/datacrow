@@ -151,8 +151,8 @@ public class ValueEnhancers {
         }
         
         try {
-            store(incrementers, DataCrow.installationDir + "/data/enhancers_autoincrement.properties");
-            store(titlerewriters, DataCrow.installationDir + "/data/enhancers_titlerewriters.properties");
+            store(incrementers, DataCrow.dataDir + "/enhancers_autoincrement.properties");
+            store(titlerewriters, DataCrow.dataDir + "/enhancers_titlerewriters.properties");
         } catch (Exception exp) {
             logger.error("Error while saving enhancer settings to file", exp);    
         }         
@@ -169,7 +169,7 @@ public class ValueEnhancers {
         
         String filename = idx == _AUTOINCREMENT ? "enhancers_autoincrement.properties" :
                                                   "enhancers_titlerewriters.properties";
-        filename = DataCrow.installationDir + "/data/" + filename;
+        filename = DataCrow.dataDir + filename;
         
         if (new File(filename).exists()) {
             try {

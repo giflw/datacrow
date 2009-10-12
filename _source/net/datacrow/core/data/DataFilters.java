@@ -53,7 +53,7 @@ public class DataFilters {
     private static final Map<Integer, DataFilter> activeFilters = 
         new HashMap<Integer, DataFilter>();
     
-    private static final String filename = DataCrow.installationDir + "data" + File.separator + "filters.xml";
+    private static final File file = new File(DataCrow.dataDir, "filters.xml");
 
     /**
      * Creates a new instance.
@@ -65,12 +65,12 @@ public class DataFilters {
      */
     public static void load() {
         
-        if (!new File(filename).exists())
+        if (!file.exists())
             return;
         
         try {
             filters.clear();
-            byte[] b = Utilities.readFile(new File(filename));
+            byte[] b = Utilities.readFile(file);
             String xml = new String(b, "UTF-8");
             
             while (xml.indexOf("<FILTER>") > -1) {
@@ -85,7 +85,7 @@ public class DataFilters {
                 xml = xml.substring(xml.indexOf("</FILTER>") + 9, xml.length());
             }
         } catch (Exception exp) {
-            logger.error("An error occurred while loading filters from " + filename, exp);
+            logger.error("An error occurred while loading filters from " + file, exp);
         }
     }
     
@@ -132,11 +132,11 @@ public class DataFilters {
         xml += "</FILTERS>";
         
         try {
-            FileOutputStream fos = new FileOutputStream(filename);
+            FileOutputStream fos = new FileOutputStream(file);
             fos.write(xml.getBytes("UTF-8"));
             fos.close();
         } catch (Exception exp) {
-            logger.error("An error occurred while saving filters to " + filename, exp);
+            logger.error("An error occurred while saving filters to " + file, exp);
         }         
     }
     
