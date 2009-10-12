@@ -17,7 +17,7 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - Module Import Wizard. Takes care of all the nitty gritty stuff that is involved when 
   you want to add a custom module to your Data Crow installation. This is, from now on,
   the way to add custom modules to your installation!
-- Module Copy Wizard. Tired of adding all the fields manually to your custom module.
+- Module Copy Wizard. Tired of adding all the fields manually to your custom module?
   Why not base it on one of the existing modules? Use this wizard, select the module 
   which you would like to copy and off you go!
 - A new parameter has been added: -datadir:<directory>. This parameter can be used to 
