@@ -21,6 +21,16 @@ public class ExternalReference extends DcObject {
     }
 
     @Override
+    public int getDefaultSortFieldIdx() {
+        return ExternalReference._EXTERNAL_ID;
+    }
+
+    @Override
+    public int getDisplayFieldIdx() {
+        return ExternalReference._EXTERNAL_ID;
+    }
+
+    @Override
     public String toString() {
         return getDisplayString(_EXTERNAL_ID_TYPE) + ": " + getDisplayString(_EXTERNAL_ID); 
     }
