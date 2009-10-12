@@ -32,7 +32,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -55,12 +54,9 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
-import net.datacrow.core.objects.helpers.AudioCD;
 import net.datacrow.core.objects.helpers.ContactPerson;
 import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.core.objects.helpers.Movie;
-import net.datacrow.core.objects.helpers.MusicAlbum;
-import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.util.StringUtils;
@@ -130,24 +126,23 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         } catch (Exception e) {}
 
         
-        Map<MappingModule, Integer> modules = new HashMap<MappingModule, Integer>();
+        Collection<MappingModule> modules = new ArrayList<MappingModule>();
         
-        modules.put(new MappingModule(DcModules.get(DcModules._MOVIE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), Movie._5_ASIN);
-        modules.put(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), AudioCD._O_ASIN);
-        modules.put(new MappingModule(DcModules.get(DcModules._SOFTWARE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), Software._U_ASIN);
-        modules.put(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), MusicAlbum._O_ASIN);
+        modules.add(new MappingModule(DcModules.get(DcModules._MOVIE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
+        modules.add(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
+        modules.add(new MappingModule(DcModules.get(DcModules._SOFTWARE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
+        modules.add(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
     
-        for (DcModule module : modules.keySet())
+        for (DcModule module : modules)
             createTable(module);
 
         createTable(DcModules.get(DcModules._EXTERNALREFERENCE));
         
-        for (MappingModule module : modules.keySet()) {
-            migrateASIN(module, modules.get(module));
-        }
+        for (MappingModule module : modules)
+            migrateASIN(module);
     }
     
-    private void migrateASIN(MappingModule mapping, int fieldIdx) throws Exception {
+    private void migrateASIN(MappingModule mapping) throws Exception {
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();
         

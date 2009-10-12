@@ -43,6 +43,7 @@ import net.datacrow.core.db.Query;
 import net.datacrow.core.db.QueryQueue;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.core.objects.helpers.Movie;
 import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.objects.template.Templates;
@@ -233,7 +234,48 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 break;
             }
         }
-    }    
+    }
+    
+    @SuppressWarnings("unchecked")
+    public String getExternalReference(String type) {
+        Collection<DcObject> references = (Collection<DcObject>) getValue(_SYS_EXTERNAL_REFERENCES);
+        references = references == null ? new ArrayList<DcObject>() : references;
+        for (DcObject mapping : references) {
+            DcObject reference = ((DcMapping) mapping).getReferencedObject();
+            if (reference.getValue(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
+                return (String) reference.getValue(ExternalReference._EXTERNAL_ID);
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Adds or updates the existing external key of the specified type.
+     * @param type The type of the key
+     * @param key The external key / ID
+     */
+    @SuppressWarnings("unchecked")
+    public void addExternalReference(String type, String key) {
+        Collection<DcObject> references = (Collection<DcObject>) getValue(_SYS_EXTERNAL_REFERENCES);
+        references = references == null ? new ArrayList<DcObject>() : references;
+            
+        boolean set = false;
+        for (DcObject mapping : references) {
+            DcObject reference = ((DcMapping) mapping).getReferencedObject();
+            if (reference.getDisplayString(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
+                reference.setValue(ExternalReference._EXTERNAL_ID, key);
+                set = true;
+            }
+        }
+        
+        if (!set) {
+            ExternalReference er = new ExternalReference();
+            er.setValue(ExternalReference._EXTERNAL_ID, key);
+            er.setValue(ExternalReference._EXTERNAL_ID_TYPE, type);
+            er.setIDs();
+            DataManager.createReference(this, DcObject._SYS_EXTERNAL_REFERENCES, er);
+        }
+    }
 
     /**
      * Indicate whether this object should be synchronized with the Data Manager.

@@ -54,10 +54,6 @@ public class Movie extends DcMediaObject {
     public static final int _1_AUDIOLANGUAGE = 23;
     public static final int _2_SUBTITLELANGUAGE = 24;
     public static final int _3_CERTIFICATION = 25;
-    
-    // TODO: External ID
-    public static final int _5_ASIN = 27;
-    
     public static final int _6_STATE = 28;
     public static final int _7_STORAGEMEDIUM = 29;
     public static final int _8_SERIES = 30;
