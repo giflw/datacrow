@@ -64,6 +64,28 @@ public class XmlField extends XmlObject {
     public XmlField() {}
     
     /**
+     * Creates a new field based on an existing one.
+     * @param template
+     */
+    public XmlField(XmlField template) {
+        index = template.getIndex();
+        valueType = template.getValueType();
+        fieldType = template.getFieldType();
+        maximumLength = template.getMaximumLength();
+        name = template.getName();
+        column = template.getColumn();
+        uiOnly = template.isUiOnly();
+        enabled = true;
+        readonly = template.isReadonly();
+        searchable = template.isSearchable();
+        techinfo = template.isTechinfo();
+        overwritable = template.isOverwritable();
+        
+        if (template.getModuleReference() != template.getModule())
+            moduleReference = template.getModuleReference();
+    }
+    
+    /**
      * Creates a new instances.
      * @param xmlModule The XML module to which the field belongs.
      * @param element The XML element to parse.
@@ -91,6 +113,14 @@ public class XmlField extends XmlObject {
         }
     }
     
+    public void setModule(int module) {
+        this.module = module;
+    }
+    
+    public int getModule() {
+        return module;
+    }
+
     public boolean isNew() {
         return DcModules.get(module) == null ||
                DcModules.get(module).getField(index) == null;

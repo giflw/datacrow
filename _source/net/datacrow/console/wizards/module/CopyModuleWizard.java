@@ -28,12 +28,9 @@ package net.datacrow.console.wizards.module;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.IWizardPanel;
-import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
@@ -41,36 +38,21 @@ import net.datacrow.core.modules.ModuleJar;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
 
-public class CreateModuleWizard extends Wizard {
+public class CopyModuleWizard extends CreateModuleWizard {
 
-    public CreateModuleWizard() {
+    public CopyModuleWizard() {
         super();
         
-        setTitle(DcResources.getText("lblModuleCreateWizard"));
-        setHelpIndex("dc.modules.create");
+        setTitle(DcResources.getText("lblModuleCopyWizard"));
 
-        setSize(DcSettings.getDimension(DcRepository.Settings.stModuleWizardFormSize));
-        setCenteredLocation();
+        // TODO: create help
+        setHelpIndex("dc.modules.copy");
     }
     
     @Override
-    protected void initialize() {
-    }
-    
-    @Override
-    protected List<IWizardPanel> getWizardPanels() {
-        List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
-        panels.add(new PanelModuleType(this));
-        panels.add(new PanelBasicInfo(this, false));
-        panels.add(new PanelFields(this, false));
-        return panels;
-    }
-
-    @Override
-    protected void saveSettings() {
-        DcSettings.set(DcRepository.Settings.stModuleWizardFormSize, getSize());
+    protected boolean isRestartSupported() {
+        return false;
     }
 
     @Override
@@ -87,6 +69,8 @@ public class CreateModuleWizard extends Wizard {
             
             for (XmlField field : module.getFields()) {
                 
+                field.setModule(module.getIndex());
+                
                 if (field.getModuleReference() !=  0 && field.getModuleReference() != module.getIndex()) {
                     DcModule m = DcModules.get(field.getModuleReference()) == null ? 
                                  DcModules.get(field.getModuleReference() + module.getIndex()) : 
@@ -94,7 +78,9 @@ public class CreateModuleWizard extends Wizard {
                     
                     if (m != null && m.getXmlModule() != null)
                         new ModuleJar(m.getXmlModule()).save();
-                } 
+                }  else {
+                    field.setModuleReference(module.getIndex());
+                }
             }
             
             module.setServingMultipleModules(true);
@@ -105,58 +91,15 @@ public class CreateModuleWizard extends Wizard {
             close();
         } catch (Exception e) {
             throw new WizardException(DcResources.getText("msgCouldNotWriteModuleFile", e.getMessage()));
-        }
+        }     
     }
 
     @Override
-    public void next() {
-        try {
-            XmlModule module = (XmlModule) getCurrent().apply();
-
-            if (module == null)
-                return;
-            
-            current += 1;
-            if (current <= getStepCount()) {
-                for (int i = 0; i < getStepCount(); i++) {
-                    ModuleWizardPanel panel = (ModuleWizardPanel) getWizardPanel(i);
-                    panel.setModule(module);
-                    panel.setVisible(i == current);
-                }
-            } else {
-                current -= 1;
-            }
-
-            applyPanel();
-        } catch (WizardException wzexp) {
-            if (wzexp.getMessage().length() > 1)
-                new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
-        }
-    }
-
-    @Override
-    public void close() {
-        if (!isCancelled() && !isRestarted())
-            new RestartDataCrowDialog(this);
-        
-        super.close();
-    }
-
-    @Override
-    protected String getWizardName() {
-        return DcResources.getText("msgModuleWizard",
-                                   new String[] {String.valueOf(current + 1), String.valueOf(getStepCount())});
-    }
-
-    @Override
-    protected void restart() {
-        try {
-            finish();
-            saveSettings();
-            CreateModuleWizard wizard = new CreateModuleWizard();
-            wizard.setVisible(true);
-        } catch (WizardException exp) {
-            new MessageBox(exp.getMessage(), MessageBox._WARNING);
-        }
+    protected List<IWizardPanel> getWizardPanels() {
+        List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
+        panels.add(new PanelSelectModuleTemplate(this));
+        panels.add(new PanelBasicInfo(this, false));
+        panels.add(new PanelFields(this, false));
+        return panels;
     }
 }

@@ -33,11 +33,17 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.datacrow.core.modules.DcMediaModule;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.InvalidModuleXmlException;
 import net.datacrow.core.modules.InvalidValueException;
 import net.datacrow.core.modules.upgrade.ModuleUpgrade;
 import net.datacrow.core.modules.upgrade.ModuleUpgradeException;
+import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.synchronizers.DefaultSynchronizer;
 import net.datacrow.util.XMLParser;
@@ -105,6 +111,56 @@ public class XmlModule extends XmlObject {
      * Creates an empty instance.
      */
     public XmlModule() {}
+    
+    /**
+     * Create a new module based on the provided existing XML module.
+     * @param template
+     */
+    public XmlModule(XmlModule template) {
+        // Currently not supported:
+        // synchronizer = template.getSynchronizer();
+        // importer = template.getImporter();
+        
+        object = template.getObject();
+        moduleClass = template.getModuleClass();
+        
+        // make sure we are using a transparent module class:
+        if (DcModules.get(template.getIndex()) != null) {
+            DcObject test = DcModules.get(template.getIndex()).getDcObject();
+            if (test instanceof DcMediaObject) {
+                object = DcMediaObject.class;
+                moduleClass = DcMediaModule.class;
+            } else if (test instanceof DcProperty) {
+                object = DcProperty.class;
+                moduleClass = DcPropertyModule.class;
+            } else if (test instanceof DcObject) {
+                object = DcObject.class;
+                moduleClass = DcModule.class;
+            }
+        }
+        
+        childIndex = -1;
+        parentIndex = -1;
+        nameFieldIdx = template.getNameFieldIdx();
+
+        icon16Filename = template.getIcon16Filename();
+        icon32Filename = template.getIcon32Filename();
+        icon16 = template.getIcon16();
+        icon32 = template.getIcon32();
+
+        defaultSortFieldIdx = template.getDefaultSortFieldIdx();
+        enabled = true;
+        canBeLend = template.canBeLend();
+        hasSearchView = template.hasSearchView;
+        hasInsertView = template.hasInsertView;
+        hasDependingModules = false;
+        isServingMultipleModules = template.isServingMultipleModules();
+        isFileBacked = template.isFileBacked();
+        isContainerManaged = template.isContainerManaged;
+        
+        for (XmlField field : template.getFields())
+            fields.add(new XmlField(field));
+    }
 
     /**
      * Creates a new instance.
