@@ -120,12 +120,14 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             conn = DatabaseManager.getConnection();
             stmt = conn.createStatement();
             stmt.executeQuery("SELECT TOP 1 * FROM SOFTWARE_EXTERNALREFERENCE");
-        } catch (Exception e) {
-            // no conversion is needed
+            
             stmt.close();
             conn.close();
+            
+            // no conversion needed
             return;
-        }
+
+        } catch (Exception e) {}
 
         
         Map<MappingModule, Integer> modules = new HashMap<MappingModule, Integer>();
@@ -138,6 +140,8 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         for (DcModule module : modules.keySet())
             createTable(module);
 
+        createTable(DcModules.get(DcModules._EXTERNALREFERENCE));
+        
         for (MappingModule module : modules.keySet()) {
             migrateASIN(module, modules.get(module));
         }

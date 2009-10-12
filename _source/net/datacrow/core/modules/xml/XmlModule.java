@@ -133,7 +133,7 @@ public class XmlModule extends XmlObject {
             } else if (test instanceof DcProperty) {
                 object = DcProperty.class;
                 moduleClass = DcPropertyModule.class;
-            } else if (test instanceof DcObject) {
+            } else {
                 object = DcObject.class;
                 moduleClass = DcModule.class;
             }

@@ -1061,11 +1061,11 @@ public class DcModule implements Comparable<DcModule> {
                         "CurrencyValue"));            
             }
             
-            if (    isTopModule() && //!isAbstract() &&
+            if (    isTopModule() && !isAbstract() &&
                     getIndex() != DcModules._CONTAINER && getIndex() != DcModules._USER &&
                     getIndex() != DcModules._EXTERNALREFERENCE && getIndex() != DcModules._LOAN &&
                     getIndex() != DcModules._MAPPING && getIndex() != DcModules._PERMISSION &&
-                    getIndex() != DcModules._TAB) {
+                    getIndex() != DcModules._TAB && getIndex() != DcModules._CONTACTPERSON) {
                 
                 addField(new DcField(DcObject._SYS_EXTERNAL_REFERENCES, getIndex(), "External References",  
                         true, true, false, true, true, 
