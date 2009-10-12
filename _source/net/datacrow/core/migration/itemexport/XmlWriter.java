@@ -73,7 +73,7 @@ public class XmlWriter extends XmlBaseWriter {
     }
     
     public void startDocument() throws IOException {
-        writeTag("<?xml version=\"1.0\" enconding=\"UTF-8\" ?>");
+        writeTag("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
         newLine();
         
         String xsd = new File(schemaFile).getName();
