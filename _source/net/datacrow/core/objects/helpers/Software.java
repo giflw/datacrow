@@ -45,7 +45,10 @@ public class Software extends DcMediaObject {
     public static final int _Q_SCREENSHOTTWO = 12;
     public static final int _R_SCREENSHOTTHREE = 13;
     public static final int _S_SERIALKEY = 14;
+    
+    // TODO: External ID
     public static final int _U_ASIN = 16;
+    
     public static final int _V_STATE = 17;
     public static final int _W_STORAGEMEDIUM = 18;
     public static final int _X_EAN = 19;

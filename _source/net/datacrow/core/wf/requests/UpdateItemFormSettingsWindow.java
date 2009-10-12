@@ -37,6 +37,8 @@ import net.datacrow.core.objects.DcObject;
  */
 public class UpdateItemFormSettingsWindow implements IUpdateUIRequest {
 
+    private static final long serialVersionUID = -8369080521270253879L;
+
     private ItemFormSettingsDialog wdw;
     private boolean executeOnFail = false;
     private boolean tabDeleted;

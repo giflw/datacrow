@@ -46,6 +46,8 @@ import net.datacrow.core.objects.DcTemplate;
  */
 public abstract class Plugin extends AbstractAction {
 
+    private static final long serialVersionUID = 4600350535556305957L;
+
     protected static final int _SEARCHTAB = 0;
     protected static final int _INSERTTAB = 1;
     protected static final int _NOTETAB = 2;

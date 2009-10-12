@@ -30,6 +30,8 @@ import net.datacrow.core.objects.DcObject;
 
 public class Item extends DcObject {
 
+    private static final long serialVersionUID = 47449509474033056L;
+
     public Item() {
         super(DcModules._ITEM);
     }

@@ -227,7 +227,9 @@ public class DatabaseManager {
             
         } catch (Exception e) {
             logger.debug(e, e);
-        	logger.debug("User '" + username + "' with password '" + password + "' cannot login");
+            
+            if (!username.equals("dc_admin"))
+                logger.debug("User '" + username + "' with password '" + password + "' cannot login");
         }
         
         return null;

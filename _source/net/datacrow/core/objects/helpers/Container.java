@@ -34,6 +34,8 @@ import net.datacrow.core.objects.DcObject;
 
 public class Container extends DcObject {
 
+    private static final long serialVersionUID = -3032927100353360734L;
+
     public static final int _A_NAME = 1;
     public static final int _B_DESCRIPTION = 4;
     public static final int _E_ICON = 5;

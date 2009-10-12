@@ -31,6 +31,8 @@ package net.datacrow.core.db.upgrade;
  */
 public class DatabaseUpgradeException extends Exception {
 
+    private static final long serialVersionUID = -4176526283444984974L;
+
     public DatabaseUpgradeException(String message) {
         super(message);
     }

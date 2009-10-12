@@ -41,7 +41,10 @@ public class MusicAlbum extends DcMediaObject {
     public static final int _L_PICTURECD = 7;
     public static final int _M_DISCID = 8;
     public static final int _N_WEBPAGE = 9;
+    
+    // TODO: External ID
     public static final int _O_ASIN = 10;
+    
     public static final int _P_EAN = 11;
 
     public MusicAlbum() {

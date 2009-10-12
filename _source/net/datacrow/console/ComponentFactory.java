@@ -179,6 +179,7 @@ public final class ComponentFactory {
     public static final int _DIRECTORIESASDRIVES = 34;
     public static final int _FONTRENDERINGCOMBO = 35;
     public static final int _DIRECTORYFIELD = 36;
+    public static final int _SIMPLEREFERENCESFIELD = 37;    
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -439,6 +440,8 @@ public final class ComponentFactory {
                 return getDirectoriesAsDrivesField();
             case _FONTRENDERINGCOMBO:
                 return getFontRenderingCombo();
+            case _SIMPLEREFERENCESFIELD:
+                return getSimpleReferencesField(DcModules.getMappingModIdx(majormodule, minormodule, fieldIdx));
 
             default:
                 return getShortTextField(maxTextLength);
@@ -484,6 +487,12 @@ public final class ComponentFactory {
         DataManager.registerUiComponent(referencesField, ((MappingModule) DcModules.get(mappingModIdx)).getReferencedModIdx());
         return referencesField;
     }
+    
+    public static final DcReferencesField getSimpleReferencesField(int mappingModIdx) {
+        DcReferencesField referencesField = getReferencesField(mappingModIdx);
+        referencesField.setEditable(false);
+        return referencesField;
+    }    
     
     public static final DcPasswordField getPasswordField() {
         DcPasswordField passwordField = new DcPasswordField();

@@ -94,7 +94,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         btCreate.addActionListener(this);
         btCreate.setActionCommand("create");
     }
-
+    
     public void setEditable(boolean b) {
         btOpen.setEnabled(b);
     }

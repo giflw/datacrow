@@ -1060,6 +1060,18 @@ public class DcModule implements Comparable<DcModule> {
                         255, ComponentFactory._DECIMALFIELD, getIndex(), DcRepository.ValueTypes._DOUBLE,
                         "CurrencyValue"));            
             }
+            
+            if (    isTopModule() && //!isAbstract() &&
+                    getIndex() != DcModules._CONTAINER && getIndex() != DcModules._USER &&
+                    getIndex() != DcModules._EXTERNALREFERENCE && getIndex() != DcModules._LOAN &&
+                    getIndex() != DcModules._MAPPING && getIndex() != DcModules._PERMISSION &&
+                    getIndex() != DcModules._TAB) {
+                
+                addField(new DcField(DcObject._SYS_EXTERNAL_REFERENCES, getIndex(), "External References",  
+                        true, true, false, true, true, 
+                        4, ComponentFactory._SIMPLEREFERENCESFIELD, DcModules._EXTERNALREFERENCE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
+                        "externalreferences"));       
+            }
     
             if (isContainerManaged())
                 addField(getField(DcObject._SYS_CONTAINER));

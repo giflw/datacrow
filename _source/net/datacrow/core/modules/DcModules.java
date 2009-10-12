@@ -107,6 +107,7 @@ public class DcModules {
     public static final int _LANGUAGE = 1100000;
     public static final int _BINDING = 1200000;
     public static final int _EDITIONTYPE = 1300000;
+    public static final int _EXTERNALREFERENCE = 1400000;
     
     public static final int _MAPPING = 50000;
 
@@ -248,6 +249,7 @@ public class DcModules {
      * Initializes the system modules such as the picture and the loan module.
      */
     private static void loadSystemModules() {
+        register(new ExternalReferenceModule());
         register(new PictureModule());
         register(new LoanModule());
         register(new UserModule());

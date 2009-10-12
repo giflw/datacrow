@@ -122,6 +122,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     public static final int _VALUE = 217;
     
+    public static final int _SYS_EXTERNAL_REFERENCES = 218;
+    
     /**
      * Creates a new instance.
      * @param module

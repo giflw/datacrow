@@ -75,7 +75,7 @@ public class AdministrationMenu extends DcMenu {
     }
     
     private void add(DcPropertyModule pm, String title) {
-        if (pm != null)
+        if (pm != null && pm.getIndex() != DcModules._EXTERNALREFERENCE)
             PluginHelper.add(this, "ManageItem", title, pm.getIndex());
     }
 }

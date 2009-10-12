@@ -29,6 +29,8 @@ import net.datacrow.core.modules.DcModules;
 
 public class Tab extends DcProperty {
 
+    private static final long serialVersionUID = 4337833481303478899L;
+
     public static final int _C_ORDER = 152;
     public static final int _D_MODULE = 153;
     

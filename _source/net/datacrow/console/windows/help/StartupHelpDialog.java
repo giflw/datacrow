@@ -104,7 +104,7 @@ public class StartupHelpDialog extends JDialog implements ActionListener {
                 "<tr><td>-debug</td></tr>" +
                 "<tr><td>Runs Data Crow in debug mode meaning that more information will be logged.</td></tr>" +
                 "<tr><td><br></td></tr>" +
-                "<tr><td>-datadir:</td></tr>" +
+                "<tr><td>-datadir:&lt;path&gt;</td></tr>" +
                 "<tr><td>Specifies an alternative location for the data folder. Spaces need to be substituted by %20.</td></tr>" +
                 "<tr><td><br></td></tr>" +
                 "<tr><td>-credentials:username/password</td></tr>" +
