@@ -32,6 +32,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -54,8 +55,12 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
+import net.datacrow.core.objects.helpers.AudioCD;
 import net.datacrow.core.objects.helpers.ContactPerson;
+import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.core.objects.helpers.Movie;
+import net.datacrow.core.objects.helpers.MusicAlbum;
+import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.util.StringUtils;
@@ -94,6 +99,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 DataCrow.showSplashScreen(true);
             }
             
+            if (DatabaseManager.getVersion().isOlder(new Version(3, 6, 0, 0))) {
+                convertExternalReferences();
+            }
+            
         } catch (Exception e) {
             String msg = e.getMessage() + ". Data conversion failed. " +
                 "Please restore your latest Backup and retry. Contact the developer " +
@@ -102,6 +111,80 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             logger.error(msg, e);
         }            
     }
+    
+    private void convertExternalReferences() throws Exception {
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = conn.createStatement();
+        
+        try {
+            conn = DatabaseManager.getConnection();
+            stmt = conn.createStatement();
+            stmt.executeQuery("SELECT TOP 1 * FROM SOFTWARE_EXTERNALREFERENCE");
+        } catch (Exception e) {
+            // no conversion is needed
+            stmt.close();
+            conn.close();
+            return;
+        }
+
+        
+        Map<MappingModule, Integer> modules = new HashMap<MappingModule, Integer>();
+        
+        modules.put(new MappingModule(DcModules.get(DcModules._MOVIE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), Movie._5_ASIN);
+        modules.put(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), AudioCD._O_ASIN);
+        modules.put(new MappingModule(DcModules.get(DcModules._SOFTWARE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), Software._U_ASIN);
+        modules.put(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES), MusicAlbum._O_ASIN);
+    
+        for (DcModule module : modules.keySet())
+            createTable(module);
+
+        for (MappingModule module : modules.keySet()) {
+            migrateASIN(module, modules.get(module));
+        }
+    }
+    
+    private void migrateASIN(MappingModule mapping, int fieldIdx) throws Exception {
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = conn.createStatement();
+        
+        DcModule module =  DcModules.get(mapping.getParentModIdx());
+        String sql = "SELECT ID, ASIN FROM " + module.getTableName() + " WHERE ASIN IS NOT NULL";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        PreparedStatement ps;
+        while (rs.next()) {
+            String ID = rs.getString(1);
+            String ASIN = rs.getString(2).trim();
+            if (!Utilities.isEmpty(ASIN)) {
+
+                DcObject ref = new ExternalReference();
+                ref.setIDs();
+                ref.setValue(ExternalReference._EXTERNAL_ID, ASIN);
+                ref.setValue(ExternalReference._EXTERNAL_ID_TYPE, DcRepository.ExternalReferences._ASIN);
+                ps = new Query(Query._INSERT, ref, null, null).getQuery();
+                ps.execute();
+                ps.close();
+                
+                DcObject x = mapping.getDcObject();
+                x.setValue(DcMapping._A_PARENT_ID, ID);
+                x.setValue(DcMapping._B_REFERENCED_ID, ref.getID());
+                ps = new Query(Query._INSERT, x, null, null).getQuery();
+                ps.execute();
+                ps.close();
+                        
+                logger.info("Created mapping for item with ID " + ID + " for module [" + module.getName() + "]");
+            }   
+        }
+        
+        sql = "ALTER TABLE " + module.getTableName() + " DROP COLUMN ASIN"; 
+        stmt.execute(sql);
+        
+        rs.close();
+        conn.close();
+        stmt.close();
+    }
+    
+    
     
     /**
      * Converts the mapping modules to new structure.

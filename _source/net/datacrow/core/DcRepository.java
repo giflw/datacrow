@@ -25,6 +25,9 @@
 
 package net.datacrow.core;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Holder of definitions such as setting keys and static collections.
  * 
@@ -197,6 +200,19 @@ public abstract class DcRepository {
         public static final String stDriveManagerExcludedDirs = "drive_manager_excluded_directories";
     }
 
+    public static final class ExternalReferences {
+        
+        public static final Collection<String> types = new ArrayList<String>();
+        
+        public static final String _ASIN = "ASIN";
+        public static final String _IMDB = "IMDB";
+        
+        static {
+            types.add(_ASIN);
+            types.add(_IMDB);
+        }
+    }
+    
     /**
      * Contains collections which can be used throughout the application.
      * @author Robert Jan van der Waals
