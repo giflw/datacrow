@@ -3,6 +3,28 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 ! Note: The minimum Java version is not Java 6 (also known as Java 1.6).
 
+[New]
+- New feature for the File Import of e-books. The importer will now try and find the ISBN
+  that is contained in the PDF document. The ISBN Extractor 
+  (http://isbnextractor.sourceforge.net) is used.
+- Each item can now have one or more external keys. External keys, such as ASINs from 
+  Amazon, are used to link the item from the source where they were obtained from. 
+  They add additional flexibility and lend themselves to be used by other systems and 
+  customization. 
+- Module Export Wizard. With this wizard it is now possible to export your custom made 
+  modules. Optionally the items of the module(s) are also exported. This wizard enables 
+  you to share your modules with the other users!  
+- Module Import Wizard. Takes care of all the nitty gritty stuff that is involved when 
+  you want to add a custom module to your Data Crow installation. This is, from now on,
+  the way to add custom modules to your installation!
+- Module Copy Wizard. Tired of adding all the fields manually to your custom module.
+  Why not base it on one of the existing modules? Use this wizard, select the module 
+  which you would like to copy and off you go!
+- A new parameter has been added: -datadir:<directory>. This parameter can be used to 
+  specify an alternative location for the data folder of Data Crow. Note that the images
+  will still be written to webapp/datacrow/mediaimages (in the installation folder).
+  Substitute spaces by %20.
+
 [Changed]
 - Added additional font rendering options (Settings > Settings > Font).
 - File and URL launcher: both have been updated to use the Java 1.6 methods for launching 
@@ -14,17 +36,12 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
   server, search mode and region.
 - File Importer now remembers the selected directory usage. 
 - Quick View: filename is now a click-able link.
-
-[New]
-- Module Export Wizard
-- Module Import Wizard
-- Module Copy Wizard
-- File Import for Books: ISBN Extraction from PDF documents using ISBNExtractor 
-  (http://isbnextractor.sourceforge.net).
-- A new parameter has been added: -datadir:<directory>. This parameter can be used to 
-  specify an alternative location for the data folder of Data Crow. Note that the images
-  will still be written to webapp/datacrow/mediaimages (in the installation folder).
-  Substitute spaces by %20.
+- Actors and such were quite hard to reuse after a user had changed their names within Data 
+  Crow. The name was the sole information available to check if the item already existed.
+  Now, with the new external IDs functionality items will be reused correctly and will 
+  always be linked to the external source from which they were retrieved. 
+  Note that this is only true for new items or for existing movies, audio CDs, 
+  music albums and software retrieved by the Amazon online service.
 
 [Fixed]
 - "Pick a Date": larger set of years to make the navigation easier + a fix for the up and 
