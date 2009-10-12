@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-! Note: The minimum Java version is not Java 6 (also known as Java 1.6).
+! Note: The minimum Java version is now Java 6 (also known as Java 1.6).
 
 [New]
 - New feature for the File Import of e-books. The importer will now try and find the ISBN
