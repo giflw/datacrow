@@ -55,15 +55,15 @@
         <module-index>50</module-index>
         <fields>            
             <field>
-                <index>22</index>
-                <name>Language</name>
-                <database-column-name>Language</database-column-name>
+                <index>16</index>
+                <name>ASIN</name>
+                <database-column-name>ASIN</database-column-name>
                 <ui-only>false</ui-only>
                 <enabled>true</enabled>
                 <readonly>false</readonly>
                 <searchable>true</searchable>
                 <techinfo>false</techinfo>
-                <maximum-length>50</maximum-length>
+                <maximum-length>255</maximum-length>
                 <field-type>5</field-type>
                 <module-reference>{index}</module-reference>
                 <value-type>0</value-type>
@@ -113,6 +113,5 @@
             </field>
        </fields>
     </module>      
-   
 </modules>  
                    
