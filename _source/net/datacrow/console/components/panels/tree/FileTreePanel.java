@@ -108,11 +108,6 @@ public class FileTreePanel extends TreePanel {
     }
 
     @Override
-    protected boolean isActive() {
-        return true;
-    }
-
-    @Override
     protected JMenuBar getMenu() {
         return null;
     }
@@ -129,7 +124,7 @@ public class FileTreePanel extends TreePanel {
 
         if (modus == _OBJECT_ADDED || modus == _OBJECT_UPDATED) {
             removeElement(dco, top);
-            addElement(dco, top);
+            addElement(dco, top, 0);
         }
         
         if (logger.isDebugEnabled()) 
@@ -142,7 +137,8 @@ public class FileTreePanel extends TreePanel {
         setSaveChanges(true);
     } 
  
-	private void addElement(DcObject dco, DefaultMutableTreeNode notused) {
+    @Override
+	protected void addElement(DcObject dco, DefaultMutableTreeNode notused, int level) {
     	// thread safe
         String filename = dco.getFilename();
         if (Utilities.isEmpty(filename)) return;
@@ -227,7 +223,7 @@ public class FileTreePanel extends TreePanel {
                 
                 if (isCanceled()) break;
                 
-                addElement(dco, top);
+                addElement(dco, top, 0);
                 
                 try {
                     sleep(5);

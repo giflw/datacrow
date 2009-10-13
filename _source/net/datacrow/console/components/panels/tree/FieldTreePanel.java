@@ -28,7 +28,6 @@ package net.datacrow.console.components.panels.tree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,17 +160,6 @@ public class FieldTreePanel extends TreePanel {
     
     @Override
     protected void revalidateTree(DcObject dco, int modus) {
-        setListeningForSelection(false);
-        setSaveChanges(false);
-        
-        // if the tree has not been initialized yet:
-        if (modus == _OBJECT_ADDED &&
-            top.getChildCount() == 0) {
-            buildTree();
-            return;
-        }
-        
-        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
         String[] s;
         if (tree.getSelectionPath() != null) {
@@ -183,23 +171,8 @@ public class FieldTreePanel extends TreePanel {
             s = new String[0];
         }
         
-        if (modus == _OBJECT_REMOVED) {
-            removeElement(dco, top);
-        } else if (modus == _OBJECT_UPDATED) {
-            removeElement(dco, top);
-            addElement(dco, top, 0);
-        } else if (modus == _OBJECT_ADDED) {
-            removeElement(dco, top);
-            addElement(dco, top, 0);
-        }
-
-        if (logger.isDebugEnabled()) 
-            logger.debug("Tree was update in " + (new Date().getTime() - start) + "ms");
-
-        repaint();
-        revalidate();
-
-        setListeningForSelection(true);
+        super.revalidateTree(dco, modus);
+        setSaveChanges(false);
         
         // if the top node was selected leave as is
         if (s.length != 1) {
@@ -212,8 +185,9 @@ public class FieldTreePanel extends TreePanel {
         setSaveChanges(true);
     } 
     
+    @Override
     @SuppressWarnings("unchecked")
-    private void addElement(DcObject dco, DefaultMutableTreeNode parent, int level) {
+    protected void addElement(DcObject dco, DefaultMutableTreeNode parent, int level) {
         DcField field = null;
 
         if (parent.getUserObject() instanceof NodeElement) {

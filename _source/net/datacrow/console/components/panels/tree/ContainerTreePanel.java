@@ -31,16 +31,19 @@ import java.util.List;
 import javax.swing.JMenuBar;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import net.datacrow.console.menu.ContainerTreePanelMenuBar;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.settings.Settings;
 
-public class ContainerTreePanel extends FieldTreePanel {
+public class ContainerTreePanel extends TreePanel {
 
     public ContainerTreePanel(GroupingPane gp) {
         super(gp);
@@ -52,30 +55,104 @@ public class ContainerTreePanel extends FieldTreePanel {
     }
     
     @Override
-    public void updateView() {
-        if (currentUserObject instanceof NodeElement) {
-            gp.getView().clear();
-            NodeElement currentNode = (NodeElement) currentUserObject;
+    protected void createTopNode() {
+        top = new DefaultMutableTreeNode(DcModules.get(DcModules._CONTAINER).getLabel());
+        NodeElement element = new NodeElement(getModule(), DcModules.get(DcModules._CONTAINER).getLabel(), null);
+        element.setValues(new ArrayList<DcObject>());
+        top.setUserObject(element);
+    }
+
+    @Override
+    public void groupBy() {}
+    
+    @Override
+    protected void removeElement(DcObject dco, DefaultMutableTreeNode parentNode) {
+        DefaultMutableTreeNode node;
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        while ((node = findNode(dco.toString(), getTopNode())) != null) {
+            model.removeNodeFromParent(node);
+        }
+    }
+    
+    @Override
+    protected void addElement(DcObject dco, DefaultMutableTreeNode parent, int level) {
+
+        DcModule module = DcModules.get(DcModules._CONTAINER);
+        boolean flatView = module.getSettings().getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
+        
+        NodeElement neTop = (NodeElement) top.getUserObject();
+        neTop.addValue(dco);
+        
+        Container container = (Container) dco;
+        
+        if (!flatView && container.getParentContainer() != null)
+            parent = findNode(container.getParentContainer().toString(), getTopNode());
             
-            if (currentNode.getValues() != null) {
-                Settings settings = DcModules.get(DcModules._CONTAINER).getSettings();
-                if (settings.getInt(DcRepository.ModuleSettings.stTreePanelShownItems) == DcModules._ITEM) {
-                    List<DcObject> containers = currentNode.getValues();
-                    List<DcObject> objects = new ArrayList<DcObject>();
-                    for (DcObject container : containers ) {
-                        objects.addAll(container.getChildren());
-                    }
-                    
-                    DataFilter df = DataFilters.getDefaultDataFilter(DcModules._ITEM);
-                    df.sort(objects);
-                    updateView(objects);
+        NodeElement ne = new NodeElement(DcModules._CONTAINER, container.toString(), container.getIcon());
+        ne.addValue(container);
+        DefaultMutableTreeNode masterNode = new DefaultMutableTreeNode(ne);
+        insertNode(masterNode, parent);
+        
+        if (!flatView) {
+            DefaultMutableTreeNode childNode;
+            for (Container child : container.getChildContainers()) {
+                childNode = findNode(child.toString(), masterNode);
+                
+                if (childNode == null) {
+                    NodeElement element = new NodeElement(DcModules._CONTAINER, child.toString(), child.getIcon());
+                    element.addValue(child);
+                    childNode = new DefaultMutableTreeNode(element);
+                    insertNode(childNode, masterNode);
                 } else {
-                    updateView(currentNode.getSortedValues());
+                    NodeElement element = (NodeElement) childNode.getUserObject();
+                    element.addValue(child);
                 }
+                
+                for (Container c : child.getChildContainers())
+                    addElement(c, childNode, level++);
             }
         }
-    }    
+    }
+    
+    @Override
+    protected void buildTree() {
+        build();
+        
+        if (!isActive()) return;
 
+        createLeafs();
+    }
+    
+    private void createLeafs() {
+        build();
+        
+        DcModule module = DcModules.get(DcModules._CONTAINER);
+        boolean flatView = module.getSettings().getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
+
+        tree.setEnabled(false);
+        setListeningForSelection(false);
+        setSaveChanges(false);
+        
+        List<DcObject> items = getItems();
+        
+        for (DcObject dco : items) {
+            if (flatView || ((Container) dco).getParentContainer() == null)
+                addElement(dco, top, 0);
+        }
+
+        setListeningForSelection(true);
+        setSaveChanges(true);
+        tree.setEnabled(true);
+
+        expandAll();
+        
+        if (isShowing())
+            setDefaultSelection();
+        
+        revalidate();
+        repaint();
+    }
+    
     @Override
     public void valueChanged(TreeSelectionEvent e) {
         
@@ -119,4 +196,29 @@ public class ContainerTreePanel extends FieldTreePanel {
             setSelected(node);
         }
     }
+    
+    @Override
+    public void updateView() {
+        if (currentUserObject instanceof NodeElement) {
+            gp.getView().clear();
+            NodeElement currentNode = (NodeElement) currentUserObject;
+            
+            if (currentNode.getValues() != null) {
+                Settings settings = DcModules.get(DcModules._CONTAINER).getSettings();
+                if (settings.getInt(DcRepository.ModuleSettings.stTreePanelShownItems) == DcModules._ITEM) {
+                    List<DcObject> containers = currentNode.getValues();
+                    List<DcObject> objects = new ArrayList<DcObject>();
+                    for (DcObject container : containers ) {
+                        objects.addAll(container.getChildren());
+                    }
+                    
+                    DataFilter df = DataFilters.getDefaultDataFilter(DcModules._ITEM);
+                    df.sort(objects);
+                    updateView(objects);
+                } else {
+                    updateView(currentNode.getSortedValues());
+                }
+            }
+        }
+    }  
 }

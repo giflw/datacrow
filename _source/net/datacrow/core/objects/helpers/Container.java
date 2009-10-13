@@ -57,8 +57,9 @@ public class Container extends DcObject {
     }
     
     public Container getParentContainer() {
-        String id = (String) getValue(_F_PARENT);
-        return id != null ? (Container) DataManager.getObject(DcModules._CONTAINER, id) : null;
+        Object parent = getValue(_F_PARENT);
+        return parent instanceof String ? (Container) DataManager.getObject(DcModules._CONTAINER, (String) parent) : 
+               (Container) parent;
     }
     
     public Collection<Container> getChildContainers() {
