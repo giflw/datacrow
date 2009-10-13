@@ -332,14 +332,7 @@ public class DataManager {
         
         int module = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
         DcObject ref = value instanceof DcObject ? 
-                      (DcObject) value : null;
-                      
-        if (ref == null)
-            ref = DataManager.getObjectForDisplayValue(module, name);
-        
-        if (ref == null)
-            ref = DataManager.getObjectForDisplayValue(module, name);
-                          
+                      (DcObject) value : DataManager.getObjectForDisplayValue(module, name);
 
         if (ref == null) {
             ref = DcModules.get(module).getDcObject();
