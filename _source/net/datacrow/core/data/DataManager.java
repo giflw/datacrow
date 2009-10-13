@@ -725,7 +725,7 @@ public class DataManager {
     public static DcObject getObjectByExternalID(int module, String type, String ID) {
         for (DcObject dco : get(module, null)) {
             String s = dco.getExternalReference(type);
-            if (s.equalsIgnoreCase(ID))
+            if (s != null && s.equalsIgnoreCase(ID))
                 return dco;
         }
         return null;
