@@ -332,7 +332,14 @@ public class DataManager {
         
         int module = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
         DcObject ref = value instanceof DcObject ? 
-                      (DcObject) value : DataManager.getObjectForDisplayValue(module, name);
+                      (DcObject) value : null;
+                      
+        if (ref == null)
+            ref = DataManager.getObjectForDisplayValue(module, name);
+        
+        if (ref == null)
+            ref = DataManager.getObjectForDisplayValue(module, name);
+                          
 
         if (ref == null) {
             ref = DcModules.get(module).getDcObject();
@@ -708,6 +715,15 @@ public class DataManager {
                 return loan;
         }
         return new Loan();
+    }
+    
+    public static DcObject getObjectByExternalID(int module, String type, String ID) {
+        for (DcObject dco : get(module, null)) {
+            String s = dco.getExternalReference(type);
+            if (s.equalsIgnoreCase(ID))
+                return dco;
+        }
+        return null;
     }
     
     /**
