@@ -403,6 +403,9 @@ public class Query {
                 if (reference == null)
                     continue;
                 
+                // also created references for the sub items of this reference...
+                createReferences(reference);
+                
                 try { 
                     DcObject existing = DataManager.getObject(reference.getModule().getIndex(), reference.getID());
                     existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
@@ -428,6 +431,9 @@ public class Query {
                     DcObject reference = mapping.getReferencedObject();
                     try { 
                         if (reference == null) continue;
+                        
+                        // also created references for the sub items of this reference...
+                        createReferences(reference);
                         
                         DcObject existing = DataManager.getObject(reference.getModule().getIndex(), reference.getID());
                         existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;

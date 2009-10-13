@@ -334,14 +334,10 @@ public class DataManager {
         int module = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
         DcObject ref = value instanceof DcObject ? (DcObject) value : null;
         
-        // method 2: simple external reference
+        // method 2: simple external reference + display value comparison
         if (ref == null)
-            ref = DataManager.getObjectByExternalID(module, DcRepository.ExternalReferences._DATACROW, name);
+            ref = DataManager.getObjectForString(module, name);
 
-        // method 3: compare display values        
-        if (ref == null)
-            ref = DataManager.getObjectForDisplayValue(module, name);
-                      
         if (ref == null) {
             ref = DcModules.get(module).getDcObject();
             
@@ -355,10 +351,6 @@ public class DataManager {
             } else {
                 ref.setValue(ref.getDisplayFieldIdx(), name);
             }
-            
-            // set the simple external reference
-            if (ref.getField(DcObject._SYS_EXTERNAL_REFERENCES) != null)
-                ref.addExternalReference(DcRepository.ExternalReferences._DATACROW, name);
             
             if (onlinesearch) {
                 OnlineSearchHelper osh = new OnlineSearchHelper(module, SearchTask._ITEM_MODE_FULL);
@@ -376,6 +368,10 @@ public class DataManager {
         }
         
         if (ref != null) {
+            // set the simple external reference
+            if (ref.getField(DcObject._SYS_EXTERNAL_REFERENCES) != null)
+                ref.addExternalReference(DcRepository.ExternalReferences._DATACROW, name);
+            
             if (dco.getField(fieldIdx).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
                 DataManager.addMapping(dco, ref, fieldIdx);
             else
