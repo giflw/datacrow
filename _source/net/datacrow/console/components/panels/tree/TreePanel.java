@@ -31,6 +31,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JMenuBar;
@@ -258,7 +259,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             new Insets(0, 5, 5, 5), 0, 0));
     }     
     
-    public void reset() {}
+    public void reset() {
+        buildTree();
+    }
     
     protected void setSelected(DefaultMutableTreeNode node) {
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
@@ -292,15 +295,20 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     protected DefaultMutableTreeNode findNode(Object key, DefaultMutableTreeNode parentNode) {
         int count = parentNode != null ? parentNode.getChildCount() : 0;
+        
+        DefaultMutableTreeNode node;
         for (int i = 0; i < count; i++) {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
+            node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
             
             if (node.getUserObject() instanceof NodeElement) {
                 NodeElement ne = (NodeElement) node.getUserObject();
                 String s = key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
-                if (ne.getComparableKey().equals(s))
+                if (ne.getComparableKey().equalsIgnoreCase(s))
                     return node;
             }
+            
+            node = findNode(key, node);
+            if (node != null) return node;
         }
         return null;
     }  
@@ -308,9 +316,43 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected abstract JMenuBar getMenu();
     protected abstract void createTopNode();
     protected abstract void buildTree();
+    protected abstract void addElement(DcObject dco, DefaultMutableTreeNode node, int level);
     
-    protected abstract void revalidateTree(DcObject dco, int modus);
-    protected abstract boolean isActive();
+    protected void revalidateTree(DcObject dco, int modus) {
+        setListeningForSelection(false);
+        setSaveChanges(false);
+        
+        // TODO: test: do not create tree when not displayed
+        // if the tree has not been initialized yet:
+        if (modus == _OBJECT_ADDED && top.getChildCount() == 0) {
+            //buildTree();
+            return;
+        }
+        
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        
+        if (modus == _OBJECT_REMOVED)
+            removeElement(dco, top);
+
+        if (modus == _OBJECT_ADDED || modus == _OBJECT_UPDATED) {
+            removeElement(dco, top);
+            addElement(dco, top, 0);
+        }
+        
+        if (logger.isDebugEnabled()) 
+            logger.debug("Tree was update in " + (new Date().getTime() - start) + "ms");
+
+        repaint();
+        revalidate();
+
+        setListeningForSelection(true);
+        setSaveChanges(true);        
+    }
+    
+    protected boolean isActive() {
+        return true;
+    }
+    
     public abstract void groupBy();
     
     

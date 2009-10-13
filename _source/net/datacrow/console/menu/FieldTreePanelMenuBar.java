@@ -34,7 +34,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcMenu;
 import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcMenuItem;
-import net.datacrow.console.components.panels.tree.FieldTreePanel;
+import net.datacrow.console.components.panels.tree.TreePanel;
 import net.datacrow.console.windows.GroupByDialog;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
@@ -42,11 +42,11 @@ import net.datacrow.util.DcSwingUtilities;
 public class FieldTreePanelMenuBar extends DcMenuBar implements ActionListener {
     
     protected final int modIdx;
-    protected final FieldTreePanel treePanel;
+    protected final TreePanel treePanel;
     
     private DcMenu menuFields = ComponentFactory.getMenu(DcResources.getText("lblGroupBy"));
 
-    public FieldTreePanelMenuBar(int modIdx, FieldTreePanel treePanel) {
+    public FieldTreePanelMenuBar(int modIdx, TreePanel treePanel) {
         this.modIdx = modIdx;
         this.treePanel = treePanel;
 

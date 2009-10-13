@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcMenu;
 import net.datacrow.console.components.DcMenuItem;
-import net.datacrow.console.components.panels.tree.FieldTreePanel;
+import net.datacrow.console.components.panels.tree.TreePanel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
@@ -38,20 +38,29 @@ import net.datacrow.settings.Settings;
 
 public class ContainerTreePanelMenuBar extends FieldTreePanelMenuBar {
 
-    public ContainerTreePanelMenuBar(int modIdx, FieldTreePanel treePanel) {
+    public ContainerTreePanelMenuBar(int modIdx, TreePanel treePanel) {
         super(modIdx, treePanel);
         
         DcMenu menuView = ComponentFactory.getMenu(DcResources.getText("lblView"));
-        
+
+        DcMenuItem menuViewFlat = ComponentFactory.getMenuItem(DcResources.getText("lblFlatView"));
+        DcMenuItem menuViewHierarchy = ComponentFactory.getMenuItem(DcResources.getText("lblHierarchicalView"));
         DcMenuItem menuViewContainers = ComponentFactory.getMenuItem(DcResources.getText("lblViewContainers"));
         DcMenuItem menuViewItems = ComponentFactory.getMenuItem(DcResources.getText("lblViewItems"));
         
+        menuView.add(menuViewFlat);
+        menuView.add(menuViewHierarchy);
+        menuView.addSeparator();
         menuView.add(menuViewContainers);
         menuView.add(menuViewItems);
         
+        menuViewFlat.setActionCommand("flatView");
+        menuViewHierarchy.setActionCommand("hierView");
         menuViewContainers.setActionCommand("viewContainers");
         menuViewItems.setActionCommand("viewItems");
         
+        menuViewFlat.addActionListener(this);
+        menuViewHierarchy.addActionListener(this);
         menuViewContainers.addActionListener(this);
         menuViewItems.addActionListener(this);
         
@@ -70,6 +79,14 @@ public class ContainerTreePanelMenuBar extends FieldTreePanelMenuBar {
         } else if (ae.getActionCommand().equals("viewItems")) {
             settings.set(DcRepository.ModuleSettings.stTreePanelShownItems, Long.valueOf(DcModules._ITEM));
             DcModules.get(DcModules._CONTAINER).getSearchView().applySettings();
+        } else if (ae.getActionCommand().equals("flatView")) {
+            settings.set(DcRepository.ModuleSettings.stContainerTreePanelFlat, Boolean.TRUE);
+            DcModules.get(DcModules._CONTAINER).getSearchView().applySettings();
+            treePanel.reset();
+        } else if (ae.getActionCommand().equals("hierView")) {
+            settings.set(DcRepository.ModuleSettings.stContainerTreePanelFlat, Boolean.FALSE);
+            DcModules.get(DcModules._CONTAINER).getSearchView().applySettings();
+            treePanel.reset();
         } else {
             super.actionPerformed(ae);
         }
