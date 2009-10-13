@@ -34,6 +34,8 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.resources.DcResources;
 
 public class Container extends DcObject {
 
@@ -74,6 +76,15 @@ public class Container extends DcObject {
         return children;
     }
     
+    @Override
+    protected void beforeSave() throws ValidationException {
+        Container parent = getParentContainer();
+        if (parent != null && parent.getID().equals(getID())) {
+            throw new ValidationException(DcResources.getText("msgCannotSetItemAsParent"));
+        }
+        super.beforeSave();
+    }
+
     @Override
     public Object getValue(int index) {
         if (index == _F_PARENT) {

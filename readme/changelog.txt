@@ -24,6 +24,9 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
   specify an alternative location for the data folder of Data Crow. Note that the images
   will still be written to webapp/datacrow/mediaimages (in the installation folder).
   Substitute spaces by %20.
+- Container hierarchy: Containers can now be assigned a parent, allowing users to create
+  a hierarchical container structure. The grouping pane of the container view has two 
+  additional options: 'Flat view' and 'Hierarchical View'. 
 
 [Changed]
 - Added additional font rendering options (Settings > Settings > Font).
