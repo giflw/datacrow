@@ -109,6 +109,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         }            
     }
     
+    // TODO: Migrate DISCID!!
     private void convertExternalReferences() throws Exception {
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();

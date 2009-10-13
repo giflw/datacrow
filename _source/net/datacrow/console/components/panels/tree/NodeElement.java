@@ -69,7 +69,7 @@ public class NodeElement {
     }
     
     public String getComparableKey() {
-        return key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
+        return key instanceof String ? ((String) key).toLowerCase() : key == null ? "" : key.toString().toLowerCase();
     }
     
     public String getKey() {
