@@ -5,18 +5,28 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 
 [New]
 - New feature for the File Import of e-books. The importer will now try and find the ISBN
-  that is contained in the PDF document. The ISBN Extractor 
+  that is contained in the PDF document. For this the ISBN Extractor 
   (http://isbnextractor.sourceforge.net) is used.
 - Each item can now have one or more external keys. External keys, such as ASINs from 
   Amazon, are used to link the item from the source where they were obtained from. 
   They add additional flexibility and lend themselves to be used by other systems and 
-  customization. 
+  customization.
+  This solves problems where items could not be linked to the source system and were
+  therefor duplicated. Most notable example are the actors for IMDB movies. 
+  The name was used to check whether the actor already existed in Data Crow. This worked
+  fine when the name is not changed on either side as this breaks the link between the
+  Data Crow and the item of the source system. Now, the external IDs are used to link
+  the items. Where there is no external ID available Data Crow uses an internally 
+  generated item tag instead.
+  In short: items are now more reusable then ever!
 - Module Export Wizard. With this wizard it is now possible to export your custom made 
   modules. Optionally the items of the module(s) are also exported. This wizard enables 
-  you to share your modules with the other users!  
+  you to share your modules with other users!
 - Module Import Wizard. Takes care of all the nitty gritty stuff that is involved when 
   you want to add a custom module to your Data Crow installation. This is, from now on,
-  the way to add custom modules to your installation!
+  THE way to add custom modules to your installation! It takes care of internal module
+  ID clashes, imports the data belonging to the module(s) and imports all other related
+  information (such as the default settings).
 - Module Copy Wizard. Tired of adding all the fields manually to your custom module?
   Why not base it on one of the existing modules? Use this wizard, select the module 
   which you would like to copy and off you go!
@@ -37,14 +47,8 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
   This also fixes the issue where text in the Quick View is not being wrapped.
 - File Importer now remembers whether it should use online services or not + the selected
   server, search mode and region.
-- File Importer now remembers the selected directory usage. 
-- Quick View: filename is now a click-able link.
-- Actors and such were quite hard to reuse after a user had changed their names within Data 
-  Crow. The name was the sole information available to check if the item already existed.
-  Now, with the new external IDs functionality items will be reused correctly and will 
-  always be linked to the external source from which they were retrieved. 
-  Note that this is only true for new items or for existing movies, audio CDs, 
-  music albums and software retrieved by the Amazon online service. 
+- File Importer now remembers the selected "directory usage". 
+- Quick View: filename is now a clickable link.
 
 [Fixed]
 - "Pick a Date": larger set of years to make the navigation easier + a fix for the up and 
