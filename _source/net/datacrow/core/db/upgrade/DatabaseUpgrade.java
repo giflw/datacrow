@@ -129,8 +129,13 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         		" will be examined and, if possible, the external ID will be extracted and stored separately. Furthermore will the ASIN fields be removed " +
         		" from the Software, Movie, Audio CD and Music Album modules and its values will be stored in the external references field. Continue?");
         
+        qb.setVisible(true);
+        
         if (!qb.isAffirmative())
             System.exit(0);
+        
+        LogForm.getInstance().setVisible(true);
+        LogForm.getInstance().toFront();
         
         Collection<MappingModule> modules = new ArrayList<MappingModule>();
         
@@ -147,28 +152,21 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         for (MappingModule module : modules)
             migrateASIN(module);
         
-        migrateServiceURL(DcModules.get(DcModules._MOVIE), DcRepository.ExternalReferences._OFDB);
-        migrateServiceURL(DcModules.get(DcModules._MOVIE), DcRepository.ExternalReferences._IMDB);
-        migrateServiceURL(DcModules.get(DcModules._ACTOR), DcRepository.ExternalReferences._IMDB);
-        migrateServiceURL(DcModules.get(DcModules._DIRECTOR), DcRepository.ExternalReferences._IMDB);
-        migrateServiceURL(DcModules.get(DcModules._SOFTWARE), DcRepository.ExternalReferences._MOBYGAMES);
-        migrateServiceURL(DcModules.get(DcModules._DEVELOPER), DcRepository.ExternalReferences._MOBYGAMES);
-        migrateServiceURL(DcModules.get(DcModules._SOFTWAREPUBLISHER), DcRepository.ExternalReferences._MOBYGAMES);
-        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._ASIN);
-        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._BOL);
-        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._BARNES_NOBLE);
-        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._MCU);
-        migrateServiceURL(DcModules.get(DcModules._AUDIOCD), DcRepository.ExternalReferences._DISCOGS);
-        migrateServiceURL(DcModules.get(DcModules._MUSICALBUM), DcRepository.ExternalReferences._DISCOGS);
-        migrateServiceURL(DcModules.get(DcModules._AUDIOCD), DcRepository.ExternalReferences._MUSICBRAINZ);
-        migrateServiceURL(DcModules.get(DcModules._MUSICALBUM), DcRepository.ExternalReferences._MUSICBRAINZ);
-        migrateServiceURL(DcModules.get(DcModules._MUSICARTIST), DcRepository.ExternalReferences._MUSICBRAINZ);
-        
+        migrateServiceURL(DcModules.get(DcModules._MOVIE));
+        migrateServiceURL(DcModules.get(DcModules._ACTOR));
+        migrateServiceURL(DcModules.get(DcModules._DIRECTOR));
+        migrateServiceURL(DcModules.get(DcModules._SOFTWARE));
+        migrateServiceURL(DcModules.get(DcModules._DEVELOPER));
+        migrateServiceURL(DcModules.get(DcModules._SOFTWAREPUBLISHER));
+        migrateServiceURL(DcModules.get(DcModules._BOOK));
+        migrateServiceURL(DcModules.get(DcModules._AUDIOCD));
+        migrateServiceURL(DcModules.get(DcModules._MUSICALBUM));
+        migrateServiceURL(DcModules.get(DcModules._MUSICARTIST));
     }
     
-    private void migrateServiceURL(DcModule module, String type) throws Exception {
+    private void migrateServiceURL(DcModule module) throws Exception {
         
-        logger.info("Extracting external IDs of type" + type + " for module " + module.getLabel());
+        logger.info("Extracting external IDs of type for module " + module.getLabel());
         
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();
@@ -185,11 +183,28 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         DcObject x;
         
         DcModule mm = new MappingModule(module, DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES);
+        
+        createTable(mm);
+        
+        String type;
         while (rs.next()) {
             id = rs.getString(1);
             url = rs.getString(2);
 
             if (Utilities.isEmpty(url)) continue;
+            
+            String base = url.toLowerCase();
+            type = base.indexOf("amazon") > -1 ? DcRepository.ExternalReferences._ASIN :
+                   base.indexOf("imdb") > -1 ? DcRepository.ExternalReferences._IMDB :
+                   base.indexOf("mobygames") > -1 ? DcRepository.ExternalReferences._MOBYGAMES :
+                   base.indexOf("bol.com") > -1 ? DcRepository.ExternalReferences._BOL :
+                   base.indexOf("barnesandnoble.com") > -1 ? DcRepository.ExternalReferences._BARNES_NOBLE :         
+                   base.indexOf("www.mcu.es") > -1 ? DcRepository.ExternalReferences._MCU :
+                   base.indexOf("musicbrainz") > -1 ? DcRepository.ExternalReferences._MUSICBRAINZ :
+                   base.indexOf("musicbrainz") > -1 ? DcRepository.ExternalReferences._MUSICBRAINZ :    
+                   base.indexOf("discogs.com") > -1 ? DcRepository.ExternalReferences._DISCOGS :  
+                   base.indexOf("ofdb.de") > -1 ? DcRepository.ExternalReferences._OFDB :
+                   "";
 
             if (type.equals(DcRepository.ExternalReferences._IMDB)) {
                 externalID = url.substring(url.lastIndexOf("/") + 1);
