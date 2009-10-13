@@ -222,7 +222,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 externalID = idx > -1 ? externalID.substring(0, idx) : externalID;
                 
                 if (externalID.length() > 12) continue;
-            } else if (type.equals(DcRepository.ExternalReferences._OFDB) &&
+            } else if (type.equals(DcRepository.ExternalReferences._OFDB) ||
                       (type.equals(DcRepository.ExternalReferences._MOBYGAMES) && module.getIndex() != DcModules._SOFTWARE)) {
                 externalID = url.substring(url.lastIndexOf("/") + 1);
                 externalID = externalID.endsWith("/") ? externalID.substring(0, externalID.length() - 1) : externalID;
@@ -249,6 +249,23 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             }
             
             if (externalID != null) {
+                
+                PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM EXTERNALREFERENCE WHERE EXTERNALID = ? AND EXTERNALIDTYPE = ?");
+                ps2.setString(1, externalID);
+                ps2.setString(2, type);
+                
+                ResultSet rs2 = ps2.executeQuery();
+                boolean exists = false;
+                while (rs2.next()) {
+                    exists = true;
+                }
+                
+                if (exists) {
+                    rs2.close();
+                    ps2.close();
+                    continue;
+                }
+                
                 ref = new ExternalReference();
                 ref.setIDs();
                 ref.setValue(ExternalReference._EXTERNAL_ID, externalID);
