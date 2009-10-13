@@ -208,10 +208,24 @@ public abstract class DcRepository {
         
         public static final String _ASIN = "ASIN";
         public static final String _IMDB = "IMDB";
+        public static final String _MCU = "MCU";
+        public static final String _DISCOGS = "DISCOGS";
+        public static final String _BARNES_NOBLE = "BARNES_NOBLES";
+        public static final String _MUSICBRAINZ = "MUSICBRAINZ";
+        public static final String _MOBYGAMES = "MOBYGAMES";
+        public static final String _OFDB = "OFDB";
+        public static final String _DATACROW = "DATACROW";
         
         static {
             types.add(_ASIN);
             types.add(_IMDB);
+            types.add(_MCU);
+            types.add(_DISCOGS);
+            types.add(_BARNES_NOBLE);
+            types.add(_MUSICBRAINZ);
+            types.add(_MOBYGAMES);
+            types.add(_OFDB);
+            types.add(_DATACROW);
         }
     }
     

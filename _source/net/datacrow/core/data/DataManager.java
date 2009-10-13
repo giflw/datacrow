@@ -330,13 +330,21 @@ public class DataManager {
         
         if (Utilities.isEmpty(name)) return null;
         
+        // method 1: item is provided and exists
         int module = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
-        DcObject ref = value instanceof DcObject ? 
-                      (DcObject) value : DataManager.getObjectForDisplayValue(module, name);
+        DcObject ref = value instanceof DcObject ? (DcObject) value : null;
+        
+        // method 2: simple external reference
+        if (ref == null)
+            ref = DataManager.getObjectByExternalID(module, DcRepository.ExternalReferences._DATACROW, name);
 
+        // method 3: compare display values        
+        if (ref == null)
+            ref = DataManager.getObjectForDisplayValue(module, name);
+                      
         if (ref == null) {
             ref = DcModules.get(module).getDcObject();
-    
+            
             boolean onlinesearch = false;
             if (ref instanceof DcAssociate) {
                 ref.setValue(DcAssociate._A_NAME, name);
@@ -347,6 +355,10 @@ public class DataManager {
             } else {
                 ref.setValue(ref.getDisplayFieldIdx(), name);
             }
+            
+            // set the simple external reference
+            if (ref.getField(DcObject._SYS_EXTERNAL_REFERENCES) != null)
+                ref.addExternalReference(DcRepository.ExternalReferences._DATACROW, name);
             
             if (onlinesearch) {
                 OnlineSearchHelper osh = new OnlineSearchHelper(module, SearchTask._ITEM_MODE_FULL);
