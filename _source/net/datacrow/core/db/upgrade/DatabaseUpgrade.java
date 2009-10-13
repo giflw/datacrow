@@ -115,16 +115,14 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         try {
             conn = DatabaseManager.getConnection();
             stmt = conn.createStatement();
-            stmt.executeQuery("SELECT TOP 1 * FROM SOFTWARE_EXTERNALREFERENCE");
+            stmt.executeQuery("SELECT TOP 1 ASIN FROM MOVIE");
             
             stmt.close();
             conn.close();
-            
-            // no conversion needed
+        } catch (Exception e) {
+            // new database or ASIN field has already been removed.
             return;
-
-        } catch (Exception e) {}
-
+        }
         
         Collection<MappingModule> modules = new ArrayList<MappingModule>();
         
