@@ -10,6 +10,7 @@
 
 3.6 
 ---------------------------------------------------------------------------------------------------------
+[ ] Amazon search: Blu-Ray
 [x] Exporting a module. Exporting the module definition itself currently requires manually copying the 
     module jar file and its property files. Functionality will be provided which makes it easy to export 
     and import a module (definition). This functionality will also allow users to export default/demo data 
