@@ -1068,7 +1068,7 @@ public class DcModule implements Comparable<DcModule> {
                     getIndex() != DcModules._TAB && getIndex() != DcModules._CONTACTPERSON) {
                 
                 addField(new DcField(DcObject._SYS_EXTERNAL_REFERENCES, getIndex(), "External References",  
-                        true, true, false, true, true, 
+                        true, true, false, false, true, 
                         4, ComponentFactory._SIMPLEREFERENCESFIELD, DcModules._EXTERNALREFERENCE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                         "externalreferences"));       
             }

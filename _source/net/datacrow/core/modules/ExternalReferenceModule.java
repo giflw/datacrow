@@ -27,12 +27,9 @@ public class ExternalReferenceModule extends DcPropertyModule {
         return ExternalReference._EXTERNAL_ID_TYPE;
     }
     
-    
-
     @Override
-    public boolean isServingMultipleModules() {
-        // TODO Auto-generated method stub
-        return super.isServingMultipleModules();
+    public int getDisplayIndex() {
+        return ExternalReference._EXTERNAL_ID;
     }
 
     /**

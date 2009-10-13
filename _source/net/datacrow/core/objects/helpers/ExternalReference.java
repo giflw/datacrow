@@ -7,8 +7,8 @@ public class ExternalReference extends DcObject {
 
     private static final long serialVersionUID = 9031499353731926500L;
 
-    public static final int _EXTERNAL_ID = 1;
-    public static final int _EXTERNAL_ID_TYPE = 2;
+    public static final int _EXTERNAL_ID = 151;
+    public static final int _EXTERNAL_ID_TYPE = 152;
     
     public ExternalReference() {
         super(DcModules._EXTERNALREFERENCE);
@@ -31,7 +31,7 @@ public class ExternalReference extends DcObject {
     }
 
     @Override
-    public String toString() {
+    public String getName() {
         return getDisplayString(_EXTERNAL_ID_TYPE) + ": " + getDisplayString(_EXTERNAL_ID); 
     }
 }
