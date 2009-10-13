@@ -25,6 +25,9 @@
 
 package net.datacrow.core.objects.helpers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
@@ -37,8 +40,11 @@ public class Container extends DcObject {
     private static final long serialVersionUID = -3032927100353360734L;
 
     public static final int _A_NAME = 1;
-    public static final int _B_DESCRIPTION = 4;
+    public static final int _B_TYPE = 2;
+    public static final int _C_PICTUREFRONT = 3;
+    public static final int _D_DESCRIPTION = 4;
     public static final int _E_ICON = 5;
+    public static final int _F_PARENT = 6;
     
     private boolean isLoading = false;
 
@@ -46,6 +52,37 @@ public class Container extends DcObject {
         super(DcModules._CONTAINER);
     }
     
+    public boolean isTop() {
+        return isFilled(_F_PARENT);
+    }
+    
+    public Container getParentContainer() {
+        String id = (String) getValue(_F_PARENT);
+        return id != null ? (Container) DataManager.getObject(DcModules._CONTAINER, id) : null;
+    }
+    
+    public Collection<Container> getChildContainers() {
+        Collection<Container> children = new ArrayList<Container>();
+        DataFilter df = new DataFilter(DcModules._CONTAINER);
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._CONTAINER, Container._F_PARENT, Operator.EQUAL_TO, getID()));
+        
+        for (DcObject dco : DataManager.get(DcModules._CONTAINER, df)) {
+            children.add((Container) dco);
+        }
+        
+        return children;
+    }
+    
+    @Override
+    public Object getValue(int index) {
+        if (index == _F_PARENT) {
+            Object o = super.getValue(_F_PARENT);
+            return o instanceof String ? DataManager.getObject(DcModules._CONTAINER, (String) o) : o;
+        } else {
+            return super.getValue(index);
+        }
+    }
+
     @Override
     public void loadChildren() {
         
