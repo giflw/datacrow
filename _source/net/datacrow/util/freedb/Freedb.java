@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.http.HttpConnection;
 import net.datacrow.core.http.HttpConnectionUtil;
@@ -227,7 +228,7 @@ public class Freedb {
         audioCD.setValue(AudioCD._A_TITLE, result.getAlbum());
         audioCD.setValue(AudioCD._F_ARTISTS, result.getArtist());
         audioCD.setValue(AudioCD._G_GENRES, result.getCategory());
-        audioCD.setValue(AudioCD._K_DISCID, result.getDiscId());
+        audioCD.addExternalReference(DcRepository.ExternalReferences._DISCID, result.getDiscId());
         return audioCD;
     }
     
@@ -249,7 +250,7 @@ public class Freedb {
         audioCD.setValue(AudioCD._A_TITLE, title);
         
         DataManager.createReference(audioCD, AudioCD._F_ARTISTS, result.getArtist());
-        audioCD.setValue(AudioCD._K_DISCID, result.getDiscId());
+        audioCD.addExternalReference(DcRepository.ExternalReferences._DISCID, result.getDiscId());
         setGenres(audioCD, result.getCategory());        
         
         int year = Utilities.getIntegerValue(result.getYear());

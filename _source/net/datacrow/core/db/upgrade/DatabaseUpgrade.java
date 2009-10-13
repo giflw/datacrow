@@ -109,7 +109,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         }            
     }
     
-    // TODO: Migrate DISCID!!
     private void convertExternalReferences() throws Exception {
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();
@@ -152,6 +151,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         for (MappingModule module : modules)
             migrateASIN(module);
+        
+        migrateDiscID(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
+        migrateDiscID(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
         
         migrateServiceURL(DcModules.get(DcModules._MOVIE));
         migrateServiceURL(DcModules.get(DcModules._ACTOR));
@@ -283,6 +285,48 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 ps.close();
             }
         }
+        
+        rs.close();
+        conn.close();
+        stmt.close();
+    }
+    
+    
+    private void migrateDiscID(MappingModule mapping) throws Exception {
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = conn.createStatement();
+        
+        DcModule module =  DcModules.get(mapping.getParentModIdx());
+        String sql = "SELECT ID, DISCID FROM " + module.getTableName() + " WHERE DISCID IS NOT NULL";
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        PreparedStatement ps;
+        while (rs.next()) {
+            String ID = rs.getString(1);
+            String ASIN = rs.getString(2).trim();
+            if (!Utilities.isEmpty(ASIN)) {
+
+                DcObject ref = new ExternalReference();
+                ref.setIDs();
+                ref.setValue(ExternalReference._EXTERNAL_ID, ASIN);
+                ref.setValue(ExternalReference._EXTERNAL_ID_TYPE, DcRepository.ExternalReferences._DISCID);
+                ps = new Query(Query._INSERT, ref, null, null).getQuery();
+                ps.execute();
+                ps.close();
+                
+                DcObject x = mapping.getDcObject();
+                x.setValue(DcMapping._A_PARENT_ID, ID);
+                x.setValue(DcMapping._B_REFERENCED_ID, ref.getID());
+                ps = new Query(Query._INSERT, x, null, null).getQuery();
+                ps.execute();
+                ps.close();
+                        
+                logger.info("Created mapping for item with ID " + ID + " for module [" + module.getName() + "]");
+            }   
+        }
+        
+        sql = "ALTER TABLE " + module.getTableName() + " DROP COLUMN DISCID"; 
+        stmt.execute(sql);
         
         rs.close();
         conn.close();

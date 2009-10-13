@@ -37,7 +37,6 @@ public class AudioCD extends DcMediaObject {
     public static final int _H_PICTUREFRONT = 3;
     public static final int _I_PICTUREBACK = 4;
     public static final int _J_PICTURECD = 5;
-    public static final int _K_DISCID = 6;
     public static final int _L_STATE = 7;
     public static final int _M_WEBPAGE = 8;
     public static final int _N_EAN = 9;

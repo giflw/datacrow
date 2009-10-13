@@ -206,6 +206,7 @@ public abstract class DcRepository {
         
         public static final Collection<String> types = new ArrayList<String>();
         
+        public static final String _DISCID = "DISCID";
         public static final String _ASIN = "ASIN";
         public static final String _IMDB = "IMDB";
         public static final String _MCU = "MCU";
@@ -228,6 +229,7 @@ public abstract class DcRepository {
             types.add(_OFDB);
             types.add(_PDCR);
             types.add(_BOL);
+            types.add(_DISCID);
         }
     }
     

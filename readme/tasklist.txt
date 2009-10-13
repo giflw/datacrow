@@ -10,19 +10,18 @@
 
 3.6 
 ---------------------------------------------------------------------------------------------------------
-[ ] Amazon search: Blu-Ray
 [x] Exporting a module. Exporting the module definition itself currently requires manually copying the 
     module jar file and its property files. Functionality will be provided which makes it easy to export 
     and import a module (definition). This functionality will also allow users to export default/demo data 
     with their module. This functionality will also be used to provide additional custom modules. 
 [x] Container Hierarchy.
-[x] Clone a module wizard
+[ ] Clone a module wizard > add settings file + test 
 [ ] MovieMeter.nl online search
 [ ] Book online search in www.isbndb.com (1886661)
 [ ] File operations
 [x] [2860480] Arch package for data crow
 [x] [2860913] Extract ISBN from PDF (isbnextractor)
-[ ] [2862681] New "IMDB ID" field for Names and Movies / Data matching for online services
+[x] [2862681] New "IMDB ID" field for Names and Movies / Data matching for online services
 [ ] [2862698] Add fields "Aspect Ratio" and "Color" to movie fields
 [ ] [2862688] IMDB wrapper doesn't fill in "Languages" field
 [x] [2874556] Date field
