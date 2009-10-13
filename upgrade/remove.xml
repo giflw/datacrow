@@ -90,6 +90,21 @@
                 <value-type>0</value-type>
                 <overwritable>false</overwritable>
             </field>
+            <field>
+                <index>6</index>
+                <name>Disc ID</name>
+                <database-column-name>DiscID</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>false</searchable>
+                <techinfo>true</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>5</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>0</value-type>
+                <overwritable>false</overwritable>
+            </field>            
        </fields>
     </module>     
     <module>
@@ -111,6 +126,21 @@
                 <value-type>0</value-type>
                 <overwritable>false</overwritable>
             </field>
+            <field>
+                <index>8</index>
+                <name>Disc ID</name>
+                <database-column-name>DiscID</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>false</searchable>
+                <techinfo>true</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>5</field-type>
+                <module-reference>{index}</module-reference>
+                <value-type>0</value-type>
+                <overwritable>false</overwritable>
+            </field>            
        </fields>
     </module>      
 </modules>
