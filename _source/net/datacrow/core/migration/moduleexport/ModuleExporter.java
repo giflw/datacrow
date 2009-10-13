@@ -108,6 +108,8 @@ public class ModuleExporter {
 			exporter.cancel();
 	}
 	
+	// TODO: PROPERTIES....... !!!!!!!
+	
 	private class Exporter extends Thread implements IItemExporterClient {
 		
 		private IModuleWizardClient client;

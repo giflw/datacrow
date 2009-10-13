@@ -214,6 +214,7 @@ public abstract class DcRepository {
         public static final String _MUSICBRAINZ = "MUSICBRAINZ";
         public static final String _MOBYGAMES = "MOBYGAMES";
         public static final String _OFDB = "OFDB";
+        public static final String _BOL = "BOL";
         public static final String _PDCR = "PDCR"; // (P)lain (D)ata (C)row (R)eference ;-)
         
         static {
@@ -226,6 +227,7 @@ public abstract class DcRepository {
             types.add(_MOBYGAMES);
             types.add(_OFDB);
             types.add(_PDCR);
+            types.add(_BOL);
         }
     }
     

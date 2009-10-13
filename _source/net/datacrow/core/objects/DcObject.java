@@ -620,8 +620,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (getModule().isFileBacked())
             Hash.getInstance().calculateHash(this);
         
-        if (getField(_SYS_EXTERNAL_REFERENCES) != null) {
-            // creates a display field foreign key reference.. ;-)
+        if (getField(_SYS_EXTERNAL_REFERENCES) != null &&
+            getExternalReference(DcRepository.ExternalReferences._PDCR) == null) {
+            // Only create this ONCE. It is supposed to remain the same for ever
             addExternalReference(DcRepository.ExternalReferences._PDCR, 
                                  getDisplayString(getSystemDisplayFieldIdx()));
         }

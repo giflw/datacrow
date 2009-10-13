@@ -147,13 +147,29 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         for (MappingModule module : modules)
             migrateASIN(module);
         
-        migrateServiceURL(DcModules.get(DcModules._BOOK), "ASIN");
-        migrateServiceURL(DcModules.get(DcModules._MOVIE), "IMDB");
-        migrateServiceURL(DcModules.get(DcModules._ACTOR), "IMDB");
-        migrateServiceURL(DcModules.get(DcModules._DIRECTOR), "IMDB");
+        migrateServiceURL(DcModules.get(DcModules._MOVIE), DcRepository.ExternalReferences._OFDB);
+        migrateServiceURL(DcModules.get(DcModules._MOVIE), DcRepository.ExternalReferences._IMDB);
+        migrateServiceURL(DcModules.get(DcModules._ACTOR), DcRepository.ExternalReferences._IMDB);
+        migrateServiceURL(DcModules.get(DcModules._DIRECTOR), DcRepository.ExternalReferences._IMDB);
+        migrateServiceURL(DcModules.get(DcModules._SOFTWARE), DcRepository.ExternalReferences._MOBYGAMES);
+        migrateServiceURL(DcModules.get(DcModules._DEVELOPER), DcRepository.ExternalReferences._MOBYGAMES);
+        migrateServiceURL(DcModules.get(DcModules._SOFTWAREPUBLISHER), DcRepository.ExternalReferences._MOBYGAMES);
+        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._ASIN);
+        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._BOL);
+        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._BARNES_NOBLE);
+        migrateServiceURL(DcModules.get(DcModules._BOOK), DcRepository.ExternalReferences._MCU);
+        migrateServiceURL(DcModules.get(DcModules._AUDIOCD), DcRepository.ExternalReferences._DISCOGS);
+        migrateServiceURL(DcModules.get(DcModules._MUSICALBUM), DcRepository.ExternalReferences._DISCOGS);
+        migrateServiceURL(DcModules.get(DcModules._AUDIOCD), DcRepository.ExternalReferences._MUSICBRAINZ);
+        migrateServiceURL(DcModules.get(DcModules._MUSICALBUM), DcRepository.ExternalReferences._MUSICBRAINZ);
+        migrateServiceURL(DcModules.get(DcModules._MUSICARTIST), DcRepository.ExternalReferences._MUSICBRAINZ);
+        
     }
     
     private void migrateServiceURL(DcModule module, String type) throws Exception {
+        
+        logger.info("Extracting external IDs of type" + type + " for module " + module.getLabel());
+        
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();
         
@@ -175,13 +191,13 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
 
             if (Utilities.isEmpty(url)) continue;
 
-            if (type.equals("IMDB")) {
+            if (type.equals(DcRepository.ExternalReferences._IMDB)) {
                 externalID = url.substring(url.lastIndexOf("/") + 1);
                 if (externalID.startsWith("tt") || externalID.startsWith("nm"))
                     externalID = externalID.endsWith("/") ? externalID.substring(0, externalID.length() - 1) : externalID;
                 else 
                     continue;
-            } else if (type.equals("ASIN")) {
+            } else if (type.equals(DcRepository.ExternalReferences._ASIN)) {
                 int idx = url.toLowerCase().indexOf("&itemid="); 
                 
                 if (idx == -1) continue;
@@ -191,6 +207,30 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 externalID = idx > -1 ? externalID.substring(0, idx) : externalID;
                 
                 if (externalID.length() > 12) continue;
+            } else if (type.equals(DcRepository.ExternalReferences._OFDB) &&
+                      (type.equals(DcRepository.ExternalReferences._MOBYGAMES) && module.getIndex() != DcModules._SOFTWARE)) {
+                externalID = url.substring(url.lastIndexOf("/") + 1);
+                externalID = externalID.endsWith("/") ? externalID.substring(0, externalID.length() - 1) : externalID;
+            } else if (type.equals(DcRepository.ExternalReferences._MOBYGAMES) && module.getIndex() == DcModules._SOFTWARE) {
+                externalID = url.substring(url.toLowerCase().lastIndexOf("mobygames.com/") + 14);
+            } else if (type.equals(DcRepository.ExternalReferences._BOL)) {
+                externalID = url.substring(0, url.lastIndexOf("/"));
+                externalID = externalID.substring(externalID.lastIndexOf("/") + 1);
+            } else if (type.equals(DcRepository.ExternalReferences._MCU)) {
+                externalID = url.substring(url.toUpperCase().indexOf("&DOCN=") + 6);
+            } else if (type.equals(DcRepository.ExternalReferences._BARNES_NOBLE)) {
+                externalID = url.substring(url.toUpperCase().indexOf("&EAN=") + 5);
+                externalID = externalID.indexOf("&") > 0 ? externalID.substring(0, externalID.indexOf("&")) : externalID;
+            } else if (type.equals(DcRepository.ExternalReferences._DISCOGS)) {
+                externalID = url.substring(url.toLowerCase().indexOf("release/") + 8);
+            } else if (type.equals(DcRepository.ExternalReferences._MUSICBRAINZ) && module.getIndex() != DcModules._MUSICARTIST) {
+                int idx = url.toLowerCase().indexOf("/release/") + 9;
+                externalID = url.substring(idx);
+                externalID = externalID.indexOf("?") > 0 ? externalID.substring(0, externalID.indexOf("?")) : externalID;
+            } else if (type.equals(DcRepository.ExternalReferences._MUSICBRAINZ) && module.getIndex() == DcModules._MUSICARTIST) {
+                int idx = url.toLowerCase().indexOf("/artist/") + 8;
+                externalID = url.substring(idx);
+                externalID = externalID.indexOf("?") > 0 ? externalID.substring(0, externalID.indexOf("?")) : externalID;
             }
             
             if (externalID != null) {
