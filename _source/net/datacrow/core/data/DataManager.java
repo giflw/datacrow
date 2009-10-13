@@ -368,10 +368,6 @@ public class DataManager {
         }
         
         if (ref != null) {
-            // set the simple external reference
-            if (ref.getField(DcObject._SYS_EXTERNAL_REFERENCES) != null)
-                ref.addExternalReference(DcRepository.ExternalReferences._DATACROW, name);
-            
             if (dco.getField(fieldIdx).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
                 DataManager.addMapping(dco, ref, fieldIdx);
             else
@@ -728,7 +724,7 @@ public class DataManager {
     }
     
     public static DcObject getObjectForString(int module, String reference) {
-        DcObject dco = getObjectByExternalID(module, DcRepository.ExternalReferences._DATACROW, reference); 
+        DcObject dco = getObjectByExternalID(module, DcRepository.ExternalReferences._PDCR, reference); 
         dco = dco == null ? getObjectForDisplayValue(module, reference) : dco;
         return dco;
     }
@@ -741,14 +737,8 @@ public class DataManager {
      */
     private static DcObject getObjectForDisplayValue(int module, String s) {
         DcObject dco = DcModules.get(module).getDcObject();
-        if (dco instanceof DcMediaObject)
-            dco.setValue(DcMediaObject._A_TITLE, s);
-        else if (dco instanceof DcProperty)
-            dco.setValue(DcProperty._A_NAME, s);
-        else if (dco instanceof DcAssociate)
-            dco.setValue(DcAssociate._A_NAME, s);
-        else 
-            dco.setValue(dco.getDisplayFieldIdx(), s);
+
+        dco.setValue(dco.getSystemDisplayFieldIdx(), s);
         
         try {
             List<DcObject> c = DatabaseManager.executeQuery(dco, false);

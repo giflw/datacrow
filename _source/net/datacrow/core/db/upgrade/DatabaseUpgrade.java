@@ -41,6 +41,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.UpgradeDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
@@ -124,6 +125,13 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             return;
         }
         
+        QuestionBox qb = new QuestionBox("A new functionality has become available; external references. The items currently present in yoru system " +
+        		" will be examined and, if possible, the external ID will be extracted and stored separately. Furthermore will the ASIN fields be removed " +
+        		" from the Software, Movie, Audio CD and Music Album modules and its values will be stored in the external references field. Continue?");
+        
+        if (!qb.isAffirmative())
+            System.exit(0);
+        
         Collection<MappingModule> modules = new ArrayList<MappingModule>();
         
         modules.add(new MappingModule(DcModules.get(DcModules._MOVIE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
@@ -138,6 +146,74 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         for (MappingModule module : modules)
             migrateASIN(module);
+        
+        migrateServiceURL(DcModules.get(DcModules._BOOK), "ASIN");
+        migrateServiceURL(DcModules.get(DcModules._MOVIE), "IMDB");
+        migrateServiceURL(DcModules.get(DcModules._ACTOR), "IMDB");
+        migrateServiceURL(DcModules.get(DcModules._DIRECTOR), "IMDB");
+    }
+    
+    private void migrateServiceURL(DcModule module, String type) throws Exception {
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery("SELECT ID, " + module.getField(Movie._SYS_SERVICEURL).getDatabaseFieldName() + 
+                " FROM " + module.getTableName() + " WHERE " + module.getField(Movie._SYS_SERVICEURL).getDatabaseFieldName() + " IS NOT NULL");
+        
+        String id;
+        String url;
+        
+        String externalID = null;
+        
+        DcObject ref;
+        DcObject x;
+        
+        DcModule mm = new MappingModule(module, DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES);
+        while (rs.next()) {
+            id = rs.getString(1);
+            url = rs.getString(2);
+
+            if (Utilities.isEmpty(url)) continue;
+
+            if (type.equals("IMDB")) {
+                externalID = url.substring(url.lastIndexOf("/") + 1);
+                if (externalID.startsWith("tt") || externalID.startsWith("nm"))
+                    externalID = externalID.endsWith("/") ? externalID.substring(0, externalID.length() - 1) : externalID;
+                else 
+                    continue;
+            } else if (type.equals("ASIN")) {
+                int idx = url.toLowerCase().indexOf("&itemid="); 
+                
+                if (idx == -1) continue;
+                    
+                externalID = url.substring(idx + 8);
+                idx = externalID.indexOf("&");
+                externalID = idx > -1 ? externalID.substring(0, idx) : externalID;
+                
+                if (externalID.length() > 12) continue;
+            }
+            
+            if (externalID != null) {
+                ref = new ExternalReference();
+                ref.setIDs();
+                ref.setValue(ExternalReference._EXTERNAL_ID, externalID);
+                ref.setValue(ExternalReference._EXTERNAL_ID_TYPE, type);
+                PreparedStatement ps = new Query(Query._INSERT, ref, null, null).getQuery();
+                ps.execute();
+                ps.close();
+                
+                x = mm.getDcObject();
+                x.setValue(DcMapping._A_PARENT_ID, id);
+                x.setValue(DcMapping._B_REFERENCED_ID, ref.getID());
+                ps = new Query(Query._INSERT, x, null, null).getQuery();
+                ps.execute();
+                ps.close();
+            }
+        }
+        
+        rs.close();
+        conn.close();
+        stmt.close();
     }
     
     private void migrateASIN(MappingModule mapping) throws Exception {
