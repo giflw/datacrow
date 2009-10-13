@@ -118,7 +118,7 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
             
             wizard.getModule().getCurrentInsertView().add(item);
         } else {
-            DcObject other = DataManager.getObjectForDisplayValue(item.getModule().getIndex(), item.toString());
+            DcObject other = DataManager.getObjectForString(item.getModule().getIndex(), item.toString());
             // Check if the item exists and if so, update the item with the found values. Else just create a new item.
             // This is to make sure the order in which XML files are processed (first software, then categories)
             // is of no importance (!).

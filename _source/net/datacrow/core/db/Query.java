@@ -193,6 +193,7 @@ public class Query {
         Collection<Object> values = new ArrayList<Object>();
         StringBuffer columns = new StringBuffer();
 
+        // create non existing references
         createReferences(dco);
         
         Collection<DcMapping> references = new ArrayList<DcMapping>();
@@ -285,6 +286,7 @@ public class Query {
         Collection<Collection<DcMapping>> references = new ArrayList<Collection<DcMapping>>();
         Collection<Object> values = new ArrayList<Object>();
         
+        // create non existing references
         createReferences(dco);
         
         List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
@@ -403,15 +405,14 @@ public class Query {
                 
                 try { 
                     DcObject existing = DataManager.getObject(reference.getModule().getIndex(), reference.getID());
-                    existing = existing == null ? 
-                                   DataManager.getObjectForDisplayValue(reference.getModule().getIndex(), reference.toString()) : 
-                                   existing;
-
+                    existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
                     if (existing == null) {
+                        // save the value that was set
                         reference.setValidate(false);
                         reference.saveNew(false);
                         reference.setValidate(true);
                     } else {
+                        // reuse the existing value
                         dco.setValue(field.getIndex(), existing);
                     }
 
@@ -426,14 +427,11 @@ public class Query {
                 for (DcMapping mapping : (Collection<DcMapping>) value) {
                     DcObject reference = mapping.getReferencedObject();
                     try { 
-                        
-                        if (reference == null)
-                            continue;
+                        if (reference == null) continue;
                         
                         DcObject existing = DataManager.getObject(reference.getModule().getIndex(), reference.getID());
-                        existing = existing == null ? 
-                                       DataManager.getObjectForDisplayValue(reference.getModule().getIndex(), reference.toString()) : 
-                                       existing;
+                        existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
+
                         if (existing == null) {
                             reference.saveNew(false);
                         } else {

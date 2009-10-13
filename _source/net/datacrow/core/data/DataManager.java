@@ -731,13 +731,19 @@ public class DataManager {
         return null;
     }
     
+    public static DcObject getObjectForString(int module, String reference) {
+        DcObject dco = getObjectByExternalID(module, DcRepository.ExternalReferences._DATACROW, reference); 
+        dco = dco == null ? getObjectForDisplayValue(module, reference) : dco;
+        return dco;
+    }
+    
     /**
      * Retrieves an item based on its display value.
      * @param module
      * @param s The display value.
      * @return Either the item or null. 
      */
-    public static DcObject getObjectForDisplayValue(int module, String s) {
+    private static DcObject getObjectForDisplayValue(int module, String s) {
         DcObject dco = DcModules.get(module).getDcObject();
         if (dco instanceof DcMediaObject)
             dco.setValue(DcMediaObject._A_TITLE, s);
