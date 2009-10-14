@@ -12,6 +12,7 @@ import net.datacrow.core.migration.itemexport.ItemExporterSettings;
 import net.datacrow.core.migration.itemexport.XmlExporter;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.ExternalReferenceModule;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -168,8 +169,8 @@ public class ModuleExporter {
 					}
 					
 					// item export
-					if ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
-					    (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
+					if (((module.getIndex() == parent.getModule() || (module instanceof ExternalReferenceModule)) && parent.isExportData()) ||
+					   (!(module instanceof ExternalReferenceModule) && module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
 					
 					    try {
     					    exportData(module.getIndex());

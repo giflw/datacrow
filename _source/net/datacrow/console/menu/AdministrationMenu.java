@@ -29,6 +29,7 @@ import net.datacrow.console.components.DcMenu;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
+import net.datacrow.core.modules.ExternalReferenceModule;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
 
@@ -75,7 +76,7 @@ public class AdministrationMenu extends DcMenu {
     }
     
     private void add(DcPropertyModule pm, String title) {
-        if (pm != null && pm.getIndex() != DcModules._EXTERNALREFERENCE)
+        if (pm != null && !(pm instanceof ExternalReferenceModule))
             PluginHelper.add(this, "ManageItem", title, pm.getIndex());
     }
 }
