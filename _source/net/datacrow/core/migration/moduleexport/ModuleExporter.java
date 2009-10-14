@@ -134,7 +134,8 @@ public class ModuleExporter {
 			
 			if (parent.isExportRelatedMods()) {
 				for (DcModule reference : DcModules.getReferencedModules(module))
-				    if (!reference.isAbstract() && reference.getIndex() != DcModules._CONTACTPERSON)
+				    if (!reference.isAbstract() && 
+				         reference.getIndex() != DcModules._CONTACTPERSON)
 				        modules.add(reference);
 			}
 
@@ -225,6 +226,14 @@ public class ModuleExporter {
 		public void notifyStopped() {}
 		
 		private void exportData(int module) throws Exception {
+		    
+            Collection<DcObject> items = new ArrayList<DcObject>();
+            for (DcObject item : DataManager.get(module, null)) 
+                items.add(item);
+            
+            if (items.size() == 0)
+                return;
+		    
 			String modName = DcModules.get(module).getName().toLowerCase();
 			
 			XmlExporter itemExporter = new XmlExporter(parent.getModule(), XmlExporter._MODE_NON_THREADED);
@@ -236,9 +245,7 @@ public class ModuleExporter {
 			itemExporter.setSettings(settings);
 			
 			itemExporter.setFile(new File(parent.getPath(), modName + ".xml"));
-			Collection<DcObject> items = new ArrayList<DcObject>();
-			for (DcObject item : DataManager.get(module, null)) 
-				items.add(item);
+
 			
 			itemExporter.setItems(items);
 			itemExporter.setClient(this);
