@@ -31,7 +31,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -331,15 +330,9 @@ public class DcDatabase {
         	
             Query query = new Query(Query._CREATE, dco, null, null);
             executeQuery(query.getQuery());
+
+            dco.getModule().setNew(true);
             
-            Collection<DcObject> items = dco.getModule().getDefaultData();
-            if (items != null) {
-                for (DcObject item : items) {
-                    item.setSynchronizeWithDM(false);
-                    item.setSilent(true);
-                    item.saveNew(false);
-                }
-            }
         } catch (Exception e) {
             logger.error("An error occurred while inserting demo data", e);
         }

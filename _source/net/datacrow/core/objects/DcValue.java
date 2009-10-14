@@ -208,7 +208,13 @@ public class DcValue implements Serializable {
                             } else if (o instanceof Number) {
                                 setValueNative(new Double(((Number) o).doubleValue()), field);
                             } else if (o instanceof String && ((String) o).trim().length() > 0) {
-                                setValueNative(Double.valueOf(((String) o).trim()), field);
+                                String s = ((String) o).trim();
+                                s = s.replaceAll(",", ".");
+                                try {
+                                    setValueNative(Double.valueOf(s), field);
+                                } catch (NumberFormatException nfe) {
+                                    logger.error("Could not set " + o + " for " + field.getDatabaseFieldName(), nfe);
+                                }
                             } else {
                                 throw new NumberFormatException();
                             }

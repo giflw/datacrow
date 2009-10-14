@@ -371,7 +371,8 @@ public class DcModules {
                 } else {
                     // Else.. derive a new index and assign a new and unique table name.
                     derivedIdx = sourceIdx + mod.getIndex();
-                    DcPropertyModule pm = propMod.getInstance(derivedIdx, propMod.getName(),  
+                    DcPropertyModule pm = propMod.getInstance(derivedIdx, 
+                            module.getName() + " " + propMod.getName(),  
                             mod.getTableName() + "_" + propMod.getTableName(), 
                             mod.getTableShortName() + propMod.getTableShortName(),
                             propMod.getObjectName(), propMod.getObjectNamePlural());

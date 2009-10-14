@@ -333,6 +333,8 @@ public class DataCrow {
 
             DatabaseManager.initialize();
             
+            loadDefaultData();
+            
             if (nocache)
                 DataManager.setUseCache(false);
             
@@ -444,6 +446,42 @@ public class DataCrow {
             long end = new Date().getTime();
             logger.debug("Total startup time was " + (end - totalstart) + "ms");
         }  
+    }
+    
+    private static void loadDefaultData() {
+        for (DcModule module : DcModules.getAllModules()) {
+            if (module.isTopModule()) {
+                for (DcModule referenced1 : DcModules.getReferencedModules(module.getIndex())) {
+                    for (DcModule referenced2 : DcModules.getReferencedModules(referenced1.getIndex())) {
+                        saveDefaultData(referenced2);
+                    }
+                    saveDefaultData(referenced1);
+                }
+                saveDefaultData(module);
+            }
+        }
+    }
+        
+    private static void saveDefaultData(DcModule module) {
+        
+        if (!module.isNew() || module.isDefaultDataLoaded()) 
+            return;
+        
+        module.setDefaultDataLoaded(true);
+        
+        Collection<DcObject> items;
+        try {
+            items = module.getDefaultData();
+            if (items != null) {
+                for (DcObject item : items) {
+                    item.setSynchronizeWithDM(false);
+                    item.setSilent(true);
+                    item.saveNew(false);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error occured while saving default data for " + module, e);
+        }
     }
     
     private static void checkTabs() {

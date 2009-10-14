@@ -132,6 +132,9 @@ public class DcModule implements Comparable<DcModule> {
     private final String objectName;
     private final String objectNamePlural;
     
+    private boolean isNew = false;
+    private boolean isDefaultDataLoaded = false;
+    
     private net.datacrow.settings.Settings settings;
     
     @SuppressWarnings("unchecked")
@@ -325,6 +328,22 @@ public class DcModule implements Comparable<DcModule> {
     
     public int[] getSupportedViews() {
         return new int[] {MasterView._LIST_VIEW, MasterView._TABLE_VIEW};
+    }
+    
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean isNew) {
+        this.isNew = isNew;
+    }
+
+    public boolean isDefaultDataLoaded() {
+        return isDefaultDataLoaded;
+    }
+
+    public void setDefaultDataLoaded(boolean b) {
+        this.isDefaultDataLoaded = b;
     }
 
     /**
@@ -1399,7 +1418,7 @@ public class DcModule implements Comparable<DcModule> {
      * @throws Exception
      */
     public Collection<DcObject> getDefaultData() throws Exception {
-        //String filename = ;
+        
         File csvFile = new File(DataCrow.moduleDir + "data", getTableName() + ".data");
         File xmlFile = new File(DataCrow.moduleDir + "data", getTableName() + ".xml");
         
