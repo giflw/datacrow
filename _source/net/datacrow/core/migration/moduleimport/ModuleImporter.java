@@ -94,7 +94,10 @@ public class ModuleImporter {
                     
                     client.notifyMessage(DcResources.getText("msgProcessingFileX", name));
                     
-                    if (name.toLowerCase().endsWith(".jpg")) {
+                    if (name.toLowerCase().endsWith(".xsl")) {
+                        // directory name is contained in the name
+                        writeToFile(bis, new File(DataCrow.reportDir, name));
+                    } else if (name.toLowerCase().endsWith(".jpg")) {
                         String moduleName = name.substring(0, name.indexOf("_"));
                         Collection<DcImageIcon> c = icons.get(moduleName);
                         c = c == null ? new ArrayList<DcImageIcon>() : c;
@@ -192,7 +195,7 @@ public class ModuleImporter {
 		            try {
 		                client.notifyMessage(DcResources.getText("msgModuleIsNewCreatingItems"));
 		                storeImages(key, icons.get(key), false);
-                        Utilities.rename(file, new File(DataCrow.moduleDir + "data", key + ".xml"));
+                        Utilities.rename(data.get(key), new File(DataCrow.moduleDir + "data", key + ".xml"));
                     } catch (IOException e) {
                         client.notifyError(e);
                     }
@@ -265,6 +268,10 @@ public class ModuleImporter {
 		}
 		
 		private void writeToFile(InputStream is, File file) throws IOException{
+		    
+		    if (file.getParentFile() != null) 
+		        file.getParentFile().mkdirs();
+		    
             FileOutputStream fos = new FileOutputStream(file);
             
             int b;

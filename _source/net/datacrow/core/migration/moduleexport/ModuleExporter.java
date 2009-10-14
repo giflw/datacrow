@@ -168,6 +168,15 @@ public class ModuleExporter {
 					    zf.addEntry(file.getName(), content);
 					}
 					
+					// reports
+					if (module.hasReports()) {
+					    File reportDir = new File(DataCrow.reportDir, module.getName().toLowerCase().replaceAll("[/\\*%., ]", ""));
+					    for (String filename : reportDir.list()) {
+					        byte[] content = Utilities.readFile(new File(reportDir, filename));
+		                    zf.addEntry(module.getName().toLowerCase().replaceAll("[/\\*%., ]", "") + "/" + filename, content);
+					    }
+					}
+					
 					// item export
 					if (((module.getIndex() == parent.getModule() || (module instanceof ExternalReferenceModule)) && parent.isExportData()) ||
 					   (!(module instanceof ExternalReferenceModule) && module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
