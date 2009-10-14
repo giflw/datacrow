@@ -136,24 +136,26 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         LogForm.getInstance().setVisible(true);
         LogForm.getInstance().toFront();
+
+        createTable(DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._MOVIE));
+        createTable(DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._AUDIOCD));
+        createTable(DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._SOFTWARE));
+        createTable(DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._MUSICALBUM));
         
         Collection<MappingModule> modules = new ArrayList<MappingModule>();
-        
-        modules.add(new MappingModule(DcModules.get(DcModules._MOVIE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
-        modules.add(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
-        modules.add(new MappingModule(DcModules.get(DcModules._SOFTWARE), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
-        modules.add(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
+        modules.add(new MappingModule(DcModules.get(DcModules._MOVIE), DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._MOVIE), DcObject._SYS_EXTERNAL_REFERENCES));
+        modules.add(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._AUDIOCD), DcObject._SYS_EXTERNAL_REFERENCES));
+        modules.add(new MappingModule(DcModules.get(DcModules._SOFTWARE), DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._SOFTWARE), DcObject._SYS_EXTERNAL_REFERENCES));
+        modules.add(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._MUSICALBUM), DcObject._SYS_EXTERNAL_REFERENCES));
     
         for (DcModule module : modules)
             createTable(module);
 
-        createTable(DcModules.get(DcModules._EXTERNALREFERENCE));
-        
         for (MappingModule module : modules)
             migrateASIN(module);
         
-        migrateDiscID(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
-        migrateDiscID(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES));
+        migrateDiscID(new MappingModule(DcModules.get(DcModules._MUSICALBUM), DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._MUSICALBUM), DcObject._SYS_EXTERNAL_REFERENCES));
+        migrateDiscID(new MappingModule(DcModules.get(DcModules._AUDIOCD), DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._AUDIOCD), DcObject._SYS_EXTERNAL_REFERENCES));
         
         migrateServiceURL(DcModules.get(DcModules._MOVIE));
         migrateServiceURL(DcModules.get(DcModules._ACTOR));
@@ -185,7 +187,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         DcObject ref;
         DcObject x;
         
-        DcModule mm = new MappingModule(module, DcModules.get(DcModules._EXTERNALREFERENCE), DcObject._SYS_EXTERNAL_REFERENCES);
+        createTable(DcModules.get(DcModules._EXTERNALREFERENCE + module.getIndex()));
+        
+        DcModule mm = new MappingModule(module, DcModules.get(DcModules._EXTERNALREFERENCE + module.getIndex()), DcObject._SYS_EXTERNAL_REFERENCES);
         
         createTable(mm);
         
@@ -253,7 +257,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             
             if (externalID != null) {
                 
-                PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM EXTERNALREFERENCE WHERE EXTERNALID = ? AND EXTERNALIDTYPE = ?");
+                PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM " + DcModules.get(DcModules._EXTERNALREFERENCE + module.getIndex()).getTableName() + " WHERE EXTERNALID = ? AND EXTERNALIDTYPE = ?");
                 ps2.setString(1, externalID);
                 ps2.setString(2, type);
                 
