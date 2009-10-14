@@ -269,7 +269,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
         
         if (!set) {
-            ExternalReference er = new ExternalReference();
+            ExternalReference er = new ExternalReference(module + DcModules._EXTERNALREFERENCE);
             er.setValue(ExternalReference._EXTERNAL_ID, key);
             er.setValue(ExternalReference._EXTERNAL_ID_TYPE, type);
             er.setIDs();

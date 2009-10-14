@@ -12,9 +12,21 @@ public class ExternalReferenceModule extends DcPropertyModule {
         super(DcModules._EXTERNALREFERENCE, "External Reference", "ExternalReference", "ExtRef", "External Reference", "External References");
     }
     
+    public ExternalReferenceModule(int index, String name, String tableName,
+            String tableShortName, String objectName, String objectNamePlural) {
+        super(index, name, tableName, tableShortName, objectName, objectNamePlural);
+    }
+    
+    @Override
+    public DcPropertyModule getInstance(int index, String name, String tableName,
+            String tableShortName, String objectName, String objectNamePlural) {
+        
+        return new ExternalReferenceModule(index, name, tableName, tableShortName, objectName, objectNamePlural);
+    }
+
     @Override
     public DcObject getDcObject() {
-        return new ExternalReference();
+        return new ExternalReference(getIndex());
     }
     
     @Override
@@ -30,6 +42,11 @@ public class ExternalReferenceModule extends DcPropertyModule {
     @Override
     public int getDisplayIndex() {
         return ExternalReference._EXTERNAL_ID;
+    }
+    
+    @Override
+    public boolean isServingMultipleModules() {
+        return false;
     }
 
     /**

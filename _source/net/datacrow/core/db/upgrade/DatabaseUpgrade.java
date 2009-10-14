@@ -269,7 +269,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                     continue;
                 }
                 
-                ref = new ExternalReference();
+                ref = new ExternalReference(module.getIndex() + DcModules._EXTERNALREFERENCE);
                 ref.setIDs();
                 ref.setValue(ExternalReference._EXTERNAL_ID, externalID);
                 ref.setValue(ExternalReference._EXTERNAL_ID_TYPE, type);
@@ -306,7 +306,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             String ASIN = rs.getString(2).trim();
             if (!Utilities.isEmpty(ASIN)) {
 
-                DcObject ref = new ExternalReference();
+                DcObject ref = new ExternalReference(module.getIndex() + DcModules._EXTERNALREFERENCE);
                 ref.setIDs();
                 ref.setValue(ExternalReference._EXTERNAL_ID, ASIN);
                 ref.setValue(ExternalReference._EXTERNAL_ID_TYPE, DcRepository.ExternalReferences._DISCID);
@@ -347,7 +347,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             String ASIN = rs.getString(2).trim();
             if (!Utilities.isEmpty(ASIN)) {
 
-                DcObject ref = new ExternalReference();
+                DcObject ref = new ExternalReference(module.getIndex() + DcModules._EXTERNALREFERENCE);
                 ref.setIDs();
                 ref.setValue(ExternalReference._EXTERNAL_ID, ASIN);
                 ref.setValue(ExternalReference._EXTERNAL_ID_TYPE, DcRepository.ExternalReferences._ASIN);
@@ -373,8 +373,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         conn.close();
         stmt.close();
     }
-    
-    
     
     /**
      * Converts the mapping modules to new structure.

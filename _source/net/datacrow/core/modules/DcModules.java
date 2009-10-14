@@ -157,6 +157,9 @@ public class DcModules {
      * Registers the base modules. These modules are used as template.
      */
     private static void initReferenceBaseModules() {
+        
+        propertyBaseModules.put(DcModules._EXTERNALREFERENCE, new ExternalReferenceModule());
+        
         propertyBaseModules.put(DcModules._CATEGORY, 
                        new DcPropertyModule(DcModules._CATEGORY, "Category", 
                                             "category", "cat",
@@ -249,7 +252,7 @@ public class DcModules {
      * Initializes the system modules such as the picture and the loan module.
      */
     private static void loadSystemModules() {
-        register(new ExternalReferenceModule());
+        //register(new ExternalReferenceModule());
         register(new PictureModule());
         register(new LoanModule());
         register(new UserModule());
@@ -358,20 +361,21 @@ public class DcModules {
                 if (propMod.isServingMultipleModules()) {
                     // A module which serves multiple other modules gets the same table name..
                     // Also the module will keep its original index. No other magic involved.
-                    
-                    DcPropertyModule pm = new DcPropertyModule(derivedIdx, propMod.getName(),  
-                                                               propMod.getTableName(), propMod.getTableShortName(),
-                                                               propMod.getObjectName(), propMod.getObjectNamePlural());
+                    DcPropertyModule pm = propMod.getInstance(derivedIdx, propMod.getName(),  
+                            propMod.getTableName(), propMod.getTableShortName(),
+                            propMod.getObjectName(), propMod.getObjectNamePlural());
+
                     pm.setServingMultipleModules(true);
                     addUserDefinedFields(propMod, pm);
                     register(pm);
                 } else {
                     // Else.. derive a new index and assign a new and unique table name.
                     derivedIdx = sourceIdx + mod.getIndex();
-                    DcPropertyModule pm = new DcPropertyModule(derivedIdx, propMod.getName(),  
-                                                               mod.getTableName() + "_" + propMod.getTableName(), 
-                                                               mod.getTableShortName() + propMod.getTableShortName(),
-                                                               propMod.getObjectName(), propMod.getObjectNamePlural());
+                    DcPropertyModule pm = propMod.getInstance(derivedIdx, propMod.getName(),  
+                            mod.getTableName() + "_" + propMod.getTableName(), 
+                            mod.getTableShortName() + propMod.getTableShortName(),
+                            propMod.getObjectName(), propMod.getObjectNamePlural());
+
                     addUserDefinedFields(propMod, pm);
                     register(pm);
                 }

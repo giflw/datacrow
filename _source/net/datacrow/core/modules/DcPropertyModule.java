@@ -97,6 +97,12 @@ public class DcPropertyModule extends DcModule {
         super(index, false, name, "", objectName, objectNamePlural, tableName, tableShortName);
     }    
 
+    public DcPropertyModule getInstance(int index, String name, String tableName,
+            String tableShortName, String objectName, String objectNamePlural) {
+        
+        return new DcPropertyModule(index, name, tableName, tableShortName, objectName, objectNamePlural);
+    }
+    
     /**
      * Creates (if needed) the simple item view.
      */

@@ -1,6 +1,5 @@
 package net.datacrow.core.objects.helpers;
 
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 
 public class ExternalReference extends DcObject {
@@ -10,8 +9,8 @@ public class ExternalReference extends DcObject {
     public static final int _EXTERNAL_ID = 151;
     public static final int _EXTERNAL_ID_TYPE = 152;
     
-    public ExternalReference() {
-        super(DcModules._EXTERNALREFERENCE);
+    public ExternalReference(int module) {
+        super(module);
     }
 
     @Override
