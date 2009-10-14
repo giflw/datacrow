@@ -77,7 +77,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
 
         // load the default settings (if available)
         String filename = module.getName().toLowerCase() + ".properties";
-        File file = new File(DataCrow.moduleDir + filename);
+        File file = new File(DataCrow.moduleDir, filename);
         if (file.exists()) {
             // this is here for backwards compatibility
             settings.setSettingsFile(file);

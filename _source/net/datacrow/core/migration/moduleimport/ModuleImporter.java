@@ -108,6 +108,8 @@ public class ModuleImporter {
                         
                         c.add(icon);
                         icons.put(moduleName, c);
+                    } else if (name.toLowerCase().endsWith(".properties")) {
+                        writeToFile(bis, new File(DataCrow.moduleDir, name));
                     } else if (name.toLowerCase().endsWith(".xml")) {
                         File file =  new File(System.getProperty("java.io.tmpdir"), name);
                         writeToFile(bis, file);

@@ -108,8 +108,6 @@ public class ModuleExporter {
 			exporter.cancel();
 	}
 	
-	// TODO: PROPERTIES....... !!!!!!!
-	
 	private class Exporter extends Thread implements IItemExporterClient {
 		
 		private IModuleWizardClient client;
@@ -160,6 +158,14 @@ public class ModuleExporter {
 						zf.addEntry(jarName, content);
 					}
 
+					// settings export
+					File file = module.getSettings().getSettings().getSettingsFile();
+					module.getSettings().save();
+					if (file.exists()) {
+					    byte[] content = Utilities.readFile(file);
+					    zf.addEntry(file.getName(), content);
+					}
+					
 					// item export
 					if ((module.getIndex() == parent.getModule() && parent.isExportData()) ||
 					    (module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
@@ -168,7 +174,7 @@ public class ModuleExporter {
     					    exportData(module.getIndex());
     					    
     					    // get the XML
-    					    File file = new File(parent.getPath(), modName + ".xml");
+    					    file = new File(parent.getPath(), modName + ".xml");
     					    if (file.exists() && !canceled) {
     					        byte[] data = Utilities.readFile(file);
     					        zf.addEntry(modName + ".xml", data);
