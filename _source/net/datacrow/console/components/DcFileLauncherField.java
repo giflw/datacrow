@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -49,8 +50,12 @@ import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.launcher.FileLauncher;
 
+import org.apache.log4j.Logger;
+
 public class DcFileLauncherField extends JComponent implements IComponent, ActionListener, MouseListener {
 
+    private static Logger logger = Logger.getLogger(DcFileLauncherField.class.getName());
+    
     private DcShortTextField text;
     private JButton buttonBrowse;
     private File file;
@@ -98,7 +103,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
 
     public void setFile(File file) {
         String filename = file == null ? "" : file.toString();
-        this.file =  file;//new File(filename);
+        this.file =  file;
         text.setText(file == null ? "" : Utilities.getMappedFilename(filename));
     }
     
@@ -144,6 +149,30 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         } else if (e.getActionCommand().equals("clear")) {
             file = null;
             text.setText("");
+        } else if (e.getActionCommand().equals("deleteFile")) {
+            if (file != null) file.delete(); 
+            file = null;
+            text.setText("");
+        } else if (e.getActionCommand().equals("locateFile")) {
+            if (file != null) file.delete(); 
+            file = null;
+            text.setText("");
+        } else if (e.getActionCommand().equals("moveFile")) {
+            if (file != null) {
+                BrowserDialog dialog = new BrowserDialog(DcResources.getText("msgSelectnewLocation"), null);
+                File newDir = dialog.showSelectDirectoryDialog(this, null);
+            
+                if (newDir != null) {
+                    try {
+                        File newFile = new File(newDir, file.getName());
+                        Utilities.rename(file, newFile);
+                        file = newFile;
+                        text.setText(newFile.toString());
+                    } catch (IOException e1) {
+                        logger.error(e1, e1);
+                    }
+                }
+            }
         }
     }
     
@@ -160,10 +189,29 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     public void mouseReleased(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
             DcPopupMenu popup = new DcPopupMenu();
-            JMenuItem mi = ComponentFactory.getMenuItem(DcResources.getText("lblClear"));
-            mi.addActionListener(this);
-            mi.setActionCommand("clear");
-            popup.add(mi);
+            
+            JMenuItem miClear = ComponentFactory.getMenuItem(DcResources.getText("lblClearField"));
+            miClear.addActionListener(this);
+            miClear.setActionCommand("clear");
+
+            JMenuItem miDelete = ComponentFactory.getMenuItem(DcResources.getText("lblDeleteFile"));
+            miDelete.addActionListener(this);
+            miDelete.setActionCommand("deleteFile");
+
+            JMenuItem miMove = ComponentFactory.getMenuItem(DcResources.getText("lblMoveFile"));
+            miMove.addActionListener(this);
+            miMove.setActionCommand("moveFile");
+
+            JMenuItem miLocate = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile"));
+            miLocate.addActionListener(this);
+            miLocate.setActionCommand("locateFile");
+            
+            popup.add(miClear);
+            popup.addSeparator();
+            popup.add(miDelete);
+            popup.add(miMove);
+            popup.add(miLocate);
+            
             popup.show(this, e.getX(), e.getY());
         } 
 

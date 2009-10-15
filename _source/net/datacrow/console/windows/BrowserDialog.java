@@ -42,13 +42,15 @@ public class BrowserDialog extends JFrame {
 
     private final DcFileChooser browser = new DcFileChooser();
 
-    public BrowserDialog(String sTitle) {
+    public BrowserDialog(String title) {
         browser.setMultiSelectionEnabled(false);
-        this.setTitle(sTitle);
+        browser.setDialogTitle(title);
+        this.setTitle(title);
     }
     
-    public BrowserDialog(String sTitle, FileFilter filter) {
-        this(sTitle);
+    public BrowserDialog(String title, FileFilter filter) {
+        this(title);
+        browser.setDialogTitle(title);
         
         if (filter != null) 
             browser.setFileFilter(filter);

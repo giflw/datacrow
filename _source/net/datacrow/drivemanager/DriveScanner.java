@@ -53,7 +53,7 @@ public class DriveScanner {
     public DriveScanner(DriveManager dm, File drive) throws IOException {
         filename = StringUtils.normalize(drive.toString()) + dm.getTempFileSuffix(); 
 
-        report = Logger.getAnonymousLogger();//Logger("FileScanner" + drive);
+        report = Logger.getAnonymousLogger();
         report.setLevel(Level.INFO);
         report.setUseParentHandlers(false);
 
