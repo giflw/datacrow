@@ -29,7 +29,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import net.datacrow.core.modules.DcModule;
@@ -150,9 +152,11 @@ public class XmlWriter extends XmlBaseWriter {
             Picture picture = (Picture) o;
             String filename = utilities.getImageURL(picture);
             write(filename);
+        } else if (o instanceof Date) {
+            Date date = (Date) o;
+            write(new SimpleDateFormat("yyyy-MM-dd").format(date));
         } else {
             String text = dco.getDisplayString(field);
-            
             int maximumLength = settings.getInt(ItemExporterSettings._MAX_TEXT_LENGTH);
             if (maximumLength > 0 && text.length() > maximumLength) {
                 text = text.substring(0, maximumLength);
@@ -160,7 +164,6 @@ public class XmlWriter extends XmlBaseWriter {
                 if (text.lastIndexOf(" ") > -1)
                     text = text.substring(0, text.lastIndexOf(" ")) + "...";
             }
-            
             write(text);
         }
     }
