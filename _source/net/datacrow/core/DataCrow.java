@@ -240,23 +240,11 @@ public class DataCrow {
             new DcSettings();
             checkPlatform();
             
-            //resetSettings();
-            
             if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
                 DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
-                
-                final java.util.concurrent.atomic.AtomicBoolean activeDialog = new java.util.concurrent.atomic.AtomicBoolean(true);
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-                        SelectLanguageDialog dlg = new SelectLanguageDialog(activeDialog);
-                        dlg.setVisible(true);
-                    }
-                });
-                
-                synchronized (activeDialog) {
-                    while (activeDialog.get() == true)
-                        activeDialog.wait();
-                }
+            
+                SelectLanguageDialog dlg = new SelectLanguageDialog();
+                dlg.setVisible(true);
             }
             
             showSplashScreen();
@@ -333,8 +321,6 @@ public class DataCrow {
 
             DatabaseManager.initialize();
             
-            loadDefaultData();
-            
             if (nocache)
                 DataManager.setUseCache(false);
             
@@ -346,6 +332,8 @@ public class DataCrow {
             DcModules.loadData();
 
             checkTabs();
+            
+            loadDefaultData();
             
             if (!webserverMode)
                 showSplashMsg(DcResources.getText("msgLoadingUI"));
@@ -454,6 +442,10 @@ public class DataCrow {
         //showSplashMsg(DcResources.getText("msgStartingWebServer"));
         
         for (DcModule module : DcModules.getAllModules()) {
+            
+            if (module.getName().equals("testmodule"))
+                System.out.println();
+            
             if (module.isTopModule()) {
                 for (DcModule referenced1 : DcModules.getReferencedModules(module.getIndex())) {
                     for (DcModule referenced2 : DcModules.getReferencedModules(referenced1.getIndex())) {
@@ -478,7 +470,7 @@ public class DataCrow {
             items = module.getDefaultData();
             if (items != null) {
                 for (DcObject item : items) {
-                    item.setSynchronizeWithDM(false);
+//                    item.setSynchronizeWithDM(false);
                     item.setSilent(true);
                     item.saveNew(false);
                 }

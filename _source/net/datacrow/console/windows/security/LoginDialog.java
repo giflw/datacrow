@@ -33,6 +33,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
@@ -51,6 +52,7 @@ public class LoginDialog extends DcDialog implements ActionListener, KeyListener
     private boolean canceled = false;
     
     public LoginDialog() {
+        super((JFrame) null);
         build();
         setTitle(DcResources.getText("lblLogin"));
         pack();

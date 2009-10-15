@@ -57,6 +57,7 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.ExternalReferenceModule;
 import net.datacrow.core.modules.IChildModule;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcAssociate;
@@ -68,6 +69,7 @@ import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.Tab;
+import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
@@ -333,6 +335,14 @@ public class DataManager {
         // method 1: item is provided and exists
         int module = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
         DcObject ref = value instanceof DcObject ? (DcObject) value : null;
+
+        // check if we are dealing with an external reference
+        if (    ref == null && 
+                DcModules.get(module) instanceof ExternalReferenceModule &&
+               !Utilities.isEmpty(name)) {
+            
+            ref = getExternalReference(module, name); 
+        }
         
         // method 2: simple external reference + display value comparison
         if (ref == null)
@@ -713,6 +723,14 @@ public class DataManager {
         }
         return new Loan();
     }
+    
+    public static DcObject getExternalReference(int module, String ID) {
+        DataFilter df = new DataFilter(module);
+        df.addEntry(new DataFilterEntry(
+                DataFilterEntry._AND, module, ExternalReference._EXTERNAL_ID, Operator.EQUAL_TO, ID));
+        DcObject[] references = DataManager.get(module, df);
+        return references.length > 0 ? references[0] : null; 
+    }    
     
     public static DcObject getObjectByExternalID(int module, String type, String ID) {
         for (DcObject dco : get(module, null)) {

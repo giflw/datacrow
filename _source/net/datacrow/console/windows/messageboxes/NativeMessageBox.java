@@ -36,6 +36,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -56,6 +57,8 @@ public class NativeMessageBox extends JDialog implements ActionListener {
     public  static final int _INFORMATION = 3;
 
     public NativeMessageBox(String title, String message) {
+        super((JFrame) null);
+        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

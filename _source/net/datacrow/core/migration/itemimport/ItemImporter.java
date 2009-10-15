@@ -6,8 +6,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -19,6 +17,8 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
+
+import org.apache.log4j.Logger;
 
 /**
  * Source Readers are capable of reading source file and parsing the information
@@ -124,8 +124,8 @@ public abstract class ItemImporter extends ItemMigrater {
         DcField field = dco.getModule().getField(fieldIdx);
         
         try {
-
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                
                 field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                 DataManager.createReference(dco, field.getIndex(), value);
                 

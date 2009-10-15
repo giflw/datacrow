@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -47,12 +48,9 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
 
     private SettingsPanel pnlSettings;
     private boolean affirmative = false;
-    private java.util.concurrent.atomic.AtomicBoolean activeDialog;
     
-    public UpgradeDialog(String help, SettingsGroup settings, java.util.concurrent.atomic.AtomicBoolean activeDialog) {
-        super();
-        
-        this.activeDialog = activeDialog;
+    public UpgradeDialog(String help, SettingsGroup settings) {
+        super((JFrame) null);
         
         build(help, settings);
         
@@ -68,11 +66,6 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
     public void close() {
         pnlSettings = null;
         super.close();
-        
-        synchronized (activeDialog) {
-            activeDialog.set(false);
-            activeDialog.notifyAll();
-        }
     }
 
     protected void build(String help, SettingsGroup settings) {

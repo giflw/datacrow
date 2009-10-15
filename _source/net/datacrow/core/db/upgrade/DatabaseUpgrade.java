@@ -35,8 +35,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.swing.SwingUtilities;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.UpgradeDialog;
@@ -441,25 +439,15 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN, _SETTING_CLEANUP_VALUES, Boolean.TRUE, 
                 ComponentFactory._CHECKBOX, "", "Make the values a bit nicer (make lower case and start with upper case)", false, true));
 
-        final java.util.concurrent.atomic.AtomicBoolean activeDialog = new java.util.concurrent.atomic.AtomicBoolean(true);
         final UpgradeDialog dlg = new UpgradeDialog("The following text fields will be converted to list (aka. reference) fields:\n" +
                 "Movie module: Language, Country, Subtitle Language, Audio Language.\n" +
                 "Contact person module: Country.\n" + "If your fields only hold single value you do not have to set any of the settings below. If not, make" +
                 "sure to specify the correct separator character. The separator character will be used to split your values;\n" +
                 "For example if you have filled the fields like so \"value1, value2\" you should enter the comma character as the separtor character." +
                 "Additionally you can choose to keep a copy of the database field just in case the upgrade does not accomodate your usage of one of these fields. The fields will be rename to \"KEEP_\" appended " +
-                "by the original database field name", group, activeDialog);
+                "by the original database field name", group);
         
-        SwingUtilities.invokeAndWait(new Runnable() {
-            public void run() {
-                dlg.setVisible(true);
-            }
-        });
-        
-        synchronized (activeDialog) {
-            while (activeDialog.get() == true)
-                activeDialog.wait();
-        }
+        dlg.setVisible(true);
         
         if (!dlg.isAffirmative()) {
             System.exit(0);

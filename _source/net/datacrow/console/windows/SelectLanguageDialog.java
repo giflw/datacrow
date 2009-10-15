@@ -34,6 +34,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import net.datacrow.console.Layout;
@@ -45,10 +46,9 @@ import net.datacrow.util.Utilities;
 public class SelectLanguageDialog extends JDialog implements ActionListener {
 
     private JComboBox cbLanguage = new JComboBox();
-    private final java.util.concurrent.atomic.AtomicBoolean activeDialog;
     
-    public SelectLanguageDialog(java.util.concurrent.atomic.AtomicBoolean activeDialog) {
-        this.activeDialog = activeDialog;
+    public SelectLanguageDialog() {
+        super((JFrame) null);
         build();
         pack();
         setTitle("Select the preferred language");
@@ -57,15 +57,6 @@ public class SelectLanguageDialog extends JDialog implements ActionListener {
         setLocation(Utilities.getCenteredWindowLocation(getSize(), true));
     }
     
-    @Override
-    public void dispose() {
-        synchronized (activeDialog) {
-            activeDialog.set(false);
-            activeDialog.notifyAll();
-        }
-        super.dispose();
-    }
-
     private void close() {
         DcSettings.set(DcRepository.Settings.stLanguage, cbLanguage.getSelectedItem());
         setVisible(false);
