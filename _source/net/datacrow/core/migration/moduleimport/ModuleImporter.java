@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.IModuleWizardClient;
@@ -20,6 +22,7 @@ import net.datacrow.core.migration.itemimport.ItemImporterHelper;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.ModuleJar;
+import net.datacrow.core.modules.ModuleJarException;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcObject;
@@ -36,6 +39,8 @@ import net.datacrow.util.Utilities;
  * @author Robert Jan van der Waals
  */
 public class ModuleImporter {
+    
+    private static Logger logger = Logger.getLogger(ModuleImporter.class.getName());
 
 	private File file;
 	
@@ -124,6 +129,15 @@ public class ModuleImporter {
                             writeToFile(bis, new File(DataCrow.moduleDir, name));
                             ModuleJar moduleJar = new ModuleJar(name);
                             moduleJar.load();
+                            
+                            XmlModule xm = moduleJar.getModule();
+                            XmlModule xmNew = new XmlModule(xm);
+                            
+                            xm.setModuleClass(xmNew.getModuleClass());
+                            xm.setObject(xmNew.getObject());
+                            xm.setChildIndex(-1);
+                            xm.setParentIndex(-1);
+                            
                             modules.add(moduleJar);
                         }
                     }
@@ -164,6 +178,12 @@ public class ModuleImporter {
 	                        field.setModuleReference(newIdx);
 	                }
 	            }
+	            
+	            try {
+                    mj.save();
+                } catch (ModuleJarException e) {
+                    logger.error(e, e);
+                }
 		    }
 		}
 		

@@ -58,6 +58,6 @@ public class PanelSelectModuleToExport extends PanelSelectModule {
     
     @Override
     protected boolean isModuleAllowed(DcModule module) {
-        return module.isCustomModule() && module.getXmlModule() != null && module.isTopModule();
+        return module.isCustomModule() && module.getXmlModule() != null && (module.isTopModule() || module.isChildModule());
     }
 }
