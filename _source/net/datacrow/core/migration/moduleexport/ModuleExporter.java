@@ -185,13 +185,13 @@ public class ModuleExporter {
     					    exportData(module.getIndex());
     					    
     					    // get the XML
-    					    file = new File(parent.getPath(), modName + ".xml");
+    					    file = new File(parent.getPath(), module.getTableName() + ".xml");
     					    if (file.exists() && !canceled) {
     					        byte[] data = Utilities.readFile(file);
-    					        zf.addEntry(modName + ".xml", data);
+    					        zf.addEntry(module.getTableName() + ".xml", data);
     					        
     					        // get the images
-    					        File imgPath = new File(parent.getPath(), modName + "_images");
+    					        File imgPath = new File(parent.getPath(), module.getTableName() + "_images");
     					        if (imgPath.exists()) {
     					            for (String image : imgPath.list()) {
     					                

@@ -449,6 +449,10 @@ public class DataCrow {
     }
     
     private static void loadDefaultData() {
+        
+        // TODO: add correct splash message
+        //showSplashMsg(DcResources.getText("msgStartingWebServer"));
+        
         for (DcModule module : DcModules.getAllModules()) {
             if (module.isTopModule()) {
                 for (DcModule referenced1 : DcModules.getReferencedModules(module.getIndex())) {
