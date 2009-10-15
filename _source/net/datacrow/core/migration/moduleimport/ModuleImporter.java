@@ -108,8 +108,8 @@ public class ModuleImporter {
                         
                         DcImageIcon icon = new DcImageIcon(bytes);
                         icon.setFilename(name.substring(name.indexOf("_") + 1));
-                        
                         c.add(icon);
+                        
                         icons.put(moduleName, c);
                     } else if (name.toLowerCase().endsWith(".properties")) {
                         writeToFile(bis, new File(DataCrow.moduleDir, name));

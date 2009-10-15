@@ -32,6 +32,7 @@ import java.util.Collection;
 
 import net.datacrow.console.components.DcTextPane;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 
@@ -50,7 +51,19 @@ public class DcCardObjectListElement extends DcObjectListElement {
     @Override
     public Collection<Picture> getPictures() {
     	Collection<Picture> pictures = new ArrayList<Picture>();
-    	for (int field : dco.getModule().getSettings().getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder))
+    	
+    	int[] fields = dco.getModule().getSettings().getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder);
+    	
+    	if (fields == null || fields.length == 0) {
+            for (DcField field : dco.getFields()) {
+                if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+                    fields = new int[] {field.getIndex()};
+            }
+    	}
+    	
+    	dco.getModule().getSettings().set(DcRepository.ModuleSettings.stCardViewPictureOrder, fields);
+    	
+    	for (int field : fields)
     		pictures.add((Picture) dco.getValue(field));
 
 		return pictures;

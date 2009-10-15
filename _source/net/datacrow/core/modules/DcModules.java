@@ -363,7 +363,7 @@ public class DcModules {
                     // Also the module will keep its original index. No other magic involved.
                     DcPropertyModule pm = propMod.getInstance(derivedIdx, propMod.getName(),  
                             propMod.getTableName(), propMod.getTableShortName(),
-                            propMod.getObjectName(), propMod.getObjectNamePlural());
+                            propMod.getSystemObjectName(), propMod.getSystemObjectNamePlural());
 
                     pm.setServingMultipleModules(true);
                     addUserDefinedFields(propMod, pm);
@@ -375,7 +375,7 @@ public class DcModules {
                             module.getName() + " " + propMod.getName(),  
                             mod.getTableName() + "_" + propMod.getTableName(), 
                             mod.getTableShortName() + propMod.getTableShortName(),
-                            propMod.getObjectName(), propMod.getObjectNamePlural());
+                            propMod.getSystemObjectName(), propMod.getSystemObjectNamePlural());
 
                     addUserDefinedFields(propMod, pm);
                     register(pm);
