@@ -16,6 +16,7 @@ import net.datacrow.core.modules.ExternalReferenceModule;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.Directory;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.zip.ZipFile;
 
@@ -168,10 +169,12 @@ public class ModuleExporter {
 					
 					// reports
 					if (module.hasReports()) {
-					    File reportDir = new File(DataCrow.reportDir, module.getName().toLowerCase().replaceAll("[/\\*%., ]", ""));
-					    for (String filename : reportDir.list()) {
-					        byte[] content = Utilities.readFile(new File(reportDir, filename));
-		                    zf.addEntry(module.getName().toLowerCase().replaceAll("[/\\*%., ]", "") + "/" + filename, content);
+					    String reportDir = DataCrow.reportDir + module.getName().toLowerCase().replaceAll("[/\\*%., ]", "");
+					    
+					    for (String filename : Directory.read(reportDir, true, false, new String[] {"xsl"})) {
+					        byte[] content = Utilities.readFile(new File(filename));
+					        String name = filename.substring(filename.indexOf(File.separator + "reports" + File.separator) + 9);
+		                    zf.addEntry(name, content);
 					    }
 					}
 					
