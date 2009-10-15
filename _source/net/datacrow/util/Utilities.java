@@ -194,10 +194,6 @@ public class Utilities {
     public static boolean canRead(File drive) {
         return fsv.isTraversable(drive) && drive.canRead();        
     }
-
-    public static boolean isFloppyDrive(File drive) {
-        return fsv.isFloppyDrive(drive);
-    }
     
     public static boolean isSystemDrive(File drive) {
     	return getSystemDrives().contains(drive);

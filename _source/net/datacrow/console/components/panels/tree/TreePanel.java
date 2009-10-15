@@ -322,10 +322,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         setListeningForSelection(false);
         setSaveChanges(false);
         
-        // TODO: test: do not create tree when not displayed
-        // if the tree has not been initialized yet:
         if (modus == _OBJECT_ADDED && top.getChildCount() == 0) {
-            //buildTree();
+            buildTree();
             return;
         }
         

@@ -51,6 +51,7 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - Quick View: filename is now a clickable link.
 - Demo Data is now loaded right after the data layer has been initialized instead of 
   during the database creation process.
+- Floppy drives are no longer ignored (due to the upgrade to Java 6).
 
 [Fixed]
 - "Pick a Date": larger set of years to make the navigation easier + a fix for the up and 

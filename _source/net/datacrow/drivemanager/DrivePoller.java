@@ -82,10 +82,8 @@ public class DrivePoller {
             dm.notifyJobStarted(dm.getPollerListeners());
             
             Map<File, Boolean> drives = new HashMap<File, Boolean>();
-            for (File drive : Utilities.getDrives()) {
-                if (!Utilities.isFloppyDrive(drive))
-                    drives.put(drive, Utilities.canRead(drive));
-            }
+            for (File drive : Utilities.getDrives())
+                drives.put(drive, Utilities.canRead(drive));
             
             while (keepOnRunning) {
                 try {

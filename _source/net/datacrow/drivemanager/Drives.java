@@ -47,7 +47,7 @@ public class Drives {
         drives.clear();
         Collection<File> drives = Utilities.getDrives();
         for (File drive : drives) {
-            if (!Utilities.isFloppyDrive(drive) && Utilities.isDriveTraversable(drive))
+            if (Utilities.isDriveTraversable(drive))
                 this.drives.add(new Drive(drive));
         }
     }
