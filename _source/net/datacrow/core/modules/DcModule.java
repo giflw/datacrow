@@ -527,10 +527,10 @@ public class DcModule implements Comparable<DcModule> {
      * Tells if the module is created by a user.
      */
     public boolean isCustomModule() {
-        return  (getIndex() < 50 || (getIndex() >= 20000  && getIndex() < 1000000)) &&
+        return (getIndex() < 50 ||
+               (getIndex() >= 20000 && getIndex() < 30000)) &&
                !(this instanceof TemplateModule) && 
-               !(this instanceof MappingModule) && 
-               !DcModules.isUsedInMapping(getIndex());
+               !(this instanceof MappingModule);
     } 
 
     /**

@@ -198,10 +198,15 @@ public class ModuleExporter {
     					                if (canceled) break;
     					                
     					                // add the image
-    					                byte[] img = Utilities.readFile(new File(imgPath.toString(), image));
+    					                File imgFile = new File(imgPath.toString(), image);
+    					                byte[] img = Utilities.readFile(imgFile);
     					                zf.addEntry(modName + "_" + image, img);
+    					                imgFile.delete();
     					            }
+    					            imgPath.delete();
     					        }
+    					        new File(parent.getPath(), modName + ".xsd").delete();
+    					        file.delete();
     					    }
 					    } catch (Exception e) {
 					        client.notifyError(e);

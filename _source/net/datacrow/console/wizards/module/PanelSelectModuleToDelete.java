@@ -27,6 +27,7 @@ package net.datacrow.console.wizards.module;
 
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
 
 public class PanelSelectModuleToDelete extends PanelSelectModule {
@@ -42,6 +43,6 @@ public class PanelSelectModuleToDelete extends PanelSelectModule {
 
     @Override
     protected boolean isModuleAllowed(DcModule module) {
-        return module.isCustomModule(); // allow only custom module
+        return module.isCustomModule() && !DcModules.isUsedInMapping(module.getIndex());
     }
 }
