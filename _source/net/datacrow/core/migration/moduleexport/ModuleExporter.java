@@ -149,8 +149,6 @@ public class ModuleExporter {
 					
 					if (canceled) break;
 					
-					String modName = module.getName().toLowerCase();
-					
 					// only export custom modules
 					// adds the module jar file to the distribution
 					if (module.isCustomModule() && module.getXmlModule() != null) {
@@ -200,12 +198,12 @@ public class ModuleExporter {
     					                // add the image
     					                File imgFile = new File(imgPath.toString(), image);
     					                byte[] img = Utilities.readFile(imgFile);
-    					                zf.addEntry(modName + "_" + image, img);
+    					                zf.addEntry(module.getTableName() + "_" + image, img);
     					                imgFile.delete();
     					            }
     					            imgPath.delete();
     					        }
-    					        new File(parent.getPath(), modName + ".xsd").delete();
+    					        new File(parent.getPath(), module.getTableName() + ".xsd").delete();
     					        file.delete();
     					    }
 					    } catch (Exception e) {
@@ -249,8 +247,6 @@ public class ModuleExporter {
             if (items.size() == 0)
                 return;
 		    
-			String modName = DcModules.get(module).getName().toLowerCase();
-			
 			XmlExporter itemExporter = new XmlExporter(parent.getModule(), XmlExporter._MODE_NON_THREADED);
 			
 			ItemExporterSettings settings = new ItemExporterSettings();
@@ -259,8 +255,7 @@ public class ModuleExporter {
 			settings.set(ItemExporterSettings._SCALE_IMAGES, Boolean.FALSE);
 			itemExporter.setSettings(settings);
 			
-			itemExporter.setFile(new File(parent.getPath(), modName + ".xml"));
-
+			itemExporter.setFile(new File(parent.getPath(), DcModules.get(module).getTableName() + ".xml"));
 			
 			itemExporter.setItems(items);
 			itemExporter.setClient(this);
