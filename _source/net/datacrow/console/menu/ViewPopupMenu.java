@@ -110,27 +110,27 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
                 JMenuItem miDelete = ComponentFactory.getMenuItem(IconLibrary._icoDelete, DcResources.getText("lblDeleteFile"));
                 miDelete.addActionListener(this);
                 miDelete.setActionCommand("deleteFile");
-                miDelete.setEnabled(file != null && file.exists());
+                miDelete.setEnabled(file.exists());
 
                 JMenuItem miMove = ComponentFactory.getMenuItem(DcResources.getText("lblMoveFile"));
                 miMove.addActionListener(this);
                 miMove.setActionCommand("moveFile");
-                miMove.setEnabled(file != null && file.exists());
+                miMove.setEnabled(file.exists());
 
                 JMenuItem miLocateHP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnHashAndSize")));
                 miLocateHP.addActionListener(this);
                 miLocateHP.setActionCommand("locateFileHP");
-                miLocateHP.setEnabled(file != null && !file.exists());
+                miLocateHP.setEnabled(!file.exists());
                 
                 JMenuItem miLocateMP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilenameAndSize")));
                 miLocateMP.addActionListener(this);
                 miLocateMP.setActionCommand("locateFileMP");
-                miLocateMP.setEnabled(file != null && !file.exists());            
+                miLocateMP.setEnabled(!file.exists());            
 
                 JMenuItem miLocateLP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilename")));
                 miLocateLP.addActionListener(this);
                 miLocateLP.setActionCommand("locateFileLP");
-                miLocateLP.setEnabled(file != null && !file.exists());        
+                miLocateLP.setEnabled(!file.exists());        
                 
                 menuFile.add(miDelete);
                 menuFile.add(miMove);
