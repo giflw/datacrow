@@ -59,6 +59,7 @@ import net.datacrow.core.db.QueryOptions;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.ExternalReferenceModule;
 import net.datacrow.core.modules.IChildModule;
 import net.datacrow.core.modules.MappingModule;
@@ -766,7 +767,7 @@ public class DataManager {
                     return o;
             }
 
-            if (dco instanceof DcProperty) {
+            if (DcModules.get(module) instanceof DcPropertyModule) {
                 dco = DcModules.get(module).getDcObject();
                 dco.setValue(DcProperty._C_ALTERNATIVE_NAMES, ";" + s.toUpperCase() + ";");
                 QueryOptions options = new QueryOptions(null, true, false);
