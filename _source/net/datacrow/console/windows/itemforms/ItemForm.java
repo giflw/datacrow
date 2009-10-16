@@ -534,6 +534,10 @@ public class ItemForm extends DcFrame implements ActionListener {
         return changed;
     }
     
+    public DcObject getOriginalItem() {
+        return dcoOrig;
+    }    
+    
     public DcObject getItem() {
         apply();
         return dco;

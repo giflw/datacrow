@@ -23,49 +23,69 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.onlinesearch;
+package net.datacrow.console.windows.drivemanager;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import javax.swing.SwingUtilities;
+
+import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.services.SearchTask;
+import net.datacrow.drivemanager.DriveManager;
+import net.datacrow.drivemanager.FileInfo;
 import net.datacrow.util.PollerTask;
-import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
 /**
  * Call from another thread and wait for this task to finish
  */
-public class OnlineItemRetriever extends Thread {
+public class DriveManagerSingleItemMatcher extends Thread {
 
-    private static Logger logger = Logger.getLogger(OnlineItemRetriever.class.getName());
-
-    private SearchTask task;
-    private DcObject dco;
+    private static Logger logger = Logger.getLogger(DriveManagerSingleItemMatcher.class.getName());
     
-    public OnlineItemRetriever(SearchTask task, DcObject dco) {
-        this.task = task;
+    private int precision;
+    private DcObject dco;
+    private FileInfo result;
+    
+    public DriveManagerSingleItemMatcher(DcObject dco, int precision) {
         this.dco = dco;
+        this.precision = precision;
         
         setPriority(Thread.MIN_PRIORITY);
     }
-
-    public DcObject getDcObject() {
-        return dco;
-    }
     
+    public FileInfo getResult() {
+        return result;
+    }
+
     @Override
     public void run() {
-        PollerTask poller = new PollerTask(this, DcResources.getText("msgRetrievingItemDetails", dco.getName()));
-        poller.start();
         
-        try {
-            dco = task.query(dco);
+        if (!DriveManager.getInstance().drivesWereScanned()) {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        QuestionBox  qb = new QuestionBox(DcResources.getText("msgDrivesNotScanned"));
+                        qb.setVisible(true);
+                        if (qb.isAffirmative())
+                            DriveManagerDialog.getInstance().setVisible(true);
+                    }
+                });
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
+        } else {
+            String filename = (String) dco.getValue(DcObject._SYS_FILENAME);
+            String hash = (String) dco.getValue(DcObject._SYS_FILEHASH); 
+            Long size  = (Long) dco.getValue(DcObject._SYS_FILESIZE); 
+            
+            PollerTask poller = new PollerTask(this, DcResources.getText("msgLocatingFile", filename));
+            poller.start();
+            
+            FileInfo fi = new FileInfo(hash, filename, size);
+            result = DriveManager.getInstance().find(fi, precision);
+            
             poller.finished(true);
-        } catch (Exception e) {
-            new MessageBox(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage(), MessageBox._ERROR);
-            logger.error(e, e);
         }
     }
 }

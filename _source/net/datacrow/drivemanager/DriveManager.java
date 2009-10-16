@@ -66,6 +66,8 @@ public class DriveManager {
     
     private Map<File, String> hashes = new HashMap<File, String>();
     
+    private boolean drivesWereScanned = false;
+    
     private Collection<IDriveManagerListener> pollerListeners = new ArrayList<IDriveManagerListener>();
     private Collection<IDriveManagerListener> scannerListeners = new ArrayList<IDriveManagerListener>();
     private Collection<IDriveManagerListener> synchronizerListeners = new ArrayList<IDriveManagerListener>();
@@ -135,8 +137,14 @@ public class DriveManager {
                 sendMessage(getScannerListeners(), DcResources.getText("msgSkippingUnreadbleDrive", drive.toString()));
             }
         }
+        
+        drivesWereScanned = true;
     }    
     
+    public boolean drivesWereScanned() {
+        return drivesWereScanned;
+    }
+
     public void stopScanners() {
         for (DriveScanner scanner : scanners.values()) 
             scanner.cancel();

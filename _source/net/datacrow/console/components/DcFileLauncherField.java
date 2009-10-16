@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components;
 
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -44,8 +45,12 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.BrowserDialog;
+import net.datacrow.console.windows.drivemanager.DriveManagerSingleItemMatcher;
+import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.drivemanager.DriveManager;
+import net.datacrow.drivemanager.FileInfo;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.launcher.FileLauncher;
@@ -56,13 +61,15 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
 
     private static Logger logger = Logger.getLogger(DcFileLauncherField.class.getName());
     
+    private ItemForm parent;
+    
     private DcShortTextField text;
     private JButton buttonBrowse;
     private File file;
 
     public DcFileLauncherField() {
         text = ComponentFactory.getTextFieldDisabled();
-        
+
         setBounds(0,0,0,0);
 
         buttonBrowse = ComponentFactory.getIconButton(IconLibrary._icoOpen);
@@ -91,6 +98,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         text = null;
         file = null;
         buttonBrowse = null;
+        parent = null;
     }
 
     public File getFile() {
@@ -140,6 +148,25 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
             new FileLauncher(filename).launch();
         }
     }
+    
+    private void locateFile(final int precision) {
+        new Thread(new Runnable() { 
+            public void run() {
+                DriveManagerSingleItemMatcher matcher = 
+                    new DriveManagerSingleItemMatcher(parent.getOriginalItem(), precision);
+                matcher.start();
+                try {
+                    matcher.join();
+                } catch (InterruptedException e) {
+                    logger.error(e, e);
+                }
+                
+                FileInfo info = matcher.getResult();
+                if (info != null)
+                    setFile(new File(info.getFilename()));
+            }
+        }).start();        
+    }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("launchFile")) {
@@ -147,30 +174,27 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         } else if (e.getActionCommand().equals("showFileOpenDialog")) {
             showFileOpenDialog();
         } else if (e.getActionCommand().equals("clear")) {
-            file = null;
-            text.setText("");
+            setFile(null);
         } else if (e.getActionCommand().equals("deleteFile")) {
-            if (file != null) file.delete(); 
-            file = null;
-            text.setText("");
-        } else if (e.getActionCommand().equals("locateFile")) {
-            if (file != null) file.delete(); 
-            file = null;
-            text.setText("");
+            file.delete(); 
+            setFile(null);
+        } else if (e.getActionCommand().equals("locateFileHP")) {
+            locateFile(DriveManager._PRECISION_HIGHEST);
+        } else if (e.getActionCommand().equals("locateFileMP")) {
+            locateFile(DriveManager._PRECISION_MEDIUM);
+        } else if (e.getActionCommand().equals("locateFileLP")) {
+            locateFile(DriveManager._PRECISION_LOWEST);
         } else if (e.getActionCommand().equals("moveFile")) {
-            if (file != null) {
-                BrowserDialog dialog = new BrowserDialog(DcResources.getText("msgSelectnewLocation"), null);
-                File newDir = dialog.showSelectDirectoryDialog(this, null);
-            
-                if (newDir != null) {
-                    try {
-                        File newFile = new File(newDir, file.getName());
-                        Utilities.rename(file, newFile);
-                        file = newFile;
-                        text.setText(newFile.toString());
-                    } catch (IOException e1) {
-                        logger.error(e1, e1);
-                    }
+            BrowserDialog dialog = new BrowserDialog(DcResources.getText("msgSelectnewLocation"), null);
+            File newDir = dialog.showSelectDirectoryDialog(this, null);
+        
+            if (newDir != null) {
+                try {
+                    File newFile = new File(newDir, file.getName());
+                    Utilities.rename(file, newFile);
+                    setFile(newFile);
+                } catch (IOException e1) {
+                    logger.error(e1, e1);
                 }
             }
         }
@@ -187,30 +211,55 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     }   
     
     public void mouseReleased(MouseEvent e) {
+        
+        if (parent == null) {
+            Container c = getTopLevelAncestor();
+            parent = c instanceof ItemForm ? (ItemForm) c : null;
+        }
+        
         if (SwingUtilities.isRightMouseButton(e)) {
+            
+            if (!buttonBrowse.isEnabled()) return;
+            
             DcPopupMenu popup = new DcPopupMenu();
             
             JMenuItem miClear = ComponentFactory.getMenuItem(DcResources.getText("lblClearField"));
             miClear.addActionListener(this);
             miClear.setActionCommand("clear");
+            miClear.setEnabled(file != null);
 
             JMenuItem miDelete = ComponentFactory.getMenuItem(DcResources.getText("lblDeleteFile"));
             miDelete.addActionListener(this);
             miDelete.setActionCommand("deleteFile");
+            miDelete.setEnabled(file != null && file.exists());
 
             JMenuItem miMove = ComponentFactory.getMenuItem(DcResources.getText("lblMoveFile"));
             miMove.addActionListener(this);
             miMove.setActionCommand("moveFile");
+            miMove.setEnabled(file != null && file.exists());
 
-            JMenuItem miLocate = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile"));
-            miLocate.addActionListener(this);
-            miLocate.setActionCommand("locateFile");
+            JMenuItem miLocateHP = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnHashAndSize")));
+            miLocateHP.addActionListener(this);
+            miLocateHP.setActionCommand("locateFileHP");
+            miLocateHP.setEnabled(file != null && !file.exists() && parent != null);
+            
+            JMenuItem miLocateMP = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilenameAndSize")));
+            miLocateMP.addActionListener(this);
+            miLocateMP.setActionCommand("locateFileMP");
+            miLocateMP.setEnabled(file != null && !file.exists() && parent != null);            
+
+            JMenuItem miLocateLP = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilename")));
+            miLocateMP.addActionListener(this);
+            miLocateMP.setActionCommand("locateFileLP");
+            miLocateMP.setEnabled(file != null && !file.exists() && parent != null);            
             
             popup.add(miClear);
             popup.addSeparator();
             popup.add(miDelete);
             popup.add(miMove);
-            popup.add(miLocate);
+            popup.add(miLocateLP);
+            popup.add(miLocateMP);
+            popup.add(miLocateHP);
             
             popup.show(this, e.getX(), e.getY());
         } 
