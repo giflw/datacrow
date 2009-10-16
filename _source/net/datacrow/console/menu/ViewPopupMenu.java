@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JMenu;
@@ -42,12 +43,14 @@ import net.datacrow.console.views.View;
 import net.datacrow.console.windows.BrowserDialog;
 import net.datacrow.console.windows.drivemanager.DriveManagerSingleItemMatcher;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.UserMode;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.plugin.InvalidPluginException;
 import net.datacrow.core.plugin.Plugin;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.plugin.Plugins;
@@ -176,12 +179,37 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
         }
 
         addSeparator();
+
+        JMenu menuAdmin = ComponentFactory.getMenu(IconLibrary._icoModuleTypeProperty16, DcResources.getText("lblAdministration"));
         
+        Collection<DcPropertyModule> modules = new ArrayList<DcPropertyModule>(); 
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
             DcField field = module.getField(definition.getIndex());
             DcPropertyModule pm = DcModules.getPropertyModule(field);
-            if (pm != null) PluginHelper.add(this, "ManageItem", pm.getIndex());
+            
+            if (pm != null && !modules.contains(pm))
+                modules.add(pm);
         }
+
+        for (DcModule pm : modules) {
+            try {
+                Plugin plugin = Plugins.getInstance().get("ManageItem", dco, null, viewIdx,  pm.getIndex());
+                if (    plugin != null &&SecurityCentre.getInstance().getUser().isAuthorized(plugin) &&
+                        UserMode.isCorrectXpLevel(plugin.getXpLevel())) {
+                    
+                    JMenuItem item = ComponentFactory.getMenuItem(plugin);
+                    item.setEnabled(plugin.isEnabled());
+                    item.setIcon(plugin.getIcon());
+                    
+                    menuAdmin.add(item);
+                }
+            } catch (InvalidPluginException e) {
+                logger.error(e, e);
+            }
+        }
+        
+        if (menuAdmin.getItemCount() > 0)
+            add(menuAdmin);
         
         addSeparator();
         PluginHelper.add(this, "ViewSettings");

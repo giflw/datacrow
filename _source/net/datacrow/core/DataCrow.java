@@ -214,12 +214,19 @@ public class DataCrow {
         DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
         
         try {
+            
             checkCurrentDir();
             createDirectories();
             initLog4j();
             initDbProperties();
-            
             installLafs();
+            
+            try {
+                new File(moduleDir, "editiontype.jar").delete();
+                new File(moduleDir, "binding.jar").delete();
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
             
             logger.info("Using installation directory: " + installationDir);
             logger.info("Using data directory: " + dataDir);

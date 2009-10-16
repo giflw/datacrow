@@ -138,4 +138,17 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoLanguage32 = new ImageIcon(picPath + "language32.png");
     public static final ImageIcon _icoCountry16 = new ImageIcon(picPath + "country16.png");
     public static final ImageIcon _icoCountry32 = new ImageIcon(picPath + "country32.png");
+    public static final ImageIcon _icoAspectRatio16 = new ImageIcon(picPath + "aspectratio16.png");
+    public static final ImageIcon _icoAspectRatio32 = new ImageIcon(picPath + "aspectratio32.png");
+    public static final ImageIcon _icoColor16 = new ImageIcon(picPath + "colors16.png");
+    public static final ImageIcon _icoColor32 = new ImageIcon(picPath + "colors32.png");
+    public static final ImageIcon _icoPlatform16 = new ImageIcon(picPath + "platform16.png");
+    public static final ImageIcon _icoPlatform32 = new ImageIcon(picPath + "platform32.png");    
+    public static final ImageIcon _icoState16 = new ImageIcon(picPath + "state16.png");
+    public static final ImageIcon _icoState32 = new ImageIcon(picPath + "state32.png");    
+    public static final ImageIcon _icoBinding16 = new ImageIcon(picPath + "binding16.png");
+    public static final ImageIcon _icoBinding32 = new ImageIcon(picPath + "binding32.png");    
+    public static final ImageIcon _icoStorageMedium16 = new ImageIcon(picPath + "storagemedium16.png");
+    public static final ImageIcon _icoStorageMedium32 = new ImageIcon(picPath + "storagemedium32.png");    
+
 }

@@ -167,21 +167,27 @@ public class DcModules {
                                             "category", "cat",
                                             DcResources.getText("sysCategory"),
                                             DcResources.getText("sysCategoryPlural")));
-        propertyBaseModules.put(DcModules._STATE, 
-                       new DcPropertyModule(DcModules._STATE, "State", 
-                                            "state", "st",
-                                            DcResources.getText("sysState"),
-                                            DcResources.getText("sysStatePlural")));
-        propertyBaseModules.put(DcModules._PLATFORM, 
-                       new DcPropertyModule(DcModules._PLATFORM, "Platform", 
-                                            "platform", "pf",
-                                            DcResources.getText("sysPlatform"),
-                                            DcResources.getText("sysPlatformPlural")));    
-        propertyBaseModules.put(DcModules._STORAGEMEDIA, 
-                       new DcPropertyModule(DcModules._STORAGEMEDIA, "Storage Medium", 
-                                            "storagemedium", "stme",
-                                            DcResources.getText("sysStorageMedium"),
-                                            DcResources.getText("sysStorageMediumPlural")));      
+        
+        DcPropertyModule stateModule = new DcPropertyModule(DcModules._STATE, "State", 
+                "state", "st", DcResources.getText("sysState"), DcResources.getText("sysStatePlural"));
+        stateModule.setIcon16(IconLibrary._icoState16);
+        stateModule.setIcon32(IconLibrary._icoState32);
+        
+        propertyBaseModules.put(DcModules._STATE, stateModule);
+        
+        DcPropertyModule platformModule = new DcPropertyModule(DcModules._PLATFORM, "Platform", 
+                "platform", "pf", DcResources.getText("sysPlatform"), DcResources.getText("sysPlatformPlural"));
+        platformModule.setIcon16(IconLibrary._icoPlatform16);
+        platformModule.setIcon32(IconLibrary._icoPlatform32);
+        propertyBaseModules.put(DcModules._PLATFORM, platformModule);    
+
+        
+        DcPropertyModule mediumModule = new DcPropertyModule(DcModules._STORAGEMEDIA, "Storage Medium", 
+                "storagemedium", "stme", DcResources.getText("sysStorageMedium"), DcResources.getText("sysStorageMediumPlural"));
+        mediumModule.setIcon16(IconLibrary._icoStorageMedium16);
+        mediumModule.setIcon32(IconLibrary._icoStorageMedium32);
+        propertyBaseModules.put(DcModules._STORAGEMEDIA, mediumModule);
+        
         propertyBaseModules.put(DcModules._CONTAINERTYPE, 
                        new DcPropertyModule(DcModules._CONTAINERTYPE, "Container Type", 
                                             "containertype", "coty",
@@ -213,19 +219,27 @@ public class DcModules {
         languageModule.setIcon32(IconLibrary._icoLanguage32);
         propertyBaseModules.put(DcModules._LANGUAGE, languageModule);
         
-        // TODO: Icons
-        // TODO: Move edition type to here.
-        
-        DcPropertyModule aspectRatioModule = new DcPropertyModule(DcModules._MOVIE_ASPECT_RATIO, "Aspect Ratio", "aspectratio", "asrt", "Aspect Ratio", "Aspect Ratios");
+        DcPropertyModule aspectRatioModule = new DcPropertyModule(DcModules._MOVIE_ASPECT_RATIO, "Aspect Ratio", "aspectratio", "asrt", "Aspect ratio", "Aspect ratios");
         aspectRatioModule.setServingMultipleModules(true);
+        aspectRatioModule.setIcon16(IconLibrary._icoAspectRatio16);
+        aspectRatioModule.setIcon32(IconLibrary._icoAspectRatio32);
         propertyBaseModules.put(DcModules._MOVIE_ASPECT_RATIO, aspectRatioModule);
         
         DcPropertyModule colorModule = new DcPropertyModule(DcModules._MOVIE_COLOR, "Color", "color", "clr", "Color", "Colors");
         colorModule.setServingMultipleModules(true);
+        colorModule.setIcon16(IconLibrary._icoColor16);
+        colorModule.setIcon32(IconLibrary._icoColor32);
         propertyBaseModules.put(DcModules._MOVIE_COLOR, colorModule);
         
-        //countryModule.setIcon16(IconLibrary._icoCountry16);
-        //countryModule.setIcon32(IconLibrary._icoCountry32);
+        DcPropertyModule bindingModule = new DcPropertyModule(DcModules._BINDING, "Binding", "binding", "binding", "Binding", "Bindings");
+        bindingModule.setServingMultipleModules(true);
+        bindingModule.setIcon16(IconLibrary._icoBinding16);
+        bindingModule.setIcon32(IconLibrary._icoBinding32);
+        propertyBaseModules.put(DcModules._BINDING, bindingModule);
+        
+        DcPropertyModule editionModule = new DcPropertyModule(DcModules._EDITIONTYPE, "Edition Type", "editiontype", "edty", "Edition type", "Edition types");
+        editionModule.setServingMultipleModules(true);
+        propertyBaseModules.put(DcModules._EDITIONTYPE, editionModule);
     }
     
     /**
@@ -267,7 +281,6 @@ public class DcModules {
      * Initializes the system modules such as the picture and the loan module.
      */
     private static void loadSystemModules() {
-        //register(new ExternalReferenceModule());
         register(new PictureModule());
         register(new LoanModule());
         register(new UserModule());
