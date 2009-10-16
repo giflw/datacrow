@@ -91,6 +91,42 @@
                 <overwritable>true</overwritable>
              </field>
         </fields>
-    </module>      
+    </module>    
+    <module>
+        <module-jar>movie.jar</module-jar>
+        <module-index>51</module-index>
+        <fields>
+            <field>
+                <index>35</index>
+                <name>Color</name>
+                <database-column-name>Color</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>50</maximum-length>
+                <field-type>20</field-type>
+                <module-reference>1500000</module-reference>
+                <value-type>8</value-type>
+                <overwritable>false</overwritable>
+            </field>
+            <field>
+                <index>36</index>
+                <name>Aspect Ratio</name>
+                <database-column-name>AspectRatio</database-column-name>
+                <ui-only>false</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>50</maximum-length>
+                <field-type>20</field-type>
+                <module-reference>1600000</module-reference>
+                <value-type>8</value-type>
+                <overwritable>false</overwritable>
+            </field>
+        </fields>
+    </module>        
 </modules> 
-		
+        

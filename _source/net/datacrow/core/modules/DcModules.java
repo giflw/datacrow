@@ -108,6 +108,8 @@ public class DcModules {
     public static final int _BINDING = 1200000;
     public static final int _EDITIONTYPE = 1300000;
     public static final int _EXTERNALREFERENCE = 1400000;
+    public static final int _MOVIE_COLOR = 1500000;
+    public static final int _MOVIE_ASPECT_RATIO = 1600000;
     
     public static final int _MAPPING = 50000;
 
@@ -209,8 +211,21 @@ public class DcModules {
         languageModule.setServingMultipleModules(true);
         languageModule.setIcon16(IconLibrary._icoLanguage16);
         languageModule.setIcon32(IconLibrary._icoLanguage32);
+        propertyBaseModules.put(DcModules._LANGUAGE, languageModule);
         
-        propertyBaseModules.put(DcModules._LANGUAGE, languageModule);        
+        // TODO: Icons
+        // TODO: Move edition type to here.
+        
+        DcPropertyModule aspectRatioModule = new DcPropertyModule(DcModules._MOVIE_ASPECT_RATIO, "Aspect Ratio", "aspectratio", "asrt", "Aspect Ratio", "Aspect Ratios");
+        aspectRatioModule.setServingMultipleModules(true);
+        propertyBaseModules.put(DcModules._MOVIE_ASPECT_RATIO, aspectRatioModule);
+        
+        DcPropertyModule colorModule = new DcPropertyModule(DcModules._MOVIE_COLOR, "Color", "color", "clr", "Color", "Colors");
+        colorModule.setServingMultipleModules(true);
+        propertyBaseModules.put(DcModules._MOVIE_COLOR, colorModule);
+        
+        //countryModule.setIcon16(IconLibrary._icoCountry16);
+        //countryModule.setIcon32(IconLibrary._icoCountry32);
     }
     
     /**

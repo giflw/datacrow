@@ -61,6 +61,8 @@ public class Movie extends DcMediaObject {
     public static final int _10_EPISODE_NR = 32;
     public static final int _11_EPISODE_TITLE = 33;
     public static final int _12_EAN = 34;
+    public static final int _13_COLOR = 35;
+    public static final int _14_ESPECT_RATIO = 36;
 
     public Movie() {
         super(DcModules._MOVIE);
