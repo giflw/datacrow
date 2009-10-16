@@ -174,6 +174,8 @@ public abstract class ItemImporter extends ItemMigrater {
                     String s = Utilities.fileToBase64String(file);
                     s = Utilities.isEmpty(s) ? Utilities.fileToBase64String(new File(value)) : s;
                     dco.setValue(field.getIndex(), s);
+                } else {
+                    dco.setValue(field.getIndex(), value);
                 }
             } else if (field.getValueType() == DcRepository.ValueTypes._BOOLEAN) {
                 dco.setValue(field.getIndex(), Boolean.valueOf(value));
