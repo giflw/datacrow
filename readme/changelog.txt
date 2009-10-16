@@ -12,21 +12,23 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
   They add additional flexibility and lend themselves to be used by other systems and 
   customization.
   This solves problems where items could not be linked to the source system and were
-  therefor duplicated. Most notable example are the actors for IMDB movies. 
+  therefore duplicated. Most notable example are the actors for IMDB movies. 
   The name was used to check whether the actor already existed in Data Crow. This worked
   fine when the name is not changed on either side as this breaks the link between the
   Data Crow and the item of the source system. Now, the external IDs are used to link
   the items. Where there is no external ID available Data Crow uses an internally 
   generated item tag instead.
   In short: items are now more reusable then ever!
-- Module Export Wizard. With this wizard it is now possible to export your custom made 
-  modules. Optionally the items of the module(s) are also exported. This wizard enables 
-  you to share your modules with other users!
+- Module Export Wizard. This wizard enables you to share your modules with other users.
+  With this wizard it is now possible to export your custom made modules and their data.
+  It creates a single archive which can be imported on any other Data Crow installation
+  by using the Module Import Wizard. It exports the reports, items of the module(s) 
+  (based on the settings), settings and reports (xsl).
 - Module Import Wizard. Takes care of all the nitty gritty stuff that is involved when 
   you want to add a custom module to your Data Crow installation. This is, from now on,
-  THE way to add custom modules to your installation! It takes care of internal module
-  ID clashes, imports the data belonging to the module(s) and imports all other related
-  information (such as the default settings).
+  THE way to add custom modules to your installation. It takes care of internal module
+  ID clashes, imports the items belonging to the module(s) and imports all other related
+  information (such as the default settings and reports).
 - Module Copy Wizard. Tired of adding all the fields manually to your custom module?
   Why not base it on one of the existing modules? Use this wizard, select the module 
   which you would like to copy and off you go!
@@ -48,10 +50,16 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - File Importer now remembers whether it should use online services or not + the selected
   server, search mode and region.
 - File Importer now remembers the selected "directory usage". 
-- Quick View: filename is now a clickable link.
-- Demo Data is now loaded right after the data layer has been initialized instead of 
-  during the database creation process.
+- Quick View: filename is now a click-able link with the filename (excluding the path) as
+  text.
+- Default data is now loaded right after the data layer has been initialized instead of 
+  during the database creation process. This delivers greater control on the load process
+  of default data.
 - Floppy drives are no longer ignored (due to the upgrade to Java 6).
+- ASIN fields have been removed from the movie, software, audio CD and music album modules.
+  The ASINs have been migrated to the new external references field.
+- Disc ID fields have been removed from the audio CD and music album modules. The Disc IDs
+  have been transferred to the new external references field. 
 
 [Fixed]
 - "Pick a Date": larger set of years to make the navigation easier + a fix for the up and 
