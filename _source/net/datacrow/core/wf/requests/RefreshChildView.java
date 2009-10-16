@@ -78,6 +78,8 @@ public class RefreshChildView implements IUpdateUIRequest {
         public void run() {
             if (form != null)
                 form.loadItems();
+            else 
+                return;
             
             for (DcObject dco : form.getItems()) {
                 String parentID = dco.getParentID();

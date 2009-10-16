@@ -25,26 +25,50 @@
 
 package net.datacrow.console.menu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+import org.apache.log4j.Logger;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcPopupMenu;
 import net.datacrow.console.views.View;
+import net.datacrow.console.windows.BrowserDialog;
+import net.datacrow.console.windows.drivemanager.DriveManagerSingleItemMatcher;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.plugin.Plugin;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.plugin.Plugins;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
+import net.datacrow.drivemanager.DriveManager;
+import net.datacrow.drivemanager.FileInfo;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.util.Utilities;
 
-public class ViewPopupMenu extends DcPopupMenu {
+public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
 
+    private static Logger logger = Logger.getLogger(ViewPopupMenu.class.getName());
+    
+    private DcObject dco;
+    
     public ViewPopupMenu(DcObject dco, int viewType, int viewIdx) {
+        
+        this.dco = dco;
+        
         DcModule current = DcModules.getCurrent();
         
         DcModule module = dco.getModule();
@@ -75,6 +99,49 @@ public class ViewPopupMenu extends DcPopupMenu {
                 // is deleted.
                 PluginHelper.add(this, "Delete", DcModules.getCurrent().getIndex());
             }
+            
+            String filename = dco.getFilename();
+            File file = !Utilities.isEmpty(filename) ? new File(filename) : null;
+            
+            if (file != null && SecurityCentre.getInstance().getUser().isAdmin() && dco.getModule().isFileBacked()) {
+                
+                JMenu menuFile = ComponentFactory.getMenu(IconLibrary._icoDriveManager, DcResources.getText("lblFile"));
+                
+                JMenuItem miDelete = ComponentFactory.getMenuItem(IconLibrary._icoDelete, DcResources.getText("lblDeleteFile"));
+                miDelete.addActionListener(this);
+                miDelete.setActionCommand("deleteFile");
+                miDelete.setEnabled(file != null && file.exists());
+
+                JMenuItem miMove = ComponentFactory.getMenuItem(DcResources.getText("lblMoveFile"));
+                miMove.addActionListener(this);
+                miMove.setActionCommand("moveFile");
+                miMove.setEnabled(file != null && file.exists());
+
+                JMenuItem miLocateHP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnHashAndSize")));
+                miLocateHP.addActionListener(this);
+                miLocateHP.setActionCommand("locateFileHP");
+                miLocateHP.setEnabled(file != null && !file.exists());
+                
+                JMenuItem miLocateMP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilenameAndSize")));
+                miLocateMP.addActionListener(this);
+                miLocateMP.setActionCommand("locateFileMP");
+                miLocateMP.setEnabled(file != null && !file.exists());            
+
+                JMenuItem miLocateLP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilename")));
+                miLocateLP.addActionListener(this);
+                miLocateLP.setActionCommand("locateFileLP");
+                miLocateLP.setEnabled(file != null && !file.exists());        
+                
+                menuFile.add(miDelete);
+                menuFile.add(miMove);
+                menuFile.add(miLocateHP);
+                menuFile.add(miLocateMP);
+                menuFile.add(miLocateLP);
+                
+                addSeparator();
+                add(menuFile);
+            }            
+            
         } else {
             PluginHelper.add(this, "RemoveRow", DcModules.getCurrent().getIndex());
             PluginHelper.add(this, "AddRow", DcModules.getCurrent().getIndex());
@@ -139,6 +206,65 @@ public class ViewPopupMenu extends DcPopupMenu {
             if (plugin.isShowInPopupMenu()) {
                 addSeparator();
                 add(ComponentFactory.getMenuItem(plugin));
+            }
+        }
+    }
+    
+    private void locateFile(final int precision) {
+        new Thread(new Runnable() { 
+            public void run() {
+                DriveManagerSingleItemMatcher matcher = 
+                    new DriveManagerSingleItemMatcher(dco, precision);
+                matcher.start();
+                try {
+                    matcher.join();
+                } catch (InterruptedException e) {
+                    logger.error(e, e);
+                }
+                
+                FileInfo info = matcher.getResult();
+                if (info != null) {
+                    dco.setValue(dco.getFileField().getIndex(), info.getFilename());
+                    try {
+                        dco.saveUpdate(true, false);
+                    } catch (ValidationException ve) {}
+                }
+            }
+        }).start();        
+    }    
+
+    public void actionPerformed(ActionEvent e) {
+        
+        String filename = dco.getFilename();
+        File file = !Utilities.isEmpty(filename) ? new File(filename) : null;
+        
+        if (e.getActionCommand().equals("deleteFile")) {
+            file.delete();
+            dco.setValue(dco.getFileField().getIndex(), null);
+            try {
+                dco.saveUpdate(true, false);
+            } catch (ValidationException ve) {}
+        } else if (e.getActionCommand().equals("locateFileHP")) {
+            locateFile(DriveManager._PRECISION_HIGHEST);
+        } else if (e.getActionCommand().equals("locateFileMP")) {
+            locateFile(DriveManager._PRECISION_MEDIUM);
+        } else if (e.getActionCommand().equals("locateFileLP")) {
+            locateFile(DriveManager._PRECISION_LOWEST);
+        } else if (e.getActionCommand().equals("moveFile")) {
+            BrowserDialog dialog = new BrowserDialog(DcResources.getText("msgSelectnewLocation"), null);
+            File newDir = dialog.showSelectDirectoryDialog(this, null);
+        
+            if (newDir != null) {
+                try {
+                    File newFile = new File(newDir, file.getName());
+                    Utilities.rename(file, newFile);
+                    dco.setValue(dco.getFileField().getIndex(), newFile.toString());
+                    try {
+                        dco.saveUpdate(true, false);
+                    } catch (ValidationException ve) {}
+                } catch (IOException e1) {
+                    logger.error(e1, e1);
+                }
             }
         }
     }

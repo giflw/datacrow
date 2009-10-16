@@ -39,6 +39,14 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - Container hierarchy: Containers can now be assigned a parent, allowing users to create
   a hierarchical container structure. The grouping pane of the container view has two 
   additional options: 'Flat view' and 'Hierarchical View'. 
+- File operations: The view popup menu and the file launcher field have a new menu
+  called 'File'. Here you'll find five new options:
+  * Move file: moves the actual file and updates the filename of the item.
+  * Delete file: deletes the actual file and clears the filename of the item.
+  * Locate file: three options to locate a file using the drive manager. This is a 
+    convenient way to locate an individual file that has been moved. The functionality
+    uses the drive manager functionality and offers to match on filename, filename +
+    file size or on file size + hash. 
 
 [Changed]
 - Added additional font rendering options (Settings > Settings > Font).

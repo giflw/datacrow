@@ -49,6 +49,7 @@ import net.datacrow.console.windows.drivemanager.DriveManagerSingleItemMatcher;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.drivemanager.DriveManager;
 import net.datacrow.drivemanager.FileInfo;
 import net.datacrow.util.DcSwingUtilities;
@@ -223,12 +224,12 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
             
             DcPopupMenu popup = new DcPopupMenu();
             
-            JMenuItem miClear = ComponentFactory.getMenuItem(DcResources.getText("lblClearField"));
+            JMenuItem miClear = ComponentFactory.getMenuItem(IconLibrary._icoDelete, DcResources.getText("lblClearField"));
             miClear.addActionListener(this);
             miClear.setActionCommand("clear");
             miClear.setEnabled(file != null);
 
-            JMenuItem miDelete = ComponentFactory.getMenuItem(DcResources.getText("lblDeleteFile"));
+            JMenuItem miDelete = ComponentFactory.getMenuItem(IconLibrary._icoDelete, DcResources.getText("lblDeleteFile"));
             miDelete.addActionListener(this);
             miDelete.setActionCommand("deleteFile");
             miDelete.setEnabled(file != null && file.exists());
@@ -238,28 +239,31 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
             miMove.setActionCommand("moveFile");
             miMove.setEnabled(file != null && file.exists());
 
-            JMenuItem miLocateHP = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnHashAndSize")));
+            JMenuItem miLocateHP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnHashAndSize")));
             miLocateHP.addActionListener(this);
             miLocateHP.setActionCommand("locateFileHP");
             miLocateHP.setEnabled(file != null && !file.exists() && parent != null);
             
-            JMenuItem miLocateMP = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilenameAndSize")));
+            JMenuItem miLocateMP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilenameAndSize")));
             miLocateMP.addActionListener(this);
             miLocateMP.setActionCommand("locateFileMP");
             miLocateMP.setEnabled(file != null && !file.exists() && parent != null);            
 
-            JMenuItem miLocateLP = ComponentFactory.getMenuItem(DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilename")));
-            miLocateMP.addActionListener(this);
-            miLocateMP.setActionCommand("locateFileLP");
-            miLocateMP.setEnabled(file != null && !file.exists() && parent != null);            
+            JMenuItem miLocateLP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilename")));
+            miLocateLP.addActionListener(this);
+            miLocateLP.setActionCommand("locateFileLP");
+            miLocateLP.setEnabled(file != null && !file.exists() && parent != null);            
             
             popup.add(miClear);
             popup.addSeparator();
             popup.add(miDelete);
-            popup.add(miMove);
-            popup.add(miLocateLP);
-            popup.add(miLocateMP);
-            popup.add(miLocateHP);
+            
+            if (SecurityCentre.getInstance().getUser().isAdmin()) {
+                popup.add(miMove);
+                popup.add(miLocateLP);
+                popup.add(miLocateMP);
+                popup.add(miLocateHP);
+            }
             
             popup.show(this, e.getX(), e.getY());
         } 
