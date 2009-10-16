@@ -92,7 +92,6 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
         exporter = new ModuleExporter(def.getModule(), new File(def.getPath()));
         exporter.setExportData(def.isExportDataMainModule());
         exporter.setExportDataRelatedMods(def.isExportDataRelatedModules());
-        exporter.setExportRelatedMods(def.isExportRelatedModules());
         
         try { 
             exporter.start(this);

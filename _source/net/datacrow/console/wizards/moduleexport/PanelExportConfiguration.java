@@ -40,7 +40,6 @@ import net.datacrow.util.Utilities;
 
 public class PanelExportConfiguration extends ModuleExportWizardPanel {
 
-	private static final String _EXPORT_RELATED_MODULES = "export_related_modules";
 	private static final String _EXPORT_DATA_RELATED_MODULES = "export_data_related_modules";
 	private static final String _EXPORT_DATA_MAIN_MODULE = "export_data_main_module";
 	private static final String _PATH = "export_path";
@@ -64,7 +63,6 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
     	} else {
 	    	definition.setExportDataRelatedModules(((Boolean) group.getSettings().get(_EXPORT_DATA_RELATED_MODULES).getValue()).booleanValue());
 	    	definition.setExportDataMainModule(((Boolean) group.getSettings().get(_EXPORT_DATA_MAIN_MODULE).getValue()).booleanValue());
-	    	definition.setExportDataRelatedModules(((Boolean) group.getSettings().get(_EXPORT_RELATED_MODULES).getValue()).booleanValue());
 	    	definition.setPath(path);
     	}
     	
@@ -76,7 +74,6 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
 		ExportDefinition definition = getDefinition();
 		
 		if (definition != null) {
-			group.getSettings().get(_EXPORT_RELATED_MODULES).setValue(definition.isExportRelatedModules());
 			group.getSettings().get(_EXPORT_DATA_RELATED_MODULES).setValue(definition.isExportDataRelatedModules());
 			group.getSettings().get(_EXPORT_DATA_MAIN_MODULE).setValue(definition.isExportDataMainModule());
 		}
@@ -99,9 +96,6 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_DATA_MAIN_MODULE, Boolean.FALSE, ComponentFactory._CHECKBOX,
                 "",  DcResources.getText("lblExportModuleItemsMain"), false, false));
-        group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
-        		PanelExportConfiguration._EXPORT_RELATED_MODULES, Boolean.TRUE, ComponentFactory._CHECKBOX,
-                "", DcResources.getText("lblExportRelatedModules"), false, false));
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_DATA_RELATED_MODULES, Boolean.TRUE, ComponentFactory._CHECKBOX,
                 "", DcResources.getText("lblExportModuleItemsSub"), false, false));     

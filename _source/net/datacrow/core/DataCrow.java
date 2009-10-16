@@ -446,15 +446,23 @@ public class DataCrow {
                 System.out.println();
             
             if (module.isTopModule()) {
-                for (DcModule referenced1 : DcModules.getReferencedModules(module.getIndex())) {
-                    for (DcModule referenced2 : DcModules.getReferencedModules(referenced1.getIndex())) {
-                        saveDefaultData(referenced2);
-                    }
-                    saveDefaultData(referenced1);
-                }
-                saveDefaultData(module);
+
+                if (module.isParentModule())
+                    loadDefaultData(module.getChild());
+
+                loadDefaultData(module);
             }
         }
+    }
+    
+    private static void loadDefaultData(DcModule module) {
+        for (DcModule referenced1 : DcModules.getReferencedModules(module.getIndex())) {
+            for (DcModule referenced2 : DcModules.getReferencedModules(referenced1.getIndex())) {
+                saveDefaultData(referenced2);
+            }
+            saveDefaultData(referenced1);
+        }
+        saveDefaultData(module);
     }
         
     private static void saveDefaultData(DcModule module) {
@@ -469,9 +477,14 @@ public class DataCrow {
             items = module.getDefaultData();
             if (items != null) {
                 for (DcObject item : items) {
-//                    item.setSynchronizeWithDM(false);
                     item.setSilent(true);
                     item.saveNew(false);
+                    if (item.getCurrentChildren() != null) {
+                        for (DcObject child : item.getCurrentChildren()) {
+                            child.setSilent(true);
+                            child.saveNew(false);
+                        }
+                    }
                 }
             }
         } catch (Exception e) {

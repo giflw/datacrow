@@ -129,15 +129,6 @@ public class ModuleImporter {
                             writeToFile(bis, new File(DataCrow.moduleDir, name));
                             ModuleJar moduleJar = new ModuleJar(name);
                             moduleJar.load();
-                            
-                            XmlModule xm = moduleJar.getModule();
-                            XmlModule xmNew = new XmlModule(xm);
-                            
-                            xm.setModuleClass(xmNew.getModuleClass());
-                            xm.setObject(xmNew.getObject());
-                            xm.setChildIndex(-1);
-                            xm.setParentIndex(-1);
-                            
                             modules.add(moduleJar);
                         }
                     }
@@ -172,10 +163,24 @@ public class ModuleImporter {
 	            for (ModuleJar other : modules) {
 	                
 	                if (other == mj) continue;
+	
+	                XmlModule xmOther = other.getModule();
 	                
-	                for (XmlField field : other.getModule().getFields()) {
+	                if (xmOther.getParentIndex() == oldIdx)
+	                    xmOther.setParentIndex(newIdx);
+
+                   if (xmOther.getChildIndex() == oldIdx)
+                        xmOther.setChildIndex(newIdx);
+	                
+	                for (XmlField field : xmOther.getFields()) {
 	                    if (field.getModuleReference() == oldIdx)
 	                        field.setModuleReference(newIdx);
+	                }
+	                
+	                try {
+	                    other.save();
+	                } catch (ModuleJarException e) {
+	                    logger.error(e, e);
 	                }
 	            }
 	            

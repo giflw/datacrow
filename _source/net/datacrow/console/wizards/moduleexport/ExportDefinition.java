@@ -32,7 +32,6 @@ public class ExportDefinition {
     private String path;
     
     private int module;
-    private boolean exportRelatedModules = true;
     private boolean exportDataMainModule = false;
     private boolean exportDataRelatedModules = true;
 
@@ -52,14 +51,6 @@ public class ExportDefinition {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public boolean isExportRelatedModules() {
-        return exportRelatedModules;
-    }
-
-    public void setExportRelatedModules(boolean exportRelatedModules) {
-        this.exportRelatedModules = exportRelatedModules;
     }
 
     public boolean isExportDataMainModule() {

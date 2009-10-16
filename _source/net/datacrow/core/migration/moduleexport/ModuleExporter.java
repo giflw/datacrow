@@ -31,7 +31,6 @@ public class ModuleExporter {
 
 	private int module;
 	
-	private boolean exportRelatedMods = false;
 	private boolean exportData = false;
 	private boolean exportDataRelatedMods = false;
 	
@@ -48,14 +47,6 @@ public class ModuleExporter {
 	public ModuleExporter(int module, File path) {
 		this.module = module;
 		this.path = path;
-	}
-
-	/**
-	 * Indicates whether the related custom modules should also be exported.
-	 * @param exportRelatedMods
-	 */
-	public void setExportRelatedMods(boolean exportRelatedMods) {
-		this.exportRelatedMods = exportRelatedMods;
 	}
 
     /**
@@ -86,10 +77,6 @@ public class ModuleExporter {
 	 */
 	private File getPath() {
 		return path;
-	}
-
-	private boolean isExportRelatedMods() {
-		return exportRelatedMods;
 	}
 
 	private boolean isExportData() {
@@ -132,15 +119,23 @@ public class ModuleExporter {
 		    client.notifyNewTask();
 		    
 			Collection<DcModule> modules = new ArrayList<DcModule>();
-			modules.add(DcModules.get(module));
-			
-			if (parent.isExportRelatedMods()) {
-				for (DcModule reference : DcModules.getReferencedModules(module))
-				    if (!reference.isAbstract() && 
-				         reference.getIndex() != DcModules._CONTACTPERSON)
-				        modules.add(reference);
-			}
+			DcModule main = DcModules.get(module); 
+			modules.add(main);
 
+			for (DcModule reference : DcModules.getReferencedModules(module))
+			    if (!reference.isAbstract() && reference.getIndex() != DcModules._CONTACTPERSON)
+			        modules.add(reference);
+
+	        if (main.isParentModule()) {
+                modules.add(main.getChild());
+                for (DcModule reference : DcModules.getReferencedModules(main.getChild().getIndex())) {
+                    if (!modules.contains(reference) && !reference.isAbstract() && 
+                         reference.getIndex() != DcModules._CONTACTPERSON) {
+                        modules.add(reference);
+                    }
+                }
+	        }
+			
 			client.notifyStarted(modules.size());
 			
 			try {
@@ -179,8 +174,9 @@ public class ModuleExporter {
 					}
 					
 					// item export
-					if (((module.getIndex() == parent.getModule() || (module instanceof ExternalReferenceModule)) && parent.isExportData()) ||
-					   (!(module instanceof ExternalReferenceModule) && module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods())) {
+					if (!module.isChildModule() &&
+                        (((module.getIndex() == parent.getModule() || module instanceof ExternalReferenceModule) && parent.isExportData()) ||
+ 					    (!(module instanceof ExternalReferenceModule) && module.getIndex() != parent.getModule() && parent.isExportDataRelatedMods()))) {
 					
 					    try {
     					    exportData(module.getIndex());
