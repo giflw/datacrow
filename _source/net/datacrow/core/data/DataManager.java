@@ -54,6 +54,8 @@ import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.db.Query;
+import net.datacrow.core.db.QueryOptions;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -755,7 +757,6 @@ public class DataManager {
      */
     private static DcObject getObjectForDisplayValue(int module, String s) {
         DcObject dco = DcModules.get(module).getDcObject();
-
         dco.setValue(dco.getSystemDisplayFieldIdx(), s);
         
         try {
@@ -765,6 +766,16 @@ public class DataManager {
                     return o;
             }
 
+            if (dco instanceof DcProperty) {
+                dco = DcModules.get(module).getDcObject();
+                dco.setValue(DcProperty._C_ALTERNATIVE_NAMES, ";" + s.toUpperCase() + ";");
+                QueryOptions options = new QueryOptions(null, true, false);
+                Query query = new Query(Query._SELECT, dco, options, null);
+                c = DatabaseManager.executeQuery(query, false);
+                for (DcObject o : c) {
+                   return o;
+                }
+            }
         } catch (SQLException e) {
             logger.error(e, e);
         }

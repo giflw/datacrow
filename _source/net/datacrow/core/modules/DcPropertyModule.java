@@ -184,14 +184,17 @@ public class DcPropertyModule extends DcModule {
     protected void initializeFields() {
         super.initializeFields();
         addField(new DcField(DcProperty._A_NAME, getIndex(), "Name", 
-                             false, true, false, true, false,
-                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-                             "Name"));
+                false, true, false, true, false,
+                255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                "Name"));
         addField(new DcField(DcProperty._B_ICON, getIndex(), "Icon", 
-                             false, true, false, false, false,
-                             255, ComponentFactory._PICTUREFIELD, getIndex(), DcRepository.ValueTypes._ICON,
-                             "Icon"));
-        
+                false, true, false, false, false,
+                255, ComponentFactory._PICTUREFIELD, getIndex(), DcRepository.ValueTypes._ICON,
+                "Icon"));
+        addField(new DcField(DcProperty._C_ALTERNATIVE_NAMES, getIndex(), "Alternative Names", 
+                false, true, false, false, true,
+                4000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                "alternative_names"));        
         getField(DcObject._ID).setEnabled(false);
     }  
     

@@ -39,6 +39,7 @@ public class DcProperty extends DcObject {
 
     public static final int _A_NAME = 150;
     public static final int _B_ICON = 151;
+    public static final int _C_ALTERNATIVE_NAMES = 152;
     
     /**
      * Creates a new instance.
