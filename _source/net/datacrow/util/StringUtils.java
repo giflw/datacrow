@@ -138,7 +138,7 @@ public class StringUtils {
         return result;
     }      
     
-    public static Long getContainedNumber(String s) {
+    public static String getContainedNumber(String s) {
         
         if (s.indexOf("%20") > -1)
             s = s.replaceAll("%20", "");
@@ -149,7 +149,7 @@ public class StringUtils {
             if ("0123456789".indexOf(c) != -1)
                 sb.append(c);
         }
-        return sb.length() > 0 ? Long.valueOf(sb.toString()) : null;
+        return sb.toString();
     }
     
     public static int backtrack(String s, int start, String to) {

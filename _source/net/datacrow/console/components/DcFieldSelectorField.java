@@ -141,7 +141,7 @@ public class DcFieldSelectorField extends JComponent implements IComponent {
         int y = 0;
 
         for (DcField field : dco.getFields()) {
-            if (field.getIndex() != DcObject._ID) {
+            if (field.getIndex() != DcObject._ID && field.getIndex() != DcObject._SYS_EXTERNAL_REFERENCES) {
                 JCheckBox checkBox = ComponentFactory.getCheckBox(field.getLabel());
                 componentMap.put(field, checkBox);
     

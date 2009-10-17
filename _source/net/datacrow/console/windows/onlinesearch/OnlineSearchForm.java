@@ -179,7 +179,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         for (DcField field : dco.getFields()) {
             boolean allowed = false;
             for (int i = 0; fields != null && i < fields.length; i++) {
-                if (field.getIndex() == fields[i])
+                if (field.getIndex() == fields[i] || field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES)
                     allowed = true;
             }
             
@@ -221,17 +221,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             
             final DcObject o = oir.getDcObject();
             
-            for (DcField field : o.getFields()) {
-                boolean allowed = false;
-                for (int fieldIdx : getModule().getSettings().getIntArray(DcRepository.ModuleSettings.stOnlineSearchRetrievedFields)) {
-                    if (fieldIdx == field.getIndex())
-                        allowed = true;
-                }
-                if (!allowed) {
-                    dco.setValue(field.getIndex(), null);
-                    o.setValue(field.getIndex(), null);
-                }
-            }
+            removeValues(o);
+            removeValues(dco);
             
             loadedItems.put(items.indexOf(dco), Boolean.TRUE);
             SwingUtilities.invokeLater(
