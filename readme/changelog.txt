@@ -101,6 +101,9 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
   language pack.
 - Online Search: the setting 'values to retrieve' is completely ignored 
   when the setting 'retrieve full item details on initial run' is switch off. 
+- Discogs online search did no longer retrieve the tracks and other information. The
+  Discogs site was changed and this broke the online service. This one has been
+  reimplemented.  
   
 
 -----------------------------------------------------------------------------------------
