@@ -82,14 +82,24 @@ public class StringUtils {
     }
     
     public static String trim(String s) {
-        String text = s.trim();
-        while (text.length() > 1 && (text.startsWith("\n") || text.startsWith("\r")))
-            text = text.substring(1);
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (c == '\n' || c == '\r' || c == '\t' || c == ' ' || Character.isSpaceChar(c)) 
+                s = s.substring(1);
+            else 
+                break;
+        }
 
-        while (text.length() > 1 && (text.endsWith("\n") || text.endsWith("\r")))
-            text = text.substring(0, text.length() - 1);
+        for (int i = chars.length - 1; i >= 0; i--) {
+            char c = chars[i];
+            if (c == '\n' || c == '\r' || c == '\t' || c == ' ')
+                s = s.substring(0, s.length() - 1);
+            else 
+                break;
+        }
 
-        return text.trim();
+        return s;
     }
 
     public static boolean equals(String s1, String s2) {
