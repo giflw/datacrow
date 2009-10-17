@@ -28,7 +28,7 @@ Framework changes:
 [x] [2862698] Add fields "Aspect Ratio" and "Color" to movie fields
 [x] [2862688] IMDB wrapper doesn't fill in "Languages" field
 [x] [2874556] Date field
-[ ] [2869347] Out of Memory while parsing AVI file
+[-] [2869347] Out of Memory while parsing AVI file
 [-] [2864974] Send online search query "as is" (without modifications)
 
 Unplanned

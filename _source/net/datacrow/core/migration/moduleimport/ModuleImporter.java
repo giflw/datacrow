@@ -151,7 +151,7 @@ public class ModuleImporter {
 		        XmlModule xm = mj.getModule();
 		        
 		        // module does not exist
-		        if (DcModules.get(xm.getIndex()) == null) continue;
+		        if (DcModules.get(xm.getName()) != null) continue;
 
 	            int oldIdx = xm.getIndex();
 	            int newIdx = DcModules.getAvailableIdx(xm);
@@ -160,31 +160,34 @@ public class ModuleImporter {
 
 	            // module does already exist and needs to be renumbered
                 // all references must also be updated..
-	            for (ModuleJar other : modules) {
-	                
-	                if (other == mj) continue;
-	
-	                XmlModule xmOther = other.getModule();
-	                
-	                if (xmOther.getParentIndex() == oldIdx)
-	                    xmOther.setParentIndex(newIdx);
-
-                   if (xmOther.getChildIndex() == oldIdx)
-                        xmOther.setChildIndex(newIdx);
-	                
-	                for (XmlField field : xmOther.getFields()) {
-	                    if (field.getModuleReference() == oldIdx)
-	                        field.setModuleReference(newIdx);
-	                }
-	                
-	                try {
-	                    other.save();
-	                } catch (ModuleJarException e) {
-	                    logger.error(e, e);
+	            Collection<ModuleJar> others = new ArrayList<ModuleJar>();
+	            others.addAll(modules);
+	            for (ModuleJar other : others) {
+	                if (other != mj) {
+    	                XmlModule xmOther = other.getModule();
+    	                
+    	                if (xmOther.getParentIndex() == oldIdx)
+    	                    xmOther.setParentIndex(newIdx);
+    
+                        if (xmOther.getChildIndex() == oldIdx)
+                            xmOther.setChildIndex(newIdx);
+    	                
+    	                for (XmlField field : xmOther.getFields()) {
+    	                    if (field.getModuleReference() == oldIdx)
+    	                        field.setModuleReference(newIdx);
+    	                }
+    	                
+    	                try {
+    	                    other.save();
+    	                } catch (ModuleJarException e) {
+    	                    logger.error(e, e);
+    	                }
 	                }
 	            }
 	            
 	            try {
+	                // fake registration to make sure the index is known
+	                DcModules.register(new DcModule(xm));
                     mj.save();
                 } catch (ModuleJarException e) {
                     logger.error(e, e);
