@@ -95,7 +95,9 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - IMDB online service: when a movie has several countries it is imported as a single
   country (item "USA, The Netherlands" instead of two separate items).
 - Several encoding issues for the online services.
-
+- Exported items using the XML exported can not be imported on a system using a different
+  language pack.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.5.1 [Release on 26/09/2009] [testing: high] [target: production]
