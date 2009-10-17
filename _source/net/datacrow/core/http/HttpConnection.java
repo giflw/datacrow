@@ -88,7 +88,7 @@ public class HttpConnection {
         try {
             StringBuffer sb = new StringBuffer();
             BufferedInputStream in = new BufferedInputStream(uc.getInputStream());
-            InputStreamReader reader = new InputStreamReader(in, charset);
+            InputStreamReader reader = charset != null ? new InputStreamReader(in, charset) : new InputStreamReader(in);
             
             int c;
             while ((c = reader.read()) != -1)

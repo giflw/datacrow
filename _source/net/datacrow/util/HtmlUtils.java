@@ -50,19 +50,18 @@ public class HtmlUtils {
     private static Logger logger = Logger.getLogger(HtmlUtils.class.getName());
 
     public static Document getDocument(URL url) throws Exception {
-        return getDocument(url, null);
+        return getDocument(url, "ISO-8859-1");
     }
     
     public static Document getDocument(URL url, String charset) throws Exception {
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         
-        charset = charset == null ? "ISO-8859-1" : charset;
         String s = connection.getString(charset);
         
         connection.close();        
 
-        Document document = getDocument(s, charset);
+        Document document = getDocument(s);
         return document;
     }
 
@@ -84,7 +83,7 @@ public class HtmlUtils {
                 s = sb.toString();
             }
             
-            Document document = getDocument(s, charset);
+            Document document = getDocument(s);
                 
             XPath xpath = XPathFactory.newInstance().newXPath();
             Node node = (Node) xpath.evaluate("/html/body", document, XPathConstants.NODE);
@@ -106,7 +105,7 @@ public class HtmlUtils {
         return html;
     }   
     
-    protected static Document getDocument(String html, String charset) throws Exception { 
+    protected static Document getDocument(String html) throws Exception { 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         
@@ -146,9 +145,9 @@ public class HtmlUtils {
                 sb.append(part2);
             }
             
-            in = new ByteArrayInputStream(sb.toString().getBytes(charset));
+            in = new ByteArrayInputStream(sb.toString().getBytes());
         } else {
-            in = new ByteArrayInputStream(s.getBytes(charset));
+            in = new ByteArrayInputStream(s.getBytes());
         }
 
         // construct all and create a parser
