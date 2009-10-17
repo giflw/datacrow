@@ -28,6 +28,7 @@ package net.datacrow.core.services;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
@@ -152,7 +153,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
      * @param query
      * @return Collection of results.
      */
-    public Collection<DcObject> query(String query, DcObject client) {
+    public List<DcObject> query(String query, DcObject client) {
         IServer server = getServer();
         Region region = getRegion(server);
         
