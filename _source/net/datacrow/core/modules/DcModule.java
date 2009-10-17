@@ -1418,7 +1418,7 @@ public class DcModule implements Comparable<DcModule> {
      * @throws Exception
      */
     public Collection<DcObject> getDefaultData() throws Exception {
-        
+
         File csvFile = new File(DataCrow.moduleDir + "data", getTableName() + ".data");
         File xmlFile = new File(DataCrow.moduleDir + "data", getTableName() + ".xml");
         

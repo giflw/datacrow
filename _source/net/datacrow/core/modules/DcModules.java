@@ -47,6 +47,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.StringUtils;
 import net.datacrow.util.filefilters.FileNameFilter;
 
 import org.apache.log4j.Logger;
@@ -400,7 +401,7 @@ public class DcModules {
                     // Else.. derive a new index and assign a new and unique table name.
                     derivedIdx = sourceIdx + mod.getIndex();
                     DcPropertyModule pm = propMod.getInstance(derivedIdx, 
-                            module.getName() + " " + propMod.getName(),  
+                            StringUtils.capitalize(module.getName()) + " " + StringUtils.capitalize(propMod.getName()),  
                             mod.getTableName() + "_" + propMod.getTableName(), 
                             mod.getTableShortName() + propMod.getTableShortName(),
                             propMod.getSystemObjectName(), propMod.getSystemObjectNamePlural());

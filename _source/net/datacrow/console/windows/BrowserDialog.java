@@ -117,17 +117,8 @@ public class BrowserDialog extends JFrame {
     }
     
     private void rememberUsedDirectory(File file) {
-        if (file != null) {
-            String s = file.toString();
-
-            try {
-            
-            	if (file.isFile() || !file.isDirectory())
-            		s = s.substring(0, s.lastIndexOf(File.separator));
-            
-            } catch (Exception ignore) {}
-            
-            DcSettings.set(DcRepository.Settings.stLastDirectoryUsed, s);
+        if (file != null && file.getParentFile() != null) {
+            DcSettings.set(DcRepository.Settings.stLastDirectoryUsed, file.getParentFile().toString());
         }        
     }
 }

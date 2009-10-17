@@ -242,7 +242,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         references = references == null ? new ArrayList<DcObject>() : references;
         for (DcObject mapping : references) {
             DcObject reference = ((DcMapping) mapping).getReferencedObject();
-            if (reference.getValue(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
+
+            if (    reference != null &&
+                    reference.getValue(ExternalReference._EXTERNAL_ID_TYPE) != null &&
+                    reference.getValue(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
+                
                 return (String) reference.getValue(ExternalReference._EXTERNAL_ID);
             }
         }
@@ -268,7 +272,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             }
         }
         
-        if (!set) {
+        if (!set && !Utilities.isEmpty(type)) {
             ExternalReference er = new ExternalReference(module + DcModules._EXTERNALREFERENCE);
             er.setValue(ExternalReference._EXTERNAL_ID, key);
             er.setValue(ExternalReference._EXTERNAL_ID_TYPE, type);
