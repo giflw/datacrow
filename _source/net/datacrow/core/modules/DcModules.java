@@ -44,7 +44,6 @@ import net.datacrow.core.modules.upgrade.ModuleUpgradeException;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.StringUtils;
@@ -164,49 +163,30 @@ public class DcModules {
         propertyBaseModules.put(DcModules._EXTERNALREFERENCE, new ExternalReferenceModule());
         
         propertyBaseModules.put(DcModules._CATEGORY, 
-                       new DcPropertyModule(DcModules._CATEGORY, "Category", 
-                                            "category", "cat",
-                                            DcResources.getText("sysCategory"),
-                                            DcResources.getText("sysCategoryPlural")));
+                       new DcPropertyModule(DcModules._CATEGORY, "Category", "category", "cat", "Category", "Categories"));
         
-        DcPropertyModule stateModule = new DcPropertyModule(DcModules._STATE, "State", 
-                "state", "st", DcResources.getText("sysState"), DcResources.getText("sysStatePlural"));
+        DcPropertyModule stateModule = new DcPropertyModule(DcModules._STATE, "State", "state", "st", "State", "States");
         stateModule.setIcon16(IconLibrary._icoState16);
         stateModule.setIcon32(IconLibrary._icoState32);
-        
         propertyBaseModules.put(DcModules._STATE, stateModule);
         
-        DcPropertyModule platformModule = new DcPropertyModule(DcModules._PLATFORM, "Platform", 
-                "platform", "pf", DcResources.getText("sysPlatform"), DcResources.getText("sysPlatformPlural"));
+        DcPropertyModule platformModule = new DcPropertyModule(DcModules._PLATFORM, "Platform", "platform", "pf", "Platform", "Platforms");
         platformModule.setIcon16(IconLibrary._icoPlatform16);
         platformModule.setIcon32(IconLibrary._icoPlatform32);
         propertyBaseModules.put(DcModules._PLATFORM, platformModule);    
 
         
-        DcPropertyModule mediumModule = new DcPropertyModule(DcModules._STORAGEMEDIA, "Storage Medium", 
-                "storagemedium", "stme", DcResources.getText("sysStorageMedium"), DcResources.getText("sysStorageMediumPlural"));
+        DcPropertyModule mediumModule = new DcPropertyModule(DcModules._STORAGEMEDIA, "Storage Medium", "storagemedium", "stme", "Storage Medium", "Storage Media");
         mediumModule.setIcon16(IconLibrary._icoStorageMedium16);
         mediumModule.setIcon32(IconLibrary._icoStorageMedium32);
         propertyBaseModules.put(DcModules._STORAGEMEDIA, mediumModule);
         
-        propertyBaseModules.put(DcModules._CONTAINERTYPE, 
-                       new DcPropertyModule(DcModules._CONTAINERTYPE, "Container Type", 
-                                            "containertype", "coty",
-                                            DcResources.getText("sysContainerType"),
-                                            DcResources.getText("sysContainerTypePlural")));  
-        propertyBaseModules.put(DcModules._GENRE, 
-                       new DcPropertyModule(DcModules._GENRE, "Genre", 
-                                            "genre", "gr",
-                                            DcResources.getText("sysGenre"),
-                                            DcResources.getText("sysGenrePlural")));
-        DcPropertyModule musicGenreMod =
-                        new DcPropertyModule(DcModules._MUSICGENRE, "Music Genre", "musicgenre", "musgr",
-                                           DcResources.getText("sysMusicGenre"), 
-                                           DcResources.getText("sysMusicGenrePlural"));
+        propertyBaseModules.put(DcModules._CONTAINERTYPE, new DcPropertyModule(DcModules._CONTAINERTYPE, "Container Type", "containertype", "coty", "Container Type", "Container Types"));  
+        propertyBaseModules.put(DcModules._GENRE, new DcPropertyModule(DcModules._GENRE, "Genre", "genre", "gr", "Genre", "Genres"));
+        DcPropertyModule musicGenreMod = new DcPropertyModule(DcModules._MUSICGENRE, "Music Genre", "musicgenre", "musgr", "Music Genre", "Music Genres");
         
         musicGenreMod.setServingMultipleModules(true);
         propertyBaseModules.put(DcModules._MUSICGENRE, musicGenreMod);
-        
         
         DcPropertyModule countryModule = new DcPropertyModule(DcModules._COUNTRY, "Country", "country", "country", "Country", "Countries");
         countryModule.setServingMultipleModules(true);
@@ -387,6 +367,7 @@ public class DcModules {
 
             if (propertyBaseModules.containsKey(sourceIdx)) {
                 DcPropertyModule propMod = propertyBaseModules.get(sourceIdx);
+                
                 if (propMod.isServingMultipleModules()) {
                     // A module which serves multiple other modules gets the same table name..
                     // Also the module will keep its original index. No other magic involved.

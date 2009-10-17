@@ -63,7 +63,7 @@ public class DcResources {
      */
     private void initialize() {
         String[] propertyFiles = {"DcLabels.properties", "DcMessages.properties", "DcTooltips.properties",
-                                  "DcAudioCodecs.properties", "DcSystem.properties", "DcTips.properties"}; 
+                                  "DcAudioCodecs.properties", "DcTips.properties"}; 
         
         DcLanguageResource english = new DcLanguageResource("English");
         for (String propertyFile : propertyFiles) {

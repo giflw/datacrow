@@ -84,6 +84,8 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - IMDB online search now retrieves the color, aspect ratio and language.
 - Amazon service now retrieves the color (if available) and the aspect ratio.
 - Ofdb.de now adds an external reference to the item on the IMDB.com page.
+- Icons_user directory has been removed. Icons_system folder is now called icons.
+- Default data (demo data) can now also be an XML file. 
 
 [Fixed]
 - "Pick a Date": larger set of years to make the navigation easier + a fix for the up and 

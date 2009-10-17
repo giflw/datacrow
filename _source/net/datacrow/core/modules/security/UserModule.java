@@ -16,7 +16,6 @@ import net.datacrow.core.modules.DcParentModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.User;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 
 /**
@@ -38,8 +37,8 @@ public class UserModule extends DcParentModule {
               true,
               "User",
               "",
-              DcResources.getText("sysUser"), 
-              DcResources.getText("sysUserPlural"), 
+              "User", 
+              "Users", 
               "user", 
               "usr");
     }

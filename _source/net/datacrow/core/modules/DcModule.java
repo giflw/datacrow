@@ -128,6 +128,10 @@ public class DcModule implements Comparable<DcModule> {
     private final String moduleResourceKey;
     private final String itemResourceKey;
     private final String itemPluralResourceKey;
+
+    private final String systemObjectName;
+    private final String systemObjectNamePlural;
+
     
     private final String objectName;
     private final String objectNamePlural;
@@ -217,6 +221,10 @@ public class DcModule implements Comparable<DcModule> {
         this.description = description;
         
         this.topModule = topModule;
+
+        this.systemObjectName = objectName;
+        this.systemObjectNamePlural = objectNamePlural;
+
         this.objectName = objectName;
         this.objectNamePlural = objectNamePlural;
         
@@ -415,7 +423,7 @@ public class DcModule implements Comparable<DcModule> {
      * The name of the items belonging to this module without translating it.
      */
     public String getSystemObjectName() {
-        return objectName;
+        return systemObjectName;
     }    
     
     /**
@@ -433,7 +441,7 @@ public class DcModule implements Comparable<DcModule> {
      * The plural name of the items belonging to this module without translating it.
      */
     public String getSystemObjectNamePlural() {
-        return objectNamePlural;
+        return systemObjectNamePlural;
     }
     
     

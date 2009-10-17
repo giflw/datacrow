@@ -30,7 +30,6 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.Settings;
 
 /**
@@ -50,8 +49,8 @@ public class LoanModule extends DcModule {
               false, 
               "Loan", 
               "", 
-              DcResources.getText("sysLoan"),
-              DcResources.getText("sysLoan"),
+              "Loan",
+              "Loans",
               "loans", 
               "lo");
     }

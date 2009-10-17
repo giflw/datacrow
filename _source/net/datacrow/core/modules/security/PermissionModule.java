@@ -15,7 +15,6 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Permission;
 import net.datacrow.core.objects.helpers.User;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 
 /**
@@ -40,8 +39,8 @@ public class PermissionModule extends DcChildModule {
               false,
               "Permission",
               "",
-              DcResources.getText("sysPermission"), 
-              DcResources.getText("sysPermissionPlural"), 
+              "Permission", 
+              "Permissions", 
               "permission", 
               "perm");
     }

@@ -35,7 +35,6 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 
@@ -60,10 +59,10 @@ public class TemplateModule extends DcModule {
     public TemplateModule(DcModule parent) {
         super(parent.getIndex() + DcModules._TEMPLATE, 
               false, 
-              DcResources.getText("sysTemplate"), 
+              "Template", 
               "",
-              DcResources.getText("sysTemplate"),
-              DcResources.getText("sysTemplatePlural"),
+              "Template",
+              "Templates",
               parent.getTableName() + "_template", 
               parent.getTableShortName() + "temp");
         
@@ -111,22 +110,6 @@ public class TemplateModule extends DcModule {
     public DcObject getDcObject() {
         return new DcTemplate(getIndex(), parent.getIndex());
     }    
-    
-    /**
-     * The name of the objects.
-     */
-    @Override
-    public String getObjectName() {
-        return DcResources.getText("sysTemplate");
-    }
-
-    /**
-     * The plural name of the objects.
-     */
-    @Override
-    public String getObjectNamePlural() {
-        return DcResources.getText("sysTemplatePlural");
-    }
     
     /**
      * The field settings/definitions.
