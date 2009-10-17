@@ -80,6 +80,17 @@ public class StringUtils {
         }
         return "";
     }
+    
+    public static String trim(String s) {
+        String text = s.trim();
+        while (text.length() > 1 && (text.startsWith("\n") || text.startsWith("\r")))
+            text = text.substring(1);
+
+        while (text.length() > 1 && (text.endsWith("\n") || text.endsWith("\r")))
+            text = text.substring(0, text.length() - 1);
+
+        return text;
+    }
 
     public static boolean equals(String s1, String s2) {
         

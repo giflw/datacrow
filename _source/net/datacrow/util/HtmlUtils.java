@@ -49,15 +49,16 @@ public class HtmlUtils {
     
     private static Logger logger = Logger.getLogger(HtmlUtils.class.getName());
 
+    public static Document getDocument(URL url) throws Exception {
+        return getDocument(url, null);
+    }
+    
     public static Document getDocument(URL url, String charset) throws Exception {
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         
-        String s;
-        if ("ISO-8859-1".equals(charset))
-            s = connection.getString();
-        else 
-            s = connection.getString(charset);
+        charset = charset == null ? "ISO-8859-1" : charset;
+        String s = connection.getString(charset);
         
         connection.close();        
 

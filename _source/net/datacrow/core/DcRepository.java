@@ -216,6 +216,7 @@ public abstract class DcRepository {
         public static final String _MOBYGAMES = "MOBYGAMES";
         public static final String _OFDB = "OFDB";
         public static final String _BOL = "BOL";
+        public static final String _ISBNDB = "ISBNDB";
         public static final String _PDCR = "PDCR"; // (P)lain (D)ata (C)row (R)eference ;-)
         
         static {
