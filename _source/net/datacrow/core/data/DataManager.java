@@ -422,9 +422,9 @@ public class DataManager {
                 tab.setValue(Tab._C_ORDER, Long.valueOf(order));
                 
                 if (name.equalsIgnoreCase(DcResources.getText("lblInformation")) || name.equals(DcResources.getText("lblSummary")))
-                    tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons_system" + File.separator + "information.png"));
+                    tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons" + File.separator + "information.png"));
                 else if (name.equalsIgnoreCase(DcResources.getText("lblTechnicalInfo")))
-                    tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons_system" + File.separator + "informationtechnical.png"));
+                    tab.setValue(Tab._B_ICON, new DcImageIcon(DataCrow.installationDir + "icons" + File.separator + "informationtechnical.png"));
                 
                 tab.saveNew(false);
             } catch (Exception e) {

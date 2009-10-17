@@ -60,7 +60,7 @@ public final class SplashScreen extends JWindow {
         //**********************************************************
         //Logo
         //**********************************************************
-        JLabel logo = new JLabel(new ImageIcon(DataCrow.installationDir + "icons_system/logo.jpg"));
+        JLabel logo = new JLabel(new ImageIcon(DataCrow.installationDir + "icons/logo.jpg"));
 
         //**********************************************************
         //Status 

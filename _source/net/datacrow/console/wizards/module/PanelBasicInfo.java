@@ -253,8 +253,8 @@ public class PanelBasicInfo extends ModuleWizardPanel {
 
         
         
-        pic16 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons_system/icon16.png"));
-        pic32 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons_system/icon32.png"));
+        pic16 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon16.png"));
+        pic32 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon32.png"));
         add(ComponentFactory.getLabel(DcResources.getText("lblIcon16")), 
                      Layout.getGBC(0, 10, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

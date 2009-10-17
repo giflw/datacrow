@@ -72,7 +72,7 @@ public class AboutDialog extends DcDialog {
 
         DcPictureField about = ComponentFactory.getPictureField(false, false, false);
         try {
-            about.setValue(new URL("file://" + DataCrow.installationDir + "icons_system/aboutinformation.jpg"));
+            about.setValue(new URL("file://" + DataCrow.installationDir + "icons/aboutinformation.jpg"));
             panelAbout.add(about, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
             GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets(5, 5, 5, 5), 0, 0));
@@ -88,7 +88,7 @@ public class AboutDialog extends DcDialog {
 
         DcPictureField credits = ComponentFactory.getPictureField(false, false, false);
         try {
-            credits.setValue(new URL("file://" + DataCrow.installationDir + "icons_system/aboutcredits.jpg"));
+            credits.setValue(new URL("file://" + DataCrow.installationDir + "icons/aboutcredits.jpg"));
             panelCredits.add(credits, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
             GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets(5, 5, 5, 5), 0, 0));
