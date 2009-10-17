@@ -89,7 +89,7 @@ public class StringUtils {
         while (text.length() > 1 && (text.endsWith("\n") || text.endsWith("\r")))
             text = text.substring(0, text.length() - 1);
 
-        return text;
+        return text.trim();
     }
 
     public static boolean equals(String s1, String s2) {

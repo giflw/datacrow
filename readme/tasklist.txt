@@ -20,7 +20,7 @@ Framework changes:
 [x] Container Hierarchy.
 [x] Clone a module wizard
 [ ] MovieMeter.nl online search
-[ ] Book online search in www.isbndb.com (1886661)
+[x] Book online search in www.isbndb.com (1886661)
 [x] File operations (move, delete and locate)
 [x] [2860480] Arch package for data crow
 [x] [2860913] Extract ISBN from PDF (ISBN Extractor)
