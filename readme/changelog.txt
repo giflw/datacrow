@@ -2,8 +2,10 @@
 Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 ! Note: The minimum Java version is now Java 6 (also known as Java 1.6).
+! Special thanks to David Marín for delivering the Spanish translation.
 
 [New]
+- A Spanish translation. Donated by David Marín. 
 - New feature for the File Import of e-books. The importer will now try and find the ISBN
   that is contained in the PDF document. For this the ISBN Extractor 
   (http://isbnextractor.sourceforge.net) is used.
@@ -97,6 +99,8 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - Several encoding issues for the online services.
 - Exported items using the XML exported can not be imported on a system using a different
   language pack.
+- Online Search: the setting 'values to retrieve' is completely ignored 
+  when the setting 'retrieve full item details on initial run' is switch off. 
   
 
 -----------------------------------------------------------------------------------------
