@@ -179,7 +179,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         for (DcField field : dco.getFields()) {
             boolean allowed = false;
             for (int i = 0; fields != null && i < fields.length; i++) {
-                if (field.getIndex() == fields[i] || field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES)
+                if (field.getIndex() == fields[i] || field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES || field.getIndex() == DcObject._ID)
                     allowed = true;
             }
             
