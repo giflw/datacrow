@@ -88,14 +88,23 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
     public void start() {
         try {
             
+            boolean upgraded = false;
             if (DatabaseManager.getVersion().isOlder(new Version(3, 5, 0, 0))) {
                 convertMappingModules();
                 convertMovieCountriesAndLanguages();
-                DataCrow.showSplashScreen(true);
+                upgraded = true;
             }
             
             if (DatabaseManager.getVersion().isOlder(new Version(3, 6, 0, 0))) {
                 convertExternalReferences();
+                upgraded = true;
+            }
+            
+            if (upgraded) {
+                MessageBox mb = new MessageBox("The upgrade was successful. Data Crow will now continue.", MessageBox._INFORMATION);
+                mb.setVisible(true);
+                LogForm.getInstance().setVisible(false);
+                DataCrow.showSplashScreen(true);
             }
             
         } catch (Exception e) {
