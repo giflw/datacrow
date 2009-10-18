@@ -28,13 +28,21 @@
 
   <ul>
   <li /><i>Copy Images</i><br>Copies the images to a sub folder.
+        If you choose not to export the images a link to the original location of the image will be exported.
   <li /><i>Scale Images</i><br>You can choose to store a smaller version of the original image. Specify the width and the height.
-          The original proportions are kept so that will not end up with malformed image sizes.
+        The original proportions are kept so that will not end up with malformed image sizes.
   </ul>
 
   <h3>Text length</h3>
   You can indicate the maximum text length. The value "0" means that text will not be cut. Data Crow will try and find the nice position possible
   to cut the text. For example right after a dot or an end of line character.
+
+
+  <h2>Limitations</h2>
+  <ul>
+  <li />The text import is not capable of exporting relationships between items.
+  <li />The text import will remove new line characters from the values. Each line of the text file will contain just one item.
+  </ul>
 
 
   </body>

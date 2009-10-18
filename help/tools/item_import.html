@@ -6,8 +6,34 @@
   <body>
 
   <h1>Item Import Wizard</h1>
-  The item import wizard allows you to import items from an external file. The items are directly imported into the database. The wizard
-  will guide you through the process.
+  The item import wizard allows you to import items from an external file. The items are directly imported into the database. Before the wizard is started you will
+  have to select the module into which you would like to import the items.
+
+  <h2>Formats</h2>
+  Select the type of import you would like to perform. For XML files select the XML Import. For text files select the CSV import. A valid CSV contains one item per
+  line. The values of each of the items is separated by a specific character.
+
+  <h2>Configuration</h2>
+  Depending on the format you have chosen some of the configuration options might not be available.
+
+  <ul>
+  <li /><i>Character Set</i><br>Select the character set or encoding. In most cases UTF-8 will be sufficient. In case you end up with items containing strange characters
+  or lotds of questions marks you most likely selected the incorrect character set. Data Crow cannot guess the encoding of the import file. To find out which character set you
+  should use I refer you to the documentation of the application which created the export file. Note that the XML exports of Data Crow are always performed in UTF-8.
+
+  <li /><i>Value separator</i><br>For CSV imports you need to indicate which character was used to separate the values of the items. Set value separator to "TAB" in case
+  tabs were used.
+  </ul>
+
+  <h2>Source field mappings</h2>
+  In case you are importing a CSV file you will be asked to map the source fields to the actual Data Crow fields. This is a crucial step in the import.
+  In case you only see one field make sure you have selected the correct value separator in the previous step. Select for each of the fields of the source the correct
+  target name in the table. The target name can be selected from a drop down.
+
+  <h2>Limitations</h2>
+  <ul>
+  <li />The CSV import will always skip the first line as it expect the field names to be located on this position.
+  </ul>
 
   </body>
 </html>
