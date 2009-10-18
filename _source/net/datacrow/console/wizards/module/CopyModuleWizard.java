@@ -45,8 +45,6 @@ public class CopyModuleWizard extends CreateModuleWizard {
         super();
         
         setTitle(DcResources.getText("lblModuleCopyWizard"));
-
-        // TODO: create help
         setHelpIndex("dc.modules.copy");
     }
     

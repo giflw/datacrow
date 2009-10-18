@@ -52,8 +52,7 @@ public class ExportModuleWizard extends Wizard {
         super();
         
         setTitle(DcResources.getText("lblModuleExportWizard"));
-        //TODO: Add help
-        //setHelpIndex("dc.modules.export");
+        setHelpIndex("dc.modules.export");
 
         setSize(DcSettings.getDimension(DcRepository.Settings.stModuleExportWizardFormSize));
         setCenteredLocation();

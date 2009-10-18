@@ -33,6 +33,9 @@
       <tocitem target="dc.modules.create" text="Creating a Module"/>
       <tocitem target="dc.modules.relate" text="Relating Modules"/>
       <tocitem target="dc.modules.delete" text="Deleting Custom Modules"/>
+      <tocitem target="dc.modules.copy" text="Copy Module Wizard"/>
+      <tocitem target="dc.modules.export" text="Export Module Wizard"/>
+      <tocitem target="dc.modules.import" text="Import Module Wizard"/>
     </tocitem>
 
     <tocitem target="dc.security" text="Security" />

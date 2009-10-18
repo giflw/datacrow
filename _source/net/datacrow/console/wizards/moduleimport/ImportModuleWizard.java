@@ -51,8 +51,7 @@ public class ImportModuleWizard extends Wizard {
         super();
         
         setTitle(DcResources.getText("lblModuleImportWizard"));
-        //TODO: Add help
-        //setHelpIndex("dc.modules.import");
+        setHelpIndex("dc.modules.import");
 
         setSize(DcSettings.getDimension(DcRepository.Settings.stModuleImportWizardFormSize));
         setCenteredLocation();
