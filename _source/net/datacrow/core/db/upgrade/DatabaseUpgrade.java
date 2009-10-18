@@ -92,10 +92,12 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             if (DatabaseManager.getVersion().isOlder(new Version(3, 5, 0, 0))) {
                 upgraded |= convertMappingModules();
                 upgraded |= convertMovieCountriesAndLanguages();
+                upgraded = true;
             }
             
             if (DatabaseManager.getVersion().isOlder(new Version(3, 6, 0, 0))) {
                 upgraded |= convertExternalReferences();
+                upgraded = true;
             }
             
             if (upgraded) {
