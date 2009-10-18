@@ -4,12 +4,11 @@
 [ ] Additional online services (using the new model).
 [ ] Upgrade of the Container module / Global Importer.
 [ ] Zoom in out for the chart panel.
-[ ] Book Module / Additional import.
-[ ] Bibtext implementation
-[ ] [2857434] Better error handling for systems with low resources
+[ ] Book Module / Additional import + bibtext implementation.
+[ ] [2857434] Better error handling for systems with low resources.
 
 Framework changes:
-[ ] Add module type indicator to each module to avoid having to use instanceof
+[ ] Add module type indicator to each module to avoid having to use 'instanceof'.
 
 3.6 
 ---------------------------------------------------------------------------------------------------------
@@ -19,7 +18,7 @@ Framework changes:
     with their module. This functionality will also be used to provide additional custom modules. 
 [x] Container Hierarchy.
 [x] Clone a module wizard
-[ ] MovieMeter.nl online search
+[-] MovieMeter.nl online search
 [x] Book online search in www.isbndb.com (1886661)
 [x] File operations (move, delete and locate)
 [x] [2860480] Arch package for data crow
@@ -37,10 +36,10 @@ Unplanned
 [ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
     Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
 [ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
-[ ] Per user settings. Settings, such a field settings, quick view settings and others are currently 
+[-] Per user settings. Settings, such a field settings, quick view settings and others are currently 
     stored on application level. As a result each and every user has the same settings as determined by 
     the administrator. Data Crow 3.4 will allow administrators to specify if the user should have the 
     default settings (current situation) or if this user is allowed to modify its own settings. Tying 
     a database instance to a user is also under consideration. This would allow users to have multiple 
     accounts, for example one per module (data separation). 
-[ ] Vector graphics support (1895140)
+[x] Vector graphics support (1895140)
