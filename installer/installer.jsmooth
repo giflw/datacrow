@@ -11,7 +11,7 @@
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>setup.exe</executableName>
-<iconLocation>..\icons_system\datacrow.png</iconLocation>
+<iconLocation>..\icons\datacrow.png</iconLocation>
 <initialMemoryHeap>-1</initialMemoryHeap>
 <mainClassName>com.izforge.izpack.installer.Installer</mainClassName>
 <maximumMemoryHeap>-1</maximumMemoryHeap>
