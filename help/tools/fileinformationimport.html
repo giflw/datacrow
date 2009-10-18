@@ -11,45 +11,44 @@
   	has the name &#8216;X import&#8217; (where X is the module name).
 
 
-	<h1>Files / Directories</h1>
+	<h1>Files and Directories</h1>
 	Here you can select the files to import. Navigate the tree and tick the directories and/or filed from which you would like to import the content.
 
 
 	<h1>Settings</h1>
 
-	<h2>Container</h2>
-	Select the container for the imported items. A container can be anything, for example a CD suitcase.
-
-	<h2>Storage Medium</h2>
-	Optionally you can select the Storage Media type on which the to be imported data resides. The storage medium indicates on which type of media the item is stored (CD/DVD/etc.).
+    <lu>
+    <li><i>Container</i>
+         <br>Select the container for the imported items. A container can be anything, for example a CD suitcase.</li>
+    <li><i>Storage Medium</i>
+         <br>Optionally you can select the Storage Media type on which the to be imported data resides. 
+             The storage medium indicates on which type of media the item is stored (CD, DVD, etc.). </li>
+    </lu>
 
     <h2>Directory usage information</h2>
-    Allows directory information to be used for filling fields like the title, album name or
-    artist name (these last two are only available for the music album module). The available options might vary depending on the module you are using.
+    Allows directory information to be used for filling fields like the title, album name or artist name (these last two are only available for the music album module). The available options might vary depending on the module you are using.
+    <lu>
+    <li><i>Use directory name as title</i><br>Select the container for the imported items. A container can be anything, for example a CD suitcase.</li>
+    </lu>
 
-    <h3>Use directory name as title</h3>
-    This option is available for most modules. If selected the lowest directory name is used as the title of the item. This can be useful when you have for example all you movies stored in separate directories like so: d:/movies/title/movie.avi. Instead of relying on the information present in the movie, or using the filename as the title, it would be more convenient to use the directory name instead. Again, this is only applicabel if you have each of your items stored in a separate directory.
+    <h2>Options for music files</h2>
 
-    <h3>Options for music files</h3>
+    <lu>
+    <li><i>Do not use directory information</i>
+         <br>Only use the information from the music file itself, such as the tag information of an mp3.</li>
+    <li><i>Use directory name as album name</i>
+         <br>The directory in which the music file resides has the album name (example ..\..\Abba Gold).</li>
+    <li><i>Use directory name as artist name</i>
+         <br>The directory in which the music file resides has the artist name (example ..\..\Abba).</li>
+    <li><i>Use directory name as artist name and its sub-directory as album name</i>
+         <br>The directory in which the music file resides has the artist name and its sub-directory has the album name
+             (example ..\..\Abba\Abba Gold).</li>
+    </lu>
 
-    <h4>Do not use directory information</h4>
-    Only use the information from the music file itself, such as the tag information of an mp3.
-
-    <h4>Use directory name as album name</h4>
-    The directory in which the music file resides has the album name (example ../../Abba Gold).
-
-    <h4>Use directory name as artist name</h4>
-    The directory in which the music file resides has the artist name (example ../../Abba).
-
-    <h4>Use directory name as artist name and its sub-directory as album name</h4>
-    The directory in which the music file resides has the artist name and its sub-directory has the album name
-    (example ../../Abba/Abba Gold).
-
-
-    <h1>Title Cleaning</h1>
+    <h2>Title Cleaning</h2>
     
     When the directory usage has been de-activated in the settings panel, Data Crow will try to create the title from the filename. As you can imagine
-    this requires some cleaning. In order to get better results you can specify words to be removed from the filename and/or use a regex pattern. 
+    this requires some cleaning. In order to get better results you can specify words to be removed from the filename and &#47; or use a regex pattern. 
     Data Crow will first remove the defined words and then apply the regex pattern.  
 
 	<h2>Remove the following words from the title</h2>
@@ -64,7 +63,6 @@
 
 	<h2>Use Online Service Settings to retrieve missing information</h2>
 	This panel will only appear if the module supports the use of online services. These settings correspond to the settings as found in a normal online search. Please read <a href="../onlinesearch/onlinesearch.html">here</a> for more information.
-
 
 	<h1>Local Art</h1>
 	Local art are pictures, stored on the storage medium, which belong to the imported item.
