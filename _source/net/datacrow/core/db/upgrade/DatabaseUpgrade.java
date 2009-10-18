@@ -90,14 +90,12 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             
             boolean upgraded = false;
             if (DatabaseManager.getVersion().isOlder(new Version(3, 5, 0, 0))) {
-                convertMappingModules();
-                convertMovieCountriesAndLanguages();
-                upgraded = true;
+                upgraded |= convertMappingModules();
+                upgraded |= convertMovieCountriesAndLanguages();
             }
             
             if (DatabaseManager.getVersion().isOlder(new Version(3, 6, 0, 0))) {
-                convertExternalReferences();
-                upgraded = true;
+                upgraded |= convertExternalReferences();
             }
             
             if (upgraded) {
@@ -116,7 +114,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         }            
     }
     
-    private void convertExternalReferences() throws Exception {
+    private boolean convertExternalReferences() throws Exception {
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();
         
@@ -129,7 +127,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             conn.close();
         } catch (Exception e) {
             // new database or ASIN field has already been removed.
-            return;
+            return false;
         }
         
         QuestionBox qb = new QuestionBox("A new functionality has become available; external references. The items currently present in yoru system " +
@@ -174,6 +172,8 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         migrateServiceURL(DcModules.get(DcModules._AUDIOCD));
         migrateServiceURL(DcModules.get(DcModules._MUSICALBUM));
         migrateServiceURL(DcModules.get(DcModules._MUSICARTIST));
+        
+        return true;
     }
     
     private void migrateServiceURL(DcModule module) throws Exception {
@@ -389,7 +389,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
      * Converts the mapping modules to new structure.
      * @throws Exception
      */
-    private void convertMappingModules() throws Exception {
+    private boolean convertMappingModules() throws Exception {
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();
         
@@ -419,9 +419,11 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 }
             }
         }
+        
+        return false;
     }
     
-    private void convertMovieCountriesAndLanguages() throws Exception {
+    private boolean convertMovieCountriesAndLanguages() throws Exception {
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = conn.createStatement();
         
@@ -433,7 +435,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             // no conversion is needed
             stmt.close();
             conn.close();
-            return;
+            return false;
         }
 
         SettingsGroup group = new SettingsGroup("1", "");
@@ -495,7 +497,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         fill(DcModules.get(DcModules._MOVIE), lan, movAudLan, Movie._1_AUDIOLANGUAGE,  "AUDIOLANGUAGE", group.getSettings(), sepLan);
         fill(DcModules.get(DcModules._MOVIE), lan, movSubLan, Movie._2_SUBTITLELANGUAGE, "SUBTITLELANGUAGE", group.getSettings(), sepLan);
         
-        LogForm.getInstance().setVisible(false);
+        return true;
     }
     
     /**
