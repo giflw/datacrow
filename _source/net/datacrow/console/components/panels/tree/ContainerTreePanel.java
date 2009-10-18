@@ -75,6 +75,11 @@ public class ContainerTreePanel extends TreePanel {
     }
     
     @Override
+    public String getName() {
+        return DcModules.get(DcModules._CONTAINER).getObjectNamePlural();
+    }    
+    
+    @Override
     protected void addElement(DcObject dco, DefaultMutableTreeNode parent, int level) {
 
         DcModule module = DcModules.get(DcModules._CONTAINER);

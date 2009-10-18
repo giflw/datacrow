@@ -197,6 +197,8 @@ This application would not have succeeded (or even existed) without the help of:
   http://www.jthink.net/jaudiotagger
 * izPack for providing a smooth way to install Data Crow on multiple platforms.
   http://www.izforge.com/izpack/
+* ISBNExtractor. Extracts ISBNs from PDF documents.
+  http://isbnextractor.sourceforge.net.   
 
 
 ----------------------------------------------------------------------------------------

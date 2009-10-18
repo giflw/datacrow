@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
+Data Crow 3.6 [Release on 18/10/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 ! Note: The minimum Java version is now Java 6 (also known as Java 1.6).
 ! Special thanks to David Marín for delivering the Spanish translation.
@@ -88,6 +88,8 @@ Data Crow 3.6 [Release on xx/10/2009] [testing: high] [target: production]
 - Ofdb.de now adds an external reference to the item on the IMDB.com page.
 - Icons_user directory has been removed. Icons_system folder is now called icons.
 - Default data (demo data) can now also be an XML file. 
+- The Dutch translation has been updated.
+- The help has been updated.
 
 [Fixed]
 - "Pick a Date": larger set of years to make the navigation easier + a fix for the up and 
