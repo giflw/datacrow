@@ -324,6 +324,12 @@ public class DatabaseManager {
             if (!e.getMessage().equals("No ResultSet was produced"))
                 logger.error("Error while executing query " + ps, e);
         }
+        
+        try {
+            ps.close();
+        } catch (SQLException e) {
+            logger.error(e, e);
+        }
 
         if (log) {
             String sql = ps.toString();

@@ -37,6 +37,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,11 +58,9 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
-import net.datacrow.core.db.QueryOptions;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.ExternalReferenceModule;
 import net.datacrow.core.modules.IChildModule;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcAssociate;
@@ -78,7 +79,6 @@ import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -297,6 +297,8 @@ public class DataManager {
         updateRelated(dco, true);
         updateUiComponents(dco.getModule().getIndex());
         updateView(dco, 2, module, MainFrame._SEARCHTAB);
+        
+        dco.release();
     }
     
     /**
@@ -310,7 +312,7 @@ public class DataManager {
         c = c == null ? new ArrayList<DcObject>() : new ArrayList<DcObject>(c);
         
         DcModule module =  DcModules.get(childIdx);
-        DataFilter filter = new DataFilter(module.getDcObject());
+        DataFilter filter = new DataFilter(childIdx);
         filter.setOrder(new DcField[] {module.getField(module.getDefaultSortFieldIdx())});
         
         filter.sort(c);
@@ -335,48 +337,42 @@ public class DataManager {
         if (Utilities.isEmpty(name)) return null;
         
         // method 1: item is provided and exists
-        int module = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
+        int moduleIdx = DcModules.getReferencedModule(dco.getField(fieldIdx)).getIndex();
+        DcModule module = DcModules.get(moduleIdx);
         DcObject ref = value instanceof DcObject ? (DcObject) value : null;
 
         // check if we are dealing with an external reference
-        if (    ref == null && 
-                DcModules.get(module) instanceof ExternalReferenceModule &&
-               !Utilities.isEmpty(name)) {
-            
-            ref = getExternalReference(module, name); 
-        }
-        
-        // method 2: simple external reference + display value comparison
-        if (ref == null)
-            ref = DataManager.getObjectForString(module, name);
+        if (ref == null && module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
 
-        if (ref == null && fieldIdx != DcObject._SYS_EXTERNAL_REFERENCES) {
+            ref = getExternalReference(moduleIdx, name); 
+        
+        } else if (ref == null && module.getType() != DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
             
-            ref = DcModules.get(module).getDcObject();
-            
-            boolean onlinesearch = false;
-            if (ref instanceof DcAssociate) {
-                ref.setValue(DcAssociate._A_NAME, name);
-                onlinesearch = ref.getModule().deliversOnlineService() &&
-                               dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchSubItems);  
-            } else if (ref instanceof DcProperty) {
-                ref.setValue(DcProperty._A_NAME, name);
-            } else {
-                ref.setValue(ref.getDisplayFieldIdx(), name);
-            }
-            
-            if (onlinesearch) {
-                OnlineSearchHelper osh = new OnlineSearchHelper(module, SearchTask._ITEM_MODE_FULL);
-                DcObject queried = osh.query(ref, name, new int[] {DcAssociate._A_NAME});
-                ref = queried != null ? queried : ref;
-                osh.clear(ref);
-            }
-            
-            try {
+            // method 2: simple external reference + display value comparison
+            ref = DataManager.getObjectForString(moduleIdx, name);
+    
+            if (ref == null && fieldIdx != DcObject._SYS_EXTERNAL_REFERENCES) {
+                ref = module.getDcObject();
+                
+                boolean onlinesearch = false;
+                if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+                    ref.setValue(DcAssociate._A_NAME, name);
+                    onlinesearch = ref.getModule().deliversOnlineService() &&
+                                   dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchSubItems);  
+                } else if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+                    ref.setValue(DcProperty._A_NAME, name);
+                } else {
+                    ref.setValue(ref.getDisplayFieldIdx(), name);
+                }
+                
+                if (onlinesearch) {
+                    OnlineSearchHelper osh = new OnlineSearchHelper(moduleIdx, SearchTask._ITEM_MODE_FULL);
+                    DcObject queried = osh.query(ref, name, new int[] {module.getSystemDisplayFieldIdx()});
+                    ref = queried != null ? queried : ref;
+                    osh.clear(ref);
+                }
+                
                 ref.setIDs();
-            } catch (Exception e) {
-                logger.error("Error while setting IDs for " + ref, e);
-                ref = null;
             }
         }
         
@@ -524,6 +520,15 @@ public class DataManager {
                     }
                 }
                 
+                if (delete) {
+                    for (DcObject mapping : mappings)
+                        mapping.release();
+
+                    int mappingModIdx = DcModules.getMappingModIdx(dco.getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
+                    Map<String, Collection<DcMapping>> map = references.get(mappingModIdx);
+                    map.remove(dco.getID());
+                }
+                
                 if (c.size() > 0) {
                     int mappingModIdx = DcModules.getMappingModIdx(dco.getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
                     Map<String, Collection<DcMapping>> map = references.get(mappingModIdx);
@@ -546,7 +551,11 @@ public class DataManager {
      */
     @SuppressWarnings("unchecked")
     private static void disgardReferences(DcObject dco) {
-        if (dco.getModule().hasDependingModules() || dco instanceof DcAssociate || dco instanceof DcProperty) {
+        DcModule mainModule = dco.getModule();
+        if (    mainModule.hasDependingModules() || 
+                mainModule.getType() == DcModule._TYPE_ASSOCIATE_MODULE ||
+                mainModule.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+
             // remove collection items holding a reference to this item
             for (DcModule referencingMod : DcModules.getReferencingModules(dco.getModule().getIndex())) {
                 DcModule module = referencingMod instanceof MappingModule ?
@@ -563,8 +572,6 @@ public class DataManager {
                                                             null));
                             
                             DcObject[] referencingItems = get(module.getIndex(), df);
-                            
-                            
                             for (int i = 0; i < referencingItems.length; i++) {
                                 Collection<DcMapping> references = (Collection<DcMapping>) referencingItems[i].getValue(field.getIndex());
                                 Object val = null;
@@ -727,21 +734,67 @@ public class DataManager {
         return new Loan();
     }
     
-    public static DcObject getExternalReference(int module, String ID) {
-        DataFilter df = new DataFilter(module);
-        df.addEntry(new DataFilterEntry(
-                DataFilterEntry._AND, module, ExternalReference._EXTERNAL_ID, Operator.EQUAL_TO, ID));
-        DcObject[] references = DataManager.get(module, df);
-        return references.length > 0 ? references[0] : null; 
+    public static DcObject getExternalReference(int moduleIdx, String ID) {
+        DcModule module = DcModules.get(moduleIdx);
+        String sql = "SELECT ID FROM " + module.getTableName() + " WHERE " +
+             module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + " = %1";
+        
+        try {
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+            ps.setString(1, ID);
+            List<DcObject> items = DatabaseManager.executeQuery(ps, Query._SELECT, false);
+            return items.size() > 0 ? items.get(0) : null;
+        } catch (SQLException se) {
+            logger.error(se, se);
+        }
+        
+        return null;
     }    
     
-    public static DcObject getObjectByExternalID(int module, String type, String ID) {
-        for (DcObject dco : get(module, null)) {
-            String s = dco.getExternalReference(type);
-            if (s != null && s.equalsIgnoreCase(ID))
-                return dco;
+    public static DcObject getObjectByExternalID(int moduleIdx, String type, String externalID) {
+        DcModule module =  DcModules.get(moduleIdx + DcModules._EXTERNALREFERENCE);
+        
+        String sql = "SELECT ID FROM " + module.getTableName() + " WHERE " +
+            "UPPER(" + module.getField(ExternalReference._EXTERNAL_ID) + ") = UPPER(%1) AND " +
+            "UPPER(" + module.getField(ExternalReference._EXTERNAL_ID_TYPE) + ") = UPPER(%2)";
+        
+        Connection conn = DatabaseManager.getConnection();
+        DcObject result = null;
+        
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, externalID);
+            ps.setString(2, type);
+            
+            ResultSet rs = ps.executeQuery();
+            String referenceID;
+            while (rs.next()) {
+                referenceID = rs.getString(1);
+                
+                DcModule mappingMod = DcModules.get(module.getIndex() + DcModules._MAPPING);
+                sql = "SELECT ID FROM " + mappingMod.getTableName() + 
+                      "WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID) + " = %1";
+    
+                PreparedStatement ps2 = conn.prepareStatement(sql);
+                ps2.setString(1, referenceID);
+                ResultSet rs2 = ps2.executeQuery();
+    
+                while (rs2.next()) {
+                    result = getObject(moduleIdx, rs2.getString(1));
+                    break;
+                }
+                
+                rs2.close();
+                break;
+            }
+        
+            rs.close();
+            conn.close();
+        } catch (SQLException se) {
+            logger.error(se, se);
         }
-        return null;
+            
+        return result;
     }
     
     public static DcObject getObjectForString(int module, String reference) {
@@ -756,27 +809,36 @@ public class DataManager {
      * @param s The display value.
      * @return Either the item or null. 
      */
-    private static DcObject getObjectForDisplayValue(int module, String s) {
-        DcObject dco = DcModules.get(module).getDcObject();
-        dco.setValue(dco.getSystemDisplayFieldIdx(), s);
-        
-        try {
-            List<DcObject> c = DatabaseManager.executeQuery(dco, false);
-            for (DcObject o : c) {
-                if (StringUtils.equals(o.toString(), dco.toString()))
-                    return o;
-            }
+    private static DcObject getObjectForDisplayValue(int moduleIdx, String s) {
+        DcModule module = DcModules.get(moduleIdx);
 
-            if (dco instanceof DcProperty) {
-                dco = DcModules.get(module).getDcObject();
-                dco.setValue(DcProperty._C_ALTERNATIVE_NAMES, ";" + s.toUpperCase() + ";");
-                QueryOptions options = new QueryOptions(null, true, false);
-                Query query = new Query(Query._SELECT, dco, options, null);
-                c = DatabaseManager.executeQuery(query, false);
-                for (DcObject o : c) {
-                   return o;
-                }
+        try {
+            String query = 
+                "SELECT ID FROM " + module.getTableName() + " WHERE " + 
+                "UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + ") =  UPPER(%1)";
+            
+            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
+                query += " UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + ") LIKE %2"; 
+            
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
+
+            ps.setString(1, s);
+            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
+                ps.setString(2,  ";%" + s.toUpperCase() + "%;");
+            
+            ResultSet rs = ps.executeQuery();
+            DcObject result = null;
+            while (rs.next()) {
+                String ID = rs.getString(1);
+                result = getObject(moduleIdx, ID);
+                break;
             }
+            
+            rs.close();
+            ps.close();
+            
+            return result;
+            
         } catch (SQLException e) {
             logger.error(e, e);
         }
@@ -857,9 +919,9 @@ public class DataManager {
         }
         
         if (df == null) {
-            DcObject dco = DcModules.get(modIdx).getDcObject();
-            df = new DataFilter(dco);
-            df.setOrder(new DcField[] {dco.getField(DcProperty._SYS_DISPLAYVALUE)});
+            DcModule module = DcModules.get(modIdx);
+            df = new DataFilter(modIdx);
+            df.setOrder(new DcField[] {module.getField(DcProperty._SYS_DISPLAYVALUE)});
         }
         
         df.sort(c);

@@ -267,9 +267,9 @@ public class DcValue implements Serializable {
      */
     public void clear() {
         if (value != null && value instanceof Picture)
-            ((Picture) value).release();
+            ((Picture) value).unload();
 
-        displayString = null;
+        displayString = "";
         value = null;
     }
     

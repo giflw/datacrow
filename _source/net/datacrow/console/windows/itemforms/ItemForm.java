@@ -335,7 +335,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         }
         
         if (dco != null)
-            dco.release();
+            dco.freeResources();
         
         ComponentFactory.clean(getJMenuBar());
         setJMenuBar(null);
