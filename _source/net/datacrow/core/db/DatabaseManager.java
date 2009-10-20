@@ -366,6 +366,8 @@ public class DatabaseManager {
                         childTest.setValue(DcObject._ID, child.getID());
                         Collection<DcObject> objects = executeQuery(childTest, true);
                         exists = objects.size() > 0;
+                        for (DcObject tmp : objects)
+                            tmp.release();
                     }
     
                     Query query;
@@ -456,6 +458,8 @@ public class DatabaseManager {
 
                 if (count > 0) return false;
             }
+            
+            dco.release();
         }
         return true;
     }

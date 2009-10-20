@@ -60,7 +60,7 @@ public class PictureModule extends DcModule {
      * @see Picture
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new Picture();
     }
    

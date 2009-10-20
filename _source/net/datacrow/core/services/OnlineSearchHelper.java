@@ -271,7 +271,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
      */
     public void clear(DcObject except) {
         for (DcObject dco : result)
-            if (dco != except) dco.unload();
+            if (dco != except) dco.release();
         
         task = null;
         server = null;

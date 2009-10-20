@@ -27,7 +27,7 @@ package net.datacrow.enhancers;
 
 import java.util.StringTokenizer;
 
-import net.datacrow.core.modules.DcMediaModule;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
@@ -64,12 +64,13 @@ public class TitleRewriter implements IValueEnhancer {
      * @return Either {@link DcAssociate#_A_NAME} or {@link DcMediaObject#_A_TITLE}
      */
     public int getField() {
-        if (DcModules.getCurrent() instanceof DcMediaModule)
+        if (DcModules.getCurrent().getType() == DcModule._TYPE_MEDIA_MODULE) {
             return DcMediaObject._A_TITLE;
-        else if (DcModules.getCurrent().getDcObject() instanceof DcAssociate)
+        } else if (DcModules.getCurrent().getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
             return DcAssociate._A_NAME;
-        else
-            return DcModules.getCurrent().getDcObject().getDisplayFieldIdx();
+        } else {
+            return DcModules.getCurrent().getDisplayFieldIdx();
+        }
     }    
 
     public String getWordList() {

@@ -107,7 +107,7 @@ public class TemplateModule extends DcModule {
      * @see DcTemplate
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new DcTemplate(getIndex(), parent.getIndex());
     }    
     

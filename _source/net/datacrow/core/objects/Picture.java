@@ -65,13 +65,6 @@ public class Picture extends DcObject {
         super(DcModules._PICTURE);
     }
     
-    /**
-     * Unloads the image (permanently)
-     */
-    public void destroy() {
-        super.unload();
-    }
-    
     public boolean hasImage() {
         return !Utilities.isEmpty(getValue(_C_FILENAME));
     }
@@ -98,6 +91,11 @@ public class Picture extends DcObject {
     }
     
     @Override
+    public void release() {
+        unload();
+        super.release();
+    }
+    
     public void unload() {
     	if (getValues() != null && !isNew() && !isUpdated) {
     	    

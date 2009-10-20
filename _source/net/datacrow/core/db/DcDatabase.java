@@ -259,6 +259,7 @@ public class DcDatabase {
                     createTable(dco);
                 }
             }
+            dco.release();
         }
         stmt.close();
     }

@@ -39,6 +39,10 @@ import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 
+/**
+ * TODO: rewrite: use modules instead of objects
+ * @author Robert Jan van der Waals
+ */
 public class XmlSchemaWriter extends XmlBaseWriter {
     
     private Collection<XmlReference> references = new ArrayList<XmlReference>();
@@ -58,7 +62,9 @@ public class XmlSchemaWriter extends XmlBaseWriter {
                      module.isTopModule() &&
                     !module.isAbstract()) {
                     
-                    handle(module.getDcObject(), handled);
+                    DcObject tmp = module.getDcObject();
+                    handle(tmp, handled);
+                    tmp.release();
                 }
             }
         } else {
@@ -79,6 +85,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
                     newLine();
                 }
                 handled.add(so.getModule().getSystemObjectName());
+                dco.release();
             }
         }
         

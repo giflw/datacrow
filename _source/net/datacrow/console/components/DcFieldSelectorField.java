@@ -135,12 +135,10 @@ public class DcFieldSelectorField extends JComponent implements IComponent {
         JPanel panel = new JPanel();
         panel.setLayout(Layout.getGBL());
 
-        DcObject dco = DcModules.get(module).getDcObject();
-
         int x = 0;
         int y = 0;
 
-        for (DcField field : dco.getFields()) {
+        for (DcField field : DcModules.get(module).getFields()) {
             if (field.getIndex() != DcObject._ID && field.getIndex() != DcObject._SYS_EXTERNAL_REFERENCES) {
                 JCheckBox checkBox = ComponentFactory.getCheckBox(field.getLabel());
                 componentMap.put(field, checkBox);

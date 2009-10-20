@@ -77,7 +77,7 @@ public class LoanModule extends DcModule {
      * @see Loan
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new Loan();
     }
 

@@ -38,7 +38,7 @@ public class TabModule extends DcPropertyModule {
     }
 
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new Tab();
     }
     

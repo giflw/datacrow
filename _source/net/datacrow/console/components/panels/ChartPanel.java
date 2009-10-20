@@ -54,8 +54,8 @@ import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -242,7 +242,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         for (DcField field : DcModules.get(module).getFields()) {
             if (((((field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
                    (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) &&
-                   (DcModules.get(field.getReferenceIdx()) instanceof DcPropertyModule)) ||
+                   DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE) ||
                    field.getValueType() == DcRepository.ValueTypes._LONG ||
                    field.getValueType() == DcRepository.ValueTypes._BOOLEAN))) && 
                    field.isEnabled() && !field.isTechnicalInfo()) {

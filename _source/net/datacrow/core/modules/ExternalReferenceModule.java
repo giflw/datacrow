@@ -25,7 +25,7 @@ public class ExternalReferenceModule extends DcPropertyModule {
     }
 
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new ExternalReference(getIndex());
     }
     

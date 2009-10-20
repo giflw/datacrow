@@ -69,6 +69,7 @@ public class TableCopyPasteAction implements ActionListener {
                 }
                 dco.setValue(fields[fldCounter], values);
                 vc.updateItemAt(updateIdx++, dco, true, true, true);
+                dco.release();
             }
         }
         catch (Exception exp) {

@@ -50,7 +50,6 @@ import net.datacrow.console.views.IViewComponent;
 import net.datacrow.console.views.View;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.IChildModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
@@ -192,8 +191,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     }      
     
     public void afterUpdate() {
-        if (getModule() instanceof DcPropertyModule)
-            return;
+        if (getModule().getType() == DcModule._TYPE_PROPERTY_MODULE) return;
             
         if (getDcModel().size() > 0) {
             DcObjectListElement elem = (DcObjectListElement) getDcModel().getElementAt(0);
@@ -356,6 +354,9 @@ public class DcObjectList extends DcList implements IViewComponent {
     }
     
     public DcObjectListElement getDisplayElement(DcObject dco) {
+        
+        // TODO: move to the module class itself!
+        
         DcObjectListElement element = null;
         DcModule module = dco.getModule();
         

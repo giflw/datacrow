@@ -59,6 +59,7 @@ import net.datacrow.core.migration.itemimport.CsvImporter;
 import net.datacrow.core.migration.itemimport.ItemImporterHelper;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
@@ -112,6 +113,16 @@ public class DcModule implements Comparable<DcModule> {
 
     private static Logger logger = Logger.getLogger(DcModule.class.getName());
     
+    private static final int _MAX_ITEM_STORE_SIZE = 50;
+
+    public static final int _TYPE_MODULE = 0;
+    public static final int _TYPE_PROPERTY_MODULE = 1;
+    public static final int _TYPE_MEDIA_MODULE = 2;
+    public static final int _TYPE_ASSOCIATE_MODULE = 3;
+    public static final int _TYPE_EXTERNALREFERENCE_MODULE = 4;
+    public static final int _TYPE_MAPPING_MODULE = 5;    
+
+    private final int type;
     private final int index;
     
     private int displayIndex;
@@ -131,7 +142,6 @@ public class DcModule implements Comparable<DcModule> {
 
     private final String systemObjectName;
     private final String systemObjectNamePlural;
-
     
     private final String objectName;
     private final String objectNamePlural;
@@ -140,6 +150,8 @@ public class DcModule implements Comparable<DcModule> {
     private boolean isDefaultDataLoaded = false;
     
     private net.datacrow.settings.Settings settings;
+    
+    private List<DcObject> items;
     
     @SuppressWarnings("unchecked")
     private Class synchronizerClass;
@@ -234,7 +246,16 @@ public class DcModule implements Comparable<DcModule> {
         this.moduleResourceKey = "sys" + s;
         this.itemResourceKey = moduleResourceKey + "Item";
         this.itemPluralResourceKey = moduleResourceKey + "ItemPlural";
-    }
+
+        // TODO: move to parent classes
+        this.type = 
+            objectClass != null && objectClass.equals(DcAssociate.class) ? _TYPE_ASSOCIATE_MODULE :
+            this instanceof MappingModule ? _TYPE_MAPPING_MODULE :
+            this instanceof DcPropertyModule ? _TYPE_PROPERTY_MODULE :
+            this instanceof DcMediaModule ? _TYPE_MEDIA_MODULE :
+            this instanceof ExternalReferenceModule ? _TYPE_EXTERNALREFERENCE_MODULE :
+            _TYPE_MODULE;        
+     }
     
     /**
      * Creates a new instance.
@@ -321,6 +342,10 @@ public class DcModule implements Comparable<DcModule> {
 
     public boolean hasReports() {
         return new ReportTemplates(true).hasReports(index);       
+    }
+    
+    public int getType() {
+        return type;
     }
     
     /**
@@ -541,10 +566,11 @@ public class DcModule implements Comparable<DcModule> {
                !(this instanceof MappingModule);
     } 
 
+    
     /**
      * Creates a new instance of an item belonging to this module.
      */
-    public DcObject getDcObject() {
+    protected DcObject createItem() {
         try {
             try {
                 return (DcObject) objectClass.getConstructors()[0].newInstance(new Object[] {});    
@@ -557,6 +583,58 @@ public class DcModule implements Comparable<DcModule> {
 
         return null;
     }  
+
+    public void release(DcObject dco) {
+        if (items.size() < _MAX_ITEM_STORE_SIZE)
+            items.add(dco);
+        else 
+            dco.destroy();
+    }
+    
+    /**
+     * Creates a new instance of an item belonging to this module.
+     */
+    public final DcObject getDcObject() {
+        if (items == null) {
+            items = new ArrayList<DcObject>();
+            for (int i = 0; i < 50; i++)
+                items.add(createItem());
+        }
+        
+        if (items.size() == 0) {
+            items.add(createItem());
+        }
+
+        return items.remove(0);
+    }  
+    
+    public DcField getFileField() {
+        if (isFileBacked()) {
+            return getField(DcObject._SYS_FILENAME);
+        } else {
+            for (DcField field : getFields()) {
+                if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD ||
+                    field.getFieldType() == ComponentFactory._FILEFIELD)
+                    return field;
+            }
+            return null;
+        }
+    }
+    
+    public int getSystemDisplayFieldIdx() {
+        return getDisplayFieldIdx();
+    }
+    
+    /**
+     * Educated guess..
+     */
+    public int getDisplayFieldIdx() {
+        for (DcFieldDefinition definition : getFieldDefinitions().getDefinitions()) {
+            if (definition.isDescriptive())
+                return definition.getIndex();
+        }
+        return getDefaultSortFieldIdx();
+    }
 
     /**
      * Creates a new item form.
@@ -678,7 +756,10 @@ public class DcModule implements Comparable<DcModule> {
                     items.add(dco);
                 return items;
             } else {
-                return DatabaseManager.executeQuery(getDcObject(), true);
+                DcObject dco = getDcObject();
+                List<DcObject> items = DatabaseManager.executeQuery(dco, true);
+                dco.release();
+                return items;
             }
         } catch (Exception e) {
             logger.error("Could not load data for module " + getLabel(), e);

@@ -72,7 +72,7 @@ public class MappingModule extends DcModule {
      * @see DcMapping
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         DcMapping mapping = new DcMapping(getIndex());
         return mapping;
     }    

@@ -128,8 +128,11 @@ public class DcPropertyModule extends DcModule {
     public List<DcObject> loadData() {
         try {
             QueryOptions options = new QueryOptions(new DcField[] {getField(DcProperty._A_NAME)}, true, false);
-            Query qry = new Query(Query._SELECT, getDcObject(), options, null);
-            return DatabaseManager.executeQuery(qry, true);
+            DcObject dco = getDcObject();
+            Query qry = new Query(Query._SELECT, dco, options, null);
+            List<DcObject> items = DatabaseManager.executeQuery(qry, true);
+            dco.release();
+            return items;
         } catch (Exception e) {
             logger.error("Could not load data for module " + getLabel(), e);
         }
@@ -164,7 +167,7 @@ public class DcPropertyModule extends DcModule {
      * Creates a new instance of an item belonging to this module.
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new DcProperty(getIndex());
     }
     

@@ -141,19 +141,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }    
     
     public int getSystemDisplayFieldIdx() {
-        return getDisplayFieldIdx();
+        return getModule().getSystemDisplayFieldIdx();
     }
     
     /**
      * Educated guess..
      */
     public int getDisplayFieldIdx() {
-        for (DcFieldDefinition definition : DcModules.get(module).getFieldDefinitions().getDefinitions()) {
-            if (definition.isDescriptive())
-                return definition.getIndex();
-        }
-
-        return getModule().getDefaultSortFieldIdx();
+        return getModule().getDisplayFieldIdx();
     }
     
     /**
@@ -521,16 +516,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     public DcField getFileField() {
-        if (getModule().isFileBacked()) {
-            return getField(DcObject._SYS_FILENAME);
-        } else {
-            for (DcField field : getFields()) {
-                if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD ||
-                    field.getFieldType() == ComponentFactory._FILEFIELD)
-                    return field;
-            }
-            return null;
-        }
+        return getModule().getFileField();
     }
 
     /**
@@ -586,7 +572,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
         
         for (DcObject dco : objects) 
-            dco.unload();
+            dco.release();
         
         setLoanInformation();
         
@@ -669,7 +655,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) getValue(field.getIndex());
                 if (picture != null)
-                    picture.unload();
+                    picture.release();
             }
         }
     }
@@ -682,7 +668,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) getValue(field.getIndex());
                 if (picture != null)
-                    picture.unload();
+                    picture.release();
                 
                 setValueLowLevel(field.getIndex(), null);
             }
@@ -810,29 +796,25 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Unloads this items. Its resources are freed and its pictures are unloaded.
      * The item is unusable after this operation (!).
      */
-    public void unload() {
-    	
-    	freeResources();
-    	
-        for (DcField field : getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) getValue(field.getIndex());
-                if (picture != null) picture.unload(); 
-                setValueLowLevel(field.getIndex(), null);
-            }
-        }
-        
+    public void release() {
+        freeResources();
         clearValues();
+        setValueLowLevel(DcObject._ID, null);
         
-        values.clear();
-        values = null;
-        
-        requests.clear();
-        requests = null;
+        if (requests != null)
+            requests.clear();
         
         if (children != null)
             children.clear();
-        
+
+        getModule().release(this);
+    }
+    
+    public void destroy() {
+        values.clear();
+        values = null;
+        requests.clear();
+        requests = null;
         children = null;
     }
     
@@ -1320,7 +1302,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     @Override
     protected void finalize() throws Throwable {
-        unload();
+        release();
         super.finalize();
     }
 

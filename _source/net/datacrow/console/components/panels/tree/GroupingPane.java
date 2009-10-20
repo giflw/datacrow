@@ -131,8 +131,7 @@ public class GroupingPane extends JPanel {
     
     public void remove(String[] ids) {
         for (String ID : ids) {
-            DcObject dco = DcModules.get(getModule()).getDcObject();
-            dco.setValue(DcObject._ID, ID);
+            DcObject dco = DataManager.getObject(getModule(), ID);
             remove(dco);
         }
     } 

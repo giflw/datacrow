@@ -115,7 +115,7 @@ public class ContainerModule extends DcParentModule {
      * Creates a new instance of an item belonging to this module.
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new Container();
     }
     

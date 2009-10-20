@@ -34,7 +34,6 @@ import javax.swing.event.ListSelectionEvent;
 import net.datacrow.console.windows.security.ModulePermissionPanel;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.security.SecurityCentre;
 
@@ -91,7 +90,7 @@ public class SecurityModuleList extends DcModuleList {
                     	if (    managedModules.contains(referencedMod) &&
                     			referencedMod.isEnabled() &&
                         		referencedMod.getIndex() != module.getIndex() && 
-                              !(referencedMod instanceof DcPropertyModule) &&
+                                referencedMod.getType() != DcModule._TYPE_PROPERTY_MODULE &&
                                 referencedMod.getIndex() != DcModules._CONTACTPERSON &&
                                 referencedMod.getIndex() != DcModules._CONTAINER) {
 	                    	

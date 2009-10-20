@@ -216,17 +216,7 @@ public class DcTable extends JTable implements IViewComponent {
 
     private int addRow() {
         Object[] row = new Object[module.getFieldCount()];
-
-        DcObject dco = module.getDcObject();
-        int[] fields = dco.getFieldIndices();
-
-        for (int i = 0; i < fields.length; i++) {
-            int field = fields[i];
-            int col = getColumnIndexForField(field);
-            row[col] = dco.getValue(field);
-        }
         getDcModel().addRow(row);
-
         return (getRowCount() - 1);
     }
 
@@ -829,9 +819,9 @@ public class DcTable extends JTable implements IViewComponent {
                     break;
                 }
             }
-
             counter++;
         }
+        dco.release();
     }
 
     public void saveSettings() {

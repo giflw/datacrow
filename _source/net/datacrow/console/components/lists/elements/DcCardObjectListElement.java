@@ -70,6 +70,7 @@ public class DcCardObjectListElement extends DcObjectListElement {
     
     @Override
     public void setBackground(Color color) {
-        fldTitle.setBackground(color);
+        if (fldTitle != null)
+            fldTitle.setBackground(color);
     }    
 }

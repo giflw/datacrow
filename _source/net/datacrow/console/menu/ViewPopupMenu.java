@@ -216,7 +216,7 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
         
         if (viewType == View._TYPE_SEARCH) {
             FileImporter importer = module.getImporter();
-            if (importer != null && importer.allowReparsing() && module.getDcObject().getFileField() != null) { 
+            if (importer != null && importer.allowReparsing() && module.getFileField() != null) { 
                 addSeparator();
                 PluginHelper.add(this, "AttachFileInfo");
             }

@@ -103,7 +103,7 @@ public class DcFilePatternField extends DcLongTextField implements KeyListener, 
     
     private void insertField(int field) {
         DcModule m = DcModules.get(module);
-        if (field == m.getDcObject().getParentReferenceFieldIndex()) {
+        if (field == m.getParentReferenceFieldIndex()) {
             insert('[' + m.getParent().getObjectName() + ']', getCaretPosition());
         } else {
             insert('[' + m.getField(field).getSystemName() + ']', getCaretPosition());

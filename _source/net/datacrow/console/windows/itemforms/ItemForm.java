@@ -254,7 +254,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         
         FileImporter importer = DcModules.get(moduleIdx).getImporter();
         if (    importer != null && importer.allowReparsing() && 
-                DcModules.get(moduleIdx).getDcObject().getFileField() != null) {
+                DcModules.get(moduleIdx).getFileField() != null) {
 
             mb = ComponentFactory.getMenuBar();
             JMenu menuEdit = ComponentFactory.getMenu(DcResources.getText("lblFile"));
@@ -335,7 +335,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         }
         
         if (dco != null)
-            dco.freeResources();
+            dco.release();
         
         ComponentFactory.clean(getJMenuBar());
         setJMenuBar(null);

@@ -188,7 +188,7 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
                 field.isEnabled() && 
                 field.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
                 field.getValueType() != DcRepository.ValueTypes._ICON &&
-               (field.getIndex() != module.getDcObject().getParentReferenceFieldIndex() || 
+               (field.getIndex() != module.getParentReferenceFieldIndex() || 
                 field.getIndex() == DcObject._SYS_CONTAINER )) {
 
                 listLeft.add(field);

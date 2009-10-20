@@ -118,7 +118,7 @@ public class UserModule extends DcParentModule {
      * @see User
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new User();
     }
     

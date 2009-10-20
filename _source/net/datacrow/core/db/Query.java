@@ -509,7 +509,7 @@ public class Query {
         	
             DcModule childModule = dco.getModule().getChild(); 
             queries.add(getPreparedStatement("DELETE FROM " + childModule.getTableName() + " WHERE " + 
-                        childModule.getField(childModule.getDcObject().getParentReferenceFieldIndex()).getDatabaseFieldName() + " = " + dco.getID()));
+                        childModule.getField(childModule.getParentReferenceFieldIndex()).getDatabaseFieldName() + " = " + dco.getID()));
         }
         
         // Remove any references to the to be deleted item.
@@ -519,9 +519,8 @@ public class Query {
             	if (m.isAbstract()) continue;
             	
                 if (m instanceof MappingModule) {
-                    DcObject mapping = m.getDcObject();
                     queries.add(getPreparedStatement(
-                            "DELETE FROM " + m.getTableName() + " WHERE " + mapping.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = " + dco.getID()));
+                            "DELETE FROM " + m.getTableName() + " WHERE " + m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = " + dco.getID()));
                 } else {
                     for (DcField field : m.getFields()) {
                         if (!field.isUiOnly() && field.getReferenceIdx() == dco.getModule().getIndex()) {

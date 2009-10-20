@@ -50,7 +50,7 @@ public class PermissionModule extends DcChildModule {
      * @see Permission
      */
     @Override
-    public DcObject getDcObject() {
+    public DcObject createItem() {
         return new Permission();
     }
     

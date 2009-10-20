@@ -126,11 +126,11 @@ public class XmlModule extends XmlObject {
         
         // make sure we are using a transparent module class:
         if (DcModules.get(template.getIndex()) != null) {
-            DcObject test = DcModules.get(template.getIndex()).getDcObject();
-            if (test instanceof DcMediaObject) {
+            DcModule module = DcModules.get(template.getIndex());
+            if (module.getType() == DcModule._TYPE_MEDIA_MODULE) {
                 object = DcMediaObject.class;
                 moduleClass = DcMediaModule.class;
-            } else if (test instanceof DcProperty) {
+            } else if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
                 object = DcProperty.class;
                 moduleClass = DcPropertyModule.class;
             } else {

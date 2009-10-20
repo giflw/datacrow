@@ -52,8 +52,6 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
-import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.settings.DcSettings;
 
@@ -109,7 +107,7 @@ public class DcModuleList extends DcList implements ListSelectionListener {
                         DcModule referencedMod = DcModules.getReferencedModule(field);
                         if (    referencedMod.isEnabled() &&
                         		referencedMod.getIndex() != module.getIndex() && 
-                              !(referencedMod instanceof DcPropertyModule) &&
+                                referencedMod.getType() != DcModule._TYPE_PROPERTY_MODULE &&
                                 referencedMod.getIndex() != DcModules._CONTACTPERSON &&
                                 referencedMod.getIndex() != DcModules._CONTAINER) {
                             
@@ -131,7 +129,8 @@ public class DcModuleList extends DcList implements ListSelectionListener {
         int module = current; 
         if (!elements.containsKey(current)) {
             for (DcModule m : DcModules.getModules()) {
-                if (!(m instanceof MappingModule) && m.hasReferenceTo(module) && m.isTopModule())
+                if (    m.getType() != DcModule._TYPE_MAPPING_MODULE && 
+                        m.hasReferenceTo(module) && m.isTopModule())
                     module = m.getIndex();
             }
         }
