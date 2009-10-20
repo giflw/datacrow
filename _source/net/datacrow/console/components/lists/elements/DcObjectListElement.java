@@ -55,6 +55,7 @@ public abstract class DcObjectListElement extends DcListElement {
 
     protected static final int fieldHeight = 21;
     protected DcObject dco;
+    protected DcTextPane fldTitle;
     
     protected DcObjectListElement() {}
     
@@ -134,12 +135,13 @@ public abstract class DcObjectListElement extends DcListElement {
     protected void build() {
         addPicture(getPictures());
         
-        DcTextPane title = ComponentFactory.getTextPane();
-        title.setText(getDescription());
-        title.setPreferredSize(dimTxt);
-        title.setMinimumSize(dimTxt);
-        title.setMaximumSize(dimTxt);
-        add(title);
+        fldTitle = ComponentFactory.getTextPane();
+        fldTitle.setText(getDescription());
+        fldTitle.setPreferredSize(dimTxt);
+        fldTitle.setMinimumSize(dimTxt);
+        fldTitle.setMaximumSize(dimTxt);
+        
+        add(fldTitle);
         
         super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
     }
@@ -214,6 +216,8 @@ public abstract class DcObjectListElement extends DcListElement {
     	if (dco != null)
     		dco.freeResources();
 
+    	dco = null;
+    	this.fldTitle = null;
         super.clear();
     }
 }

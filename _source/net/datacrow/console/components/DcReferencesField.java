@@ -160,6 +160,8 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
             }
         }
         
+        if (items.size() == 0) return;
+        
         int index = items.size() > 0 ? items.get(0).getDefaultSortFieldIdx() : 0;
         Collections.sort(items, new DcObjectComparator(index));
 

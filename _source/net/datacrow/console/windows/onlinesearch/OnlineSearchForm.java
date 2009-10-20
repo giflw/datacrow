@@ -361,7 +361,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                         int field = fields[i];
 
                         if (!Utilities.isEmpty(o.getValue(fields[i]))) {
-                            if ((dco.isFilled(field) && overwrite) || !dco.isFilled(field))
+                            if (field == DcObject._SYS_EXTERNAL_REFERENCES ||
+                               ((dco.isFilled(field) && overwrite) || !dco.isFilled(field)))
                                 dco.setValue(field, o.getValue(fields[i])); 
                         }
                     }  

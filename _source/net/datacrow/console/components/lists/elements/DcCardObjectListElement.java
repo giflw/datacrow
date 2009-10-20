@@ -30,7 +30,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.datacrow.console.components.DcTextPane;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -71,9 +70,6 @@ public class DcCardObjectListElement extends DcObjectListElement {
     
     @Override
     public void setBackground(Color color) {
-        for (int i = 0; i < getComponents().length; i++) {
-            if (getComponents()[i] instanceof DcTextPane)
-                getComponents()[i].setBackground(color);
-        }
+        fldTitle.setBackground(color);
     }    
 }
