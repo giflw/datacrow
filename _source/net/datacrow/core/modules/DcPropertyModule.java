@@ -128,7 +128,7 @@ public class DcPropertyModule extends DcModule {
     public List<DcObject> loadData() {
         try {
             QueryOptions options = new QueryOptions(new DcField[] {getField(DcProperty._A_NAME)}, true, false);
-            DcObject dco = getDcObject();
+            DcObject dco = getItem();
             Query qry = new Query(Query._SELECT, dco, options, null);
             List<DcObject> items = DatabaseManager.executeQuery(qry, true);
             dco.release();

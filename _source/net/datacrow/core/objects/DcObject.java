@@ -268,7 +268,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
         
         if (!set && !Utilities.isEmpty(type)) {
-            ExternalReference er = new ExternalReference(module + DcModules._EXTERNALREFERENCE);
+            DcObject er = DcModules.get(module + DcModules._EXTERNALREFERENCE).getItem();
             er.setValue(ExternalReference._EXTERNAL_ID, key);
             er.setValue(ExternalReference._EXTERNAL_ID_TYPE, type);
             er.setIDs();
@@ -716,7 +716,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             
             if (!exists) {
                 DcMapping newMapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(
-                        getModule().getIndex(), mapping.getReferencedObject().getModule().getIndex(), DcObject._SYS_EXTERNAL_REFERENCES)).getDcObject();
+                        getModule().getIndex(), mapping.getReferencedObject().getModule().getIndex(), DcObject._SYS_EXTERNAL_REFERENCES)).getItem();
                 newMapping.setValue(DcMapping._A_PARENT_ID, getID());
                 newMapping.setValue(DcMapping._B_REFERENCED_ID, mapping.getReferencedObject().getID());
                 newMapping.setReferencedObject(mapping.getReferencedObject());
@@ -1239,7 +1239,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             	} else if (getField(field).getValueType() == DcRepository.ValueTypes._PICTURE) {
                     Picture curPic = (Picture) dco.getValue(field);
                     
-                    Picture newPic = new Picture();
+                    Picture newPic = (Picture) DcModules.get(DcModules._PICTURE).getItem();
                     newPic.copy(curPic, overwrite);
                     
                     newPic.isNew(curPic.isNew());
@@ -1285,7 +1285,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 
                 Picture templatePic = (Picture) template.getValue(idx);
                 
-                Picture pic = new Picture();
+                Picture pic = (Picture) DcModules.get(DcModules._PICTURE).getItem();
                 templatePic.loadImage();
                 pic.setValue(Picture._D_IMAGE, templatePic.getValue(Picture._D_IMAGE));
                 pic.setValue(Picture._E_HEIGHT, templatePic.getValue(Picture._E_HEIGHT));
@@ -1316,7 +1316,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     @Override
     public DcObject clone() {
-        DcObject dco = getModule().getDcObject();
+        DcObject dco = getModule().getItem();
         
         dco.copy(this, true);
         dco.setValue(DcObject._ID, getID());
@@ -1324,7 +1324,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         
         if (children != null) {
             for (DcObject child : children) {
-                DcObject childCopy = child.getModule().getDcObject();
+                DcObject childCopy = child.getModule().getItem();
                 childCopy.copy(child, true);
                 dco.addChild(child);
             }

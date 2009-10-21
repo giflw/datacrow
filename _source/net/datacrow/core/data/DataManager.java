@@ -353,7 +353,7 @@ public class DataManager {
             ref = DataManager.getObjectForString(moduleIdx, name);
     
             if (ref == null && fieldIdx != DcObject._SYS_EXTERNAL_REFERENCES) {
-                ref = module.getDcObject();
+                ref = module.getItem();
                 
                 boolean onlinesearch = false;
                 if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
@@ -407,7 +407,7 @@ public class DataManager {
         DcObject[] tabs = get(DcModules._TAB, df);
         if (tabs == null || tabs.length == 0) {
             try {
-                Tab tab = new Tab();
+                Tab tab = (Tab) DcModules.get(DcModules._TAB).getItem();
                 tab.setIDs();
                 tab.setValue(Tab._A_NAME, name);
                 tab.setValue(Tab._D_MODULE, Long.valueOf(module));
@@ -456,7 +456,7 @@ public class DataManager {
     @SuppressWarnings("unchecked")
     public static void addMapping(DcObject parent, DcObject child, int fieldIdx) {
         DcMapping mapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(
-                parent.getModule().getIndex(), child.getModule().getIndex(), fieldIdx)).getDcObject();
+                parent.getModule().getIndex(), child.getModule().getIndex(), fieldIdx)).getItem();
         mapping.setValue(DcMapping._A_PARENT_ID, parent.getID());
         mapping.setValue(DcMapping._B_REFERENCED_ID, child.getID());
         mapping.setReferencedObject(child);
@@ -735,7 +735,7 @@ public class DataManager {
                 return loan;
         }
         
-        Loan loan = new Loan();
+        Loan loan = (Loan) DcModules.get(DcModules._LOAN).getItem();
         loans.add(loan);
         return loan;
     }

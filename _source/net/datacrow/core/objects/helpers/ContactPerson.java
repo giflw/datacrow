@@ -56,7 +56,7 @@ public class ContactPerson extends DcObject {
     
     @Override
     public void delete() {
-        Loan loan = new Loan();
+        DcObject loan = DcModules.get(DcModules._LOAN).getItem();
         loan.setValue(Loan._C_CONTACTPERSONID, getID());
         
         DataFilter filter = new DataFilter(loan);
@@ -79,6 +79,8 @@ public class ContactPerson extends DcObject {
                 getRequests().clear();
             }
         }
+        
+        loan.release();
     }    
 }
 

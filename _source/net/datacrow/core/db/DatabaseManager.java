@@ -368,7 +368,7 @@ public class DatabaseManager {
                     
                     boolean exists = false;
                     if (child.getID() != null && child.getID().length() > 0) {
-                        DcObject childTest = child.getModule().getDcObject();
+                        DcObject childTest = child.getModule().getItem();
                         childTest.setValue(DcObject._ID, child.getID());
                         Collection<DcObject> objects = executeQuery(childTest, true);
                         exists = objects.size() > 0;
@@ -445,7 +445,7 @@ public class DatabaseManager {
     public static boolean isUnique(DcObject o, boolean isExisting) {
         if (o.hasPrimaryKey() && !o.getModule().isChildModule()) {
             boolean hasUniqueFields = false;
-            DcObject dco = o.getModule().getDcObject();
+            DcObject dco = o.getModule().getItem();
 
             for (DcFieldDefinition def : o.getModule().getFieldDefinitions().getDefinitions()) {
                 if (def.isUnique()) {

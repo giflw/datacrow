@@ -601,7 +601,7 @@ public class DcModule implements Comparable<DcModule> {
     /**
      * Creates a new instance of an item belonging to this module.
      */
-    public final DcObject getDcObject() {
+    public final DcObject getItem() {
         
         if (!DataManager.isInitialized())
             return createItem();
@@ -769,7 +769,7 @@ public class DcModule implements Comparable<DcModule> {
                     items.add(dco);
                 return items;
             } else {
-                DcObject dco = getDcObject();
+                DcObject dco = getItem();
                 List<DcObject> items = DatabaseManager.executeQuery(dco, true);
                 dco.release();
                 return items;

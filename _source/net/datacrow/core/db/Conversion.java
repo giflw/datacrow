@@ -223,7 +223,7 @@ public class Conversion {
             DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(
                     moduleIdx, refMod.getIndex(), DcModules.get(moduleIdx).getField(columnName).getIndex()));
         
-            DcObject mapping = mappingMod.getDcObject();
+            DcObject mapping = mappingMod.getItem();
             while (rs.next()) {
                 String ID = rs.getString(1);
                 String referenceID = rs.getString(2);
@@ -257,7 +257,7 @@ public class Conversion {
                 String name = rs.getString(1);
                 
                 // check if the referenced item exists
-                DcObject reference = refMod.getDcObject();
+                DcObject reference = refMod.getItem();
                 reference.setValue(DcProperty._A_NAME, name);
                 List<DcObject> items = DatabaseManager.executeQuery(reference, false);
                 if (items.size() == 0) {
@@ -279,7 +279,7 @@ public class Conversion {
                         DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(
                                 moduleIdx, refMod.getIndex(), DcModules.get(moduleIdx).getField(columnName).getIndex()));
                         
-                        DcObject mapping = mappingMod.getDcObject();
+                        DcObject mapping = mappingMod.getItem();
                         mapping.setValue(DcMapping._A_PARENT_ID, itemID);
                         mapping.setValue(DcMapping._B_REFERENCED_ID, propertyID);
                         
