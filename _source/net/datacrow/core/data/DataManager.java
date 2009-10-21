@@ -828,7 +828,7 @@ public class DataManager {
                 "UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + ") =  UPPER(?)";
             
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
-                query += " UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + ") LIKE ?"; 
+                query += " OR UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + ") LIKE ?"; 
             
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
 
