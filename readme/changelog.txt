@@ -2,8 +2,24 @@
 Data Crow 3.7 beta [Release on xx/10/2009] [testing: medium] [target: beta]
 -----------------------------------------------------------------------------------------
 
-[Fixed]
+[Changed]
+- Items are now internally reused. Data Crow was quite generous when it came to item 
+  instances. To gain, I admit, a rather small performance and memory usage gain items
+  are now internally re-usable. As a user you will not really see this change. However,
+  this change has such a big impact on the whole of the product that I have decided to
+  release this version as a major release and to release it as a beta version first.   
+- Several performance fixes have been applied. The external references and the additional
+  checks performed when saving an searching for items caused the performance to drop.
+  To overcome these issues (for large databases) the checks to see whether an item 
+  already exists have been changed; 
+  - For properties both the alternative names and the names are checked.
+  - For all other items the external references are checked first (the PDCR in particular).
+    Secondly the combination of display fields are checked. Since version 3.5 Data Crow
+    only checks on the actual string (exact match but case insensitive). This has been
+    kept this way.
 
+[Fixed]
+- External Reference is not created when an item is updated by an online service.
 
 
 -----------------------------------------------------------------------------------------
