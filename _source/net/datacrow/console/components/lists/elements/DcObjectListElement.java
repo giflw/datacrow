@@ -216,7 +216,6 @@ public abstract class DcObjectListElement extends DcListElement {
     	if (dco != null)
     		dco.freeResources();
 
-    	dco = null;
     	this.fldTitle = null;
         super.clear();
     }
