@@ -152,6 +152,9 @@ public class DcModule implements Comparable<DcModule> {
     private net.datacrow.settings.Settings settings;
     
     private List<DcObject> items;
+    private int itemsCreated = 0;
+    private int itemsDestroyed = 0;
+    private int itemsReleased = 0;
     
     @SuppressWarnings("unchecked")
     private Class synchronizerClass;
@@ -591,11 +594,27 @@ public class DcModule implements Comparable<DcModule> {
 
         if (items.size() < _MAX_ITEM_STORE_SIZE) {
             items.add(dco);
-            logger.debug(getName() + " added to the store (" + items.size() + ")");
+            itemsReleased += 1;
         } else { 
             dco.destroy();
-            logger.debug(getName() + " store is full. Item has been destroyed.");
+            itemsDestroyed += 1;
         }
+    }
+    
+    public final int getItemsInStore() {
+        return items == null ? 0 : items.size();
+    }
+    
+    public final int getItemsDestroyed() {
+        return itemsDestroyed;
+    }
+
+    public final int getItemsReleased() {
+        return itemsReleased;
+    }
+
+    public final int getItemsCreated() {
+        return itemsCreated;
     }
     
     /**
@@ -608,13 +627,14 @@ public class DcModule implements Comparable<DcModule> {
         
         if (items == null) {
             items = new ArrayList<DcObject>();
-            for (int i = 0; i < _MAX_ITEM_STORE_SIZE; i++)
+            for (int i = 0; i < _MAX_ITEM_STORE_SIZE; i++) {
+                itemsCreated += 1;
                 items.add(createItem());
+            }
         }
 
-        logger.debug(getObjectNamePlural() + " in store : " + items.size());
-        
         if (items.size() == 0) {
+            itemsCreated += 1;
             items.add(createItem());
         }
 

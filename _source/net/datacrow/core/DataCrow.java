@@ -74,7 +74,7 @@ import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.Directory;
-import net.datacrow.util.MemoryMonitor;
+import net.datacrow.util.SystemMonitor;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.logging.TextPaneAppender;
 
@@ -389,7 +389,7 @@ public class DataCrow {
                 }
             }
             
-            MemoryMonitor monitor = new MemoryMonitor();
+            SystemMonitor monitor = new SystemMonitor();
             monitor.start();
 
             Thread splashCloser = new Thread(new SplashScreenCloser());

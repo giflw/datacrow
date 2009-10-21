@@ -29,15 +29,19 @@ import org.apache.log4j.Logger;
 
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
 
-public class MemoryMonitor extends Thread {
+public class SystemMonitor extends Thread {
 
     private static Logger logger = Logger.getLogger(MainFrame.class.getName());
     
     private Runtime runtime;
     
-    public MemoryMonitor() {
+    private boolean checkMem = true;
+    
+    public SystemMonitor() {
         runtime = Runtime.getRuntime();
     }
     
@@ -45,22 +49,44 @@ public class MemoryMonitor extends Thread {
     public void run() {
         
         while (true) {
-            
-            try {
-                sleep(20000);
-            } catch (Exception ignore) {}
-            
-            long max = Math.round(Math.round(runtime.maxMemory() / 1024) / 1024) + 1;
-            long used = Math.round(Math.round(runtime.totalMemory() / 1024) / 1024) + 1;
-            
-            long available = max - used;
 
-            logger.debug("Memory usage (max " + max + " MB) (used " + used + " MB) (available " + available + " MB)");
-            
-            if (max <= 65) {
-                new MessageBox(DcResources.getText("msgMemory64MB", String.valueOf(max)), MessageBox._WARNING);
-                break;
+            try {
+                sleep(10000);
+            } catch (Exception e) {
+                logger.error(e, e);
             }
+            
+            if (checkMem)
+                checkMemory();
+            
+            if (logger.isDebugEnabled())
+                checkItemStores();
+        }
+    }
+    
+    private void checkItemStores() {
+        for (DcModule module : DcModules.getModules()) {
+            String moduleName = Utilities.isEmpty(module.getName()) ? module.getTableName() : module.getName();
+            
+            if (module.getItemsInStore() != 0 && module.getItemsCreated() != 0) {
+                logger.debug("[" + moduleName + "] Items currently in store: " + module.getItemsInStore() + 
+                        " (created = " + module.getItemsCreated() + ", destroyed = " + module.getItemsDestroyed() + 
+                        ", recycled = " + module.getItemsReleased() + ")");
+            }
+        }
+    }
+    
+    private void checkMemory() {
+        long max = Math.round(Math.round(runtime.maxMemory() / 1024) / 1024) + 1;
+        long used = Math.round(Math.round(runtime.totalMemory() / 1024) / 1024) + 1;
+        
+        long available = max - used;
+
+        logger.debug("Memory usage (max " + max + " MB) (used " + used + " MB) (available " + available + " MB)");
+
+        if (max <= 65) {
+            new MessageBox(DcResources.getText("msgMemory64MB", String.valueOf(max)), MessageBox._WARNING);
+            checkMem = false;
         }
     }
 }
