@@ -109,7 +109,7 @@ public class DcValue implements Serializable {
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
 
             if (o instanceof Picture) {
-                setValueNative(o, field);    
+                setValueNative(((Picture) o).clone(), field);    
             } else {
                 Picture picture = value == null ? new Picture() : (Picture) value;
                 value = picture; 

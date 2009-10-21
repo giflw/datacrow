@@ -349,21 +349,22 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                     
                     boolean overwrite = dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite);
                     
-                    int[] fields = overwrite ?
-                        settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings) :
-                        dco.getModule().getFieldIndices();
+                    int[] fields = dco.getModule().getFieldIndices();//overwrite ?
+                    int[] overwriteFields = settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings);
+                    overwriteFields = overwriteFields == null ? fields : overwriteFields;
                         
-                    // if all fails, just update all!
-                    if (fields == null || fields.length == 0)
-                        fields = dco.getModule().getFieldIndices();
-        
                     for (int i = 0; i < fields.length; i++) {
                         int field = fields[i];
 
-                        if (!Utilities.isEmpty(o.getValue(fields[i]))) {
-                            if (field == DcObject._SYS_EXTERNAL_REFERENCES ||
-                               ((dco.isFilled(field) && overwrite) || !dco.isFilled(field)))
-                                dco.setValue(field, o.getValue(fields[i])); 
+                        if (Utilities.isEmpty(o.getValue(fields[i]))) continue;
+
+                        boolean update = field == DcObject._SYS_EXTERNAL_REFERENCES;
+                        for (int j = 0; j < overwriteFields.length && !update; j++) {
+                            update = overwriteFields[j] == field;
+                        }
+                        
+                        if ((dco.isFilled(field) && overwrite) || !dco.isFilled(field)) {
+                            dco.setValue(field, o.getValue(fields[i])); 
                         }
                     }  
                     

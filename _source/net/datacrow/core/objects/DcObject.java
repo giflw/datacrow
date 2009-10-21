@@ -655,7 +655,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) getValue(field.getIndex());
                 if (picture != null)
-                    picture.release();
+                    picture.unload();
             }
         }
     }
@@ -797,7 +797,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * The item is unusable after this operation (!).
      */
     public void release() {
-        freeResources();
+
         clearValues();
         setValueLowLevel(DcObject._ID, null);
         
@@ -822,6 +822,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Resets this item. All values are set to empty.
      */
     public void clearValues() {
+        if (values == null) return;
         for (Integer key : values.keySet()) {
             if (key.intValue() != _ID) {
                 DcValue value = values.get(key);

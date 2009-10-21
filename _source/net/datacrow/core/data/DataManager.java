@@ -737,7 +737,7 @@ public class DataManager {
     public static DcObject getExternalReference(int moduleIdx, String ID) {
         DcModule module = DcModules.get(moduleIdx);
         String sql = "SELECT ID FROM " + module.getTableName() + " WHERE " +
-             module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + " = %1";
+             module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + " = ?";
         
         try {
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
@@ -752,11 +752,14 @@ public class DataManager {
     }    
     
     public static DcObject getObjectByExternalID(int moduleIdx, String type, String externalID) {
-        DcModule module =  DcModules.get(moduleIdx + DcModules._EXTERNALREFERENCE);
+        DcModule module =  DcModules.get(moduleIdx);
+       
+        if (module.getField(DcObject._SYS_EXTERNAL_REFERENCES) == null) return null;
         
-        String sql = "SELECT ID FROM " + module.getTableName() + " WHERE " +
-            "UPPER(" + module.getField(ExternalReference._EXTERNAL_ID) + ") = UPPER(%1) AND " +
-            "UPPER(" + module.getField(ExternalReference._EXTERNAL_ID_TYPE) + ") = UPPER(%2)";
+        DcModule extRefModule =  DcModules.get(moduleIdx + DcModules._EXTERNALREFERENCE);
+        String sql = "SELECT ID FROM " + extRefModule.getTableName() + " WHERE " +
+            "UPPER(" + extRefModule.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + ") = UPPER(?) AND " +
+            "UPPER(" + extRefModule.getField(ExternalReference._EXTERNAL_ID_TYPE).getDatabaseFieldName() + ") = UPPER(?)";
         
         Connection conn = DatabaseManager.getConnection();
         DcObject result = null;
@@ -771,9 +774,9 @@ public class DataManager {
             while (rs.next()) {
                 referenceID = rs.getString(1);
                 
-                DcModule mappingMod = DcModules.get(module.getIndex() + DcModules._MAPPING);
+                DcModule mappingMod = DcModules.get(extRefModule.getIndex() + DcModules._MAPPING);
                 sql = "SELECT ID FROM " + mappingMod.getTableName() + 
-                      "WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID) + " = %1";
+                      "WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID) + " = ?";
     
                 PreparedStatement ps2 = conn.prepareStatement(sql);
                 ps2.setString(1, referenceID);
@@ -815,10 +818,10 @@ public class DataManager {
         try {
             String query = 
                 "SELECT ID FROM " + module.getTableName() + " WHERE " + 
-                "UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + ") =  UPPER(%1)";
+                "UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + ") =  UPPER(?)";
             
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
-                query += " UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + ") LIKE %2"; 
+                query += " UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + ") LIKE ?"; 
             
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
 
