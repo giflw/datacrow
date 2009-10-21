@@ -242,9 +242,9 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The retrieved items or null when an error occurs.
      */
-    public static Collection<DcObject> executeQuery(String sql, int type, boolean log) {
+    public static Collection<DcObject> executeQuery(String sql, int type) {
         try {
-            return executeQuery(DatabaseManager.getConnection().prepareStatement(sql), type, log);
+            return executeQuery(DatabaseManager.getConnection().prepareStatement(sql), type);
         } catch (SQLException e) {
             logger.error("There were errors for query " + sql, e);
         }
@@ -257,21 +257,20 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The retrieved items or null when an error occurs.
      */
-    public static List<DcObject> executeQuery(DcObject dco, boolean log) throws SQLException {
+    public static List<DcObject> executeQuery(DcObject dco) throws SQLException {
         Query query = new Query(Query._SELECT, dco, null, null);
-        return executeQuery(query.getQuery(), Query._SELECT, log);
+        return executeQuery(query.getQuery(), Query._SELECT);
     }
     
     /**
      * Executes a query.  
      * @param query.
-     * @param log Indicates if information on the query should be logged.
      * @return The retrieved items or null when an error occurs.
      */
-    public static List<DcObject> executeQuery(Query query, boolean logQuery) {
+    public static List<DcObject> executeQuery(Query query) {
         List<DcObject> data = new ArrayList<DcObject>();
         for (PreparedStatement ps : query.getQueries()) {
-            Collection<DcObject> c = executeQuery(ps, query.getType(), logQuery);
+            Collection<DcObject> c = executeQuery(ps, query.getType());
             if (c != null) data.addAll(c);
         }
         
@@ -306,7 +305,7 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The retrieved items or null when an error occurs.
      */
-    public static List<DcObject> executeQuery(PreparedStatement ps, int type, boolean log) {
+    public static List<DcObject> executeQuery(PreparedStatement ps, int type) {
         List<DcObject> data = null;
         
         try {
@@ -329,14 +328,6 @@ public class DatabaseManager {
             ps.close();
         } catch (SQLException e) {
             logger.error(e, e);
-        }
-
-        if (log) {
-            String sql = ps.toString();
-            int idx = sql.toLowerCase().indexOf("sql=[");
-            if (idx > -1)
-                sql = sql.substring(idx + 5, (idx + 5 < sql.length() - 2 ? sql.length() - 2 : sql.length()));
-            logger.info(sql);
         }
 
         return data;
@@ -370,7 +361,7 @@ public class DatabaseManager {
                     if (child.getID() != null && child.getID().length() > 0) {
                         DcObject childTest = child.getModule().getItem();
                         childTest.setValue(DcObject._ID, child.getID());
-                        Collection<DcObject> objects = executeQuery(childTest, true);
+                        Collection<DcObject> objects = executeQuery(childTest);
                         exists = objects.size() > 0;
                         for (DcObject tmp : objects)
                             tmp.release();

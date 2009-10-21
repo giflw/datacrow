@@ -92,12 +92,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             if (DatabaseManager.getVersion().isOlder(new Version(3, 5, 0, 0))) {
                 upgraded |= convertMappingModules();
                 upgraded |= convertMovieCountriesAndLanguages();
-                upgraded = true;
             }
             
             if (DatabaseManager.getVersion().isOlder(new Version(3, 6, 0, 0))) {
                 upgraded |= convertExternalReferences();
-                upgraded = true;
             }
             
             if (upgraded) {
@@ -290,7 +288,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 ps.execute();
                 ps.close();
                 
-                x = mm.getDcObject();
+                x = mm.getItem();
                 x.setValue(DcMapping._A_PARENT_ID, id);
                 x.setValue(DcMapping._B_REFERENCED_ID, ref.getID());
                 ps = new Query(Query._INSERT, x, null, null).getQuery();
@@ -327,7 +325,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 ps.execute();
                 ps.close();
                 
-                DcObject x = mapping.getDcObject();
+                DcObject x = mapping.getItem();
                 x.setValue(DcMapping._A_PARENT_ID, ID);
                 x.setValue(DcMapping._B_REFERENCED_ID, ref.getID());
                 ps = new Query(Query._INSERT, x, null, null).getQuery();
@@ -368,7 +366,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 ps.execute();
                 ps.close();
                 
-                DcObject x = mapping.getDcObject();
+                DcObject x = mapping.getItem();
                 x.setValue(DcMapping._A_PARENT_ID, ID);
                 x.setValue(DcMapping._B_REFERENCED_ID, ref.getID());
                 ps = new Query(Query._INSERT, x, null, null).getQuery();
@@ -563,7 +561,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                     
                     if (multiRef) {
                         // Create a mapping
-                        DcObject x = mapMod.getDcObject();
+                        DcObject x = mapMod.getItem();
                         x.setValue(DcMapping._A_PARENT_ID, ID);
                         x.setValue(DcMapping._B_REFERENCED_ID, refID);
                         
@@ -616,7 +614,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         // if not.. create the value
         if (refID == null) {
-            DcObject ref = refMod.getDcObject();
+            DcObject ref = refMod.getItem();
             ref.setIDs();
             ref.setValue(DcProperty._A_NAME, name);
             PreparedStatement psCreateRef = new Query(Query._INSERT, ref, null, null).getQuery();
@@ -652,7 +650,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
      */
     private void createTable(DcModule module) throws Exception {
         try {
-            PreparedStatement ps = new Query(Query._CREATE, module.getDcObject(), null, null).getQuery();
+            PreparedStatement ps = new Query(Query._CREATE, module.getItem(), null, null).getQuery();
             ps.execute();
             ps.close();
             

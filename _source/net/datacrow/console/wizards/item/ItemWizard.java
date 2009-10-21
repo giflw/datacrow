@@ -84,7 +84,7 @@ public class ItemWizard extends Wizard {
         }
         
         if (getModule() != null)
-            dco = getModule().getDcObject();
+            dco = getModule().getItem();
     }
     
     @Override

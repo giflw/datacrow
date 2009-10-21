@@ -125,7 +125,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     
     private void create() {
         MappingModule mm = (MappingModule) DcModules.get(mappingModIdx);
-        DcObject dco = DcModules.get(mm.getReferencedModIdx()).getDcObject();
+        DcObject dco = DcModules.get(mm.getReferencedModIdx()).getItem();
         ItemForm itemForm = new ItemForm(false, false, dco, true);
         itemForm.setListener(this);
         itemForm.setVisible(true);
@@ -174,7 +174,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     }
     
     public void notifyItemSaved(DcObject dco) {
-        DcObject mapping = DcModules.get(mappingModIdx).getDcObject();
+        DcObject mapping = DcModules.get(mappingModIdx).getItem();
         mapping.setValue(DcMapping._B_REFERENCED_ID, dco.getID());
         references.add(mapping);
         setDescription();

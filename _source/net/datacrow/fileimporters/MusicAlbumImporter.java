@@ -103,7 +103,7 @@ public class MusicAlbumImporter extends FileImporter {
 
     @Override
     public DcObject parse(String filename, int directoryUsage) {
-        DcObject ma = new MusicAlbum();
+        DcObject ma = DcModules.get(DcModules._MUSICALBUM).getItem();
 
         try {
             MusicFile musicFile = new MusicFile(filename);
@@ -139,7 +139,7 @@ public class MusicAlbumImporter extends FileImporter {
             }
             
             if (ma == null) {
-                ma = new MusicAlbum();
+                ma = DcModules.get(DcModules._MUSICALBUM).getItem();
                 ma.setValue(MusicAlbum._A_TITLE, album);
                 
                 if (musicFile.getImage() != null)
@@ -156,7 +156,7 @@ public class MusicAlbumImporter extends FileImporter {
             if (musicFile.getGenre() != null)
                 genre = DataManager.createReference(ma, MusicAlbum._G_GENRES, musicFile.getGenre());
 
-            MusicTrack mt = new MusicTrack();
+            DcObject mt = DcModules.get(DcModules._MUSICTRACK).getItem();
             mt.setValue(MusicTrack._SYS_FILENAME, filename);
             Hash.getInstance().calculateHash(mt);
             

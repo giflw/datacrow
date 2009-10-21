@@ -37,6 +37,7 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.http.HttpConnection;
 import net.datacrow.core.http.HttpConnectionUtil;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.AudioCD;
 import net.datacrow.core.objects.helpers.AudioTrack;
@@ -55,9 +56,8 @@ public class Freedb {
     
     public Freedb() {}
     
-    public AudioCD[] queryDiscId(String discID) throws Exception {
-        AudioCD[] audioCDs = query(discID);
-        return audioCDs;
+    public DcObject[] queryDiscId(String discID) throws Exception {
+        return query(discID);
     }   
     
     public String[] getCategories() throws Exception {
@@ -101,7 +101,7 @@ public class Freedb {
      * @param id full disc id
      * @throws Exception
      */
-    public net.datacrow.core.objects.helpers.AudioCD[] query(String id) throws Exception {
+    public net.datacrow.core.objects.DcObject[] query(String id) throws Exception {
         //Create the command to be sent to freedb
         String command = getReadCommand(id);
         //Send the command, and read the answer
@@ -133,7 +133,7 @@ public class Freedb {
             }
         }
         
-        AudioCD[] audioCDs = new AudioCD[counter];
+        DcObject[] audioCDs = new AudioCD[counter];
         counter = 0;
         for (int i = 0; i < data.length; i++) {
             if (data[i] != null) {
@@ -223,8 +223,8 @@ public class Freedb {
      * Converts a query result (not detailed) to a Data Crow Object
      * @param result query result
      */
-    public AudioCD convertToDcObject(FreedbQueryResult result) {
-        AudioCD audioCD = new AudioCD();
+    public DcObject convertToDcObject(FreedbQueryResult result) {
+        DcObject audioCD = DcModules.get(DcModules._AUDIOCD).getItem();
         audioCD.setValue(AudioCD._A_TITLE, result.getAlbum());
         audioCD.setValue(AudioCD._F_ARTISTS, result.getArtist());
         audioCD.setValue(AudioCD._G_GENRES, result.getCategory());
@@ -240,8 +240,8 @@ public class Freedb {
      * Converts a read result (detailed) to a Data Crow Object
      * @param result read result
      */
-    public AudioCD convertToDcObject(FreedbReadResult result) {
-        AudioCD audioCD = new AudioCD();
+    public DcObject convertToDcObject(FreedbReadResult result) {
+        DcObject audioCD = DcModules.get(DcModules._AUDIOCD).getItem();
         
         String title = result.getAlbum();
         if (title != null && title.length() > 0)
@@ -257,8 +257,7 @@ public class Freedb {
         audioCD.setValue(AudioCD._C_YEAR, new Integer(year));
         
         for (int i = 0; i < result.getTracksNumber(); i++) {
-            AudioTrack track = new AudioTrack();
-            
+            DcObject track = DcModules.get(DcModules._AUDIOTRACK).getItem();
             String lyric = result.getTrackComment(i);
             track.setValue(AudioTrack._F_TRACKNUMBER, new Integer(i + 1));
             track.setValue(AudioTrack._A_TITLE, result.getTrackTitle(i));

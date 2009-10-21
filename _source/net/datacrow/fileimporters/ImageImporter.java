@@ -79,7 +79,7 @@ public class ImageImporter extends FileImporter {
     
     @Override
     public DcObject parse(String filename, int directoryUsage) {
-        Image image = new Image();
+        DcObject image = DcModules.get(DcModules._IMAGE).getItem();
         
         try {
             image.setIDs();
@@ -109,7 +109,7 @@ public class ImageImporter extends FileImporter {
             icon = new DcImageIcon(scaledImg);
             icon.setFilename(filename);
             
-            Picture pic = new Picture(); 
+            Picture pic = (Picture) DcModules.get(DcModules._PICTURE).getItem();; 
             pic.setValue(Picture._A_OBJECTID, image.getID());
             pic.setValue(Picture._B_FIELD, image.getField(Image._I_IMAGE).getDatabaseFieldName());
             pic.setValue(Picture._C_FILENAME, filename);

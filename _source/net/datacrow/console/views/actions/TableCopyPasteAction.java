@@ -44,7 +44,7 @@ public class TableCopyPasteAction implements ActionListener {
             StringTokenizer rowTokenizer = new StringTokenizer(text, "\n");
             for (int i = 0; rowTokenizer.hasMoreTokens(); i++) {
                 String values = rowTokenizer.nextToken();
-                DcObject dco = module.getDcObject();
+                DcObject dco = module.getItem();
 
                 int fldCounter = 0;
                 int index = values.indexOf("\t");

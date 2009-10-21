@@ -119,7 +119,7 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         
         Collection<DcObject> c = listRight.getItems();
         for (DcObject dco : c) {
-            DcMapping mapping = (DcMapping) mappingModule.getDcObject();
+            DcMapping mapping = (DcMapping) mappingModule.getItem();
             mapping.setValue(DcMapping._B_REFERENCED_ID, dco.getID());
             selected.add(mapping);
         }

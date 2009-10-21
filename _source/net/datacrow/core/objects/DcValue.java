@@ -37,6 +37,7 @@ import javax.swing.ImageIcon;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.Base64;
 import net.datacrow.util.Converter;
 import net.datacrow.util.DcImageIcon;
@@ -111,7 +112,7 @@ public class DcValue implements Serializable {
             if (o instanceof Picture) {
                 setValueNative(((Picture) o).clone(), field);    
             } else {
-                Picture picture = value == null ? new Picture() : (Picture) value;
+                Picture picture = value == null ? (Picture) DcModules.get(DcModules._PICTURE).getItem() : (Picture) value;
                 value = picture; 
 
                 ImageIcon currentImage = (ImageIcon) picture.getValue(Picture._D_IMAGE);

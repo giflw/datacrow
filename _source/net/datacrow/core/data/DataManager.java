@@ -748,7 +748,7 @@ public class DataManager {
         try {
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
             ps.setString(1, ID);
-            List<DcObject> items = DatabaseManager.executeQuery(ps, Query._SELECT, false);
+            List<DcObject> items = DatabaseManager.executeQuery(ps, Query._SELECT);
             return items.size() > 0 ? items.get(0) : null;
         } catch (SQLException se) {
             logger.error(se, se);

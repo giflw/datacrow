@@ -55,7 +55,7 @@ public class TemplateForm extends DcMinimalisticItemView {
 
     @Override
     public void createNew() {
-        TemplateItemForm form = new TemplateItemForm(false, getModule().getDcObject(), this);
+        TemplateItemForm form = new TemplateItemForm(false, getModule().getItem(), this);
         form.setVisible(true);
     }
 

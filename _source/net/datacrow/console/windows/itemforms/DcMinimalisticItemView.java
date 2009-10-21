@@ -136,7 +136,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     }
     
     public void createNew() {
-        DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, false, DcModules.get(module).getDcObject(), this);
+        DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, false, DcModules.get(module).getItem(), this);
         itemForm.setVisible(true);
     }
     
@@ -194,7 +194,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     
     public void loadItems() {
         list.clear();
-        DcObject dco = DcModules.get(module).getDcObject();
+        DcObject dco = DcModules.get(module).getItem();
         DataFilter filter = new DataFilter(dco);
         filter.setOrder(new DcField[] {dco.getField(DcModules.get(module).getDefaultSortFieldIdx())});
         list.add(DataManager.get(module, filter));

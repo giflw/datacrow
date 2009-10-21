@@ -388,7 +388,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     }
 
     private void createContainer() {
-        DcObject dco = DcModules.get(DcModules._CONTAINER).getDcObject();
+        DcObject dco = DcModules.get(DcModules._CONTAINER).getItem();
         ItemForm itemForm = new ItemForm(null, false, false, dco, true);
         itemForm.setVisible(true);
     }

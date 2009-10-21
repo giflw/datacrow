@@ -63,7 +63,7 @@ public class SoftwareImporter extends FileImporter {
     
     @Override
     public DcObject parse(String filename, int directoryUsage) {
-        Software software = new Software();
+        DcObject software = DcModules.get(DcModules._SOFTWARE).getItem();
         
         try {
             software.setValue(Software._A_TITLE, getName(filename, directoryUsage));

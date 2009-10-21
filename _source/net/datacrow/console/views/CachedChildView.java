@@ -152,7 +152,7 @@ public class CachedChildView extends View implements ActionListener {
 
     private void addChild() {
         if (getParentID() != null && !getParentID().equals("")) {
-            DcObject dco = getModule().getDcObject();
+            DcObject dco = getModule().getItem();
             dco.setValue(dco.getParentReferenceFieldIndex(), getParentID());
             add(dco);
             children.add(dco);

@@ -63,7 +63,7 @@ public class MovieImporter extends FileImporter {
 
     @Override
     public DcObject parse(String filename, int directoryUsage) {
-        Movie movie = new Movie();
+        DcObject movie = DcModules.get(DcModules._MOVIE).getItem();
 
         movie.setValue(Movie._SYS_FILENAME, filename);
         movie.setValue(Movie._A_TITLE, getName(filename, directoryUsage));

@@ -49,6 +49,7 @@ public class ImageRequest implements IRequest {
     private static final long serialVersionUID = 6822123799687000065L;
 
     private static Logger logger = Logger.getLogger(ImageRequest.class.getName());
+    private static final Picture picture = new Picture();
     
     public static final int _SAVE = 1;
     public static final int _DELETE = 2;
@@ -112,7 +113,7 @@ public class ImageRequest implements IRequest {
         File file1 = new File(filename1);
         if (file1.exists()) file1.delete();
         
-        String filename2 = new Picture().getScaledFilename(DataCrow.imageDir + filename);
+        String filename2 = picture.getScaledFilename(DataCrow.imageDir + filename);
         
         File file2 = new File(filename2);
         if (file2.exists()) file2.delete();
@@ -134,7 +135,7 @@ public class ImageRequest implements IRequest {
             byte[] image = icon.getBytes();
             if (image != null && image.length > 10) {
                 Utilities.writeToFile(image, imageFile);
-                Utilities.writeScaledImageToFile(new ImageIcon(image), new Picture().getScaledFilename(imageFile));
+                Utilities.writeScaledImageToFile(new ImageIcon(image), picture.getScaledFilename(imageFile));
             }
             
         } catch (Exception e) {

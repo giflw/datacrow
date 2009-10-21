@@ -107,7 +107,7 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
     }
 
     private void create() {
-        DcObject dco = DcModules.get(referenceModIdx).getDcObject();
+        DcObject dco = DcModules.get(referenceModIdx).getItem();
         ItemForm itemForm = new ItemForm(false, false, dco, true);
         itemForm.setListener(this);
         itemForm.setVisible(true);

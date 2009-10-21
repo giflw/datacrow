@@ -108,7 +108,7 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
             }
             
             if (permission == null) {
-                permission = new Permission();
+                permission = DcModules.get(DcModules._PERMISSION).getItem();
                 permission.setIDs();
                 permission.setValue(Permission._B_FIELD, Long.valueOf(field.getIndex()));
                 permission.setValue(Permission._C_MODULE, Long.valueOf(field.getModule()));

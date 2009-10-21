@@ -546,7 +546,7 @@ public class DcModules {
     public static DcObject getObjectForTable(String tableName) {
         for (DcModule module : modules.values()) {
             if (module.getTableName().equalsIgnoreCase(tableName))
-                return module.getDcObject();
+                return module.getItem();
         }
         return null;
     }

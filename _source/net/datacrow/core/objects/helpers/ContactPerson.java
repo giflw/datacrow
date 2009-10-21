@@ -70,7 +70,7 @@ public class ContactPerson extends DcObject {
             if (qb.isAffirmative()) {
                 DatabaseManager.executeQuery("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
                                              loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 
-                                             Query._DELETE, false);
+                                             Query._DELETE);
                 for (DcObject dco : loans)
                     DataManager.remove(dco, loan.getModule().getIndex());
 

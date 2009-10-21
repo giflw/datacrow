@@ -493,8 +493,8 @@ public class Query {
     private List<PreparedStatement> getDeleteQueries(DcObject dco) throws SQLException {
         List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
 
-        Loan loan = new Loan();
-        Picture picture = new Picture();
+        DcObject loan = DcModules.get(DcModules._LOAN).getItem();
+        Picture picture = (Picture) DcModules.get(DcModules._PICTURE).getItem();
         if (dco.hasPrimaryKey())
             queries.add(getPreparedStatement("DELETE FROM " + dco.getTableName() + " WHERE ID = " + dco.getID()));
 

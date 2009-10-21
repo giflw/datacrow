@@ -62,7 +62,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
                      module.isTopModule() &&
                     !module.isAbstract()) {
                     
-                    DcObject tmp = module.getDcObject();
+                    DcObject tmp = module.getItem();
                     handle(tmp, handled);
                     tmp.release();
                 }
@@ -78,7 +78,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         for (DcField field : dco.getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 DcModule sm = DcModules.get(field.getReferenceIdx());
-                DcObject so = sm.getDcObject();
+                DcObject so = sm.getItem();
 
                 if (!handled.contains(so.getModule().getSystemObjectName())) {
                     writeDco(so);
@@ -90,7 +90,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         }
         
         if (dco.getModule().getChild() != null) {
-            writeDco(dco.getModule().getChild().getDcObject());
+            writeDco(dco.getModule().getChild().getItem());
             newLine();
             
             handled.add(dco.getModule().getChild().getSystemObjectName());

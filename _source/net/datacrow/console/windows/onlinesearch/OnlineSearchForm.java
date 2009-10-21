@@ -343,7 +343,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                     
                 if (itemForm.isVisible()) {
                     DcModule mod = DcModules.get(module);
-                    final DcObject dco = mod.getDcObject();
+                    final DcObject dco = mod.getItem();
         
                     Settings settings = getModule().getSettings();
                     

@@ -193,12 +193,12 @@ public final class SecuredUser {
             } else {
                 // not managed: access is allowed
                 for (DcField field : module.getFields()) {
-                    Permission permission = new Permission();
+                    DcObject permission = DcModules.get(DcModules._PERMISSION).getItem();
                     permission.setValue(Permission._B_FIELD, Long.valueOf(field.getIndex()));
                     permission.setValue(Permission._C_MODULE, Long.valueOf(module.getIndex()));
                     permission.setValue(Permission._D_VIEW, Boolean.TRUE);
                     permission.setValue(Permission._E_EDIT, Boolean.TRUE);
-                    mp.addPermission(permission);
+                    mp.addPermission((Permission) permission);
                 }
             }
             modulePermissions.put(Integer.valueOf(module.getIndex()), mp);

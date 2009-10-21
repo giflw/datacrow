@@ -107,7 +107,7 @@ public abstract class ItemBean extends DcBean {
         if (!isValid(wo))
             return current();
         
-        DcObject dco = wo.isNew() ? DcModules.get(wo.getModule()).getDcObject() :
+        DcObject dco = wo.isNew() ? DcModules.get(wo.getModule()).getItem() :
                        DataManager.getObject(wo.getModule(), wo.getID()).clone();
         
         for (DcWebField wf : wo.getFields()) {

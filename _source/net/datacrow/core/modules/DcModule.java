@@ -113,7 +113,7 @@ public class DcModule implements Comparable<DcModule> {
 
     private static Logger logger = Logger.getLogger(DcModule.class.getName());
     
-    private static final int _MAX_ITEM_STORE_SIZE = 50;
+    private static final int _MAX_ITEM_STORE_SIZE = 20;
 
     public static final int _TYPE_MODULE = 0;
     public static final int _TYPE_PROPERTY_MODULE = 1;
@@ -770,7 +770,7 @@ public class DcModule implements Comparable<DcModule> {
                 return items;
             } else {
                 DcObject dco = getItem();
-                List<DcObject> items = DatabaseManager.executeQuery(dco, true);
+                List<DcObject> items = DatabaseManager.executeQuery(dco);
                 dco.release();
                 return items;
             }
@@ -1504,9 +1504,9 @@ public class DcModule implements Comparable<DcModule> {
         if (this instanceof DcPropertyModule && getXmlModule() != null && !getXmlModule().isServingMultipleModules()) {
             // We are (or might be) working on a property base module with a calculated tablename
             DcModule module = DcModules.get(getName()); 
-            DatabaseManager.executeQuery("DROP TABLE " + module.getTableName(), Query._DELETE, true);
+            DatabaseManager.executeQuery("DROP TABLE " + module.getTableName(), Query._DELETE);
         } else {
-            DatabaseManager.executeQuery("DROP TABLE " + getTableName(), Query._DELETE, true);
+            DatabaseManager.executeQuery("DROP TABLE " + getTableName(), Query._DELETE);
             if (getTemplateModule() != null)
                 getTemplateModule().delete();
         }

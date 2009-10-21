@@ -180,7 +180,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
         JPanel panelInput = new JPanel();
         panelInput.setLayout(Layout.getGBL());
         
-        itemForm = new ItemForm(null, false, false, module.getDcObject(), false);
+        itemForm = new ItemForm(null, false, false, module.getItem(), false);
         for (DcField field : module.getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
                 itemForm.hide(field);

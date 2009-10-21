@@ -87,7 +87,7 @@ public class TabPanel extends JPanel implements ActionListener {
     }
     
     private void addTab() {
-        Tab tab = new Tab();
+        DcObject tab = DcModules.get(DcModules._TAB).getItem();
         tab.setValue(Tab._D_MODULE, Long.valueOf(dlg.getModule()));
         tab.addRequest(new UpdateItemFormSettingsWindow(dlg, false));
         ItemForm frm = new ItemForm(null, false, false, tab, true);

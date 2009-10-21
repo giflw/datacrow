@@ -562,7 +562,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         unloadImages();
         
         String query = "SELECT * FROM " + getTableName() + " WHERE ID = " + getID();
-        Collection<DcObject> objects = DatabaseManager.executeQuery(query, Query._SELECT, false);
+        Collection<DcObject> objects = DatabaseManager.executeQuery(query, Query._SELECT);
         for (DcObject dco : objects) {
             int[] fields = getModule().getFieldIndices();
             for (int i = 0; i < fields.length; i++)
@@ -1003,7 +1003,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             	WorkFlow.insert(this);
             } else {
                 Query query = new Query(Query._INSERT, this, null, null);
-            	DatabaseManager.executeQuery(query, false);
+            	DatabaseManager.executeQuery(query);
 
             	if (synchronizeWithDM)
             		new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, this).execute(null);
@@ -1052,7 +1052,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             	WorkFlow.update(this);
             } else {
                 Query query = new Query(Query._UPDATE, this, null, null);
-                DatabaseManager.executeQuery(query, false);
+                DatabaseManager.executeQuery(query);
             	if (synchronizeWithDM)
             		new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, this).execute(null);
             }

@@ -240,7 +240,7 @@ public class DcTable extends JTable implements IViewComponent {
                 byte[] bytes = picture.getBytes();
                 
                 if (bytes != null) {
-                    Picture p = new Picture();
+                    Picture p = (Picture) DcModules.get(DcModules._PICTURE).getItem();
                     p.setValue(Picture._A_OBJECTID, picture.getValue(Picture._A_OBJECTID));
                     p.setValue(Picture._B_FIELD, picture.getValue(Picture._B_FIELD));
                     p.setValue(Picture._C_FILENAME, picture.getValue(Picture._C_FILENAME));
@@ -413,7 +413,7 @@ public class DcTable extends JTable implements IViewComponent {
             return cache.get(id);
         } else {
             cancelEdit();
-            DcObject dco = getModuleForRow(row).getDcObject();
+            DcObject dco = getModuleForRow(row).getItem();
             for (TableColumn column : columns.values()) {
                 col = column.getModelIndex();
                 int field = getFieldForColumnIndex(col);
@@ -720,7 +720,7 @@ public class DcTable extends JTable implements IViewComponent {
     // Private methods and classes
     // *************************************************************************
     private void buildTable() {
-        DcObject dco = module.getDcObject();
+        DcObject dco = module.getItem();
         getDcModel().setColumnCount(dco.getFields().size());
 
         int counter = 0;

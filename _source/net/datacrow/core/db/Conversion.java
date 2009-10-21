@@ -231,7 +231,7 @@ public class Conversion {
                 mapping.setValue(DcMapping._A_PARENT_ID, ID);
                 mapping.setValue(DcMapping._B_REFERENCED_ID, referenceID);
                 
-                DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null), true);
+                DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null));
             }
             rs.close();
         } catch (Exception e) {
@@ -259,10 +259,10 @@ public class Conversion {
                 // check if the referenced item exists
                 DcObject reference = refMod.getItem();
                 reference.setValue(DcProperty._A_NAME, name);
-                List<DcObject> items = DatabaseManager.executeQuery(reference, false);
+                List<DcObject> items = DatabaseManager.executeQuery(reference);
                 if (items.size() == 0) {
                     reference.setIDs();
-                    DatabaseManager.executeQuery(new Query(Query._INSERT, reference, null, null), true);
+                    DatabaseManager.executeQuery(new Query(Query._INSERT, reference, null, null));
                 }
                 
                 String sql2 = "select item.ID, property.ID from " + refMod.getTableName() + " property " +
@@ -283,9 +283,9 @@ public class Conversion {
                         mapping.setValue(DcMapping._A_PARENT_ID, itemID);
                         mapping.setValue(DcMapping._B_REFERENCED_ID, propertyID);
                         
-                        items = DatabaseManager.executeQuery(mapping, false);
+                        items = DatabaseManager.executeQuery(mapping);
                         if (items.size() == 0)
-                            DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null), true);
+                            DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null));
                         
                     } else {
                         String sql3 = "update " + DcModules.get(getModuleIdx()).getTableName() +

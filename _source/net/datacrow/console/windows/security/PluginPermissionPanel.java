@@ -43,6 +43,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
 import net.datacrow.console.components.tables.DcTable;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.helpers.Permission;
@@ -99,7 +100,7 @@ public class PluginPermissionPanel extends JPanel implements ActionListener {
             }
             
             if (permission == null) {
-                permission = new Permission();
+                permission = DcModules.get(DcModules._PERMISSION).getItem();
                 permission.setIDs();
                 permission.setValue(Permission._A_PLUGIN, plugin.getKey());
                 

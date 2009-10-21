@@ -80,7 +80,7 @@ public class EbookImport extends FileImporter {
     
     @Override
     public DcObject parse(String filename, int directoryUsage) {
-        Book book = new Book();
+        DcObject book = DcModules.get(DcModules._BOOK).getItem();
         
         try {
             book.setValue(Book._A_TITLE, getName(filename, directoryUsage));

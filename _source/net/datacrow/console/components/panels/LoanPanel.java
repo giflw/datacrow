@@ -102,7 +102,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         
         int counter = 0;
         Boolean available = null;
-        Loan l = new Loan();
+        Loan l = (Loan) DcModules.get(DcModules._LOAN).getItem();
         for (DcObject o : objects) {
             dco = counter == 0 ? o : dco;
             boolean currentStatus = l.isAvailable(o.getID());
@@ -119,6 +119,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         loan = DataManager.getCurrentLoan(dco.getID());
         buildPanel(loan.isAvailable(dco.getID())); 
         setLoanInformation(loan);
+        l.release();
     }
     
     private String getPersonLink(String personID) {

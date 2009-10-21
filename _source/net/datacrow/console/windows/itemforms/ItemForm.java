@@ -159,12 +159,12 @@ public class ItemForm extends DcFrame implements ActionListener {
             
             String parentID = dcoOrig.getParentID();
             
-            this.dcoOrig = DcModules.get(moduleIdx).getDcObject();
-            this.dco = DcModules.get(moduleIdx).getDcObject();
+            this.dcoOrig = DcModules.get(moduleIdx).getItem();
+            this.dco = DcModules.get(moduleIdx).getItem();
             
             if (DcModules.getCurrent().getIndex() == DcModules._CONTAINER) {
                 if (this.template == null) 
-                    this.template = (DcTemplate) dco.getModule().getTemplateModule().getDcObject();
+                    this.template = (DcTemplate) dco.getModule().getTemplateModule().getItem();
                 
                 this.template.setValue(DcObject._SYS_CONTAINER,
                                        DcModules.getCurrent().getCurrentSearchView().getSelectedItem());

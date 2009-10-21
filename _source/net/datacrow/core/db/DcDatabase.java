@@ -245,7 +245,7 @@ public class DcDatabase {
         initializeSystemTable(stmt);
         
         for (DcModule module : DcModules.getAllModules()) {
-            DcObject dco = module.getDcObject();
+            DcObject dco = module.getItem();
             if (!dco.getTableName().equals("")) {
                 String testQuery = "select * from " + dco.getTableName();
                 try {

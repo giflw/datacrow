@@ -113,7 +113,7 @@ public class XmlExporter extends ItemExporter {
          */
         private void generateXsd(String schemaFile) throws Exception {
             XmlSchemaWriter schema = new XmlSchemaWriter(schemaFile);
-            DcObject dco = DcModules.getCurrent().getDcObject();
+            DcObject dco = DcModules.getCurrent().getItem();
             schema.create(dco);
             dco.release();
         }

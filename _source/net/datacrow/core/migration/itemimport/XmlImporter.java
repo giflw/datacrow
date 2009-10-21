@@ -65,7 +65,7 @@ public class XmlImporter extends ItemImporter {
         }
     
         private DcObject parseItem(DcModule module, Element eItem) throws Exception {
-            DcObject dco = module.getDcObject();
+            DcObject dco = module.getItem();
             dco.setIDs();
             // get the object
             for (DcField field : module.getFields()) {
@@ -87,7 +87,7 @@ public class XmlImporter extends ItemImporter {
                     for (int j = 0; elReferences != null && j < elReferences.getLength(); j++) {
                         // retrieve the values by the display field index (the system display field index)
                         Element eReference = (Element) elReferences.item(j);
-                        DcObject reference = referenceMod.getDcObject();
+                        DcObject reference = referenceMod.getItem();
                         String referenceField = Converter.getValidXmlTag(reference.getField(reference.getSystemDisplayFieldIdx()).getSystemName());
                         NodeList nlRefField = eReference.getElementsByTagName(referenceField);
                         if (nlRefField != null && nlRefField.getLength() > 0) {

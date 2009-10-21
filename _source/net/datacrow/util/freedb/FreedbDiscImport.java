@@ -29,7 +29,7 @@ import net.datacrow.console.MainFrame;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.helpers.AudioCD;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
@@ -69,12 +69,12 @@ public class FreedbDiscImport {
 	        discId = discId.replaceAll(" ", "+");
 
 	        try {
-	            AudioCD[] audioCDs = freeDb.queryDiscId(discId);
+	            DcObject[] audioCDs = freeDb.queryDiscId(discId);
 
 	            if (audioCDs.length == 0) {
 	                new MessageBox(DcResources.getText("msgNoResultsForDiscID", discId), MessageBox._INFORMATION);
 	            } else {
-	            	for (AudioCD audioCD : audioCDs)
+	            	for (DcObject audioCD : audioCDs)
 	            		DcModules.get(DcModules._AUDIOCD).getCurrentInsertView().add(audioCD);
 	            	
 	            	DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);

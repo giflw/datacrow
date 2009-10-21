@@ -68,7 +68,7 @@ public class ChildForm extends DcMinimalisticItemView {
     
     @Override
     public void createNew() {
-        DcObject dco = getModule().getDcObject();
+        DcObject dco = getModule().getItem();
         dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
         
         ChildItemForm itemForm = new ChildItemForm(false, dco, this);

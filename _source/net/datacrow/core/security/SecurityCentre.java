@@ -43,7 +43,6 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Permission;
 import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.plugin.Plugins;
@@ -216,7 +215,7 @@ public class SecurityCentre {
         
         for (DcModule module : getManagedModules()) {
             for (DcField field : module.getFields()) {
-                Permission permission = new Permission();
+                Permission permission = (Permission) DcModules.get(DcModules._PERMISSION).getItem();
                 permission.setIDs();
                 permission.setValue(Permission._B_FIELD, Long.valueOf(field.getIndex()));
                 permission.setValue(Permission._C_MODULE, Long.valueOf(field.getModule()));
@@ -228,7 +227,7 @@ public class SecurityCentre {
         
         for (RegisteredPlugin plugin : Plugins.getInstance().getRegistered()) {
             if (plugin.isAuthorizable()) {
-                Permission permission = new Permission();
+                Permission permission = (Permission) DcModules.get(DcModules._PERMISSION).getItem();
                 permission.setIDs();
                 permission.setValue(Permission._A_PLUGIN, plugin.getKey());
                 permission.setValue(Permission._D_VIEW, Boolean.TRUE);
@@ -296,19 +295,19 @@ public class SecurityCentre {
     
     private void createTables() {
         try {
-            Query query = new Query(Query._CREATE, new User(), null, null);
+            Query query = new Query(Query._CREATE, DcModules.get(DcModules._USER).getItem(), null, null);
             for (PreparedStatement ps : query.getQueries()) 
                 ps.execute();
         } catch (Exception se) {}
 
         try {
-            Query query = new Query(Query._CREATE, new Picture(), null, null);
+            Query query = new Query(Query._CREATE, DcModules.get(DcModules._PICTURE).getItem(), null, null);
             for (PreparedStatement ps : query.getQueries()) 
                 ps.execute();
         } catch (SQLException se) {}
 
         try {
-            Query query = new Query(Query._CREATE, new Permission(), null, null);
+            Query query = new Query(Query._CREATE, DcModules.get(DcModules._PERMISSION).getItem(), null, null);
             for (PreparedStatement ps : query.getQueries()) 
                 ps.execute();
         } catch (SQLException se) {}

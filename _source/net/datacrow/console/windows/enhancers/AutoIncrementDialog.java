@@ -387,7 +387,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
                                              " SET " + field.getDatabaseFieldName() + " = " + counter  + 
                                              " WHERE ID = " + ID;
                         
-                        DatabaseManager.executeQuery(updateQuery, Query._UPDATE, false);
+                        DatabaseManager.executeQuery(updateQuery, Query._UPDATE);
 
                         DcObject dco = DataManager.getObject(module.getIndex(), ID);
                         dco.setValue(field.getIndex(), Long.valueOf(counter));

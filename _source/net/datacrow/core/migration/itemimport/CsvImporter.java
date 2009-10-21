@@ -114,7 +114,7 @@ public class CsvImporter extends ItemImporter {
                     if (isCanceled()) break;
                     if (counter == 0) continue;
                     
-                    DcObject dco = module.getDcObject();
+                    DcObject dco = module.getItem();
                     for (int fieldIdx = 0; fieldIdx < values.length; fieldIdx++) {
                         String value = values[fieldIdx];
                         DcField field = mappings.getTarget(fieldIdx);
