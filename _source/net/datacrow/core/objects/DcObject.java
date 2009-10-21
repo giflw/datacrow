@@ -680,11 +680,58 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param index The field index.
      * @param o The value to be set.
      */
+    @SuppressWarnings("unchecked")
     public void setValue(int index, Object o) {
         DcValue value = getValueDef(index);
-        if (value != null)
-            value.setValue(o, getModule().getField(index));
-    }    
+        if (value != null) {
+            if (index == _SYS_EXTERNAL_REFERENCES && getValue(index) != null && o != null ) {
+                mergeReferences((Collection<DcMapping>) o);
+            } else {
+                value.setValue(o, getModule().getField(index));
+            }
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void mergeReferences(Collection<DcMapping> mappings) {
+        Collection<DcMapping> currentMappings = (Collection<DcMapping>) getValue(DcObject._SYS_EXTERNAL_REFERENCES);
+            
+        // external references are always merged!
+        for (DcMapping mapping : mappings) {
+            DcObject reference = mapping.getReferencedObject();
+            boolean exists = false;
+            
+            if (currentMappings != null) {
+                for (DcMapping mappingCurrent : currentMappings) {
+                    DcObject referenceCurrent = mappingCurrent.getReferencedObject();
+                    exists = referenceCurrent.getValue(ExternalReference._EXTERNAL_ID_TYPE).equals(reference.getValue(ExternalReference._EXTERNAL_ID_TYPE));
+                    if (exists) {
+                        mappingCurrent.setValue(DcMapping._B_REFERENCED_ID, mapping.getReferencedObject().getID());
+                        mappingCurrent.setReferencedObject(mapping.getReferencedObject());
+                        getValueDef(DcObject._SYS_EXTERNAL_REFERENCES).setChanged(true);
+                        break;
+                    }
+                }
+            }
+            
+            if (!exists) {
+                DcMapping newMapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(
+                        getModule().getIndex(), mapping.getReferencedObject().getModule().getIndex(), DcObject._SYS_EXTERNAL_REFERENCES)).getDcObject();
+                newMapping.setValue(DcMapping._A_PARENT_ID, getID());
+                newMapping.setValue(DcMapping._B_REFERENCED_ID, mapping.getReferencedObject().getID());
+                newMapping.setReferencedObject(mapping.getReferencedObject());
+                currentMappings.add(newMapping);
+                getValueDef(DcObject._SYS_EXTERNAL_REFERENCES).setChanged(true);
+            }
+        }
+    }
+
+//        if (value != null) {
+//            if (index == DcObject._SYS_EXTERNAL_REFERENCES) {
+//                if (o instanceof Collection<?>) {
+//                    }
+//                }
+//            } else {
     
     /**
      * Applies the value directly on this item. All checks are bypasses.
@@ -797,7 +844,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * The item is unusable after this operation (!).
      */
     public void release() {
-        freeResources();
+
         clearValues();
         setValueLowLevel(DcObject._ID, null);
         
