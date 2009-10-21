@@ -585,21 +585,27 @@ public class DcModule implements Comparable<DcModule> {
     }  
 
     public void release(DcObject dco) {
-        if (items.size() < _MAX_ITEM_STORE_SIZE)
+        if (items.size() < _MAX_ITEM_STORE_SIZE) {
             items.add(dco);
-        else 
+            logger.debug(getName() + " added to the store (" + items.size() + ")");
+        } else { 
             dco.destroy();
+            logger.debug(getName() + " store is full. Item has been destroyed.");
+        }
     }
     
     /**
      * Creates a new instance of an item belonging to this module.
      */
     public final DcObject getDcObject() {
+        
         if (items == null) {
             items = new ArrayList<DcObject>();
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < _MAX_ITEM_STORE_SIZE; i++)
                 items.add(createItem());
         }
+
+        logger.debug(getObjectNamePlural() + " in store : " + items.size());
         
         if (items.size() == 0) {
             items.add(createItem());

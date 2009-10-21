@@ -310,6 +310,7 @@ public class DataManager {
     public static Collection<DcObject> getChildren(String parentId, int childIdx) {
         List<DcObject> c = children.get(childIdx).get(parentId);
         c = c == null ? new ArrayList<DcObject>() : new ArrayList<DcObject>(c);
+        children.get(childIdx).put(parentId, c);
         
         DcModule module =  DcModules.get(childIdx);
         DataFilter filter = new DataFilter(childIdx);
@@ -717,8 +718,10 @@ public class DataManager {
      * @return A collection holding loans or an empty collection.
      */
     public static Collection<Loan> getLoans(String parentID) {
-        Collection<Loan> c = loans.get(parentID);
-        return c != null ? new ArrayList<Loan>(c) : new ArrayList<Loan>();
+        List<Loan> c = loans.get(parentID);
+        c = c == null ? new ArrayList<Loan>() : c;
+        loans.put(parentID, c);
+        return c;
     }
     
     /**
@@ -727,11 +730,14 @@ public class DataManager {
      */
     public static Loan getCurrentLoan(String parentID) {
         Collection<Loan> loans = getLoans(parentID);
-        for (Loan loan : loans) {
+        for (Loan loan : new ArrayList<Loan>(loans)) {
             if (loan.getValue(Loan._B_ENDDATE) == null)
                 return loan;
         }
-        return new Loan();
+        
+        Loan loan = new Loan();
+        loans.add(loan);
+        return loan;
     }
     
     public static DcObject getExternalReference(int moduleIdx, String ID) {
@@ -868,7 +874,9 @@ public class DataManager {
      */
     public static Collection<DcMapping> getReferences(int module, String parentId) {
         Collection<DcMapping> c = references.get(module).get(parentId);
-        return c == null ? new ArrayList<DcMapping>() : c; 
+        c = c == null ? new ArrayList<DcMapping>() : c;
+        references.get(module).put(parentId, c);
+        return c; 
     }
 
     /**
@@ -877,8 +885,10 @@ public class DataManager {
      * @return Either the pictures or an empty collection.
      */
     public static Collection<Picture> getPictures(String parentId) {
-        Collection<Picture> c = pictures.get(parentId);
-        return c == null ? new ArrayList<Picture>() : c; 
+        List<Picture> c = pictures.get(parentId);
+        c = c == null ? new ArrayList<Picture>() : c;
+        pictures.put(parentId, c);
+        return c;
     }
     
     /**

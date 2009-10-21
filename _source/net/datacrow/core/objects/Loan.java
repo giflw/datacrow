@@ -68,15 +68,13 @@ public class Loan extends DcObject {
             loan = DataManager.getCurrentLoan(objectID);
         
         boolean available = true;
-        if (loan != null) {
-            Date start = (Date) loan.getValue(Loan._A_STARTDATE);
-            Date end = (Date) loan.getValue(Loan._B_ENDDATE);
-            Date current = new Date();
-            if (end != null)
-                available = true;
-            else if (start != null && current.compareTo(start) >= 0)
-                available = false;
-        }
+        Date start = (Date) loan.getValue(Loan._A_STARTDATE);
+        Date end = (Date) loan.getValue(Loan._B_ENDDATE);
+        Date current = new Date();
+        if (end != null)
+            available = true;
+        else if (start != null && current.compareTo(start) >= 0)
+            available = false;
         
         return available;
     }
