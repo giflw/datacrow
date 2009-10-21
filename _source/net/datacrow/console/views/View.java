@@ -664,7 +664,7 @@ public class View extends DcPanel implements ListSelectionListener {
         if (o != null) vc.updateItem(o.getID(), dco, overwrite, allowDeletes, mark);
         
         // TODO: test
-        //dco.release();
+        dco.release();
     }
 
     public void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {

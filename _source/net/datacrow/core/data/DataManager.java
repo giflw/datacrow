@@ -774,9 +774,10 @@ public class DataManager {
             while (rs.next()) {
                 referenceID = rs.getString(1);
                 
-                DcModule mappingMod = DcModules.get(extRefModule.getIndex() + DcModules._MAPPING);
-                sql = "SELECT ID FROM " + mappingMod.getTableName() + 
-                      "WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID) + " = ?";
+                int idx = DcModules.getMappingModIdx(extRefModule.getIndex() - DcModules._EXTERNALREFERENCE, extRefModule.getIndex(), DcObject._SYS_EXTERNAL_REFERENCES);
+                DcModule mappingMod = DcModules.get(idx);
+                sql = "SELECT OBJECTID FROM " + mappingMod.getTableName() + 
+                      " WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?";
     
                 PreparedStatement ps2 = conn.prepareStatement(sql);
                 ps2.setString(1, referenceID);
