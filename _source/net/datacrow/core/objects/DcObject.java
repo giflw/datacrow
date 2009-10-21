@@ -797,7 +797,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * The item is unusable after this operation (!).
      */
     public void release() {
-
+        freeResources();
         clearValues();
         setValueLowLevel(DcObject._ID, null);
         
