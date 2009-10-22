@@ -387,7 +387,7 @@ public class Utilities {
     	if (image instanceof BufferedImage)
     		bi = (BufferedImage) image;
     	else 
-    		bi = Utilities.toBufferedImage(new ImageIcon(image), type, -1, -1);
+    		bi = Utilities.toBufferedImage(new ImageIcon(image), -1, -1);
     	
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BufferedOutputStream bos = new BufferedOutputStream(baos);
@@ -442,15 +442,11 @@ public class Utilities {
     }    
 
     public static Image getScaledImage(byte[] bytes, int width, int height) {
-        return toBufferedImage(new ImageIcon(bytes), DcImageIcon._TYPE_JPEG, width, height);
-    }    
-
-    public static Image getScaledImage(byte[] bytes, int type, int width, int height) {
-        return toBufferedImage(new ImageIcon(bytes), type, width, height);
+        return toBufferedImage(new ImageIcon(bytes), width, height);
     }    
     
     public static Image getScaledImage(ImageIcon icon, int width, int height) {
-        return toBufferedImage(icon, DcImageIcon._TYPE_JPEG, width, height);
+        return toBufferedImage(icon, width, height);
     }    
     
     public static void writeScaledImageToFile(ImageIcon icon, String filename) throws Exception {
@@ -458,7 +454,7 @@ public class Utilities {
     }
 
     public static void writeScaledImageToFile(ImageIcon icon, String filename, int type, int w, int h) throws Exception {
-        BufferedImage bufferedImage = toBufferedImage(icon, type, w, h);
+        BufferedImage bufferedImage = toBufferedImage(icon, w, h);
         ImageIO.write(bufferedImage, (type == DcImageIcon._TYPE_JPEG ? "JPG" : "PNG"), new File(filename));
         bufferedImage.flush();
     }       
@@ -620,10 +616,10 @@ public class Utilities {
     }
     
     public static BufferedImage toBufferedImage(ImageIcon icon) {
-        return toBufferedImage(icon, DcImageIcon._TYPE_JPEG, -1, -1);
+        return toBufferedImage(icon, -1, -1);
     }  
     
-    public static BufferedImage toBufferedImage(ImageIcon icon, int type, int width, int height) {
+    public static BufferedImage toBufferedImage(ImageIcon icon, int width, int height) {
         // make sure the image is loaded
         Image image = new DcImageIcon(icon.getImage()).getImage();
         
@@ -647,8 +643,7 @@ public class Utilities {
                 w = (int) (h * imageRatio);
         }
         
-        int transparency = type == DcImageIcon._TYPE_JPEG ? Transparency.OPAQUE : Transparency.BITMASK;
-        BufferedImage bi = gc.createCompatibleImage(w, h, transparency);
+        BufferedImage bi = gc.createCompatibleImage(w, h, Transparency.TRANSLUCENT);
 
         Graphics g = bi.createGraphics();
         DcSwingUtilities.setRenderingHint(g);

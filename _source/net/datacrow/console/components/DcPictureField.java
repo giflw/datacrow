@@ -32,6 +32,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -336,7 +337,10 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                     BufferedImage bi = converter.renderSVG(file.toString());
                     picture = new DcImageIcon(Utilities.getBytes(new ImageIcon(bi)));
                 } else {
-                    picture = new DcImageIcon(Utilities.readFile(file));
+                    String filename = file.toString().toLowerCase();
+                    picture = new DcImageIcon(Utilities.getBytes(
+                            Toolkit.getDefaultToolkit().createImage(Utilities.readFile(file)), 
+                            filename.endsWith(".png") ? DcImageIcon._TYPE_PNG : DcImageIcon._TYPE_JPEG));
                 }
                 
                 initialize();

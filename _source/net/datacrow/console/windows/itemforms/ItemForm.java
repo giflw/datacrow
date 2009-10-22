@@ -334,10 +334,10 @@ public class ItemForm extends DcFrame implements ActionListener {
                 dcoOrig.getModule().getCurrentSearchView().repaintQuickViewImage();
         }
         
-        if (dco != null && update)
-            dco.release();
-        else if (dco != null)
-            dco.freeResources();
+//        if (dco != null && update)
+//            dco.release();
+//        else if (dco != null)
+//            dco.freeResources();
         
         ComponentFactory.clean(getJMenuBar());
         setJMenuBar(null);

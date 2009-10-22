@@ -87,7 +87,7 @@ public class ItemExporterUtilities {
                 if (settings.getBoolean(ItemExporterSettings._SCALE_IMAGES)) {
                     int width = settings.getInt(ItemExporterSettings._IMAGE_WIDTH);
                     int height = settings.getInt(ItemExporterSettings._IMAGE_HEIGHT);
-                    Utilities.writeToFile(new DcImageIcon(Utilities.toBufferedImage(icon, DcImageIcon._TYPE_JPEG, width, height)), target);
+                    Utilities.writeToFile(new DcImageIcon(Utilities.toBufferedImage(icon, width, height)), target);
                 } else {
                     Utilities.writeToFile(icon, target);
                 }
