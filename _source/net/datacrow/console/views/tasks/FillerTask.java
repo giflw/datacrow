@@ -26,6 +26,8 @@ public class FillerTask extends DataTask {
         super();
         setName("Filler-Task [Object count: " + objects.length + "]");
         
+        logger.debug("Going to fill view with " + objects.length + " items");
+        
         this.view = view;
         this.tree = tree;
         this.objects = objects;
