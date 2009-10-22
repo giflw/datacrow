@@ -627,7 +627,7 @@ public class DcModule implements Comparable<DcModule> {
         
         if (items == null) {
             items = new ArrayList<DcObject>();
-            for (int i = 0; i < _MAX_ITEM_STORE_SIZE; i++) {
+            for (int i = 0; i < _MAX_ITEM_STORE_SIZE / 2; i++) {
                 itemsCreated += 1;
                 items.add(createItem());
             }
