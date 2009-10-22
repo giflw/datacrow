@@ -726,13 +726,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
 
-//        if (value != null) {
-//            if (index == DcObject._SYS_EXTERNAL_REFERENCES) {
-//                if (o instanceof Collection<?>) {
-//                    }
-//                }
-//            } else {
-    
     /**
      * Applies the value directly on this item. All checks are bypasses.
      * @param index The field index.

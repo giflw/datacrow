@@ -43,6 +43,7 @@ public class SystemMonitor extends Thread {
     
     public SystemMonitor() {
         runtime = Runtime.getRuntime();
+        setName("System-Monitor-Thread");
     }
     
     @Override

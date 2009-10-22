@@ -25,6 +25,7 @@ public class DeleteTask extends DataTask {
     
     public DeleteTask(View view, Collection<? extends DcObject> objects) {
         super(objects);
+        setName("Delete-Items-Task");
         this.view = view;
     }
 

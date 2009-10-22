@@ -313,6 +313,10 @@ public class FilterDialog extends DcDialog implements ActionListener {
     
     private class FilterThread extends Thread {
 
+        public FilterThread() {
+            setName("Filter-Thread");
+        }
+        
         @Override
         public void run() {
             View view = parent.getCurrent();

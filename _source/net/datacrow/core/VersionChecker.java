@@ -56,6 +56,7 @@ public class VersionChecker extends Thread {
     
     public VersionChecker() {
         properties = new Properties();
+        setName("Version-Checker");
     }
     
     @Override

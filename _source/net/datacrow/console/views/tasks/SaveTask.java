@@ -27,6 +27,7 @@ public class SaveTask extends DataTask {
     
     public SaveTask(View view, Collection<? extends DcObject> objects) {
         super(objects);
+        setName("Save-Items-Task");
         this.view = view;
     }
 

@@ -51,6 +51,7 @@ public class DriveManagerSingleItemMatcher extends Thread {
         this.dco = dco;
         this.precision = precision;
         
+        setName("Drive-Manager-Single-Item-Matcher");
         setPriority(Thread.MIN_PRIORITY);
     }
     
