@@ -20,6 +20,8 @@ Data Crow 3.7 beta [Release on xx/10/2009] [testing: medium] [target: beta]
 
 [Fixed]
 - External Reference is not created when an item is updated by an online service.
+- Several problems with transparent images have been fixed.
+- MobyGames.com stopped working.
 
 
 -----------------------------------------------------------------------------------------
