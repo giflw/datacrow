@@ -52,7 +52,7 @@ public class SystemMonitor extends Thread {
         while (true) {
 
             try {
-                sleep(10000);
+                sleep(60000);
             } catch (Exception e) {
                 logger.error(e, e);
             }
