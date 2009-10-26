@@ -45,7 +45,7 @@ import net.datacrow.console.components.lists.elements.DcPropertyListElement;
 import net.datacrow.console.components.lists.elements.DcShortObjectListElement;
 import net.datacrow.console.components.lists.elements.DcSoftwareListHwElement;
 import net.datacrow.console.components.lists.elements.DcTemplateListElement;
-import net.datacrow.console.components.renderers.DcListRenderer;
+import net.datacrow.console.components.renderers.DcObjectListRenderer;
 import net.datacrow.console.views.IViewComponent;
 import net.datacrow.console.views.View;
 import net.datacrow.core.modules.DcModule;
@@ -72,7 +72,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     public static final int _CARDS = 1;
     public static final int _LISTING = 2;
     
-    private DcListRenderer renderer = new DcListRenderer();
+    private DcObjectListRenderer renderer = new DcObjectListRenderer();
     
     public DcObjectList(int style, boolean wrap, boolean evenOddColors) {
         this(null, style, wrap, evenOddColors);
@@ -408,5 +408,5 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     public void removeSelectionListener(ListSelectionListener lsl) {
         removeListSelectionListener(lsl);
-    }      
+    }   
 }

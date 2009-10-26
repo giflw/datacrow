@@ -29,62 +29,37 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Rectangle;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
-import javax.swing.border.Border;
 
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
 
-public class DcListRenderer extends DefaultListCellRenderer  {
+public class DcObjectListRenderer extends DcListRenderer  {
 
-    private boolean evenOddColors;
-    private static final Border selectedBorder = BorderFactory.createLineBorder(Color.BLACK);
-    private static final Border normalBorder = BorderFactory.createLineBorder(Color.WHITE);
-    
-    public DcListRenderer() {}
-
-    public DcListRenderer(boolean evenOddColors) {
-        this.evenOddColors = evenOddColors;
+    public DcObjectListRenderer() {
     }
 
-    public void setEventOddColors(boolean b) {
-        evenOddColors = b;
+    public DcObjectListRenderer(boolean evenOddColors) {
+        super(evenOddColors);
     }
-    
+
     @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        Component component = (Component) value;
-        component.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
-        setElementColor(isSelected, component, index);
-        return component;
-    }
+    public Component getListCellRendererComponent(
+            JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
-    protected void setElementColor(boolean isSelected, Component component, int index) {
-        if (evenOddColors) {
-            Color colorOddRow = DcSettings.getColor(DcRepository.Settings.stOddRowColor);
-            Color colorEvenRow = DcSettings.getColor(DcRepository.Settings.stEvenRowColor);
-            Color colorRowSelection = DcSettings.getColor(DcRepository.Settings.stSelectionColor);
-            
-            if (!isSelected) {
-                if ((index % 2) == 0)
-                    component.setBackground(colorEvenRow);
-                else
-                    component.setBackground(colorOddRow);
-            } else {
-                component.setBackground(colorRowSelection);
-            }
-        } else {
-            if (isSelected) {
-                if (component instanceof DcObjectListElement) 
-                    ((DcObjectListElement) component).setBorder(selectedBorder);
-            } else if (component instanceof DcObjectListElement) { 
-                ((DcObjectListElement) component).setBorder(normalBorder);
-            }
-        }
+        DcObjectListElement c = (DcObjectListElement) value;
+        c.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
+
+    	if (c.getDcObject().getModule().canBeLend()) {
+    		Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
+    		if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
+    			c.setForeground(Color.RED);
+    	}
         
+    	setElementColor(isSelected, c, index);
+    	return c;
     }
     
     @Override
