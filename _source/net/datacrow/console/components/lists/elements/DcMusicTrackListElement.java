@@ -44,6 +44,7 @@ public class DcMusicTrackListElement extends DcObjectListElement {
     
     public DcMusicTrackListElement(DcObject dco) {
         super(dco);
+        build();
     }
     
     @Override

@@ -44,6 +44,7 @@ public class DcChildObjectListElement extends DcObjectListElement {
     
     public DcChildObjectListElement(DcObject dco) {
         super(dco);
+        build();
     }
     
     @Override

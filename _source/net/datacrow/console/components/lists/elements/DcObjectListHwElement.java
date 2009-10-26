@@ -61,7 +61,6 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
         
         this.dco = dco;
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        //ComponentFactory.setBorder(this);
         build();
     }
 

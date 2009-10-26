@@ -116,6 +116,10 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         this.thumbnail = thumbnail;
     }
     
+    public void setScaled(boolean scaled) {
+        this.scaled = scaled;
+    }
+
     public void setValue(Object o) {
         if (o == picture)
             return;

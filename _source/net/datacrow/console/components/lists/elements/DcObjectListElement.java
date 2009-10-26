@@ -32,14 +32,12 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.util.Collection;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcTextPane;
+import net.datacrow.console.components.lists.DcObjectListComponents;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -49,6 +47,11 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A list element which is capable of displaying a DcObject.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public abstract class DcObjectListElement extends DcListElement {
 
     private static Logger logger = Logger.getLogger(DcObjectListElement.class.getName());
@@ -57,8 +60,10 @@ public abstract class DcObjectListElement extends DcListElement {
     private static final Dimension dimPicLbl = new Dimension(146, 140);
 
     protected static final int fieldHeight = 21;
+
     protected DcObject dco;
     protected DcTextPane fldTitle;
+    protected DcPictureField fldPicture;
     
     private boolean build = false;
     
@@ -135,14 +140,16 @@ public abstract class DcObjectListElement extends DcListElement {
     	}
     }
 
-	@Override
+    @Override
     public void build() {
-	    
-	    build = true;
-	    
-        addPicture(getPictures());
+
+        this.fldPicture = DcObjectListComponents.getPictureField();
+        this.fldTitle = DcObjectListComponents.getTextPane();
         
-        fldTitle = ComponentFactory.getTextPane();
+	    build = true;
+
+	    addPicture(getPictures());
+        
         fldTitle.setText(getDescription());
         fldTitle.setPreferredSize(dimTxt);
         fldTitle.setMinimumSize(dimTxt);
@@ -151,6 +158,8 @@ public abstract class DcObjectListElement extends DcListElement {
         add(fldTitle);
         
         super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
+        
+        revalidate();
     }
 	
     public boolean isBuild() {
@@ -158,31 +167,26 @@ public abstract class DcObjectListElement extends DcListElement {
     }
 
     private void addPicture(Collection<Picture> pictures) {
-        JComponent c = null;
         for (Picture p : pictures) {
             if (p == null) continue;
                 
             DcImageIcon scaledImage = p.getScaledPicture();
             DcImageIcon image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
-            DcPictureField pictureFld = null;
-
-            if (scaledImage != null) { 
-                pictureFld = new DcPictureField(false, false, false);
-                pictureFld.setValue(scaledImage);
-            } else if (image != null) {
-                pictureFld = new DcPictureField(true, false, false);
-                pictureFld.setValue(new DcImageIcon(image.getImage()));
-            }                
             
-            c = pictureFld;
+            if (scaledImage != null) { 
+                fldPicture.setValue(scaledImage);
+                fldPicture.setScaled(false);
+            } else if (image != null) {
+                fldPicture.setValue(new DcImageIcon(image.getImage()));
+                fldPicture.setScaled(true);
+            }                
             break;
         }
 
-        c = c == null ? new JLabel() : c;
-        c.setPreferredSize(dimPicLbl);
-        c.setMinimumSize(dimPicLbl);
-        c.setMaximumSize(dimPicLbl);
-        add(c);
+        fldPicture.setPreferredSize(dimPicLbl);
+        fldPicture.setMinimumSize(dimPicLbl);
+        fldPicture.setMaximumSize(dimPicLbl);
+        add(fldPicture);
     }
     
     public JPanel getPanel() {
@@ -221,30 +225,29 @@ public abstract class DcObjectListElement extends DcListElement {
             build();
         
         super.paint(g);
-        
-        revalidate();
     }
     
-    public void destruct() {
-        clear();
-        super.destroy();
-        fldTitle = null;
-    }
-
     @Override
     public void destroy() {
-        clear();
         super.destroy();
         dco = null;
     }
     
     @Override
     public void clear() {
-    	if (dco != null)
-    		dco.freeResources();
-
-    	this.fldTitle = null;
-        super.clear();
+        DcObjectListComponents.release(fldPicture);
+        DcObjectListComponents.release(fldTitle);
+        
+        removeAll();
+        
+        if (dco != null)
+            dco.freeResources();
+        
+        fldPicture = null;
+        fldTitle = null;
+        
         build = false;
+        
+        revalidate();
     }
 }

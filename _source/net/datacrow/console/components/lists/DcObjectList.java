@@ -74,7 +74,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     public static final int _LISTING = 2;
     
     private DcObjectListRenderer renderer = new DcObjectListRenderer();
-    
+
     public DcObjectList(int style, boolean wrap, boolean evenOddColors) {
         this(null, style, wrap, evenOddColors);
     }
@@ -439,10 +439,11 @@ public class DcObjectList extends DcList implements IViewComponent {
                 
                 try {
                     for (int i = 0; i < first; i++)
-                        getElement(i).destruct();
+                        getElement(i).clear();
                     
                     for (int i = last; i < size; i++)
-                        getElement(i).destruct();
+                        getElement(i).clear();
+
                 } catch (Exception e) {
                     try {
                         sleep(1000);
