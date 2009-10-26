@@ -437,11 +437,19 @@ public class DcObjectList extends DcList implements IViewComponent {
                 first = first < 0 ? 0 : first;
                 last = last > size ? size : last;
                 
-                for (int i = 0; i < first; i++)
-                    getElement(i).destruct();
-                
-                for (int i = last; i < size; i++)
-                    getElement(i).destruct();
+                try {
+                    for (int i = 0; i < first; i++)
+                        getElement(i).destruct();
+                    
+                    for (int i = last; i < size; i++)
+                        getElement(i).destruct();
+                } catch (Exception e) {
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e1) {
+                        logger.error(e, e);
+                    }
+                }
                 
                 try {
                     sleep(100);

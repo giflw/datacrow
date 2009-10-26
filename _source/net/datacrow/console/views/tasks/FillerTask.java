@@ -75,11 +75,11 @@ public class FillerTask extends DataTask {
               logger.error("Error while updating the view", e);
           }
           
-          try {
-              sleep(1);
-          } catch (Exception e) {
-              logger.error(e, e);
-          }
+//          try {
+//              sleep(1);
+//          } catch (Exception e) {
+//              logger.error(e, e);
+//          }
        }
        
        batchMap.clear();
