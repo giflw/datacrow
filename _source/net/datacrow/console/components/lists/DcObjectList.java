@@ -31,6 +31,7 @@ import java.util.Collection;
 
 import javax.swing.JList;
 import javax.swing.JViewport;
+import javax.swing.ListModel;
 import javax.swing.event.ListSelectionListener;
 
 import net.datacrow.console.components.lists.elements.DcAudioCDListHwElement;
@@ -121,6 +122,12 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     public void setView(View view) {
         this.view = view;
+        
+        if (    view.getType() == View._TYPE_SEARCH && 
+                module != null && 
+                module.isSelectableInUI()) {
+            new ViewRecycler("View recycler " + module).start();
+        }
     }
     
     public boolean allowsHorizontalTraversel() {
@@ -408,5 +415,40 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     public void removeSelectionListener(ListSelectionListener lsl) {
         removeListSelectionListener(lsl);
-    }   
+    }
+    
+    private class ViewRecycler extends Thread {
+        
+        public ViewRecycler(String name) {
+            super(name);
+            setPriority(Thread.MIN_PRIORITY);
+        }
+        
+        @Override
+        public void run() {
+            
+            ListModel model = getModel();
+            
+            while (true) {
+                int first = getFirstVisibleIndex() - 10;
+                int last = first + 20;
+                int size = model.getSize();
+                
+                first = first < 0 ? 0 : first;
+                last = last > size ? size : last;
+                
+                for (int i = 0; i < first; i++)
+                    getElement(i).destruct();
+                
+                for (int i = last; i < size; i++)
+                    getElement(i).destruct();
+                
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                    logger.error(e, e);
+                }
+            }
+        }
+    }
 }

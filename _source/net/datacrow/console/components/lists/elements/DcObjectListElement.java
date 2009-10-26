@@ -29,8 +29,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.util.Collection;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
@@ -57,11 +60,12 @@ public abstract class DcObjectListElement extends DcListElement {
     protected DcObject dco;
     protected DcTextPane fldTitle;
     
+    private boolean build = false;
+    
     protected DcObjectListElement() {}
     
     public DcObjectListElement(DcObject dco) {
         this.dco = dco;
-        build();
     }
 
     public DcObject getDcObject() {
@@ -132,7 +136,10 @@ public abstract class DcObjectListElement extends DcListElement {
     }
 
 	@Override
-    protected void build() {
+    public void build() {
+	    
+	    build = true;
+	    
         addPicture(getPictures());
         
         fldTitle = ComponentFactory.getTextPane();
@@ -145,12 +152,15 @@ public abstract class DcObjectListElement extends DcListElement {
         
         super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
     }
-    
+	
+    public boolean isBuild() {
+        return build;
+    }
+
     private void addPicture(Collection<Picture> pictures) {
-        DcPictureField lbl = null;
+        JComponent c = null;
         for (Picture p : pictures) {
             if (p == null) continue;
-            if (lbl != null) break;
                 
             DcImageIcon scaledImage = p.getScaledPicture();
             DcImageIcon image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
@@ -164,16 +174,15 @@ public abstract class DcObjectListElement extends DcListElement {
                 pictureFld.setValue(new DcImageIcon(image.getImage()));
             }                
             
-            lbl = pictureFld;
+            c = pictureFld;
+            break;
         }
-        
-        if (lbl == null)
-            lbl = new DcPictureField();
-        
-        lbl.setPreferredSize(dimPicLbl);
-        lbl.setMinimumSize(dimPicLbl);
-        lbl.setMaximumSize(dimPicLbl);
-        add(lbl);
+
+        c = c == null ? new JLabel() : c;
+        c.setPreferredSize(dimPicLbl);
+        c.setMinimumSize(dimPicLbl);
+        c.setMaximumSize(dimPicLbl);
+        add(c);
     }
     
     public JPanel getPanel() {
@@ -206,9 +215,27 @@ public abstract class DcObjectListElement extends DcListElement {
     }
     
     @Override
+    public void paint(Graphics g) {
+        
+        if (!build)
+            build();
+        
+        super.paint(g);
+        
+        revalidate();
+    }
+    
+    public void destruct() {
+        clear();
+        super.destroy();
+        fldTitle = null;
+    }
+
+    @Override
     public void destroy() {
-    	super.destroy();
-    	dco = null;
+        clear();
+        super.destroy();
+        dco = null;
     }
     
     @Override
@@ -218,5 +245,6 @@ public abstract class DcObjectListElement extends DcListElement {
 
     	this.fldTitle = null;
         super.clear();
+        build = false;
     }
 }
