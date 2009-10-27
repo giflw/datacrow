@@ -353,9 +353,6 @@ public class DcObjectList extends DcList implements IViewComponent {
         
         setModel(model);
         revalidate();
-        repaint();
-        
-        setSelected(0);
     }    
     
     public DcObjectListElement getDisplayElement(DcObject dco) {

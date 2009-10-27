@@ -49,6 +49,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcLoginNameField;
@@ -225,10 +226,21 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     public void add(DcObject dco, boolean setSelected) {
+        add(getModel(), dco, setSelected, -1);
+    }
+    
+    /**
+     * Adds a row to the table
+     * @param model The model 
+     * @param dco
+     * @param setSelected
+     * @param position
+     */
+    public void add(TableModel model, DcObject dco, boolean setSelected, int position) {
         setListeningForChanges(false);
         int[] fields = dco.getFieldIndices();
 
-        int row = addRow();
+        int row = position == -1 ? addRow() : position;
         for (int i = 0; i < fields.length; i++) {
             int field = fields[i];
             int col = getColumnIndexForField(field);
@@ -249,16 +261,16 @@ public class DcTable extends JTable implements IViewComponent {
                     p.setValue(Picture._D_IMAGE, new DcImageIcon(bytes));
                     picture = p;
                 }
-                getDcModel().setValueAt(picture, row, col);
+                model.setValueAt(picture, row, col);
             } else {
-                getDcModel().setValueAt(value, row, col);    
+                model.setValueAt(value, row, col);    
             }
         }
 
         if (module.isAbstract()) {
             int col = getColumnIndexForField(Media._SYS_MODULE);
             Object value = dco.getModule();
-            getDcModel().setValueAt(value, row, col);
+            model.setValueAt(value, row, col);
         }
 
         if (setSelected)
@@ -268,18 +280,21 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     public void add(Collection<? extends DcObject> objects) {
-        for (DcObject dco : objects)
-            add(dco, false);
-
-        setSelected(getRowCount() - 1);
-    }
-
+        add((DcObject[]) objects.toArray(new DcObject[objects.size()]));
+    }    
+    
     public void add(DcObject[] objects) {
+        DcTableModel model = (DcTableModel) getModel();
+        model.setRowCount(0);
+        model.setRowCount(objects.length);
+        
+        int row = 0;
         for (DcObject dco : objects)
-            add(dco, false);
-
-        setSelected(getRowCount() - 1);
-    }
+            add(model, dco, false, row++);
+        
+        setModel(model);
+        revalidate();
+    }    
 
     public boolean isReadOnly() {
         return readonly;

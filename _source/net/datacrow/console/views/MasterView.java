@@ -213,11 +213,6 @@ public class MasterView {
         } 
     }
     
-    public void add(Collection<DcObject> objects) {
-        for (View view : getViews())
-            view.add(objects);
-    }
-    
     public Collection<View> getViews() {
         Collection<View> c = new ArrayList<View>();
         c.addAll(views.values());

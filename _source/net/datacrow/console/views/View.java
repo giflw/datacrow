@@ -205,10 +205,6 @@ public class View extends DcPanel implements ListSelectionListener {
         this.parentView = parentView;
     }      
     
-    public void deselect() {
-        vc.deselect();
-    }
-    
     public IViewComponent getViewComponent() {
         return vc;
     }
@@ -319,6 +315,8 @@ public class View extends DcPanel implements ListSelectionListener {
 
         if (select)
             setSelected();
+        
+        vc.setSelected(0);
     }
 
     public void cancelCurrentTask() {
@@ -326,12 +324,21 @@ public class View extends DcPanel implements ListSelectionListener {
             task.stopRunning();
     }
     
-    public void add(Collection<DcObject> c) {
-        vc.add(c);
+    public void add(Collection<DcObject> items) {
+        add((DcObject[]) items.toArray(new DcObject[items.size()]));
     }
     
-    public void add(DcObject[] objects) {
-        vc.add(objects);
+    public void add(DcObject[] items) {
+        setActionsAllowed(false);
+        
+        vc.deselect();
+        vc.add(items);
+        
+        setActionsAllowed(true);
+        
+        revalidate();
+        afterUpdate();
+        setDefaultSelection();
     }    
     
     protected void setSelected() {

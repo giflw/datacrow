@@ -143,11 +143,11 @@ public abstract class DcObjectListElement extends DcListElement {
     @Override
     public void build() {
 
+        build = true;
+        
         this.fldPicture = DcObjectListComponents.getPictureField();
         this.fldTitle = DcObjectListComponents.getTextPane();
         
-	    build = true;
-
 	    addPicture(getPictures());
         
         fldTitle.setText(getDescription());
