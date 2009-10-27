@@ -247,7 +247,5 @@ public abstract class DcObjectListElement extends DcListElement {
         fldTitle = null;
         
         build = false;
-        
-        revalidate();
     }
 }

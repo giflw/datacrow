@@ -215,10 +215,14 @@ public class DcTable extends JTable implements IViewComponent {
         return c;
     }
 
+    /**
+     * Adds a row to the table and returns the index.
+     * @return Index of the new row.
+     */
     private int addRow() {
-        Object[] row = new Object[module.getFieldCount()];
-        getDcModel().addRow(row);
-        return (getRowCount() - 1);
+        int rows = getRowCount();
+        setRowCount(rows + 1);
+        return (rows);
     }
 
     public void add(DcObject dco) {
