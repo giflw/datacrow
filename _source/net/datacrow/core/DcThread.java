@@ -33,11 +33,11 @@ public class DcThread extends Thread {
         super(group, name);
     }
 
-    public void cancel() {
+    public synchronized void cancel() {
         canceled = true;
     }
     
-    public boolean isCanceled() {
+    public synchronized boolean isCanceled() {
         return canceled;
     }
 
