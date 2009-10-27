@@ -1190,7 +1190,9 @@ public class DataManager {
                 is.close();
                 success = true;
             } catch (Exception e) {
-                logger.error(e, e);
+                logger.error("Failed to load the items from cache. The items will be loaded from the database instead.", e);
+            } catch (Error err) {
+                logger.error("Failed to load the items from cache. The items will be loaded from the database instead.", err);
             }            
         }
         

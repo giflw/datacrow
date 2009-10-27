@@ -147,6 +147,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         this.update = update;
         this.dcoOrig = o;
         
+        this.dcoOrig.markAsUnchanged();
         this.dcoOrig.setPartOfBatch(false);
 
         if (!update && !readonly && o.getModule().isAbstract()) {
@@ -174,7 +175,9 @@ public class ItemForm extends DcFrame implements ActionListener {
                 dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
             
         } else {
+            this.dcoOrig.markAsUnchanged();
             this.dco = o.clone();
+            this.dco.markAsUnchanged();
             this.moduleIdx = dco.getModule().getIndex();
             
             for (IRequest request : o.getRequests().get())
