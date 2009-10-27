@@ -340,18 +340,12 @@ public class DcObjectList extends DcList implements IViewComponent {
         ensureIndexIsVisible(getModel().getSize());
     }
     
-    public void add(DcObject[] objects) {
-        DcListModel model = new DcListModel();
-        
-        for (DcObject dco : objects)
-            model.addElement(getDisplayElement(dco));
-        
-        setModel(model);
-        revalidate();
-        repaint();
-    }    
-    
     public void add(Collection<? extends DcObject> objects) {
+        add((DcObject[]) objects.toArray(new DcObject[objects.size()]));
+    }
+    
+    public void add(DcObject[] objects) {
+        getDcModel().clear();
         DcListModel model = new DcListModel();
         
         for (DcObject dco : objects)
@@ -360,7 +354,9 @@ public class DcObjectList extends DcList implements IViewComponent {
         setModel(model);
         revalidate();
         repaint();
-    }
+        
+        setSelected(0);
+    }    
     
     public DcObjectListElement getDisplayElement(DcObject dco) {
         

@@ -316,10 +316,6 @@ public class View extends DcPanel implements ListSelectionListener {
         }
         
         vc.add(items);
-//        
-//        if (getType() == View._TYPE_INSERT && isParent())  {
-//            
-//        }
 
         if (select)
             setSelected();
