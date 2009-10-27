@@ -136,7 +136,8 @@ public class View extends DcPanel implements ListSelectionListener {
         vc.addSelectionListener(this);
         vc.addKeyListener(new ViewKeyListener(this));
 
-        this.actionPanel = new ViewActionPanel(this);
+        if (type == _TYPE_INSERT)
+            actionPanel = new ViewActionPanel(this);
         
         build();
         
@@ -582,7 +583,8 @@ public class View extends DcPanel implements ListSelectionListener {
             vc.removeMouseListener(vml);
         }
 
-        actionPanel.setEnabled(b);
+        if (actionPanel != null)
+            actionPanel.setEnabled(b);
     }
     
     public Collection<DcObject> getItems() {
@@ -684,7 +686,6 @@ public class View extends DcPanel implements ListSelectionListener {
         DcObject o = getItemAt(index);
         if (o != null) vc.updateItem(o.getID(), dco, overwrite, allowDeletes, mark);
         
-        // TODO: test
         dco.release();
     }
 
@@ -812,6 +813,7 @@ public class View extends DcPanel implements ListSelectionListener {
             vdQuickPane = new DcViewDivider(vdGroupingPane, quickView, DcRepository.Settings.stQuickViewDividerLocation);
 
             quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
+            quickView.setBorder(null);
         }
         
         //**********************************************************
@@ -823,9 +825,12 @@ public class View extends DcPanel implements ListSelectionListener {
         add(    c, Layout.getGBC( 0, 1, 3, 1, 100.0, 100.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(5, 5, 5, 5), 0, 0)); 
-        add(    actionPanel,    Layout.getGBC( 0, 2, 3, 1, 1.0, 1.0
-                ,GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 5, 0, 5), 0, 0));
+        
+        if (actionPanel != null)
+            add(    actionPanel,    Layout.getGBC( 0, 2, 3, 1, 1.0, 1.0
+                    ,GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 5, 0, 5), 0, 0));
+
         add(    panelStatus,    Layout.getGBC( 0, 3, 3, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 5, 0, 5), 0, 0));

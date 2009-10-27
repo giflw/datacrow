@@ -37,6 +37,7 @@ import javax.swing.JPanel;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcTextPane;
+import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.lists.DcObjectListComponents;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
@@ -159,7 +160,12 @@ public abstract class DcObjectListElement extends DcListElement {
         
         super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
         
-        revalidate();
+        DcObjectList list = (DcObjectList) getParent().getParent();
+        
+        if (list.getView() != null) {
+            list.getView().revalidate();
+            list.getView().repaint(1000);
+        }
     }
 	
     public boolean isBuild() {

@@ -121,6 +121,9 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
             view.setListSelectionListenersEnabled(false);
             try {
 	            for (int i = 0; i < rows.length && keepOnRunning; i++) {
+	                
+	                // TODO: save directly
+	                
 	                view.updateItemAt(rows[i], dco, true, false, true);
 	                updateProgressBar(i + 1);
 	
