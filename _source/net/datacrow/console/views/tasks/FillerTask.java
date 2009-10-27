@@ -14,6 +14,7 @@ import net.datacrow.util.DataTask;
 
 import org.apache.log4j.Logger;
 
+@Deprecated
 public class FillerTask extends DataTask {
     
     private static Logger logger = Logger.getLogger(FillerTask.class.getName());

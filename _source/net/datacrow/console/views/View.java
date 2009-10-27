@@ -54,7 +54,6 @@ import net.datacrow.console.components.DcViewDivider;
 import net.datacrow.console.components.panels.QuickViewPanel;
 import net.datacrow.console.components.panels.tree.GroupingPane;
 import net.datacrow.console.views.tasks.DeleteTask;
-import net.datacrow.console.views.tasks.FillerTask;
 import net.datacrow.console.views.tasks.SaveTask;
 import net.datacrow.console.windows.UpdateAllDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
@@ -287,7 +286,7 @@ public class View extends DcPanel implements ListSelectionListener {
     public void add(DcObject dco) {
         add(dco, true);
     }    
-
+    
     public void add(final DcObject dco, final boolean select) {
         if (getType() == View._TYPE_INSERT)
             dco.setIDs();
@@ -303,21 +302,40 @@ public class View extends DcPanel implements ListSelectionListener {
 
         if (select)
             setSelected();
+    }    
+
+    public void add(final Collection<DcObject> items, final boolean select) {
+        if (getType() == View._TYPE_INSERT) {
+            for (DcObject item : items) {
+                item.setIDs();
+                // add the children to the cached child view..
+                childView.add(item.getChildren());
+                // and load them
+                childView.setParentID(item.getID(), true);
+            }
+        }
+        
+        vc.add(items);
+//        
+//        if (getType() == View._TYPE_INSERT && isParent())  {
+//            
+//        }
+
+        if (select)
+            setSelected();
     }
 
     public void cancelCurrentTask() {
-        if (task != null && task.isAlive() && task instanceof FillerTask)
+        if (task != null && task.isAlive())
             task.stopRunning();
     }
     
     public void add(Collection<DcObject> c) {
-        add(c.toArray(new DcObject[0]));
+        vc.add(c);
     }
     
     public void add(DcObject[] objects) {
-        cancelCurrentTask();
-        task = new FillerTask(groupingPane != null ? groupingPane.getActiveTree() : null, this, objects);
-        task.start();
+        vc.add(objects);
     }    
     
     protected void setSelected() {

@@ -341,23 +341,25 @@ public class DcObjectList extends DcList implements IViewComponent {
     }
     
     public void add(DcObject[] objects) {
-        setListenersEnabled(false);
+        DcListModel model = new DcListModel();
         
-        for (int i = 0; i < objects.length; i++) {
-            DcObject dco = objects[i];
-            if (dco.getID() == null || dco.getID().equals("")) 
-                dco.setIDs(); 
-            
-            add(dco);
-        }
+        for (DcObject dco : objects)
+            model.addElement(getDisplayElement(dco));
         
-        setListenersEnabled(true);
-        
-        getDcModel().fireIntervalAdded(getDcModel(), 0, objects.length - 1);
+        setModel(model);
+        revalidate();
+        repaint();
     }    
     
     public void add(Collection<? extends DcObject> objects) {
-        add(objects.toArray(new DcObject[] {}));
+        DcListModel model = new DcListModel();
+        
+        for (DcObject dco : objects)
+            model.addElement(getDisplayElement(dco));
+        
+        setModel(model);
+        revalidate();
+        repaint();
     }
     
     public DcObjectListElement getDisplayElement(DcObject dco) {
