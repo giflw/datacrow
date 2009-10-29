@@ -276,10 +276,12 @@ public class DcTable extends JTable implements IViewComponent {
             model.setValueAt(value, row, col);
         }
 
-        View childView = getView().getChildView();
-        if (getView().getType() == View._TYPE_INSERT &&  childView != null) {
-            childView.add(dco.getChildren());
-            childView.setParentID(dco.getID(), true);
+        if (getView() != null) {
+            View childView = getView().getChildView();
+            if (getView().getType() == View._TYPE_INSERT &&  childView != null) {
+                childView.add(dco.getChildren());
+                childView.setParentID(dco.getID(), true);
+            }
         }
         
         if (setSelected)
