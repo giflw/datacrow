@@ -125,11 +125,12 @@ public class DcCardObjectListElement extends DcObjectListElement {
             if (scaledImage != null) { 
                 fldPicture.setValue(scaledImage);
                 fldPicture.setScaled(false);
+                break;
             } else if (image != null) {
                 fldPicture.setValue(new DcImageIcon(image.getImage()));
                 fldPicture.setScaled(true);
+                break;
             }                
-            break;
         }
 
         fldPicture.setPreferredSize(dimPicLbl);

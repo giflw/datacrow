@@ -399,14 +399,11 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                         if (selected != null) {
                             // Create clones to prevent the cleaning task from clearing the items..
                             // This is to fix an unconfirmed bug (NullPointerException on saving new items). 
-                            Collection<DcObject> clones = new ArrayList<DcObject>();
                             for (DcObject o : selected)
-                                clones.add(o.clone());
+                                getModule().getCurrentInsertView().add(o.clone());
                             
-                            getModule().getCurrentInsertView().add(clones);
                             DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
                         }
-                        
                     }
                 }).start();
     }    

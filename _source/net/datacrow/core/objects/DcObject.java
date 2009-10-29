@@ -844,8 +844,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (requests != null)
             requests.clear();
         
-        if (children != null)
-            children.clear();
+//        if (children != null)
+//            children.clear();
 
         getModule().release(this);
     }
