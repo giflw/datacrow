@@ -112,7 +112,8 @@ public class VersionChecker extends Thread {
                 properties = null;
                 
             } catch (Exception e) {
-                logger.debug(e, e);
+                logger.warn("Failed to check if a new version was released", e);
+                break;
             }
         }
     }

@@ -77,7 +77,7 @@ public class TemplateItemForm extends ItemForm {
      * Deletes this item from the database
      */
     @Override
-    protected void deleteValues() {
+    protected void deleteItem() {
         QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion"), this);
         qb.setVisible(true);
         

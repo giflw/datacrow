@@ -285,6 +285,9 @@ public class View extends DcPanel implements ListSelectionListener {
     }    
     
     public void add(final DcObject dco, final boolean select) {
+
+        dco.markAsUnchanged();
+        
         if (getType() == View._TYPE_INSERT)
             dco.setIDs();
         
@@ -301,25 +304,6 @@ public class View extends DcPanel implements ListSelectionListener {
             setSelected();
     }    
 
-    public void add(final Collection<DcObject> items, final boolean select) {
-        if (getType() == View._TYPE_INSERT) {
-            for (DcObject item : items) {
-                item.setIDs();
-                // add the children to the cached child view..
-                childView.add(item.getChildren());
-                // and load them
-                childView.setParentID(item.getID(), true);
-            }
-        }
-        
-        vc.add(items);
-
-        if (select)
-            setSelected();
-        
-        vc.setSelected(0);
-    }
-
     public void cancelCurrentTask() {
         if (task != null && task.isAlive())
             task.stopRunning();
@@ -328,9 +312,21 @@ public class View extends DcPanel implements ListSelectionListener {
     public void add(Collection<DcObject> items) {
         add((DcObject[]) items.toArray(new DcObject[items.size()]));
     }
-    
+
+    /**
+     * Adds the items to the view. 
+     * Note: children for the insert view are added by the view component.
+     * @see DcTable#add(DcObject).
+     * @param items
+     */
     public void add(DcObject[] items) {
         setActionsAllowed(false);
+
+        for (DcObject item : items) {
+            item.markAsUnchanged();
+            if (getType() == View._TYPE_INSERT)
+                item.setIDs();
+        }
         
         vc.deselect();
         vc.add(items);
@@ -367,19 +363,13 @@ public class View extends DcPanel implements ListSelectionListener {
     public void clear(boolean saveChanges) {
         if (checkForChanges && saveChanges) {
             boolean saved = isChangesSaved();
-            if (!saved && getCurrentTask() != null) {
+            if (!saved) {
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
                 qb.setVisible(true);
                 if (qb.isAffirmative())
-                    save();
+                    save(false);
                 else
                     vc.undoChanges();
-
-                try {
-                    getCurrentTask().join(5000);
-                } catch (Exception e) {
-                    logger.error("Error while trying to join the new saving thread with the current one", e);
-                }
             }
         } else {
             vc.undoChanges();
@@ -474,7 +464,7 @@ public class View extends DcPanel implements ListSelectionListener {
             quickView.reloadImage();
     }
 
-    public void save() {
+    public void save(boolean threaded) {
         if (!isTaskRunning()) {
         	
         	Collection<DcObject> objects = new ArrayList<DcObject>();
@@ -494,7 +484,11 @@ public class View extends DcPanel implements ListSelectionListener {
         	if (objects.size() > 0) {
         		task = new SaveTask(this, objects);
         		task.startRunning();
-        		task.start();   
+        		
+        		if (threaded)
+        		    task.start();
+        		else 
+        		    task.run();
             } else {
                 new MessageBox(DcResources.getText("msgNoChangesToSave"), MessageBox._WARNING);    
             }
@@ -682,17 +676,19 @@ public class View extends DcPanel implements ListSelectionListener {
         return vc.getSelectedIndices();
     }
     
-    public void updateItemAt(int index, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
+    public void updateItemAt(int index, DcObject dco) {
         DcObject o = getItemAt(index);
-        if (o != null) vc.updateItem(o.getID(), dco, overwrite, allowDeletes, mark);
-        
-        dco.release();
+
+        if (o != null)
+            updateItem(o.getID(), dco);
+        else 
+            logger.warn("No element found at index " + index);
     }
 
-    public void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
-        vc.updateItem(ID, dco, overwrite, allowDeletes, mark);
-        DcObject item = getItem(ID);
+    public void updateItem(String ID, DcObject dco) {
+        vc.updateItem(ID, dco);
         
+        DcObject item = getItem(ID);
         if (quickView != null && index > -1)
             quickView.setObject(item, true);
     }

@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -67,7 +68,7 @@ public class LoanPanel extends JPanel implements ActionListener {
     
     private DcObject dco;
     
-    private Collection<DcObject> objects;
+    private List<DcObject> objects;
     private Loan loan;
     private DcFrame owner;
     
@@ -257,7 +258,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         
         if (objects.size() == 1) {
             tableLoans.clear();
-            DcObject dco = (DcObject) objects.toArray()[0];
+            DcObject dco = objects.get(0);
             for (Loan loan : DataManager.getLoans(dco.getID())) {
                 if (loan.getValue(Loan._B_ENDDATE) != null) 
                     tableLoans.add(loan, true);
@@ -271,7 +272,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         
         if (objects.size() == 1) {
             tableLoans.clear();
-            DcObject dco = (DcObject) objects.toArray()[0];
+            DcObject dco = objects.get(0);
             for (Loan loan : DataManager.getLoans(dco.getID())) {
                 if (loan.getValue(Loan._B_ENDDATE) != null) 
                     tableLoans.add(loan, true);

@@ -27,17 +27,36 @@ package net.datacrow.console.components.lists.elements;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.datacrow.console.components.DcPictureField;
+import net.datacrow.console.components.DcTextPane;
+import net.datacrow.console.components.lists.DcObjectList;
+import net.datacrow.console.components.lists.DcObjectListComponents;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcImageIcon;
+
+import org.apache.log4j.Logger;
 
 public class DcCardObjectListElement extends DcObjectListElement {
 
+    private static Logger logger = Logger.getLogger(DcCardObjectListElement.class.getName());
+
     private final static Dimension size = new Dimension(150, 200);
+    private static final Dimension dimTxt = new Dimension(145, 45);
+    private static final Dimension dimPicLbl = new Dimension(146, 140);
+
+    private DcTextPane fldTitle;
+    private DcPictureField fldPicture;
+    
+    private boolean build = false;
+
     
     public DcCardObjectListElement(DcObject dco) {
         super(dco);
@@ -45,6 +64,27 @@ public class DcCardObjectListElement extends DcObjectListElement {
         setPreferredSize(size);
         setMaximumSize(size);
         setMinimumSize(size);
+    }
+
+    private String getDescription() {
+        int[] fields = (int[]) dco.getModule().getSetting(DcRepository.ModuleSettings.stCardViewItemDescription);
+        if (fields != null && fields.length > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (int field :  fields) {
+                String disp = dco.getDisplayString(field);
+                if (disp.length() > 0) {
+                    if (sb.length() > 0)
+                        sb.append("/");
+                    sb.append(disp);
+                }
+            }
+            return sb.toString();
+        } 
+        return dco.getName();
+    }
+
+    public boolean isBuild() {
+        return build;
     }
     
     @Override
@@ -73,4 +113,81 @@ public class DcCardObjectListElement extends DcObjectListElement {
         if (fldTitle != null)
             fldTitle.setBackground(color);
     }    
+    
+    
+    private void addPicture(Collection<Picture> pictures) {
+        for (Picture p : pictures) {
+            if (p == null) continue;
+                
+            DcImageIcon scaledImage = p.getScaledPicture();
+            DcImageIcon image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
+            
+            if (scaledImage != null) { 
+                fldPicture.setValue(scaledImage);
+                fldPicture.setScaled(false);
+            } else if (image != null) {
+                fldPicture.setValue(new DcImageIcon(image.getImage()));
+                fldPicture.setScaled(true);
+            }                
+            break;
+        }
+
+        fldPicture.setPreferredSize(dimPicLbl);
+        fldPicture.setMinimumSize(dimPicLbl);
+        fldPicture.setMaximumSize(dimPicLbl);
+        add(fldPicture);
+    }
+    
+    
+    @Override
+    public void build() {
+
+      build = true;
+      
+      this.fldPicture = DcObjectListComponents.getPictureField();
+      this.fldTitle = DcObjectListComponents.getTextPane();
+      
+    addPicture(getPictures());
+      
+      fldTitle.setText(getDescription());
+      fldTitle.setPreferredSize(dimTxt);
+      fldTitle.setMinimumSize(dimTxt);
+      fldTitle.setMaximumSize(dimTxt);
+      
+      add(fldTitle);
+      
+      super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
+      
+      try {
+          DcObjectList list = (DcObjectList) getParent().getParent();
+          
+          if (list.getView() != null) {
+              list.getView().revalidate();
+              list.getView().repaint(1000);
+          }
+      } catch (Exception e) {
+          logger.error("Error while updating the view component (revalidate)", e);
+      }
+    }
+    
+    @Override
+    public void paint(Graphics g) {
+        if (!build)
+            build();
+        
+        super.paint(g);
+    }
+    
+    @Override
+    public void clear() {
+        super.clear();
+        
+        DcObjectListComponents.release(fldPicture);
+        DcObjectListComponents.release(fldTitle);
+        
+        fldPicture = null;
+        fldTitle = null;
+        
+        build = false;
+    }
 }

@@ -32,9 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.IUpdateUIRequest;
@@ -147,7 +145,6 @@ public class QueryQueue extends Thread {
             } catch (SQLException e) {
                 success = false;
                 logger.error("Error while executing query " + ps, e);
-                new MessageBox(DcResources.getText("msgQueryError", e.toString()), MessageBox._ERROR, false);
             } finally {
                 close(ps);
             }
@@ -178,7 +175,6 @@ public class QueryQueue extends Thread {
             } catch (SQLException e) {
                 success = false;
                 logger.error("Error while executing query " + ps, e);
-                new MessageBox(DcResources.getText("msgQueryError", e.toString()), MessageBox._ERROR, false);
             } finally {
                 close(ps);
             }
@@ -196,11 +192,6 @@ public class QueryQueue extends Thread {
                 result = ps.executeQuery();
             } catch (SQLException e) {
                 logger.error("Error while executing query " + ps, e);
-                if (e.getMessage().toUpperCase().indexOf("MEMORY") > -1) {
-                    new MessageBox(DcResources.getText("msqMemoryError"), MessageBox._ERROR, false);
-                } else {
-                    new MessageBox(DcResources.getText("msgQueryError", e.toString()), MessageBox._ERROR, false);
-                }
             }
 
             objects.addAll(new WorkFlow().convert(result));
@@ -225,13 +216,6 @@ public class QueryQueue extends Thread {
             result = ps.executeQuery();
         } catch (SQLException e) {
             logger.error("Error while executing query " + ps, e);
-            
-            if (e.getMessage().toUpperCase().indexOf("MEMORY") > -1) {
-                new MessageBox(DcResources.getText("msqMemoryError"), MessageBox._ERROR, false);
-                System.gc();
-            } else {
-                new MessageBox(DcResources.getText("msgQueryError", "" + e), MessageBox._ERROR, false);
-            }
         }
 
         Collection<DcObject> objects = new WorkFlow().convert(result);

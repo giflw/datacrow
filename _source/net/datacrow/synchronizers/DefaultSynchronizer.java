@@ -119,7 +119,7 @@ public abstract class DefaultSynchronizer extends Synchronizer {
         try {
             DcObject dcoNew = dco.getModule().getOnlineServices().query(dco);
             if (dcoNew != null) {
-                dco.copy(dcoNew, true);
+                dco.copy(dcoNew, true, false);
                 dcoNew.release();
                 return true;
             }

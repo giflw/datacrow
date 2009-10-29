@@ -65,8 +65,8 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
     }
 
     @Override
-    public void update(DcObject o, boolean overwrite, boolean allowDeletes, boolean mark) {
-        dco.copy(o, overwrite);
+    public void update(DcObject dco) {
+        this.dco.copy(dco, true, true);
         update();
     }  
     

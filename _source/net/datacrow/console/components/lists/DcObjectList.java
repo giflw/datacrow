@@ -237,29 +237,23 @@ public class DcObjectList extends DcList implements IViewComponent {
             repaint();
         }
     }       
-    
-    public void updateItemAt(int index, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
-        DcObjectListElement element = (DcObjectListElement) getDcModel().getElementAt(index);
-        element.update(dco, overwrite, allowDeletes, mark);
-        
-        try {
-            setSelectedValue(getDcModel().getElementAt(index), true);
-        } catch (Exception e) {
-            logger.warn("Could set [" + index + "] selected", e);
-        }
+
+    public void updateItemAt(int index, DcObject dco) {
+        updateElement((DcObjectListElement) getDcModel().getElementAt(index), dco);
     }
     
-    public void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
-        DcObjectListElement element = getElement(ID);
-        if (element != null)
-            element.update(dco, overwrite, allowDeletes, mark);
-        
-        try {
-            setSelectedValue(getElement(ID), true);
-        } catch (Exception e) {
-            logger.warn("Could set [" + ID + "] selected", e);
-        }
+    public void updateItem(String ID, DcObject dco) {
+        updateElement(getElement(ID), dco);
     }    
+
+    private void updateElement(DcObjectListElement element, DcObject dco) {
+        if (element != null) {
+            element.update(dco);
+            setSelectedValue(element, true);
+        } else {
+            logger.warn("Could not update " + dco + ", element could not be found in the view");   
+        }
+    }
     
     public void setSelected(DcObject dco, int field) {
         for (int row = 0 ; row < getDcModel().getSize(); row++) {

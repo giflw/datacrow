@@ -149,8 +149,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
 
     public void addError(Throwable e) {
         logger.error(e, e);
-        new MessageBox(DcResources.getText("msgUnexpectedProblemDuringFileImport", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()), 
-                       MessageBox._ERROR);
+        new MessageBox(DcResources.getText("msgUnexpectedProblemDuringFileImport", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()), MessageBox._ERROR);
     }
 
     public void finish() {

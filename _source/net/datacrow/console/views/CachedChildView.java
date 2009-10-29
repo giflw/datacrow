@@ -101,7 +101,7 @@ public class CachedChildView extends View implements ActionListener {
             for (int j = 0; j < c.length; j++) {
                 DcObject dcoCached = c[j];
                 if (dcoCached.getID().equals(dco.getID())) {
-                    dcoCached.copy(dco, true);
+                    dcoCached.copy(dco, true, true);
                     exists = true;
                     break;
                 }

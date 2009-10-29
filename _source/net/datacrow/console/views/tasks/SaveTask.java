@@ -34,18 +34,26 @@ public class SaveTask extends DataTask {
     @Override
     public void run() {
         try {
-            
             try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-                        view.updateProgressBar(0);
-                        view.initProgressBar(objects.length);
-                        view.setStatus(DcResources.getText("msgSavingXItems", "" + objects.length));
-                        view.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                        view.setActionsAllowed(false);
-                        view.checkForChanges(false);
-                    }
-                });
+                if (!SwingUtilities.isEventDispatchThread()) {                
+                    SwingUtilities.invokeAndWait(new Runnable() {
+                        public void run() {
+                            view.updateProgressBar(0);
+                            view.initProgressBar(objects.length);
+                            view.setStatus(DcResources.getText("msgSavingXItems", "" + objects.length));
+                            view.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                            view.setActionsAllowed(false);
+                            view.checkForChanges(false);
+                        }
+                    });
+                } else {
+                    view.updateProgressBar(0);
+                    view.initProgressBar(objects.length);
+                    view.setStatus(DcResources.getText("msgSavingXItems", "" + objects.length));
+                    view.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                    view.setActionsAllowed(false);
+                    view.checkForChanges(false);
+                }
             } catch (Exception e) {
                 logger.error(e, e);
             }
@@ -100,14 +108,21 @@ public class SaveTask extends DataTask {
             stopRunning();
             
             try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-                        view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                        view.setActionsAllowed(true);
-                        view.checkForChanges(true);
-                        view.setDefaultSelection();
-                    }
-                });
+                if (!SwingUtilities.isEventDispatchThread()) {                
+                    SwingUtilities.invokeAndWait(new Runnable() {
+                        public void run() {
+                            view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                            view.setActionsAllowed(true);
+                            view.checkForChanges(true);
+                            view.setDefaultSelection();
+                        }
+                    });
+                } else {
+                    view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    view.setActionsAllowed(true);
+                    view.checkForChanges(true);
+                    view.setDefaultSelection();
+                }
             } catch (Exception e) {
                 logger.error(e, e);
             }

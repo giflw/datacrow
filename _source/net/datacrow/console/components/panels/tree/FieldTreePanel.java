@@ -116,14 +116,13 @@ public class FieldTreePanel extends TreePanel {
             isSame = oldPath[i].equals(keys[i]);
         }
         
-        boolean exists = exists(keys);
+        setListeningForSelection(false);
+        boolean selected = select(keys, 0, max, top);
+        if (!selected)
+            setDefaultSelection();
         
-        setListeningForSelection(!isSame || !exists);
-        select(keys, 0, max, top);
         setListeningForSelection(true);
-        
-        if (!isSame)
-            updateView();
+        updateView();
     }
     
     /**
@@ -135,22 +134,13 @@ public class FieldTreePanel extends TreePanel {
      * @param parent
      */
     private boolean select(String[] keys, int level, int max, DefaultMutableTreeNode parent) {
-        DefaultMutableTreeNode node = level == 0 ? top : findNode(keys[level], parent);
-        
-        boolean selected = false;
-        if (node != null) {
-            setSelected(node);
-            selected = true;
+        List<DefaultMutableTreeNode> path = findPath(keys);
+        if (path.size() > 0) {
+            setSelected(path.get(path.size() - 1));
+            return true;
+        } else {
+            return false;
         }
-        
-        if (level + 1 < max) {
-            int count = parent.getChildCount();
-            for (int i = 0; i < count; i++) {
-                if (select(keys, level+1, max, node))
-                    return true;
-            }
-        }
-        return selected;
     }    
     
     @Override
@@ -243,7 +233,7 @@ public class FieldTreePanel extends TreePanel {
      * @return
      */
     private DefaultMutableTreeNode addElement(Object key, ImageIcon icon, DcObject dco, DefaultMutableTreeNode parent) {
-        DefaultMutableTreeNode node = findNode(key, parent);
+        DefaultMutableTreeNode node = findNode(key, parent, false);
         if (node == null) {
             NodeElement ne = new NodeElement(getModule(), key, icon);
             ne.addValue(dco);

@@ -60,22 +60,13 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
     public  static final int _WARNING = 2;
     public  static final int _INFORMATION = 3;
 
+    public MessageBox(String message, int type) {
+        this(DcSwingUtilities.getRootFrame(), message, type);
+    }
+
+    
     public MessageBox(JFrame frame, String message, int type) {
         super(frame);
-        init();
-        setModal(true);
-        display(message, type);
-    }
-
-    public MessageBox(String message, int type, boolean modal) {
-        super(DcSwingUtilities.getRootFrame());
-        init();
-        setModal(modal);
-        display(message, type);
-    }
-
-    public MessageBox(String message, int type) {
-        super(DcSwingUtilities.getRootFrame());
         init();
         setModal(true);
         display(message, type);
@@ -132,9 +123,6 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
         buttonOk.addActionListener(this);
 
         panel.setLayout(Layout.getGBL());
-        panel.addKeyListener(this);
-        buttonOk.addKeyListener(this);
-
         panel.add(labelIcon,  Layout.getGBC( 0, 0, 1, 1, 0.0, 0.0
                              ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                               new Insets(5, 5, 5, 5), 0, 0));
@@ -156,6 +144,14 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
             close();
     }
 
-    public void keyPressed(KeyEvent e) {}
-    public void keyTyped(KeyEvent e) {}
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            close();
+
+    }
+    public void keyTyped(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+            close();
+
+    }
 }

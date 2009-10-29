@@ -1204,18 +1204,34 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     /**
-     * Copies all values from the specified Data Crow object
-     * @param dco source object
+     * Merges the values of this and the source item.
+     * Only empty values are updated with the values of the source item.  
+     * @param dco The source item.
      */
-    public void copy(DcObject dco, boolean overwrite) {
+    public void merge(DcObject dco) {
+        copy(dco, false, false);
+    }
+    
+    /**
+     * Copies all values from the specified Data Crow object.
+     * @param overwrite Indicates whether existing values should be overwritten.
+     * @param allowDeletes Allows existing values to be cleared.
+     * @param dco Source item.
+     */
+    public void copy(DcObject dco, boolean overwrite, boolean allowDeletes) {
         int[] fields = dco.getFieldIndices();
         for (int i = 0; i < fields.length; i++) {
-            int field = dco.getFieldIndices()[i];
+            int field = fields[i];
 
-            if (!overwrite && !Utilities.isEmpty(dco.getValue(field)))
+            // Do not overwrite when:
+            // - the to be copied value is empty and deletes are not allowed
+            // - overwriting is not allowed and the current value is not empty
+            if (!dco.isFilled(field) && !allowDeletes)
+                continue;
+            else if (!overwrite && isFilled(field))
                 continue;
             
-            if (field != _ID && dco.getValue(field) != null) {
+            if (field != _ID) {
             	Object o = dco.getValue(field);
             	if (o instanceof DcImageIcon) {
             		DcImageIcon oldIcon = (DcImageIcon) o;
@@ -1229,11 +1245,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             		icon.setFilename(oldIcon.getFilename());
             	
             		setValue(field, icon);
-            	} else if (getField(field).getValueType() == DcRepository.ValueTypes._PICTURE) {
+            	} else if (o != null && getField(field).getValueType() == DcRepository.ValueTypes._PICTURE) {
                     Picture curPic = (Picture) dco.getValue(field);
                     
                     Picture newPic = (Picture) DcModules.get(DcModules._PICTURE).getItem();
-                    newPic.copy(curPic, overwrite);
+                    newPic.copy(curPic, overwrite, allowDeletes);
                     
                     newPic.isNew(curPic.isNew());
                     newPic.isDeleted(curPic.isDeleted());
@@ -1311,14 +1327,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public DcObject clone() {
         DcObject dco = getModule().getItem();
         
-        dco.copy(this, true);
+        dco.copy(this, true, true);
         dco.setValue(DcObject._ID, getID());
         dco.markAsUnchanged();
         
         if (children != null) {
             for (DcObject child : children) {
                 DcObject childCopy = child.getModule().getItem();
-                childCopy.copy(child, true);
+                childCopy.copy(child, true, true);
                 dco.addChild(child);
             }
         }

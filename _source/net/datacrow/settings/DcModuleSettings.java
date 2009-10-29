@@ -312,7 +312,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.ModuleSettings.stFileImportDirectoryUsage,
-                            Long.valueOf(1),
+                            Long.valueOf(0),
                             -1,
                             "",
                             "",

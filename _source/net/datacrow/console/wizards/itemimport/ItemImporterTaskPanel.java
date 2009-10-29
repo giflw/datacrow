@@ -125,7 +125,7 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
             try {
                 if (other != null) {
                     updated++;
-                    other.copy(item, true);
+                    other.copy(item, true, false);
                     other.saveUpdate(true, false);
                 } else {
                     created++;

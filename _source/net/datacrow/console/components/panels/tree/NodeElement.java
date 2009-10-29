@@ -11,7 +11,8 @@ import net.datacrow.core.objects.DcObject;
 
 public class NodeElement {
         
-    private Object key;
+    private String key;
+    private String keyComparable;
     private ImageIcon icon;
     private int module;
     
@@ -19,7 +20,8 @@ public class NodeElement {
     
     public NodeElement(int module, Object key, ImageIcon icon) {
         this.module = module;
-        this.key = key;
+        this.key = key instanceof DcObject ? key.toString() : key instanceof String ? (String) key : key.toString();
+        this.keyComparable = this.key.toLowerCase();
         this.icon = icon;
     }
 
@@ -69,15 +71,16 @@ public class NodeElement {
     }
     
     public String getComparableKey() {
-        return key instanceof String ? ((String) key).toLowerCase() : key == null ? "" : key.toString().toLowerCase();
+        return keyComparable;
     }
     
     public String getKey() {
-        return key instanceof DcObject ? ((DcObject) key).toString() : key instanceof String ? (String) key : key.toString();
+        return key;
     }
     
     public void clear() {
         key = null;
+        keyComparable = null;
         
         if (values != null)
             values.clear();

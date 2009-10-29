@@ -29,24 +29,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.util.Collection;
 
 import javax.swing.JPanel;
 
 import net.datacrow.console.components.DcLabel;
-import net.datacrow.console.components.DcPictureField;
-import net.datacrow.console.components.DcTextPane;
-import net.datacrow.console.components.lists.DcObjectList;
-import net.datacrow.console.components.lists.DcObjectListComponents;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.Utilities;
-
-import org.apache.log4j.Logger;
 
 /**
  * A list element which is capable of displaying a DcObject.
@@ -55,18 +46,8 @@ import org.apache.log4j.Logger;
  */
 public abstract class DcObjectListElement extends DcListElement {
 
-    private static Logger logger = Logger.getLogger(DcObjectListElement.class.getName());
-    
-    private static final Dimension dimTxt = new Dimension(145, 45);
-    private static final Dimension dimPicLbl = new Dimension(146, 140);
-
     protected static final int fieldHeight = 21;
-
     protected DcObject dco;
-    protected DcTextPane fldTitle;
-    protected DcPictureField fldPicture;
-    
-    private boolean build = false;
     
     protected DcObjectListElement() {}
     
@@ -80,59 +61,9 @@ public abstract class DcObjectListElement extends DcListElement {
     
     public abstract Collection<Picture> getPictures();
     
-    public void update(DcObject o, boolean overwrite, boolean allowDeletes, boolean mark) {
-        int[] indices = dco.getFieldIndices();
-        
-        for (int i = 0; i < indices.length; i++) {
-            
-            try {
-                if (o.isChanged(indices[i])) {
-                    Object newValue = o.getValue(indices[i]);
-                    Object existingValue = dco.getValue(indices[i]);
-
-                    boolean isNewEmpty = Utilities.isEmpty(newValue);
-                    boolean isOldEmpty = Utilities.isEmpty(existingValue);
-                    
-                    if (newValue instanceof Picture)
-                        newValue = ((Picture) newValue).isDeleted() ? null : newValue;
-                    
-                    if ((overwrite && !isNewEmpty) || allowDeletes) {
-                        dco.setValue(indices[i], newValue);
-                    } else if (isOldEmpty) {
-                        dco.setValue(indices[i], newValue);
-                    }
-                }
-            } catch (Exception e) {
-                logger.error("Could not update element [" + dco + "]", e);
-            }
-        }        
-
-        dco.removeChildren();
-        dco.loadChildren();
-        
-        if (!mark)
-            dco.markAsUnchanged();
-        
-        update();
-        revalidate();
+    public void update(DcObject dco) {
+        clear();
     }    
-    
-    private String getDescription() {
-        int[] fields = (int[]) dco.getModule().getSetting(DcRepository.ModuleSettings.stCardViewItemDescription);
-        if (fields != null && fields.length > 0) {
-            StringBuilder sb = new StringBuilder();
-            for (int field :  fields) {
-                String disp = dco.getDisplayString(field);
-                if (disp.length() > 0) {
-                    if (sb.length() > 0)
-                        sb.append("/");
-                    sb.append(disp);
-                }
-            }
-            return sb.toString();
-        } 
-        return dco.getName();
-    }
     
     @Override
     public void setForeground(Color fg) {
@@ -141,60 +72,6 @@ public abstract class DcObjectListElement extends DcListElement {
     	}
     }
 
-    @Override
-    public void build() {
-
-        build = true;
-        
-        this.fldPicture = DcObjectListComponents.getPictureField();
-        this.fldTitle = DcObjectListComponents.getTextPane();
-        
-	    addPicture(getPictures());
-        
-        fldTitle.setText(getDescription());
-        fldTitle.setPreferredSize(dimTxt);
-        fldTitle.setMinimumSize(dimTxt);
-        fldTitle.setMaximumSize(dimTxt);
-        
-        add(fldTitle);
-        
-        super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
-        
-        DcObjectList list = (DcObjectList) getParent().getParent();
-        
-        if (list.getView() != null) {
-            list.getView().revalidate();
-            list.getView().repaint(1000);
-        }
-    }
-	
-    public boolean isBuild() {
-        return build;
-    }
-
-    private void addPicture(Collection<Picture> pictures) {
-        for (Picture p : pictures) {
-            if (p == null) continue;
-                
-            DcImageIcon scaledImage = p.getScaledPicture();
-            DcImageIcon image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
-            
-            if (scaledImage != null) { 
-                fldPicture.setValue(scaledImage);
-                fldPicture.setScaled(false);
-            } else if (image != null) {
-                fldPicture.setValue(new DcImageIcon(image.getImage()));
-                fldPicture.setScaled(true);
-            }                
-            break;
-        }
-
-        fldPicture.setPreferredSize(dimPicLbl);
-        fldPicture.setMinimumSize(dimPicLbl);
-        fldPicture.setMaximumSize(dimPicLbl);
-        add(fldPicture);
-    }
-    
     public JPanel getPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -225,15 +102,6 @@ public abstract class DcObjectListElement extends DcListElement {
     }
     
     @Override
-    public void paint(Graphics g) {
-        
-        if (!build)
-            build();
-        
-        super.paint(g);
-    }
-    
-    @Override
     public void destroy() {
         super.destroy();
         dco = null;
@@ -241,17 +109,9 @@ public abstract class DcObjectListElement extends DcListElement {
     
     @Override
     public void clear() {
-        DcObjectListComponents.release(fldPicture);
-        DcObjectListComponents.release(fldTitle);
-        
         removeAll();
         
         if (dco != null)
             dco.freeResources();
-        
-        fldPicture = null;
-        fldTitle = null;
-        
-        build = false;
     }
 }

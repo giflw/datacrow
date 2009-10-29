@@ -279,7 +279,7 @@ public class ModuleImporter {
                     try {
                         if (other != null) {
                             client.notifyMessage(DcResources.getText("msgItemExistsMerged", other.toString()));
-                            other.copy(item, true);
+                            other.merge(item);
                             other.saveUpdate(true, false);
                         } else {
                             client.notifyMessage(DcResources.getText("msgItemNoExistsCreated", item.toString()));

@@ -60,12 +60,8 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
-import org.apache.log4j.Logger;
-
 public class FilterDialog extends DcDialog implements ActionListener {
 
-    private static Logger logger = Logger.getLogger(FilterDialog.class.getName());
-    
     private final DcModule module;
     
     private final MasterView parent;
@@ -326,13 +322,7 @@ public class FilterDialog extends DcDialog implements ActionListener {
                 QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
                 qb.setVisible(true);
                 if (qb.isAffirmative())
-                    view.save();
-                
-                try {
-                    view.getCurrentTask().join();
-                } catch (Exception e) {
-                    logger.error("Error while joining threads", e);
-                }
+                    view.save(false);
             }
             
             view.undoChanges();

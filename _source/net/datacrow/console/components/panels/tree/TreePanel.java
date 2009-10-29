@@ -47,6 +47,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
 import net.datacrow.console.views.MasterView;
+import net.datacrow.console.views.View;
 import net.datacrow.core.objects.DcObject;
 
 import org.apache.log4j.Logger;
@@ -111,11 +112,12 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public void updateView() {
         if (currentUserObject instanceof NodeElement) {
-            gp.getView().clear(isSaveChanges());
+            getView().clear(isSaveChanges());
             NodeElement currentNode = (NodeElement) currentUserObject;
             
-            if (currentNode.getValues() != null)
+            if (currentNode.getValues() != null) {
                 updateView(currentNode.getSortedValues());
+            }
         }
     }    
     
@@ -139,7 +141,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         boolean exists = true;
         DefaultMutableTreeNode node = top;
         for (int level = 1; level < keys.length; level++) {
-            node = findNode(keys[level], node);
+            node = findNode(keys[level], node, false);
             exists &= node != null; 
         }
         
@@ -176,7 +178,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     }
     
     protected void updateView(Collection<DcObject> dcos) {
-        getView().getCurrent().cancelCurrentTask();    
+        //getView().getCurrent().cancelCurrentTask();    
         getView().getCurrent().add(dcos);      
     }
     
@@ -269,6 +271,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         tree.setSelectionPath(treePath);
         tree.expandPath(treePath);
         tree.scrollPathToVisible(treePath);
+        
+        currentUserObject = node.getUserObject();
     }
     
     /**
@@ -293,10 +297,37 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         model.insertNodeInto(node, parent, idx);
     }
     
-    protected DefaultMutableTreeNode findNode(Object key, DefaultMutableTreeNode parentNode) {
+    /**
+     * Retrieves the node path for the given keys. 
+     * The returned path is the actual existing path, starting with the parent node.
+     * The returned path can be shorter then the key set if the path does not (fully) 
+     * exists in the tree.
+     * @param keys
+     */
+    protected List<DefaultMutableTreeNode> findPath(Object[] keys) {
+        List<DefaultMutableTreeNode> path = new ArrayList<DefaultMutableTreeNode>();
+        DefaultMutableTreeNode parentNode = null;
+        
+        for (Object key : keys) {
+            parentNode = findNode(key, parentNode, false);
+            
+            if (parentNode != null) 
+                path.add(parentNode);
+            else 
+                break;
+        }
+        
+        return path;
+    }
+    
+    protected DefaultMutableTreeNode findNode(Object key, DefaultMutableTreeNode parentNode, boolean deepSearch) {
         int count = parentNode != null ? parentNode.getChildCount() : 0;
         
+        if (parentNode == null && key.equals(((NodeElement) getTopNode().getUserObject()).getKey()))
+            return getTopNode();
+        
         DefaultMutableTreeNode node;
+        DefaultMutableTreeNode result = null;
         for (int i = 0; i < count; i++) {
             node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
             
@@ -304,11 +335,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
                 NodeElement ne = (NodeElement) node.getUserObject();
                 String s = key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
                 if (ne.getComparableKey().equalsIgnoreCase(s))
-                    return node;
+                    result = node;
             }
             
-            node = findNode(key, node);
-            if (node != null) return node;
+            if (result == null && deepSearch)
+                node = findNode(key, node, deepSearch);
+            
+            if (result != null) return node;
         }
         return null;
     }  
@@ -430,13 +463,12 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
 
         Object o = node.getUserObject();
         
-        if (o != currentUserObject && getView().getCurrent() != null) {
-            currentUserObject = o;
-            getView().getCurrent().clear(isSaveChanges());
+        View currentView = getView().getCurrent();
+        if (currentView != null) {
+            currentView.clear(isSaveChanges());
             NodeElement currentNode = (NodeElement) o;
-            updateView(currentNode.getSortedValues());
             setSelected(node);
+            updateView(currentNode.getSortedValues());
         }
     }
-
 }

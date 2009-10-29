@@ -205,11 +205,9 @@ public class ItemForm extends DcFrame implements ActionListener {
         addPictureTabs();
         addRelationPanel();
         
-        if (	module.canBeLend() && 
-                SecurityCentre.getInstance().getUser().isAuthorized("Loan") && 
-        		update && 
-        		!readonly)
+        if (module.canBeLend() && SecurityCentre.getInstance().getUser().isAuthorized("Loan") && update && !readonly) {
             addLoanTab();
+        }
 
         getContentPane().add(tabbedPane,  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
@@ -235,12 +233,8 @@ public class ItemForm extends DcFrame implements ActionListener {
                         int index = definition.getIndex();
                         DcField field = dco.getField(index);
                         JComponent component = fields.get(field);
-    
-                        if (   !field.isTechnicalInfo() && 
-                                component instanceof JTextField && 
-                                field.isEnabled() && 
-                                component.isShowing()) {
-                            
+                        if ((   component instanceof JTextField || component instanceof DcLongTextField) && 
+                                field.isEnabled() && component.getParent() != null) {
                             component.requestFocusInWindow();
                             break;
                         }
@@ -337,11 +331,6 @@ public class ItemForm extends DcFrame implements ActionListener {
                 dcoOrig.getModule().getCurrentSearchView().repaintQuickViewImage();
         }
         
-//        if (dco != null && update)
-//            dco.release();
-//        else if (dco != null)
-//            dco.freeResources();
-        
         ComponentFactory.clean(getJMenuBar());
         setJMenuBar(null);
         
@@ -418,7 +407,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         }
     }
 
-    protected void deleteValues() {
+    protected void deleteItem() {
         QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion"), this);
         qb.setVisible(true);
         
@@ -581,7 +570,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 // check if the value has been cleared manually 
                 // do not save if the value is empty, however do clear it when it was not empty before 
                 // (online search bug, values of added items could not be removed).
-                if (!value.equals("") || !Utilities.isEmpty(dco.getValue(field.getIndex())))
+                if (!Utilities.isEmpty(value) || !Utilities.isEmpty(dco.getValue(field.getIndex())))
                     dco.setValue(field.getIndex(), value);
             }
         }
@@ -875,7 +864,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         if (e.getActionCommand().equals("save"))
             saveValues();
         else if (e.getActionCommand().equals("delete"))
-            deleteValues();
+            deleteItem();
         else if (e.getActionCommand().equals("close"))
             close(false);
         else if (e.getActionCommand().equals("onlineSearch"))

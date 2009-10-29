@@ -91,7 +91,6 @@ import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -277,6 +276,12 @@ public class DcTable extends JTable implements IViewComponent {
             model.setValueAt(value, row, col);
         }
 
+        View childView = getView().getChildView();
+        if (getView().getType() == View._TYPE_INSERT &&  childView != null) {
+            childView.add(dco.getChildren());
+            childView.setParentID(dco.getID(), true);
+        }
+        
         if (setSelected)
             setSelected(getRowCount() - 1);
 
@@ -563,6 +568,9 @@ public class DcTable extends JTable implements IViewComponent {
 
     public void setSelected(int row) {
         try {
+            
+            int selectedCol = getSelectedColumn();
+            
             if (getSelectedRow() > -1) {
                 removeColumnSelectionInterval(0, getColumnCount() - 1);
                 removeRowSelectionInterval(getSelectedRow(), getSelectedRow());
@@ -570,8 +578,10 @@ public class DcTable extends JTable implements IViewComponent {
 
             getSelectionModel().setValueIsAdjusting(true);
 
+            selectedCol = selectedCol < 0 ? getColumnCount() - 1 : selectedCol; 
+            
             addRowSelectionInterval(row, row);
-            addColumnSelectionInterval(0, getColumnCount() - 1);
+            addColumnSelectionInterval(0, selectedCol);
 
             if (row <= getRowCount()) {
                 Rectangle rect = getCellRect(row, 0, true);
@@ -583,20 +593,20 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
-    public void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
+    public void updateItem(String ID, DcObject dco) {
         int index = getIndex(ID);
         if (index > -1)
-            updateItemAt(index, dco, overwrite, allowDeletes, mark);
+            updateItemAt(index, dco);
+        else 
+            logger.warn("Item with ID " + ID + " could not be found");
     }
 
-    public void updateItemAt(int row, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
+    public void updateItemAt(int row, DcObject dco) {
 
         cancelEdit();
 
-        if (!mark) {
-            setListeningForChanges(false);
-            removeFromCache(dco.getID());
-        }
+        setListeningForChanges(false);
+        removeFromCache(dco.getID());
 
         int[] indices = dco.getFieldIndices();
 
@@ -616,19 +626,11 @@ public class DcTable extends JTable implements IViewComponent {
                 int col = column.getModelIndex();
 
                 Object newValue = dco.getValue(indices[i]);
-                Object existingValue = getDcModel().getValueAt(row, col);
 
-                boolean isNewEmpty = Utilities.isEmpty(newValue);
-                boolean isOldEmpty = Utilities.isEmpty(existingValue);
-                
                 if (newValue instanceof Picture)
                     newValue = ((Picture) newValue).isDeleted() ? null : newValue;
                 
-                if ((overwrite && !isNewEmpty) || allowDeletes) {
-                    getDcModel().setValueAt(newValue, row, col);
-                } else if (isOldEmpty) {
-                    getDcModel().setValueAt(newValue, row, col);
-                }
+                getDcModel().setValueAt(newValue, row, col);
 
             } catch (Exception e) {
                 Integer key = indices[i];
@@ -643,8 +645,7 @@ public class DcTable extends JTable implements IViewComponent {
             getDcModel().setValueAt(value, row, col);
         }
 
-        if (!mark)
-            setListeningForChanges(true);
+        setListeningForChanges(true);
     }
 
     public void addRow(Object[] row) {

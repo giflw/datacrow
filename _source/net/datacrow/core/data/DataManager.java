@@ -297,8 +297,6 @@ public class DataManager {
         updateRelated(dco, true);
         updateUiComponents(dco.getModule().getIndex());
         updateView(dco, 2, module, MainFrame._SEARCHTAB);
-        
-        dco.release();
     }
     
     /**
@@ -522,8 +520,10 @@ public class DataManager {
                 }
                 
                 if (delete) {
-                    for (DcObject mapping : mappings)
-                        mapping.release();
+                    if (mappings != null) {
+                        for (DcObject mapping : mappings)
+                            mapping.release();
+                    }
 
                     int mappingModIdx = DcModules.getMappingModIdx(dco.getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
                     Map<String, Collection<DcMapping>> map = references.get(mappingModIdx);
@@ -609,7 +609,7 @@ public class DataManager {
         
         // make sure children are also removed
         if (dco.getModule().getChild() != null) {
-            for (DcObject child : getChildren(dco.getID(), dco.getModule().getChild().getIndex()))
+            for (DcObject child : new ArrayList<DcObject>(getChildren(dco.getID(), dco.getModule().getChild().getIndex())))
                 remove(child, child.getModule().getIndex());
         }
         
@@ -638,7 +638,7 @@ public class DataManager {
                     picture.setValue(Picture._D_IMAGE, null);
                     if (pics.indexOf(picture) > -1) {
                        Picture pic = pics.get(pics.indexOf(picture));
-                       pic.copy(picture, true);
+                       pic.copy(picture, true, true);
                        pic.markAsUnchanged();
                     }
                 } else if (picture.isDeleted()) {
@@ -1190,9 +1190,9 @@ public class DataManager {
                 is.close();
                 success = true;
             } catch (Exception e) {
-                logger.error("Failed to load the items from cache. The items will be loaded from the database instead.", e);
+                logger.warn("Failed to load the items from cache. The items will be loaded from the database instead.", e);
             } catch (Error err) {
-                logger.error("Failed to load the items from cache. The items will be loaded from the database instead.", err);
+                logger.warn("Failed to load the items from cache. The items will be loaded from the database instead.", err);
             }            
         }
         
@@ -1435,7 +1435,7 @@ public class DataManager {
             DcModule m = DcModules.get(module);
             if (tab == MainFrame._INSERTTAB) {
                 if (mode == 0) {
-                    m.getCurrentInsertView().updateItem(dco.getID(), dco, true, true, false);
+                    m.getCurrentInsertView().updateItem(dco.getID(), dco);
                 } else if (mode == 1) {
                     
                     if (DcModules.get(module).getSearchView() != null) {
@@ -1475,7 +1475,7 @@ public class DataManager {
                         MasterView masterView = mod.getSearchView();
                         if (masterView != null) {
                             if (mode == 0)
-                                masterView.updateItem(dco.getID(), dco, true, true, false);
+                                masterView.updateItem(dco.getID(), dco);
                             if (mode == 1)
                                 masterView.add(dco);
                             if (mode == 2)

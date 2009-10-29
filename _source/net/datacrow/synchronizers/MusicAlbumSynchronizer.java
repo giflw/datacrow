@@ -162,12 +162,12 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
             for (DcObject currentTrack : oldTracks) {
                 for (DcObject newTrack : newTracks) {
                     if (StringUtils.equals(currentTrack.getDisplayString(MusicTrack._A_TITLE), newTrack.getDisplayString(MusicTrack._A_TITLE))) {
-                        currentTrack.copy(newTrack, true);
+                        currentTrack.copy(newTrack, true, false);
                         break;
                     } else if (newTracks.size() == oldTracks.size() && 
                               !Utilities.isEmpty(currentTrack.getValue(MusicTrack._J_PLAYLENGTH)) && 
                                currentTrack.getDisplayString(MusicTrack._J_PLAYLENGTH).equals(newTrack.getDisplayString(MusicTrack._J_PLAYLENGTH))) {    
-                        currentTrack.copy(newTrack, true);
+                        currentTrack.copy(newTrack, true, false);
                         break;
                     }
                 }

@@ -76,7 +76,7 @@ public class FileTreePanel extends TreePanel {
         int level = 0;
         for (String part : parts) {
             DefaultMutableTreeNode parent = nodes.size() == 0 ? parentNode : nodes.get(level - 1);
-            DefaultMutableTreeNode node = findNode(part, parent);
+            DefaultMutableTreeNode node = findNode(part, parent, true);
             if (node != null)
                 nodes.add(node);
             else

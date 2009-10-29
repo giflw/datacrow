@@ -121,7 +121,7 @@ public class DcMapping extends DcObject {
         
         try {
             dco = getReferencedObject();
-        } catch (Exception ignore) {}
+        } catch (Exception e) {}
             
         return dco == null ? "" : dco.toString();
     }

@@ -160,12 +160,12 @@ public class MasterView {
             view.remove(ids);
     }
 
-    public void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark) {
+    public void updateItem(String ID, DcObject dco) {
         if (groupingPane != null)
             groupingPane.update(dco);
         
         for (View view : getViews())
-    		view.updateItem(ID, dco, overwrite, allowDeletes, mark);
+    		view.updateItem(ID, dco);
     }    
     
     public void reload(String ID) {
@@ -189,11 +189,12 @@ public class MasterView {
     }
     
     public void add(DcObject dco) {
-        if (groupingPane != null)
+        if (groupingPane != null) {
             groupingPane.add(dco);
-        
-        for (View view : getViews())
-            view.add(dco);
+        } else {
+            for (View view : getViews())
+                view.add(dco);
+        }
     }
     
     public void add(DcObject[] objects) {

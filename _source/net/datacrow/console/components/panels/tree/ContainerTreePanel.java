@@ -69,7 +69,7 @@ public class ContainerTreePanel extends TreePanel {
     protected void removeElement(DcObject dco, DefaultMutableTreeNode parentNode) {
         DefaultMutableTreeNode node;
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-        while ((node = findNode(dco.toString(), getTopNode())) != null) {
+        while ((node = findNode(dco.toString(), getTopNode(), true)) != null) {
             model.removeNodeFromParent(node);
         }
     }
@@ -91,7 +91,7 @@ public class ContainerTreePanel extends TreePanel {
         Container container = (Container) dco;
         
         if (!flatView && container.getParentContainer() != null)
-            parent = findNode(container.getParentContainer().toString(), getTopNode());
+            parent = findNode(container.getParentContainer().toString(), getTopNode(), true);
             
         NodeElement ne = new NodeElement(DcModules._CONTAINER, container.toString(), container.getIcon());
         ne.addValue(container);
@@ -101,7 +101,7 @@ public class ContainerTreePanel extends TreePanel {
         if (!flatView) {
             DefaultMutableTreeNode childNode;
             for (Container child : container.getChildContainers()) {
-                childNode = findNode(child.toString(), masterNode);
+                childNode = findNode(child.toString(), masterNode, true);
                 
                 if (childNode == null) {
                     NodeElement element = new NodeElement(DcModules._CONTAINER, child.toString(), child.getIcon());

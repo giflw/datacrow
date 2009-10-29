@@ -100,12 +100,12 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
             for (DcObject currentTrack : oldTracks) {
                 for (DcObject newTrack : newTracks) {
                     if (StringUtils.equals(currentTrack.getDisplayString(AudioTrack._A_TITLE), newTrack.getDisplayString(AudioTrack._A_TITLE))) {
-                        currentTrack.copy(newTrack, true);
+                        currentTrack.copy(newTrack, true, false);
                         break;
                     } else if (newTracks.size() == oldTracks.size() && 
                             !Utilities.isEmpty(currentTrack.getValue(AudioTrack._H_PLAYLENGTH)) && 
                              currentTrack.getDisplayString(AudioTrack._H_PLAYLENGTH).equals(newTrack.getDisplayString(AudioTrack._H_PLAYLENGTH))) {    
-                        currentTrack.copy(newTrack, true);
+                        currentTrack.copy(newTrack, true, false);
                         break;
                     }
                 }

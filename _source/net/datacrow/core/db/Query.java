@@ -578,7 +578,7 @@ public class Query {
             if (dco.getModule().isAbstract()) {
                 objects.clear();
                 DcObject o = DcModules.getObjectForTable(table);
-                o.copy(dco, true);
+                o.copy(dco, true, true);
                 objects.add(o);
             }
 
@@ -640,7 +640,7 @@ public class Query {
 
             DcObject objectClone = DcModules.getObjectForTable(table);
             if (objectClone  != null)
-                objectClone.copy(dco, true);
+                objectClone.copy(dco, true, true);
 
             addAvailabilityCondition(objectClone == null ? dco : objectClone, conditions);
 

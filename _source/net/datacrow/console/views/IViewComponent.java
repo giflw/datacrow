@@ -47,8 +47,8 @@ public interface IViewComponent {
 
     void deselect();
     
-    void updateItem(String ID, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark);
-    void updateItemAt(int index, DcObject dco, boolean overwrite, boolean allowDeletes, boolean mark);
+    void updateItem(String ID, DcObject dco);
+    void updateItemAt(int index, DcObject dco);
 
     int[] getChangedIndices();
     void undoChanges();

@@ -1,10 +1,15 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.7 beta [Release on xx/10/2009] [testing: medium] [target: beta]
 -----------------------------------------------------------------------------------------
+No new functionality but a lot of memory and performance improvements. The changes
+made cause a dramatic performance increase as well as a substantial memory gain.
+
+[ ] Fix: table view child items (insert view).
+[ ] Fix: upgrade
 
 [Changed]
 - Items are now internally reused. Data Crow was quite generous when it came to item 
-  instances. To gain, I admit, a rather small performance and memory usage gain items
+  instances. To gain, I admit, a modest performance and memory usage gain items
   are now internally re-usable. As a user you will not really see this change. However,
   this change has such a big impact on the whole of the product that I have decided to
   release this version as a major release and to release it as a beta version first.   
@@ -14,15 +19,31 @@ Data Crow 3.7 beta [Release on xx/10/2009] [testing: medium] [target: beta]
   already exists have been changed; 
   - For properties both the alternative names and the names are checked.
   - For all other items the external references are checked first (the PDCR in particular).
-    Secondly the combination of display fields are checked. Since version 3.5 Data Crow
+    Secondly a (combination of) display field is checked. Since version 3.5 Data Crow
     only checks on the actual string (exact match but case insensitive). This has been
     kept this way.
+- Views are now filled instantly resulting in a 99% performance improvement. With this 
+  change items are added to the view in about a second (regardless of the amount of items). 
+- View components are now reused (reduction of item creation; lesser memory needed and 
+  performance improvement).  
+- Memory needed for viewing all items now requires about 75% lesser memory. This is not
+  a fixed memory gain as it also depends whether the items contain an image (etc.).
+- Save buttons are now removed from the item tabs of the view. Save and save all is still
+  available from the menu bar and the tool bar.
+- Update all now saves the updates directly (!).  
 
 [Fixed]
 - External Reference is not created when an item is updated by an online service.
 - Several problems with transparent images have been fixed.
 - MobyGames.com stopped working.
-
+- Items are not correctly updated in the tree / grouping pane.
+- Key navigation in table view.
+- Issues with update all functionality when loosing view focus.
+- Data Crow hangs after message "want to save changes" when navigating in the grouping 
+  pane.
+- By default the directory usage has been turned on for the File Importer. Has been
+  changed to off by default.
+    
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.6 [Release on 18/10/2009] [testing: high] [target: production]

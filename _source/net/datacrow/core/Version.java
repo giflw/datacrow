@@ -58,7 +58,10 @@ public class Version {
      * @param version
      */
     public Version(String version) {
-        String v = version.toLowerCase().startsWith("data crow") ? version.substring(10) : version;
+        String v = version.toLowerCase().startsWith("data crow beta") ? version.substring(15) :  
+                   version.toLowerCase().startsWith("data crow") ? version.substring(10) : 
+                   version;
+                   
         StringTokenizer st = new StringTokenizer(v, ".");
         if (st.hasMoreElements())
             major = Integer.valueOf((String) st.nextElement());
@@ -125,7 +128,7 @@ public class Version {
      * Full string representation of the current version. 
      */
     public String getFullString() {
-        return "Data Crow " + toString();
+        return "Data Crow BETA " + toString();
     }
     
     @Override

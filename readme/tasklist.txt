@@ -1,45 +1,54 @@
-4.0
+4.0 Major Platform Additions 
 ---------------------------------------------------------------------------------------------------------
-[ ] Flexible Online Services model (scripting).
-[ ] Additional online services (using the new model).
+[-] Flexible Online Services model (scripting).
+[ ] Additional online services.
 [ ] Upgrade of the Container module / Global Importer.
 [ ] Zoom in out for the chart panel.
-[ ] Book Module / Additional import + bibtext implementation.
-[ ] [2857434] Better error handling for systems with low resources.
+[ ] Book Module / Additional import + bib-text implementation.
+[ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
+    Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
+[ ] Translation tool update:
+    - Show untranslated text
+    - Add help for the translation of the system labels (field translation).
+    - Find and replace.
+[ ] Image module upgrade: direct file linking.
+[ ] Make a better distinction between Audio CD's and Music ALbums. Allow both to be displayed
+    within the same abstract module.
+    
+
+3.7 Performance release
+---------------------------------------------------------------------------------------------------------
+[X] Overall performance improvements.
+[X] Overall bug fixing.
+[X] [2857434] Better error handling for systems with low resources.
+[ ] Startup errors? Adopt old startup dialogs? > test on Ubuntu.
 
 Framework changes:
-[ ] Add module type indicator to each module to avoid having to use 'instanceof'.
+[X] Add module type indicator to each module to avoid having to use 'instanceof'.
 
-3.6 
+
+3.6 Module builder update 
 ---------------------------------------------------------------------------------------------------------
-[x] Exporting a module. Exporting the module definition itself currently requires manually copying the 
+[X] Exporting a module. Exporting the module definition itself currently requires manually copying the 
     module jar file and its property files. Functionality will be provided which makes it easy to export 
     and import a module (definition). This functionality will also allow users to export default/demo data 
     with their module. This functionality will also be used to provide additional custom modules. 
-[x] Container Hierarchy.
-[x] Clone a module wizard
+[X] Container Hierarchy.
+[X] Clone a module wizard
 [-] MovieMeter.nl online search
-[x] Book online search in www.isbndb.com (1886661)
-[x] File operations (move, delete and locate)
-[x] [2860480] Arch package for data crow
-[x] [2860913] Extract ISBN from PDF (ISBN Extractor)
-[x] [2862681] New "IMDB ID" field for Names and Movies / Data matching for online services
-[x] [2862698] Add fields "Aspect Ratio" and "Color" to movie fields
-[x] [2862688] IMDB wrapper doesn't fill in "Languages" field
-[x] [2874556] Date field
+[X] Book online search in www.isbndb.com (1886661)
+[X] File operations (move, delete and locate)
+[X] [2860480] Arch package for data crow
+[X] [2860913] Extract ISBN from PDF (ISBN Extractor)
+[X] [2862681] New "IMDB ID" field for Names and Movies / Data matching for online services
+[X] [2862698] Add fields "Aspect Ratio" and "Color" to movie fields
+[X] [2862688] IMDB wrapper doesn't fill in "Languages" field
+[X] [2874556] Date field
 [-] [2869347] Out of Memory while parsing AVI file
 [-] [2864974] Send online search query "as is" (without modifications)
+
 
 Unplanned
 ---------------------------------------------------------------------------------------------------------
 [ ] Multiple file support (per item)
-[ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
-    Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
 [ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
-[-] Per user settings. Settings, such a field settings, quick view settings and others are currently 
-    stored on application level. As a result each and every user has the same settings as determined by 
-    the administrator. Data Crow 3.4 will allow administrators to specify if the user should have the 
-    default settings (current situation) or if this user is allowed to modify its own settings. Tying 
-    a database instance to a user is also under consideration. This would allow users to have multiple 
-    accounts, for example one per module (data separation). 
-[x] Vector graphics support (1895140)

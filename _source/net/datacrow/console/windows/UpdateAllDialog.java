@@ -29,6 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -46,6 +47,7 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
@@ -107,35 +109,44 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
         public void run() {
             DcObject dco = itemForm.getItem();
             
-            int[] rows;
+            Collection<? extends DcObject> c;
             if (isUpdateSelectedItemsOnly()) {
-                rows = view.getSelectedRows();
+                c = view.getSelectedItems();
             } else {
-                rows = new int[view.getItemCount()];
-                for (int i = 0; i < rows.length; i++) {
-                    rows[i] = i;
-                }
+                c = view.getItems();
             }
 
-            initProgressBar(rows.length);
+            int count = 1;
+            initProgressBar(c.size());
             view.setListSelectionListenersEnabled(false);
             try {
-	            for (int i = 0; i < rows.length && keepOnRunning; i++) {
+                
+	            for (DcObject item : c) {
 	                
-	                // TODO: save directly
+	                if (!keepOnRunning) break;
 	                
-	                view.updateItemAt(rows[i], dco, true, false, true);
-	                updateProgressBar(i + 1);
+	                item.copy(dco, true, false);
+	                
+	                try {
+	                    
+	                    if (item.isChanged())
+	                        item.saveUpdate(false, false);
+	                    
+                    } catch (ValidationException ve) {
+                        logger.error(ve, ve);
+                    }
+	                
+	                updateProgressBar(count);
 	
 	                try {
-	                    sleep(20);
+	                    sleep(200);
 	                } catch (Exception e) {
 	                    logger.error(e, e);
 	                }
+	                
+	                count++;
 	            }
             } finally {
-            	if (rows.length > 0)
-            		view.setSelected(rows[rows.length -1]);
             	view.setListSelectionListenersEnabled(true);
             }
             
