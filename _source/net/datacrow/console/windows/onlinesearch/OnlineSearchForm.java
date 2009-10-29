@@ -248,7 +248,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
         if (row < 0) {
             new MessageBox(DcResources.getText("msgSelectRowForTransfer"), MessageBox._WARNING);
-            return null;
+            return new ArrayList<DcObject>();
         }
 
         // removed the clone option; it somehow managed to make the pictures disappear..
@@ -394,16 +394,20 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                 new Runnable() {
                     public void run() {
                         saveSettings();
-                        Collection<DcObject> selected = getSelectedObjects();
+                        final Collection<DcObject> selected = new ArrayList<DcObject>(getSelectedObjects());
                         
-                        if (selected != null) {
-                            // Create clones to prevent the cleaning task from clearing the items..
-                            // This is to fix an unconfirmed bug (NullPointerException on saving new items). 
-                            for (DcObject o : selected)
-                                getModule().getCurrentInsertView().add(o.clone());
-                            
-                            DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
-                        }
+                        // Create clones to prevent the cleaning task from clearing the items..
+                        // This is to fix an unconfirmed bug (NullPointerException on saving new items). 
+
+                        SwingUtilities.invokeLater(
+                                new Thread(new Runnable() { 
+                                    public void run() {
+                                        for (DcObject o : selected)
+                                            getModule().getCurrentInsertView().add(o.clone());
+                                        
+                                        DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
+                                    }
+                                }));
                     }
                 }).start();
     }    

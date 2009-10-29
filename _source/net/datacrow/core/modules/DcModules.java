@@ -623,10 +623,7 @@ public class DcModules {
      * Retrieves all modules
      */
     public static Collection<DcModule> getAllModules() {
-        List<DcModule> c = new ArrayList<DcModule>();
-        for (DcModule module : modules.values())
-                c.add(module);
-
+        List<DcModule> c = new ArrayList<DcModule>(modules.values());
         Collections.sort(c); 
         return c;
     }
