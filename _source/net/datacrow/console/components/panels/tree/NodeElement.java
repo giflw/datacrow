@@ -7,12 +7,13 @@ import javax.swing.ImageIcon;
 
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 
 public class NodeElement {
         
-    private String key;
-    private String keyComparable;
+    private Object key;
+    
     private ImageIcon icon;
     private int module;
     
@@ -20,8 +21,7 @@ public class NodeElement {
     
     public NodeElement(int module, Object key, ImageIcon icon) {
         this.module = module;
-        this.key = key instanceof DcObject ? key.toString() : key instanceof String ? (String) key : key.toString();
-        this.keyComparable = this.key.toLowerCase();
+        this.key = key instanceof DcMapping ? ((DcMapping) key).getReferencedObject() : key;     
         this.icon = icon;
     }
 
@@ -71,16 +71,15 @@ public class NodeElement {
     }
     
     public String getComparableKey() {
-        return keyComparable;
+        return getKey().toLowerCase();
     }
     
     public String getKey() {
-        return key;
+        return key instanceof String ? (String) key : key.toString();
     }
     
     public void clear() {
         key = null;
-        keyComparable = null;
         
         if (values != null)
             values.clear();
