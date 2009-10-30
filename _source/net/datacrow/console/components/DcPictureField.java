@@ -60,13 +60,13 @@ import net.datacrow.console.menu.DcPictureFieldMenu;
 import net.datacrow.console.windows.BrowserDialog;
 import net.datacrow.console.windows.OpenFromUrlDialog;
 import net.datacrow.console.windows.PictureDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.filefilters.DcFileFilter;
 import net.datacrow.util.filefilters.PictureFileFilter;
@@ -372,7 +372,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                     Utilities.writeToFile(picture, filename);
                 }
             } catch (Exception e) {
-                new MessageBox(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage(), MessageBox._ERROR);
+                DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
                 logger.error("An error occurred while saving the image", e);
             }
         }

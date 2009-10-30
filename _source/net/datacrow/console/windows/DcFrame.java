@@ -23,36 +23,37 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components;
+package net.datacrow.console.windows;
 
 import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Date;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
-import org.apache.log4j.Logger;
+public class DcFrame extends JFrame implements WindowFocusListener {
 
-public class DcDialog extends JDialog {
-
-    private static Logger logger = Logger.getLogger(DcDialog.class.getName());
-    
     private String helpIndex = null;
 
-    public DcDialog(JFrame parent) {
-        super(parent);
+    public DcFrame(String title, ImageIcon icon) {
+        super(title);
         
+        setIconImage(icon == null ? IconLibrary._icoMain.getImage() : icon.getImage());
+        
+        DcSwingUtilities.setRootFrame(this);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -60,71 +61,66 @@ public class DcDialog extends JDialog {
             }
         });
         
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setModal(true);
-
+        addWindowFocusListener(this);
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         PluginHelper.registerKey(getRootPane(), "Help");
         PluginHelper.registerKey(getRootPane(), "CloseWindow");
     }
-
-    public DcDialog() {
-        this(DcSwingUtilities.getRootFrame());
-    }
     
-    @Override
-    public void setVisible(boolean b) {
-        if (isModal() && DataCrow.isSplashScreenActive())
-            DataCrow.showSplashScreen(false);
-
-        super.setVisible(b);
-    }
-
     public void close() {
-        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+
+        for (WindowListener wl : getWindowListeners())
+            removeWindowListener(wl);
         
         helpIndex = null;
         
         if (rootPane.getInputMap() != null)
             rootPane.getInputMap().clear();
-        
-        if (rootPane.getActionMap() != null)
+
+        if (rootPane.getActionMap() != null) {
             rootPane.getActionMap().clear();
-        
-        rootPane.setActionMap(null);        
+            rootPane.setActionMap(null);
+        }
         
         ComponentFactory.clean(getContentPane());
-        
-        setVisible(false);
-        if (DataCrow.isSplashScreenActive())
-            DataCrow.showSplashScreen(true);
-        
         dispose();
         
-        if (logger.isDebugEnabled()) {
-            long end = new Date().getTime();
-            logger.debug("Disposing of the dialog and its resources took " + (end - start) + "ms");
-        }  
+        DcSwingUtilities.setRootFrame(DataCrow.mainFrame);
+    }
+    
+    protected void addKeyListener(KeyStroke keyStroke, Action action, String name) {
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);
+        rootPane.getActionMap().put(name, action);
     }
 
-    public void setHelpIndex(String helpIndex) {
-    	this.helpIndex = helpIndex;
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) DcSwingUtilities.setRootFrame(this);
     }
 
+    public void setHelpIndex(String helpID) {
+        helpIndex =  helpID;
+    }
+    
     public String getHelpIndex() {
         return helpIndex;
     }
 
-    public void setCenteredLocation() {
+    protected void setCenteredLocation() {
         setLocation(Utilities.getCenteredWindowLocation(getSize(), false));
+    }
+
+    public void windowGainedFocus(WindowEvent e) {
+        DcSwingUtilities.setRootFrame(this);
+    }
+
+    public void windowLostFocus(WindowEvent e) {
     }
     
     @Override
     public void paint(Graphics g) {
         super.paint(DcSwingUtilities.setRenderingHint(g));
-    }    
-    
-    protected void addKeyListener(KeyStroke keyStroke, Action action, String name) {
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);
-        rootPane.getActionMap().put(name, action);
-    }    
+    }
 }

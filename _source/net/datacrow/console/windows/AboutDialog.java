@@ -37,7 +37,6 @@ import javax.swing.JTabbedPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;

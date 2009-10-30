@@ -46,14 +46,12 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.MainFrame;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.menu.DcPropertyViewPopupMenu;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.CreateMultipleItemsDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
@@ -230,7 +228,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     protected boolean isTaskRunning() {
         boolean isTaskRunning = task != null && task.isRunning();
         if (isTaskRunning)
-            new MessageBox(DcResources.getText("msgJobRunning"), MessageBox._WARNING); 
+            DcSwingUtilities.displayWarningMessage("msgJobRunning");
+
         return isTaskRunning; 
     }     
 
@@ -312,7 +311,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 task = new DeletingThread(objects);
                 task.start();
             } else {
-                new MessageBox(DcResources.getText("msgSelectItemToDel"), MessageBox._WARNING);    
+                DcSwingUtilities.displayWarningMessage("msgSelectItemToDel");
             }
         }
     }     
@@ -334,9 +333,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 startRunning();
                 denyActions();
                 
-                QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion")); 
-                qb.setVisible(true);
-                if (!qb.isAffirmative()) {
+                if (!DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
                     stopRunning();
                 } else {
                     int counter = 1;

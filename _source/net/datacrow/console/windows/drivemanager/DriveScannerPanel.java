@@ -46,13 +46,13 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.BrowserDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.drivemanager.DriveManager;
 import net.datacrow.drivemanager.JobAlreadyRunningException;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 
 public class DriveScannerPanel extends DriveManagerPanel implements ActionListener {
 
@@ -195,7 +195,7 @@ public class DriveScannerPanel extends DriveManagerPanel implements ActionListen
                 for (int i = tableSkipDirs.getSelectedRows().length; i > 0; i--)
                     tableSkipDirs.removeRow(tableSkipDirs.getSelectedRows()[i - 1]);
             } else {
-                new MessageBox(DcResources.getText("msgSelectItemBeforeDelete"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayMessage("msgSelectItemBeforeDelete");
             }
         }
     }

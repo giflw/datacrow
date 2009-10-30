@@ -36,7 +36,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
@@ -55,6 +54,7 @@ import net.datacrow.core.wf.requests.Requests;
 import net.datacrow.core.wf.requests.SynchronizeWithManagerRequest;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -108,7 +108,7 @@ public class DatabaseManager {
 
         } catch (Exception e) {
             logger.error("Could not find and connect to the database!", e);
-            new MessageBox("Could not find or connect to the database!", MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage("Could not find or connect to the database!");
         }
     }
 

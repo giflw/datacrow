@@ -44,11 +44,10 @@ import javax.swing.JScrollPane;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcDateField;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.console.components.tables.DcTable;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.loan.LoanForm;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
@@ -58,6 +57,7 @@ import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.helpers.ContactPerson;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -110,7 +110,7 @@ public class LoanPanel extends JPanel implements ActionListener {
             available = available == null ? currentStatus : available;
             
             if (available.booleanValue() != currentStatus) {
-                new MessageBox(DcResources.getText("msgNotSameState"), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage("msgNotSameState");
                 throw new Exception(DcResources.getText("msgNotSameState"));
             }
             
@@ -198,7 +198,7 @@ public class LoanPanel extends JPanel implements ActionListener {
     public void returnItems() {
         final Date endDate = (Date) inputEndDate.getValue();
         if (endDate == null) {
-            new MessageBox(DcResources.getText("msgEnterReturnDate"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgEnterReturnDate");
             return;
         }
         
@@ -206,7 +206,7 @@ public class LoanPanel extends JPanel implements ActionListener {
             Loan currentLoan = DataManager.getCurrentLoan(o.getID());
             Date startDate = (Date) currentLoan.getValue(Loan._A_STARTDATE);
             if (startDate.compareTo(endDate) > 0) {
-                new MessageBox(DcResources.getText("msgEndDateMustBeAfterStartDate"), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage("msgEndDateMustBeAfterStartDate");
                 return;
             }
         }
@@ -287,13 +287,13 @@ public class LoanPanel extends JPanel implements ActionListener {
         final Date dueDate = (Date) inputDueDate.getValue();
         
         if (contactPersonID == null) {
-            new MessageBox(DcResources.getText("msgSelectPerson"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgSelectPerson");
             return;
         } else if (startDate == null) {
-            new MessageBox(DcResources.getText("msgEnterDate"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgEnterDate");
             return;
         } else if (dueDate != null && dueDate.before(startDate)) {
-            new MessageBox(DcResources.getText("msgDueDateBeforeStartDate"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgDueDateBeforeStartDate");
             return;
         }
         

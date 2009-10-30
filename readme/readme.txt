@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.7
-Created on xx/10/2009
+Version 3.7 BETA
+Created on 30/10/2009
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -40,7 +40,7 @@ Features:
 
 * Skinnable UI.
 * Platform independent.
-* Completel portable.
+* Completely portable.
 * Internal help system (F1).
 * Nice looking and easy to use UI.
 * Loan administration.
@@ -74,7 +74,7 @@ Data Crow needs, when using larger databases, at least 256 MB.
 (a database of 10,000 records, with pictures, is considered large).
 
 Data Crow needs Java:
-  * JRE 1.5 or higher from Sun (http://java.sun.com/)
+  * JRE 1.6 or higher from Sun (http://java.sun.com/)
 
 
 ----------------------------------------------------------------------------------------

@@ -23,18 +23,18 @@ import javax.swing.table.TableColumn;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.menu.DcFileRenamerPreviewPopupMenu;
 import net.datacrow.console.menu.FileRenamerMenu;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.filerenamer.FilePattern;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 
 public class FileRenamerPreviewDialog extends DcDialog implements ActionListener, MouseListener {
 
@@ -232,7 +232,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
             if (rows != null && rows.length > 0)
                 table.remove(rows);
             else 
-                new MessageBox(DcResources.getText("msgNoItemsSelectedToRemove"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayMessage("msgNoItemsSelectedToRemove");
         } else if (ae.getActionCommand().equals("cancel")) {
             close();
         }

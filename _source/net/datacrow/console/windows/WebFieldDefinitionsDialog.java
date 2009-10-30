@@ -42,7 +42,6 @@ import javax.swing.table.TableColumn;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.panels.NavigationPanel;
 import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
 import net.datacrow.console.components.tables.DcTable;

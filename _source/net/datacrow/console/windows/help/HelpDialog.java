@@ -32,11 +32,11 @@ import javax.help.HelpSet;
 import javax.swing.JFrame;
 
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -78,7 +78,7 @@ public class HelpDialog {
 
         } catch (Exception e) {
             logger.error(DcResources.getText("msgErrorOpeningHelp"), e);
-            new MessageBox(DcResources.getText("msgErrorOpeningHelp"), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage("msgErrorOpeningHelp");
             return;
 		}
 	}

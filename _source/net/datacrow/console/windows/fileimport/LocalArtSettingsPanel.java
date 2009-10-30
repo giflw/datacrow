@@ -36,11 +36,11 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcShortTextField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.Settings;
+import net.datacrow.util.DcSwingUtilities;
 
 public class LocalArtSettingsPanel extends JPanel {
 
@@ -63,7 +63,7 @@ public class LocalArtSettingsPanel extends JPanel {
             txtFront.getText().length() == 0 ||
             txtBack.getText().length() == 0) {
             
-            new MessageBox(DcResources.getText("msgPleaseEnterKeywords"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgPleaseEnterKeywords");
             return;
         } else {
             Settings settings = DcModules.get(module).getSettings();

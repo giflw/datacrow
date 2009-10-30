@@ -44,11 +44,10 @@ import javax.swing.JTextArea;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.panels.OnlineServicePanel;
 import net.datacrow.console.components.panels.OnlineServiceSettingsPanel;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
@@ -62,6 +61,7 @@ import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.fileimporters.IFileImportClient;
 import net.datacrow.settings.Settings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.filefilters.FileNameFilter;
 
@@ -149,7 +149,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
 
     public void addError(Throwable e) {
         logger.error(e, e);
-        new MessageBox(DcResources.getText("msgUnexpectedProblemDuringFileImport", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()), MessageBox._ERROR);
+        DcSwingUtilities.displayErrorMessage(DcResources.getText("msgUnexpectedProblemDuringFileImport", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()));
     }
 
     public void finish() {
@@ -187,8 +187,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         if (regex.trim().length() > 0) {
             try {
                 Pattern.compile(regex);
-            } catch (PatternSyntaxException pse) {
-                new MessageBox(DcResources.getText("msgPatternError", pse.getMessage()), MessageBox._ERROR);
+            } catch (PatternSyntaxException e) {
+                DcSwingUtilities.displayErrorMessage(DcResources.getText("msgPatternError", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()));
                 valid = false;
             }
         }
@@ -207,7 +207,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             importer.setClient(this);
             importer.parse(panelFs.getFiles(false));
         } catch (Exception e) {
-            new MessageBox(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage(), MessageBox._INFORMATION);
+            DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
             finish();
         }
     }

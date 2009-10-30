@@ -25,10 +25,10 @@
 
 package net.datacrow.console.windows.onlinesearch;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.SearchTask;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.PollerTask;
 import net.datacrow.util.Utilities;
 
@@ -64,7 +64,7 @@ public class OnlineItemRetriever extends Thread {
             dco = task.query(dco);
             poller.finished(true);
         } catch (Exception e) {
-            new MessageBox(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage(), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
             logger.error(e, e);
         }
     }

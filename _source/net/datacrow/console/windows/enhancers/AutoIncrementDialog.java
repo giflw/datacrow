@@ -43,9 +43,8 @@ import javax.swing.JProgressBar;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
@@ -59,6 +58,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.enhancers.AutoIncrementer;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -288,7 +288,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
             }
             
             if (!active && !canceled) {
-                new MessageBox(DcResources.getText("msgNoRenumbersFound"), MessageBox._ERROR);
+                DcSwingUtilities.displayErrorMessage("msgNoRenumbersFound");
             } else {
                 // refresh the view
                 module.getSearchView().clear();

@@ -43,7 +43,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
-public class SelectLanguageDialog extends JDialog implements ActionListener {
+public class SelectLanguageDialog extends NativeDialog implements ActionListener {
 
     private JComboBox cbLanguage = new JComboBox();
     

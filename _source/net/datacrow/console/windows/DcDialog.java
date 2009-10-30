@@ -23,37 +23,38 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components;
+package net.datacrow.console.windows;
 
 import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.IconLibrary;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
-public class DcFrame extends JFrame implements WindowFocusListener {
+import org.apache.log4j.Logger;
 
+public class DcDialog extends JDialog implements IDialog {
+
+    private static Logger logger = Logger.getLogger(DcDialog.class.getName());
+    
     private String helpIndex = null;
+    private AtomicBoolean active;
 
-    public DcFrame(String title, ImageIcon icon) {
-        super(title);
+    public DcDialog(JFrame parent) {
+        super(parent);
         
-        setIconImage(icon == null ? IconLibrary._icoMain.getImage() : icon.getImage());
-        
-        DcSwingUtilities.setRootFrame(this);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -61,66 +62,87 @@ public class DcFrame extends JFrame implements WindowFocusListener {
             }
         });
         
-        addWindowFocusListener(this);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setModal(true);
+
         PluginHelper.registerKey(getRootPane(), "Help");
         PluginHelper.registerKey(getRootPane(), "CloseWindow");
     }
-    
-    public void close() {
 
-        for (WindowListener wl : getWindowListeners())
-            removeWindowListener(wl);
+    public DcDialog() {
+        this(DcSwingUtilities.getRootFrame());
+    }
+    
+    public void setModal(AtomicBoolean active) {
+        this.active = active;
+    }
+ 
+    @Override
+    public void dispose() {
+        if (active != null) {
+            synchronized (active) {
+                active.set(false);
+                active.notifyAll();
+            }
+        }
+        super.dispose();   
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        if (b && DataCrow.isSplashScreenActive())
+            DataCrow.showSplashScreen(false);
+        
+        if (!b) dispose();
+        
+        super.setVisible(b);
+    }
+
+    public void close() {
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
         helpIndex = null;
         
         if (rootPane.getInputMap() != null)
             rootPane.getInputMap().clear();
-
-        if (rootPane.getActionMap() != null) {
+        
+        if (rootPane.getActionMap() != null)
             rootPane.getActionMap().clear();
-            rootPane.setActionMap(null);
-        }
+        
+        rootPane.setActionMap(null);        
         
         ComponentFactory.clean(getContentPane());
+        
         dispose();
         
-        DcSwingUtilities.setRootFrame(DataCrow.mainFrame);
-    }
-    
-    protected void addKeyListener(KeyStroke keyStroke, Action action, String name) {
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);
-        rootPane.getActionMap().put(name, action);
-    }
-
-    @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
-        if (visible) DcSwingUtilities.setRootFrame(this);
+        if (DataCrow.isSplashScreenActive())
+            DataCrow.showSplashScreen(true);
+        
+        if (logger.isDebugEnabled()) {
+            long end = new Date().getTime();
+            logger.debug("Disposing of the dialog and its resources took " + (end - start) + "ms");
+        }  
     }
 
-    public void setHelpIndex(String helpID) {
-        helpIndex =  helpID;
+    public void setHelpIndex(String helpIndex) {
+    	this.helpIndex = helpIndex;
     }
-    
+
     public String getHelpIndex() {
         return helpIndex;
     }
 
-    protected void setCenteredLocation() {
+    public void setCenteredLocation() {
         setLocation(Utilities.getCenteredWindowLocation(getSize(), false));
-    }
-
-    public void windowGainedFocus(WindowEvent e) {
-        DcSwingUtilities.setRootFrame(this);
-    }
-
-    public void windowLostFocus(WindowEvent e) {
     }
     
     @Override
     public void paint(Graphics g) {
         super.paint(DcSwingUtilities.setRenderingHint(g));
-    }
+    }    
+    
+    protected void addKeyListener(KeyStroke keyStroke, Action action, String name) {
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);
+        rootPane.getActionMap().put(name, action);
+    }    
 }

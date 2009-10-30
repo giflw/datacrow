@@ -38,11 +38,11 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcNumberField;
 import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 
 public class PerformancePanel extends DcPanel implements ActionListener {
 
@@ -125,8 +125,7 @@ public class PerformancePanel extends DcPanel implements ActionListener {
             DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, gcInterval);      
         
         DatabaseManager.applySettings();
-        
-        new MessageBox(DcResources.getText("msgSettingsSavedUnapplied"), MessageBox._INFORMATION);
+        DcSwingUtilities.displayMessage("msgSettingsSavedUnapplied");
     }
     
     public void actionPerformed(ActionEvent ae) {

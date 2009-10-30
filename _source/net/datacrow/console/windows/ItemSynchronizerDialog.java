@@ -40,7 +40,6 @@ import javax.swing.JTextArea;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcProgressBar;
 import net.datacrow.console.components.panels.OnlineServicePanel;

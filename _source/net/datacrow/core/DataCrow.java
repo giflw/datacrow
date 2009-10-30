@@ -48,9 +48,7 @@ import net.datacrow.console.windows.SplashScreen;
 import net.datacrow.console.windows.TipOfTheDayDialog;
 import net.datacrow.console.windows.help.StartupHelpDialog;
 import net.datacrow.console.windows.loan.LoanInformationForm;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.console.windows.security.LoginDialog;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
@@ -73,6 +71,7 @@ import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Directory;
 import net.datacrow.util.SystemMonitor;
 import net.datacrow.util.Utilities;
@@ -141,7 +140,8 @@ public class DataCrow {
             } else if (args[i].toLowerCase().startsWith("-nocache")) {
                 nocache = true;        
             } else if (args[i].toLowerCase().startsWith("-help")) {
-                new StartupHelpDialog().setVisible(true);
+                StartupHelpDialog dialog = new StartupHelpDialog();
+                DcSwingUtilities.openDialogNativeModal(dialog);
                 System.exit(0);
             } else if (args[i].toLowerCase().startsWith("-debug")) {
                 debug = true;
@@ -204,9 +204,10 @@ public class DataCrow {
         installationDir = dir != null ? dir : installationDir;
         
         if (installationDir == null || installationDir.trim().length() == 0) {
-            new NativeMessageBox("Warning", "The installation directory could not be determined. " +
+            NativeMessageBox dialog = new NativeMessageBox("Warning", "The installation directory could not be determined. " +
                     "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
                     "The DATACROW_HOME variable value should point to the Data Crow intallation directory.");
+            DcSwingUtilities.openDialogNativeModal(dialog);
             return;
         }
         
@@ -249,9 +250,9 @@ public class DataCrow {
             
             if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
                 DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
-            
+                
                 SelectLanguageDialog dlg = new SelectLanguageDialog();
-                dlg.setVisible(true);
+                DcSwingUtilities.openDialogNativeModal(dlg);
             }
             
             showSplashScreen();
@@ -316,7 +317,7 @@ public class DataCrow {
             } 
             
             if (DatabaseManager.isLocked()) {
-                new MessageBox(DcResources.getText("msgDatabaseIsLocked"), MessageBox._WARNING);
+                DcSwingUtilities.displayErrorMessage("msgDatabaseIsLocked");
                 System.exit(0);
             }
             
@@ -373,7 +374,7 @@ public class DataCrow {
             } else {
                 
                 if (!SecurityCentre.getInstance().getUser().isAuthorized("WebServer")) {
-                    new MessageBox(DcResources.getText("msgWebServerStartUnauthorized"), MessageBox._INFORMATION);
+                    DcSwingUtilities.displayWarningMessage("msgWebServerStartUnauthorized");
                     new ShutdownThread().run();
                     System.exit(0);
                 } else {
@@ -407,7 +408,7 @@ public class DataCrow {
                 for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
                     Long overdue = ((Loan) loan).getDaysTillOverdue();
                 	if (overdue != null && overdue.longValue() < 0) {
-                		new MessageBox(DcResources.getText("msgThereAreOverdueItems"), MessageBox._WARNING);
+                        DcSwingUtilities.displayWarningMessage("msgThereAreOverdueItems");
                 		new LoanInformationForm().setVisible(true);
                 		break;
                 	}
@@ -540,15 +541,15 @@ public class DataCrow {
                 int retry = 0;
                 while (!success && retry < 3) {
                     showSplashScreen(false);
-                    LoginDialog dlg = new LoginDialog();
-                    dlg.setVisible(true);
                     
+                    LoginDialog dlg = new LoginDialog();
+                    DcSwingUtilities.openDialogNativeModal(dlg);
                     if (dlg.isCanceled()) break;
                     
                     try {
                         success = SecurityCentre.getInstance().login(dlg.getLoginName(), dlg.getPassword(), false) != null;
                     } catch (SecurityException se) {
-                        new MessageBox(se.toString(), MessageBox._INFORMATION);
+                        DcSwingUtilities.displayMessage(se.toString());
                         retry ++;
                     }
                 }
@@ -644,10 +645,11 @@ public class DataCrow {
         if (!new File(DataCrow.installationDir + "plugins").exists() ||
             !new File(DataCrow.installationDir + "modules").exists()) {
         
-            new NativeMessageBox("Warning", 
+            NativeMessageBox dlg = new NativeMessageBox("Warning", 
                     "The installation directory could not be determined. " +
                     "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
                     "The DATACROW_HOME variable value should point to the Data Crow intallation directory.");
+            DcSwingUtilities.openDialogNativeModal(dlg);
             
             System.exit(0);
         }
@@ -785,8 +787,8 @@ public class DataCrow {
         logger.info("Operating System: " + System.getProperty("os.name"));
         
         boolean alreadyChecked = DcSettings.getBoolean(DcRepository.Settings.stCheckedForJavaVersion);
-        if (!getPlatform().isJavaSun() && !alreadyChecked) {
-            new NativeMessageBox("Warning", "Data Crow has only been tested on Java from Sun (version 1.5 or higher). " +
+        if (!getPlatform().isJavaSun() && !alreadyChecked && !getPlatform().isJava16()) {
+            new NativeMessageBox("Warning", "Data Crow has only been tested on Java from Sun (version 1.6 or higher). " +
             		"Make sure the latest Java version from Sun has been installed. You are currently using the Java version from " + System.getProperty("java.vendor") + " " +
             		"Data Crow will now continue and will not display this message again. Upgrade your Java version in case Data Crow does not continue (hangs) or " +
             		"if you experience any other kind of malfunction.");
@@ -813,27 +815,14 @@ public class DataCrow {
     private static void resetSettings() throws Exception {
         Version old = DatabaseManager.getVersion();
         if (old.getMajor() > 0 && old.isOlder(version) && old.isOlder(new Version(3, 5, 0, 0))) {
-            final java.util.concurrent.atomic.AtomicBoolean activeDialog = new java.util.concurrent.atomic.AtomicBoolean(true);
-            final QuestionBox qb = new QuestionBox(
-                             "Please be aware that with this new version changes have been made to several modules. These "
-                            + "changes combined with the old settings can impact the movie IMDB search. It is therefor recommended to load the new default "
-                            + "settings. If you do not wish to do this make sure to check all the settings as available in the online search form. "
-                            + "Loading the default settings also improves the default layout of the item form, which migth look cluttered otherwise "
-                            + "with the old settings. Do you want to use the new default settings?",
-                    activeDialog);
-
-            SwingUtilities.invokeAndWait(new Runnable() {
-                public void run() {
-                    qb.setVisible(true);
-                }
-            });
-
-            synchronized (activeDialog) {
-                while (activeDialog.get() == true)
-                    activeDialog.wait();
-            }
-
-            loadSettings = !qb.isAffirmative();
+            
+            loadSettings = !DcSwingUtilities.displayQuestion(
+                      "Please be aware that with this new version changes have been made to several modules. These "
+                    + "changes combined with the old settings can impact the movie IMDB search. It is therefor recommended to load the new default "
+                    + "settings. If you do not wish to do this make sure to check all the settings as available in the online search form. "
+                    + "Loading the default settings also improves the default layout of the item form, which migth look cluttered otherwise "
+                    + "with the old settings. Do you want to use the new default settings?");
+            
             if (!loadSettings)
                 DcSettings.reset();
         }

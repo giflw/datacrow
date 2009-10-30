@@ -49,7 +49,6 @@ import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.lists.DcFilterEntryList;
 import net.datacrow.console.components.lists.elements.DcFilterEntryListElement;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
@@ -59,6 +58,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class DefineFilterEntryPanel extends JPanel implements MouseListener, ActionListener {
 
@@ -126,7 +126,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         }
         
         if (operator.needsValue() && (value == null || value.equals(""))) {
-            new MessageBox(DcResources.getText("msgEnterFilterValue"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgEnterFilterValue");
             return;
         }
         

@@ -30,8 +30,8 @@ import java.awt.Insets;
 import java.util.Collection;
 
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.panels.LoanPanel;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModules;

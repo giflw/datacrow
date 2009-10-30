@@ -42,9 +42,8 @@ import javax.swing.JScrollPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
@@ -58,6 +57,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.enhancers.TitleRewriter;
 import net.datacrow.enhancers.ValueEnhancers;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -117,13 +117,13 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
             module.removeEnhancers();
             DcField field = module.getField(titleRewriter.getField());
             if (field == null) {
-                new MessageBox(DcResources.getText("msgCouldNotSaveTitleRewriter"), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage("msgCouldNotSaveTitleRewriter");
             } else {
                 ValueEnhancers.registerEnhancer(field, titleRewriter);
                 ValueEnhancers.save();
             }
         } catch (Exception exp) {
-            new MessageBox(exp.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(exp.toString());
         }
     }
     
@@ -271,7 +271,7 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
             }
             
             if (!active && !canceled) {
-                new MessageBox(DcResources.getText("msgNoTitleRewritersFound"), MessageBox._ERROR);
+                DcSwingUtilities.displayErrorMessage("msgNoTitleRewritersFound");
             } else {
                 // refresh the view
                 module.getSearchView().clear();

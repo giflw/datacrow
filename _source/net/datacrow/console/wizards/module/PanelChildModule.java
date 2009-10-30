@@ -38,7 +38,6 @@ import javax.swing.JRadioButton;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.modules.DcMediaModule;
@@ -48,6 +47,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcParentModule;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class PanelChildModule extends ModuleWizardPanel {
 
@@ -64,7 +64,7 @@ public class PanelChildModule extends ModuleWizardPanel {
         XmlModule module = getModule();
         
         if (selectedModule == -1) {
-            new MessageBox(DcResources.getText("msgSelectChildModuleFirst"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgSelectChildModuleFirst");
             return null;
         }
         
@@ -113,7 +113,7 @@ public class PanelChildModule extends ModuleWizardPanel {
                 try {
                     getWizard().finish();
                 } catch (WizardException wi) {
-                    new MessageBox(wi.getMessage(), MessageBox._WARNING);
+                    DcSwingUtilities.displayWarningMessage(wi.getMessage());
                 }
             }
         } 

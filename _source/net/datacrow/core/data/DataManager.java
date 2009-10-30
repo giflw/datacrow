@@ -53,7 +53,6 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.components.IComponent;
 import net.datacrow.console.views.MasterView;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
@@ -79,6 +78,7 @@ import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -1406,11 +1406,12 @@ public class DataManager {
             } catch (OutOfMemoryError ome) {
                 ome.printStackTrace();
                 logger.error(DcResources.getText("msgOutOfMemory"), ome);
-                new MessageBox(DcResources.getText("msgOutOfMemory"), MessageBox._ERROR);
+                DcSwingUtilities.displayErrorMessage("msgOutOfMemory");
             } catch (Exception exp) {
                 exp.printStackTrace();
                 logger.error(DcResources.getText("msgDataLoadingError"), exp);
-                new MessageBox(DcResources.getText("msgDataLoadingError"), MessageBox._ERROR);
+                DcSwingUtilities.displayErrorMessage("msgDataLoadingError");
+
             }
             
             module = null;

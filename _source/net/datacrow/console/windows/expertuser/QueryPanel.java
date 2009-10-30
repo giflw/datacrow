@@ -51,11 +51,11 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -113,8 +113,8 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
     protected void runQuery() {
         String sql   = textInput.getText().trim();
 
-        if (sql.trim().equals("")){
-            new MessageBox( DcResources.getText("msgNoInput"), MessageBox._WARNING);
+        if (sql.equals("")){
+            DcSwingUtilities.displayWarningMessage("msgNoInput");
             return;
         }
 
@@ -131,7 +131,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
             }
 
             if (empty) {
-                new MessageBox(DcResources.getText("msgQueryWasSuccessFull"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayMessage("msgQueryWasSuccessFull");
             } else {
                 fillTable(result);
             }
@@ -141,7 +141,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
             saveDataToFile();
         } catch (Exception e) {
             logger.error("An error occurred while executing the query", e);
-            new MessageBox(e.toString(), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(e.toString());
         }
     }
 

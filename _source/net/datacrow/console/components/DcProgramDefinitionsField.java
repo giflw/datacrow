@@ -45,10 +45,10 @@ import javax.swing.table.TableColumn;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.ProgramDefinition;
 import net.datacrow.settings.definitions.ProgramDefinitions;
+import net.datacrow.util.DcSwingUtilities;
 
 public class DcProgramDefinitionsField extends JComponent implements IComponent, ActionListener, MouseListener {
 	    
@@ -149,7 +149,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
 
             String current = definitions.getProgramForExtension(extension);
             if (current != null) {
-                new MessageBox(DcResources.getText("msgProgramAlreadyDefined"), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage("msgProgramAlreadyDefined");
             } else {
                 Object[] row = {extension, program}; 
                 programTable.addRow(row);
@@ -158,7 +158,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
                 programField.setValue(null);
             }
         } else {
-            new MessageBox(DcResources.getText("msgFileOrExtensionNotFilled"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgFileOrExtensionNotFilled");
         }
     }    
     

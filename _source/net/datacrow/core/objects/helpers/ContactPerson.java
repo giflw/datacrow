@@ -25,7 +25,6 @@
 
 package net.datacrow.core.objects.helpers;
 
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
@@ -33,7 +32,7 @@ import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
-import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class ContactPerson extends DcObject {
 
@@ -65,9 +64,7 @@ public class ContactPerson extends DcObject {
         if (loans == null || loans.length == 0) {
             super.delete();
         } else {
-            QuestionBox qb = new QuestionBox(DcResources.getText("msgDeletePersonLendItems"));
-            qb.setVisible(true);
-            if (qb.isAffirmative()) {
+            if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
                 DatabaseManager.executeQuery("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
                                              loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 
                                              Query._DELETE);

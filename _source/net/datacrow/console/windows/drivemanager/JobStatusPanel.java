@@ -38,10 +38,10 @@ import javax.swing.JTextField;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.drivemanager.JobAlreadyRunningException;
+import net.datacrow.util.DcSwingUtilities;
 
 public class JobStatusPanel extends JPanel implements ActionListener {
     
@@ -104,7 +104,7 @@ public class JobStatusPanel extends JPanel implements ActionListener {
             else if (e.getActionCommand().equals("stop"))
                 dmp.stop();
         } catch (JobAlreadyRunningException jare) {
-            new MessageBox(jare.getMessage(), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage(jare.getMessage());
         }
     }
 }

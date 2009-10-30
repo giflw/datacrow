@@ -34,8 +34,6 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.Version;
 import net.datacrow.core.data.DataManager;
@@ -43,6 +41,7 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -132,7 +131,7 @@ public class Restore extends Thread {
             
             SecurityCentre.getInstance().initialize();
             
-            new MessageBox(DcResources.getText("msgRestoreFinishedRestarting"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgRestoreFinishedRestarting");
             
             // do not save settings as the restored settings are used for upgrading purposes.
             DataManager.clearCache();
@@ -166,14 +165,10 @@ public class Restore extends Thread {
         }
         
         if (version == null || version.isUndetermined()) {
-            QuestionBox qb = new QuestionBox(DcResources.getText("msgCouldNotDetermineVersion"));
-            qb.setVisible(true);
-            if (!qb.isAffirmative())
+            if (!DcSwingUtilities.displayQuestion("msgCouldNotDetermineVersion"))
                 return false;
         } else if (version != null && version.isOlder(new Version(3, 4, 13, 0))) {
-            QuestionBox qb = new QuestionBox(DcResources.getText("msgOldVersion3.4.12"));
-            qb.setVisible(true);
-            if (!qb.isAffirmative())
+            if (!DcSwingUtilities.displayQuestion("msgOldVersion3.4.12"))
                 return false;
         }
         

@@ -51,9 +51,8 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcFilePatternField;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.views.View;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataFilter;
@@ -69,6 +68,7 @@ import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.filerenamer.FileRenamer;
 import net.datacrow.filerenamer.IFileRenamerListener;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -186,9 +186,9 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
     private boolean isValidPattern(String pattern) {
         boolean valid = false;
         if (pattern.length() == 0) {
-            new MessageBox(DcResources.getText("msgNoPatternEntered"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgNoPatternEntered");
         } else if (pattern.endsWith("/") || pattern.endsWith("\\")) { 
-            new MessageBox(DcResources.getText("msgInvalidPatternEndsWithDir"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgInvalidPatternEndsWithDir");
         } else {
             valid = true;
         }
@@ -202,7 +202,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         if (rbAlternateLoc.isSelected()) {
             baseDir = fileField.getFile();
             if (baseDir == null) {
-                new MessageBox(DcResources.getText("msgSelectDirFirst"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayMessage("msgSelectDirFirst");
                 return;
             }
         }
@@ -213,8 +213,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
             FilePattern fp = new FilePattern(pattern, module);
             DcObject[] objects = getApplicableObjects(fp);
             if (objects.length == 0) {
-                new MessageBox(DcResources.getText("msgNoItemsToRename"), MessageBox._INFORMATION);
-
+                DcSwingUtilities.displayMessage("msgNoItemsToRename");
             } else {
                 FileRenamerPreviewDialog dlg = new FileRenamerPreviewDialog(this, objects, fp, baseDir);
                 dlg.setVisible(true);
@@ -482,7 +481,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         buttonStop.setEnabled(false);
         
         notify(DcResources.getText("msgFileRenamerFinished"));
-        new MessageBox(this, DcResources.getText("msgFileRenamerFinished"), MessageBox._INFORMATION);
+        DcSwingUtilities.displayMessage("msgFileRenamerFinished");
     }
 
     public void notifyProcessed() {

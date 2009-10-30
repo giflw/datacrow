@@ -38,11 +38,11 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcPasswordField;
 import net.datacrow.console.components.DcShortTextField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class LoginDialog extends DcDialog implements ActionListener, KeyListener {
     
@@ -80,7 +80,7 @@ public class LoginDialog extends DcDialog implements ActionListener, KeyListener
 
     private void login() {
         if (fldLoginName.getText().length() == 0) 
-            new MessageBox(DcResources.getText("msgPleaseEnterUsername"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgPleaseEnterUsername");
         else
             close();
     }

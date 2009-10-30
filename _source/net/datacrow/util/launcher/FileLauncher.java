@@ -28,12 +28,12 @@ package net.datacrow.util.launcher;
 import java.awt.Desktop;
 import java.io.File;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.ProgramDefinitions;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -55,13 +55,13 @@ public class FileLauncher extends Launcher {
     @Override
     public void launch() {
         if (Utilities.isEmpty(filename)) {
-            new MessageBox(DcResources.getText("msgNoFilename"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgNoFilename");
             return;
         }
         
         File file = new File(filename);
         if (!file.exists()) {
-            new MessageBox(DcResources.getText("msgFileDoesNotExist", filename), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgFileDoesNotExist", filename));
             return;
         }
             
@@ -90,7 +90,7 @@ public class FileLauncher extends Launcher {
                     try {
                         runCmd(getLaunchableName());
                     } catch (Exception exp) {
-                        new MessageBox(DcResources.getText("msgNoProgramDefinedForExtension", extension), MessageBox._WARNING);    
+                        DcSwingUtilities.displayWarningMessage("msgNoProgramDefinedForExtension");
                     }
                 }
             }
@@ -102,7 +102,7 @@ public class FileLauncher extends Launcher {
                 try {
                     runCmd("'" + cmd + "' " + getLaunchableName());
                 } catch (Exception exp) {
-                    new MessageBox(DcResources.getText("msgErrorWhileExecuting", cmd), MessageBox._WARNING);
+                    DcSwingUtilities.displayWarningMessage(DcResources.getText("msgErrorWhileExecuting", cmd));
                 }
             } 
         }

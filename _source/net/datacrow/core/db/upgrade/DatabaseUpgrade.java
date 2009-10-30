@@ -38,8 +38,6 @@ import java.util.StringTokenizer;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.UpgradeDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
@@ -58,6 +56,7 @@ import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.core.objects.helpers.Movie;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
@@ -99,17 +98,17 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             }
             
             if (upgraded) {
-                MessageBox mb = new MessageBox("The upgrade was successful. Data Crow will now continue.", MessageBox._INFORMATION);
-                mb.setVisible(true);
+                DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
                 LogForm.getInstance().setVisible(false);
                 DataCrow.showSplashScreen(true);
             }
             
         } catch (Exception e) {
-            String msg = e.getMessage() + ". Data conversion failed. " +
+            String msg = e.toString() + ". Data conversion failed. " +
                 "Please restore your latest Backup and retry. Contact the developer " +
                 "if the error persists";
-            new MessageBox(msg, MessageBox._ERROR);
+            
+            DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
     }
@@ -130,13 +129,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             return false;
         }
         
-        QuestionBox qb = new QuestionBox("A new functionality has become available; external references. The items currently present in yoru system " +
-        		" will be examined and, if possible, the external ID will be extracted and stored separately. Furthermore will the ASIN fields be removed " +
-        		" from the Software, Movie, Audio CD and Music Album modules and its values will be stored in the external references field. Continue?");
-        
-        qb.setVisible(true);
-        
-        if (!qb.isAffirmative())
+        if (!DcSwingUtilities.displayQuestion(
+                "New functionality has become available; external references. The items currently present in yoru system " +
+                " will be examined and, if possible, the external ID will be extracted and stored separately. Furthermore will the ASIN fields be removed " +
+                " from the Software, Movie, Audio CD and Music Album modules and its values will be stored in the external references field. Continue?"))
             System.exit(0);
         
         LogForm.getInstance().setVisible(true);

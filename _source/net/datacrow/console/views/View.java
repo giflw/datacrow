@@ -57,8 +57,6 @@ import net.datacrow.console.views.tasks.DeleteTask;
 import net.datacrow.console.views.tasks.SaveTask;
 import net.datacrow.console.windows.UpdateAllDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.console.windows.reporting.ReportingDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
@@ -72,6 +70,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DataTask;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -220,8 +219,9 @@ public class View extends DcPanel implements ListSelectionListener {
     
     protected boolean isTaskRunning() {
         boolean isTaskRunning = task != null && task.isRunning() && task.isAlive();
+
         if (isTaskRunning)
-            new MessageBox(DcResources.getText("msgJobRunning"), MessageBox._WARNING); 
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgJobRunning"));
         
         return isTaskRunning; 
     }
@@ -357,9 +357,7 @@ public class View extends DcPanel implements ListSelectionListener {
         if (checkForChanges && saveChanges) {
             boolean saved = isChangesSaved();
             if (!saved) {
-                QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
-                qb.setVisible(true);
-                if (qb.isAffirmative())
+                if (DcSwingUtilities.displayQuestion("msgNotSaved"))
                     save(false);
                 else
                     vc.undoChanges();
@@ -407,7 +405,7 @@ public class View extends DcPanel implements ListSelectionListener {
                 task = new DeleteTask(this, objects);
                 task.start();
             } else {
-                new MessageBox(DcResources.getText("msgSelectItemToDel"), MessageBox._WARNING);    
+                DcSwingUtilities.displayWarningMessage(DcResources.getText("msgSelectItemToDel"));
             }
         }
     }
@@ -439,7 +437,7 @@ public class View extends DcPanel implements ListSelectionListener {
                                          dco, getType() != View._TYPE_SEARCH);
             form.setVisible(true);
         } else {
-            new MessageBox(DcResources.getText("msgSelectRowToOpen"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgSelectRowToOpen"));
         }
     }
     
@@ -483,7 +481,7 @@ public class View extends DcPanel implements ListSelectionListener {
         		else 
         		    task.run();
             } else {
-                new MessageBox(DcResources.getText("msgNoChangesToSave"), MessageBox._WARNING);    
+                DcSwingUtilities.displayWarningMessage(DcResources.getText("msgNoChangesToSave"));
             }
         }        
     }
@@ -628,7 +626,7 @@ public class View extends DcPanel implements ListSelectionListener {
             ReportingDialog dialog = new ReportingDialog(objects);
             dialog.setVisible(true);
         } else {
-            new MessageBox(DcResources.getText("msgReportNoItems"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgReportNoItems"));
         }
     }
 

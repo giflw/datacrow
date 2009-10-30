@@ -32,7 +32,6 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.windows.ItemTypeDialog;
 import net.datacrow.console.windows.SelectItemDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
@@ -43,6 +42,7 @@ import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 
 public class ItemWizard extends Wizard {
 
@@ -152,7 +152,7 @@ public class ItemWizard extends Wizard {
                                 }));
                     } catch (WizardException wzexp) {
                         if (wzexp.getMessage().length() > 1)
-                            new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
+                            DcSwingUtilities.displayWarningMessage(wzexp.getMessage());
                     }
                 }
             }).start();
@@ -180,7 +180,7 @@ public class ItemWizard extends Wizard {
             ItemWizard wizard = new ItemWizard();
             wizard.setVisible(true);
         } catch (WizardException exp) {
-            new MessageBox(exp.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(exp.getMessage());
         }
     }
 }

@@ -26,7 +26,6 @@
 package net.datacrow.console.windows.security;
 
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
@@ -36,6 +35,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
 import net.datacrow.core.wf.requests.CreateUserRequest;
 import net.datacrow.core.wf.requests.UpdateUserRequest;
+import net.datacrow.util.DcSwingUtilities;
 
 public class UserForm extends ItemForm {
     
@@ -109,12 +109,11 @@ public class UserForm extends ItemForm {
             } else if (isChanged()) {
                 dco.addRequest(new UpdateUserRequest((User) dco));
                 dco.saveUpdate(true);
+            } else {
+                DcSwingUtilities.displayWarningMessage("msgNoChangesToSave");
             }
-            
-            else
-                new MessageBox(DcResources.getText("msgNoChangesToSave"), MessageBox._WARNING);
         } catch (ValidationException vExp) {
-            new MessageBox(vExp.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(vExp.getMessage());
         }
     }
 }

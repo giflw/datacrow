@@ -36,8 +36,8 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcFileField;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.resources.DcResources;
 
 public class ModuleExportDefinitionDialog extends DcDialog implements ActionListener {

@@ -49,9 +49,9 @@ import javax.swing.tree.TreeSelectionModel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcImageLabel;
 import net.datacrow.console.components.DcTree;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Settings;

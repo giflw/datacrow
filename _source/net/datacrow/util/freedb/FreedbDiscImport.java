@@ -26,11 +26,11 @@
 package net.datacrow.util.freedb;
 
 import net.datacrow.console.MainFrame;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -54,13 +54,13 @@ public class FreedbDiscImport {
 	        	discId = util.readDiscID();
 	        	logger.info(DcResources.getText("msgFoundDiscID", discId));
 	        } catch (Exception e) {
-	        	new MessageBox(DcResources.getText("msgErrorDiscID", e.getMessage()), MessageBox._INFORMATION);
+	            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgErrorDiscID", e.getMessage()));
 	        	logger.error(DcResources.getText("msgErrorDiscID", e.getMessage()));
 	        	return;
 	        }
 
 	        if (!util.isSuccess()) {
-	        	new MessageBox(DcResources.getText("msgCouldNotReadDiscID"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayWarningMessage("msgCouldNotReadDiscID");
 	        	logger.info(DcResources.getText("msgCouldNotReadDiscID"));
 	            return;
 	        }
@@ -72,7 +72,7 @@ public class FreedbDiscImport {
 	            DcObject[] audioCDs = freeDb.queryDiscId(discId);
 
 	            if (audioCDs.length == 0) {
-	                new MessageBox(DcResources.getText("msgNoResultsForDiscID", discId), MessageBox._INFORMATION);
+	                DcSwingUtilities.displayWarningMessage(DcResources.getText("msgNoResultsForDiscID", discId));
 	            } else {
 	            	for (DcObject audioCD : audioCDs)
 	            		DcModules.get(DcModules._AUDIOCD).getCurrentInsertView().add(audioCD);
@@ -80,7 +80,7 @@ public class FreedbDiscImport {
 	            	DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
 	            }
 	        } catch (Exception e) {
-	        	new MessageBox(DcResources.getText("msgErrorDiscID", e.getMessage()), MessageBox._INFORMATION);
+                DcSwingUtilities.displayErrorMessage(DcResources.getText("msgErrorDiscID", e.getMessage()));
 	            logger.error(DcResources.getText("msgErrorDiscID", e.getMessage()), e);
 	        }
 		}

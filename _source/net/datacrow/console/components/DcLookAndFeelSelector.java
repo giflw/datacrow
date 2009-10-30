@@ -41,6 +41,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcLookAndFeel;

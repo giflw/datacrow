@@ -35,7 +35,6 @@ import javax.swing.JButton;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLookAndFeelSelector;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;

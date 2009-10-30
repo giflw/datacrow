@@ -1,6 +1,5 @@
 package net.datacrow.core.objects.helpers;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
@@ -13,6 +12,7 @@ import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.DeleteUserRequest;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.DcSwingUtilities;
 
 public class User extends DcObject {
 
@@ -99,7 +99,7 @@ public class User extends DcObject {
             addRequest(new DeleteUserRequest(this));
             super.delete();
         } else {
-            new MessageBox(DcResources.getText("msgCannotDeleteThisUser"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgCannotDeleteThisUser");
         }
     }
 

@@ -37,8 +37,8 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcPasswordField;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.resources.DcResources;

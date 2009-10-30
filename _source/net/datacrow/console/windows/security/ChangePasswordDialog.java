@@ -38,14 +38,14 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcPasswordField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecuredUser;
 import net.datacrow.core.security.SecurityCentre;
+import net.datacrow.util.DcSwingUtilities;
 
 public class ChangePasswordDialog extends DcDialog implements ActionListener, KeyListener {
     
@@ -83,19 +83,19 @@ public class ChangePasswordDialog extends DcDialog implements ActionListener, Ke
                 String newPass2 = String.valueOf(fldNewPassword2.getPassword());
 
                 if (newPass1.length() == 0 || newPass2.length() == 0) {
-                    new MessageBox(DcResources.getText("msgPleaseEnterNewPassword"), MessageBox._INFORMATION);
+                    DcSwingUtilities.displayMessage("msgPleaseEnterNewPassword");
                 } else if (newPass1.equals(newPass2)){
                     sc.changePassword(su.getUser(), newPass1);
                     close();
                 } else {
-                    new MessageBox(DcResources.getText("msgPasswordsDoNotMatch"), MessageBox._INFORMATION);
+                    DcSwingUtilities.displayMessage("msgPasswordsDoNotMatch");
                 }
                 
             } else {
-                new MessageBox(DcResources.getText("msgIncorrectOldPassword"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayMessage("msgIncorrectOldPassword");
             }
         } catch (net.datacrow.core.security.SecurityException se) {
-            new MessageBox(DcResources.getText("msgIncorrectOldPassword"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgIncorrectOldPassword");
         }
     }
     

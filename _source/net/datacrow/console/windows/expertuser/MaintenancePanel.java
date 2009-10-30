@@ -34,10 +34,10 @@ import javax.swing.JButton;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class MaintenancePanel extends DcPanel implements ActionListener {
 
@@ -67,7 +67,7 @@ public class MaintenancePanel extends DcPanel implements ActionListener {
         	DataCrow.mainFrame.setOnExitCheckForChanges(false);
             DataCrow.mainFrame.close();
         } catch (Exception exp) {
-        	new MessageBox(exp.getMessage(), MessageBox.ERROR);
+            DcSwingUtilities.displayErrorMessage(exp.toString());
         }
     }
     

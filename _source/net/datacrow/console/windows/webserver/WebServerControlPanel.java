@@ -42,12 +42,12 @@ import javax.swing.JTextField;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcNumberField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.DcWebServer;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.launcher.URLLauncher;
 
 import org.apache.log4j.Logger;
@@ -109,7 +109,7 @@ public class WebServerControlPanel extends JPanel implements java.awt.event.Acti
         } catch (Exception e) {
             setMessage(e.getMessage());
             logger.error(e, e);
-            new MessageBox(DcResources.getText("msgWebServerStartError", e.getMessage()), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(DcResources.getText("msgWebServerStartError", e.getMessage()));
         }
     }
 
@@ -119,7 +119,7 @@ public class WebServerControlPanel extends JPanel implements java.awt.event.Acti
             URLLauncher launcher = new URLLauncher(url);
             launcher.launch();
         } catch (Exception exp) {
-            new MessageBox(exp.getMessage(), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(exp.toString());
         }
     }
     
@@ -131,7 +131,7 @@ public class WebServerControlPanel extends JPanel implements java.awt.event.Acti
         } catch (Exception e) {
             setMessage(e.getMessage());
             logger.error(e, e);
-            new MessageBox(DcResources.getText("msgWebServerStopError", e.getMessage()), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(DcResources.getText("msgWebServerStopError", e.getMessage()));
         }
     }
     

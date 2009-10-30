@@ -43,10 +43,8 @@ import javax.swing.filechooser.FileFilter;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcMultiLineToolTip;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.backup.Backup;
@@ -54,6 +52,7 @@ import net.datacrow.core.backup.IBackupRestoreListener;
 import net.datacrow.core.backup.Restore;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -127,7 +126,7 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
             restore.setRestoreReports(checkRestoreReports.isSelected());
             restore.start();
         } else {
-            new MessageBox(DcResources.getText("msgSelectBackupFile"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgSelectBackupFile");
         }
     }
     
@@ -137,12 +136,12 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
             Backup bck = new Backup(this, fileFieldTarget.getFile());
             bck.start();
         } else {
-            new MessageBox(DcResources.getText("msgSelectOutputDir"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgSelectOutputDir");
         }
     }
     
     public void sendError(Exception e) {
-        new MessageBox(DcResources.getText("msgBackupFileCreationError", e.getMessage()), MessageBox._ERROR);
+        DcSwingUtilities.displayErrorMessage(DcResources.getText("msgBackupFileCreationError", e.getMessage()));
         logger.error(e, e);
     }
 

@@ -39,7 +39,6 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DcRepository;

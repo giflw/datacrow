@@ -27,11 +27,11 @@ package net.datacrow.console.windows.drivemanager;
 
 import javax.swing.SwingUtilities;
 
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.drivemanager.DriveManager;
 import net.datacrow.drivemanager.FileInfo;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.PollerTask;
 
 import org.apache.log4j.Logger;
@@ -66,9 +66,7 @@ public class DriveManagerSingleItemMatcher extends Thread {
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
                     public void run() {
-                        QuestionBox  qb = new QuestionBox(DcResources.getText("msgDrivesNotScanned"));
-                        qb.setVisible(true);
-                        if (qb.isAffirmative())
+                        if (DcSwingUtilities.displayQuestion("msgDrivesNotScanned"))
                             DriveManagerDialog.getInstance().setVisible(true);
                     }
                 });

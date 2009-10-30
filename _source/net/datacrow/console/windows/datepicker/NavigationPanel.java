@@ -110,6 +110,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
         if (months == null) {    
             SimpleDateFormat mf = new SimpleDateFormat("MMMMM");
             Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, 1);
             months = new String[12];
             for(int i = 0; i < 12; i++) {
                 cal.set(Calendar.MONTH, i);

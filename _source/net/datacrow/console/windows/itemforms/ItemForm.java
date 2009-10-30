@@ -57,15 +57,13 @@ import javax.swing.ScrollPaneConstants;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcCheckBox;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.panels.LoanPanel;
 import net.datacrow.console.components.panels.RelatedItemsPanel;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.ItemTypeDialog;
 import net.datacrow.console.windows.loan.LoanInformationPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
@@ -88,6 +86,7 @@ import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -301,9 +300,7 @@ public class ItemForm extends DcFrame implements ActionListener {
      */
     public void close(boolean aftersave) {
         if (!aftersave && update && dco != null && (!readonly && isChanged())) {
-            QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
-            qb.setVisible(true);
-            if (qb.isAffirmative()) {
+            if (DcSwingUtilities.displayQuestion("msgNotSaved")) {
                 saveValues();
                 return;
             }
@@ -408,10 +405,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     protected void deleteItem() {
-        QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion"), this);
-        qb.setVisible(true);
-        
-        if (qb.isAffirmative()) {
+        if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
             String id = dco.getID();
             dco.clearValues();
             dco.setValue(DcObject._ID, id);
@@ -604,11 +598,11 @@ public class ItemForm extends DcFrame implements ActionListener {
             } else if (isChanged()) {
                 dco.saveUpdate(true);
             } else {
-            	new MessageBox(DcResources.getText("msgNoChangesToSave"), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage("msgNoChangesToSave");
             }
             
         } catch (ValidationException vExp) {
-            new MessageBox(vExp.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(vExp.getMessage());
         }
     }
 

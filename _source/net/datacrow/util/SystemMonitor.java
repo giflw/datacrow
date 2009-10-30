@@ -25,13 +25,12 @@
 
 package net.datacrow.util;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.MainFrame;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
+
+import org.apache.log4j.Logger;
 
 public class SystemMonitor extends Thread {
 
@@ -86,7 +85,7 @@ public class SystemMonitor extends Thread {
         logger.debug("Memory usage (max " + max + " MB) (used " + used + " MB) (available " + available + " MB)");
 
         if (max <= 65) {
-            new MessageBox(DcResources.getText("msgMemory64MB", String.valueOf(max)), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgMemory64MB", String.valueOf(max)));
             checkMem = false;
         }
     }

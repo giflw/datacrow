@@ -41,13 +41,11 @@ import javax.swing.JTabbedPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.panels.FieldSelectionPanel;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
@@ -59,6 +57,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class FilterDialog extends DcDialog implements ActionListener {
 
@@ -238,7 +237,7 @@ public class FilterDialog extends DcDialog implements ActionListener {
         private void save() {
             DataFilter df = getDataFilter();
             if (textName.getText() == null || textName.getText().trim().length() == 0) {
-                new MessageBox(DcResources.getText("msgEnterFilterName"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayMessage("msgEnterFilterName");
             } else {
                 df.setName(textName.getText());
                 DataFilters.add(df);
@@ -319,9 +318,7 @@ public class FilterDialog extends DcDialog implements ActionListener {
             boolean saved = view.isChangesSaved();
             
             if (!saved && view.getCurrentTask() != null) {
-                QuestionBox qb = new QuestionBox(DcResources.getText("msgNotSaved"));
-                qb.setVisible(true);
-                if (qb.isAffirmative())
+                if (DcSwingUtilities.displayQuestion("msgNotSaved"))
                     view.save(false);
             }
             

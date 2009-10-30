@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.List;
 
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
@@ -44,6 +43,7 @@ import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
 
 public class RelateModuleWizard extends Wizard {
@@ -137,7 +137,7 @@ public class RelateModuleWizard extends Wizard {
             applyPanel();
         } catch (WizardException wzexp) {
             if (wzexp.getMessage().length() > 1)
-                new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage(wzexp.getMessage());
         }
     }
 
@@ -163,7 +163,7 @@ public class RelateModuleWizard extends Wizard {
             CreateModuleWizard wizard = new CreateModuleWizard();
             wizard.setVisible(true);
         } catch (WizardException exp) {
-            new MessageBox(exp.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(exp.getMessage());
         }
     }
 }

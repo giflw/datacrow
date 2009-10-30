@@ -38,11 +38,11 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcShortTextField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class CreateLanguageDialog extends DcDialog implements ActionListener{
     
@@ -74,9 +74,9 @@ public class CreateLanguageDialog extends DcDialog implements ActionListener{
         
         String name = txtName.getText().trim(); 
         if (name.length() == 0) {
-            new MessageBox(DcResources.getText("msgLanguageNameMustBeFilled"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgLanguageNameMustBeFilled");
         } else if (languages.contains(name)) {
-            new MessageBox(DcResources.getText("msgLanguageWithNameAlreadyExists"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgLanguageWithNameAlreadyExists");
         } else {
             language = name.replaceAll(" ", "");
             DcLanguageResource lr = new DcLanguageResource(name);

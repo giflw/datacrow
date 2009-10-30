@@ -42,14 +42,14 @@ import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcLongTextField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.wizards.item.InternetWizardPanel;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 /**
  * Base for all GUI wizards of Data Crow. The wizard is used to navigate through
@@ -140,8 +140,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
 
             applyPanel();
         } catch (WizardException wzexp) {
-            if (wzexp.getMessage().length() > 1)
-                new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(wzexp.getMessage());
         }
     }
     
@@ -335,7 +334,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
                 else
                     finish();
             } catch (WizardException we) {
-                new MessageBox(we.getMessage(), MessageBox._ERROR);
+                DcSwingUtilities.displayWarningMessage(we.getMessage());
             }
         }
     }
@@ -349,7 +348,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
             try {
                 next();
             } catch (Exception exp) {
-                new MessageBox(exp.getMessage(), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage(exp.getMessage());
             }
         } else if (e.getActionCommand().equals("close")) {
            cancelled = true;
@@ -360,7 +359,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
             try {
                 finish();
             } catch (Exception exp) {
-                new MessageBox(exp.getMessage(), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage(exp.getMessage());
             }
         }
     }

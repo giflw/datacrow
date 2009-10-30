@@ -13,13 +13,13 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.components.tables.DcTableModel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.migration.itemimport.ItemImporter;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -70,7 +70,7 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
                     table.addRow(new Object[] {Integer.valueOf(veld++), source, reader.getTargetField(source)});
 
             } catch (Exception exp) {
-                new MessageBox(DcResources.getText("msgFileCannotBeUsed") + ": " + exp.getMessage(), MessageBox._ERROR);
+                DcSwingUtilities.displayErrorMessage(DcResources.getText("msgFileCannotBeUsed") + ": " + exp.getMessage());
                 logger.error("Error while reading from file", exp);
             }        
     	}

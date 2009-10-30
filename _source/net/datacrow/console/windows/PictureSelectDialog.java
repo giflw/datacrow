@@ -38,7 +38,6 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;

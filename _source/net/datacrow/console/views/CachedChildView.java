@@ -35,9 +35,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class CachedChildView extends View implements ActionListener {
 
@@ -157,7 +157,7 @@ public class CachedChildView extends View implements ActionListener {
             add(dco);
             children.add(dco);
         } else {
-            new MessageBox(DcResources.getText("msgAddSelectParent"), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(DcResources.getText("msgAddSelectParent"));
         }  
     }
     

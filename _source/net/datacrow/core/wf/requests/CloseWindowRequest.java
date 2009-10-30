@@ -30,8 +30,8 @@ import java.util.Collection;
 
 import javax.swing.SwingUtilities;
 
-import net.datacrow.console.components.DcDialog;
-import net.datacrow.console.components.DcFrame;
+import net.datacrow.console.windows.DcDialog;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.objects.DcObject;
 

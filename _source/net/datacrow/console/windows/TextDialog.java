@@ -41,7 +41,6 @@ import javax.swing.undo.UndoManager;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.menu.TextEditMenu;
 import net.datacrow.core.DcRepository;

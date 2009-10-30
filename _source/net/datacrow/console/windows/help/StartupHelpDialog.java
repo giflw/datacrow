@@ -31,15 +31,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcHtmlEditorPane;
+import net.datacrow.console.windows.NativeDialog;
 import net.datacrow.util.Utilities;
 
-public class StartupHelpDialog extends JDialog implements ActionListener {
+public class StartupHelpDialog extends NativeDialog implements ActionListener {
 
     public StartupHelpDialog() {
         super();

@@ -43,7 +43,6 @@ import javax.swing.JToolTip;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.menu.DcEditorMouseListener;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.launcher.URLLauncher;
@@ -105,7 +104,7 @@ public class DcUrlField extends JComponent implements IComponent, ActionListener
             	launcher.launch();
             }
         } catch (Exception exp) {
-            new MessageBox(exp.getMessage(), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(exp.toString());
         }
     }
     

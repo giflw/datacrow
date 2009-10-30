@@ -39,7 +39,6 @@ import javax.swing.JTextArea;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.DcImageLabel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;

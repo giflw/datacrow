@@ -45,8 +45,8 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.BrowserDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class DcDirectoriesAsDrivesField extends JComponent implements IComponent, ActionListener {
         
@@ -145,6 +145,8 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(5, 5, 5, 5), 0, 0));
         
+        tableDirectoriesAsDrives.applyHeaders();
+        
     }
     
     public void setEditable(boolean b) {}
@@ -163,7 +165,7 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
                 for (int i = tableDirectoriesAsDrives.getSelectedRows().length; i > 0; i--)
                     tableDirectoriesAsDrives.removeRow(tableDirectoriesAsDrives.getSelectedRows()[i - 1]);
             } else {
-                new MessageBox(DcResources.getText("msgSelectItemBeforeDelete"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayMessage("msgSelectItemBeforeDelete");
             }
         }
     }

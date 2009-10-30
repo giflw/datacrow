@@ -38,9 +38,7 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcUrlField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.http.HttpConnectionUtil;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
@@ -80,16 +78,15 @@ public class OpenFromUrlDialog extends DcDialog implements ActionListener {
                     setImage(HttpConnectionUtil.retrieveBytes(url));
                     close();
                 } else {
-                    new MessageBox("msgEnterUrl", MessageBox._INFORMATION);
+                    DcSwingUtilities.displayMessage("msgEnterUrl");
                 }
             } else if (ae.getActionCommand().equals("cancel")) {
                 close();
             }
         } catch (Exception e) {
-            String message = DcResources.getText("msgCouldNotReadFromURL", 
-                             new String[] {(String) input.getValue(), e.getMessage()});
+            String message = DcResources.getText("msgCouldNotReadFromURL", new String[] {(String) input.getValue(), e.getMessage()});
             logger.warn(message, e);
-            new MessageBox(message, MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(message);
         }
     }
 

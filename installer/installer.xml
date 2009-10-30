@@ -4,12 +4,12 @@
 
     <info>
         <appname>Data Crow</appname>
-        <appversion>3.7</appversion>
+        <appversion>3.7 BETA</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
         <url>http://www.datacrow.net</url>
-        <javaversion>1.5</javaversion>
+        <javaversion>1.6</javaversion>
     </info>
     
     <guiprefs width="600" height="400" resizable="no"/>

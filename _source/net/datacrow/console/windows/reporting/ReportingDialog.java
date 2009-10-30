@@ -48,9 +48,8 @@ import javax.swing.JTextArea;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcFileField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
@@ -65,6 +64,7 @@ import net.datacrow.reporting.templates.ReportTemplates;
 import net.datacrow.reporting.transformers.XmlTransformer;
 import net.datacrow.reporting.transformers.XmlTransformers;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.launcher.FileLauncher;
 
 import org.apache.log4j.Logger;
@@ -109,7 +109,7 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
 
         } catch (Exception exp) {
             logger.error(DcResources.getText("msgFailedToOpen", exp.getMessage()), exp);
-            new MessageBox(DcResources.getText("msgFailedToOpen", exp.getMessage()) , MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(DcResources.getText("msgFailedToOpen", exp.getMessage()));
         }
         
         setModal(true);
@@ -155,13 +155,12 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
             	FileLauncher launcher = new FileLauncher(file);
             	launcher.launch();
             } catch (Exception e) {
-                String msg = DcResources.getText("msgErrorWhileOpeningX",
-                                        new String[] {file.toString(), e.getMessage()});
-                new MessageBox(msg, MessageBox._WARNING);
+                String msg = DcResources.getText("msgErrorWhileOpeningX", new String[] {file.toString(), e.getMessage()});
+                DcSwingUtilities.displayWarningMessage(msg);
                 logger.error(msg, e);
             }
         } else {
-        	new MessageBox(DcResources.getText("msgCouldNotOpenReport"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgCouldNotOpenReport");
         }
     }
 
@@ -194,7 +193,7 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
             allowActions(false);
             
         } catch (FileNotFoundException fnfe) {
-            new MessageBox(DcResources.getText("msgSelectTargetFile"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgSelectTargetFile");
         } 
     }
 

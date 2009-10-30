@@ -43,7 +43,7 @@ import javax.swing.ScrollPaneConstants;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
@@ -54,19 +54,10 @@ public class QuestionBox extends DcDialog implements ActionListener {
     private JButton buttonYes;
     private JButton buttonNo;
     private JPanel panel = new JPanel();
-    
-    private java.util.concurrent.atomic.AtomicBoolean activeDialog;
-
     private boolean affirmative = false;
     
     private final JLabel labelIcon = ComponentFactory.getLabel("");
 
-    public QuestionBox(String message, java.util.concurrent.atomic.AtomicBoolean activeDialog) {
-        super();
-        this.activeDialog = activeDialog;
-        init(message);
-    }
-    
     public QuestionBox(String message) {
         super(DcSwingUtilities.getRootFrame());
         init(message);
@@ -86,23 +77,10 @@ public class QuestionBox extends DcDialog implements ActionListener {
         textMessage = null;
         buttonYes = null;
         buttonNo = null;
-        panel = null;        
-        super.close();
+        panel = null;   
         
-        setVisible(false);
-        dispose();
+        super.close();
     }
-    
-    @Override
-    public void dispose() {
-        if (activeDialog != null) {
-            synchronized (activeDialog) {
-                activeDialog.set(false);
-                activeDialog.notifyAll();
-            }
-        }
-        super.dispose();
-    }    
     
     private void init(String message) {
         buildDialog();

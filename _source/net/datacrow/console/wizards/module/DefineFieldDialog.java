@@ -45,11 +45,10 @@ import javax.swing.JPanel;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcCheckBox;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcNumberField;
 import net.datacrow.console.components.DcShortTextField;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
@@ -57,6 +56,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
 
 public class DefineFieldDialog extends DcDialog implements ActionListener {
@@ -198,7 +198,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             
         } catch (WizardException we) {
         	field = null;
-            new MessageBox(we.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(we.getMessage());
         }
     }
     

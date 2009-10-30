@@ -29,12 +29,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -143,7 +143,7 @@ public class AutoIncrementer implements IValueEnhancer {
         } catch (Exception e) {
             String msg = DcResources.getText("msgAutoNumberError",  new String[] {field.getLabel(), e.getMessage()});
             logger.error(msg, e);
-            new MessageBox(msg, MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(msg);
         }
             
         return result;

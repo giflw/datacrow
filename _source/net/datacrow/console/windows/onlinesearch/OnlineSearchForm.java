@@ -50,13 +50,12 @@ import javax.swing.event.ChangeListener;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.MainFrame;
-import net.datacrow.console.components.DcFrame;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.panels.OnlineServiceSettingsPanel;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.IViewComponent;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
@@ -73,6 +72,7 @@ import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
@@ -247,7 +247,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         int row = getView().getSelectedIndex();
 
         if (row < 0) {
-            new MessageBox(DcResources.getText("msgSelectRowForTransfer"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgSelectRowForTransfer");
             return new ArrayList<DcObject>();
         }
 
@@ -279,7 +279,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             public void run() {
                 int selectedRow = getView().getSelectedIndex();
                 if (selectedRow == -1) {
-                    new MessageBox(DcResources.getText("msgSelectRowToOpen"), MessageBox._WARNING);
+                    DcSwingUtilities.displayWarningMessage("msgSelectRowToOpen");
                     return;
                 }
 
@@ -453,7 +453,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     	resultCount = 0;
     	
         if (panelService.getQuery() == null || panelService.getQuery().trim().equals("")) {
-            new MessageBox(DcResources.getText("msgEnterKeyword"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgEnterKeyword");
             return;
         }
         
@@ -491,18 +491,18 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }    
     
     public void addError(Throwable t) {
-        new MessageBox(t.getMessage(), MessageBox._ERROR);
+        DcSwingUtilities.displayErrorMessage(t.toString());
         logger.error(t.getMessage(), t);
     }
 
     public void addError(String message) {
-        new MessageBox(message, MessageBox._ERROR);
+        DcSwingUtilities.displayErrorMessage(message);
         addMessage(message);
     }
 
     public void addWarning(String warning) {
         if (panelService != null && !panelService.hasPerfectMatchOccured())
-            new MessageBox(warning, MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(warning);
     }    
     
     public void setFocus() {

@@ -7,13 +7,13 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.views.View;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.StatusUpdateRequest;
 import net.datacrow.core.wf.requests.UpdateStatusProgressBarRequest;
 import net.datacrow.util.DataTask;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -50,14 +50,8 @@ public class DeleteTask extends DataTask {
             startRunning();
             
             try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-                        QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion")); 
-                        qb.setVisible(true);
-                        if (!qb.isAffirmative())
-                            stopRunning();
-                    }
-                });
+                if (!DcSwingUtilities.displayQuestion("msgDeleteQuestion"))
+                    stopRunning();
             } catch (Exception e) {
                 logger.error(e, e);
             }

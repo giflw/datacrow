@@ -46,7 +46,6 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.DcThread;
 import net.datacrow.core.IconLibrary;
@@ -59,6 +58,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -200,9 +200,8 @@ public class ChartPanel extends DcPanel implements ActionListener {
         }
         
         if (categories.size() == 0) {
-            new MessageBox(DcResources.getText("msgCouldNotCreateChart"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgCouldNotCreateChart");
             return null;
-            
         }
         
         // check for empty values and include these

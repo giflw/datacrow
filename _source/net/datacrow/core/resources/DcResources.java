@@ -32,10 +32,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -75,7 +75,7 @@ public class DcResources {
                     p.load(getClass().getResourceAsStream("/net/sf/dc/core/resources/" + propertyFile));
                 } catch (Exception e) {
                     logger.error("Could not load sustom resource files. Falling back to the default resources.", e);
-                    new MessageBox("Unable to load custom resources! " + e.toString(), MessageBox._ERROR);
+                    DcSwingUtilities.displayErrorMessage("Unable to load custom resources! " + e.toString());
                 }
             }
             

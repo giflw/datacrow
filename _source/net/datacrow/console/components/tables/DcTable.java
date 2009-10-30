@@ -74,7 +74,6 @@ import net.datacrow.console.components.renderers.ReferencesTableCellRenderer;
 import net.datacrow.console.components.renderers.TimeFieldTableCellRenderer;
 import net.datacrow.console.views.IViewComponent;
 import net.datacrow.console.views.View;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
@@ -84,7 +83,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Media;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.DcTableSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
@@ -341,8 +339,7 @@ public class DcTable extends JTable implements IViewComponent {
             getDcModel().moveRow(row, row, destination);
             setSelected(destination);
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
-                    MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgNoRowSelectedToMove");
         }
     }
 
@@ -357,8 +354,7 @@ public class DcTable extends JTable implements IViewComponent {
                 setSelected(destination);
             }
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
-                    MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgNoRowSelectedToMove");
         }
     }
 
@@ -373,8 +369,7 @@ public class DcTable extends JTable implements IViewComponent {
                 setSelected(destination);
             }
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
-                    MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgNoRowSelectedToMove");
         }
     }
 
@@ -388,8 +383,7 @@ public class DcTable extends JTable implements IViewComponent {
                 setSelected(destination);
             }
         } else {
-            new MessageBox(DcResources.getText("msgNoRowSelectedToMove"),
-                    MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgNoRowSelectedToMove");
         }
     }
 

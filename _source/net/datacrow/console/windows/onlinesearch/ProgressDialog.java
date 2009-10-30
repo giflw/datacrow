@@ -32,7 +32,7 @@ import java.awt.Insets;
 import javax.swing.JProgressBar;
 
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.util.DcSwingUtilities;
 
 public class ProgressDialog extends DcDialog {

@@ -25,13 +25,11 @@
 
 package net.datacrow.console.windows.itemforms;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
 import net.datacrow.core.wf.requests.RefreshChildView;
+import net.datacrow.util.DcSwingUtilities;
 
 public class ChildItemForm extends ItemForm {
 
@@ -53,7 +51,7 @@ public class ChildItemForm extends ItemForm {
                 dco.setSilent(true);
                 dco.saveNew(true);
             } catch (ValidationException vExp) {
-                new MessageBox(vExp.getMessage(), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage(vExp.getMessage());
             }
         } else if (isChanged()) {
             try {
@@ -61,10 +59,10 @@ public class ChildItemForm extends ItemForm {
                 dco.setSilent(true);
                 dco.saveUpdate(true);
             } catch (ValidationException vExp) {
-                new MessageBox(vExp.getMessage(), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage(vExp.getMessage());
             }
         } else if (! isChanged()) {
-            new MessageBox(DcResources.getText("msgNoChangesToSave"), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage("msgNoChangesToSave");
         }
     }  
     
@@ -79,10 +77,7 @@ public class ChildItemForm extends ItemForm {
      */
     @Override
     protected void deleteItem() {
-        QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteQuestion"), this);
-        qb.setVisible(true);
-        
-        if (qb.isAffirmative()) {
+        if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
             String id = dco.getID();
             dco.clearValues();
             dco.setValue(DcObject._ID, id);

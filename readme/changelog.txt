@@ -1,8 +1,11 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.7 beta [Release on xx/10/2009] [testing: medium] [target: beta]
+Data Crow BETA 3.7  [Release on 30/10/2009] [testing: medium] [target: BETA]
 -----------------------------------------------------------------------------------------
 No new functionality but a lot of memory and performance improvements. The changes
 made cause a dramatic performance increase as well as a substantial memory gain.
+
+Note that this is a beta version; limited testing has been performed! Please create a
+backup of your database before using this version.
 
 [Changed]
 - Items are now internally reused. Data Crow was quite generous when it came to item 
@@ -28,6 +31,7 @@ made cause a dramatic performance increase as well as a substantial memory gain.
 - Save buttons are now removed from the item tabs of the view. Save and save all is still
   available from the menu bar and the tool bar.
 - Update all now saves the updates directly (!).  
+- Displaying dialogs is now more controlled (technical change).
 
 [Fixed]
 - External Reference is not created when an item is updated by an online service.
@@ -40,7 +44,10 @@ made cause a dramatic performance increase as well as a substantial memory gain.
   pane.
 - By default the directory usage has been turned on for the File Importer. Has been
   changed to off by default.
-   
+- Calendar displays February twice if the current day of the months is greater than 28.
+- "Hanging startup" on some Linux flavors.
+- Several references in text to Java 1.5; should be Java 1.6.    
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.6 [Release on 18/10/2009] [testing: high] [target: production]

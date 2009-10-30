@@ -44,8 +44,8 @@ import javax.swing.table.TableColumn;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 public class DcDriveMappingField extends JComponent implements IComponent, ActionListener {
@@ -124,9 +124,9 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
     
     private void addMapping(String drive, String mapsTo) {
         if (Utilities.isEmpty(drive)) {
-            new MessageBox(DcResources.getText("msgEnterValueFor", DcResources.getText("lblDriveLetter")), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage(DcResources.getText("msgEnterValueFor", DcResources.getText("lblDriveLetter")));
         } else if (Utilities.isEmpty(mapsTo)) {
-            new MessageBox(DcResources.getText("msgEnterValueFor", DcResources.getText("lblMapsTo")), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage(DcResources.getText("msgEnterValueFor", DcResources.getText("lblMapsTo")));
         } else {
             mappingTable.addRow(new String[] {drive, mapsTo});
         }

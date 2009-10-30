@@ -41,9 +41,9 @@ import javax.swing.filechooser.FileFilter;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.BrowserDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -135,7 +135,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
                 RandomAccessFile random = new RandomAccessFile(file, "rw");
                 random.close();
             } catch (Exception exp) {
-                new MessageBox( DcResources.getText("msgFileCouldNotbeCreated"), MessageBox._ERROR);
+                DcSwingUtilities.displayErrorMessage("msgFileCouldNotbeCreated");
                 logger.error(DcResources.getText("msgFileCouldNotbeCreated"), exp);
             }
         }

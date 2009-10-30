@@ -34,7 +34,7 @@ import java.io.File;
 import javax.swing.ImageIcon;
 
 import net.datacrow.console.windows.BrowserDialog;
-import net.datacrow.console.windows.messageboxes.MessageBox;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.filefilters.PictureFileFilter;
 
@@ -104,7 +104,7 @@ public class DcIconSelectField extends DcImageLabel implements MouseListener {
             image = null;
             changed = true;
         } catch (Exception exp) {
-            new MessageBox(exp.getMessage(), MessageBox._ERROR);
+            DcSwingUtilities.displayErrorMessage(exp.toString());
         }
     }
     

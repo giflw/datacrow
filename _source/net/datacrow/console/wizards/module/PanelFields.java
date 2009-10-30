@@ -47,8 +47,6 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
 import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
@@ -58,6 +56,7 @@ import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 public class PanelFields extends ModuleWizardPanel implements ActionListener {
 
@@ -175,7 +174,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             revalidate();
             repaint();
         } else {
-            new MessageBox(DcResources.getText("msgFieldCannotBeAltered"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayWarningMessage("msgFieldCannotBeAltered");
             return;
         }
     }
@@ -224,12 +223,10 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             XmlField field = (XmlField) table.getValueAt(table.getSelectedRow(), 0);
             
             if (field.isOverwritable()) {
-                QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteField"));
-                qb.setVisible(true);
-                if (qb.isAffirmative())
+                if (DcSwingUtilities.displayQuestion("msgDeleteField"))
                     table.removeRow(table.getSelectedRow());
             } else {
-                new MessageBox(DcResources.getText("msgFieldCannotBeRemoved"), MessageBox._INFORMATION);
+                DcSwingUtilities.displayWarningMessage("msgFieldCannotBeRemoved");
                 return;
             }
         } else {

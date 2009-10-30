@@ -25,12 +25,12 @@
 
 package net.datacrow.console.wizards.moduleexport;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.module.PanelSelectModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
 /**
  * @author Robert Jan van der Waals 
@@ -44,7 +44,7 @@ public class PanelSelectModuleToExport extends PanelSelectModule {
     @Override
     public Object apply() {
         if (getSelectedModule() == -1) {
-            new MessageBox(DcResources.getText("msgSelectModuleFirst"), MessageBox._INFORMATION);
+            DcSwingUtilities.displayMessage("msgSelectModuleFirst");
             return null;
         }
         

@@ -35,7 +35,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,10 +42,12 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 import net.datacrow.console.Layout;
+import net.datacrow.console.windows.IDialog;
+import net.datacrow.console.windows.NativeDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.util.Utilities;
 
-public class NativeMessageBox extends JDialog implements ActionListener {
+public class NativeMessageBox extends NativeDialog implements ActionListener, IDialog {
 
     private JTextArea textMessage;
     private JButton buttonOk;
@@ -55,7 +56,7 @@ public class NativeMessageBox extends JDialog implements ActionListener {
     public  static final int _ERROR = 1;
     public  static final int _WARNING = 2;
     public  static final int _INFORMATION = 3;
-
+    
     public NativeMessageBox(String title, String message) {
         super((JFrame) null);
         
@@ -69,26 +70,8 @@ public class NativeMessageBox extends JDialog implements ActionListener {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         setTitle(title);
-        init();
+        build();
         
-        display(message);
-    }
-
-    public void close() {
-        textMessage = null;
-        buttonOk = null;
-        panel = null;
-        
-        setVisible(false);
-        
-        if (DataCrow.isSplashScreenActive())
-            DataCrow.showSplashScreen(true);
-        
-        dispose();
-    }
-
-    private void display(String message) {
-
         if (isModal() && DataCrow.isSplashScreenActive())
             DataCrow.showSplashScreen(false);
         
@@ -97,11 +80,28 @@ public class NativeMessageBox extends JDialog implements ActionListener {
         setLocation(Utilities.getCenteredWindowLocation(getSize(), true));
         toFront();
         buttonOk.requestFocus();
+        
         setModal(true);
-        setVisible(true);
     }
 
-    private void init() {
+    public void close() {
+        textMessage = null;
+        buttonOk = null;
+        panel = null;
+        
+        if (DataCrow.isSplashScreenActive())
+            DataCrow.showSplashScreen(true);
+        
+        dispose();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        if (!b) dispose();
+        super.setVisible(b);
+    }
+
+    private void build() {
         getContentPane().add(panel);
 
         setResizable(true);

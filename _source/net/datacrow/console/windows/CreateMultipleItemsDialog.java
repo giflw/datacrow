@@ -36,10 +36,8 @@ import javax.swing.JScrollPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
@@ -174,7 +172,7 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 					dco.saveNew(false);
 					table.removeRow(row - 1);
 				} catch (ValidationException e) {
-					new MessageBox(e.getMessage(), MessageBox._WARNING);
+			        DcSwingUtilities.displayWarningMessage(e.getMessage());
 				}
 			}
 		}

@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
-import net.datacrow.console.windows.messageboxes.QuestionBox;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
@@ -48,6 +46,7 @@ import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -83,9 +82,7 @@ public class DeleteModuleWizard extends Wizard {
     @Override
     public void finish() throws WizardException {
         
-        QuestionBox qb = new QuestionBox(DcResources.getText("msgDeleteModuleConfirmation"));
-        qb.setVisible(true);
-        if (!qb.isAffirmative())
+        if (!DcSwingUtilities.displayQuestion("msgDeleteModuleConfirmation"))
             return;
         
         XmlModule xmlModule = (XmlModule) getCurrent().apply();
@@ -177,7 +174,7 @@ public class DeleteModuleWizard extends Wizard {
             applyPanel();
         } catch (WizardException wzexp) {
             if (wzexp.getMessage().length() > 1)
-                new MessageBox(wzexp.getMessage(), MessageBox._WARNING);
+                DcSwingUtilities.displayWarningMessage(wzexp.getMessage());
         }
     }
 
@@ -203,7 +200,7 @@ public class DeleteModuleWizard extends Wizard {
             CreateModuleWizard wizard = new CreateModuleWizard();
             wizard.setVisible(true);
         } catch (WizardException exp) {
-            new MessageBox(exp.getMessage(), MessageBox._WARNING);
+            DcSwingUtilities.displayWarningMessage(exp.getMessage());
         }
     }
 }

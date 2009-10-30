@@ -3,10 +3,10 @@ package net.datacrow.util.launcher;
 import java.awt.Desktop;
 import java.net.URL;
 
-import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -46,9 +46,9 @@ public class URLLauncher extends Launcher {
 	            	logger.debug("Could not launch URL using the Dekstop class [" + url + "]", exp);
 	            	
 	            	if (!Utilities.isEmpty(browserPath))
-	            		new MessageBox(DcResources.getText("msgCannotLaunchURLNoBrowserPath", url.toString()), MessageBox._WARNING);
+	                    DcSwingUtilities.displayWarningMessage(DcResources.getText("msgCannotLaunchURLNoBrowserPath", url.toString()));
 	            	else 
-	            		new MessageBox(DcResources.getText("msgCannotLaunchURL", url.toString()), MessageBox._WARNING);
+                        DcSwingUtilities.displayWarningMessage(DcResources.getText("msgCannotLaunchURL", url.toString()));
 	            }
 	        }
 		}

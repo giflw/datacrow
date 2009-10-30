@@ -44,7 +44,7 @@ import javax.swing.ScrollPaneConstants;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcDialog;
+import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
@@ -63,13 +63,23 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
     public MessageBox(String message, int type) {
         this(DcSwingUtilities.getRootFrame(), message, type);
     }
-
     
     public MessageBox(JFrame frame, String message, int type) {
         super(frame);
-        init();
+        build();
         setModal(true);
-        display(message, type);
+
+        textMessage.setText(message);
+        textMessage.setCaretPosition(0);
+
+        setIcon(type == _ERROR ? IconLibrary._icoError : 
+                type == _WARNING ? IconLibrary._icoWarning : IconLibrary._icoAbout);
+
+        this.pack();
+        this.toFront();
+
+        setCenteredLocation();
+        buttonOk.requestFocus();
     }
 
     @Override
@@ -85,27 +95,7 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
         labelIcon.setIcon(icon);
     }
 
-    private void display(String message, int type) {
-        textMessage.setText(message);
-        textMessage.setCaretPosition(0);
-
-        if (type == _ERROR) {
-            setIcon(IconLibrary._icoError);
-        } else if (type == _WARNING) {
-            setIcon(IconLibrary._icoWarning);
-        } else {
-            setIcon(IconLibrary._icoAbout);
-        }
-
-        this.pack();
-        this.toFront();
-
-        setCenteredLocation();
-        buttonOk.requestFocus();
-        this.setVisible(true);
-    }
-
-    private void init() {
+    private void build() {
         this.getContentPane().add(panel);
 
         this.setResizable(false);
