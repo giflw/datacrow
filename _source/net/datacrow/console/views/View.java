@@ -303,7 +303,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void add(Collection<DcObject> items) {
-        add((DcObject[]) items.toArray(new DcObject[items.size()]));
+        add(items.toArray(new DcObject[items.size()]));
     }
 
     /**

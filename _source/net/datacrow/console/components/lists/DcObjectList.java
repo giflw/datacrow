@@ -335,7 +335,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     }
     
     public void add(Collection<? extends DcObject> objects) {
-        add((DcObject[]) objects.toArray(new DcObject[objects.size()]));
+        add(objects.toArray(new DcObject[objects.size()]));
     }
     
     public void add(DcObject[] objects) {
