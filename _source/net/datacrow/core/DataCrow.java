@@ -449,9 +449,6 @@ public class DataCrow {
         
         for (DcModule module : DcModules.getAllModules()) {
             
-            if (module.getName().equals("testmodule"))
-                System.out.println();
-            
             if (module.isTopModule()) {
 
                 if (module.isParentModule())
