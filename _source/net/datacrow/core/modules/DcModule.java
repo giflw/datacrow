@@ -1032,7 +1032,7 @@ public class DcModule implements Comparable<DcModule> {
      */
     public boolean hasActualReferenceTo(int module) {
         for (DcField field : getFields()) {
-            if (field.getReferenceIdx() == module)
+            if (field != null && field.getReferenceIdx() == module)
                 return true;
         }
         return false;
