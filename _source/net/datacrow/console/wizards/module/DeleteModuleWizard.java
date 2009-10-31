@@ -138,7 +138,7 @@ public class DeleteModuleWizard extends Wizard {
     private void undoParentChildRelation(DcModule module) throws Exception {
         if (module == null) return;
         
-        if (module instanceof DcMediaModule) {
+        if (module.getType() == DcModule._TYPE_MEDIA_MODULE) {
             module.getXmlModule().setModuleClass(DcMediaModule.class);
             module.getXmlModule().setObject(DcMediaObject.class);
         } else {

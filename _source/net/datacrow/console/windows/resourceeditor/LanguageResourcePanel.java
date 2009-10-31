@@ -54,7 +54,6 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
@@ -103,7 +102,10 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         
         for (DcModule module : DcModules.getAllModules()) {
             
-            if (module.isTopModule() || module.isChildModule() || module instanceof DcPropertyModule || module.isAbstract()) {
+            if (    module.isTopModule() || module.isChildModule() || 
+                    module.getType() == DcModule._TYPE_PROPERTY_MODULE || 
+                    module.isAbstract()) {
+                
                 String key = module.getModuleResourceKey();
                 String value = module.getLabel();
                 if ((value != null && value.length() > 0) && 

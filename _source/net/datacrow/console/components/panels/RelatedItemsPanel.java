@@ -49,7 +49,6 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -105,7 +104,7 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
                     if (field.getReferenceIdx() == dco.getModule().getIndex()) {
                         DataFilter df = new DataFilter(module.getIndex());
                         
-                        if (module instanceof MappingModule) {
+                        if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                             Collection<DcObject> c = new ArrayList<DcObject>();
                             c.add(dco);
                             df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));

@@ -41,9 +41,6 @@ import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
-import net.datacrow.core.modules.IChildModule;
-import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
@@ -88,10 +85,12 @@ public class PanelSelectModule extends ModuleWizardPanel {
     }
     
     protected boolean isModuleAllowed(DcModule module) {
-        return  module instanceof DcPropertyModule && module.getXmlModule() != null || (
-               (module.isTopModule() || module instanceof IChildModule) && 
-              !(module instanceof DcPropertyModule || module instanceof MappingModule) &&
-               !module.isAbstract());
+        return  module.getType() == DcModule._TYPE_PROPERTY_MODULE  && 
+                module.getXmlModule() != null || 
+                (  (module.isTopModule() || module.isChildModule()) && 
+                    module.getType() != DcModule._TYPE_PROPERTY_MODULE && 
+                    module.getType() != DcModule._TYPE_MAPPING_MODULE &&
+                   !module.isAbstract());
     }
     
     private void build() {
