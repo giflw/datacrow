@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcAssociate;
@@ -40,7 +39,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 
 /**
- * TODO: rewrite: use modules instead of objects
  * @author Robert Jan van der Waals
  */
 public class XmlSchemaWriter extends XmlBaseWriter {
@@ -57,10 +55,9 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         Collection<String> handled = new ArrayList<String>();
         if (dco.getModule().isAbstract()) {
             for (DcModule module : DcModules.getModules()) {
-                if ((module instanceof DcMediaModule || 
-                     dco.getModule().getIndex() != DcModules._MEDIA)&& 
-                     module.isTopModule() &&
-                    !module.isAbstract()) {
+                if ((module.getType() == DcModule._TYPE_MEDIA_MODULE || 
+                     dco.getModule().getIndex() != DcModules._MEDIA) && 
+                     module.isTopModule() && !module.isAbstract()) {
                     
                     DcObject tmp = module.getItem();
                     handle(tmp, handled);

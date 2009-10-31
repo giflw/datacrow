@@ -250,7 +250,7 @@ public class DcModule implements Comparable<DcModule> {
         this.itemResourceKey = moduleResourceKey + "Item";
         this.itemPluralResourceKey = moduleResourceKey + "ItemPlural";
 
-        // TODO: move to parent classes
+        // lowel level determination of the type of module.
         this.type = 
             objectClass != null && objectClass.equals(DcAssociate.class) ? _TYPE_ASSOCIATE_MODULE :
             this instanceof MappingModule ? _TYPE_MAPPING_MODULE :

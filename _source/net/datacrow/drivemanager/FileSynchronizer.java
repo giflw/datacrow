@@ -131,7 +131,9 @@ public class FileSynchronizer {
                         FileInfo currentFI = new FileInfo(hash, filename, size);
                         FileInfo fi = dm.find(currentFI, precision);
                         
-                        if (fi != null && !currentFI.equals(fi)) {
+                        // A result means a match was found.
+                        // No longer check whether the filename is different; found = found.
+                        if (fi != null) {
                             
                             dco.setValue(DcObject._SYS_FILENAME, fi.getFilename());
                             dco.setValue(DcObject._SYS_FILESIZE, fi.getSize());

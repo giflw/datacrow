@@ -51,12 +51,8 @@ import net.datacrow.console.views.IViewComponent;
 import net.datacrow.console.views.View;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.IChildModule;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.helpers.AudioTrack;
-import net.datacrow.core.objects.helpers.MusicTrack;
 
 import org.apache.log4j.Logger;
 
@@ -370,26 +366,26 @@ public class DcObjectList extends DcList implements IViewComponent {
             else 
                 element = new DcCardObjectListElement(dco);
         } else if (style == _CARDS) {
-            if (dco instanceof AudioTrack)
+            if (dco.getModule().getIndex() == DcModules._AUDIOTRACK)
                 element = new DcAudioTrackListElement(dco);
             else if (dco instanceof DcTemplate)
                 element = new DcTemplateListElement(dco);
-            else if (dco instanceof MusicTrack)
+            else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
                 element = new DcMusicTrackListElement(dco);
-            else if (dco instanceof DcProperty)
+            else if (dco.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE)
                 element = new DcPropertyListElement(dco);
-            else if (module instanceof IChildModule)
+            else if (module.isChildModule())
                 element = new DcShortObjectListElement(dco);
             else 
                 element = new DcCardObjectListElement(dco);       
         } else if (style == _LISTING) {
-            if (dco instanceof DcProperty)
+            if (dco.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE)
                 element = new DcPropertyListElement(dco);
             else if (dco instanceof DcTemplate)
             	element = new DcTemplateListElement(dco);
-            else if (dco instanceof MusicTrack)
+            else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
                 element = new DcMusicTrackListElement(dco);
-            else if (dco instanceof AudioTrack)
+            else if (dco.getModule().getIndex() == DcModules._AUDIOTRACK)
                 element = new DcAudioTrackListElement(dco);
             else
                 element = new DcShortObjectListElement(dco);

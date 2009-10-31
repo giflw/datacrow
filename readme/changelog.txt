@@ -1,4 +1,17 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.7  [Release on xx/11/2009] [testing: medium] [target: BETA]
+-----------------------------------------------------------------------------------------
+
+[Changed]
+- Increased the speed of the file synchronizer.
+
+[Fixed]
+- Templates could not be saved.
+- Templates are not correctly displayed in the view.
+- Template form does not show tabs as defined for the item itself.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow BETA 3.7  [Release on 30/10/2009] [testing: medium] [target: BETA]
 -----------------------------------------------------------------------------------------
 No new functionality but a lot of memory and performance improvements. The changes

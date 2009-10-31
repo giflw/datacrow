@@ -120,11 +120,11 @@ public class TemplateModule extends DcModule {
         DcFieldDefinitions fds = parent.getFieldDefinitions();
         DcFieldDefinitions definitions = new DcFieldDefinitions();
         
-        definitions.add(new DcFieldDefinition(DcTemplate._SYS_TEMPLATENAME, null, true, true, true, true, null));
-        definitions.add(new DcFieldDefinition(DcTemplate._SYS_DEFAULT, null, true, true, true, false, null));
+        definitions.add(new DcFieldDefinition(DcTemplate._SYS_TEMPLATENAME, null, true, true, true, true, "lblSummary"));
+        definitions.add(new DcFieldDefinition(DcTemplate._SYS_DEFAULT, null, true, true, true, false, "lblSummary"));
         
         for (DcFieldDefinition fd : fds.getDefinitions())
-            definitions.add(new DcFieldDefinition(fd.getIndex(), fd.getLabel(), fd.isEnabled(), false, false, false, null));
+            definitions.add(new DcFieldDefinition(fd.getIndex(), fd.getLabel(), fd.isEnabled(), false, false, false, fd.getTab(parent.getIndex())));
         
         return definitions;
     }      

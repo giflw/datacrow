@@ -81,7 +81,12 @@ public class DcTemplate extends DcObject {
          // prevent images error
      }     
      
-     /**
+     @Override
+    protected void beforeSave() throws ValidationException {
+         // prevent external reference errors and the likes
+    }
+
+    /**
       * The module which uses the template.
       */
      public int getParentModule() {

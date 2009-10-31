@@ -47,6 +47,7 @@ public class DcTemplateListElement extends DcObjectListElement {
     
     public DcTemplateListElement(DcObject dco) {
         super(dco);
+        build();
     }
     
     @Override

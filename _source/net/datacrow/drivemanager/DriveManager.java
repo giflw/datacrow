@@ -345,20 +345,21 @@ public class DriveManager {
                         // high: match on file size and file hash
                         } else if (precision == DriveManager._PRECISION_HIGHEST) {
 	                       
-                            newHash = getHash(fod);
-	                       
-                            // can happen when out of memory, when the file is not readable or when the settings
-                            // do not allow for the hash to be calculated based on the file size.
-                            if (newHash == null)
-                                continue;
+                            if (fodSize.equals(fi.getSize())) {
                             
-                            hashes.put(fod, newHash);
-                            
-	                        if (newHash.equals(fi.getHash()) && 
-                                fodSize.equals(fi.getSize())) {
-
-	                           match = true;
-	                       }
+                                newHash = getHash(fod);
+    	                       
+                                // can happen when out of memory, when the file is not readable or when the settings
+                                // do not allow for the hash to be calculated based on the file size.
+                                if (newHash == null)
+                                    continue;
+                                
+                                hashes.put(fod, newHash);
+                                
+    	                        if (newHash.equals(fi.getHash())) {
+    	                           match = true;
+    	                        }
+                            }
                         }
 	                    
                         if (match) {
