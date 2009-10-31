@@ -52,7 +52,6 @@ import net.datacrow.console.views.View;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcTemplate;
 
 import org.apache.log4j.Logger;
 
@@ -368,7 +367,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         } else if (style == _CARDS) {
             if (dco.getModule().getIndex() == DcModules._AUDIOTRACK)
                 element = new DcAudioTrackListElement(dco);
-            else if (dco instanceof DcTemplate)
+            else if (dco.getModule().getType() == DcModule._TYPE_TEMPLATE_MODULE)
                 element = new DcTemplateListElement(dco);
             else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
                 element = new DcMusicTrackListElement(dco);
@@ -381,7 +380,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         } else if (style == _LISTING) {
             if (dco.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE)
                 element = new DcPropertyListElement(dco);
-            else if (dco instanceof DcTemplate)
+            else if (dco.getModule().getType() == DcModule._TYPE_TEMPLATE_MODULE)
             	element = new DcTemplateListElement(dco);
             else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
                 element = new DcMusicTrackListElement(dco);

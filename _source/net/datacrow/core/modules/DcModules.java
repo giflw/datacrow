@@ -228,7 +228,7 @@ public class DcModules {
      * also used to determine the mapped modules indices.
      */
     public static int getMappingModIdx(int module, int referenceModIdx, int fieldIdx) {
-        int baseModIdx = DcModules.get(module) instanceof TemplateModule ? 
+        int baseModIdx = DcModules.get(module).getType() == DcModule._TYPE_TEMPLATE_MODULE ? 
                         ((TemplateModule) DcModules.get(module)).getTemplatedModule().getIndex() : module;
         
         return baseModIdx + referenceModIdx + DcModules._MAPPING + fieldIdx;
@@ -359,8 +359,8 @@ public class DcModules {
             return;
         
         for (DcField field : module.getFields()) {
-                DcModule mod = module instanceof TemplateModule ? 
-                                   ((TemplateModule) module).getTemplatedModule() : module; 
+                DcModule mod = module.getType() == DcModule._TYPE_TEMPLATE_MODULE  ? 
+                              ((TemplateModule) module).getTemplatedModule() : module; 
        
             int sourceIdx = field.getSourceModuleIdx();
             int derivedIdx = sourceIdx;
@@ -448,7 +448,7 @@ public class DcModules {
      * @param field
      */
     public static DcModule getReferencedModule(DcField field) {
-        int parentModule = DcModules.get(field.getModule()) instanceof TemplateModule ?
+        int parentModule = DcModules.get(field.getModule()).getType() == DcModule._TYPE_TEMPLATE_MODULE ?
                            ((TemplateModule) DcModules.get(field.getModule())).getTemplatedModule().getIndex() : 
                            field.getModule();
         
@@ -593,7 +593,7 @@ public class DcModules {
     public static Collection<DcModule> getReferencingModules(int moduleIdx) {
         Collection<DcModule> refs = new ArrayList<DcModule>();
         for (DcModule module : getAllModules()) {
-            if (module.getIndex() != moduleIdx && !(module instanceof TemplateModule)) {
+            if (module.getIndex() != moduleIdx && module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
                 if (module.hasReferenceTo(moduleIdx))
                     refs.add(module);
             }
@@ -610,8 +610,11 @@ public class DcModules {
     public static Collection<DcModule> getActualReferencingModules(int moduleIdx) {
         Collection<DcModule> refs = new ArrayList<DcModule>();
         for (DcModule module : getAllModules()) {
-            if (module.getIndex() != moduleIdx && !(module instanceof TemplateModule) &&
-                !((module instanceof MappingModule) && ( (MappingModule) module).getParentModIdx() == moduleIdx  )) {
+            if ( module.getIndex() != moduleIdx && 
+                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE &&
+               !(module.getType() == DcModule._TYPE_MAPPING_MODULE && 
+                ((MappingModule) module).getParentModIdx() == moduleIdx)) {
+                
                 if (module.hasActualReferenceTo(moduleIdx))
                     refs.add(module);
             }

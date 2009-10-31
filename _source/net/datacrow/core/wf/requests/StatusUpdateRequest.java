@@ -86,10 +86,10 @@ public class StatusUpdateRequest implements IRequest {
             DcModule mod = DcModules.get(module);
 
             String msg = DcResources.getText(msgID);
-            if (mod instanceof DcPropertyModule) {
+            if (mod.getType() == DcModule._TYPE_PROPERTY_MODULE) {
                 DcMinimalisticItemView view = ((DcPropertyModule) mod).getForm();
                 view.setStatus(msg);
-            } else if (mod instanceof TemplateModule) {
+            } else if (mod.getType() == DcModule._TYPE_TEMPLATE_MODULE) {
                 DcMinimalisticItemView form = ((TemplateModule) mod).getForm();
                 form.setStatus(msg);             
             } else {

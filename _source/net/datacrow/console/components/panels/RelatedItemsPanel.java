@@ -50,7 +50,6 @@ import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.MappingModule;
-import net.datacrow.core.modules.TemplateModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -100,7 +99,7 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
         List<DcObject> items = new ArrayList<DcObject>();
         for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
             if ( module.getIndex() != dco.getModule().getIndex() && 
-               !(module instanceof TemplateModule)) {
+                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
             	
                 for (DcField field : module.getFields()) {
                     if (field.getReferenceIdx() == dco.getModule().getIndex()) {

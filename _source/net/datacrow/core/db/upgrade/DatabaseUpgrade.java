@@ -391,7 +391,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         for (DcModule module : DcModules.getAllModules()) {
             for (DcField field : module.getFields()) {
-                DcModule mod = module instanceof TemplateModule ? ((TemplateModule) module).getTemplatedModule() : module; 
+                DcModule mod = module.getType() == DcModule._TYPE_TEMPLATE_MODULE ? ((TemplateModule) module).getTemplatedModule() : module; 
        
                 if (mod.isAbstract())
                     continue;

@@ -120,7 +120,8 @@ public class DcModule implements Comparable<DcModule> {
     public static final int _TYPE_MEDIA_MODULE = 2;
     public static final int _TYPE_ASSOCIATE_MODULE = 3;
     public static final int _TYPE_EXTERNALREFERENCE_MODULE = 4;
-    public static final int _TYPE_MAPPING_MODULE = 5;    
+    public static final int _TYPE_MAPPING_MODULE = 5;
+    public static final int _TYPE_TEMPLATE_MODULE = 6;
 
     private final int type;
     private final int index;
@@ -256,6 +257,7 @@ public class DcModule implements Comparable<DcModule> {
             this instanceof MappingModule ? _TYPE_MAPPING_MODULE :
             this instanceof DcPropertyModule ? _TYPE_PROPERTY_MODULE :
             this instanceof DcMediaModule ? _TYPE_MEDIA_MODULE :
+            this instanceof TemplateModule ? _TYPE_TEMPLATE_MODULE :
             this instanceof ExternalReferenceModule ? _TYPE_EXTERNALREFERENCE_MODULE :
             _TYPE_MODULE;        
      }
@@ -565,8 +567,8 @@ public class DcModule implements Comparable<DcModule> {
     public boolean isCustomModule() {
         return (getIndex() < 50 ||
                (getIndex() >= 20000 && getIndex() < 30000)) &&
-               !(this instanceof TemplateModule) && 
-               !(this instanceof MappingModule);
+                getType() != DcModule._TYPE_TEMPLATE_MODULE && 
+                getType() != DcModule._TYPE_MAPPING_MODULE ;
     } 
 
     
