@@ -357,7 +357,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         try {
             dco.applyEnhancers(update);
             
-            if (applyTemplate && !(dco instanceof DcTemplate))
+            if (applyTemplate && dco.getModule().getType() != DcModule._TYPE_TEMPLATE_MODULE)
                 dco.applyTemplate(template);  
             
             if (childView != null) {

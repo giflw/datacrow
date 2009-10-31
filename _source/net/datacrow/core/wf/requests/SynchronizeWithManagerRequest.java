@@ -31,7 +31,6 @@ import java.util.Date;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.helpers.Media;
 
 import org.apache.log4j.Logger;
 
@@ -65,7 +64,7 @@ public class SynchronizeWithManagerRequest implements IRequest {
         this.type = type;
         this.dco = dco;
         
-        if (dco instanceof Media)
+        if (dco.getModule().getIndex() == DcModules._MEDIA)
             this.module = DcModules.getCurrent().getIndex();
         else         
             this.module = dco.getModule().getIndex();

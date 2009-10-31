@@ -32,10 +32,7 @@ import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcAssociate;
-import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
@@ -67,11 +64,7 @@ public abstract class DefaultSynchronizer extends Synchronizer {
     }
 
     protected int getSearchFieldIdx(SearchMode mode) {
-        return  mode != null ? mode.getFieldBinding() :
-                dco instanceof DcMediaObject ? DcMediaObject._A_TITLE :
-                dco instanceof DcProperty ? DcProperty._A_NAME :
-                dco instanceof DcAssociate ? DcAssociate._A_NAME :
-                dco.getDisplayFieldIdx();
+        return  mode != null ? mode.getFieldBinding() : dco.getDisplayFieldIdx();
     }
     
     protected String getSearchString(int field, IServer server) {

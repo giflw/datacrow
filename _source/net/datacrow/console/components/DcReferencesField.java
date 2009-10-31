@@ -47,6 +47,7 @@ import net.datacrow.console.windows.DcReferencesDialog;
 import net.datacrow.console.windows.itemforms.IItemFormListener;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcMapping;
@@ -152,7 +153,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         
         List<DcObject> items = new ArrayList<DcObject>();
         for (DcObject dco : references) {
-            if (dco instanceof DcMapping) {
+            if (dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE) {
                 DcObject ref = ((DcMapping) dco).getReferencedObject();
                 if (ref != null) items.add(ref);
             } else {

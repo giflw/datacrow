@@ -57,7 +57,6 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
-import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.IChildModule;
@@ -65,7 +64,6 @@ import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
-import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Loan;
@@ -198,7 +196,9 @@ public class DataManager {
      */
     public static void update(DcObject dco, int module) {
         // get the real object
-        DcObject o = dco instanceof Loan ? dco : getObject(dco.getModule().getIndex(), dco.getID());
+        DcObject o = dco.getModule().getIndex() == DcModules._LOAN ? dco : 
+                     getObject(dco.getModule().getIndex(), dco.getID());
+
         updatePictures(dco);
         updateRelated(dco, false);
 
@@ -491,9 +491,9 @@ public class DataManager {
     }
 
     private static String getKey(DcObject dco) {
-        if (dco instanceof Picture)
+        if (dco.getModule().getIndex() == DcModules._PICTURE)
             return (String) dco.getValue(Picture._A_OBJECTID);
-        else if (dco instanceof Loan)
+        else if (dco.getModule().getIndex() == DcModules._LOAN)
             return (String) dco.getValue(Loan._D_OBJECTID);
         else if (dco.getParentReferenceFieldIndex() > -1)
             return dco.getParentID();
@@ -540,7 +540,7 @@ public class DataManager {
         
         if (delete)
             disgardReferences(dco);
-        else if (dco instanceof Loan)
+        else if (dco.getModule().getIndex() == DcModules._LOAN)
             updateLoanedItems((Loan) dco);
     }   
     
@@ -905,7 +905,7 @@ public class DataManager {
             for (DcModule m : DcModules.getModules()) {
                 if (!m.isAbstract() && m.isTopModule()) {
                     
-                    if ((modIdx == DcModules._MEDIA && m instanceof DcMediaModule) ||
+                    if ((modIdx == DcModules._MEDIA && m.getType() == DcModule._TYPE_MEDIA_MODULE) ||
                         (modIdx == DcModules._ITEM && (m.isContainerManaged()))) {
                      
                         DcObject[] objects = get(m.getIndex(), df);
@@ -1445,7 +1445,7 @@ public class DataManager {
                         
                         if (!DcModules.get(module).isAbstract() && dco.getModule().isTopModule()) {
 
-                            if (dco instanceof DcMediaObject)
+                            if (dco.getModule().getType() == DcModule._TYPE_MEDIA_MODULE)
                                 DcModules.get(DcModules._MEDIA).getSearchView().add(dco);
 
                             DcModules.get(DcModules._ITEM).getSearchView().add(dco);
@@ -1461,7 +1461,7 @@ public class DataManager {
                 modules.add(m);
                 
                 if (!m.isAbstract()) {
-                    if (m instanceof DcMediaModule)
+                    if (m.getType() == DcModule._TYPE_MEDIA_MODULE)
                         modules.add(DcModules.get(DcModules._MEDIA));
                     
                     if (m.isContainerManaged())

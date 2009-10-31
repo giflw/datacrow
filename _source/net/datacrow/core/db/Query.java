@@ -42,7 +42,6 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
@@ -330,7 +329,7 @@ public class Query {
             }
         }
 
-        if (!(dco instanceof Picture)) {
+        if (dco.getModule().getIndex() != DcModules._PICTURE) {
             String sql = "UPDATE " + dco.getTableName() + " SET " + sbValues + "\r\n WHERE ID = " + dco.getID();
             PreparedStatement ps = getPreparedStatement(sql);
             setValues(ps, values);
@@ -518,7 +517,7 @@ public class Query {
             	
             	if (m.isAbstract()) continue;
             	
-                if (m instanceof MappingModule) {
+                if (m.getType() == DcModule._TYPE_MAPPING_MODULE) {
                     queries.add(getPreparedStatement(
                             "DELETE FROM " + m.getTableName() + " WHERE " + m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = " + dco.getID()));
                 } else {

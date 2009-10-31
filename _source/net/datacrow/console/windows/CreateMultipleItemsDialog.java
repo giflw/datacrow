@@ -45,7 +45,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.helpers.AudioTrack;
-import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
@@ -92,9 +91,9 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 			
 			dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
 			
-			if (dco instanceof AudioTrack)
+			if (dco.getModule().getIndex() == DcModules._AUDIOTRACK)
 				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(table.getRowCount() + 1));
-			else if (dco instanceof MusicTrack)
+			else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
 				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(table.getRowCount() + 1));
 		}
 		table.add(dco);

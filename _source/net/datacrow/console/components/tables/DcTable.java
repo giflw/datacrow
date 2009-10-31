@@ -766,7 +766,8 @@ public class DcTable extends JTable implements IViewComponent {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
                 columnNew.setCellRenderer(ModuleTableCellRenderer.getInstance());
-            } else if (dco instanceof Loan && field.getIndex() == Loan._C_CONTACTPERSONID) {
+            } else if (dco.getModule().getIndex() == DcModules._LOAN && 
+                       field.getIndex() == Loan._C_CONTACTPERSONID) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
                 columnNew.setCellEditor(new DefaultCellEditor(text));
                 columnNew.setCellRenderer(ContactPersonTableCellRenderer.getInstance());

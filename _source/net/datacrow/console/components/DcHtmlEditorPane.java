@@ -38,6 +38,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.DcSwingUtilities;
@@ -79,7 +80,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         sb.append(dco.getID());
         sb.append("?module=");
         
-        if (dco instanceof DcMapping)
+        if (dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE)
             sb.append(((DcMapping) dco).getReferencedModuleIdx());    
         else 
             sb.append(dco.getModule().getIndex());

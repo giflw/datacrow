@@ -126,7 +126,6 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.plugin.Plugin;
@@ -568,7 +567,7 @@ public final class ComponentFactory {
     
     public static final JComboBox getStateCombo(int module) {
         DcModule m = DcModules.get(module);
-        int modIx = !(m instanceof DcPropertyModule) ? m.getPropertyModule(DcModules._STATE).getIndex() : m.getIndex();
+        int modIx = m.getType() != DcModule._TYPE_PROPERTY_MODULE ? m.getPropertyModule(DcModules._STATE).getIndex() : m.getIndex();
 
         DcComboBox combo = getComboBox();
         DataManager.registerUiComponent(combo, modIx);

@@ -36,7 +36,6 @@ import javax.swing.SwingUtilities;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Media;
 import net.datacrow.core.wf.requests.Requests;
 
@@ -142,7 +141,7 @@ public class WorkFlow {
                 if (dco.getModule().canBeLend())
                     dco.setLoanInformation();
 
-                if (!(dco instanceof Picture))
+                if (dco.getModule().getIndex() != DcModules._PICTURE)
                     dco.initializeImages();
 
                 dco.initializeReferences();

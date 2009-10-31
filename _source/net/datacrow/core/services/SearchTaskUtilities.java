@@ -27,6 +27,7 @@ package net.datacrow.core.services;
 
 import org.apache.log4j.Logger;
 
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Book;
 import net.datacrow.util.StringUtils;
@@ -53,10 +54,14 @@ public abstract class SearchTaskUtilities {
         if (dco == null) return;
         
         String isbn;
-        if (dco instanceof Book && (dco.isFilled(Book._N_ISBN13) || dco.isFilled(Book._J_ISBN10))) {
+        if (    dco.getModule().getIndex() == DcModules._BOOK && 
+                (dco.isFilled(Book._N_ISBN13) || dco.isFilled(Book._J_ISBN10))) {
+            
             isbn = (String) dco.getValue(Book._N_ISBN13);
             isbn = isbn == null ? (String) dco.getValue(Book._J_ISBN10) : isbn;
+            
         } else {
+            
             isbn = String.valueOf(StringUtils.getContainedNumber(task.getQuery()));
         }
         

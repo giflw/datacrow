@@ -36,7 +36,6 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.comparators.DcObjectComparator;
@@ -205,7 +204,7 @@ public class DataFilter {
             
             if (    entry.getModule() == dco.getModule().getIndex() || 
                    (DcModules.get(entry.getModule()).isAbstract() && 
-                    dco instanceof DcMediaObject)) {
+                    dco.getModule().getType() == DcModule._TYPE_MEDIA_MODULE)) {
                 entryApplies = entry.applies(dco);
             } else {
                 for (DcObject child : dco.getChildren())
