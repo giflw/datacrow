@@ -54,7 +54,9 @@ public class DcWebModules extends DcSecured implements Serializable  {
         
         if (!isLoggedIn()) return;
         
-        String[] files = new File(DataCrow.webDir, "/images/modules/").list();
+        File dir = new File(DataCrow.webDir, "/images/modules/");
+        dir.mkdirs();
+        String[] files = dir.list();
         if (files != null) {
             for (String file : files)
                 new File(DataCrow.webDir, "/images/modules/" + file).delete();
