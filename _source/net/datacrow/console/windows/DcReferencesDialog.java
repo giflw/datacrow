@@ -108,7 +108,31 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
     public Collection<DcObject> getDcObjects() {
         return selected;
     }
-    
+
+    public void clear() {
+        if (listLeft != null)
+            listLeft.clear();
+        
+        listLeft = null;
+        
+        if (listRight != null)
+            listRight.clear();
+        
+        listRight = null;
+        
+        if (elements != null)
+            elements.clear();
+        
+        elements = null;
+        
+        mappingModule = null;
+
+        if (selected != null)
+            selected.clear();
+        
+        selected = null;
+    }
+
     public boolean isSaved() {
         return saved;
     }
@@ -132,31 +156,6 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         DcSettings.set(DcRepository.Settings.stReferencesDialogSize, getSize());
         setVisible(false);
     }
-    
-    @Override
-    public void dispose() {
-        if (listLeft != null)
-            listLeft.clear();
-        
-        listLeft = null;
-        
-        if (listRight != null)
-            listRight.clear();
-        
-        listRight = null;
-        
-        if (elements != null)
-            elements.clear();
-        
-        elements = null;
-        
-        mappingModule = null;
-
-        if (selected != null)
-            selected.clear();
-        
-        selected = null;
-    }    
     
     private void buildDialog() {
         getContentPane().setLayout(Layout.getGBL());

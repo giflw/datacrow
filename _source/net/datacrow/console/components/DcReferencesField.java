@@ -143,7 +143,8 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
             references.addAll(dlg.getDcObjects());
             setDescription();
         }
-        dlg.dispose();        
+        
+        dlg.clear();
     }    
     
     private void setDescription() {

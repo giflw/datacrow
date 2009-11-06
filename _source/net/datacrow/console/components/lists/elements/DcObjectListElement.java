@@ -63,6 +63,7 @@ public abstract class DcObjectListElement extends DcListElement {
     
     public void update(DcObject dco) {
         clear();
+        build();
     }    
     
     @Override
