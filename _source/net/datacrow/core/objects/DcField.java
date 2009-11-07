@@ -149,8 +149,6 @@ public class DcField implements Serializable{
         try {
             return DcModules.getReferencedModule(this).getIndex();
         } catch (Exception e) {
-            e.printStackTrace();
-            DcModules.getReferencedModule(this);
             return 0;
         }
     }
