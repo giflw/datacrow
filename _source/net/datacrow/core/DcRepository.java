@@ -218,6 +218,7 @@ public abstract class DcRepository {
         public static final String _BOL = "BOL";
         public static final String _ISBNDB = "ISBNDB";
         public static final String _PDCR = "PDCR"; // (P)lain (D)ata (C)row (R)eference ;-)
+        public static final String _METACRITICS = "METACRITICS";
         
         static {
             types.add(_ASIN);
