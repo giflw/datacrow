@@ -158,7 +158,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
                 DcObject ref = ((DcMapping) dco).getReferencedObject();
                 if (ref != null) items.add(ref);
             } else {
-                if (dco != null) items.add(dco);
+                items.add(dco);
             }
         }
         
