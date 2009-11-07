@@ -39,9 +39,9 @@ This list of changes and fixes is the combined list of this and the 3.7 beta rel
 - Template form does not show tabs as defined for the item itself.
 - Images not displayed in the web application if the images/modules folder does 
   not exist.
-- Reference values such as actors and genres could not be saved.
+- Reference values such as actors and genres could not be saved (introduced by 3.7 beta).
 - Picture disappears when lending an item. The image reappeared after restarting 
-  Data Crow.
+  Data Crow (introduced by 3.7 beta).
 - External Reference is not created when an item is updated by an online service.
 - Several problems with transparent images have been fixed.
 - MobyGames.com stopped working.
