@@ -1,4 +1,12 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.8  [Release on xx/11/2009] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[New]
+- Metacritic game and movie online search.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.7  [Release on 07/11/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 No new functionality but a lot of memory and performance improvements. The changes
