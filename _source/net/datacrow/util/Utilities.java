@@ -450,7 +450,7 @@ public class Utilities {
     }    
     
     public static void writeScaledImageToFile(ImageIcon icon, String filename) throws Exception {
-    	writeScaledImageToFile(icon, filename, DcImageIcon._TYPE_JPEG, 190, 145);
+    	writeScaledImageToFile(icon, filename, DcImageIcon._TYPE_PNG, 190, 145);
     }
 
     public static void writeScaledImageToFile(ImageIcon icon, String filename, int type, int w, int h) throws Exception {
