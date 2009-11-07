@@ -105,6 +105,7 @@ public abstract class DcRepository {
         public static final String stModuleImportWizardFormSize = "module_import_wizard_form_size";
         public static final String stServerSettingsDialogSize = "server_settings_dialog_size";
         public static final String stAmazonRetrieveFeatureListing = "retrieve_feature_listing";
+        public static final String stMetacriticRetrieveCriticReviews = "metacritic_retrieve_critic_reviews";
         public static final String stAmazonRetrieveUserReviews = "retrieve_user_reviews";
         public static final String stAmazonRetrieveEditorialReviews = "retrieve_editorial_reviews";
         public static final String stCheckForNewVersion = "check_for_new_version_on_startup";
