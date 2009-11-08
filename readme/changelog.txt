@@ -12,6 +12,10 @@ Data Crow 3.8  [Release on xx/11/2009] [testing: high] [target: production]
   also internally recycled.
 - The drive scanner and drive poller (part of the Drive Manager) can now be configured
   (from within the Drive Manager dialog) to run on each startup. 
+
+[Fixed]
+- Reserved keywords could be used as module and field names causing all kinds of startup
+  errors. Data Crow now actively checks whether the name is allowed.
    
 
 -----------------------------------------------------------------------------------------

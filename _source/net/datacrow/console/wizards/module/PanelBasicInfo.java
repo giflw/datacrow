@@ -137,6 +137,9 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         						 module.getTableName() != null && 
         					    !module.getTableName().equals("") ?
                                  module.getTableName() : toTablename(objectName);
+                                 
+        if (Utilities.isKeyword(nameNormalized))
+            throw new WizardException(DcResources.getText("msgObjectNameNotAllowed"));
                                 
         if (getWizard() instanceof CreateModuleWizard && DcModules.get(nameNormalized) != null)
         	throw new WizardException(DcResources.getText("msgModuleNameNotUnique"));

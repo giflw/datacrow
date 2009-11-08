@@ -74,6 +74,7 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
+import org.hsqldb.Token;
 
 public class Utilities {
     
@@ -144,6 +145,12 @@ public class Utilities {
         }
         
         return s;
+    }
+
+    public static boolean isKeyword(String name) {
+        String s = name.toUpperCase();
+        return Token.isKeyword(s) || s.equals("CREATE") || s.equals("ALTER") || s.equals("SELECT") ||
+               s.equals("DROP") || s.equals("TRUNCATE") || s.equals("MODIFY") || s.equals("TABLE") || s.equals("COLUMN");        
     }
     
     public static DcImageIcon getImageFromClipboard() {
