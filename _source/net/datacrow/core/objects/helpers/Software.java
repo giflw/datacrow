@@ -36,7 +36,7 @@ public class Software extends DcMediaObject {
     public static final int _G_PUBLISHER  = 2;
     public static final int _H_PLATFORM = 3;
     public static final int _I_WEBPAGE = 4;
-    public static final int _K_TYPE = 6;
+    public static final int _K_CATEGORIES = 6;
     public static final int _L_MULTI = 7;
     public static final int _M_PICTUREFRONT = 8;
     public static final int _N_PICTUREBACK = 9;

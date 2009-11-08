@@ -6,6 +6,8 @@ Data Crow 3.8  [Release on xx/11/2009] [testing: high] [target: production]
 - Metacritic game and movie online service. An excellent resource for game and movie
   reviews.
 - FreeBookSpot online service. A site from which e-books can be downloaded.
+- Added sourceforge.net as an online service. Sourceforge.net hosts open source projects
+  like Data Crow and many others.
 
 [Changed]
 - Invalid auto numberers are now automatically removed on startup. They can become 
@@ -14,6 +16,7 @@ Data Crow 3.8  [Release on xx/11/2009] [testing: high] [target: production]
   also internally recycled.
 - The drive scanner and drive poller (part of the Drive Manager) can now be configured
   (from within the Drive Manager dialog) to run on startup. 
+- The category field of the software module has been changed to a multi reference field.
 
 [Fixed]
 - Reserved keywords could be used as module and field names causing all kinds of startup

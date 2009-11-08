@@ -51,6 +51,27 @@
         </fields>
     </module>
     <module>
+        <module-jar>software.jar</module-jar>
+        <module-index>50</module-index>
+        <fields>
+            <field>
+                <index>6</index>
+                <name>Categories</name>
+                <database-column-name>Categories</database-column-name>
+                <ui-only>true</ui-only>
+                <enabled>true</enabled>
+                <readonly>false</readonly>
+                <searchable>true</searchable>
+                <techinfo>false</techinfo>
+                <maximum-length>255</maximum-length>
+                <field-type>21</field-type>
+                <module-reference>10000</module-reference>
+                <value-type>18</value-type>
+                <overwritable>false</overwritable>
+            </field>
+        </fields>
+    </module>        
+    <module>
         <module-jar>contactperson.jar</module-jar>
         <module-index>56</module-index>
         <fields>
@@ -72,4 +93,4 @@
         </fields>
     </module>        
 </modules> 
-		
+        

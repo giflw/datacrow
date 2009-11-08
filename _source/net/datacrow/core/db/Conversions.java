@@ -85,6 +85,10 @@ public class Conversions {
             }
         }
     }
+    
+    public void add(Conversion conversion) {
+        conversions.add(conversion);
+    }
 
     public void load() {
         List<String> filenames = Directory.read(DataCrow.installationDir + "upgrade", false, false, new String[] {"properties"});

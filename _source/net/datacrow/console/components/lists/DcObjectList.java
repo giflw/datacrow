@@ -414,14 +414,14 @@ public class DcObjectList extends DcList implements IViewComponent {
             ListModel model = getModel();
             
             while (true) {
-                int first = getFirstVisibleIndex() - 10;
-                int last = first + 20;
-                int size = model.getSize();
-                
-                first = first < 0 ? 0 : first;
-                last = last > size ? size : last;
-                
                 try {
+                    int first = getFirstVisibleIndex() - 10;
+                    int last = first + 20;
+                    int size = model.getSize();
+                    
+                    first = first < 0 ? 0 : first;
+                    last = last > size ? size : last;
+
                     for (int i = 0; i < first; i++)
                         getElement(i).clear();
                     

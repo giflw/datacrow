@@ -54,6 +54,7 @@ import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.helpers.ContactPerson;
 import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.core.objects.helpers.Movie;
+import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.util.DcSwingUtilities;
@@ -97,6 +98,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 upgraded |= convertExternalReferences();
             }
             
+            if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 0, 0))) {
+                upgraded |= convertSoftwareCategories();
+            }
+
             if (upgraded) {
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
                 LogForm.getInstance().setVisible(false);
@@ -111,6 +116,56 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private boolean convertSoftwareCategories() throws Exception {
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = conn.createStatement();
+        
+        try {
+            conn = DatabaseManager.getConnection();
+            stmt = conn.createStatement();
+            stmt.executeQuery("SELECT TOP 1 CATEGORY FROM SOFTWARE");
+            
+        } catch (Exception e) {
+            // new database or ASIN field has already been removed.
+            stmt.close();
+            conn.close();
+
+            return false;
+        }
+        
+        if (!DcSwingUtilities.displayQuestion(
+                "The single reference field category of the software module will be converted to a multiple " +
+                "references field. Continue?"))
+            System.exit(0);
+        
+
+        LogForm.getInstance().setVisible(true);
+        LogForm.getInstance().toFront();
+
+        MappingModule mappingMod = new MappingModule(DcModules.get(DcModules._SOFTWARE), DcModules.get(DcModules._SOFTWARE + DcModules._CATEGORY), Software._K_CATEGORIES);
+        createTable(mappingMod);
+        
+        ResultSet rs = stmt.executeQuery("SELECT ID, CATEGORY FROM SOFTWARE WHERE CATEGORY IS NOT NULL");
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO " + mappingMod.getTableName() + 
+                " (" + mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " + 
+                       mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ") " +
+                "VALUES (?, ?)");
+
+        while (rs.next()) {
+            ps.setLong(1, rs.getLong(1));
+            ps.setLong(2, rs.getLong(2));
+            ps.execute();
+        }
+        
+        stmt.execute("ALTER TABLE SOFTWARE DROP COLUMN CATEGORY");
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        
+        return true;
     }
     
     private boolean convertExternalReferences() throws Exception {

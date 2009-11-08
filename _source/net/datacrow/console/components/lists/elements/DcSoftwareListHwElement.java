@@ -74,9 +74,9 @@ public class DcSoftwareListHwElement extends DcObjectListHwElement {
     public void build() {
         setLayout(Layout.getGBL());
 
-        JLabel label = getLabel(Software._K_TYPE, false, field1Length);
+        JLabel label = getLabel(Software._K_CATEGORIES, false, field1Length);
         try {
-            DcProperty category = (DcProperty) dco.getValue(Software._K_TYPE);
+            DcProperty category = (DcProperty) dco.getValue(Software._K_CATEGORIES);
             label.setIcon(category.getIcon());
         } catch (Exception exp) {}
 
@@ -91,7 +91,7 @@ public class DcSoftwareListHwElement extends DcObjectListHwElement {
         addComponent(getLabel(Software._C_YEAR, true, label2Length), 2, 0);
         addComponent(getLabel(Software._C_YEAR, false, field2Length), 3, 0);
         
-        addComponent(getLabel(Software._K_TYPE, true, label1Length), 0, 1);
+        addComponent(getLabel(Software._K_CATEGORIES, true, label1Length), 0, 1);
         addComponent(label, 1, 1);        
         addComponent(getLabel(Software._W_STORAGEMEDIUM, true, label2Length), 2, 1);
         addComponent(getLabel(Software._W_STORAGEMEDIUM, false, field2Length), 3, 1);     

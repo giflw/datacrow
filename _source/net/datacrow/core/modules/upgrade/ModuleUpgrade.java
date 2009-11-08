@@ -159,7 +159,7 @@ public class ModuleUpgrade extends XmlObject {
                 XmlField fieldOrg = getField(fieldNew.getIndex(), xmlModule.getFields());
                 
                 if (fieldOrg == null) continue;
-                
+
                 fieldOrg.setColumn(fieldNew.getColumn());
                 fieldOrg.setEnabled(fieldNew.isEnabled());
                 fieldOrg.setFieldType(fieldNew.getFieldType());
