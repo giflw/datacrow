@@ -143,6 +143,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public int getSystemDisplayFieldIdx() {
         return getModule().getSystemDisplayFieldIdx();
     }
+
+    public boolean isDestroyed() {
+        return values == null;
+    }
     
     /**
      * Educated guess..
@@ -682,6 +686,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     @SuppressWarnings("unchecked")
     public void setValue(int index, Object o) {
+        
+        if (isDestroyed()) {
+            logger.warn("System tried to set a value while the object was already destroyed");
+            return;
+        }
+        
         DcValue value = getValueDef(index);
         if (value != null) {
             if (index == _SYS_EXTERNAL_REFERENCES && getValue(index) != null && o != null ) {
@@ -753,6 +763,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @see DcValue#isChanged()
      */
     public boolean isChanged() {
+        
+        if (isDestroyed()) {
+            logger.warn("System tried to check if a value was changed while the object was already destroyed");
+            return false;
+        }
+        
         try {
             for (DcField field : getFields()) {
                 boolean changed = getValueDef(field.getIndex()).isChanged();
@@ -771,6 +787,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param index The field index
      */
     public boolean isChanged(int index) {
+        if (isDestroyed()) {
+            logger.warn("System tried to check if the value was changed while the object was already destroyed");
+            return false;
+        }
+
         return getValueDef(index).isChanged();
     }
 
@@ -781,7 +802,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param b Changed true / false
      */
     public void setChanged(int index, boolean b) {
-    	getValueDef(index).setChanged(b);
+        if (isDestroyed()) {
+            logger.warn("System tried to mark a field as changed while the object was already destroyed");
+        } else {
+            getValueDef(index).setChanged(b);
+        }
     }
 
     /**
@@ -851,6 +876,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
     
     public void destroy() {
+        clearValues();
         values.clear();
         values = null;
         requests.clear();
@@ -862,11 +888,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Resets this item. All values are set to empty.
      */
     public void clearValues() {
-        if (values == null) return;
-        for (Integer key : values.keySet()) {
-            if (key.intValue() != _ID) {
-                DcValue value = values.get(key);
-                value.clear();
+        if (isDestroyed()) {
+            logger.warn("System tried to clear all values while the object was already destroyed");
+        } else {
+            for (Integer key : values.keySet()) {
+                if (key.intValue() != _ID) {
+                    DcValue value = values.get(key);
+                    value.clear();
+                }
             }
         }
     }
@@ -884,9 +913,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param index The field index.
      */
     public Object getValue(int index) {
+        
         Object value = null;
-        if (getValueDef(index) != null) {
-
+        if (isDestroyed()) {
+            logger.warn("System tried to retrieve a value while the object was already destroyed");
+        } else {
         	// recalculate loan information
         	if (getModule().canBeLend() && index != DcObject._SYS_AVAILABLE) {
         		Boolean available = (Boolean) getValue(DcObject._SYS_AVAILABLE);
@@ -902,6 +933,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 value = getValueDef(index).getValue();
             }
         }
+        
         return value;
     }
 
@@ -1167,7 +1199,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     protected DcValue getValueDef(int index) {
-        return values == null ? null : values.get(index);
+        return values.get(index);
     }
 
     protected void executeRequests(boolean saveSuccessful) {

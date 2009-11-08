@@ -46,6 +46,7 @@ import net.datacrow.console.windows.SelectExpienceLevelDialog;
 import net.datacrow.console.windows.SelectLanguageDialog;
 import net.datacrow.console.windows.SplashScreen;
 import net.datacrow.console.windows.TipOfTheDayDialog;
+import net.datacrow.console.windows.drivemanager.DriveManagerDialog;
 import net.datacrow.console.windows.help.StartupHelpDialog;
 import net.datacrow.console.windows.loan.LoanInformationForm;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
@@ -67,6 +68,7 @@ import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.security.SecurityException;
 import net.datacrow.core.services.Servers;
 import net.datacrow.core.web.DcWebServer;
+import net.datacrow.drivemanager.DriveManager;
 import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.settings.DcSettings;
@@ -417,6 +419,16 @@ public class DataCrow {
             
             DcSettings.set(DcRepository.Settings.stGracefulShutdown, Boolean.FALSE);
             DcSettings.save();
+            
+            if (DcSettings.getBoolean(DcRepository.Settings.stDriveScannerRunOnStartup)) {
+                DriveManagerDialog.getInstance();
+                DriveManager.getInstance().startScanners();
+            }
+            
+            if (DcSettings.getBoolean(DcRepository.Settings.stDrivePollerRunOnStartup)) {
+                DriveManagerDialog.getInstance();
+                DriveManager.getInstance().startDrivePoller();
+            }
             
         } catch (Exception e) {
             logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);

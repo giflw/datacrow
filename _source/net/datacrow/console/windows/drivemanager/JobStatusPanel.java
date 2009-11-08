@@ -82,7 +82,7 @@ public class JobStatusPanel extends JPanel implements ActionListener {
 
         add(fldStatus, Layout.getGBC(0, 0, 1, 1, 10.0, 10.0,
             GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-            new Insets(5, 0, 0, 0), 0, 0));
+            new Insets(5, 5, 0, 0), 0, 0));
         add(panelActions, Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,
             GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
             new Insets(0, 0, 0, 0), 0, 0));

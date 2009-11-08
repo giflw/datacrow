@@ -25,15 +25,26 @@
 
 package net.datacrow.console.windows.drivemanager;
 
-import javax.swing.ImageIcon;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.Layout;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.drivemanager.DriveManager;
 import net.datacrow.drivemanager.JobAlreadyRunningException;
+import net.datacrow.settings.DcSettings;
 
 public class DrivePollerPanel extends DriveManagerPanel {
 
+    private JCheckBox cbRunOnStartup;
+    
     public DrivePollerPanel() {
         super();
         DriveManager.getInstance().addPollerListener(this);
@@ -55,6 +66,11 @@ public class DrivePollerPanel extends DriveManagerPanel {
     }    
     
     @Override
+    protected void saveSettings() {
+        DcSettings.set(DcRepository.Settings.stDrivePollerRunOnStartup, Boolean.valueOf(cbRunOnStartup.isSelected()));
+    }
+
+    @Override
     protected void start() throws JobAlreadyRunningException {
         DriveManager.getInstance().startDrivePoller();
     }
@@ -62,5 +78,27 @@ public class DrivePollerPanel extends DriveManagerPanel {
     @Override
     protected void stop() {
         DriveManager.getInstance().stopDrivePoller();
-    }    
+    }
+
+    @Override
+    protected void build() {
+        super.build();
+
+        cbRunOnStartup = ComponentFactory.getCheckBox(DcResources.getText("lblRunOnStartup"));   
+        
+        JPanel panelSettings = new JPanel();
+        panelSettings.setLayout(Layout.getGBL());
+        panelSettings.add(cbRunOnStartup, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 5, 0, 0), 0, 0));
+        panelSettings.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSettings")));
+        cbRunOnStartup.setSelected(DcSettings.getBoolean(DcRepository.Settings.stDrivePollerRunOnStartup));        
+        
+        add(panelSettings, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(5, 5, 5, 5), 0, 0));
+
+    }
+    
+    
 }

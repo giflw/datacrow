@@ -58,6 +58,9 @@ public class FileSynchronizerPanel extends DriveManagerPanel {
     protected ImageIcon getIcon() {
         return IconLibrary._icoFileSynchronizer;
     }
+    
+    @Override
+    protected void saveSettings() {}
 
     @Override
     protected String getTitle() {

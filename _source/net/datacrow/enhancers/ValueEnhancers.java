@@ -128,7 +128,7 @@ public class ValueEnhancers {
                     return field;
             }
         } catch (Exception exp) {
-            logger.error("Could not find valid field information in " + s, exp);
+            logger.error("Could not find valid field information in " + s);
         }
         return null;
     }
@@ -180,17 +180,26 @@ public class ValueEnhancers {
                 for (Object o : properties.keySet()) {
                     String key = (String) o;
                     DcField field = getField(key);
-                    String value = properties.getProperty(key);
                     
-                    IValueEnhancer enhancer;
-                    if (idx == _AUTOINCREMENT)
-                        enhancer = new AutoIncrementer(field.getIndex()); 
-                    else 
-                        enhancer = new TitleRewriter();
-                    
-                    enhancer.parse(value);
-                    
-                    registerEnhancer(field, enhancer);
+                    if (field != null) {
+                        String value = properties.getProperty(key);
+                        IValueEnhancer enhancer;
+                        if (idx == _AUTOINCREMENT)
+                            enhancer = new AutoIncrementer(field.getIndex()); 
+                        else 
+                            enhancer = new TitleRewriter();
+                        
+                        enhancer.parse(value);
+                        
+                        registerEnhancer(field, enhancer);
+                    } else {
+                        logger.warn("The value enhancer is invalid, the value enhancer will be deleted.");
+                        
+                        properties.remove(key);
+                        FileOutputStream fos = new FileOutputStream(filename);
+                        properties.store(fos, "");
+                        fos.close();
+                    }
                 }
             } catch (Exception e) {
                 logger.error("Error while loading enhancer settings from " + filename, e);

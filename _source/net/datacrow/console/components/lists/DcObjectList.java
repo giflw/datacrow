@@ -246,7 +246,7 @@ public class DcObjectList extends DcList implements IViewComponent {
             element.update(dco);
             setSelectedValue(element, true);
         } else {
-            logger.warn("Could not update " + dco + ", element could not be found in the view");   
+            logger.debug("Could not update " + dco + ", element could not be found in the view");   
         }
     }
     

@@ -30,8 +30,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -43,7 +41,6 @@ import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.drivemanager.DriveManager;
 import net.datacrow.settings.DcSettings;
 
 public class DriveManagerDialog extends DcFrame implements ActionListener {
@@ -100,16 +97,11 @@ public class DriveManagerDialog extends DcFrame implements ActionListener {
     }
     
     private void saveSettings() {
-        Collection<String> excluded = DriveManager.getInstance().getExcludedDirs();
-        Collection<File> drives = DriveManager.getInstance().getDrives();
-        String[] s = new String[drives.size()];
-        int i = 0;
-        for (File drive : drives)
-            s[i++] = drive.toString();
+        scannerPanel.saveSettings();
+        pollerPanel.saveSettings();
+        synchronizerPanel.saveSettings();
         
         DcSettings.set(DcRepository.Settings.stDriveManagerDialogSize, getSize());
-        DcSettings.set(DcRepository.Settings.stDriveManagerExcludedDirs, excluded.toArray(new String[0]));
-        DcSettings.set(DcRepository.Settings.stDriveManagerDrives, s);
     }
 
     private void build() {

@@ -101,8 +101,24 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     }
 
     protected void createSettings() {
-        
-
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stDrivePollerRunOnStartup,
+                            Boolean.FALSE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblRunOnStartup",
+                            false,
+                            false));   
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stDriveScannerRunOnStartup,
+                            Boolean.FALSE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblRunOnStartup",
+                            false,
+                            false));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stMetacriticRetrieveCriticReviews,

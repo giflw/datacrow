@@ -643,7 +643,7 @@ public class DataManager {
                     }
                 } else if (picture.isDeleted()) {
                     pics.remove(picture);
-                    picture.destroy();
+                    picture.release();
                 }  
             }
         }

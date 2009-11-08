@@ -5,6 +5,14 @@ Data Crow 3.8  [Release on xx/11/2009] [testing: high] [target: production]
 [New]
 - Metacritic game and movie online search.
 
+[Changed]
+- Invalid auto numberers are now automatically removed on startup. They can become 
+  invalid due to removal of the field from the module.
+- Added additional checks to see if an item was destroyed. Picture objects are now 
+  also internally recycled.
+- The drive scanner and drive poller (part of the Drive Manager) can now be configured
+  (from within the Drive Manager dialog) to run on each startup. 
+   
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.7  [Release on 07/11/2009] [testing: high] [target: production]

@@ -54,6 +54,7 @@ public abstract class DriveManagerPanel extends JPanel implements IDriveManagerL
     protected abstract ImageIcon getIcon();
     protected abstract String getTitle();
     protected abstract String getHelpText();
+    protected abstract void saveSettings();
     
     protected abstract void start() throws JobAlreadyRunningException;
     protected abstract void stop();
@@ -103,7 +104,7 @@ public abstract class DriveManagerPanel extends JPanel implements IDriveManagerL
         panel.add(statusPanel, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(5, 5, 5, 5), 0, 0));
-        
+
         add(panel, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                    new Insets(0, 0, 0, 0), 0, 0));
