@@ -223,6 +223,7 @@ public abstract class DcRepository {
         public static final String _PDCR = "PDCR"; // (P)lain (D)ata (C)row (R)eference ;-)
         public static final String _METACRITICS = "METACRITICS";
         public static final String _FREEBOOKSPOT = "FBS";
+        public static final String _SOURCEFORGE = "SF";
         
         static {
             types.add(_ASIN);
@@ -236,6 +237,10 @@ public abstract class DcRepository {
             types.add(_PDCR);
             types.add(_BOL);
             types.add(_DISCID);
+            types.add(_METACRITICS);
+            types.add(_FREEBOOKSPOT);
+            types.add(_SOURCEFORGE);
+            types.add(_ISBNDB);
         }
     }
     
