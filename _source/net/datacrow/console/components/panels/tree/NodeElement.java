@@ -9,6 +9,7 @@ import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 
 public class NodeElement {
         
@@ -75,7 +76,11 @@ public class NodeElement {
     }
     
     public String getKey() {
-        return key instanceof String ? (String) key : key.toString();
+        try {
+            return key instanceof String ? (String) key : key.toString();
+        } catch (Exception e) {
+            return DcResources.getText("lblEmpty");
+        }
     }
     
     public void clear() {
