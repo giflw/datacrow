@@ -25,8 +25,8 @@
 
             <tr><th>Description</th>
                 <td><xsl:value-of select="description"/></td></tr>
-            <tr><th>Category</th>
-                <td><xsl:value-of select="category"/></td></tr>
+            <tr><th>Categories</th>
+                <td><xsl:for-each select="categories/category"><xsl:value-of select="name"/>&#160;</xsl:for-each></td></tr>
             <tr><th>Year</th>
                 <td><xsl:value-of select="year"/></td></tr>
             <tr><th>Developed by</th>

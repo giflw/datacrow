@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" exclude-result-prefixes="fo">
 <xsl:import href="../../_stylesheets/pdf_desert.xsl" />
 
@@ -39,8 +39,8 @@
                 </fo:table-row>
 
                 <fo:table-row height="{$rowHeight}">
-                  <fo:table-cell><fo:block font-weight="bold">Category</fo:block></fo:table-cell>
-                  <fo:table-cell><fo:block><xsl:value-of select="category"/></fo:block></fo:table-cell>
+                  <fo:table-cell><fo:block font-weight="bold">Categories</fo:block></fo:table-cell>
+                  <fo:table-cell><fo:block><xsl:for-each select="categories/category"><xsl:value-of select="name"/>&#160;</xsl:for-each></fo:block></fo:table-cell>
                 </fo:table-row>
                 
                 <fo:table-row height="{$rowHeight}">

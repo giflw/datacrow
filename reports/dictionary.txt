@@ -3,6 +3,7 @@ xsl reference name  [actor]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  External References     = external-references
   Firstname               = firstname
   ID                      = id
   Item                    = item
@@ -26,6 +27,7 @@ xsl reference name  [artist]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  External References     = external-references
   Firstname               = firstname
   ID                      = id
   Item                    = item
@@ -47,7 +49,6 @@ xsl reference name  [artist]
 Module              [Audio CDs]
 xsl reference name  [audio-cd]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ASIN                    = asin
   Artists                 = artists
   Available               = available
   Container               = container
@@ -56,9 +57,9 @@ xsl reference name  [audio-cd]
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
   Description             = description
-  Disc ID                 = disc-id
   Due Date                = due-date
   EAN                     = ean
+  External References     = external-references
   Genres                  = genres
   ID                      = id
   Item                    = item
@@ -89,6 +90,7 @@ xsl reference name  [author]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  External References     = external-references
   Firstname               = firstname
   ID                      = id
   Item                    = item
@@ -121,6 +123,7 @@ xsl reference name  [book]
   Due Date                = due-date
   Edition Comment         = edition-comment
   Edition Type            = edition-type
+  External References     = external-references
   Filehash                = filehash
   Filehash Type           = filehash-type
   Filename                = filename
@@ -180,7 +183,7 @@ xsl reference name  [contact-person]
   User Short Text Field 2 = user-short-text-field-2
 
 
-Module              [Container]
+Module              [Containers]
 xsl reference name  [container]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Available               = available
@@ -201,6 +204,7 @@ xsl reference name  [container]
   Lend By                 = lend-by
   Modified                = modified
   Name                    = name
+  Parent                  = parent
   Picture Front           = picture-front
   User Long Text Field    = user-long-text-field
   User Numeric Field 1    = user-numeric-field-1
@@ -214,6 +218,7 @@ xsl reference name  [developer]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  External References     = external-references
   Firstname               = firstname
   ID                      = id
   Item                    = item
@@ -237,6 +242,7 @@ xsl reference name  [director]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  External References     = external-references
   Firstname               = firstname
   ID                      = id
   Item                    = item
@@ -270,6 +276,7 @@ xsl reference name  [image]
   Days till overdue       = days-till-overdue
   Description             = description
   Due Date                = due-date
+  External References     = external-references
   Filehash                = filehash
   Filehash Type           = filehash-type
   Filename                = filename
@@ -326,8 +333,8 @@ xsl reference name  [media-item]
 Module              [Movie]
 xsl reference name  [movie]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ASIN                    = asin
   Actors                  = actors
+  Aspect Ratio            = aspect-ratio
   Audio Bitrate           = audio-bitrate
   Audio Channels          = audio-channels
   Audio Codec             = audio-codec
@@ -335,6 +342,7 @@ xsl reference name  [movie]
   Audio Sample Rate       = audio-sample-rate
   Available               = available
   Certification           = certification
+  Color                   = color
   Container               = container
   Countries               = countries
   Created                 = created
@@ -346,6 +354,7 @@ xsl reference name  [movie]
   EAN                     = ean
   Episode (nr)            = episode-nr
   Episode name            = episode-name
+  External References     = external-references
   Filehash                = filehash
   Filehash Type           = filehash-type
   Filename                = filename
@@ -390,7 +399,6 @@ xsl reference name  [movie]
 Module              [Music Albums]
 xsl reference name  [music-album]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ASIN                    = asin
   Artists                 = artists
   Available               = available
   Container               = container
@@ -399,9 +407,9 @@ xsl reference name  [music-album]
   Days Loaned             = days-loaned
   Days till overdue       = days-till-overdue
   Description             = description
-  Disc ID                 = disc-id
   Due Date                = due-date
   EAN                     = ean
+  External References     = external-references
   Genres                  = genres
   ID                      = id
   Item                    = item
@@ -433,6 +441,7 @@ xsl reference name  [publisher]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  External References     = external-references
   Firstname               = firstname
   ID                      = id
   Item                    = item
@@ -454,6 +463,7 @@ xsl reference name  [publisher]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Created                 = created
   Description             = description
+  External References     = external-references
   Firstname               = firstname
   ID                      = id
   Item                    = item
@@ -475,9 +485,8 @@ xsl reference name  [publisher]
 Module              [Software]
 xsl reference name  [software-item]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ASIN                    = asin
   Available               = available
-  Category                = category
+  Categories              = categories
   Container               = container
   Countries               = countries
   Created                 = created
@@ -487,6 +496,7 @@ xsl reference name  [software-item]
   Developers              = developers
   Due Date                = due-date
   EAN                     = ean
+  External References     = external-references
   Filehash                = filehash
   Filehash Type           = filehash-type
   Filename                = filename

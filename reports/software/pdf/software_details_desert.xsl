@@ -45,11 +45,11 @@
                 
                 <fo:table-row height="{$rowHeight}">
                   <fo:table-cell  background-color="{$labelColor}" padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
-                    <fo:block font-weight="bold">Category</fo:block>
+                    <fo:block font-weight="bold">Categories</fo:block>
                   </fo:table-cell>
 
                   <fo:table-cell padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
-                    <fo:block><xsl:value-of select="category"/></fo:block>
+                    <fo:block><xsl:for-each select="categories/category"><xsl:value-of select="name"/>&#160;</xsl:for-each></fo:block>
                   </fo:table-cell>
                 </fo:table-row>
                     
