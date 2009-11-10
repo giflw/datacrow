@@ -41,6 +41,7 @@ import net.datacrow.console.windows.UpgradeDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModule;
@@ -103,6 +104,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             }
 
             if (upgraded) {
+                DataManager.setUseCache(false);
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
                 LogForm.getInstance().setVisible(false);
                 DataCrow.showSplashScreen(true);
