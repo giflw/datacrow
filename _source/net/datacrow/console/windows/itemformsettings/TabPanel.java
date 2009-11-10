@@ -104,7 +104,9 @@ public class TabPanel extends JPanel implements ActionListener {
         for (int i = rows.length - 1; i > -1; i--) {
             DcObject dco = tblTabs.getItemAt(rows[i]);
             dco.addRequest(new UpdateItemFormSettingsWindow(dlg, true));
-            dco.delete();
+            try {
+                dco.delete(false);
+            } catch (ValidationException e) {}
         }
     }
     

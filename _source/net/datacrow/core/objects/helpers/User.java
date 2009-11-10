@@ -81,7 +81,7 @@ public class User extends DcObject {
     }
 
     @Override
-    public void delete() {
+    public void delete(boolean validate) throws ValidationException {
         boolean canBeDeleted = true;
         
         if (isAdmin()) {
@@ -97,7 +97,7 @@ public class User extends DcObject {
                 
         if (canBeDeleted) {
             addRequest(new DeleteUserRequest(this));
-            super.delete();
+            super.delete(validate);
         } else {
             DcSwingUtilities.displayWarningMessage("msgCannotDeleteThisUser");
         }

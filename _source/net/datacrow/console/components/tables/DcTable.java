@@ -593,8 +593,6 @@ public class DcTable extends JTable implements IViewComponent {
         int index = getIndex(ID);
         if (index > -1)
             updateItemAt(index, dco);
-        else 
-            logger.warn("Item with ID " + ID + " could not be found");
     }
 
     public void updateItemAt(int row, DcObject dco) {

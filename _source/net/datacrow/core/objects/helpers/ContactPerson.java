@@ -32,6 +32,7 @@ import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.util.DcSwingUtilities;
 
 public class ContactPerson extends DcObject {
@@ -54,28 +55,30 @@ public class ContactPerson extends DcObject {
     }
     
     @Override
-    public void delete() {
+    public void delete(boolean validate) {
         DcObject loan = DcModules.get(DcModules._LOAN).getItem();
         loan.setValue(Loan._C_CONTACTPERSONID, getID());
         
         DataFilter filter = new DataFilter(loan);
         DcObject[] loans = DataManager.get(DcModules._LOAN, filter);
         
-        if (loans == null || loans.length == 0) {
-            super.delete();
-        } else {
-            if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
-                DatabaseManager.executeQuery("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
-                                             loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 
-                                             Query._DELETE);
-                for (DcObject dco : loans)
-                    DataManager.remove(dco, loan.getModule().getIndex());
-
-                super.delete();
+        try {
+            if (loans == null || loans.length == 0) {
+                super.delete(false);
             } else {
-                getRequests().clear();
+                if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
+                    DatabaseManager.executeQuery("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
+                                                 loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 
+                                                 Query._DELETE);
+                    for (DcObject dco : loans)
+                        DataManager.remove(dco, loan.getModule().getIndex());
+    
+                    super.delete(false);
+                } else {
+                    getRequests().clear();
+                }
             }
-        }
+        } catch (ValidationException ve) {}
         
         loan.release();
     }    

@@ -332,7 +332,7 @@ public class DatabaseManager {
 
         return data;
     }
-
+    
     /**
      * Update the item in the database with the values from the specified item.
      * @param dco

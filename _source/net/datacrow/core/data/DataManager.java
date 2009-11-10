@@ -385,6 +385,36 @@ public class DataManager {
         return ref;
     }
     
+    public static List<DcObject> getReferencingItems(DcObject item) {
+        List<DcObject> items = new ArrayList<DcObject>();
+        for (DcModule module : DcModules.getActualReferencingModules(item.getModule().getIndex())) {
+            if ( module.getIndex() != item.getModule().getIndex() && 
+                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
+                
+                for (DcField field : module.getFields()) {
+                    if (field.getReferenceIdx() == item.getModule().getIndex()) {
+                        DataFilter df = new DataFilter(module.getIndex());
+                        
+                        if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+                            Collection<DcObject> c = new ArrayList<DcObject>();
+                            c.add(item);
+                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));
+                        } else {
+                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, item));
+                        }
+                        
+                        for (DcObject dco : DataManager.get(module.getIndex(), df)) {
+                            if (!items.contains(dco))
+                                items.add(dco);
+                        }
+                    }
+                }
+            }
+        }  
+        
+        return items;
+    }    
+    
     /**
      * Retrieves the tab. In case it does not yet exists the tab is created and stored
      * to the database.

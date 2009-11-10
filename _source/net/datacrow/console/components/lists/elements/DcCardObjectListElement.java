@@ -36,7 +36,6 @@ import net.datacrow.console.components.DcTextPane;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.lists.DcObjectListComponents;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -69,7 +68,7 @@ public class DcCardObjectListElement extends DcObjectListElement {
     @Override
     public void update(DcObject dco) {
         clear();
-        dco = DataManager.getObject(dco.getModule().getIndex(), dco.getID());
+        
     }    
     
     private String getDescription() {
@@ -154,7 +153,7 @@ public class DcCardObjectListElement extends DcObjectListElement {
       this.fldPicture = DcObjectListComponents.getPictureField();
       this.fldTitle = DcObjectListComponents.getTextPane();
       
-    addPicture(getPictures());
+      addPicture(getPictures());
       
       fldTitle.setText(getDescription());
       fldTitle.setPreferredSize(dimTxt);

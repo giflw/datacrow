@@ -97,7 +97,11 @@ public class DcMinimalisticItemForm extends ItemForm {
             if (parent != null)
                 dco.addRequest(new RefreshSimpleViewRequest(parent));
             
-            dco.delete();
+            try {
+                dco.delete(true);
+            } catch (ValidationException e) {
+                DcSwingUtilities.displayWarningMessage(e.getMessage());
+            }
         }
     }
 }

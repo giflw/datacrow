@@ -85,7 +85,10 @@ public class ChildItemForm extends ItemForm {
 
             dco.addRequest(new CloseWindowRequest(this));
             dco.addRequest(new RefreshChildView(childForm));
-            dco.delete();
+            
+            try {
+                dco.delete(false);
+            } catch (ValidationException e) {}
         }
     }
 }

@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.views.View;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.StatusUpdateRequest;
@@ -77,7 +78,11 @@ public class DeleteTask extends DataTask {
                         dco.setEndOfBatch(false);
                     }
                     
-                    dco.delete(); 
+                    try {
+                        dco.delete(true);
+                    } catch (ValidationException e) {
+                        DcSwingUtilities.displayWarningMessage(e.getMessage());
+                    }
                     
                     try {
                         sleep(300);

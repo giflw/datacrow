@@ -59,6 +59,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
@@ -357,7 +358,11 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                             dco.setEndOfBatch(false);
                         }
 
-                        dco.delete(); 
+                        try {
+                            dco.delete(true);
+                        } catch (ValidationException e) {
+                            DcSwingUtilities.displayWarningMessage(e.getMessage());
+                        }
                         
                         try {
                             sleep(300);

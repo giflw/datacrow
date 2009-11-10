@@ -563,7 +563,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Reloads the item directly from the database (!).
      */
     public void reload() {
-        unloadImages();
+        // do not unload: dangerous because of the newly added destroy or release method 
+        // unloadImages();
         
         String query = "SELECT * FROM " + getTableName() + " WHERE ID = " + getID();
         Collection<DcObject> objects = DatabaseManager.executeQuery(query, Query._SELECT);
@@ -660,21 +661,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 Picture picture = (Picture) getValue(field.getIndex());
                 if (picture != null)
                     picture.unload();
-            }
-        }
-    }
-    
-    /**
-     * Resets the pictures. All pictures are unloaded and set to null. 
-     */
-    private void unloadImages() {
-        for (DcField field : getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) getValue(field.getIndex());
-                if (picture != null)
-                    picture.release();
-                
-                setValueLowLevel(field.getIndex(), null);
             }
         }
     }
@@ -1021,6 +1007,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             beforeSave();
             setValue(_SYS_CREATED, getCurrentDate());
             
+            setIDs();
+            
             if (queued) {
             	if (synchronizeWithDM)
             		addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, this));
@@ -1092,11 +1080,21 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     /**
      * Permanently deletes the item.
      */
-    public void delete() {
+    public void delete(boolean validate) throws ValidationException {
+        
+        if (validate)
+            beforeDelete();
+        
     	if (synchronizeWithDM)
     		addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._DELETE, this));
     	
         WorkFlow.delete(this);
+    }
+    
+    protected void beforeDelete() throws ValidationException {
+        Collection<DcObject> items = DataManager.getReferencingItems(this);
+        if (items.size() > 0) 
+            throw new ValidationException(DcResources.getText("msgCannotDeleteDueToReferences", items.toString()));
     }
 
     /**
@@ -1250,6 +1248,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param allowDeletes Allows existing values to be cleared.
      * @param dco Source item.
      */
+    @SuppressWarnings("unchecked")
     public void copy(DcObject dco, boolean overwrite, boolean allowDeletes) {
         int[] fields = dco.getFieldIndices();
         for (int i = 0; i < fields.length; i++) {
@@ -1288,6 +1287,13 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                     newPic.isUpdated(curPic.isUpdated());
                     
                     setValue(field, newPic);
+            	} else if (o != null && getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+            	    Collection<DcMapping> newMappings = new ArrayList<DcMapping>();
+            	    
+            	    for (DcObject mapping : (Collection<DcObject>) o)
+            	        newMappings.add((DcMapping) mapping.clone());
+            	    
+            	    setValue(field, newMappings);
                 } else {
                     setValue(field, o);    
                 }

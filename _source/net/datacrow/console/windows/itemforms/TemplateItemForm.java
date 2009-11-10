@@ -84,7 +84,9 @@ public class TemplateItemForm extends ItemForm {
 
             dco.addRequest(new CloseWindowRequest(this));
             dco.addRequest(new RefreshSimpleViewRequest(parent));
-            dco.delete();
+            try {
+                dco.delete(false);
+            } catch (ValidationException e) {}
         }
     }
 }

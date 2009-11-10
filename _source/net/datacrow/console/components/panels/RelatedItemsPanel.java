@@ -29,8 +29,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,13 +41,7 @@ import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemForm;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.data.Operator;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.comparators.DcObjectComparator;
@@ -94,33 +86,7 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
     
     public void loadItems() {
         list.clear();
-        
-        List<DcObject> items = new ArrayList<DcObject>();
-        for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
-            if ( module.getIndex() != dco.getModule().getIndex() && 
-                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
-            	
-                for (DcField field : module.getFields()) {
-                    if (field.getReferenceIdx() == dco.getModule().getIndex()) {
-                        DataFilter df = new DataFilter(module.getIndex());
-                        
-                        if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
-                            Collection<DcObject> c = new ArrayList<DcObject>();
-                            c.add(dco);
-                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));
-                        } else {
-                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, dco));
-                        }
-                        
-                    	for (DcObject dco : DataManager.get(module.getIndex(), df)) {
-                    		if (!items.contains(dco))
-                    			items.add(dco);
-                    	}
-                    }
-                }
-            }
-        }
-
+        List<DcObject> items = DataManager.getReferencingItems(dco);
         Collections.sort(items, new DcObjectComparator(DcObject._SYS_DISPLAYVALUE));
         list.add(items);
     }

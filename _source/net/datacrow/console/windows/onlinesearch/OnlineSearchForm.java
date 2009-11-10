@@ -402,8 +402,12 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                         SwingUtilities.invokeLater(
                                 new Thread(new Runnable() { 
                                     public void run() {
-                                        for (DcObject o : selected)
-                                            getModule().getCurrentInsertView().add(o.clone());
+                                        for (DcObject o : selected) {
+                                            DcObject clone = o.clone();
+                                            clone.setValue(DcObject._ID, null);
+                                            clone.setIDs();
+                                            getModule().getCurrentInsertView().add(clone);
+                                        }
                                         
                                         DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
                                     }

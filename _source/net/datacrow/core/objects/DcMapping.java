@@ -125,4 +125,10 @@ public class DcMapping extends DcObject {
             
         return dco == null ? "" : dco.toString();
     }
+
+    @Override
+    public void copy(DcObject dco, boolean overwrite, boolean allowDeletes) {
+        super.copy(dco, overwrite, allowDeletes);
+        setReferencedObject(((DcMapping) dco).getReferencedObject());
+    }
 }
