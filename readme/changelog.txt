@@ -1,6 +1,9 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8  [Release on xx/11/2009] [testing: high] [target: production]
+Data Crow 3.8  [Release on 10/11/2009] [testing: moderate] [target: production]
 -----------------------------------------------------------------------------------------
+The 3.7 version contained errors which were not noticed while the 3.7 was in its
+beta stage. This release fixes 'all' of these issues. Note that this version has only be 
+tested moderately. 
 
 [New]
 - Metacritic game and movie online service. An excellent resource for game and movie
@@ -16,12 +19,19 @@ Data Crow 3.8  [Release on xx/11/2009] [testing: high] [target: production]
   also internally recycled.
 - The drive scanner and drive poller (part of the Drive Manager) can now be configured
   (from within the Drive Manager dialog) to run on startup. 
-- The category field of the software module has been changed to a multi reference field.
+- The category field of the software module has been changed to a multi-reference field.
+- Items can no longer be deleted when referenced by other items.
 
 [Fixed]
 - Reserved keywords could be used as module and field names causing all kinds of startup
   errors. Data Crow now actively checks whether the name is allowed.
-   
+- NullPointerExceptions when starting Data Crow and while working with items in 
+  the views.
+- Grouping pane looses its grouping.
+- Picture disappears when updating a newly added item. 
+- Strange images being written to HTML reports.
+- NullPointerException when creating a report.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.7  [Release on 07/11/2009] [testing: high] [target: production]

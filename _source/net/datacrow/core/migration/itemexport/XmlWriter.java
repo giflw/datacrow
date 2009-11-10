@@ -168,8 +168,6 @@ public class XmlWriter extends XmlBaseWriter {
         }
     }
     
-
-    
     private void ident(int x) throws IOException {
         String s = "";
         for (int i = 0; i < x; i++)

@@ -848,6 +848,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * The item is unusable after this operation (!).
      */
     public void release() {
+        
+        if (isDestroyed()) return;
 
         clearValues();
         setValueLowLevel(DcObject._ID, null);
