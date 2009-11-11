@@ -65,6 +65,8 @@ public class PanelBasicInfo extends ModuleWizardPanel {
     private DcShortTextField textObjectName;
     private DcShortTextField textObjectNamePlural;
     private DcCheckBox checkCanBeLended;
+    private DcCheckBox checkContainerManaged;
+    private DcCheckBox checkFileBacked;
     
     private boolean exists;
     
@@ -154,6 +156,8 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         module.setTableNameShort(nameNormalized);
         module.setLabel(name);
         module.setCanBeLend(checkCanBeLended.isSelected());
+        module.setContainerManaged(checkContainerManaged.isSelected());
+        module.setFileBacked(checkFileBacked.isSelected());
         module.setHasInsertView(true);
         module.setHasSearchView(true);
 
@@ -197,7 +201,30 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         textObjectNamePlural = null;
         checkCanBeLended = null;
     }    
-    
+
+    @Override
+    public void onActivation() {
+        if (getModule() != null && getModule().getModuleClass() != null) {
+            if (getModule().getModuleClass().equals(DcPropertyModule.class)) {
+                checkCanBeLended.setSelected(false);
+                checkCanBeLended.setVisible(false);
+                checkContainerManaged.setSelected(false);
+                checkContainerManaged.setVisible(false);
+                checkFileBacked.setSelected(false);
+                checkFileBacked.setVisible(false);
+            } else {
+                checkCanBeLended.setVisible(true);
+                checkContainerManaged.setVisible(true);
+                checkFileBacked.setVisible(true);
+            }
+        }
+        
+        revalidate();
+        repaint();
+        
+        super.onActivation();
+    }
+
     private void build() {
         // info panel
         setLayout(Layout.getGBL());
@@ -210,6 +237,8 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         textName = ComponentFactory.getShortTextField(25);
         textObjectName = ComponentFactory.getShortTextField(25);
         checkCanBeLended = ComponentFactory.getCheckBox(DcResources.getText("lblCanBeLended"));
+        checkContainerManaged = ComponentFactory.getCheckBox(DcResources.getText("lblContainerManaged"));
+        checkFileBacked = ComponentFactory.getCheckBox(DcResources.getText("lblFileBacked"));
         textObjectNamePlural = ComponentFactory.getShortTextField(25);
         
         if (!exists) {
@@ -237,25 +266,29 @@ public class PanelBasicInfo extends ModuleWizardPanel {
                     Layout.getGBC(1, 3, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
+            add(checkContainerManaged, 
+                    Layout.getGBC(1, 4, 2, 1, 1.0, 1.0
+                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets( 5, 5, 5, 5), 0, 0));
+            add(checkFileBacked, 
+                    Layout.getGBC(1, 5, 2, 1, 1.0, 1.0
+                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets( 5, 5, 5, 5), 0, 0));
         }
         
         add(checkCanBeLended, 
-                Layout.getGBC(1, 4, 1, 1, 1.0, 1.0
+                Layout.getGBC(1, 6, 2, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets( 5, 5, 5, 5), 0, 0));
-        
-        
         add(ComponentFactory.getLabel(DcResources.getText("lblDescription")), 
-                Layout.getGBC(0, 5, 1, 1, 1.0, 1.0
+                Layout.getGBC(0, 7, 1, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets( 5, 5, 5, 5), 0, 0));  
         add(scollDesc,        
-                Layout.getGBC(1, 5, 1, 1, 2.0, 2.0
+                Layout.getGBC(1, 7, 1, 1, 2.0, 2.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets( 5, 5, 5, 5), 0, 0));  
 
-        
-        
         pic16 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon16.png"));
         pic32 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon32.png"));
         add(ComponentFactory.getLabel(DcResources.getText("lblIcon16")), 

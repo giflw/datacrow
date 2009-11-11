@@ -1440,7 +1440,8 @@ public class DcModule implements Comparable<DcModule> {
     }
 
     /**
-     * Retrieves the index of the field on which is sorted by default.  
+     * Retrieves the index of the field on which is sorted by default.
+     * Return 1 if this field exists or else the defined default index.
      */
     public int getDefaultSortFieldIdx() {
         return getField(1) != null ? 1 : defaultSortFieldIdx;

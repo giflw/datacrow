@@ -67,7 +67,8 @@ import org.apache.log4j.Logger;
 /**
  * This class is what it is all about. Each DcObject represents an item 
  * within Data Crow. DcObjects are very generic by nature. There are no direct
- * getters and setters for their values. Instead, values are referenced by indices.
+ * getters and setters for their values. Instead the values are stored in a Map object
+ * and the values are retrieved by using the field indices. 
  * <br>
  * It's recommended before starting new development of plugins to create so called
  * helper classes for your new module. Examples of helper classes are {@link Software}
