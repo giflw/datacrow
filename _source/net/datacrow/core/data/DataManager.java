@@ -358,10 +358,8 @@ public class DataManager {
                     ref.setValue(DcAssociate._A_NAME, name);
                     onlinesearch = ref.getModule().deliversOnlineService() &&
                                    dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchSubItems);  
-                } else if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
-                    ref.setValue(DcProperty._A_NAME, name);
                 } else {
-                    ref.setValue(ref.getDisplayFieldIdx(), name);
+                    ref.setValue(ref.getSystemDisplayFieldIdx(), name);
                 }
                 
                 if (onlinesearch) {
@@ -592,7 +590,11 @@ public class DataManager {
                 DcModule module = referencingMod instanceof MappingModule ?
                                     DcModules.get(((MappingModule) referencingMod).getParentModIdx()) :
                                     referencingMod;
+                                    
+                if (module == mainModule) continue;
+ 
                 for (DcField field : module.getFields()) {
+                    
                     if (field.getReferenceIdx() == dco.getModule().getIndex()) {
                         if (referencingMod instanceof MappingModule) {
                             DataFilter df = new DataFilter(module.getIndex());
