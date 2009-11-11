@@ -4,6 +4,7 @@ Data Crow 3.8.1  [Release on xx/11/2009] [testing: moderate] [target: production
 
 [Fixed]
 - Categories and such could still be deleted even when used by other items.
+- French translation was corrupted (sorry Skorpionnan)!
 
 
 -----------------------------------------------------------------------------------------

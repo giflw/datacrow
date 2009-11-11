@@ -905,6 +905,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         Object value = null;
         if (isDestroyed()) {
             logger.warn("System tried to retrieve a value while the object was already destroyed");
+        } else if (getField(index) == null) {
+            logger.warn("Field with index " + index + " does not exist for module " + getModule());
         } else {
         	// recalculate loan information
         	if (getModule().canBeLend() && index != DcObject._SYS_AVAILABLE) {
