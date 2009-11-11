@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.1  [Release on xx/11/2009] [testing: moderate] [target: production]
+Data Crow 3.8.1  [Release on xx/11/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -7,6 +7,14 @@ Data Crow 3.8.1  [Release on xx/11/2009] [testing: moderate] [target: production
 - French translation was corrupted (sorry Skorpionnan)!
 - Errors when trying to delete an item (Date cannot be cast to collection of DcObject). 
 
+[Changed]
+- Added the file backed and the container managed properties to the module wizard.
+  These option were already available but only by editing the module XML manually.
+  The file backed property adds the file size, file hash, hash type and file name field
+  to the module. The container managed property adds a container field to the module
+  and allows the items belonging to this module to be displayed within the container
+  module. 
+    
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8  [Release on 10/11/2009] [testing: moderate] [target: production]
