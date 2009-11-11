@@ -87,11 +87,7 @@ public class DcMinimalisticItemForm extends ItemForm {
     @Override
     protected void deleteItem() {
         if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-            String id = dco.getID();
-            dco.clearValues();
-            dco.setValue(DcObject._ID, id);
             dco.setSilent(true);
-
             dco.addRequest(new CloseWindowRequest(this));
             
             if (parent != null)

@@ -1188,8 +1188,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             
             if (children != null) {
                 for (DcObject child : children) {
-                    String parentID = child.getDisplayString(child.getParentReferenceFieldIndex());
-                    if (!id.equals(parentID)) {
+                    if (child.hasPrimaryKey()) {
+                        child.setValue(DcObject._ID, null);
                         child.setIDs();
                         child.setValue(child.getParentReferenceFieldIndex(), id);
                     }
@@ -1372,11 +1372,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         dco.markAsUnchanged();
         
         if (children != null) {
-            for (DcObject child : children) {
-                DcObject childCopy = child.getModule().getItem();
-                childCopy.copy(child, true, true);
-                dco.addChild(child);
-            }
+            for (DcObject child : children)
+                dco.addChild(child.clone());
         }
         
         int[] indices = getFieldIndices();
