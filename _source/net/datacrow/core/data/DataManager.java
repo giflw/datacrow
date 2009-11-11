@@ -84,13 +84,13 @@ import org.apache.log4j.Logger;
 /**
  * This is the persistence layer of Data Crow. All items are cached and stored in several
  * data structures for quick retrieval. Large data items such as images are only loaded
- * when needed and are not cached here. Only the reference to the image is stored. 
- * 
+ * when needed and are not cached here  (only the reference to the image is stored). 
+ * <br>
  * Data present represents the HSQL database information. Referential integrity is forced
  * by the database and further guaranteed by the Query class.
- * 
+ * <br>
  * NOTE: There is no 'smart caching' mechanism implemented as the data sets stored in 
- *       Data Crow are relatively small.
+ *       Data Crow are, relatively, small.
  *       
  * @author Robert Jan van der Waals        
  */ 

@@ -125,8 +125,8 @@ public abstract class ItemImporter extends ItemMigrater {
         
         try {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                
                 field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+
                 DataManager.createReference(dco, field.getIndex(), value);
                 
             } else if (field.getFieldType() == ComponentFactory._TIMEFIELD) { 
