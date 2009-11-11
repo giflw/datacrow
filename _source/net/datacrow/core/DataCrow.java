@@ -331,7 +331,7 @@ public class DataCrow {
 
             DatabaseManager.initialize();
             
-            if (nocache)
+            if (nocache || getVersion().isNewer(DatabaseManager.getOriginalVersion()))
                 DataManager.setUseCache(false);
             
             // Start the UI
