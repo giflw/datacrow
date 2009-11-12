@@ -65,16 +65,16 @@ Features:
 2.0 Requirements
 
 Data Crow was tested on:
-Windows XP, Windows 98 and Ubuntu 7.10.
+Windows XP, Windows 98 and Ubuntu (latest version at the moment of testing).
 Systems used: P4 2.4 Ghz, Core 2 Duo 2.2ghz
 
 Minimum requirement: 
 An 800 Mhz system is perfectly capable of running Data Crow.
-Data Crow needs, when using larger databases, at least 256 MB.
-(a database of 10,000 records, with pictures, is considered large).
+Data Crow needs, for large collections, at least 256 MB.
+(a collection of 10,000 items or more is considered large).
 
 Data Crow needs Java:
-  * JRE 1.6 or higher from Sun (http://java.sun.com/)
+  * JRE 1.6 (or higher) from Sun (http://java.sun.com/)
 
 
 ----------------------------------------------------------------------------------------
@@ -123,10 +123,10 @@ Upgrade paths:
 5.0 Building the project
 
 In the main directory (\Project) a batch file can be found; build.bat. This
-batch file calls Ant (see http://jakarta.apache.org/) and uses the build.xml
+batch file calls Apache Ant (see http://jakarta.apache.org/) and uses the build.xml
 file. Packages which have been build can be found in the "lib" Directory.
 
-Of course you can also just call ant within the main directory.
+Of course you can also just call Ant within the main directory.
 
 
 ----------------------------------------------------------------------------------------
@@ -171,7 +171,15 @@ Additional parameters:
      Loads the default Data Crow settings. Disgards all user settings.
      
     -datadir:<path>
-     Specifies an alternative location for the data folder. Spaces need to be substituted by %20.
+     Specifies an alternative location for the data folder. Spaces need to be substituted 
+     by %20.
+
+   
+Fixing installation / upgrade issues:
+
+When experiencing problems it can be useful to start Data Crow with both the -clearsettings 
+and the -nocache parameters: java -Xmx256m -jar datacrow.jar -nocache - clearsettings
+Note that all your settings will be disgarded when you start Data Crow with these parameters!
 
 
 ----------------------------------------------------------------------------------------
@@ -185,8 +193,6 @@ This application would not have succeeded (or even existed) without the help of:
   I want to thank Thomas Mueller for providing this application with an easy
   to use, powerful but small and platform independent database.
   http://hsqldb.sourceforge.net/
-* Med's Movie Manager allows parsing of various movie file formats.
-  http://sourceforge.net/projects/xmm
 * http://www.freedb.org for allowing me to retrieve data from their web servers.
 * http://musicbrainz.org for allowing me to retrieve Music Albums.
 * Amazon.com for allowing me to retrieve data from their web servers.

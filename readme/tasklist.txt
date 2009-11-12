@@ -21,7 +21,7 @@
 [X] Overall performance improvements.
 [X] Overall bug fixing.
 [X] [2857434] Better error handling for systems with low resources.
-[ ] Startup errors? Adopt old startup dialogs? > test on Ubuntu.
+[X] Startup errors? Adopt old startup dialogs? > test on Ubuntu.
 
 Framework changes:
 [X] Add module type indicator to each module to avoid having to use 'instanceof'.
