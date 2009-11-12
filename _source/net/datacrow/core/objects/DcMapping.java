@@ -27,6 +27,8 @@ package net.datacrow.core.objects;
 
 import javax.swing.ImageIcon;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.core.data.DataManager;
 
 /**
@@ -36,6 +38,8 @@ import net.datacrow.core.data.DataManager;
  * @author Robert Jan van der Waals
  */
 public class DcMapping extends DcObject {
+    
+    private static Logger logger = Logger.getLogger(DcMapping.class.getName());
     
     private static final long serialVersionUID = 1314886460279316879L;
     
@@ -121,7 +125,9 @@ public class DcMapping extends DcObject {
         
         try {
             dco = getReferencedObject();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            logger.debug(e, e);
+        }
             
         return dco == null ? "" : dco.toString();
     }

@@ -978,8 +978,8 @@ public class DcModule implements Comparable<DcModule> {
      */
     public boolean canBeLend() {
         return canBeLended &&  
-              (DcModules.get(DcModules._CONTACTPERSON) == null || 
-               DcModules.get(DcModules._CONTACTPERSON).isEnabled());
+               DcModules.get(DcModules._CONTACTPERSON) != null && 
+               DcModules.get(DcModules._CONTACTPERSON).isEnabled();
     }
 
     /**
@@ -1233,7 +1233,9 @@ public class DcModule implements Comparable<DcModule> {
                 addField(getField(DcObject._SYS_FILEHASHTYPE));
             }
             
-            if (canBeLend()) {
+            // do not check whether the contact person module is enabled.
+            // just add the fields if the settings allow for this
+            if (canBeLended) {
                 addField(getField(DcObject._SYS_AVAILABLE));
                 addField(getField(DcObject._SYS_LENDBY));
                 addField(getField(DcObject._SYS_LOANDURATION));
