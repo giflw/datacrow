@@ -329,13 +329,14 @@ public class Query {
             }
         }
 
-        if (dco.getModule().getIndex() != DcModules._PICTURE) {
-            String sql = "UPDATE " + dco.getTableName() + " SET " + sbValues + "\r\n WHERE ID = " + dco.getID();
+        String s = sbValues.toString();
+        if (dco.getModule().getIndex() != DcModules._PICTURE && !Utilities.isEmpty(values)) {
+            String sql = "UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE ID = " + dco.getID();
             PreparedStatement ps = getPreparedStatement(sql);
             setValues(ps, values);
             queries.add(ps);
-        } else {
-            String sql = "UPDATE " + dco.getTableName() + " SET " + sbValues + "\r\n WHERE " +
+        } else if (!Utilities.isEmpty(values)) {
+            String sql = "UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE " +
                          dco.getDatabaseFieldName(Picture._A_OBJECTID) + " = " + dco.getValue(Picture._A_OBJECTID) + " AND " +
                          dco.getDatabaseFieldName(Picture._B_FIELD) + " = ?";
             

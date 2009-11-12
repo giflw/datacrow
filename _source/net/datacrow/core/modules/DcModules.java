@@ -239,7 +239,7 @@ public class DcModules {
      */
     public static int getAvailableIdx(XmlModule module) {
         int add = module.getModuleClass().equals(DcPropertyModule.class) ? 1000 : 1;
-        int index = module.getModuleClass().equals(DcPropertyModule.class) ? 20000 : 1;
+        int index = module.getModuleClass().equals(DcPropertyModule.class) ? 10000000 : 1;
         while (modules.containsKey(index) || propertyBaseModules.containsKey(index))
             index += add;
         
