@@ -129,10 +129,6 @@ public class MappingModule extends DcModule {
                              false, true, false, false, false,
                              50, ComponentFactory._NUMBERFIELD, referencedMod.getIndex(), DcRepository.ValueTypes._BIGINTEGER,
                              "ReferencedId"));
-        addField(new DcField(DcMapping._C_DISPLAY_STRING, getIndex(), "Display String",
-                             true, true, true, false, false,
-                             50, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-                             "DisplayString"));
     }
     
     @Override

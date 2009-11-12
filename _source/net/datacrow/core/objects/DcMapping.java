@@ -45,7 +45,6 @@ public class DcMapping extends DcObject {
     
     public static final int _A_PARENT_ID = 1;
     public static final int _B_REFERENCED_ID = 2;
-    public static final int _C_DISPLAY_STRING = 3;
     
     private DcObject referencedObj;
     
@@ -87,8 +86,8 @@ public class DcMapping extends DcObject {
      * Retrieves the referenced object.
      */
     public DcObject getReferencedObject() {
-        return referencedObj == null ? 
-               DataManager.getObject(getReferencedModuleIdx(), getReferencedId()) : referencedObj;
+        referencedObj = referencedObj == null ? DataManager.getObject(getReferencedModuleIdx(), getReferencedId()) : referencedObj;
+        return referencedObj;
     }
     
     /**
