@@ -30,6 +30,7 @@ import javax.swing.ImageIcon;
 import org.apache.log4j.Logger;
 
 import net.datacrow.core.data.DataManager;
+import net.datacrow.util.Utilities;
 
 /**
  * A mapping represents a many to many relationship.
@@ -117,13 +118,15 @@ public class DcMapping extends DcObject {
     public String getReferencedId() {
         String id = getValueDef(_B_REFERENCED_ID).getValueAsString();
         
-        try {
-            Long.parseLong(id);
-        } catch (Exception e) {
-            logger.warn("Invalid ID for reference in mapping to item " + referencedObj + ", module " + getModule(), e);
-            id = referencedObj.getID();
-            logger.warn("Invalid ID corrected to " + id);
-            setValue(_B_REFERENCED_ID, id);
+        if (!Utilities.isEmpty(id)) {
+            try {
+                Long.parseLong(id);
+            } catch (Exception e) {
+                logger.warn("Invalid ID for reference in mapping to item " + referencedObj + ", module " + getModule(), e);
+                id = referencedObj.getID();
+                logger.warn("Invalid ID corrected to " + id);
+                setValue(_B_REFERENCED_ID, id);
+            }
         }
         
         return id;
