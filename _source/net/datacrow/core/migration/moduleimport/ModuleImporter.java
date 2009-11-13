@@ -187,7 +187,9 @@ public class ModuleImporter {
 	            
 	            try {
 	                // fake registration to make sure the index is known
-	                DcModules.register(new DcModule(xm));
+	                DcModule module = new DcModule(xm);
+	                module.isEnabled(false);
+	                DcModules.register(module);
                     mj.save();
                 } catch (ModuleJarException e) {
                     logger.error(e, e);
