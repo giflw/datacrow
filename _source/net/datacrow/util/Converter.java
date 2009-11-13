@@ -34,15 +34,12 @@ public class Converter {
         tag = tag.replaceAll("[()]", "");
         tag = tag.replaceAll("[?]", "");
         tag = tag.toLowerCase();
+        tag = Character.isDigit(tag.charAt(0)) ? "fld-" + tag : tag; 
         return tag;        
     }
     
     public static String databaseValueConverter(String s) {
         String converted = s;
-//        try {
-//            converted = new String(s.getBytes(), "UTF-8");
-//        } catch (Exception e) {
-//        }
         converted = converted.replaceAll("\u0000", " ");
         converted = converted.replaceAll(">", " ");
         return converted;
