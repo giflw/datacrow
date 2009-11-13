@@ -439,7 +439,9 @@ public class Query {
                         existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
 
                         if (existing == null) {
+                            reference.setValidate(false);
                             reference.saveNew(false);
+                            reference.setValidate(true);
                         } else {
                             mapping.setReferencedObject(existing);
                             mapping.setValue(DcMapping._B_REFERENCED_ID, existing.getID());
