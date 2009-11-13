@@ -147,6 +147,7 @@ public class DcModule implements Comparable<DcModule> {
     private final String objectName;
     private final String objectNamePlural;
     
+    private boolean isValid = true;
     private boolean isNew = false;
     private boolean isDefaultDataLoaded = false;
     
@@ -368,12 +369,39 @@ public class DcModule implements Comparable<DcModule> {
         return new int[] {MasterView._LIST_VIEW, MasterView._TABLE_VIEW};
     }
     
+    /**
+     * Returns whether this module is new for this installation.
+     * New means that it was registered on startup.
+     */
     public boolean isNew() {
         return isNew;
     }
-
+    
+    /**
+     * Indicate this module as new for this installation
+     * @param isNew
+     */
     public void setNew(boolean isNew) {
         this.isNew = isNew;
+    }
+
+    /**
+     * Indicate if this module is valid (fully functional).
+     * Some processes register a new module temporarily. Since in that case the table has not been
+     * created yet or not all referenced exist the module is in an invalid state.
+     */
+    public boolean isValid() {
+        return isValid;
+    }
+
+    /**
+     * Indicate if this module is valid (fully functional).
+     * Some processes register a new module temporarily. Since in that case the table has not been
+     * created yet or not all referenced exist the module is in an invalid state.
+     * @param isValid
+     */
+    public void setValid(boolean isValid) {
+        this.isValid = isValid;
     }
 
     public boolean isDefaultDataLoaded() {

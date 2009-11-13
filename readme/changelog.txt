@@ -11,6 +11,10 @@ Data Crow 3.8.1  [Release on xx/11/2009] [testing: high] [target: production]
 - Only 10 custom property modules could be created. In the new setup you can have an 
   unlimited amount of custom property modules. 
 - Cache is now always cleared when upgrading from an older version.
+- Possible error during module import; importer tries to update a view which is created\
+  only after restarting Data Crow.
+- Item importer (XML) failed when a field name (XML tag) started with a numeric value.
+  These fields are now appended by 'fld-' to create a valid XML tag. 
 
 [Changed]
 - Added the file backed and the container managed properties to the module wizard.

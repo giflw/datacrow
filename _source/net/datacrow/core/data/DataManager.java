@@ -1539,7 +1539,7 @@ public class DataManager {
                 
                 if (dco.getModule().hasDependingModules()) {
                     for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
-                        if (module.isEnabled() && module.getSearchView() != null) {
+                        if (module.isValid() && module.isEnabled() && module.getSearchView() != null) {
                             module.getSearchView().refreshQuickView();
                             if (module.getSearchView().getGroupingPane() != null) {
                                 module.getSearchView().getGroupingPane().revalidate();
