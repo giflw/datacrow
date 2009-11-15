@@ -460,15 +460,19 @@ public class DataCrow {
         
         showSplashMsg(DcResources.getText("msgCreatingDefaultData"));
         
-        for (DcModule module : DcModules.getAllModules()) {
-            
-            if (module.isTopModule()) {
-
-                if (module.isParentModule())
-                    loadDefaultData(module.getChild());
-
-                loadDefaultData(module);
+        try {
+            for (DcModule module : DcModules.getAllModules()) {
+                
+                if (module.isTopModule()) {
+    
+                    if (module.isParentModule())
+                        loadDefaultData(module.getChild());
+    
+                    loadDefaultData(module);
+                }
             }
+        } catch (Exception e) {
+            logger.error(e, e);
         }
     }
     
