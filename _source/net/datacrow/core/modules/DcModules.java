@@ -110,6 +110,7 @@ public class DcModules {
     public static final int _EXTERNALREFERENCE = 1400000;
     public static final int _MOVIE_COLOR = 1500000;
     public static final int _MOVIE_ASPECT_RATIO = 1600000;
+    public static final int _LICENSE = 1700000;
     
     public static final int _MAPPING = 50000;
 
@@ -217,6 +218,12 @@ public class DcModules {
         bindingModule.setIcon16(IconLibrary._icoBinding16);
         bindingModule.setIcon32(IconLibrary._icoBinding32);
         propertyBaseModules.put(DcModules._BINDING, bindingModule);
+        
+        DcPropertyModule licenseModule = new DcPropertyModule(DcModules._LICENSE, "License", "license", "license", "License", "Licenses");
+        licenseModule.setServingMultipleModules(true);
+        licenseModule.setIcon16(IconLibrary._icoLicense16);
+        licenseModule.setIcon32(IconLibrary._icoLicense32);
+        propertyBaseModules.put(DcModules._LICENSE, licenseModule);
         
         DcPropertyModule editionModule = new DcPropertyModule(DcModules._EDITIONTYPE, "Edition Type", "editiontype", "edty", "Edition type", "Edition types");
         editionModule.setServingMultipleModules(true);

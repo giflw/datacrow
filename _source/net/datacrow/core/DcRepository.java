@@ -224,6 +224,7 @@ public abstract class DcRepository {
         public static final String _METACRITICS = "METACRITICS";
         public static final String _FREEBOOKSPOT = "FBS";
         public static final String _SOURCEFORGE = "SF";
+        public static final String _SOFTPEDIA = "SP";
         
         static {
             types.add(_ASIN);

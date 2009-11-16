@@ -91,12 +91,14 @@ public class StringUtils {
                 break;
         }
 
-        for (int i = chars.length - 1; i >= 0; i--) {
-            char c = chars[i];
-            if (c == '\n' || c == '\r' || c == '\t' || c == ' ')
-                s = s.substring(0, s.length() - 1);
-            else 
-                break;
+        if (s.length() > 0) {
+            for (int i = chars.length - 1; i >= 0; i--) {
+                char c = chars[i];
+                if (c == '\n' || c == '\r' || c == '\t' || c == ' ')
+                    s = s.substring(0, s.length() - 1);
+                else 
+                    break;
+            }
         }
 
         return s;

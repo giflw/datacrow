@@ -43,6 +43,8 @@ public abstract class IconLibrary {
     public static final ImageIcon _icoMain = new ImageIcon(picPath + "datacrow64.png");
     public static final ImageIcon _icoIcon16 = new ImageIcon(picPath + "icon16.png");
     public static final ImageIcon _icoIcon32 = new ImageIcon(picPath + "icon32.png");
+    public static final ImageIcon _icoLicense16 = new ImageIcon(picPath + "license16.png");
+    public static final ImageIcon _icoLicense32 = new ImageIcon(picPath + "license32.png");
     public static final ImageIcon _icoChart = new ImageIcon(picPath + "chart.png");
     public static final ImageIcon _icoPersons = new ImageIcon(picPath + "persons.png");
     public static final ImageIcon _icoModuleTypeProperty16 = new ImageIcon(picPath + "property16.png");

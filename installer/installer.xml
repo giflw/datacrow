@@ -56,7 +56,6 @@
             <file src="webserver.sh" targetdir="$INSTALL_PATH"/>
             <file src="readme" targetdir="$INSTALL_PATH"/>
             <file src="upgrade" targetdir="$INSTALL_PATH"/>
-            <file src="lib/amazon.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/PDFRenderer.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/hsqldb.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jacksum.jar" targetdir="$INSTALL_PATH/lib"/>
