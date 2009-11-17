@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.8.1
-Created on 15/11/2009
+Version 3.8.2
+Created on 17/11/2009
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -39,18 +39,19 @@ useful information.
 Features:
 
 * Skinnable UI.
-* Platform independent.
-* Completely portable.
 * Internal help system (F1).
 * Nice looking and easy to use UI.
-* Loan administration.
-* Optional web module (multiple users / remote interface).
-* Create your own modules or modify existing modules.
-* Advanced user configuration (access rights + field access).
+* You can customize almost anything; design your own item form, quick view, hide fields
+  and module which you are not using and create your own reports (XSLT scripts).  
+* Platform independent and completely portable (run from an USB stick).
+* Loan administration. Keep track of your loans.
+* Optional internal web server and web GUI.
+* Create your own modules and/or modify existing modules.
+* Advanced user configuration (access rights + module and field access).
 * Rename your files based on the information of Data Crow.
 * Highly customizable; add your own fields, alter existing modules or create a new
   one, rename any text within the application, set the fonts, ..
-* Reporting (PDF / HTML / Text / XML).
+* Reporting (PDF, HTML, Text and XML).
 * Registration of Software, Audio CDs and Music Files, Books, Movies and Images.
 * Search for items using online services such as Amazon.com (http://www.amazon.com), 
   Imdb (http://www.imdb.com), Musicbrainz (http://musicbrainz.org) and many others.

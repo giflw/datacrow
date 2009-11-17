@@ -1,13 +1,27 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.2  [Release on xx/11/2009] [testing: high] [target: production]
+Data Crow 3.8.2  [Release on 17/11/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+Maybe I am taking the 'release often' approach to its very limits.. here is yet 
+another minor release containing small fixes and an additional online service.
 
 [Fixed]
-- 
+- Genres for movies retrieved by IMDB were, sometimes, appended by " more". 
+- Sorting: sort settings overruled the sorting of a filter created in the filter dialog.
+  Now this filter dialog sorting is remembered. Changing the sort after applying a filter
+  overrules the sorting of the filter. 
+- Description was not retrieved for software from Sourceforge.
 
 [Changed]
-- Updated Italian translated thanks to Marco Artioli. 
+- Updated Italian translated. Thanks Marco Artioli! 
 - Added a new reference to the software module: License.
+
+[New]
+- Softpedia online service. Retrieves information on drivers and Linux, Mac, 
+  windows and game (related) titles. Together with the previous new online services 
+  (Sourceforge.net and FreeBookSpot) Data Crow now offers information on downloadable 
+  (free) content instead of solely using the online service to retrieve information on
+  commercial titles. You can expect more of these kind of services to be added in the
+  near future.
 
 
 -----------------------------------------------------------------------------------------
@@ -1760,25 +1774,25 @@ CHANGES SINCE LAST PRODUCTION VERSION (3.0):
 
 (*) View structures:
 
-	      Old view structure                    New view structure
-	 (complex and poor code re-use)     (clear structure, optimal code re-use)
-	 
-	            View                                 View
-	            /   \                           (IViewComponent*)
-	TableBaseView   ListBaseView                       |
-	 (DcTable*)     (DcObjectList*)              CachedChildView
-	   /    \           /    \
-	insert update    insert  update
-	 view   view      view    view
-	   |     
-	cached
-	childview
+          Old view structure                    New view structure
+     (complex and poor code re-use)     (clear structure, optimal code re-use)
+     
+                View                                 View
+                /   \                           (IViewComponent*)
+    TableBaseView   ListBaseView                       |
+     (DcTable*)     (DcObjectList*)              CachedChildView
+       /    \           /    \
+    insert update    insert  update
+     view   view      view    view
+       |     
+    cached
+    childview
   
   * A view uses a view component to actually display its items. In the old
-	situation a new view component type meant having to add at least 3 new classes
-	to talk to this component. In the new situation only the view component itself
-	has to be created, by implementing the IViewComponent interface. The, generic,
-	View class can talk to any component implementing the IViewComponent interface.
+    situation a new view component type meant having to add at least 3 new classes
+    to talk to this component. In the new situation only the view component itself
+    has to be created, by implementing the IViewComponent interface. The, generic,
+    View class can talk to any component implementing the IViewComponent interface.
 
 
 -----------------------------------------------------------------------------------------
@@ -1908,25 +1922,25 @@ Feature requests not yet implemented will be added to one of the next releases.
 
 (*) View structures:
 
-	    Old view structure                    New view structure
-	 (complex and poor code re-use)     (clear structure, optimal code re-use)
-	 
-	            View                              View
-	            /   \                        (IViewComponent*)
-	TableBaseView   ListBaseView                    |
-	 (DcTable*)     (DcObjectList*)           CachedChildView
-	   /    \           /    \
-	insert update    insert  update
-	 view   view      view    view
-	   |     
-	cached
-	childview
+        Old view structure                    New view structure
+     (complex and poor code re-use)     (clear structure, optimal code re-use)
+     
+                View                              View
+                /   \                        (IViewComponent*)
+    TableBaseView   ListBaseView                    |
+     (DcTable*)     (DcObjectList*)           CachedChildView
+       /    \           /    \
+    insert update    insert  update
+     view   view      view    view
+       |     
+    cached
+    childview
   
   * A view uses a view component to actually display its items. In the old
-	situation a new view component type meant having to add at least 3 new classes
-	to talk to this component. In the new situation only the view component itself
-	has to be created, by implementing the IViewComponent interface. The, generic,
-	View class can talk to any component implementing the IViewComponent interface.
+    situation a new view component type meant having to add at least 3 new classes
+    to talk to this component. In the new situation only the view component itself
+    has to be created, by implementing the IViewComponent interface. The, generic,
+    View class can talk to any component implementing the IViewComponent interface.
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.0.0 [Release on 02/11/2007] [testing: high] [target: production]

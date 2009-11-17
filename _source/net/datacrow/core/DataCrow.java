@@ -93,7 +93,7 @@ public class DataCrow {
     private static Logger logger = Logger.getLogger(DataCrow.class.getName());
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 8, 1, 0);
+    private static Version version = new Version(3, 8, 2, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -126,7 +126,7 @@ public class DataCrow {
         String password = null;
         String username = null;
 
-        // legacy stuff.. but it still works.
+        // legacy stuff: still works (!)
         installationDir = System.getenv("DATACROW_HOME");
         
         if (installationDir == null || installationDir.length() == 0)
@@ -224,6 +224,7 @@ public class DataCrow {
             initDbProperties();
             installLafs();
             
+            // TODO: remove after version 4.0
             try {
                 new File(moduleDir, "editiontype.jar").delete();
                 new File(moduleDir, "binding.jar").delete();
@@ -235,15 +236,6 @@ public class DataCrow {
             logger.info("Using data directory: " + dataDir);
             logger.info("Using images directory: " + imageDir);
             logger.info("Using cache directory: " + cacheDir);
-            
-            // upgrade purposes (version 3.4.3 and older)
-            if (new File(DataCrow.dataDir + "resources.properties").exists()) {
-                try {
-                    Utilities.rename(new File(DataCrow.dataDir + "resources.properties"), new File(DataCrow.resourcesDir + "Custom_resources.properties"));
-                } catch (Exception e) {
-                    logger.error(e, e);
-                }
-            }
             
             // load resources
             new DcResources();
@@ -269,7 +261,6 @@ public class DataCrow {
             Servers.getInstance();
     
             // Initialize the Component factory
-            showSplashMsg("Loading components");
             new ComponentFactory();
             
             Enumeration en = Logger.getRootLogger().getAllAppenders();

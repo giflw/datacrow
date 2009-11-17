@@ -48,6 +48,16 @@ import org.w3c.dom.Node;
 public class HtmlUtils {
     
     private static Logger logger = Logger.getLogger(HtmlUtils.class.getName());
+    private static final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private static DocumentBuilder builder;
+    
+    static {
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (Exception e) {
+            logger.fatal("Cannot get a document builder!", e);
+        }
+    }
 
     public static Document getDocument(URL url) throws Exception {
         return getDocument(url, "ISO-8859-1");
@@ -106,9 +116,6 @@ public class HtmlUtils {
     }   
     
     protected static Document getDocument(String html) throws Exception { 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        
         String s = html;
         ByteArrayInputStream in;
         if (s.contains("<html") || s.contains("<HTML")) {

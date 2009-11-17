@@ -38,6 +38,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.FieldSelectionPanel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.resources.DcResources;
@@ -82,7 +83,10 @@ public class SortingDialog extends DcDialog implements ActionListener {
             for (DcField field : fields)
                 order[counter++] = field.getDatabaseFieldName();
             
+            // Set the sort order in the settings and overrule the sorting of the currently
+            // applied filter.
             DcModules.get(module).setSetting(DcRepository.ModuleSettings.stSearchOrder, order);
+            DataFilters.getCurrent(module).setOrder(order);
         }
 
         DcModules.get(module).getSearchView().sort();

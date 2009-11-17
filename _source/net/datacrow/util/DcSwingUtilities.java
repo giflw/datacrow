@@ -134,8 +134,6 @@ public class DcSwingUtilities {
      * current running operation. This way of opening dialogs is ideal for the startup process
      * where there is no main window yet to use as the blocking source.
      *
-     * Special note: 
-     * 
      * @param dialog
      */
     public static void openDialogNativeModal(final IDialog dialog) {
@@ -156,7 +154,7 @@ public class DcSwingUtilities {
                     active.wait();
             }
         } catch (Exception ite) {
-            // can't depend on the logger
+            // can't depend on the logger; most likely the logger has not yet been initialized
             ite.printStackTrace();
         }
     }
@@ -165,6 +163,7 @@ public class DcSwingUtilities {
         Graphics2D g2d = (Graphics2D) g;
         
         try {
+            
             g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -183,7 +182,11 @@ public class DcSwingUtilities {
                 g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_VBGR);
                 
         } catch (Exception ignore) {
-        } catch (Error ignore) {}
+            logger.debug(ignore, ignore);
+        } catch (Error ignore) {
+            logger.debug(ignore, ignore);
+        }
+        
         return g;
     }
 }

@@ -100,7 +100,7 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
         try {
             this.items = items;
             
-            DataFilters.getDefaultDataFilter(DcModules.getCurrent().getIndex()).sort(items);
+            DataFilters.getCurrent(DcModules.getCurrent().getIndex()).sort(items);
 
             setHelpIndex("dc.reports");
     

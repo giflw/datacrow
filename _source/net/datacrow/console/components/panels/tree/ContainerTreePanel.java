@@ -191,7 +191,7 @@ public class ContainerTreePanel extends TreePanel {
                     objects.addAll(container.getChildren());
                 }
                 
-                DataFilter df = DataFilters.getDefaultDataFilter(DcModules._ITEM);
+                DataFilter df = DataFilters.getCurrent(DcModules._ITEM);
                 df.sort(objects);
                 updateView(objects);
             } else {
@@ -217,7 +217,7 @@ public class ContainerTreePanel extends TreePanel {
                         objects.addAll(container.getChildren());
                     }
                     
-                    DataFilter df = DataFilters.getDefaultDataFilter(DcModules._ITEM);
+                    DataFilter df = DataFilters.getCurrent(DcModules._ITEM);
                     df.sort(objects);
                     updateView(objects);
                 } else {

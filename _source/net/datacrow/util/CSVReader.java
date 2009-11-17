@@ -166,7 +166,7 @@ public class CSVReader {
     /**
      * Closes the underlying reader.
      */
-    public void close() throws IOException{
+    public void close() throws IOException {
     	br.close();
     }
 }

@@ -346,8 +346,6 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     public DcObjectListElement getDisplayElement(DcObject dco) {
         
-        // TODO: move to the module class itself!
-        
         DcObjectListElement element = null;
         DcModule module = dco.getModule();
         

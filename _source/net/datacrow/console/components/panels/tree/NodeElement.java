@@ -61,7 +61,7 @@ public class NodeElement {
     
     public List<DcObject> getSortedValues() {
         if (values != null && values.size() > 1) {
-            DataFilter df = DataFilters.getDefaultDataFilter(module);
+            DataFilter df = DataFilters.getCurrent(module);
             df.sort(values);
         }
         return values;
