@@ -151,7 +151,7 @@ public class ModuleImporter {
 		        XmlModule xm = mj.getModule();
 		        
 		        // module does not exist
-		        if (DcModules.get(xm.getName()) != null) continue;
+		        if (DcModules.get(xm.getName()) == null) continue;
 
 	            int oldIdx = xm.getIndex();
 	            int newIdx = DcModules.getAvailableIdx(xm);
