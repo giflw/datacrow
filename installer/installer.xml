@@ -4,7 +4,7 @@
 
     <info>
         <appname>Data Crow</appname>
-        <appversion>3.8.1</appversion>
+        <appversion>3.8.2</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
@@ -20,9 +20,9 @@
     
     <resources>
         <res id="HTMLLicencePanel.licence" src="readme/gpl.html"/>
-        <res id="HTMLInfoPanel.info" src="D:\development/projects/datacrow/installer/donate.html"/>
-        <res id="shortcutSpec.xml" src="D:/development/tools/izpack/shortcutSpec.xml"/>
-        <res id="Unix_shortcutSpec.xml" src="D:/development/tools/izpack/Unix_shortcutSpec.xml"/>
+        <res id="HTMLInfoPanel.info" src="installer/donate.html"/>
+        <res id="shortcutSpec.xml" src="installer/shortcutSpec.xml"/>
+        <res id="Unix_shortcutSpec.xml" src="installer/Unix_shortcutSpec.xml"/>
         <res src="installer/images/border.png" id="Installer.image.0"/>
         <res src="installer/images/border.png" id="Installer.image.1"/>
         <res src="installer/images/border.png" id="Installer.image.2"/>

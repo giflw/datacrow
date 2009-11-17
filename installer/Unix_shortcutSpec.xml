@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <programGroup defaultName="Data Crow" location="applications"/>
+
+  <shortcut
+     name="Data Crow"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="java"
+     commandLine="-jar &quot;$INSTALL_PATH/datacrow.jar&quot;"
+     workingDirectory=""
+     description="Data Crow"
+     iconFile="$INSTALL_PATH/icons/datacrow64.png"
+     iconIndex="0"
+     type="Application"
+     encoding="UTF-8"
+     terminal="true"
+     KdeSubstUID="false"
+     initialState="normal">   
+     <createForPack name="Core"/>     
+   </shortcut>
+
+   <shortcut
+     name="Uninstaller"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="java"
+     commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
+     iconFile="$INSTALL_PATH/icons/uninstall.png"
+     initialState="noShow"
+     iconIndex="0" 
+     workingDirectory=""
+     type="Application"
+     encoding="UTF-8"
+     description="Data Crow uninstaller">
+     <createForPack name="Core" />
+   </shortcut>   
+   
+</shortcuts>
