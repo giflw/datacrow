@@ -90,9 +90,12 @@ public class ContainerTreePanel extends TreePanel {
         
         Container container = (Container) dco;
         
-        if (!flatView && container.getParentContainer() != null)
-            parent = findNode(container.getParentContainer().toString(), getTopNode(), true);
-            
+        // Additional check to make sure that the correct parent node is being used.
+        if (!flatView && container.getParentContainer() != null) {
+            DefaultMutableTreeNode node = findNode(container.getParentContainer().toString(), getTopNode(), true);
+            parent = node == null ? parent : node;
+        }
+        
         NodeElement ne = new NodeElement(DcModules._CONTAINER, container.toString(), container.getIcon());
         ne.addValue(container);
         DefaultMutableTreeNode masterNode = new DefaultMutableTreeNode(ne);
@@ -104,17 +107,11 @@ public class ContainerTreePanel extends TreePanel {
                 childNode = findNode(child.toString(), masterNode, true);
                 
                 if (childNode == null) {
-                    NodeElement element = new NodeElement(DcModules._CONTAINER, child.toString(), child.getIcon());
-                    element.addValue(child);
-                    childNode = new DefaultMutableTreeNode(element);
-                    insertNode(childNode, masterNode);
+                    addElement(child, masterNode, level++);
                 } else {
                     NodeElement element = (NodeElement) childNode.getUserObject();
                     element.addValue(child);
                 }
-                
-                for (Container c : child.getChildContainers())
-                    addElement(c, childNode, level++);
             }
         }
     }

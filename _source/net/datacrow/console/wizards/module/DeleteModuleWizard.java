@@ -114,6 +114,8 @@ public class DeleteModuleWizard extends Wizard {
             for (DcField field : module.getFields()) {
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                     DcModule reference = DcModules.getReferencedModule(field);
+                    
+                    if (reference.getXmlModule() == null) continue;
 
                     if (reference.hasDependingModules() && DcModules.getReferencingModules(reference.getIndex()).size() == 1)
                         reference.getXmlModule().setHasDependingModules(false);

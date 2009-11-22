@@ -123,7 +123,7 @@ public class ModuleJar {
      * @return
      */
     public boolean delete() {
-        return new File(DataCrow.moduleDir + filename).delete();
+        return new File(DataCrow.moduleDir, filename).delete();
     }
     
     /**

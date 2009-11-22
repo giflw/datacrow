@@ -44,5 +44,5 @@ public class AudioTrack extends DcMediaObject {
     }
 
     @Override
-    public void checkIntegrity(boolean update)  {}
+    public void checkIntegrity()  {}
 }

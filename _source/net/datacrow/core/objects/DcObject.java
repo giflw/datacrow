@@ -1007,7 +1007,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         try {
             markAsChanged();
             applyEnhancers(false);
-            checkIntegrity(false);
+            checkIntegrity();
             
             beforeSave();
             setValue(_SYS_CREATED, getCurrentDate());
@@ -1058,7 +1058,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public void saveUpdate(boolean queued, boolean validate) throws ValidationException {
         try {
             applyEnhancers(true);
-            checkIntegrity(validate);
+            
+            if (validate)
+                checkIntegrity();
 
             beforeSave();
             setValue(_SYS_MODIFIED, getCurrentDate());
@@ -1142,12 +1144,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param update Indicates if the item is new or not.
      * @throws ValidationException
      */
-    public void checkIntegrity(boolean update) throws ValidationException {
+    public void checkIntegrity() throws ValidationException {
         if (DcSettings.getBoolean(DcRepository.Settings.stCheckRequiredFields))
-            validateRequiredFields(update);
+            validateRequiredFields();
 
         if (DcSettings.getBoolean(DcRepository.Settings.stCheckUniqueness))
-            isUnique(this, update);
+            isUnique();
     }
 
     /**
@@ -1156,8 +1158,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param update Indicates if the item is new or not.
      * @throws ValidationException
      */
-    public void isUnique(DcObject o, boolean update) throws ValidationException {
-        boolean bUnique = WorkFlow.checkUniqueness(o, update);
+    public void isUnique() throws ValidationException {
+        boolean bUnique = WorkFlow.checkUniqueness(this, !isNew());
         if (!bUnique && validate) {
             
             String fields = "";
@@ -1218,7 +1220,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
     
-    protected void validateRequiredFields(boolean update) throws ValidationException {
+    protected void validateRequiredFields() throws ValidationException {
         
         if (!validate) return;
         

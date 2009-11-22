@@ -79,8 +79,17 @@ public class Container extends DcObject {
     @Override
     protected void beforeSave() throws ValidationException {
         Container parent = getParentContainer();
-        if (parent != null && parent.getID().equals(getID())) {
+        String ID = getID();
+        
+        if (parent != null && parent.getID().equals(ID)) {
             throw new ValidationException(DcResources.getText("msgCannotSetItemAsParent"));
+        } else  {
+            while (parent != null) {
+                if (ID.equals(parent.getID()))
+                    throw new ValidationException(DcResources.getText("msgCannotSetItemAsParentLoop"));        
+
+                parent = parent.getParentContainer();
+            }
         }
         super.beforeSave();
     }

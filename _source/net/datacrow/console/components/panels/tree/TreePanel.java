@@ -320,7 +320,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         return path;
     }
     
-    protected DefaultMutableTreeNode findNode(Object key, DefaultMutableTreeNode parentNode, boolean deepSearch) {
+    /**
+     * Recursive search method for tree nodes.
+     * @param key
+     * @param parentNode
+     * @param recurse
+     */
+    protected DefaultMutableTreeNode findNode(Object key, DefaultMutableTreeNode parentNode, boolean recurse) {
         int count = parentNode != null ? parentNode.getChildCount() : 0;
         
         if (parentNode == null && key.equals(((NodeElement) getTopNode().getUserObject()).getKey()))
@@ -338,10 +344,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
                     result = node;
             }
             
-            if (result == null && deepSearch)
-                node = findNode(key, node, deepSearch);
+            if (result == null && recurse)
+                result = findNode(key, node, recurse);
             
-            if (result != null) return node;
+            if (result != null) return result;
         }
         return null;
     }  

@@ -69,10 +69,10 @@ public class User extends DcObject {
     }
     
     @Override
-    public void checkIntegrity(boolean update) throws ValidationException {
-    	super.checkIntegrity(update);
+    public void checkIntegrity() throws ValidationException {
+    	super.checkIntegrity();
     	
-    	if (update & isChanged(User._A_LOGINNAME)) {
+    	if (!isNew() & isChanged(User._A_LOGINNAME)) {
     		DcObject original = DataManager.getObject(DcModules._USER, getID());
     		setValue(User._A_LOGINNAME, original.getValue(User._A_LOGINNAME));
     		getValueDef(User._A_LOGINNAME).setChanged(false);

@@ -46,9 +46,9 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -124,15 +124,17 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
 	                
 	                if (!keepOnRunning) break;
 	                
-	                item.copy(dco, true, false);
+	                DcObject clone = item.clone();
+	                clone.markAsUnchanged();
+	                clone.copy(dco, true, false);
 	                
-	                try {
-	                    
-	                    if (item.isChanged())
-	                        item.saveUpdate(false, false);
-	                    
-                    } catch (ValidationException ve) {
-                        logger.error(ve, ve);
+                    if (item.isChanged()) {
+                        try {
+                            clone.saveUpdate(false, false);
+                        } catch (Exception e) {
+                            // warn the user of the event that occurred (for example an incorrect parent for a container)
+                            DcSwingUtilities.displayErrorMessage(e.getMessage());
+                        }
                     }
 	                
 	                updateProgressBar(count);

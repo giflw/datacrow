@@ -100,8 +100,8 @@ public class DcTemplate extends DcObject {
      } 
 
      @Override
-     public void checkIntegrity(boolean update) throws ValidationException {
-         validateRequiredFields(update);
-         isUnique(this, update);
+     public void checkIntegrity() throws ValidationException {
+         validateRequiredFields();
+         isUnique();
      }  
 }
