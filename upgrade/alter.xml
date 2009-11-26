@@ -72,7 +72,7 @@
         </fields>
     </module>        
     <module>
-        <module-jar>contactperson.jar</module-jar>
+        <module-jar>person.jar</module-jar>
         <module-index>56</module-index>
         <fields>
             <field>

@@ -11,9 +11,9 @@ Data Crow 3.8.3  [Release on xx/11/2009] [testing: high] [target: production]
   This is fine but no error is shown to the user.
 - NullpointerException when deleting a custom made module (rarely occurs).
 - Imdb.com online service was no longer working.
-  Cobra project: IMDB HTML was no longer valid for this library. The cobra.jar library
-  has been altered to correct this. 
-  The suppressed error is now written to the log.
+  Cobra project: Imdb.com HTML was no longer valid for this library. The cobra.jar 
+  library has been altered to correct this. 
+- Changes made to the contact person module were saved to the wrong module JAR file.
 
 
 -----------------------------------------------------------------------------------------

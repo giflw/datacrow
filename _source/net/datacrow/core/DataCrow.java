@@ -314,6 +314,8 @@ public class DataCrow {
                 System.exit(0);
             }
             
+            new File(moduleDir, "contactperson.jar").delete();
+            
             // log in
             login(username, password);
             
