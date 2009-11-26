@@ -165,6 +165,7 @@ public class HtmlUtils {
             HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
             parser.parse(reader);
         } catch (Exception e) {
+            logger.error(e, e);
            // Utilities.writeToFile(html.getBytes(), "d:/temp.html");
         }
         
