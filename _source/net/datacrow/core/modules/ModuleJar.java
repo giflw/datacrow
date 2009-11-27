@@ -76,6 +76,10 @@ public class ModuleJar {
         this.filename = module.getJarFilename();
     }
     
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
     /**
      * Retrieves the XML module definition.
      */

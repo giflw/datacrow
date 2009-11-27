@@ -93,8 +93,10 @@ public class ModuleUpgrade extends XmlObject {
         }
     }
 
-    private void save(XmlModule module) throws Exception {
-        new ModuleJar(module).save();
+    private void save(XmlModule module, String filename) throws Exception {
+        ModuleJar mj = new ModuleJar(module);
+        mj.setFilename(filename);
+        mj.save();
     }
     
     private XmlField getField(int index, Collection<XmlField> fields) {
@@ -132,7 +134,7 @@ public class ModuleUpgrade extends XmlObject {
                 }
             }
             
-            save(xmlModule);
+            save(xmlModule, jarfile);
         }
     }
 
@@ -178,7 +180,7 @@ public class ModuleUpgrade extends XmlObject {
                             new String[]{xmlModule.getName(), fieldOrg.getName()}));
             }
             
-            save(xmlModule);
+            save(xmlModule, jarfile);
         }        
     }
 
@@ -210,7 +212,7 @@ public class ModuleUpgrade extends XmlObject {
                 }
             }
             
-            save(xmlModule);
+            save(xmlModule, jarfile);
         }        
     }
     
