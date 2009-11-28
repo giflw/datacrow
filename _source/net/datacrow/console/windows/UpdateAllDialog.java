@@ -128,7 +128,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
 	                clone.markAsUnchanged();
 	                clone.copy(dco, true, false);
 	                
-                    if (item.isChanged()) {
+                    if (clone.isChanged()) {
                         try {
                             clone.saveUpdate(false, false);
                         } catch (Exception e) {
