@@ -558,7 +558,7 @@ public class DataCrow {
                     try {
                         success = SecurityCentre.getInstance().login(dlg.getLoginName(), dlg.getPassword(), false) != null;
                     } catch (SecurityException se) {
-                        DcSwingUtilities.displayMessage(se.toString());
+                        DcSwingUtilities.displayMessage(se.getMessage());
                         retry ++;
                     }
                 }

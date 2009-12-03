@@ -80,7 +80,7 @@ public abstract class Synchronizer {
     /**
      * Merges the data of the source and the target with regard of the settings.
      */
-    protected void merge(DcObject target, DcObject source) {
+    public void merge(DcObject target, DcObject source) {
         merge(target, source, null);
     }
 

@@ -54,7 +54,6 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.migration.itemexport.IItemExporterClient;
-import net.datacrow.core.migration.itemexport.ItemExporter;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -73,7 +72,6 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
 
     private static Logger logger = Logger.getLogger(ReportingDialog.class.getName());
     
-    private ItemExporter exporter;
     private XmlTransformer transformer;
 
     private ReportSettingsPanel panelSettings = new ReportSettingsPanel();
@@ -198,9 +196,6 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
     }
 
     private void cancel() {
-        if (exporter != null)
-            exporter.cancel();
-        
         if (transformer != null)
             transformer.cancel();
         
@@ -219,7 +214,6 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
             items = null;
         }
         
-        exporter = null;
         transformer = null;
         panelSettings = null;
         buttonRun = null;

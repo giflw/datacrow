@@ -237,6 +237,9 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         }
         
         private void paintImage(Graphics g) {
+            
+            if (g == null) return;
+            
             Graphics2D g2d = (Graphics2D) g;
 
             g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);

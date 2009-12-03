@@ -71,10 +71,8 @@ import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.settings.Settings;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
-import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -257,10 +255,6 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             int[] rows = getView().getSelectedIndices();
             for (int i = 0; i < rows.length; i++) {
                 DcObject dco = items.get(rows[i]);
-                
-                
-                
-                
                 result.add(fill(dco));
             }
         } else {
@@ -342,49 +336,87 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                 if (o == null) return;
                     
                 if (itemForm.isVisible()) {
-                    DcModule mod = DcModules.get(module);
-                    final DcObject dco = mod.getItem();
-        
-                    Settings settings = getModule().getSettings();
                     
-                    boolean overwrite = dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite);
-                    
-                    int[] fields = dco.getModule().getFieldIndices();//overwrite ?
-                    int[] overwriteFields = settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings);
-                    overwriteFields = overwriteFields == null ? fields : overwriteFields;
-                        
-                    for (int i = 0; i < fields.length; i++) {
-                        int field = fields[i];
-
-                        if (Utilities.isEmpty(o.getValue(fields[i]))) continue;
-
-                        boolean update = field == DcObject._SYS_EXTERNAL_REFERENCES;
-                        for (int j = 0; j < overwriteFields.length && !update; j++) {
-                            update = overwriteFields[j] == field;
-                        }
-                        
-                        if ((dco.isFilled(field) && overwrite) || !dco.isFilled(field)) {
-                            dco.setValue(field, o.getValue(fields[i])); 
-                        }
-                    }  
-                    
-                    if (o.getCurrentChildren().size() > 0)
-                        dco.setChildren(o.getCurrentChildren());
+                    final DcObject dco = itemForm.getItem();
+                    o.getModule().getSynchronizer().merge(dco, o);
                     
                     SwingUtilities.invokeLater(
                             new Thread(new Runnable() { 
                                 public void run() {
                                     itemForm.setData(dco, panelSettings.isOverwriteAllowed(), true);
+                                    close();
                                 }
                             }));
-                }
 
-                SwingUtilities.invokeLater(
-                        new Thread(new Runnable() { 
-                            public void run() {
-                                close();
-                            }
-                        }));
+                    
+//                    
+//                    
+//                    DcModule mod = DcModules.get(module);
+//                    final DcObject dco = mod.getItem();
+//        
+//                    Settings settings = getModule().getSettings();
+//                    
+//                    boolean overwrite = dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stOnlineSearchOverwrite);
+//                    
+//                    int[] fields = dco.getModule().getFieldIndices();
+//                    int[] overwriteFields = settings.getIntArray(DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings);
+//                    overwriteFields = overwriteFields == null ? fields : overwriteFields;
+//                        
+//                    for (int i = 0; i < fields.length; i++) {
+//                        
+//                        int field = fields[i];
+//
+//                        if (Utilities.isEmpty(o.getValue(fields[i]))) continue;
+//
+//                        boolean update = field == DcObject._SYS_EXTERNAL_REFERENCES;
+//                        for (int j = 0; j < overwriteFields.length && !update; j++) {
+//                            update = overwriteFields[j] == field;
+//                        }
+//                        
+//                        if ((dco.isFilled(field) && overwrite) || !dco.isFilled(field)) {
+//                            dco.setValue(field, o.getValue(fields[i])); 
+//                        }
+//                    }  
+//                    
+//                    if (o.getCurrentChildren().size() > 0) {
+//                        if (dco.getChildren().size() == 0) {
+//                            dco.setChildren(o.getCurrentChildren());
+//                        } else {
+//                            for (DcObject currentChild : dco.getChildren()) {
+//                                for (DcObject newChild : o.getCurrentChildren()) {
+//                                    if (StringUtils.equals(currentChild.getDisplayString(DcMediaObject._A_TITLE), 
+//                                                           newChild.getDisplayString(DcMediaObject._A_TITLE))) {
+//                                        
+//                                        currentChild.copy(newChild, true, false);
+//                                    
+//                                    } else if (o.getCurrentChildren().size() == dco.getChildren().size()) {
+//                                        
+//                                        if (o.getModule().getIndex() == DcModules._AUDIOCD &&
+//                                           !Utilities.isEmpty(currentChild.getValue(AudioTrack._H_PLAYLENGTH)) && 
+//                                            currentChild.getDisplayString(AudioTrack._H_PLAYLENGTH).equals(newChild.getDisplayString(AudioTrack._H_PLAYLENGTH))) {
+//                                            
+//                                            currentChild.copy(newChild, true, false);
+//                                        } else if (o.getModule().getIndex() == DcModules._MUSICALBUM &&
+//                                           !Utilities.isEmpty(currentChild.getValue(MusicTrack._J_PLAYLENGTH)) && 
+//                                            currentChild.getDisplayString(MusicTrack._J_PLAYLENGTH).equals(newChild.getDisplayString(MusicTrack._J_PLAYLENGTH))) {
+//
+//                                            currentChild.copy(newChild, true, false);
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }    
+//                    }
+                        
+                    
+                }
+//
+//                SwingUtilities.invokeLater(
+//                        new Thread(new Runnable() { 
+//                            public void run() {
+//                                
+//                            }
+//                        }));
             }
         }).start();
     }

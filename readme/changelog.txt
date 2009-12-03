@@ -4,8 +4,15 @@ Data Crow 3.8.4  [Release on xx/12/2009] [testing: high] [target: production]
 
 [Fixed]
 - Update all was no longer working.
-- I have remove the skin look and feel options. These performed very bad compared to the
-  normal 
+- I had to remove the skin look and feel options. The performance of Data Crow in 
+  combination with the skin look and feel is very bad compared to the normal look and
+  feels.
+- The cards in the card view have been made bigger. This also fixes the issue where
+  images are clipped / displayed partially. 
+- Images exported by the item exporter and the reporting tool were corrupted.
+- Report creation process could not be canceled. 
+- Online update duplicates tracks.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.3  [Release on 26/11/2009] [testing: high] [target: production]

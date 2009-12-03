@@ -53,6 +53,7 @@ public abstract class XmlTransformer {
     protected IItemExporterClient client;
     protected BufferedOutputStream bos;
     
+    private Transformer rt;
     private ItemExporterSettings settings;
     private ItemExporter exporter;
 
@@ -78,14 +79,16 @@ public abstract class XmlTransformer {
         s = s.substring(0, s.lastIndexOf(".")) + ".xml";
         this.source = new File(s);
         
-        Transformer rt = new Transformer();
+        if (rt != null) rt.cancel();
+        
+        rt = new Transformer();
         rt.start();
     }
     
     public void cancel() {
         canceled = true;
-        if (exporter != null)
-            exporter.cancel();
+        if (exporter != null) exporter.cancel();
+        if (rt != null) rt.cancel();
     }    
     
     public abstract int getType();
@@ -96,13 +99,19 @@ public abstract class XmlTransformer {
     
     private class Transformer extends Thread {
         
+        private ItemExporter exporter;
+        
+        public void cancel() {
+            if (exporter != null) exporter.cancel();
+        }
+        
         @Override
         public void run() {
             try {
                 canceled = false;
                 
                 // export the items to an XML file
-                ItemExporter exporter = ItemExporters.getInstance().getExporter("XML", DcModules.getCurrent().getIndex(), ItemExporter._MODE_NON_THREADED);
+                exporter = ItemExporters.getInstance().getExporter("XML", DcModules.getCurrent().getIndex(), ItemExporter._MODE_NON_THREADED);
                 exporter.setSettings(settings);
                 exporter.setFile(source);
                 exporter.setClient(client);
@@ -140,8 +149,6 @@ public abstract class XmlTransformer {
                 settings = null;
                 exporter = null;
                 
-
-
                 try {
                     if (bos != null) bos.close();
                 } catch (IOException ignore) {}
