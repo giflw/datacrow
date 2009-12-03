@@ -104,7 +104,7 @@ public class PictureSelectDialog extends DcDialog implements ActionListener {
                 cbFields.addItem(field);
         }
         
-        DcPictureField picFld = ComponentFactory.getPictureField(true, false, false);
+        DcPictureField picFld = ComponentFactory.getPictureField(true, false);
         picFld.setValue(image);
         
         getContentPane().setLayout(Layout.getGBL());

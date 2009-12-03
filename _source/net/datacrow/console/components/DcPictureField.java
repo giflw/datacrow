@@ -46,6 +46,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorConvertOp;
 import java.awt.image.ConvolveOp;
+import java.awt.image.ImageObserver;
 import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
 import java.io.File;
@@ -80,7 +81,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     
     private boolean changed = false;
     private boolean scaled = true;
-    private boolean thumbnail = false;
 
     private Image img = null;
     private DcImageIcon picture;
@@ -94,10 +94,10 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     private DcPictureFieldMenu menu;
     
     public DcPictureField() {
-    	this(true, false, false);
+    	this(true, false);
     }
     
-    public DcPictureField(boolean scaled, boolean allowActions, boolean thumbnail) {
+    public DcPictureField(boolean scaled, boolean allowActions) {
         this.setLayout(Layout.getGBL());
         if (allowActions) {
         	this.menu = new DcPictureFieldMenu(this);
@@ -113,7 +113,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                  new Insets(5, 5, 5, 5), 0, 0));
         
         this.scaled = scaled;
-        this.thumbnail = thumbnail;
     }
     
     public void setScaled(boolean scaled) {
@@ -201,38 +200,13 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     		return picture;
     }
 
-    private Image getImage() {
-    	return img;
-    }
-
     private boolean scalingAllowed(int width, int height) {
-        return scaled && (height >= 50 && width >= 50);
+        return scaled && 
+              ((height >= 50 && width >= 50) || 
+               (imageWidth > size.width || imageHeight > size.height));
     }
 
-    @Override
-    public Dimension getMinimumSize() {
-        Image image = getImage();
-        insets = getInsets(insets);
-        if (thumbnail && image != null) {
-            return new Dimension(insets.left + Math.max(32, ((imageWidth / 5) / 10)) + insets.right,
-                                 insets.top  + Math.max(32, ((imageHeight / 5) / 10)) + insets.bottom);
-        } 
-
-        return super.getMinimumSize();
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        insets = getInsets(insets);
-        Image image = getImage();
-        if (thumbnail && image != null) {
-            return new Dimension(insets.left + (imageWidth / 5) + insets.right,
-                                 insets.top  + (imageHeight / 5) + insets.bottom);
-        }
-        return super.getPreferredSize();
-    }        
-    
-    private class PicturePane extends JComponent {
+    private class PicturePane extends JComponent implements ImageObserver {
         
         @Override
         protected void paintComponent(Graphics g) {
@@ -243,61 +217,54 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                 super.paintComponent(g);
                 return;
             }
-
-            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
             try {
-                if (scalingAllowed(imageWidth, imageHeight)) {
-                    
-                    int newWidth = 0;
-                    int newHeight = 0;
-                    if (thumbnail) {
-                        newWidth =  Math.min(size.width, imageWidth / 5);
-                        newHeight = Math.min(size.height, imageHeight / 5);
-                    
-                    } else if (imageWidth > size.width || imageHeight > size.height) {
-                        
-                        newWidth =  Math.min(size.width, imageWidth);
-                        newHeight = Math.min(size.height, imageHeight);
-            
-                        double scaledRatio = (double) newWidth / (double) newHeight;
-                        double imageRatio = (double) imageWidth / (double) imageHeight;
-                        if (scaledRatio < imageRatio) 
-                            newHeight = (int) (newWidth / imageRatio);
-                        else
-                            newWidth = (int) (newHeight * imageRatio);
-                        
-                        img = picture.getImage();
-
-                        // reload image if necessary
-                        if (!prepareImage(img, this))
-                            img = new DcImageIcon(picture.getImage()).getImage();
-                        
-                        g.drawImage(img, 
-                                getInset(size.width, newWidth), 
-                                getInset(size.height, newHeight), 
-                                newWidth, 
-                                newHeight,
-                                null);
-                    } else {
-                        picture.paintIcon(this, g, getInset(size.width, imageWidth), getInset(size.height, imageHeight));
-                    }
-    
-                } else {
-                    picture.paintIcon(this, g, getInset(size.width, imageWidth), getInset(size.height, imageHeight));
-                } 
+                img = picture.getImage();
+                if (prepareImage(img, imageWidth, imageHeight, this))
+                    paintImage(g);
             } catch (Exception e) {
                 logger.error(e, e);
             } finally {
             	g.dispose();
             }
         }
-    }
-    
-    private int getInset(int sizeComp, int sizePic) {
-        int remainingSpace = sizeComp - sizePic;
-        return remainingSpace >= 2 ? remainingSpace / 2 : 0;
+        
+        @Override
+        public boolean imageUpdate(Image img, int infoflags, int x, int y, int w, int h) {
+            Graphics2D g = (Graphics2D) getGraphics();
+            paintImage(g);
+            return true;
+        }
+        
+        private void paintImage(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g;
+
+            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+
+            int width = imageWidth;
+            int height = imageHeight;
+            
+            if (scalingAllowed(imageWidth, imageHeight)) {
+                width =  Math.min(size.width, imageWidth);
+                height = Math.min(size.height, imageHeight);
+                double scaledRatio = (double) width / (double) height;
+                double imageRatio = (double) imageWidth / (double) imageHeight;
+            
+                if (scaledRatio < imageRatio) {
+                    height = (int) (width / imageRatio);
+                } else {
+                    width = (int) (height * imageRatio);
+                }
+            }
+
+            g.translate((getWidth() - (width)) / 2, (getHeight() - (height)) / 2);
+            g.drawImage(img, 0, 0, width, height, null);
+            g.dispose();
+        }     
     }
 
     @Override

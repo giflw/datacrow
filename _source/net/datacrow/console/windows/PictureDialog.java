@@ -44,7 +44,7 @@ import net.datacrow.util.DcImageIcon;
 
 public class PictureDialog extends DcDialog implements ActionListener {
     
-    private DcPictureField pf = ComponentFactory.getPictureField(true, true, false);
+    private DcPictureField pf = ComponentFactory.getPictureField(true, true);
     
     public PictureDialog(DcImageIcon ii) {
         super();

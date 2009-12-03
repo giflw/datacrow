@@ -19,7 +19,7 @@ public abstract class DcObjectListComponents {
     }
 
     public static DcPictureField getPictureField() {
-        return pictureFields.size() > 0 ? pictureFields.remove(0) : ComponentFactory.getPictureField(false, false, false);
+        return pictureFields.size() > 0 ? pictureFields.remove(0) : ComponentFactory.getPictureField(false, false);
     }
     
     public static void release(DcPictureField picField) {

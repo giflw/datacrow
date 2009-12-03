@@ -380,9 +380,9 @@ public final class ComponentFactory {
             case _URLFIELD:
                 return getURLField(maxTextLength);
             case _SIMPLEPICTUREFIELD:
-                return getPictureField(true, false, false);
+                return getPictureField(true, false);
             case _PICTUREFIELD:
-                return getPictureField(true, true, false);
+                return getPictureField(true, true);
             case _FONTSELECTOR:
                 return getFontSelector();
             case _TIMEFIELD:
@@ -641,10 +641,8 @@ public final class ComponentFactory {
         return dateField;
     }
 
-    public static final DcPictureField getPictureField(boolean scaled,
-                                                       boolean allowActions,
-                                                       boolean thumbnail) {
-        DcPictureField pictureField = new DcPictureField(scaled, allowActions, thumbnail);
+    public static final DcPictureField getPictureField(boolean scaled, boolean allowActions) {
+        DcPictureField pictureField = new DcPictureField(scaled, allowActions);
         return pictureField;
     }
 
@@ -697,10 +695,6 @@ public final class ComponentFactory {
         comboBox.setRenderer(ComboBoxRenderer.getInstance());
         return comboBox;
     }    
-
-    public static final DcImageLabel getImageLabel() {
-        return new DcImageLabel();
-    }
 
     public static final DcIconSelectField getIconSelectField(ImageIcon icon) {
         return new DcIconSelectField(icon);
