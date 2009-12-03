@@ -86,7 +86,7 @@ public class Picture extends DcObject {
         } else {
             // make sure the image is loaded.
             // as a precaution; ignore the image if it has bytes assigned to it
-            if (image.getCurrentBytes() == null)
+            if (image != null && image.getCurrentBytes() == null)
                 image = new DcImageIcon(image.getImage());
         }
         
