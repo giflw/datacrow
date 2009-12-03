@@ -48,9 +48,9 @@ public class DcCardObjectListElement extends DcObjectListElement {
 
     private static Logger logger = Logger.getLogger(DcCardObjectListElement.class.getName());
 
-    private final static Dimension size = new Dimension(190, 200);
+    private final static Dimension size = new Dimension(190, 210);
     private static final Dimension dimTxt = new Dimension(190, 45);
-    private static final Dimension dimPicLbl = new Dimension(190, 145);
+    private static final Dimension dimPicLbl = new Dimension(190, 160);
 
     private DcTextPane fldTitle;
     private DcPictureField fldPicture;
