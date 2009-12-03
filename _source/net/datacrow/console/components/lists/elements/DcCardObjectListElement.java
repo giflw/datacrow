@@ -78,7 +78,7 @@ public class DcCardObjectListElement extends DcObjectListElement {
                 String disp = dco.getDisplayString(field);
                 if (disp.length() > 0) {
                     if (sb.length() > 0)
-                        sb.append("/");
+                        sb.append(" / ");
                     sb.append(disp);
                 }
             }
