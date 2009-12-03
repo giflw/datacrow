@@ -45,6 +45,7 @@ call build.bat
 rd _classes /S /Q
 rd _source /S /Q
 rd installer /S /Q
+rd .settings /S /Q
 del manifest.mf
 del build.bat
 del build.xml
