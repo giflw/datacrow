@@ -382,7 +382,7 @@ public class Utilities {
     }
     
     public static byte[] getBytes(ImageIcon icon) {
-        return getBytes(icon, DcImageIcon._TYPE_JPEG);
+        return getBytes(icon, DcImageIcon._TYPE_PNG);
     }
     
     public static byte[] getBytes(ImageIcon icon, int type) {
@@ -419,12 +419,7 @@ public class Utilities {
     }
     
     public static void writeToFile(ImageIcon icon, String filename) throws Exception {
-        FileOutputStream fos = new FileOutputStream(filename);
-        BufferedOutputStream bos = new BufferedOutputStream(fos);
-
-        bos.write(getBytes(icon));
-        bos.flush();
-        bos.close();
+        writeScaledImageToFile(icon, filename, DcImageIcon._TYPE_PNG, -1, -1);
     }   
 
     public static void writeToFile(byte[] b, String filename) throws Exception {

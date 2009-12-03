@@ -67,7 +67,6 @@ public class RestartDataCrowDialog extends DcDialog implements ActionListener {
 
         JTextArea textMessage = ComponentFactory.getTextArea();
         textMessage.setEditable(false);
-        textMessage.setBackground(getBackground());
         
         textMessage.setText(DcResources.getText("msgRestart"));
         
@@ -97,6 +96,8 @@ public class RestartDataCrowDialog extends DcDialog implements ActionListener {
         panelActions.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelActions.add(buttonNo);
         panelActions.add(buttonYes);
+        
+        textMessage.setBackground(panelActions.getBackground());
         
         getContentPane().add(panelActions,  Layout.getGBC( 2, 3, 1, 1, 0.0, 0.0
                             ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,

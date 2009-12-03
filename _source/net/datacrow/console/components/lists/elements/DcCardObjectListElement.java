@@ -68,7 +68,6 @@ public class DcCardObjectListElement extends DcObjectListElement {
     @Override
     public void update(DcObject dco) {
         clear();
-        
     }    
     
     private String getDescription() {

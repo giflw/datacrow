@@ -534,6 +534,10 @@ public class View extends DcPanel implements ListSelectionListener {
             groupingPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
         }
         
+        if (type == _TYPE_SEARCH) {
+            add(getItems());
+        }
+        
         vc.applySettings();
         panelStatus.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
         
