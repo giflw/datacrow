@@ -32,7 +32,6 @@ package net.datacrow.core.objects;
  */
 public class DcLookAndFeel {
     
-    public static final int _SKINLF = 0;
     public static final int _LAF = 1;
     public static final int _NONE = 3;
     public static final int _JTATTOO = 4;

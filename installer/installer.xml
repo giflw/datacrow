@@ -71,14 +71,13 @@
             <file src="lib/pdf" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/html" targetdir="$INSTALL_PATH/lib"/>
             <file src="services" targetdir="$INSTALL_PATH"/>
-            <file src="themes" targetdir="$INSTALL_PATH"/>
             <file src="resources" targetdir="$INSTALL_PATH"/>
             <file src="plugins" targetdir="$INSTALL_PATH"/>
             <file src="icons" targetdir="$INSTALL_PATH"/>
             <file src="help" targetdir="$INSTALL_PATH"/>
         </pack>
 
-	<pack name="Web" required="no">
+    <pack name="Web" required="no">
             <description>Web Module</description>
             <file src="lib/jetty" targetdir="$INSTALL_PATH/lib"/>
             <file src="webapp/datacrow/common" targetdir="$INSTALL_PATH/webapp/datacrow"/>
@@ -98,7 +97,7 @@
             <file src="webapp/datacrow/itemrelate.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/login.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/search.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
-	</pack>
+    </pack>
 
         <pack name="Modules" required="no">
             <description>Data Crow Modules</description>

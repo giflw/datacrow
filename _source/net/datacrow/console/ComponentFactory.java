@@ -120,7 +120,6 @@ import net.datacrow.console.components.IComponent;
 import net.datacrow.console.components.renderers.AvailabilityComboBoxRenderer;
 import net.datacrow.console.components.renderers.ComboBoxRenderer;
 import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
@@ -134,9 +133,6 @@ import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
-
-import com.l2fprod.gui.plaf.skin.Skin;
-import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 
 public final class ComponentFactory {
 
@@ -262,11 +258,7 @@ public final class ComponentFactory {
                 defaultLaf = UIManager.getLookAndFeel();
             
             DcLookAndFeel laf = DcSettings.getLookAndFeel(DcRepository.Settings.stLookAndFeel);
-            if (laf.getType() == DcLookAndFeel._SKINLF) {
-                Skin theSkinToUse = SkinLookAndFeel.loadThemePack(DataCrow.installationDir + "/themes/" +  laf.getFileName());
-                SkinLookAndFeel.setSkin(theSkinToUse);
-                UIManager.setLookAndFeel(new SkinLookAndFeel());
-            } else if (laf.getType() == DcLookAndFeel._LAF) {
+            if (laf.getType() == DcLookAndFeel._LAF) {
                 UIManager.setLookAndFeel(laf.getClassName());
             } else {
                 UIManager.setLookAndFeel(defaultLaf);

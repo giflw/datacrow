@@ -30,7 +30,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -48,12 +47,8 @@ import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
-import org.apache.log4j.Logger;
-
 public class DcLookAndFeelSelector extends JComponent implements IComponent, ActionListener {
     
-    private static Logger logger = Logger.getLogger(DcLookAndFeelSelector.class.getName());    
-
     private DcComboBox cbFieldHeight = ComponentFactory.getComboBox();
     private DcComboBox cbButtonHeight = ComponentFactory.getComboBox();
     private DcComboBox cbTreeNodeHeight = ComponentFactory.getComboBox();
@@ -61,9 +56,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     
     private JCheckBox checkNoLF = ComponentFactory.getCheckBox(DcResources.getText("lblNoLF"));
     private JCheckBox checkSystemLF = ComponentFactory.getCheckBox(DcResources.getText("lblLaf"));
-    private JCheckBox checkSkinLF = ComponentFactory.getCheckBox(DcResources.getText("lblSkinLF"));
-
-    private JComboBox comboSkinLF = ComponentFactory.getComboBox();
     private JComboBox comboSystemLF = ComponentFactory.getComboBox();
     
     private DcDialog parent;
@@ -73,7 +65,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     public DcLookAndFeelSelector() {
         applyModus = false;
         buildComponent();
-        fillSkinLFCombo();
         fillSystemLFCombo();
         applyModus = true;
     }
@@ -85,27 +76,10 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     public void clear() {
         checkNoLF = null;
         checkSystemLF = null;
-        checkSkinLF = null;
-        comboSkinLF = null;
         comboSystemLF = null;
         parent = null;
     }    
     
-    private void fillSkinLFCombo() {
-        File file = new File(DataCrow.installationDir, "themes");
-        String [] files = file.exists() && file.isDirectory() ? file.list() : null;
-        if (files != null) {
-            for (int i = 0; i < files.length; i++) {
-                String filename = files[i];
-                if (filename.toLowerCase().endsWith("zip"))
-                    comboSkinLF.addItem(
-                            new DcLookAndFeel(filename, null, filename, DcLookAndFeel._SKINLF));
-            }
-        } else {
-            logger.error(DcResources.getText("msgNoThemesFound"));
-        }
-    }
-
     private void fillSystemLFCombo() {
         LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
         for (int i = 0; i < lafs.length; i++) {
@@ -132,9 +106,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
             DcLookAndFeel laf = (DcLookAndFeel) o;
             if (laf.getType() == DcLookAndFeel._NONE) {
                 checkNoLF.setSelected(true);
-            } else if (laf.getType() == DcLookAndFeel._SKINLF) {
-                comboSkinLF.setSelectedItem(laf);
-                checkSkinLF.setSelected(true);
             } else { 
                 comboSystemLF.setSelectedItem(laf);
                 checkSystemLF.setSelected(true);
@@ -155,9 +126,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         
         if (checkNoLF != null) {
             checkNoLF.setFont(ComponentFactory.getStandardFont());
-            checkSkinLF.setFont(ComponentFactory.getStandardFont());
             checkSystemLF.setFont(ComponentFactory.getStandardFont());
-            comboSkinLF.setFont(ComponentFactory.getStandardFont());
             comboSystemLF.setFont(ComponentFactory.getStandardFont());
         }
     }     
@@ -165,8 +134,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     public void setEditable(boolean b) {
         checkNoLF.setEnabled(b);
         checkSystemLF.setEnabled(b);
-        checkSkinLF.setEnabled(b);
-        comboSkinLF.setEnabled(b);
         comboSystemLF.setEnabled(b);
         cbButtonHeight.setEnabled(b);
         cbFieldHeight.setEnabled(b);
@@ -211,11 +178,9 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         lblButtonHeight.setToolTipText(DcResources.getText("tpButtonHeight"));
         
         checkNoLF.addActionListener(new TypeActionListener(DcLookAndFeel._NONE));
-        checkSkinLF.addActionListener(new TypeActionListener(DcLookAndFeel._SKINLF));
         checkSystemLF.addActionListener(new TypeActionListener(DcLookAndFeel._LAF));
         
         comboSystemLF.addActionListener(this);
-        comboSkinLF.addActionListener(this);
         
         add(checkNoLF,       Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
@@ -224,12 +189,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));
         add(comboSystemLF,   Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 0, 0, 0), 0, 0));
-        add(checkSkinLF,     Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 0, 0, 0), 0, 0));
-        add(comboSkinLF,     Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 0, 0, 0), 0, 0));
         add(lblFieldHeight,  Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
@@ -283,8 +242,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
             
             if (checkNoLF.isSelected()) 
                 laf = DcLookAndFeel.getDisabled();
-            else if (checkSkinLF.isSelected())
-                laf = (DcLookAndFeel) comboSkinLF.getSelectedItem();
             else if (checkSystemLF.isSelected())
                 laf = (DcLookAndFeel) comboSystemLF.getSelectedItem();
             
@@ -307,19 +264,12 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         
         public void actionPerformed(ActionEvent arg0) {
             checkNoLF.setSelected(false);
-            checkSkinLF.setSelected(false);
             checkSystemLF.setSelected(false);
-            comboSkinLF.setEnabled(false);
             comboSystemLF.setEnabled(false);
             
             if (type == DcLookAndFeel._NONE) {
                 checkNoLF.setSelected(true);
-            } else if (type == DcLookAndFeel._SKINLF) {
-                comboSkinLF.setSelectedIndex(0);
-                checkSkinLF.setSelected(true);
-                comboSkinLF.setEnabled(true);
             } else if (type == DcLookAndFeel._LAF) {
-                comboSkinLF.setSelectedIndex(0);
                 checkSystemLF.setSelected(true);
                 comboSystemLF.setEnabled(true);
             }
