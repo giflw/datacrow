@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.4  [Release on xx/12/2009] [testing: high] [target: production]
+Data Crow 3.8.4  [Release on 3/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -11,7 +11,7 @@ Data Crow 3.8.4  [Release on xx/12/2009] [testing: high] [target: production]
   images are clipped / displayed partially. 
 - Images exported by the item exporter and the reporting tool were corrupted.
 - Report creation process could not be canceled. 
-- Online update duplicates tracks.
+- Online update duplicates tracks. 
 
 
 -----------------------------------------------------------------------------------------
