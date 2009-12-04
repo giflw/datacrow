@@ -207,20 +207,16 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         
         @Override
         protected void paintComponent(Graphics g) {
-    
             if (picture == null) {
                 super.paintComponent(g);
-                return;
-            }
-            
-            try {
-                img = picture.getImage();
-                if (prepareImage(img, imageWidth, imageHeight, this))
-                    paintImage(g);
-            } catch (Exception e) {
-                logger.error(e, e);
-            } finally {
-            	g.dispose();
+            } else {
+                try {
+                    img = picture.getImage();
+                    if (prepareImage(img, imageWidth, imageHeight, this))
+                        paintImage(g);
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }
             }
         }
         
@@ -232,7 +228,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         
         private void paintImage(Graphics g) {
             
-            if (g == null) return;
+            if (g == null || picture == null || img == null) return;
             
             Graphics2D g2d = (Graphics2D) g;
 
@@ -246,6 +242,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             int height = imageHeight;
             
             if (scalingAllowed(imageWidth, imageHeight)) {
+                size = getSize(size);
                 width =  Math.min(size.width, imageWidth);
                 height = Math.min(size.height, imageHeight);
                 double scaledRatio = (double) width / (double) height;
@@ -258,7 +255,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                 }
             }
 
-            g.translate((getWidth() - (width)) / 2, (getHeight() - (height)) / 2);
+            g.translate((getWidth() - width) / 2, (getHeight() - height) / 2);
             g.drawImage(img, 0, 0, width, height, null);
             g.dispose();
         }     
@@ -430,13 +427,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         }
     }    
     
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        super.paintComponent(g2d);
-    }
-
     public void setEditable(boolean b) {
     	setEnabled(b);
     	if (!b) {
