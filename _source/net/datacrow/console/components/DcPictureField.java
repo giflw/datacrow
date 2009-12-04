@@ -89,8 +89,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     private int imageHeight = -1;
 
     private Dimension size = null;
-    private Insets insets = new Insets(0, 0, 0, 0);
-    
     private DcPictureFieldMenu menu;
     
     public DcPictureField() {
@@ -171,7 +169,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         
         picture = null;
         size = null;
-        insets = null;
         menu = null;
         img = null;
     } 
@@ -210,8 +207,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         
         @Override
         protected void paintComponent(Graphics g) {
-            insets = getInsets(insets);
-            size = getSize(size);
     
             if (picture == null) {
                 super.paintComponent(g);
