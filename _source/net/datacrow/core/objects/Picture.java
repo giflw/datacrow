@@ -127,30 +127,34 @@ public class Picture extends DcObject {
         isDeleted = false;
     }    
     
+    private void createScaledImage(String filename) {
+        loadImage();
+        DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
+        
+        if (icon != null) {
+            logger.info("Scaled image is missing, creating new");
+            try {
+                Utilities.writeScaledImageToFile(icon, DataCrow.imageDir + filename);
+            } catch (Exception e) {
+                logger.error("Could not create new scaled image!", e);
+            }
+        }
+    }
+    
     public DcImageIcon getScaledPicture() {
         String filename = getScaledFilename();
         if (filename != null) {
-            if (!new File(DataCrow.imageDir + filename).exists()) {
-                loadImage();
-                DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
-                
-                if (icon != null) {
-                    logger.info("Scaled image is missing, creating new");
-                    try {
-                        Utilities.writeScaledImageToFile(icon, DataCrow.imageDir + filename);
-                    } catch (Exception e) {
-                        logger.error("Could not create new scaled image!", e);
-                    }
-                }
-            }
-            
             try {
                 return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
-            } catch (IOException ioe) {
-                logger.error("Could not load scaled image", ioe);
+            } catch (IOException e1) {
+                createScaledImage(filename);
+                try {
+                    return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
+                } catch (IOException e2) {
+                    logger.error("Could not load scaled image", e2);
+                }
             }
         }
-        
         return null;
     }
     
