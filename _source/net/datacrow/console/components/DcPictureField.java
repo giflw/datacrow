@@ -231,8 +231,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         
         @Override
         public boolean imageUpdate(Image img, int infoflags, int x, int y, int w, int h) {
-            Graphics2D g = (Graphics2D) getGraphics();
-            paintImage(g);
+            paintImage(getGraphics());
             return true;
         }
         
