@@ -121,6 +121,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         if (    view.getType() == View._TYPE_SEARCH && 
                 module != null && 
                 module.isSelectableInUI()) {
+            
             new ViewRecycler("View recycler " + module).start();
         }
     }
@@ -334,9 +335,9 @@ public class DcObjectList extends DcList implements IViewComponent {
     }
     
     public void add(DcObject[] objects) {
-        getDcModel().clear();
-        DcListModel model = new DcListModel();
+        clear();
         
+        DcListModel model = new DcListModel();
         for (DcObject dco : objects)
             model.addElement(getDisplayElement(dco));
         

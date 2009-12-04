@@ -26,6 +26,9 @@
 package net.datacrow.core.objects;
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModules;
@@ -58,8 +61,6 @@ public class Picture extends DcObject {
     private boolean isUpdated = false;
     private boolean isDeleted = false;
     
-    private DcImageIcon scaled;
-    
     /**
      * Creates a new instance
      */
@@ -83,12 +84,12 @@ public class Picture extends DcObject {
             } catch (Exception e) {
                 logger.error("Could not load image " + DataCrow.imageDir + filename, e);
             }
-        } //else {
+        } else {
             // make sure the image is loaded.
             // as a precaution; ignore the image if it has bytes assigned to it
-            //if (image != null && image.getCurrentBytes() == null)
-              //  image = new DcImageIcon(image.getImage());
-        //}
+            if (image != null && image.getCurrentBytes() == null)
+                image = new DcImageIcon(image.getImage());
+        }
         
         setValue(Picture._D_IMAGE, image);
         
@@ -111,9 +112,7 @@ public class Picture extends DcObject {
 	    	DcImageIcon image = ((DcImageIcon) getValue(_D_IMAGE));
 	    	
 	    	if (image != null) image.flush();
-	    	if (scaled != null) scaled.flush();
 	    	
-	    	scaled = null;
 	        setValueLowLevel(_D_IMAGE, null);
 	        setChanged(_D_IMAGE, false);
     	}
@@ -128,28 +127,36 @@ public class Picture extends DcObject {
         isDeleted = false;
     }    
     
-    public DcImageIcon getScaledPicture() {
-        if (scaled == null) {
-            String filename = getScaledFilename();
-            if (filename != null) {
-                if (!new File(DataCrow.imageDir + filename).exists()) {
-                    loadImage();
-                    DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
-                    
-                    if (icon != null) {
-                        logger.info("Scaled image is missing, creating new");
-                        try {
-                            Utilities.writeScaledImageToFile(icon, DataCrow.imageDir + filename);
-                        } catch (Exception e) {
-                            logger.error("Could not create new scaled image!", e);
-                        }
-                    }
-                }
-                scaled = new DcImageIcon(DataCrow.imageDir + filename);
+    private void createScaledImage(String filename) {
+        loadImage();
+        DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
+        
+        if (icon != null) {
+            logger.info("Scaled image is missing, creating new");
+            try {
+                Utilities.writeScaledImageToFile(icon, DataCrow.imageDir + filename);
+            } catch (Exception e) {
+                logger.error("Could not create new scaled image!", e);
             }
         }
-        
-        return scaled;
+    }
+    
+    public DcImageIcon getScaledPicture() {
+        String filename = getScaledFilename();
+        if (filename != null) {
+            try {
+                return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
+            } catch (IOException e1) {
+                logger.error("Scaled image does not exist or is invalid. Creating new.", e1);
+                createScaledImage(filename);
+                try {
+                    return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
+                } catch (IOException e2) {
+                    logger.error("Could not load scaled image", e2);
+                }
+            }
+        }
+        return null;
     }
     
     public String getScaledFilename() {
