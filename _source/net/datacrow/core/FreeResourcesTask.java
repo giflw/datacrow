@@ -27,6 +27,10 @@ package net.datacrow.core;
 
 import java.util.Date;
 
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
@@ -70,6 +74,12 @@ public class FreeResourcesTask {
         ImageStore.clean();
         debug(start, "Clearing images in store");
 
+        for (DcObject dco : DataManager.get(DcModules._PICTURE, null)) {
+            if (dco instanceof Picture) {
+                ((Picture) dco).unload();
+            }
+        }
+        
         start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         System.runFinalization();
         debug(start, "Running finalizers");

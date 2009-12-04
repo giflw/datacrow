@@ -83,12 +83,12 @@ public class Picture extends DcObject {
             } catch (Exception e) {
                 logger.error("Could not load image " + DataCrow.imageDir + filename, e);
             }
-        } else {
+        } //else {
             // make sure the image is loaded.
             // as a precaution; ignore the image if it has bytes assigned to it
-            if (image != null && image.getCurrentBytes() == null)
-                image = new DcImageIcon(image.getImage());
-        }
+            //if (image != null && image.getCurrentBytes() == null)
+              //  image = new DcImageIcon(image.getImage());
+        //}
         
         setValue(Picture._D_IMAGE, image);
         
@@ -103,18 +103,17 @@ public class Picture extends DcObject {
     @Override
     public void release() {
         unload();
-        scaled = null;
         super.release();
     }
     
     public void unload() {
     	if (getValues() != null && !isNew() && !isUpdated) {
-    	    
 	    	DcImageIcon image = ((DcImageIcon) getValue(_D_IMAGE));
 	    	
 	    	if (image != null) image.flush();
 	    	if (scaled != null) scaled.flush();
 	    	
+	    	scaled = null;
 	        setValueLowLevel(_D_IMAGE, null);
 	        setChanged(_D_IMAGE, false);
     	}
@@ -148,8 +147,6 @@ public class Picture extends DcObject {
                 }
                 scaled = new DcImageIcon(DataCrow.imageDir + filename);
             }
-        } else {
-            scaled = new DcImageIcon(scaled.getImage());
         }
         
         return scaled;

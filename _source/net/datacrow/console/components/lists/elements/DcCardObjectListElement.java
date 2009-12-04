@@ -131,7 +131,7 @@ public class DcCardObjectListElement extends DcObjectListElement {
                 fldPicture.setScaled(false);
                 break;
             } else if (image != null) {
-                fldPicture.setValue(new DcImageIcon(image.getImage()));
+                fldPicture.setValue(image);
                 fldPicture.setScaled(true);
                 break;
             }                
