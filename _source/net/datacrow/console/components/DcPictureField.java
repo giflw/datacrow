@@ -108,7 +108,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         
         this.add(new PicturePane(), Layout.getGBC(0, 1, 1, 1, 80.0, 80.0,
                  GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets(5, 5, 5, 5), 0, 0));
+                 new Insets(1, 1, 1, 1), 0, 0));
         
         this.scaled = scaled;
     }
