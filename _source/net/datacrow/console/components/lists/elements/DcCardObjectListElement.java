@@ -60,8 +60,6 @@ public class DcCardObjectListElement extends DcObjectListElement {
     public DcCardObjectListElement(DcObject dco) {
         super(dco);
         
-        setDoubleBuffered(false);
-        
         setPreferredSize(size);
         setMaximumSize(size);
         setMinimumSize(size);

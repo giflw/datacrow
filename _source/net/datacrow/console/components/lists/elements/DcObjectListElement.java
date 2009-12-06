@@ -53,6 +53,8 @@ public abstract class DcObjectListElement extends DcListElement {
     
     public DcObjectListElement(DcObject dco) {
         this.dco = dco;
+        
+        setDoubleBuffered(false);
     }
 
     public DcObject getDcObject() {

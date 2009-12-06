@@ -111,6 +111,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                  new Insets(1, 1, 1, 1), 0, 0));
         
         this.scaled = scaled;
+        this.setDoubleBuffered(false);
     }
     
     public void setScaled(boolean scaled) {
@@ -204,6 +205,10 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     }
 
     private class PicturePane extends JComponent implements ImageObserver {
+        
+        private PicturePane() {
+            this.setDoubleBuffered(false);
+        }
         
         @Override
         protected void paintComponent(Graphics g) {
