@@ -1,14 +1,14 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.5  [Release on xx/12/2009] [testing: high] [target: production]
+Data Crow 3.8.5  [Release on 9/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Discogs online service no longer retrieved the tracks.
+- Discogs.com online service no longer retrieved the tracks.
 - Memory leak in the card view. Data Crow will now use a maximum amount of memory.
   After that, additional memory is actively released to the system.
 - File size is cleared when saving an item of which the file does not exist.
-- [2909635] Failure after installing without modules. Data Crow now actually be started
-  when non of the default modules are available.
+- [2909635] Failure after installing without modules. Data Crow can now actually be 
+  started without having any of the default modules available.
 - Non picture fields are displayed in the pictures settings for the card view.
 - [2909608] Cannot delete empty back picture.
 - [2909589] Update all still malfunctioning.
@@ -18,6 +18,7 @@ Data Crow 3.8.5  [Release on xx/12/2009] [testing: high] [target: production]
 [Changed]
 - Selected container and storage medium for the file importer is now remembered for a 
   next run.
+- Default picture order for the card view has been corrected (front, media, back).
 
 
 -----------------------------------------------------------------------------------------
