@@ -765,8 +765,10 @@ public class ItemForm extends DcFrame implements ActionListener {
 	            moduleIdx != DcModules._CONTACTPERSON &&
 	            moduleIdx != DcModules._CONTAINER) {
 	        	
-	            RelatedItemsPanel rip = new RelatedItemsPanel(dco);
-	            tabbedPane.addTab(rip.getTitle(), rip.getIcon(),  rip);
+	            if (DataManager.getReferencingItems(dco).size() > 0) {
+	                RelatedItemsPanel rip = new RelatedItemsPanel(dco);
+	                tabbedPane.addTab(rip.getTitle(), rip.getIcon(), rip);
+	            }
 	        }
 	        
 	        if (moduleIdx == DcModules._CONTACTPERSON) {
