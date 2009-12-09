@@ -93,8 +93,11 @@ public class CardViewPictureSettingsPanel extends JPanel {
                 new Insets(0, 5, 5, 5), 0, 0));
         
         Collection<DcField> fields = new ArrayList<DcField>();
-        for (int field : DcModules.get(module).getSettings().getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder))
-            fields.add(DcModules.get(module).getField(field));
+        for (int fieldIdx : DcModules.get(module).getSettings().getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder)) {
+            DcField field = DcModules.get(module).getField(fieldIdx);
+            if (field.getValueType() == DcRepository.ValueTypes._PICTURE && !fields.contains(field))
+                fields.add(field);
+        }
 
         for (DcField field : DcModules.get(module).getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE && !fields.contains(field))
