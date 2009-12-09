@@ -126,6 +126,7 @@ public abstract class Synchronizer {
         if (allowed) {
             if ((dco.isFilled(field) && overwrite) || !dco.isFilled(field)) {
                 if (value instanceof Collection) {
+                    dco.setValue(field, null);
                     for (Iterator iter = ((Collection) value).iterator(); iter.hasNext(); ) {
                         DcObject o = (DcObject) iter.next();
                         if (o instanceof DcMapping) {

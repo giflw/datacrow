@@ -341,17 +341,28 @@ public abstract class FileImporter implements ISynchronizerClient {
         String directory = new File(filename).getParent();
         boolean recurse = settings.getBoolean(DcRepository.ModuleSettings.stImportLocalArtRecurse);
         Collection<String> files = Directory.read(directory, recurse, 
-                                                  false, new String[] {"jpg", "jpeg", "png"});
+                                                  false, new String[] {"jpg", "jpeg", "png", "gif"});
         boolean frontSet = false;
         boolean backSet = false;
         boolean cdSet = false;
         
         for (String file : files) {
             try {
-                if (!frontSet &&
-                    (files.size() == 1 || 
-                     match(DcRepository.ModuleSettings.stImportLocalArtFrontKeywords, file))) {
+                
+                if (!frontSet) {
+                    String name1 = new File(filename).getName();
+                    String name2 = new File(file).getName();
+                    name1 = name1.substring(0, name1.lastIndexOf(".") > 0 ? name1.lastIndexOf(".") : name1.length());
+                    name2 = name2.substring(0, name2.lastIndexOf(".") > 0 ? name2.lastIndexOf(".") : name2.length());
                     
+                    if (StringUtils.equals(name1, name2)) {
+                        dco.setValue(front, new DcImageIcon(file));
+                        frontSet = true;
+                    }
+                }
+                
+                if (!frontSet && (files.size() == 1 || 
+                    match(DcRepository.ModuleSettings.stImportLocalArtFrontKeywords, file))) {
                     dco.setValue(front, new DcImageIcon(file));
                     frontSet = true;
                 } else if (!backSet && match(DcRepository.ModuleSettings.stImportLocalArtBackKeywords, file)) {

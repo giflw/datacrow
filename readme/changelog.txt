@@ -18,7 +18,6 @@ Data Crow 3.8.5  [Release on xx/12/2009] [testing: high] [target: production]
 [Changed]
 - Selected container and storage medium for the file importer is now remembered for a 
   next run.
-- 
 
 
 -----------------------------------------------------------------------------------------
