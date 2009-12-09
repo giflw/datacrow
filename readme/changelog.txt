@@ -6,6 +6,7 @@ Data Crow 3.8.5  [Release on 3/12/2009] [testing: high] [target: production]
 - Discogs online service no longer retrieved the tracks.
 - Memory leak in the card view. Data Crow will now use a maximum amount of memory.
   After that, additional memory is actively released to the system.
+- File size is cleared when saving an item of which the file does not exist.
  
 
 -----------------------------------------------------------------------------------------
