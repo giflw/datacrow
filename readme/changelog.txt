@@ -15,6 +15,11 @@ Data Crow 3.8.5  [Release on xx/12/2009] [testing: high] [target: production]
 - [2909593] Null Pointer Exception when importing Movies
 - [2909591] No directory sort order in Movie import dialog
 
+[Changed]
+- Selected container and storage medium for the file importer is now remembered for a 
+  next run.
+- 
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.4  [Release on 3/12/2009] [testing: high] [target: production]

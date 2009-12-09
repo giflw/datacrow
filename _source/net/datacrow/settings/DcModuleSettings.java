@@ -40,7 +40,11 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.helpers.AudioCD;
 import net.datacrow.core.objects.helpers.Container;
+import net.datacrow.core.objects.helpers.Movie;
+import net.datacrow.core.objects.helpers.MusicAlbum;
+import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
@@ -235,16 +239,31 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
         else
             order = new int[] {DcObject._SYS_DISPLAYVALUE};
         
-        Collection<DcField> pics = new ArrayList<DcField>();
-        for (DcField field : module.getFields()) {
-        	if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
-        		pics.add(field);
+        int[] picFieldOrder;
+        if (module.getIndex() == DcModules._SOFTWARE) {
+            int[] fields = {Software._M_PICTUREFRONT, Software._O_PICTURECD, Software._N_PICTUREBACK,
+                           Software._P_SCREENSHOTONE, Software._Q_SCREENSHOTTWO, Software._R_SCREENSHOTTHREE};
+            picFieldOrder = fields;
+        } else if (module.getIndex() == DcModules._MOVIE) {
+            int[] fields = {Movie._X_PICTUREFRONT, Movie._Z_PICTURECD, Movie._Y_PICTUREBACK};
+            picFieldOrder = fields;
+        } else if (module.getIndex() == DcModules._AUDIOCD) {
+            int[] fields = {AudioCD._H_PICTUREFRONT, AudioCD._J_PICTURECD, AudioCD._I_PICTUREBACK};
+            picFieldOrder = fields;
+        } else if (module.getIndex() == DcModules._MUSICALBUM) {
+            int[] fields = {MusicAlbum._J_PICTUREFRONT, MusicAlbum._L_PICTURECD, MusicAlbum._K_PICTUREBACK};
+            picFieldOrder = fields;
+        } else {
+            Collection<DcField> pics = new ArrayList<DcField>();
+            for (DcField field : module.getFields()) {
+            	if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+            		pics.add(field);
+            }
+            picFieldOrder = new int[pics.size()];
+            int i = 0;
+            for (DcField field : pics)
+            	picFieldOrder[i++] = field.getIndex();
         }
-        
-        int[] picFieldOrder = new int[pics.size()];
-        int i = 0;
-        for (DcField field : pics)
-        	picFieldOrder[i++] = field.getIndex();
 
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
