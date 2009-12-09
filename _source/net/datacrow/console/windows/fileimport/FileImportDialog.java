@@ -50,6 +50,7 @@ import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
@@ -217,6 +218,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         settings.set(DcRepository.ModuleSettings.stTitleCleanup, textTitleCleanup.getText());
         settings.set(DcRepository.ModuleSettings.stTitleCleanupRegex, textTitleCleanupRegex.getText());
         settings.set(DcRepository.ModuleSettings.stFileImportDirectoryUsage, Long.valueOf(getDirectoryUsage()));
+        settings.set(DcRepository.ModuleSettings.stImportCDContainer, getDcContainer() != null ? getDcContainer().getID() : null);
+        settings.set(DcRepository.ModuleSettings.stImportCDStorageMedium, getStorageMedium() != null ? getStorageMedium().getID() : null);
         
         if (panelServer != null) {
             settings.set(DcRepository.ModuleSettings.stFileImportUseOnlineService,  Boolean.valueOf(panelServer.useOnlineService()));
@@ -334,13 +337,24 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         
         JPanel panelMediaInfo = new JPanel();
         panelMediaInfo.setLayout(Layout.getGBL());
-
+        
         JLabel lblContainer = ComponentFactory.getLabel(DcResources.getText("lblContainer"));
         fldContainer = ComponentFactory.getObjectCombo(DcModules._CONTAINER);
         
+        String ID = settings.getString(DcRepository.ModuleSettings.stImportCDContainer);
+        DcObject item = DataManager.getObject(DcModules._CONTAINER, ID);
+        if (item != null)
+            fldContainer.setSelectedItem(item);
+        
+        int idx = DcModules.get(importer.getModule()).getPropertyModule(DcModules._STORAGEMEDIA).getIndex();
         JLabel labelMedium = ComponentFactory.getLabel(DcResources.getText("lblStorageMedium"));
-        fldStorageMedium = ComponentFactory.getObjectCombo(DcModules.get(importer.getModule()).getPropertyModule(DcModules._STORAGEMEDIA).getIndex());
-
+        fldStorageMedium = ComponentFactory.getObjectCombo(idx);
+        
+        ID = settings.getString(DcRepository.ModuleSettings.stImportCDStorageMedium);
+        item = DataManager.getObject(idx, ID);
+        if (item != null)
+            fldStorageMedium.setSelectedItem(item);
+        
         panelMediaInfo.add(lblContainer,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 5, 5), 0, 0));

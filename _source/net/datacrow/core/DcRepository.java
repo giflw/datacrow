@@ -82,6 +82,8 @@ public abstract class DcRepository {
         public static final String stSimpleItemFormSize = "Simple_Item_Form_Size";
         public static final String stAutoAddPerfectMatch = "auto_add_perfect_match";
         public static final String stImportCDDialogSize = "import_cd_dialog_size";
+        public static final String stImportCDContainer = "import_cd_container";
+        public static final String stImportCDStorageMedium = "import_cd_storagemedium";
         public static final String stSynchronizerDialogSize = "synchronizer_dialog_size";
         public static final String stQuickViewFieldDefinitions = "quick_view_field_definitions";
         public static final String stWebFieldDefinitions = "web_field_definitions";
