@@ -381,7 +381,7 @@ public class Query {
                 ps.setString(1, (String) picture.getValue(Picture._B_FIELD));
                 
                 queries.add(ps);
-                requests.add(new ImageRequest(picture, ImageRequest._DELETE));                
+                requests.add(new ImageRequest(picture, ImageRequest._DELETE));    
             } else if (picture.isNew()) {
                 queries.addAll(getInsertQueries(picture));
                 requests.add(new ImageRequest(picture, ImageRequest._SAVE));

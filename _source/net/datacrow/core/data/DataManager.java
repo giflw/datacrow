@@ -204,6 +204,7 @@ public class DataManager {
 
         o.removeRequests();
         o.reload();
+        
         o.initializeReferences();
         o.setValidate(true);
         
@@ -665,7 +666,6 @@ public class DataManager {
                 if (picture.isNew()) {
                     picture.markAsUnchanged();
                     pics.add(picture);
-                    pictures.put(dco.getID(), pics);
                 } else if (picture.isUpdated()) {
                     picture.setValue(Picture._D_IMAGE, null);
                     if (pics.indexOf(picture) > -1) {
@@ -676,7 +676,9 @@ public class DataManager {
                 } else if (picture.isDeleted()) {
                     pics.remove(picture);
                     picture.release();
-                }  
+                } 
+                
+                pictures.put(dco.getID(), pics);
             }
         }
     }

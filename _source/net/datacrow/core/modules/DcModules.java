@@ -525,6 +525,9 @@ public class DcModules {
         if (current == null)
             current = DcModules.get(DcModules._SOFTWARE);
         
+        if (current == null)
+            current = DcModules.get(DcModules._USER);
+        
         if (current.getIndex() == DcModules._CONTAINER &&
             current.getSettings().getInt(DcRepository.ModuleSettings.stTreePanelShownItems) == DcModules._ITEM) {
             

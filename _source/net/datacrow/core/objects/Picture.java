@@ -68,8 +68,11 @@ public class Picture extends DcObject {
         super(DcModules._PICTURE);
     }
     
+    /**
+     * Checks whether an image has been defined and, if so, if the image exists.
+     */
     public boolean hasImage() {
-        return !Utilities.isEmpty(getValue(_C_FILENAME));
+        return isFilled(_C_FILENAME) && new File(DataCrow.imageDir, getDisplayString(_C_FILENAME)).exists();
     }
     
     public void loadImage() {
@@ -147,6 +150,7 @@ public class Picture extends DcObject {
             try {
                 return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
             } catch (IOException e1) {
+                logger.error("Scaled image does not exist or is invalid. Creating new.", e1);
                 createScaledImage(filename);
                 try {
                     return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));

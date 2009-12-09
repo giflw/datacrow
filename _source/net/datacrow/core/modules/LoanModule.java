@@ -60,7 +60,8 @@ public class LoanModule extends DcModule {
      */
     @Override
     public boolean isEnabled() {
-        return DcModules.get(DcModules._CONTACTPERSON).isEnabled();
+        return DcModules.get(DcModules._CONTACTPERSON) != null ? 
+               DcModules.get(DcModules._CONTACTPERSON).isEnabled() : false;
     }
 
     /**
