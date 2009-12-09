@@ -133,7 +133,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             
             DataFilter df = DataFilters.getDefaultDataFilter(module.getIndex());
             DataFilterEntry dfe = new DataFilterEntry(DataFilterEntry._AND, 
-                                                      module.getIndex(), 
+                                                      field.getModule(), 
                                                       field.getIndex(), 
                                                       operator,
                                                       value);
@@ -195,9 +195,18 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     }
     
     private void build() {
+     // TODO: encapsulate
         for (DcField field : module.getFields()) {
             if (field.isSearchable() && field.isEnabled())
                 comboFields.addItem(field);
+        }
+        
+        // TODO: encapsulate
+        if (module.getChild() != null) {
+            for (DcField field : module.getChild().getFields()) {
+                if (field.isSearchable() && field.isEnabled())
+                    comboFields.addItem(field);
+            }
         }
         
         Collection<DataFilter> filters = DataFilters.get(module.getIndex());

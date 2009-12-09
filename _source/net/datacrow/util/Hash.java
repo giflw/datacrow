@@ -94,6 +94,8 @@ public class Hash {
                     fileSize = currentFilesize;
                 }
                 
+                dco.setValue(DcObject._SYS_FILESIZE, fileSize);
+                
                 long max = DcSettings.getLong(DcRepository.Settings.stHashMaxFileSizeKb);
                 // check if the hash should be changed
                 if ( (max == 0 || fileSize <= max) &&
@@ -110,6 +112,9 @@ public class Hash {
                     hash = currentHash;
                     hashType = currentHashType;
                 }
+
+                dco.setValue(DcObject._SYS_FILEHASH, hash);
+                dco.setValue(DcObject._SYS_FILEHASHTYPE, hashType);
                 
                 checksum.reset();
 
@@ -117,10 +122,6 @@ public class Hash {
                 logger.error("Error while trying to calculate hash for file " + filename, e);
             }
         }
-        
-        dco.setValue(DcObject._SYS_FILESIZE, fileSize);
-        dco.setValue(DcObject._SYS_FILEHASH, hash);
-        dco.setValue(DcObject._SYS_FILEHASHTYPE, hashType);
     }
     
     private void initChecksum() {

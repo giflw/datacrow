@@ -118,9 +118,9 @@ public class DcCardObjectListElement extends DcObjectListElement {
             fldTitle.setBackground(color);
     }    
     
-    
     private void addPicture(Collection<Picture> pictures) {
         for (Picture p : pictures) {
+            
             if (p == null) continue;
                 
             DcImageIcon scaledImage = p.getScaledPicture();
@@ -147,32 +147,34 @@ public class DcCardObjectListElement extends DcObjectListElement {
     @Override
     public void build() {
 
-      build = true;
+        build = true;
       
-      this.fldPicture = DcObjectListComponents.getPictureField();
-      this.fldTitle = DcObjectListComponents.getTextPane();
+        this.fldPicture = DcObjectListComponents.getPictureField();
+        this.fldTitle = DcObjectListComponents.getTextPane();
       
-      addPicture(getPictures());
+        addPicture(getPictures());
       
-      fldTitle.setText(getDescription());
-      fldTitle.setPreferredSize(dimTxt);
-      fldTitle.setMinimumSize(dimTxt);
-      fldTitle.setMaximumSize(dimTxt);
+        fldTitle.setText(getDescription());
+        fldTitle.setPreferredSize(dimTxt);
+        fldTitle.setMinimumSize(dimTxt);
+        fldTitle.setMaximumSize(dimTxt);
       
-      add(fldTitle);
-      
-      super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
-      
-      try {
-          DcObjectList list = (DcObjectList) getParent().getParent();
+        add(fldTitle);
           
-          if (list.getView() != null) {
-              list.getView().revalidate();
-              list.getView().repaint(1000);
-          }
-      } catch (Exception e) {
+        super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
+      
+        try {
+            
+            DcObjectList list = (DcObjectList) getParent().getParent();
+          
+            if (list.getView() != null) {
+                list.getView().revalidate();
+                list.getView().repaint(1000);
+            }
+
+        } catch (Exception e) {
           logger.error("Error while updating the view component (revalidate)", e);
-      }
+        }
     }
     
     @Override

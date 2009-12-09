@@ -75,8 +75,5 @@ public abstract class DcListElement extends JPanel {
         
         if (getParent() != null)
             getParent().remove(this);
-        
-        if (getGraphics() != null)
-            getGraphics().dispose();
     }
 }
