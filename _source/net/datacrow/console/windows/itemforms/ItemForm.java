@@ -283,7 +283,8 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
     
     protected void applySettings() {
-        setSize(DcModules.get(moduleIdx).getSettings().getDimension(DcRepository.ModuleSettings.stItemFormSize));
+        DcModule m = dcoOrig != null ? dcoOrig.getModule() : DcModules.get(moduleIdx);
+        setSize(m.getSettings().getDimension(DcRepository.ModuleSettings.stItemFormSize));
     }
     
     public JTabbedPane getTabbedPane() {

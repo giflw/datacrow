@@ -76,6 +76,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     protected final boolean showImages;
     
+    private boolean hasRelatedItems = false;
+    
     protected DcObject dco;
     private LinkedList<Picture> pictures = new LinkedList<Picture>();
     private LinkedList<JPanel> imagePanels = new LinkedList<JPanel>();
@@ -206,6 +208,13 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             try {
                 descriptionPane.setCaretPosition(0);
             } catch (Exception exp) {}
+
+            hasRelatedItems = DataManager.getReferencingItems(dco).size() > 0;
+
+            if (hasRelatedItems) {
+                RelatedItemsPanel rip = new RelatedItemsPanel(dco);
+                tabbedPane.addTab(rip.getTitle(), rip.getIcon(), rip);
+            }
             
             createImageTabs();
             
@@ -435,7 +444,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     public void stateChanged(ChangeEvent evt) {
         JTabbedPane pane = (JTabbedPane) evt.getSource();
         
-        if (pane.getSelectedIndex() > 0)
+        if ((hasRelatedItems && pane.getSelectedIndex() > 1) || 
+            (!hasRelatedItems &&  pane.getSelectedIndex() > 0))
             loadImage();
     }
     
