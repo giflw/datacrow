@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.5  [Release on 3/12/2009] [testing: high] [target: production]
+Data Crow 3.8.5  [Release on xx/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -10,7 +10,11 @@ Data Crow 3.8.5  [Release on 3/12/2009] [testing: high] [target: production]
 - [2909635] Failure after installing without modules. Data Crow now actually be started
   when non of the default modules are available.
 - Non picture fields are displayed in the pictures settings for the card view.
-- [2909608] Cannot delete empty back picture
+- [2909608] Cannot delete empty back picture.
+- [2909589] Update all still malfunctioning.
+- [2909593] Null Pointer Exception when importing Movies
+- [2909591] No directory sort order in Movie import dialog
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.4  [Release on 3/12/2009] [testing: high] [target: production]

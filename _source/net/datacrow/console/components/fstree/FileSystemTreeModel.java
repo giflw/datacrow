@@ -28,7 +28,9 @@ package net.datacrow.console.components.fstree;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -62,7 +64,20 @@ public class FileSystemTreeModel extends DefaultTreeModel {
         } catch (Exception e) {}
         
         // if not, add it
-        insertNodeInto(node, (FileSystemTreeNode) parent, 0);
+        List<String> children = new ArrayList<String>();
+        FileSystemTreeNode parentNode = (FileSystemTreeNode) parent;
+        
+        // determine the position / sort index
+        for (int i = 0; i < parentNode.getExistingChildCount(); i++) 
+            children.add(((FileSystemTreeNode) parentNode.getChildAt(i)).getText());
+        
+        children.add(node.getText());
+        Collections.sort(children);
+        int pos = children.indexOf(node.getText());
+
+        // and add the node
+        insertNodeInto(node, (FileSystemTreeNode) parent, pos < 0 ? 0 : pos);
+        
         return node;
     }
 

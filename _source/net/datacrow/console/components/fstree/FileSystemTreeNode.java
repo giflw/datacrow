@@ -68,11 +68,12 @@ public class FileSystemTreeNode extends DefaultMutableTreeNode {
     
     @Override
     public int getChildCount() {
-        //if (isDirectory())
-            return children.size();
-
-        //return 0;
+        return children.size();
     }
+    
+    public int getExistingChildCount() {
+        return super.getChildCount();
+    }    
     
     public String getName() {
         return file.getName();

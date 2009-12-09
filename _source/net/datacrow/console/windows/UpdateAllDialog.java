@@ -130,7 +130,11 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
 	                
                     if (clone.isChanged()) {
                         try {
-                            clone.saveUpdate(false, false);
+                            if (view.getType() == View._TYPE_SEARCH) {
+                                clone.saveUpdate(false, false);
+                            } else if (view.getType() == View._TYPE_INSERT) {
+                                view.updateItem(item.getID(), clone);
+                            }
                         } catch (Exception e) {
                             // warn the user of the event that occurred (for example an incorrect parent for a container)
                             DcSwingUtilities.displayErrorMessage(e.getMessage());
@@ -148,7 +152,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
 	                count++;
 	            }
             } finally {
-            	view.setListSelectionListenersEnabled(true);
+            	if (view != null) view.setListSelectionListenersEnabled(true);
             }
             
             SwingUtilities.invokeLater(new Runnable() {
