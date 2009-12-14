@@ -68,7 +68,7 @@ public class ImageRequest implements IRequest {
      */
     public ImageRequest(Picture pic, int modus) {
         this.icon = (DcImageIcon) pic.getValue(Picture._D_IMAGE);
-        this.filename = pic.getFilename();
+        this.filename = (String) pic.getValue(Picture._C_FILENAME);
         this.modus = modus;
     }
 
@@ -126,15 +126,17 @@ public class ImageRequest implements IRequest {
         if (filename == null)
             return;
         
-        String imageFile = DataCrow.imageDir + filename;
+        File file = new File(DataCrow.imageDir, filename);
+        String imageFile = file.toString();
+        
         try {
-            File file = new File(imageFile);
+            
             if (file.exists())
                 file.delete();
             
             byte[] image = icon.getBytes();
             if (image != null && image.length > 10) {
-                Utilities.writeToFile(image, imageFile);
+                Utilities.writeToFile(image, file);
                 Utilities.writeScaledImageToFile(new ImageIcon(image), picture.getScaledFilename(imageFile));
             }
             

@@ -56,6 +56,7 @@ public class Picture extends DcObject {
     public static final int _D_IMAGE = 4;
     public static final int _E_HEIGHT = 5;
     public static final int _F_WIDTH = 6;
+    public static final int _G_EXTERNAL_FILENAME = 7;
     
     private boolean isNew = false;
     private boolean isUpdated = false;
@@ -76,14 +77,17 @@ public class Picture extends DcObject {
     }
     
     public void loadImage() {
+        
+        String filenameExt = Utilities.getMappedFilename((String) getValue(_G_EXTERNAL_FILENAME));
         String filename = (String) getValue(_C_FILENAME);
         DcImageIcon image = (DcImageIcon) getValue(Picture._D_IMAGE);
+
+        filename = new File(filenameExt).exists() ? filenameExt : filename; 
 
         if (filename != null && image == null) {
             try {
             	filename = new File(filename).exists() ? filename : DataCrow.imageDir + filename;
                 image = new DcImageIcon(filename);
-                
             } catch (Exception e) {
                 logger.error("Could not load image " + DataCrow.imageDir + filename, e);
             }

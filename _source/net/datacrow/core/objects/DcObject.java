@@ -667,6 +667,21 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
     
     /**
+     * Frees the resources hold by this items pictures.
+     */
+    public void flushImages() {
+        for (DcField field : getFields()) {
+            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                Picture picture = (Picture) getValue(field.getIndex());
+                if (picture != null) {
+                    DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
+                    if (icon != null) icon.flush();
+                }
+            }
+        }
+    }    
+    
+    /**
      * Sets a value on this object.
      * @param index The field index.
      * @param o The value to be set.
