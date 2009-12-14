@@ -110,6 +110,11 @@ public abstract class DcObjectListElement extends DcListElement {
         dco = null;
     }
     
+    public void flushImage() {
+        if (dco != null)
+            dco.flushImages();
+    }
+    
     @Override
     public void clear() {
         removeAll();

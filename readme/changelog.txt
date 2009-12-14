@@ -6,8 +6,11 @@ Data Crow 3.8.6  [Release on 9/12/2009] [testing: high] [target: production]
 - Incorrect translation of tabs in the software module.
 
 [Changed]
-- The image importer no longer imports the full image but a scaled thumbnail. If the 
-  original picture is present on the system it will be used for.
+Multiple improvements have been made to the image importer:
+- Images are no longer copied in their unmodified state to the Data Crow images folder.
+  The image will now first be scaled (400x400).
+- The link to the original image is now used to display the original image (if it is 
+  available).
   
 
 -----------------------------------------------------------------------------------------

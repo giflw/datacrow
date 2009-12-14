@@ -191,6 +191,12 @@ public class DcCardObjectListElement extends DcObjectListElement {
     }
     
     @Override
+    public void flushImage() {
+        super.flushImage();
+        fldPicture.flushImage();
+    }
+    
+    @Override
     public void clear() {
         super.clear();
         

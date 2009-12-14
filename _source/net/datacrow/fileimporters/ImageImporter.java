@@ -78,6 +78,11 @@ public class ImageImporter extends FileImporter {
     }    
     
     @Override
+    public boolean canImportArt() {
+        return false;
+    }    
+    
+    @Override
     public DcObject parse(String filename, int directoryUsage) {
         DcObject image = DcModules.get(DcModules._IMAGE).getItem();
         
@@ -104,6 +109,8 @@ public class ImageImporter extends FileImporter {
             
             image.setValue(Image._F_WIDTH, width != -1 ? Long.valueOf(width) : null);
             image.setValue(Image._G_HEIGHT, height != -1 ? Long.valueOf(height) : null);
+            
+            icon.flush();
             
             pic.setValue(Picture._A_OBJECTID, image.getID());
             pic.setValue(Picture._B_FIELD, image.getField(Image._I_IMAGE).getDatabaseFieldName());

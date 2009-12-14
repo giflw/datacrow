@@ -421,14 +421,14 @@ public class DcObjectList extends DcList implements IViewComponent {
                         if (view.getType() == View._TYPE_SEARCH)
                             getElement(i).clear();
                         else
-                            getElement(i).getDcObject().flushImages();
+                            getElement(i).flushImage();
                     }
                     
                     for (int i = last; i < size; i++) {
                         if (view.getType() == View._TYPE_SEARCH)
                             getElement(i).clear();
                         else
-                            getElement(i).getDcObject().flushImages();
+                            getElement(i).flushImage();
                     }
 
                 } catch (Exception e) {
