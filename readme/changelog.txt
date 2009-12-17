@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.6  [Release on 9/12/2009] [testing: high] [target: production]
+Data Crow 3.8.6  [Release on 17/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -11,7 +11,10 @@ Multiple improvements have been made to the image importer:
   The image will now first be scaled (400x400).
 - The link to the original image is now used to display the original image (if it is 
   available).
-  
+- A new option has been added to the file importer: save directly. This option adds 
+  items directly to the database, bypassing the new item tab. This saves both time and
+  memory.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.5  [Release on 9/12/2009] [testing: high] [target: production]
