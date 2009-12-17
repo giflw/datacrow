@@ -80,7 +80,7 @@ public class ItemExporterUtilities {
     
     private void copyImage(Picture picture, String target) {
         try {
-            picture.loadImage();
+            picture.loadImage(false);
             ImageIcon icon = (ImageIcon) picture.getValue(Picture._D_IMAGE);
 
             if (icon != null) {

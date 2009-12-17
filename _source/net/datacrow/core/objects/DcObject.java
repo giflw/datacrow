@@ -1355,7 +1355,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 Picture templatePic = (Picture) template.getValue(idx);
                 
                 Picture pic = (Picture) DcModules.get(DcModules._PICTURE).getItem();
-                templatePic.loadImage();
+                templatePic.loadImage(true);
                 pic.setValue(Picture._D_IMAGE, templatePic.getValue(Picture._D_IMAGE));
                 pic.setValue(Picture._E_HEIGHT, templatePic.getValue(Picture._E_HEIGHT));
                 pic.setValue(Picture._F_WIDTH, templatePic.getValue(Picture._F_WIDTH));

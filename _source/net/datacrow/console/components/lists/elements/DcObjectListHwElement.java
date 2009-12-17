@@ -156,7 +156,7 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
             if (picture != null && !picture.isDeleted()) {
                 ImageIcon image = (ImageIcon) picture.getValue(Picture._D_IMAGE);
                 if (image == null) {
-                	picture.loadImage();
+                	picture.loadImage(false);
                 	image = (ImageIcon) picture.getValue(Picture._D_IMAGE);
                 }
                 
