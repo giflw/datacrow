@@ -82,7 +82,7 @@ public class Picture extends DcObject {
         String filename = (String) getValue(_C_FILENAME);
         DcImageIcon image = (DcImageIcon) getValue(Picture._D_IMAGE);
 
-        filename = new File(filenameExt).exists() ? filenameExt : filename; 
+        filename = filenameExt != null && new File(filenameExt).exists() ? filenameExt : filename; 
 
         if (filename != null && image == null) {
             try {
