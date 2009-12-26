@@ -260,15 +260,7 @@ public abstract class FileImporter implements ISynchronizerClient {
         }
 
         if (getClient().getModule() != null && getClient().getModule().getCurrentInsertView() != null) {
-            if (getClient().getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly)) {
-                try {
-                    dco.saveNew(true);
-                } catch (Exception e) {
-                    getClient().addError(e);
-                }
-            } else {
-                getClient().getModule().getCurrentInsertView().add(dco, false);
-            }
+            getClient().getModule().getCurrentInsertView().add(dco, false);
         }
     }
 

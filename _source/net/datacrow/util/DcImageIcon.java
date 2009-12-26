@@ -92,8 +92,7 @@ public class DcImageIcon extends ImageIcon {
             logger.debug("Retrieving bytes from " + filename);
     		
     	try {
-    		this.bytes =  bytes != null ? bytes :  
-    		              filename != null ? Utilities.readFile(new File(filename)) : Utilities.getBytes(this);
+    		this.bytes = bytes == null && filename != null ? Utilities.readFile(new File(filename)) : bytes;
     	} catch (Exception ie) {
     		logger.error("Could not retrieve bytes from " + filename, ie);
     	}
