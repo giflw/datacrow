@@ -53,6 +53,7 @@ public abstract class DcRepository {
         public static final String stCardViewItemDescription = "card_view_item_description";
         public static final String stTitleCleanup = "title_cleanup";
         public static final String stTitleCleanupRegex = "title_cleanup_regex";
+        public static final String stImportSaveDirectly = "import_save_directly";
         public static final String stImportLocalArt = "import_local_art";
         public static final String stImportLocalArtFrontKeywords = "import_local_art_front_keywords";
         public static final String stImportLocalArtBackKeywords = "import_local_art_back_keywords";

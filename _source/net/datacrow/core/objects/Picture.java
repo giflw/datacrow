@@ -56,6 +56,7 @@ public class Picture extends DcObject {
     public static final int _D_IMAGE = 4;
     public static final int _E_HEIGHT = 5;
     public static final int _F_WIDTH = 6;
+    public static final int _G_EXTERNAL_FILENAME = 7;
     
     private boolean isNew = false;
     private boolean isUpdated = false;
@@ -76,7 +77,8 @@ public class Picture extends DcObject {
     }
     
     public void loadImage() {
-        String filename = (String) getValue(_C_FILENAME);
+        String filename = (String) getValue(_G_EXTERNAL_FILENAME);
+        filename = filename == null || !new File(filename).exists() ? (String) getValue(_C_FILENAME) : filename;
         DcImageIcon image = (DcImageIcon) getValue(Picture._D_IMAGE);
 
         if (filename != null && image == null) {

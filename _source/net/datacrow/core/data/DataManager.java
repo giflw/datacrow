@@ -672,6 +672,8 @@ public class DataManager {
                        Picture pic = pics.get(pics.indexOf(picture));
                        pic.copy(picture, true, true);
                        pic.markAsUnchanged();
+                    } else {
+                        pics.add(picture);
                     }
                 } else if (picture.isDeleted()) {
                     pics.remove(picture);
