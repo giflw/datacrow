@@ -56,7 +56,6 @@ public class Picture extends DcObject {
     public static final int _D_IMAGE = 4;
     public static final int _E_HEIGHT = 5;
     public static final int _F_WIDTH = 6;
-    public static final int _G_EXTERNAL_FILENAME = 7;
     
     private boolean isNew = false;
     private boolean isUpdated = false;
@@ -76,22 +75,19 @@ public class Picture extends DcObject {
         return isFilled(_C_FILENAME) && new File(DataCrow.imageDir, getDisplayString(_C_FILENAME)).exists();
     }
     
-    public void loadImage(boolean recreateImage) {
-        
-        String filenameExt = Utilities.getMappedFilename((String) getValue(_G_EXTERNAL_FILENAME));
+    public void loadImage() {
         String filename = (String) getValue(_C_FILENAME);
         DcImageIcon image = (DcImageIcon) getValue(Picture._D_IMAGE);
-
-        filename = filenameExt != null && new File(filenameExt).exists() ? filenameExt : filename; 
 
         if (filename != null && image == null) {
             try {
             	filename = new File(filename).exists() ? filename : DataCrow.imageDir + filename;
                 image = new DcImageIcon(filename);
+                
             } catch (Exception e) {
                 logger.error("Could not load image " + DataCrow.imageDir + filename, e);
             }
-        } else if (recreateImage) {
+        } else {
             // make sure the image is loaded.
             // as a precaution; ignore the image if it has bytes assigned to it
             if (image != null && image.getCurrentBytes() == null)
@@ -135,7 +131,7 @@ public class Picture extends DcObject {
     }    
     
     private void createScaledImage(String filename) {
-        loadImage(false);
+        loadImage();
         DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
         
         if (icon != null) {

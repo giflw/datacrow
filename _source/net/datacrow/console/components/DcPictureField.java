@@ -125,8 +125,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         if (o instanceof Picture)
             o = ((Picture) o).getValue(Picture._D_IMAGE);
 
-        flushImage();
-        initialize();
+        clearImage();
         
         try {
             if (o == null) {
@@ -167,22 +166,22 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     }
     
     public void clear() {
-        flushImage();
+        clearImage();
         
-        initialize();
-
         picture = null;
         size = null;
         menu = null;
         img = null;
     } 
     
-    public void flushImage() {
+    private void clearImage() {
         if (picture != null)
             picture.getImage().flush();
 
-        if (img != null)
+        if (img != null) {
             img.flush();
+            initialize();
+        }
     }
     
     public boolean isEmpty() {

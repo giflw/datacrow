@@ -118,8 +118,12 @@ public class DcObjectList extends DcList implements IViewComponent {
     public void setView(View view) {
         this.view = view;
         
-        if (module != null && module.isSelectableInUI())
+        if (    view.getType() == View._TYPE_SEARCH && 
+                module != null && 
+                module.isSelectableInUI()) {
+            
             new ViewRecycler("View recycler " + module).start();
+        }
     }
     
     public boolean allowsHorizontalTraversel() {
@@ -417,19 +421,11 @@ public class DcObjectList extends DcList implements IViewComponent {
                     first = first < 0 ? 0 : first;
                     last = last > size ? size : last;
 
-                    for (int i = 0; i < first; i++) {
-                        if (view.getType() == View._TYPE_SEARCH)
-                            getElement(i).clear();
-                        else
-                            getElement(i).flushImage();
-                    }
+                    for (int i = 0; i < first; i++)
+                        getElement(i).clear();
                     
-                    for (int i = last; i < size; i++) {
-                        if (view.getType() == View._TYPE_SEARCH)
-                            getElement(i).clear();
-                        else
-                            getElement(i).flushImage();
-                    }
+                    for (int i = last; i < size; i++)
+                        getElement(i).clear();
 
                 } catch (Exception e) {
                     try {

@@ -77,7 +77,6 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     protected JProgressBar progressBar = new JProgressBar();
 
     protected JCheckBox checkDirNameAsTitle = ComponentFactory.getCheckBox(DcResources.getText("lblUseDirNameAsTitle"));
-    protected JCheckBox checkSaveDirectly = ComponentFactory.getCheckBox(DcResources.getText("lblSaveDirectly"));
     protected JComboBox fldContainer;
     protected JComboBox fldStorageMedium;
     
@@ -221,7 +220,6 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         settings.set(DcRepository.ModuleSettings.stFileImportDirectoryUsage, Long.valueOf(getDirectoryUsage()));
         settings.set(DcRepository.ModuleSettings.stImportCDContainer, getDcContainer() != null ? getDcContainer().getID() : null);
         settings.set(DcRepository.ModuleSettings.stImportCDStorageMedium, getStorageMedium() != null ? getStorageMedium().getID() : null);
-        settings.set(DcRepository.ModuleSettings.stImportSaveDirectly, checkSaveDirectly.isSelected());
         
         if (panelServer != null) {
             settings.set(DcRepository.ModuleSettings.stFileImportUseOnlineService,  Boolean.valueOf(panelServer.useOnlineService()));
@@ -396,26 +394,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             panel.add(getDirectoryUsagePanel(), Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(10, 0, 0, 0), 0, 0));
-
-        //**********************************************************
-        //General settings
-        //**********************************************************
-        JPanel panelGeneral = new JPanel();
-        panelGeneral.setLayout(Layout.getGBL());
-        panelGeneral.add(checkSaveDirectly, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets(15, 5, 5, 5), 0, 0));  
-        panelGeneral.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblGroupGeneral")));
-        checkSaveDirectly.setSelected(settings.getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly));
         
-        panel.add(getDirectoryUsagePanel(), Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(10, 0, 0, 0), 0, 0));
-        
-        panel.add(panelGeneral, Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(10, 0, 0, 0), 0, 0));
-
+      
         
         return panel;
     }
@@ -529,8 +509,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         if (module.deliversOnlineService())
             tp.addTab(DcResources.getText("lblOnlineSearch"), IconLibrary._icoSearchOnline16, panelOs);
         
-        if (importer.canImportArt())
-            tp.addTab(DcResources.getText("lblLocalArt"), IconLibrary._icoPicture, panelLocalArt);
+        tp.addTab(DcResources.getText("lblLocalArt"), IconLibrary._icoPicture, panelLocalArt);
+
         
         //**********************************************************
         //Main Panel

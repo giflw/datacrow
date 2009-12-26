@@ -667,21 +667,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
     
     /**
-     * Frees the resources hold by this items pictures.
-     */
-    public void flushImages() {
-        for (DcField field : getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) getValue(field.getIndex());
-                if (picture != null) {
-                    DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
-                    if (icon != null) icon.flush();
-                }
-            }
-        }
-    }    
-    
-    /**
      * Sets a value on this object.
      * @param index The field index.
      * @param o The value to be set.
@@ -1355,7 +1340,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 Picture templatePic = (Picture) template.getValue(idx);
                 
                 Picture pic = (Picture) DcModules.get(DcModules._PICTURE).getItem();
-                templatePic.loadImage(true);
+                templatePic.loadImage();
                 pic.setValue(Picture._D_IMAGE, templatePic.getValue(Picture._D_IMAGE));
                 pic.setValue(Picture._E_HEIGHT, templatePic.getValue(Picture._E_HEIGHT));
                 pic.setValue(Picture._F_WIDTH, templatePic.getValue(Picture._F_WIDTH));

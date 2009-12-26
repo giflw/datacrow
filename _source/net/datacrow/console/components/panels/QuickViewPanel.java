@@ -114,7 +114,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     private void loadImage() {
         int index = tabbedPane.getSelectedIndex() - 1;
         Picture picture = pictures.get(index);
-        picture.loadImage(false);
+        picture.loadImage();
         
         JPanel panel = imagePanels.get(index);
         Component[] components =  panel.getComponents();
