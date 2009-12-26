@@ -546,7 +546,9 @@ public class ItemForm extends DcFrame implements ActionListener {
                 dco.addChild(child);
         }
 
-        if (update) dco.markAsUnchanged();
+        if (update)
+            dco = dcoOrig.clone();
+            //dco.markAsUnchanged();
         
         for (DcField field : fields.keySet()) {
             JComponent component = fields.get(field);
