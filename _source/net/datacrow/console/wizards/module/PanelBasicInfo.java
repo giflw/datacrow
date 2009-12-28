@@ -30,7 +30,6 @@ import java.awt.Insets;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
@@ -290,14 +289,8 @@ public class PanelBasicInfo extends ModuleWizardPanel {
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets( 5, 5, 5, 5), 0, 0));  
 
-        try {
-            pic16 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon16.png"));
-            pic32 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon32.png"));
-        } catch (IOException e) {
-            logger.error(e, e);
-            pic16 = ComponentFactory.getIconSelectField(new DcImageIcon());
-            pic32 = ComponentFactory.getIconSelectField(new DcImageIcon());
-        }
+        pic16 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon16.png"));
+        pic32 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon32.png"));
             
         add(ComponentFactory.getLabel(DcResources.getText("lblIcon16")), 
                      Layout.getGBC(0, 10, 1, 1, 1.0, 1.0
