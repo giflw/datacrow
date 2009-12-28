@@ -33,6 +33,7 @@ import net.datacrow.console.windows.onlinesearch.OnlineSearchForm;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.plugin.IServer;
+import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
 
@@ -195,7 +196,7 @@ public abstract class SearchTask extends Thread {
      * The used query as specified by the user.
      */
     public String getQuery() {
-        String s = query;//StringUtils.normalize(query); 
+        String s = StringUtils.normalize2(query); 
             
         s = query.replaceAll(" ", getWhiteSpaceSubst());
         s = s.replaceAll("\n", "");

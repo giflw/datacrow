@@ -1,12 +1,13 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.6  [Release on 17/12/2009] [testing: high] [target: production]
+Data Crow 3.8.6  [Release on 28/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Incorrect translation of tabs in the software module.
+- Incorrect translation of tabs in the software module (only fixed for new installations)
 - Several small memory leaks concerning images.
 - Image not always saved; newly added image are marked as updated images causing them
   to be discarded.
+- Cannot perform online search for items having a ' in the name.
 
 [Changed]
 Multiple improvements have been made to the image importer:
@@ -17,6 +18,8 @@ Multiple improvements have been made to the image importer:
 - A new option has been added to the file importer: save directly. This option adds 
   items directly to the database, bypassing the new item tab. This saves both time and
   memory.
+- Selected server, mode and region are now remembered for the Mass Update functionality.
+- Queries as entered in the online search form are now used in their unmodified form.
 
 
 -----------------------------------------------------------------------------------------

@@ -50,7 +50,6 @@ import net.datacrow.core.services.OnlineServices;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.util.StringUtils;
 
 public class OnlineServicePanel extends JPanel implements ActionListener, KeyListener  {
     
@@ -85,7 +84,7 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
     }
     
     public String getQuery() {
-        return StringUtils.normalize(fldQuery.getText().trim());
+        return fldQuery.getText().trim();
     }
     
     public void setQuery(String query) {

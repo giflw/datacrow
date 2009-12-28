@@ -661,7 +661,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) getValue(field.getIndex());
                 if (picture != null)
-                    picture.unload();
+                    picture.unload(false);
             }
         }
     }
@@ -867,7 +867,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         
         if (isDestroyed()) return;
 
-        clearValues();
+        clearValues(true);
         setValueLowLevel(DcObject._ID, null);
         
         if (requests != null)
@@ -880,7 +880,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
     
     public void destroy() {
-        clearValues();
+        clearValues(true);
         values.clear();
         values = null;
         requests.clear();
@@ -888,17 +888,19 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         children = null;
     }
     
+    
     /**
      * Resets this item. All values are set to empty.
+     * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
-    public void clearValues() {
+    public void clearValues(boolean nochecks) {
         if (isDestroyed()) {
             logger.warn("System tried to clear all values while the object was already destroyed");
         } else {
             for (Integer key : values.keySet()) {
                 if (key.intValue() != _ID) {
                     DcValue value = values.get(key);
-                    value.clear();
+                    value.clear(nochecks);
                 }
             }
         }

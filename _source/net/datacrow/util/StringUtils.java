@@ -185,6 +185,22 @@ public class StringUtils {
         return result;
     }    
     
+    public static String normalize2(String s) {
+        s = s.replaceAll("[èéêë]","e");
+        s = s.replaceAll("[ûù]","u");
+        s = s.replaceAll("[ïî]","i");
+        s = s.replaceAll("[àâ]","a");
+        s = s.replaceAll("Ô","o");
+
+        s = s.replaceAll("[ÈÉÊË]","E");
+        s = s.replaceAll("[ÛÙ]","U");
+        s = s.replaceAll("[ÏÎ]","I");
+        s = s.replaceAll("[ÀÂ]","A");
+        s = s.replaceAll("Ô","O");
+        
+        return s;
+    }
+    
     public static String normalize(String text) {
         String s = text == null ? "" : text.trim().toLowerCase();
         
@@ -200,17 +216,7 @@ public class StringUtils {
         s = s.replaceAll("\n", "");
         s = s.replaceAll("\r", "");
         
-        s = s.replaceAll("[èéêë]","e");
-        s = s.replaceAll("[ûù]","u");
-        s = s.replaceAll("[ïî]","i");
-        s = s.replaceAll("[àâ]","a");
-        s = s.replaceAll("Ô","o");
-
-        s = s.replaceAll("[ÈÉÊË]","E");
-        s = s.replaceAll("[ÛÙ]","U");
-        s = s.replaceAll("[ÏÎ]","I");
-        s = s.replaceAll("[ÀÂ]","A");
-        s = s.replaceAll("Ô","O");
+        s = normalize2(s);
         
         while (s.length() > 2 && (Character.isDigit(s.charAt(s.length() -1)) || s.charAt(s.length() -1) == ' ')) 
             s = s.substring(0, s.length() -1);

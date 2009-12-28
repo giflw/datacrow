@@ -693,11 +693,11 @@ public class DataManager {
                     }
                     
                     if (pics.indexOf(picture) > -1) {
-                       Picture pic = pics.get(pics.indexOf(picture));
-                       pic.copy(picture, true, true);
-                       pic.markAsUnchanged();
+                        Picture pic = pics.get(pics.indexOf(picture));
+                        pic.copy(picture, true, true);
+                        pic.markAsUnchanged();
                     } else {
-                        logger.error("Image was marked as changed but is new");
+                        logger.error("Image was marked as changed but is actually new!", new Exception());
                     }
                     
                 } else if (picture.isDeleted()) {

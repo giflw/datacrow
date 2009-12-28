@@ -75,8 +75,10 @@ public class FreeResourcesTask {
         debug(start, "Clearing images in store");
 
         start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        
         for (DcObject dco : DataManager.get(DcModules._PICTURE, null))
-            ((Picture) dco).unload();
+            ((Picture) dco).unload(false);
+        
         debug(start, "Unloading images");
         
         start = logger.isDebugEnabled() ? new Date().getTime() : 0;

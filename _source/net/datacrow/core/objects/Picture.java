@@ -107,30 +107,25 @@ public class Picture extends DcObject {
     
     @Override
     public void release() {
-        removeImage();
+        unload(true);
         super.release();
     }
     
-    public void unload() {
-        if (getValues() != null && !isNew() && !edited)
-            removeImage();
-    }
-        
-    private void removeImage() {
+    public void unload(boolean nochecks) {
         
         if (scaledImage != null) {
             scaledImage.flush();
             scaledImage = null;
         }
         
-    	if (getValues() != null) {
+        if (getValues() != null && (nochecks || (!isNew() && !edited))) {
 	    	DcImageIcon image = ((DcImageIcon) getValue(_D_IMAGE));
-	    	
+
 	    	if (image != null) image.flush();
 	    	
 	        setValueLowLevel(_D_IMAGE, null);
 	        setChanged(_D_IMAGE, false);
-    	}
+        }
     }
     
     @Override

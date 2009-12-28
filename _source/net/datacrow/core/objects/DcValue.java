@@ -262,10 +262,11 @@ public class DcValue implements Serializable {
     
     /**
      * Clears the value and sets it to null.
+     * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
-    public void clear() {
+    public void clear(boolean nochecks) {
         if (value != null && value instanceof Picture)
-            ((Picture) value).unload();
+            ((Picture) value).unload(nochecks);
 
         displayString = "";
         value = null;

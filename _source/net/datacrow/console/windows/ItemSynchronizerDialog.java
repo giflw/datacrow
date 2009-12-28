@@ -53,6 +53,7 @@ import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.Settings;
 import net.datacrow.synchronizers.ISynchronizerClient;
 import net.datacrow.synchronizers.Synchronizer;
 
@@ -97,8 +98,21 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         enableActions(true);
     }
     
-    protected void synchronize() {
+    private void saveSettings() {
         panelOnlineServiceSettings.save();
+
+        Settings settings = DcModules.get(module).getSettings();
+        if (panelServer.getServer() != null)
+            settings.set(DcRepository.ModuleSettings.stMassUpdateServer, panelServer.getServer().getName());
+        if (panelServer.getRegion() != null)
+            settings.set(DcRepository.ModuleSettings.stMassUpdateRegion, panelServer.getRegion().getCode());
+        if (panelServer.getMode() != null)
+            settings.set(DcRepository.ModuleSettings.stMassUpdateMode, panelServer.getMode().getDisplayName());
+        
+    }
+    
+    protected void synchronize() {
+        saveSettings();
         synchronizer.synchronize(this);
     }
     
@@ -132,6 +146,9 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
     
     @Override
     public void close() {
+        
+        saveSettings();
+        
         cancel();
 
         if (cbItemPickMode.getSelectedIndex() > -1)
@@ -240,6 +257,10 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         //Online Server panel
         //**********************************************************
         panelServer = new OnlineServicePanel(servers, true, canParseFiles ? true : false);
+        Settings settings = DcModules.get(module).getSettings();
+        panelServer.setServer(settings.getString(DcRepository.ModuleSettings.stMassUpdateServer));
+        panelServer.setMode(settings.getString(DcRepository.ModuleSettings.stMassUpdateMode));
+        panelServer.setRegion(settings.getString(DcRepository.ModuleSettings.stMassUpdateRegion));
 
         //**********************************************************
         //Online Server Settings panel

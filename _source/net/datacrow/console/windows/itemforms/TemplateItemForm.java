@@ -78,7 +78,7 @@ public class TemplateItemForm extends ItemForm {
     protected void deleteItem() {
         if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
             String id = dco.getID();
-            dco.clearValues();
+            dco.clearValues(true);
             dco.setValue(DcObject._ID, id);
             dco.setSilent(true);
 
