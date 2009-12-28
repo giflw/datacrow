@@ -624,7 +624,7 @@ public class DcModule implements Comparable<DcModule> {
             return;
 
         if (items.size() < _MAX_ITEM_STORE_SIZE) {
-            items.add(dco);
+            items.add(0, dco);
             itemsReleased += 1;
         } else { 
             dco.destroy();

@@ -108,8 +108,10 @@ public class Picture extends DcObject {
     @Override
     public void release() {
         unload(true);
-        scaledImage = null;
         super.release();
+        deleted = false;
+        edited = false;
+        scaledImage = null;
     }
     
     public String getImageFilename() {
