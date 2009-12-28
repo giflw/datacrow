@@ -108,6 +108,7 @@ public class Picture extends DcObject {
     @Override
     public void release() {
         unload(true);
+        scaledImage = null;
         super.release();
     }
     
@@ -115,7 +116,9 @@ public class Picture extends DcObject {
         
         if (scaledImage != null) {
             scaledImage.flush();
-            scaledImage = null;
+            // prevent massive amounts of pictures being created;
+            // do turn this back on! just flush the image an keep using it.
+            // scaledImage = null;
         }
         
         if (getValues() != null && (nochecks || (!isNew() && !edited))) {
