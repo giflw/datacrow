@@ -681,7 +681,7 @@ public class DataManager {
                 List<Picture> pics = pictures.get(dco.getID());
                 pics = pics == null ? new ArrayList<Picture>() : pics;
 
-                if (picture.isNew() && picture.isEdited()) {
+                if (picture.isNew() && picture.isEdited() && !picture.isDeleted()) {
                     picture.markAsUnchanged();
                     pics.add(picture);
                     picture.unload(true);
