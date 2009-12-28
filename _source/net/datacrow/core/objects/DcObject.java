@@ -1383,6 +1383,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Clones this objects. All values are copies as well as its children.
      * The clone operates on copies of the pictures and the children and can be used entirely
      * in parallel with its clone(s).
+     * 
+     * Note; this is not a shallow copy and costs just as much resources as its original.
+     * After using the clone it is best to disgard it by calling the destroy method.
      */
     @Override
     public DcObject clone() {
