@@ -4,6 +4,9 @@ Data Crow 3.8.6  [Release on 17/12/2009] [testing: high] [target: production]
 
 [Fixed]
 - Incorrect translation of tabs in the software module.
+- Several small memory leaks concerning images.
+- Image not always saved; newly added image are marked as updated images causing them
+  to be discarded.
 
 [Changed]
 Multiple improvements have been made to the image importer:

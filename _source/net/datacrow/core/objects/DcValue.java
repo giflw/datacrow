@@ -32,8 +32,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
@@ -108,27 +106,30 @@ public class DcValue implements Serializable {
             setChanged(true);
 
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-
             if (o instanceof Picture) {
-                setValueNative(((Picture) o).clone(), field);    
+                if (value != null) ((Picture) value).release();
+                setValueNative(((Picture) o).clone(), field);   
             } else {
                 Picture picture = value == null ? (Picture) DcModules.get(DcModules._PICTURE).getItem() : (Picture) value;
                 value = picture; 
 
-                ImageIcon currentImage = (ImageIcon) picture.getValue(Picture._D_IMAGE);
-                ImageIcon newImage = o instanceof ImageIcon ? (ImageIcon) o : 
-                	                 o instanceof byte[] ? new DcImageIcon((byte[]) o) : null;
+                DcImageIcon currentImage = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
+                DcImageIcon newImage = o instanceof DcImageIcon ? (DcImageIcon) o : 
+                	                   o instanceof byte[] ? new DcImageIcon((byte[]) o) : null;
 
                 if (currentImage != newImage) {
+                    
                 	// prevent empty and incorrect images to be saved
 		        	if (	newImage != null && 
 		        			newImage.getIconHeight() != 0 && 
 		        			newImage.getIconWidth() != 0) {
 		        		
+		        	    if (currentImage != null) currentImage.flush();
 		                picture.setValue(Picture._D_IMAGE, newImage);
 	                	picture.isEdited(true);
                         setValueNative(picture, field);
 		            } else if (currentImage != null) {
+		                currentImage.flush();
 		                ((Picture) value).isDeleted(true);
                         setValueNative(picture, field);
                     }

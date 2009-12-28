@@ -93,6 +93,7 @@ public class Picture extends DcObject {
         } else if (image != null && isEdited() && image.getCurrentBytes() == null) {
             image.flush();
             image = new DcImageIcon(image.getImage());
+            scaledImage = null;
         }
         
         setValue(Picture._D_IMAGE, image);
@@ -116,6 +117,12 @@ public class Picture extends DcObject {
     }
         
     private void removeImage() {
+        
+        if (scaledImage != null) {
+            scaledImage.flush();
+            scaledImage = null;
+        }
+        
     	if (getValues() != null) {
 	    	DcImageIcon image = ((DcImageIcon) getValue(_D_IMAGE));
 	    	

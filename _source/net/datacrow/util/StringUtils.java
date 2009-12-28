@@ -212,6 +212,9 @@ public class StringUtils {
         s = s.replaceAll("[юб]","A");
         s = s.replaceAll("т","O");
         
+        while (s.length() > 2 && (Character.isDigit(s.charAt(s.length() -1)) || s.charAt(s.length() -1) == ' ')) 
+            s = s.substring(0, s.length() -1);
+        
         return s.trim();
     }
 }

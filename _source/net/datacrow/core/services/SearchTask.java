@@ -33,7 +33,6 @@ import net.datacrow.console.windows.onlinesearch.OnlineSearchForm;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
 
@@ -70,6 +69,7 @@ public abstract class SearchTask extends Thread {
     
     private int maximum = 20;
     
+    private String input;
     private String query;
     
     // The currently used URL or address
@@ -101,7 +101,8 @@ public abstract class SearchTask extends Thread {
 		this.searchMode = mode;
 		this.server = server;
 		this.address = region != null ? region.getUrl() : server.getUrl();
-		this.query = StringUtils.normalize(query);
+		this.query = query;//StringUtils.normalize(query);
+		this.input = query;
 	}
 
     /**
@@ -194,7 +195,7 @@ public abstract class SearchTask extends Thread {
      * The used query as specified by the user.
      */
     public String getQuery() {
-        String s = StringUtils.normalize(query); 
+        String s = query;//StringUtils.normalize(query); 
             
         s = query.replaceAll(" ", getWhiteSpaceSubst());
         s = s.replaceAll("\n", "");
@@ -308,7 +309,7 @@ public abstract class SearchTask extends Thread {
         listener.processingTotal(keys.size());
 
         if (keys.size() == 0) {
-            listener.addWarning(DcResources.getText("msgNoResultsForKeywords", getQuery()));
+            listener.addWarning(DcResources.getText("msgNoResultsForKeywords", input));
             listener.stopped();
             return;
         }
