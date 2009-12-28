@@ -162,7 +162,12 @@ public abstract class FileImporter implements ISynchronizerClient {
         Thread thread = new Thread(new Runnable() {
             public void run() {
                 getClient().addMessage(DcResources.getText("msgImportStarts"));
-                DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
+                
+                if (getClient().getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly))
+                    DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._SEARCHTAB);
+                else 
+                    DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
+                
                 getClient().addMessage(DcResources.getText("msgParsingXFiles", 
                                     String.valueOf(sources.size())));
                 

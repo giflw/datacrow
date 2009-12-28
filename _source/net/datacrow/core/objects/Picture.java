@@ -237,8 +237,7 @@ public class Picture extends DcObject {
     
     @Override
     public int hashCode() {
-        return (getValue(Picture._B_FIELD) != null ? getValue(Picture._B_FIELD).hashCode() : 0) +
-               (getValue(Picture._A_OBJECTID) != null ? getValue(Picture._A_OBJECTID).hashCode() : 0); 
+        return (getValue(Picture._C_FILENAME) != null ? getValue(Picture._C_FILENAME).hashCode() : 0); 
     }
     
     @Override
@@ -248,13 +247,10 @@ public class Picture extends DcObject {
         if (o instanceof Picture) {
             Picture picture = (Picture) o;
             
-            String fieldname1 = (String) picture.getValue(Picture._B_FIELD);
-            String fieldname2 = (String) getValue(Picture._B_FIELD);
-
-            String objectID1 = (String) picture.getValue(Picture._A_OBJECTID);
-            String objectID2 = (String) getValue(Picture._A_OBJECTID);
+            String filename1 = (String) picture.getValue(Picture._C_FILENAME);
+            String filename2 = (String) getValue(Picture._C_FILENAME);
             
-            equals = fieldname1.equals(fieldname2) && objectID1.equals(objectID2);
+            equals = filename1 == filename2 || (filename1 != null && filename1.equals(filename2));
         } else {
             equals = super.equals(o);
         }

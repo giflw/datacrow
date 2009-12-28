@@ -651,8 +651,7 @@ public class DataCrow {
      * Checks whether the specified installation directory is valid.
      */
     private static void checkCurrentDir() {
-        if (!new File(DataCrow.installationDir + "plugins").exists() ||
-            !new File(DataCrow.installationDir + "modules").exists()) {
+        if (!new File(DataCrow.installationDir + "plugins").exists()) {
         
             NativeMessageBox dlg = new NativeMessageBox("Warning", 
                     "The installation directory could not be determined. " +
@@ -706,6 +705,7 @@ public class DataCrow {
         cacheDir = DataCrow.dataDir + "cache/";
         resourcesDir = DataCrow.installationDir + "resources/";
         
+        DataCrow.createDirectory(new File(installationDir), "modules");
         DataCrow.createDirectory(new File(dataDir), "data");
         DataCrow.createDirectory(new File(cacheDir), "cache");
         DataCrow.createDirectory(new File(dataDir, "temp"), "temp");

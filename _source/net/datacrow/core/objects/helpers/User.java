@@ -1,5 +1,7 @@
 package net.datacrow.core.objects.helpers;
 
+import java.io.IOException;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
@@ -14,8 +16,12 @@ import net.datacrow.core.wf.requests.DeleteUserRequest;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
 
+import org.apache.log4j.Logger;
+
 public class User extends DcObject {
 
+    private static Logger logger = Logger.getLogger(User.class.getName());
+    
     private static final long serialVersionUID = -6350928968206517038L;
     
     public static final int _A_LOGINNAME = 1;
@@ -52,8 +58,13 @@ public class User extends DcObject {
         super.beforeSave();
 
         Picture picture = (Picture) getValue(_E_PHOTO);
-        if (picture == null || picture.getValue(Picture._D_IMAGE) == null)
-        	setValue(User._E_PHOTO, new DcImageIcon(DataCrow.installationDir + "icons/" + "user.png"));
+        if (picture == null || picture.getValue(Picture._D_IMAGE) == null) {
+            try {
+                setValue(User._E_PHOTO, new DcImageIcon(DataCrow.installationDir + "icons/" + "user.png"));
+            } catch (IOException e) {
+                logger.error(e, e);
+            }
+        }
         
         String loginname = (String) getValue(_A_LOGINNAME);
         if (loginname != null)

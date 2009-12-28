@@ -27,8 +27,10 @@ package net.datacrow.util;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
@@ -49,8 +51,8 @@ public class DcImageIcon extends ImageIcon {
         super();
     }
     
-    public DcImageIcon(String filename) {
-        super(filename);
+    public DcImageIcon(String filename) throws IOException {
+        super(ImageIO.read(new File(filename)));
         this.filename = filename;
     }    
 
