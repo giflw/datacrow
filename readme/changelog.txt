@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.6  [Release on 28/12/2009] [testing: high] [target: production]
+Data Crow 3.8.6  [Release on 17/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -7,7 +7,6 @@ Data Crow 3.8.6  [Release on 28/12/2009] [testing: high] [target: production]
 - Several small memory leaks concerning images.
 - Image not always saved; newly added image are marked as updated images causing them
   to be discarded.
-- Cannot perform online search for items having a ' in the name.
 
 [Changed]
 Multiple improvements have been made to the image importer:
