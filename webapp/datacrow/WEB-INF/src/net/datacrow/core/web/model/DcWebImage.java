@@ -26,6 +26,7 @@
 package net.datacrow.core.web.model;
 
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.Picture;
 
 
 public class DcWebImage {
@@ -56,7 +57,7 @@ public class DcWebImage {
     }
 
     public String getFilename() {
-        return picture != null ? "mediaimages/" + picture.getFilename() : null;
+        return picture != null ? "mediaimages/" + picture.getValue(Picture._C_FILENAME) : null;
     }
 
     public String getFilenameScaled() {

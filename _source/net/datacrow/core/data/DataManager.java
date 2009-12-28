@@ -684,22 +684,17 @@ public class DataManager {
                 if (picture.isNew()) {
                     picture.markAsUnchanged();
                     pics.add(picture);
+                    picture.unload(false);
                 } else if (picture.isEdited()) {
-                    
-                    DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
-                    if (icon != null) {
-                        icon.flush();
-                        picture.setValue(Picture._D_IMAGE, null);
-                    }
-                    
+                    picture.unload(true);
                     if (pics.indexOf(picture) > -1) {
                         Picture pic = pics.get(pics.indexOf(picture));
                         pic.copy(picture, true, true);
                         pic.markAsUnchanged();
+                        pic.unload(true);
                     } else {
                         logger.error("Image was marked as changed but is actually new!", new Exception());
                     }
-                    
                 } else if (picture.isDeleted()) {
                     pics.remove(picture);
                     picture.release();

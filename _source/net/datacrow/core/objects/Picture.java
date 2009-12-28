@@ -112,6 +112,10 @@ public class Picture extends DcObject {
         super.release();
     }
     
+    public String getImageFilename() {
+        return (String) getValue(Picture._C_FILENAME);
+    }
+    
     public void unload(boolean nochecks) {
         
         if (scaledImage != null) {
