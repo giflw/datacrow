@@ -69,7 +69,7 @@ import javax.swing.filechooser.FileSystemView;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.ImageStore;
+import net.datacrow.core.ImageCleaner;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
 
@@ -655,8 +655,8 @@ public class Utilities {
         bi.flush();
         image.flush();
         
-        ImageStore.addImage(bi);
-        ImageStore.addImage(image);
+        ImageCleaner.addImage(bi);
+        ImageCleaner.addImage(image);
         
         return bi;
     }

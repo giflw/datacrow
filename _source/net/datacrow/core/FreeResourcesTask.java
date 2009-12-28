@@ -71,7 +71,7 @@ public class FreeResourcesTask {
     
     private static void suggestGCNow() {
     	long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-        ImageStore.clean();
+        ImageCleaner.clean();
         debug(start, "Clearing images in store");
 
         start = logger.isDebugEnabled() ? new Date().getTime() : 0;

@@ -42,9 +42,9 @@ import org.apache.log4j.Logger;
  * 
  * @author Robert Jan van der Waals
  */
-public class ImageStore {
+public class ImageCleaner {
 
-    private static Logger logger = Logger.getLogger(ImageStore.class.getName());
+    private static Logger logger = Logger.getLogger(ImageCleaner.class.getName());
     
     private static final Collection<WeakReference<Image>> references = new ArrayList<WeakReference<Image>>();
     
@@ -80,17 +80,8 @@ public class ImageStore {
                 remove.add(reference);
                 collected++;
             } else {
-
-                try {
-                    image.getGraphics().dispose();
-                } catch (Exception e) {
-                    // this will fail for non-offscreen images (see API)
-                    if (logger.isDebugEnabled())
-                        logger.debug("Could not dispose of the graphics of image of type [" + image.getClass() + "] in store [" + image.hashCode() + "]. Not an offscreen image.");
-                }
-                   
                 image.flush();
-                
+
                 // try to enqueue. As we are only interested in freeing the resources used
                 // by the images and we already disposed of its graphics and flushed its resources its time
                 // to queue the reference for garbage collection. 

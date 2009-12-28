@@ -685,7 +685,13 @@ public class DataManager {
                     picture.markAsUnchanged();
                     pics.add(picture);
                 } else if (picture.isEdited()) {
-                    picture.setValue(Picture._D_IMAGE, null);
+                    
+                    DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
+                    if (icon != null) {
+                        icon.flush();
+                        picture.setValue(Picture._D_IMAGE, null);
+                    }
+                    
                     if (pics.indexOf(picture) > -1) {
                        Picture pic = pics.get(pics.indexOf(picture));
                        pic.copy(picture, true, true);
@@ -693,6 +699,7 @@ public class DataManager {
                     } else {
                         logger.error("Image was marked as changed but is new");
                     }
+                    
                 } else if (picture.isDeleted()) {
                     pics.remove(picture);
                     picture.release();

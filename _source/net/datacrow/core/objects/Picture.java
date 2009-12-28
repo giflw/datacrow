@@ -61,6 +61,8 @@ public class Picture extends DcObject {
     private boolean edited = false;
     private boolean deleted = false;
     
+    private DcImageIcon scaledImage;
+    
     /**
      * Creates a new instance
      */
@@ -88,15 +90,12 @@ public class Picture extends DcObject {
             } catch (Exception e) {
                 logger.error("Could not load image " + DataCrow.imageDir + filename, e);
             }
-        } else {
-            // make sure the image is loaded.
-            // as a precaution; ignore the image if it has bytes assigned to it
-            if (image != null && image.getCurrentBytes() == null)
-                image = new DcImageIcon(image.getImage());
+        } else if (image != null && isEdited() && image.getCurrentBytes() == null) {
+            image.flush();
+            image = new DcImageIcon(image.getImage());
         }
         
         setValue(Picture._D_IMAGE, image);
-        
         markAsUnchanged();
     }
     
@@ -153,18 +152,22 @@ public class Picture extends DcObject {
         String filename = getScaledFilename();
         if (filename != null) {
             try {
-                return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
+                if (isEdited() || scaledImage == null) {
+                    if (scaledImage != null) scaledImage.flush();
+                    scaledImage = new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
+                }
             } catch (IOException e1) {
                 logger.error("Scaled image does not exist or is invalid. Creating new.", e1);
                 createScaledImage(filename);
                 try {
-                    return new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
+                    scaledImage = new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
                 } catch (IOException e2) {
                     logger.error("Could not load scaled image", e2);
                 }
             }
         }
-        return null;
+        
+        return scaledImage;
     }
     
     public String getScaledFilename() {
