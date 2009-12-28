@@ -567,6 +567,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         // do not unload: dangerous because of the newly added destroy or release method 
         // unloadImages();
         
+        initializeImages();
+        
         String query = "SELECT * FROM " + getTableName() + " WHERE ID = " + getID();
         Collection<DcObject> objects = DatabaseManager.executeQuery(query, Query._SELECT);
         for (DcObject dco : objects) {
@@ -574,8 +576,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             break;
         }
         
-        for (DcObject dco : objects) 
-            dco.release();
+//        for (DcObject dco : objects) 
+//            dco.release();
         
         setLoanInformation();
         
@@ -891,6 +893,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
     public void clearValues(boolean nochecks) {
+        
+        if (this instanceof Picture)
+            return;
+        
         if (isDestroyed()) {
             logger.warn("System tried to clear all values while the object was already destroyed");
         } else {

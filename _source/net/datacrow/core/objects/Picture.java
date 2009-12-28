@@ -219,7 +219,7 @@ public class Picture extends DcObject {
     
     @Override
     public boolean isNew() {
-        return super.isNew() && getValue(_D_IMAGE) != null; 
+        return super.isNew() && !isDeleted() && getValue(_D_IMAGE) != null; 
     }
     
     public boolean isEdited() {

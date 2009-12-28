@@ -681,21 +681,18 @@ public class DataManager {
                 List<Picture> pics = pictures.get(dco.getID());
                 pics = pics == null ? new ArrayList<Picture>() : pics;
 
-                if (picture.isNew()) {
+                if (picture.isNew() && picture.isEdited()) {
                     picture.markAsUnchanged();
                     pics.add(picture);
-                    picture.unload(false);
-                } else if (picture.isEdited()) {
                     picture.unload(true);
-                    if (pics.indexOf(picture) > -1) {
-                        Picture pic = pics.get(pics.indexOf(picture));
-                        pic.copy(picture, true, true);
-                        pic.markAsUnchanged();
-                        pic.unload(true);
-                    } else {
-                        logger.error("Image was marked as changed but is actually new!", new Exception());
-                    }
-                } else if (picture.isDeleted()) {
+                    
+                } else if (picture.isEdited() && pics.contains(picture)) {
+                    Picture pic = pics.get(pics.indexOf(picture));
+                    pic.copy(picture, true, true);
+                    pic.markAsUnchanged();
+                    pic.unload(true);
+
+                } else if (pics.contains(picture) && picture.isDeleted()) {
                     pics.remove(picture);
                     picture.release();
                 } 
