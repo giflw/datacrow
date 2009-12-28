@@ -419,7 +419,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     public boolean isNew() {
-        return getID() == null || DataManager.getObject(getModule().getIndex(), getID()) == null;
+        return !DataManager.exists(this);
     }
     
     /**
@@ -1304,9 +1304,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                     Picture newPic = (Picture) DcModules.get(DcModules._PICTURE).getItem();
                     newPic.copy(curPic, overwrite, allowDeletes);
                     
-                    newPic.isNew(curPic.isNew());
                     newPic.isDeleted(curPic.isDeleted());
-                    newPic.isUpdated(curPic.isUpdated());
+                    newPic.isEdited(curPic.isEdited());
                     
                     setValue(field, newPic);
             	} else if (o != null && getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
@@ -1359,7 +1358,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 pic.setValue(Picture._D_IMAGE, templatePic.getValue(Picture._D_IMAGE));
                 pic.setValue(Picture._E_HEIGHT, templatePic.getValue(Picture._E_HEIGHT));
                 pic.setValue(Picture._F_WIDTH, templatePic.getValue(Picture._F_WIDTH));
-                pic.isNew(true);
+                pic.isEdited(true);
                 
                 setValue(idx, pic);                
             }

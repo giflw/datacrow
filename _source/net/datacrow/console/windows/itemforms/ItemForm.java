@@ -507,7 +507,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 } 
             } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) dcoOrig.getValue(index);
-                changed = (picture != null && (picture.isUpdated() || picture.isNew() || picture.isDeleted())) ||
+                changed = (picture != null && (picture.isEdited() || picture.isNew() || picture.isDeleted())) ||
                           ((DcPictureField) component).isChanged();
 
                 // Tricky: mark the item as changed when a new picture has been set.

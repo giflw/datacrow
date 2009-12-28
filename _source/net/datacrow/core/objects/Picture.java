@@ -58,9 +58,8 @@ public class Picture extends DcObject {
     public static final int _F_WIDTH = 6;
     public static final int _G_EXTERNAL_FILENAME = 7;
     
-    private boolean isNew = false;
-    private boolean isUpdated = false;
-    private boolean isDeleted = false;
+    private boolean edited = false;
+    private boolean deleted = false;
     
     /**
      * Creates a new instance
@@ -77,7 +76,8 @@ public class Picture extends DcObject {
     }
     
     public void loadImage() {
-        String filename = (String) getValue(_C_FILENAME);
+        String filename = (String) getValue(_G_EXTERNAL_FILENAME);
+        filename = filename == null || !new File(filename).exists() ? (String) getValue(_C_FILENAME) : filename;
         DcImageIcon image = (DcImageIcon) getValue(Picture._D_IMAGE);
 
         if (filename != null && image == null) {
@@ -107,12 +107,17 @@ public class Picture extends DcObject {
     
     @Override
     public void release() {
-        unload();
+        removeImage();
         super.release();
     }
     
     public void unload() {
-    	if (getValues() != null && !isNew() && !isUpdated) {
+        if (getValues() != null && !isNew() && !edited)
+            removeImage();
+    }
+        
+    private void removeImage() {
+    	if (getValues() != null) {
 	    	DcImageIcon image = ((DcImageIcon) getValue(_D_IMAGE));
 	    	
 	    	if (image != null) image.flush();
@@ -126,9 +131,8 @@ public class Picture extends DcObject {
     public void markAsUnchanged() {
         super.markAsUnchanged();
 
-        isNew = false;
-        isUpdated = false;
-        isDeleted = false;
+        edited = false;
+        deleted = false;
     }    
     
     private void createScaledImage(String filename) {
@@ -187,47 +191,31 @@ public class Picture extends DcObject {
         return null;
     }
     
-    public void isUpdated(boolean b) {
-        isUpdated = b;
-        if (b) {
-            isNew = false;
-            isDeleted = false;
-        }
-    }
-    
-    public void isNew(boolean b) {
-        isNew = b;
-
-        if (b) {
-            isUpdated = false;
-            isDeleted = false;
-        }
+    public void isEdited(boolean b) {
+        edited = b;
+        if (b) deleted = false;
     }
     
     public void isDeleted(boolean b) {
-        isDeleted = b;
-        
-        if (b) {
-            isUpdated = false;
-            isNew = false;
-        }
+        deleted = b;
+        if (b) edited = false;
     }
     
     public boolean isLoaded() {
         return getValue(Picture._D_IMAGE) != null;
     }
     
-    public boolean isUpdated() {
-        return isUpdated;
-    }
-    
     @Override
     public boolean isNew() {
-        return isNew;
+        return super.isNew() && getValue(_D_IMAGE) != null; 
+    }
+    
+    public boolean isEdited() {
+        return edited;
     }
     
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
     
     @Override

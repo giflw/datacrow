@@ -115,7 +115,7 @@ public class ImageImporter extends FileImporter {
             pic.setValue(Picture._A_OBJECTID, image.getID());
             pic.setValue(Picture._B_FIELD, image.getField(Image._I_IMAGE).getDatabaseFieldName());
             pic.setValue(Picture._D_IMAGE, icon);
-            pic.isNew(true);
+            pic.isEdited(true);
             
             image.setValue(Image._I_IMAGE, pic);
             

@@ -269,6 +269,24 @@ public class DataManager {
             updateView(dco, 1, module, MainFrame._INSERTTAB);
     }  
     
+    public static boolean exists(DcObject o) {
+        boolean exists = false;
+        
+        if (o.getModule().getIndex() == DcModules._PICTURE) {
+            String objectID = (String) o.getValue(Picture._A_OBJECTID);
+            if (objectID != null) {
+                Collection<Picture> pictures = getPictures(objectID);
+                exists = pictures.contains(o);
+            }
+        } else if (o.hasPrimaryKey()) {
+            exists = getObject(o.getModule().getIndex(), o.getID()) != null;
+        } else {
+            logger.error("Cannot determine whether the item exists, not a picture and no ID", new Exception());
+        }
+        
+        return exists;
+    }
+    
     /**
      * Remove the item from the cache.
      * @param dco The item to be removed.
@@ -666,14 +684,14 @@ public class DataManager {
                 if (picture.isNew()) {
                     picture.markAsUnchanged();
                     pics.add(picture);
-                } else if (picture.isUpdated()) {
+                } else if (picture.isEdited()) {
                     picture.setValue(Picture._D_IMAGE, null);
                     if (pics.indexOf(picture) > -1) {
                        Picture pic = pics.get(pics.indexOf(picture));
                        pic.copy(picture, true, true);
                        pic.markAsUnchanged();
                     } else {
-                        pics.add(picture);
+                        logger.error("Image was marked as changed but is new");
                     }
                 } else if (picture.isDeleted()) {
                     pics.remove(picture);

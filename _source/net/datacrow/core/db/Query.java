@@ -211,7 +211,7 @@ public class Query {
 	                    picture.setValue(Picture._C_FILENAME, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
 	                    picture.setValue(Picture._E_HEIGHT, image.getIconHeight());
 	                    picture.setValue(Picture._F_WIDTH, image.getIconWidth());
-	                    picture.isNew(true);
+	                    picture.isEdited(true);
 	                    pictures.add(picture);
                     }
                 }
@@ -297,7 +297,7 @@ public class Query {
             
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) dco.getValue(field.getIndex());
-                if (picture != null && (picture.isNew() || picture.isUpdated() || picture.isDeleted())) {
+                if (picture != null && (picture.isNew() || picture.isEdited() || picture.isDeleted())) {
                     picture.setValue(Picture._A_OBJECTID, dco.getID());
                     picture.setValue(Picture._B_FIELD, field.getDatabaseFieldName());
                     picture.setValue(Picture._C_FILENAME, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
@@ -359,17 +359,10 @@ public class Query {
         }
         
         for (Picture picture : pictures) {
-            Collection<Picture> currentPics = DataManager.getPictures(dco.getID());
-            
-            boolean isReallyNew = picture.isNew() && (currentPics == null || !currentPics.contains(picture));
-            if (!isReallyNew && picture.isNew())
-                picture.isUpdated(!isReallyNew);
-            
-            // no images = create this image instead of updating it (3.4.19)
-            if (picture.isUpdated() && (currentPics == null || currentPics.isEmpty()))
-                picture.isNew(true);
-            
-            if (picture.isUpdated()) {
+            if (picture.isNew()) {
+                queries.addAll(getInsertQueries(picture));
+                requests.add(new ImageRequest(picture, ImageRequest._SAVE));
+            } else if (picture.isEdited()) {
                 queries.addAll(getUpdateQueries(picture));
                 requests.add(new ImageRequest(picture, ImageRequest._SAVE));                
             } else if (picture.isDeleted()) {
@@ -382,9 +375,6 @@ public class Query {
                 
                 queries.add(ps);
                 requests.add(new ImageRequest(picture, ImageRequest._DELETE));    
-            } else if (picture.isNew()) {
-                queries.addAll(getInsertQueries(picture));
-                requests.add(new ImageRequest(picture, ImageRequest._SAVE));
             }
         }
         
