@@ -31,6 +31,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
@@ -75,6 +76,19 @@ public class Picture extends DcObject {
      */
     public boolean hasImage() {
         return isFilled(_C_FILENAME) && new File(DataCrow.imageDir, getDisplayString(_C_FILENAME)).exists();
+    }
+
+    @Override
+    public void clearValues(boolean nochecks) {
+        if (isDestroyed()) return;
+        
+        String id = (String) getValue(Picture._A_OBJECTID);
+        for (Picture p : DataManager.getPictures(id)) {
+            if (p == this)
+                return;
+        }
+
+        super.clearValues(nochecks);
     }
     
     public void loadImage() {

@@ -664,7 +664,9 @@ public class DcModule implements Comparable<DcModule> {
             }
         }
 
-        return items.remove(0);
+        DcObject dco = items.remove(0);
+        dco.clearValues(true);
+        return dco;
     }  
     
     public DcField getFileField() {

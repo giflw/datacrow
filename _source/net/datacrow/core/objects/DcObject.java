@@ -332,8 +332,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * when reloading an object.
      */
     public void initializeImages() {
+        for (DcField field : getFields()) {
+            if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+                setValueLowLevel(field.getIndex(), null);
+        }
+        
         for (Picture picture : DataManager.getPictures(getID())) {
             picture.setValue(Picture._D_IMAGE, null);
+            picture.markAsUnchanged();
             setValueForColumn((String) picture.getValue(Picture._B_FIELD), picture);
         }
     }
@@ -576,8 +582,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             break;
         }
         
-//        for (DcObject dco : objects) 
-//            dco.release();
+        for (DcObject dco : objects) 
+            dco.release();
         
         setLoanInformation();
         
@@ -893,10 +899,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
     public void clearValues(boolean nochecks) {
-        
-        if (this instanceof Picture)
-            return;
-        
         if (isDestroyed()) {
             logger.warn("System tried to clear all values while the object was already destroyed");
         } else {
