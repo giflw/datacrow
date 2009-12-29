@@ -1,6 +1,7 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.6  [Release on 28/12/2009] [testing: high] [target: production]
+Data Crow 3.8.6  [Release on 29/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+Contains for the most part bug fixes but also introduces changes to the image module.
 
 [Fixed]
 - Incorrect translation of tabs in the software module (only fixed for new installations)
@@ -13,7 +14,6 @@ Data Crow 3.8.6  [Release on 28/12/2009] [testing: high] [target: production]
 - Data Crow cannot be started after installing it without the modules.
 
 [Changed]
-Multiple improvements have been made to the image importer:
 - Images are no longer copied in their unmodified state to the Data Crow images folder.
   The image will now first be scaled (400x400).
 - The link to the original image is now used to display the original image (if it is 
