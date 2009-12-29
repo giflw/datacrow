@@ -570,25 +570,22 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Reloads the item directly from the database (!).
      */
     public void reload() {
-        // do not unload: dangerous because of the newly added destroy or release method 
-        // unloadImages();
-        
-        initializeImages();
-        
         String query = "SELECT * FROM " + getTableName() + " WHERE ID = " + getID();
         Collection<DcObject> objects = DatabaseManager.executeQuery(query, Query._SELECT);
         for (DcObject dco : objects) {
-            copy(dco, true, true);
+            for (DcField field : dco.getFields())
+                setValueLowLevel(field.getIndex(), dco.getValue(field.getIndex()));
+
             break;
         }
-        
-        for (DcObject dco : objects) 
-            dco.release();
         
         setLoanInformation();
         
         initializeImages();
         markAsUnchanged();
+        
+        for (DcObject dco : objects) 
+            dco.release();
     }
     
     /**
