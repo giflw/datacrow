@@ -289,6 +289,8 @@ public class DcModules {
         Collection<XmlModule> dependingMods = new ArrayList<XmlModule>();
         Collection<XmlModule> masterMods = new ArrayList<XmlModule>();
         
+        if (files == null) return;
+        
         for (String filename : files) {
             ModuleJar mj = new ModuleJar(filename);
             mj.load();

@@ -10,6 +10,7 @@ Data Crow 3.8.6  [Release on 28/12/2009] [testing: high] [target: production]
 - Cannot perform online search for items having a ' in the name.
 - Picture not shown in the images detail page of the web GUI.
 - Local art tab is shown for the image importer.
+- Data Crow cannot be started after installing it without the modules.
 
 [Changed]
 Multiple improvements have been made to the image importer:

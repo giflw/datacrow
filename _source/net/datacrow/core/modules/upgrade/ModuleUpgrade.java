@@ -218,6 +218,9 @@ public class ModuleUpgrade extends XmlObject {
     
     private void removeDuplicates() {
         String[] modules = new File(DataCrow.moduleDir).list();
+        
+        if (modules == null) return;
+        
         for (String module : modules) {
             if (module.toLowerCase().endsWith(".jar")) {
                 
