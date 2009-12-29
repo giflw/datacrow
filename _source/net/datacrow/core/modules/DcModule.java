@@ -651,22 +651,17 @@ public class DcModule implements Comparable<DcModule> {
     /**
      * Creates a new instance of an item belonging to this module.
      */
-    public final DcObject getItem() {
+    public synchronized final DcObject getItem() {
         
         if (!DataManager.isInitialized())
             return createItem();
         
-        if (items == null) {
-            items = new ArrayList<DcObject>();
+        if (items == null || items.size() == 0) {
+            items = items == null ? new ArrayList<DcObject>() : items;
             for (int i = 0; i < _MAX_ITEM_STORE_SIZE / 2; i++) {
-                itemsCreated += 1;
+                itemsCreated++;
                 items.add(createItem());
             }
-        }
-
-        if (items.size() == 0) {
-            itemsCreated += 1;
-            items.add(createItem());
         }
 
         return items.remove(0);
