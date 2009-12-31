@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.6  [Release on 29/12/2009] [testing: high] [target: production]
+Data Crow 3.8.6  [Release on 31/12/2009] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 Contains for the most part bug fixes but also introduces changes to the image module.
 
@@ -25,7 +25,8 @@ Contains for the most part bug fixes but also introduces changes to the image mo
 - Queries as entered in the online search form are now used in their unmodified form.
 - You can quickly add a new drive (directory or network location) from within the 
   File Import dialog.
-  
+- Quick filter toolbar; you can now search for child items 
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.5  [Release on 9/12/2009] [testing: high] [target: production]

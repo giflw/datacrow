@@ -37,6 +37,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -78,7 +80,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         
         // set default value (if applicable)
         int fieldIdx = module.getSettings().getInt(DcRepository.ModuleSettings.stQuickFilterDefaultField);
-        comboFields.setSelectedItem(module.getField(fieldIdx));
+        comboFields.setSelectedItem(new Field(module.getField(fieldIdx)));
     }
     
     @Override
@@ -102,7 +104,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     }
     
     private Object getValue() {
-        DcField field = (DcField) comboFields.getSelectedItem();
+        DcField field = ((Field) comboFields.getSelectedItem()).getField();
         
         Object value = comboCriteria.getSelectedItem();
         if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX)
@@ -114,7 +116,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     }
     
     private DataFilter getDataFilter() {
-        DcField field = (DcField) comboFields.getSelectedItem();
+        DcField field = ((Field) comboFields.getSelectedItem()).getField();
         Object value = getValue();
         
         if (value != null && !value.equals("")) {
@@ -181,9 +183,9 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     
     private void applySelectedField() {
         comboCriteria.removeAllItems();
-        DcField field = (DcField) comboFields.getSelectedItem();
         
-        if (field != null) {
+        if (comboFields.getSelectedItem() != null) {
+            DcField field = ((Field) comboFields.getSelectedItem()).getField();
             setSearchField(field);
             module.getSettings().set(DcRepository.ModuleSettings.stQuickFilterDefaultField, field.getIndex());
         }
@@ -195,19 +197,22 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     }
     
     private void build() {
-     // TODO: encapsulate
+        List<Field> allFields = new ArrayList<Field>();
         for (DcField field : module.getFields()) {
             if (field.isSearchable() && field.isEnabled())
-                comboFields.addItem(field);
+                allFields.add(new Field(field));
         }
         
-        // TODO: encapsulate
         if (module.getChild() != null) {
             for (DcField field : module.getChild().getFields()) {
                 if (field.isSearchable() && field.isEnabled())
-                    comboFields.addItem(field);
+                    allFields.add(new Field(field));
             }
         }
+        
+        Collections.sort(allFields);
+        for (Field field : allFields) 
+            comboFields.addItem(field);
         
         Collection<DataFilter> filters = DataFilters.get(module.getIndex());
         comboFilters.addItem(" ");
@@ -297,5 +302,35 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    }
+    
+    private class Field implements Comparable<Field> {
+        
+        private DcField field;
+        
+        protected Field(DcField field) {
+            this.field = field;
+        }
+        
+        public DcField getField() {
+            return field;
+        }
+        
+        @Override
+        public String toString() {
+            if (DcModules.getCurrent().isParentModule())
+                return field.getLabel() + " (" + DcModules.get(field.getModule()).getLabel() + ")";
+            else
+                return field.getLabel();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Field ? getField().equals(((Field) obj).getField()) : false;
+        }
+        
+        public int compareTo(Field o) {
+            return toString().compareTo(o.toString());
+        }
     }
 }
