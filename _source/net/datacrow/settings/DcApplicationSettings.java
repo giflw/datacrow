@@ -616,6 +616,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stDirectoriesAsDrivesDialogSize,
+                            new Dimension(400, 300),
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stItemFormSettingsDialogSize,
                             new Dimension(700, 600),
                             -1,

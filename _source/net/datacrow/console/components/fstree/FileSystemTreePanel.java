@@ -36,6 +36,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -44,6 +45,9 @@ import javax.swing.JScrollPane;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
+import net.datacrow.console.windows.DirectoriesAsDrivesDialog;
+import net.datacrow.core.IconLibrary;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.drivemanager.Drive;
 import net.datacrow.drivemanager.Drives;
 import net.datacrow.util.filefilters.FileNameFilter;
@@ -113,6 +117,20 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
         }
     }
     
+    private void addDrive() {
+        DirectoriesAsDrivesDialog dlg = new DirectoriesAsDrivesDialog();
+        dlg.setVisible(true);
+        if (dlg.isSuccess()) {
+            scrollers.clear();
+            models.clear();
+
+            removeAll();
+            build();
+            revalidate();
+            repaint();
+        }
+    }
+    
     protected void build() {
         setLayout(Layout.getGBL());
         
@@ -123,10 +141,26 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
                       new Insets(0, 0, 0, 0), 0, 0));
         }
         
+        JPanel pnlDrives = new JPanel();
+        pnlDrives.setLayout(Layout.getGBL());
+        
         JComboBox cbDrives = ComponentFactory.getComboBox();
-        add(cbDrives, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+        
+        JButton btAddDrive = ComponentFactory.getIconButton(IconLibrary._icoAdd);
+        btAddDrive.setToolTipText(DcResources.getText("tpAddDrive"));
+        btAddDrive.setActionCommand("addDrive");
+        btAddDrive.addActionListener(this);
+
+        pnlDrives.add(cbDrives, Layout.getGBC( 0, 1, 1, 1, 30.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets(15, 5, 5, 5), 0, 0));     
+                 new Insets(15, 5, 5, 5), 0, 0));    
+        pnlDrives.add(btAddDrive, Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets(15, 5, 5, 5), 0, 0));  
+        
+        add(pnlDrives, Layout.getGBC( 0, 1, 3, 1, 20.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 0), 0, 0));  
         
         for (Drive drive : new Drives().getDrives()) {
             DcTree tree = new DcTree(new FileSystemTreeModel(drive.getPath(), filter));
@@ -156,6 +190,8 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
         if (e.getActionCommand().equals("drvChanged")) {
             JComboBox cb = (JComboBox) e.getSource();
             setSelectedDrive((Drive) cb.getSelectedItem());
+        } else if (e.getActionCommand().equals("addDrive")) {
+            addDrive();
         }
     }
     

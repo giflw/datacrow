@@ -127,6 +127,7 @@ public abstract class DcRepository {
         public static final String stOnlineSearchSelectedView = "online_search_selected_view";
         public static final String stInputFieldHeight = "input_field_height";
         public static final String stButtonHeight = "button_height";
+        public static final String stDirectoriesAsDrivesDialogSize = "directories_as_drives_dialog_size";
         public static final String stTreeNodeHeight = "tree_node_height";
         public static final String stTableRowHeight = "table_row_height";
         public static final String stUseCache = "use_cache";

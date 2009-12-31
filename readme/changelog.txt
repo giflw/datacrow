@@ -23,7 +23,9 @@ Contains for the most part bug fixes but also introduces changes to the image mo
   memory.
 - Selected server, mode and region are now remembered for the Mass Update functionality.
 - Queries as entered in the online search form are now used in their unmodified form.
-
+- You can quickly add a new drive (directory or network location) from within the 
+  File Import dialog.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.5  [Release on 9/12/2009] [testing: high] [target: production]
