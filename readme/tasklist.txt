@@ -1,54 +1,32 @@
 4.0 Major Platform Additions 
 ---------------------------------------------------------------------------------------------------------
-[-] Flexible Online Services model (scripting).
+[ ] Multiple file support (per item)
 [ ] Additional online services.
 [ ] Upgrade of the Container module / Global Importer.
 [ ] Zoom in out for the chart panel.
-[ ] Book Module / Additional import + bib-text implementation.
+[ ] Book Module / Additional import + BibTeXML implementation.
 [ ] Document handling. Data Crow does not yet handle document information (content searching of PDF, 
     Word and other formats). Plans have been made to implement a 3rd party library to allow for this. 
 [ ] Translation tool update:
     - Show untranslated text
     - Add help for the translation of the system labels (field translation).
     - Find and replace.
-[ ] Image module upgrade: direct file linking.
-[ ] Make a better distinction between Audio CD's and Music ALbums. Allow both to be displayed
+[x] Image module upgrade: direct file linking.
+[ ] Make a better distinction between Audio CD's and Music Albums. Allow both to be displayed
     within the same abstract module.
+
     
-
-3.7 Performance release
+3.9
 ---------------------------------------------------------------------------------------------------------
-[X] Overall performance improvements.
-[X] Overall bug fixing.
-[X] [2857434] Better error handling for systems with low resources.
-[X] Startup errors? Adopt old startup dialogs? > test on Ubuntu.
-
-Framework changes:
-[X] Add module type indicator to each module to avoid having to use 'instanceof'.
-
-
-3.6 Module builder update 
----------------------------------------------------------------------------------------------------------
-[X] Exporting a module. Exporting the module definition itself currently requires manually copying the 
-    module jar file and its property files. Functionality will be provided which makes it easy to export 
-    and import a module (definition). This functionality will also allow users to export default/demo data 
-    with their module. This functionality will also be used to provide additional custom modules. 
-[X] Container Hierarchy.
-[X] Clone a module wizard
-[-] MovieMeter.nl online search
-[X] Book online search in www.isbndb.com (1886661)
-[X] File operations (move, delete and locate)
-[X] [2860480] Arch package for data crow
-[X] [2860913] Extract ISBN from PDF (ISBN Extractor)
-[X] [2862681] New "IMDB ID" field for Names and Movies / Data matching for online services
-[X] [2862698] Add fields "Aspect Ratio" and "Color" to movie fields
-[X] [2862688] IMDB wrapper doesn't fill in "Languages" field
-[X] [2874556] Date field
-[-] [2869347] Out of Memory while parsing AVI file
-[-] [2864974] Send online search query "as is" (without modifications)
+[ ] Task panel - new users help tool
+[ ] 2917852 multiple containers for a single item
+[ ] 2903336 Add 'related items' field to quick-views of sub-modules
+[ ] 2897952 Exporting property modules
+[ ] 2892964 Netflix and/or Rotten Tomatoes Server(s)
+[ ] 2889643 Item Ownership
+[ ] 2868884 Translation tool 
 
 
 Unplanned
 ---------------------------------------------------------------------------------------------------------
-[ ] Multiple file support (per item)
 [ ] Instant messenger implementation; talk with Data Crow using an instant messenger. 
