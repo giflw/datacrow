@@ -77,9 +77,12 @@ public abstract class DefaultSynchronizer extends Synchronizer {
     
     @Override
     public boolean onlineUpdate(ISynchronizerClient client, DcObject dco) {
+        String item = dco.toString();
         this.client = client;
         this.dco = dco;
 
+        client.addMessage(DcResources.getText("msgSearchingOnlineFor", item));
+        
         // use the original service settings
         if (dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings)) {
             return exactSearch(dco);
@@ -104,6 +107,24 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                     break;
                 }
             }
+            
+            if (!updated) {
+                searchString = StringUtils.normalize(searchString);
+                client.addMessage(DcResources.getText("msgSearchingOnlineFor", searchString));
+                results.clear();
+                results.addAll(osh.query(searchString, dco));
+                for (DcObject result : results) {
+                    if (matches(result, searchString, fieldIdx)) {
+                        merge(dco, result, osh);
+                        updated = true;
+                        break;
+                    }
+                }
+            }
+
+            if (updated)
+                client.addMessage(DcResources.getText("msgMatchFound", new String[] {searchString, item}));
+            
             return updated;
         }
     }
@@ -148,8 +169,6 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                     if (client.isCancelled()) break;
                     
                     boolean updated = false;
-                    
-                    client.addMessage(DcResources.getText("msgSearchingOnlineFor", "" + dco));
                     
                     updated = parseFiles(dco);
                     updated |= onlineUpdate(client, dco);
