@@ -6,7 +6,7 @@ Data Crow 3.8.6  [Release on xx/01/2010] [testing: high] [target: production]
 - Mass updater will first search for an item using the unmodified title or name of the 
   item. If no results were found for the specific item Data Crow will try and clean up
   the title and find a match. Additionally the logging has been improved; the log will
-  tell you if a match was using which search string.
+  tell you if a a match was found and for which search string.
 
 
 -----------------------------------------------------------------------------------------
