@@ -96,7 +96,8 @@ public class DcSwingUtilities {
      * @return
      */    
     public static void displayWarningMessage(String msg) {
-        MessageBox mb = new MessageBox(msg != null && msg.startsWith("msg") ? DcResources.getText(msg) : DcResources.getText("msgUnexpectedErrorOccurred"), MessageBox._WARNING);
+        String text = msg != null && msg.startsWith("msg") ? DcResources.getText(msg) : msg;
+        MessageBox mb = new MessageBox(text, MessageBox._WARNING);
         open(mb);
     }    
 

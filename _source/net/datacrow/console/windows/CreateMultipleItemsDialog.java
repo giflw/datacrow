@@ -66,6 +66,8 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 		this.moduleIdx = moduleIdx;
 		this.table = new DcTable(DcModules.get(moduleIdx), false, false);
 		
+		setTitle(DcResources.getText("lblAddMultiple"));
+		
 		build();
 		
 		pack();

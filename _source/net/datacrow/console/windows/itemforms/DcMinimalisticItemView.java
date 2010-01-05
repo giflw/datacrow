@@ -258,6 +258,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         
         buttonCreateMultiple.addActionListener(this);
         buttonCreateMultiple.setActionCommand("createMultiple");
+        buttonCreateMultiple.setToolTipText("tpCreateMultiple");
         
         buttonNew.addActionListener(this);
         buttonNew.setActionCommand("createNew");
