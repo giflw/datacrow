@@ -114,7 +114,7 @@ public class DcMultiLineToolTipUI extends BasicToolTipUI {
         int length = text != null ? text.length() : 0;
         if (length > 0) { 
             text = length > 1000 ? StringUtils.concatUserFriendly(s, 1500) : text;
-            text = text.replaceAll("[\r,\n]", "<br>");
+            text = text.replaceAll("[\r\n]", "<br>");
             text = text.replaceAll("[\t]", "    ");
             
             StringBuffer sb = new StringBuffer();

@@ -749,10 +749,7 @@ public final class ComponentFactory {
         menuItem.setIcon(plugin.getIcon());
         menuItem.addActionListener(plugin);
         menuItem.setAccelerator(plugin.getKeyStroke());
-        
-        if (plugin.getHelpText() != null)
-            menuItem.setToolTipText(plugin.getHelpText());
-        
+        menuItem.setToolTipText(plugin.getHelpText() == null ? menuItem.getText() : plugin.getHelpText());
         return menuItem;
     }
 
@@ -760,10 +757,6 @@ public final class ComponentFactory {
         DcToolBarButton button = new DcToolBarButton(plugin);        
         button.setFont(getSystemFont());
         button.setLayout(new FlowLayout(FlowLayout.LEFT));
-        
-        if (plugin.getHelpText() != null)
-            button.setToolTipText(plugin.getHelpText());
-        
         return button;
     }
     

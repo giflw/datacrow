@@ -64,7 +64,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         DcMenu menuUser = ComponentFactory.getMenu(DcResources.getText("lblUser"));
         DcMenu menuXp = ComponentFactory.getMenu(DcResources.getText("lblXpMode"));
         DcMenu menuWebServer = ComponentFactory.getMenu(DcResources.getText("lblWebServer"));
-        DcMenu menuInformation = ComponentFactory.getMenu(DcResources.getText("lblHelp"));
+        DcMenu menuHelp = ComponentFactory.getMenu(DcResources.getText("lblHelp"));
         
         // webserver menu
         if (DataCrow.isWebModuleInstalled())
@@ -104,12 +104,14 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         menuModules.addSeparator();
         menuModules.add(subMenuModule);
         
-        // information menu
-        PluginHelper.add(menuInformation, "Help");
-        PluginHelper.add(menuInformation, "TipOfTheDay");
-        menuInformation.addSeparator();
-        PluginHelper.add(menuInformation, "About");
-        PluginHelper.add(menuInformation, "Donate");
+        // help menu
+        PluginHelper.add(menuHelp, "Help");
+        PluginHelper.add(menuHelp, "TipOfTheDay");
+        menuHelp.addSeparator();
+        PluginHelper.add(menuHelp, "About");
+        PluginHelper.add(menuHelp, "Donate");
+        menuHelp.addSeparator();
+        PluginHelper.add(menuHelp, "ToolSelectWizard");
         
         // filter menu
         PluginHelper.add(menuFilter, "Filter");
@@ -118,7 +120,6 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         PluginHelper.add(menuFilter, "UndoFilter");
         
         // tools menu
-        
         if (module.getImporterClass() != null)
             PluginHelper.add(menuTools, "FileImport");
         
@@ -231,7 +232,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         menuFilter.setEnabled(menuFilter.getItemCount() > 0);
         menuSettings.setEnabled(menuSettings.getItemCount() > 0);
         menuTools.setEnabled(menuTools.getItemCount() > 0);
-        menuInformation.setEnabled(menuInformation.getItemCount() > 0);
+        menuHelp.setEnabled(menuHelp.getItemCount() > 0);
         
         if (menuFile.isEnabled())
             this.add(menuFile);
@@ -265,6 +266,6 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         if (menuWebServer.isEnabled())
             this.add(menuWebServer);
         
-        this.add(menuInformation);
+        this.add(menuHelp);
     }
 }

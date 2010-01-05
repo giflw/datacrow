@@ -137,7 +137,9 @@ public class DcToolBar extends JToolBar implements MouseListener {
 		while ((c = getComponentAtIndex(i++)) != null) {
             if (c instanceof DcToolBarButton) {
                 DcToolBarButton button = (DcToolBarButton) c;
-                button.setText(b ? button.getToolTipText() : null);
+                
+                if (b) button.showText();
+                else button.hideText();
             }
 		}
         DcSettings.set(DcRepository.Settings.stShowMenuBarLabels, b);
