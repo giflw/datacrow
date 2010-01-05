@@ -98,6 +98,9 @@ public class PluginHelper {
                     button.setIcon(plugin.getIcon());
                     button.setEnabled(plugin.isEnabled());
                     
+                    if (plugin.getHelpText() != null)
+                        button.setToolTipText(plugin.getHelpText());
+                    
                     c.add(button);
                 }
             } else {
