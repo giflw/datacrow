@@ -7,8 +7,13 @@ Data Crow 3.8.7  [Release on xx/01/2010] [testing: high] [target: production]
   item. If no results were found for the specific item Data Crow will try and clean up
   the title and find a match. Additionally the logging has been improved; the log will
   tell you if a match was using which search string.
-- Added meaningful tooltips for all menu and toolbar items.
+- Added meaningful tool tips for all menu and tool bar items.
+- Improved error handling for startup errors.
 
+[New]
+- Added a new wizard; Tool Select. This wizard helps new users in selecting the right
+  tool for the job they want to perform.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.6  [Release on 31/12/2009] [testing: high] [target: production]
