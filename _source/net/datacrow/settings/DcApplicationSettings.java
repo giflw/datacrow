@@ -698,7 +698,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stToolSelectWizard,
-                            new Dimension(400, 600),
+                            new Dimension(500, 600),
                             -1,
                             "",
                             "",

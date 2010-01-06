@@ -44,7 +44,7 @@ public class ToolSelectWizard extends Wizard {
         super();
         
         setHelpIndex("dc.tools.wizard");
-        setSize(DcSettings.getDimension(DcRepository.Settings.stItemWizardFormSize));
+        setSize(DcSettings.getDimension(DcRepository.Settings.stToolSelectWizard));
         setCenteredLocation();
     }
     
@@ -81,8 +81,8 @@ public class ToolSelectWizard extends Wizard {
         super.next();
         
         panel = (ToolSelectBasePanel) getCurrent();
-        panel.onActivation();
         panel.setTool(tool);
+        panel.onActivation();
     }
 
     @Override

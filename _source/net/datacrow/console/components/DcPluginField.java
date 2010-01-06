@@ -27,14 +27,21 @@ package net.datacrow.console.components;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.color.ColorSpace;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ColorConvertOp;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.plugin.Plugin;
+import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.Utilities;
 
 public class DcPluginField extends AbstractButton {
     
@@ -81,6 +88,13 @@ public class DcPluginField extends AbstractButton {
         
         fldHelp.setText(plugin.getHelpText());
         cb.setActionCommand(plugin.getKey());
+
+        BufferedImage src = Utilities.toBufferedImage(plugin.getIcon());
+        BufferedImageOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        DcImageIcon deselected = new DcImageIcon(Utilities.getBytes(new ImageIcon(op.filter(src, null))));
+        
+        cb.setIcon(deselected);
+        cb.setSelectedIcon(plugin.getIcon());
         
         setLayout(Layout.getGBL());
         
