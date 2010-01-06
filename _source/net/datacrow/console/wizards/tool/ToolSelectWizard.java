@@ -25,9 +25,15 @@
 
 package net.datacrow.console.wizards.tool;
 
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JCheckBox;
+
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
@@ -37,8 +43,16 @@ import net.datacrow.settings.DcSettings;
 
 public class ToolSelectWizard extends Wizard {
 
+    private JCheckBox cb = ComponentFactory.getCheckBox(DcResources.getText("lblRunOnStartup"));
+    
     public ToolSelectWizard() {
         super();
+        
+        add(cb,  Layout.getGBC(1, 2, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        
+        cb.setSelected(DcSettings.getBoolean(DcRepository.Settings.stShowToolSelectorOnStartup));
         
         setHelpIndex("dc.tools.wizard");
         setSize(DcSettings.getDimension(DcRepository.Settings.stToolSelectWizard));
@@ -56,6 +70,7 @@ public class ToolSelectWizard extends Wizard {
     @Override
     protected void saveSettings() {
         DcSettings.set(DcRepository.Settings.stToolSelectWizard, getSize());
+        DcSettings.set(DcRepository.Settings.stShowToolSelectorOnStartup, cb.isSelected());
     }
 
     @Override

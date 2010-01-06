@@ -161,6 +161,7 @@ public abstract class DcRepository {
         public static final String stGroupByDialogSize = "group_by_dialog_size";
         public static final String stLookAndFeel = "look_and_feel";
         public static final String stShowTipsOnStartup = "show_tips_on_startup";
+        public static final String stShowToolSelectorOnStartup = "show_tool_selector_on_startup";
         public static final String stProgramDefinitions = "program_definitions";
         public static final String stQuickViewDividerLocation = "quick_view_divider_location";
         public static final String stTreeDividerLocation = "tree_divider_location";

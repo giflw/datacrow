@@ -110,6 +110,16 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblRunOnStartup",
                             false,
                             false));   
+
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stShowToolSelectorOnStartup,
+                            Boolean.TRUE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "",
+                            false,
+                            false));   
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stDriveScannerRunOnStartup,

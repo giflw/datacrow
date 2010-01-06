@@ -51,6 +51,7 @@ import net.datacrow.console.windows.help.StartupHelpDialog;
 import net.datacrow.console.windows.loan.LoanInformationForm;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
 import net.datacrow.console.windows.security.LoginDialog;
+import net.datacrow.console.wizards.tool.ToolSelectWizard;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataFilters;
@@ -441,6 +442,11 @@ public class DataCrow {
         if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowTipsOnStartup)) {
             TipOfTheDayDialog dlg = new TipOfTheDayDialog();
             dlg.setVisible(true);
+        }  
+
+        if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowToolSelectorOnStartup)) {
+            ToolSelectWizard wizard = new ToolSelectWizard();
+            wizard.setVisible(true);
         }  
         
         if (logger.isDebugEnabled()) {
