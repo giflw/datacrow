@@ -3,10 +3,10 @@ rd _data /S /Q
 rd __data /S /Q
 md ..\..\release
 md ..\..\release\datacrow
-del webapp\datacrow\mediaimages\*.*
-del data\*.*
-del data\cache\*.*
-del data\temp\*.*
+del webapp\datacrow\mediaimages\*.* /Q
+del data\*.* /Q
+del data\cache\*.* /Q
+del data\temp\*.* /Q
 rd _build /S /Q
 call build.bat
 del installer\*.jar
@@ -16,13 +16,14 @@ call build.bat
 cd ..\datacrow
 del plugins\*.class
 copy ..\plugins\_build\\plugins\*.* .\plugins\ /Y
-xcopy * ..\..\release\datacrow /s /o /EXCLUDE:release.exclude
+xcopy * ..\..\release\datacrow /E /o /EXCLUDE:release.exclude
 cd ..\..\release\datacrow
 chmod -R +r+w *
 rd _classes /S /Q
 rd homepage /S /Q
 rd logo_design /S /Q
 rd documentation /S /Q
+chmod -R +r+w ./*.*
 call build.bat
 call build-javadoc.bat
 cd installer
