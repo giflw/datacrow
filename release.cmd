@@ -3,8 +3,10 @@ rd _data /S /Q
 rd __data /S /Q
 md ..\..\release
 md ..\..\release\datacrow
-rd webapp\datacrow\mediaimages /S /Q
-rd data /S /Q
+del webapp\datacrow\mediaimages\*.*
+del data\*.*
+del data\cache\*.*
+del data\temp\*.*
 rd _build /S /Q
 call build.bat
 del installer\*.jar
@@ -36,6 +38,7 @@ del release.cmd
 del release.exclude
 del build-javadoc.bat
 rd _classes /S /Q
+rd temp /S /Q
 cd ..
 7z a -tZip datacrow_x_source .\datacrow
 7z a -tZip datacrow_x_javadoc .\javadoc

@@ -75,9 +75,11 @@
             <file src="plugins" targetdir="$INSTALL_PATH"/>
             <file src="icons" targetdir="$INSTALL_PATH"/>
             <file src="help" targetdir="$INSTALL_PATH"/>
+            <file src="data" targetdir="$INSTALL_PATH"/>
+            <file src="webapp/datacrow/mediaimages" targetdir="$INSTALL_PATH"/>
         </pack>
 
-    <pack name="Web" required="no">
+       <pack name="Web" required="no">
             <description>Web Module</description>
             <file src="lib/jetty" targetdir="$INSTALL_PATH/lib"/>
             <file src="webapp/datacrow/common" targetdir="$INSTALL_PATH/webapp/datacrow"/>
