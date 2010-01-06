@@ -32,19 +32,19 @@ import java.util.List;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.plugin.Plugin;
 import net.datacrow.core.plugin.Plugins;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 
 public class ToolSelectWizard extends Wizard {
 
     public ToolSelectWizard() {
         super();
         
-        setTitle(DcResources.getText("lblToolSelectWizard"));
-        //setHelpIndex("dc.items.wizard");
-    
-        //setSize(DcSettings.getDimension(DcRepository.Settings.stItemWizardFormSize));
+        setHelpIndex("dc.tools.wizard");
+        setSize(DcSettings.getDimension(DcRepository.Settings.stItemWizardFormSize));
         setCenteredLocation();
     }
     
@@ -58,7 +58,7 @@ public class ToolSelectWizard extends Wizard {
 
     @Override
     protected void saveSettings() {
-        //DcSettings.set(DcRepository.Settings.stItemWizardFormSize, getSize());
+        DcSettings.set(DcRepository.Settings.stToolSelectWizard, getSize());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ToolSelectWizard extends Wizard {
 
     @Override
     protected String getWizardName() {
-        return "";
+        return DcResources.getText("lblToolSelectWizard");
     }
 
     @Override

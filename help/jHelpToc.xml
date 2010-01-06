@@ -61,6 +61,7 @@
     </tocitem> 
 
     <tocitem target="dc.Tools" text="Tools">
+      <tocitem target="dc.tools.wizard" text="Tool Select Wizard" />
       <tocitem target="dc.tools.files" text="File operations" />
       <tocitem target="dc.migration.wizard.importer" text="Item Import Wizard"/>
       <tocitem target="dc.migration.wizard.exporter" text="Item Export Wizard"/>
