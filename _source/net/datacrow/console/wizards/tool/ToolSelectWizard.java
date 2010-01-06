@@ -25,7 +25,6 @@
 
 package net.datacrow.console.wizards.tool;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +32,6 @@ import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.plugin.Plugin;
-import net.datacrow.core.plugin.Plugins;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
@@ -63,13 +60,7 @@ public class ToolSelectWizard extends Wizard {
 
     @Override
     public void finish() throws WizardException {
-        Tool tool = (Tool) getCurrent().apply();
-        try {
-            Plugin plugin = Plugins.getInstance().get(tool.getPlugin());
-            plugin.actionPerformed(new ActionEvent(this, 0, ""));
-        } catch (Exception e) {
-            throw new WizardException(e.getMessage());
-        }
+        close();
     }
 
     @Override

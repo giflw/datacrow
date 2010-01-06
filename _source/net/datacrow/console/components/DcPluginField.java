@@ -27,25 +27,17 @@ package net.datacrow.console.components;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.color.ColorSpace;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ColorConvertOp;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonModel;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.plugin.Plugin;
-import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.Utilities;
 
-public class DcPluginField extends AbstractButton {
+public class DcPluginField extends JComponent implements ActionListener {
     
-    private JCheckBox cb = ComponentFactory.getCheckBox("");
     private Plugin plugin;
     
     public DcPluginField(Plugin plugin) {
@@ -53,56 +45,24 @@ public class DcPluginField extends AbstractButton {
         build();
     }
     
-    @Override
-    public Object[] getSelectedObjects() {
-        return cb.getSelectedObjects();
-    }
-
-    @Override
-    public String getActionCommand() {
-        return plugin.getKey();
-    }
-
-    @Override
-    public ButtonModel getModel() {
-        return cb.getModel();
-    }
-
-    @Override
-    public String getText() {
-        return "";
-    }
-
-    @Override
-    public boolean isSelected() {
-        return cb.isSelected();
-    }
-
-    @Override
-    public void setSelected(boolean b) {
-        cb.setSelected(b);
-    }
-
     private void build() {
         DcLongTextField fldHelp = ComponentFactory.getHelpTextField();
-        
         fldHelp.setText(plugin.getHelpText());
-        cb.setActionCommand(plugin.getKey());
-
-        BufferedImage src = Utilities.toBufferedImage(plugin.getIcon());
-        BufferedImageOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-        DcImageIcon deselected = new DcImageIcon(Utilities.getBytes(new ImageIcon(op.filter(src, null))));
         
-        cb.setIcon(deselected);
-        cb.setSelectedIcon(plugin.getIcon());
+        DcButton bt = ComponentFactory.getIconButton(plugin.getIcon());
+        bt.addActionListener(this);
         
         setLayout(Layout.getGBL());
         
-        add(cb, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
+        add(bt, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
             GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-            new Insets(0, 0, 0, 0), 0, 0));
+            new Insets(5, 5, 5, 5), 0, 0));
         add(fldHelp, Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,
             GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-            new Insets(0, 0, 0, 0), 0, 0));
+            new Insets(5, 5, 5, 5), 0, 0));
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        plugin.actionPerformed(ae);
     }
 }

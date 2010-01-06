@@ -30,8 +30,6 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.ButtonGroup;
-
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPluginField;
 import net.datacrow.console.wizards.Wizard;
@@ -50,9 +48,6 @@ public class ToolSelectPanel extends ToolSelectBasePanel {
 
     private static Logger logger = Logger.getLogger(ToolSelectPanel.class.getName());
     
-    private int module = -1;
-    private ButtonGroup bg = new ButtonGroup();
-    
     public ToolSelectPanel(Wizard wizard) {
         super(wizard);
         build();
@@ -66,8 +61,6 @@ public class ToolSelectPanel extends ToolSelectBasePanel {
     public void onActivation() {
         super.onActivation();
 
-        bg = new ButtonGroup();
-        
         removeAll();
         build();
         revalidate();
@@ -78,27 +71,13 @@ public class ToolSelectPanel extends ToolSelectBasePanel {
 
     public Object apply() throws WizardException {
         Tool tool = getTool();
-        
-        if (bg.getSelection() == null)
-            throw new WizardException(DcResources.getText("msgSelectToolFirst"));
-        
-        String command = bg.getSelection().getActionCommand();
-        tool.setPlugin(command);
         return tool;
-    }
-
-    public int getSelectedModule() {
-        return module;
     }
 
     @Override
     public void destroy() {
         super.destroy();
     }  
-    
-    protected boolean isModuleAllowed(DcModule module) {
-        return module.isTopModule();
-    }
     
     private void addPlugin(Collection<Plugin> plugins, String key) {
         try {
@@ -134,7 +113,6 @@ public class ToolSelectPanel extends ToolSelectBasePanel {
         for (Plugin plugin : plugins) {
             if (SecurityCentre.getInstance().getUser().isAuthorized(plugin)) {
                 DcPluginField fld = new DcPluginField(plugin);
-                bg.add(fld);
                 add(fld, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                     new Insets( 0, 5, 5, 5), 0, 0));
