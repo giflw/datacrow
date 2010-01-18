@@ -27,14 +27,12 @@ package net.datacrow.core.migration.itemexport;
 
 import java.io.File;
 
-import javax.swing.ImageIcon;
-
-import org.apache.log4j.Logger;
-
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
+
+import org.apache.log4j.Logger;
 
 public class ItemExporterUtilities {
 
@@ -80,8 +78,8 @@ public class ItemExporterUtilities {
     
     private void copyImage(Picture picture, String target) {
         try {
-            picture.loadImage();
-            ImageIcon icon = (ImageIcon) picture.getValue(Picture._D_IMAGE);
+            picture.loadImage(false);
+            DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
 
             if (icon != null) {
                 if (settings.getBoolean(ItemExporterSettings._SCALE_IMAGES)) {

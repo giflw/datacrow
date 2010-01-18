@@ -30,8 +30,6 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -96,9 +94,10 @@ public class ImageImporter extends FileImporter {
             if (filename.toLowerCase().endsWith(".svg")) {
                 SVGtoBufferedImageConverter converter = new SVGtoBufferedImageConverter();
                 BufferedImage bi = converter.renderSVG(filename);
-                icon = new DcImageIcon(Utilities.getScaledImage(new ImageIcon(bi), 400, 400));
+                icon = new DcImageIcon(Utilities.getScaledImage(new DcImageIcon(bi), 400, 400));
                 filename = File.createTempFile(Utilities.getUniqueID(), ".png").toString();
                 Utilities.writeToFile(icon, filename);
+                bi.flush();
             } else {
                 icon = new DcImageIcon(Utilities.getScaledImage(new DcImageIcon(filename), 400, 400));
                 pic.setValue(Picture._G_EXTERNAL_FILENAME, filename);
@@ -110,7 +109,7 @@ public class ImageImporter extends FileImporter {
             image.setValue(Image._F_WIDTH, width != -1 ? Long.valueOf(width) : null);
             image.setValue(Image._G_HEIGHT, height != -1 ? Long.valueOf(height) : null);
             
-            icon.flush();
+            icon.getImage().flush();
             
             pic.setValue(Picture._A_OBJECTID, image.getID());
             pic.setValue(Picture._B_FIELD, image.getField(Image._I_IMAGE).getDatabaseFieldName());

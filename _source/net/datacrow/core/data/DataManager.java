@@ -681,16 +681,16 @@ public class DataManager {
                 List<Picture> pics = pictures.get(dco.getID());
                 pics = pics == null ? new ArrayList<Picture>() : pics;
 
+                picture.unload(true);
+                
                 if (picture.isNew() && picture.isEdited() && !picture.isDeleted()) {
                     picture.markAsUnchanged();
                     pics.add(picture);
-                    picture.unload(true);
                     
                 } else if (picture.isEdited() && pics.contains(picture)) {
                     Picture pic = pics.get(pics.indexOf(picture));
                     pic.copy(picture, true, true);
                     pic.markAsUnchanged();
-                    pic.unload(true);
 
                 } else if (pics.contains(picture) && picture.isDeleted()) {
                     pics.remove(picture);
@@ -700,6 +700,8 @@ public class DataManager {
                 pictures.put(dco.getID(), pics);
             }
         }
+        
+        System.gc();
     }
     
     private static void updateLoanedItems(Loan loan) {

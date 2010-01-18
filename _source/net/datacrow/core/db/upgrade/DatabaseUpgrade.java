@@ -103,6 +103,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 upgraded |= convertSoftwareCategories();
             }
 
+            if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 8, 0))) {
+                upgraded |= convertImages();
+            }
+            
             if (upgraded) {
                 DataManager.setUseCache(false);
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
@@ -118,6 +122,12 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private boolean convertImages() throws Exception {
+        
+        
+        return false;
     }
     
     private boolean convertSoftwareCategories() throws Exception {

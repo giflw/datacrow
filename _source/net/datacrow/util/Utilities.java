@@ -394,7 +394,7 @@ public class Utilities {
     	if (image instanceof BufferedImage)
     		bi = (BufferedImage) image;
     	else 
-    		bi = Utilities.toBufferedImage(new ImageIcon(image), -1, -1);
+    		bi = Utilities.toBufferedImage(new DcImageIcon(image), -1, -1);
     	
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BufferedOutputStream bos = new BufferedOutputStream(baos);
@@ -410,6 +410,7 @@ public class Utilities {
             logger.error(e, e);
         } finally {
             try {
+                baos.close();
             	bos.close();
             } catch (IOException e) {
                 logger.error(e, e);
@@ -418,7 +419,7 @@ public class Utilities {
         return bytes;
     }
     
-    public static void writeToFile(ImageIcon icon, String filename) throws Exception {
+    public static void writeToFile(DcImageIcon icon, String filename) throws Exception {
         writeScaledImageToFile(icon, filename, DcImageIcon._TYPE_PNG, -1, -1);
     }   
 
@@ -439,23 +440,23 @@ public class Utilities {
         return getScaledImage(bytes, 190, 145);
     }
 
-    public static Image getScaledImage(ImageIcon icon) {
+    public static Image getScaledImage(DcImageIcon icon) {
         return getScaledImage(icon, 190, 145);
     }    
 
     public static Image getScaledImage(byte[] bytes, int width, int height) {
-        return toBufferedImage(new ImageIcon(bytes), width, height);
+        return toBufferedImage(new DcImageIcon(bytes), width, height);
     }    
     
-    public static Image getScaledImage(ImageIcon icon, int width, int height) {
+    public static Image getScaledImage(DcImageIcon icon, int width, int height) {
         return toBufferedImage(icon, width, height);
     }    
     
-    public static void writeScaledImageToFile(ImageIcon icon, String filename) throws Exception {
+    public static void writeScaledImageToFile(DcImageIcon icon, String filename) throws Exception {
     	writeScaledImageToFile(icon, filename, DcImageIcon._TYPE_PNG, 190, 145);
     }
 
-    public static void writeScaledImageToFile(ImageIcon icon, String filename, int type, int w, int h) throws Exception {
+    public static void writeScaledImageToFile(DcImageIcon icon, String filename, int type, int w, int h) throws Exception {
         BufferedImage bufferedImage = toBufferedImage(icon, w, h);
         ImageIO.write(bufferedImage, (type == DcImageIcon._TYPE_JPEG ? "JPG" : "PNG"), new File(filename));
         bufferedImage.flush();
@@ -617,11 +618,12 @@ public class Utilities {
         return "";
     }
     
-    public static BufferedImage toBufferedImage(ImageIcon icon) {
+    public static BufferedImage toBufferedImage(DcImageIcon icon) {
         return toBufferedImage(icon, -1, -1);
     }  
     
-    public static BufferedImage toBufferedImage(ImageIcon icon, int width, int height) {
+    public static BufferedImage toBufferedImage(DcImageIcon icon, int width, int height) {
+        
         // make sure the image is loaded
         Image image = new DcImageIcon(icon.getImage()).getImage();
         
@@ -654,6 +656,7 @@ public class Utilities {
         
         bi.flush();
         image.flush();
+        icon.getImage().flush();
         
         ImageCleaner.addImage(bi);
         ImageCleaner.addImage(image);

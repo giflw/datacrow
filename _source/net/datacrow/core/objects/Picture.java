@@ -91,9 +91,9 @@ public class Picture extends DcObject {
         super.clearValues(nochecks);
     }
     
-    public void loadImage() {
+    public void loadImage(boolean external) {
         String filename = (String) getValue(_G_EXTERNAL_FILENAME);
-        filename = filename == null || !new File(filename).exists() ? (String) getValue(_C_FILENAME) : filename;
+        filename = !external || filename == null || !new File(filename).exists() ? (String) getValue(_C_FILENAME) : filename;
         DcImageIcon image = (DcImageIcon) getValue(Picture._D_IMAGE);
 
         if (filename != null && image == null) {
@@ -138,7 +138,8 @@ public class Picture extends DcObject {
             scaledImage.flush();
             // prevent massive amounts of pictures being created;
             // do turn this back on! just flush the image an keep using it.
-            // scaledImage = null;
+            // 11/1/2010: Seems to be better to actually clean everything out..
+            scaledImage = null;
         }
         
         if (getValues() != null && (nochecks || (!isNew() && !edited))) {
@@ -160,7 +161,7 @@ public class Picture extends DcObject {
     }    
     
     private void createScaledImage(String filename) {
-        loadImage();
+        loadImage(false);
         DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
         
         if (icon != null) {

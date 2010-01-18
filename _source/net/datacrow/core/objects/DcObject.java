@@ -641,7 +641,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             
             if (value != null && value.length() > 0) {
                 byte[] bytes = Base64.decode(value.toCharArray());
-                ImageIcon current = new ImageIcon(bytes);
+                DcImageIcon current = new DcImageIcon(bytes);
                 
                 if (current.getIconHeight() > 16 || current.getIconWidth() > 16) {
                     BufferedImage img = Utilities.toBufferedImage(current, 16, 16);
@@ -1359,7 +1359,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 Picture templatePic = (Picture) template.getValue(idx);
                 
                 Picture pic = (Picture) DcModules.get(DcModules._PICTURE).getItem();
-                templatePic.loadImage();
+                templatePic.loadImage(false);
                 pic.setValue(Picture._D_IMAGE, templatePic.getValue(Picture._D_IMAGE));
                 pic.setValue(Picture._E_HEIGHT, templatePic.getValue(Picture._E_HEIGHT));
                 pic.setValue(Picture._F_WIDTH, templatePic.getValue(Picture._F_WIDTH));
