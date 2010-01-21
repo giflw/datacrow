@@ -49,11 +49,15 @@ public class DcImageIcon extends ImageIcon {
         super();
     }
     
+    public DcImageIcon(File file) {
+        super(file.toString());
+    }    
+    
     public DcImageIcon(String filename) {
         super(filename);
         this.filename = filename;
-    }    
-
+    }  
+    
     public DcImageIcon(byte[] bytes) {
         super(bytes);
         this.bytes = bytes;

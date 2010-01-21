@@ -103,6 +103,8 @@ public class ImageRequest implements IRequest {
             else if (modus == ImageRequest._DELETE)
                 deleteImage();
         }
+        
+        System.gc();
     }
     
     private void deleteImage() {

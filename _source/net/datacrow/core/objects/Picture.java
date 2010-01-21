@@ -26,15 +26,11 @@
 package net.datacrow.core.objects;
 
 import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -160,39 +156,12 @@ public class Picture extends DcObject {
         deleted = false;
     }    
     
-    private void createScaledImage(String filename) {
-        loadImage(false);
-        DcImageIcon icon = (DcImageIcon) getValue(_D_IMAGE);
-        
-        if (icon != null) {
-            logger.info("Scaled image is missing, creating new");
-            try {
-                Utilities.writeScaledImageToFile(icon, DataCrow.imageDir + filename);
-            } catch (Exception e) {
-                logger.error("Could not create new scaled image!", e);
-            }
-        }
-    }
-    
     public DcImageIcon getScaledPicture() {
         String filename = getScaledFilename();
-        if (filename != null) {
-            try {
-                if (isEdited() || scaledImage == null) {
-                    if (scaledImage != null) scaledImage.flush();
-                    scaledImage = new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
-                }
-            } catch (IOException e1) {
-                logger.error("Scaled image does not exist or is invalid. Creating new.", e1);
-                createScaledImage(filename);
-                try {
-                    scaledImage = new DcImageIcon(ImageIO.read(new File(DataCrow.imageDir, filename)));
-                } catch (IOException e2) {
-                    logger.error("Could not load scaled image", e2);
-                }
-            }
+        if (filename != null && (isEdited() || scaledImage == null)) {
+            if (scaledImage != null) scaledImage.flush();
+            scaledImage = new DcImageIcon(new File(DataCrow.imageDir, filename));
         }
-        
         return scaledImage;
     }
     

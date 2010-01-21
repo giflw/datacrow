@@ -25,6 +25,9 @@
 
 package net.datacrow.core.db.upgrade;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,6 +36,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import net.datacrow.console.ComponentFactory;
@@ -58,6 +62,7 @@ import net.datacrow.core.objects.helpers.Movie;
 import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
@@ -102,6 +107,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 0, 0))) {
                 upgraded |= convertSoftwareCategories();
             }
+            
+            if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 8, 0))) {
+                changeSettings();
+            }            
 
             if (upgraded) {
                 DataManager.setUseCache(false);
@@ -118,6 +127,25 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private void changeSettings() {
+        try {
+            File file = new File(DataCrow.dataDir, "dc.properties");
+            if (file.exists()) {
+                Properties properties = new Properties();
+                properties.load(new FileInputStream(file));
+                properties.setProperty("hsqldb.cache_size_scale", "6");
+                properties.setProperty("hsqldb.cache_scale", "8");
+                properties.store(new FileOutputStream(file), "Default properties for the DC database of Data Crow.");
+            }
+        } catch (Exception e) {
+            logger.error("Could not set the default database properties.", e);
+        }   
+        
+        DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, Long.valueOf(20000));
+        DcSettings.set(DcRepository.Settings.stHsqlCacheSizeScale, Long.valueOf(6));
+        DcSettings.set(DcRepository.Settings.stHsqlCacheScale, Long.valueOf(8));
     }
     
     private boolean convertSoftwareCategories() throws Exception {
