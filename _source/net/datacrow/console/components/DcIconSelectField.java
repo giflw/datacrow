@@ -34,6 +34,7 @@ import java.io.File;
 import javax.swing.ImageIcon;
 
 import net.datacrow.console.windows.BrowserDialog;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.filefilters.PictureFileFilter;
@@ -100,7 +101,7 @@ public class DcIconSelectField extends DcImageLabel implements MouseListener {
         try {
             byte[] bytes = Utilities.readFile(file);
             Image image = Utilities.getScaledImage(bytes, size.width, size.height);
-            setIcon(new ImageIcon(image));
+            setIcon(new DcImageIcon(image));
             image = null;
             changed = true;
         } catch (Exception exp) {

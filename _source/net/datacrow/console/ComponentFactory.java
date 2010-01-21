@@ -52,7 +52,6 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -976,11 +975,6 @@ public final class ComponentFactory {
     public static final DcTable getDCTable(DcModule module, boolean readonly, boolean caching) {
     	DcTable table = new DcTable(module, readonly, caching);
         return table;
-    }
-
-    public static final Icon getIcon(String iconLocation) {
-        Icon icon = new ImageIcon(iconLocation);
-        return icon;
     }
 
     public static final JMenuBar getMenuBar() {

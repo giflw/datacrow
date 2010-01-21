@@ -34,13 +34,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 
-import javax.swing.ImageIcon;
-
-import org.apache.log4j.Logger;
-import org.chabanois.isbn.extractor.FileISBNExtractor;
-import org.chabanois.isbn.extractor.ISBNCandidates;
-import org.chabanois.isbn.extractor.PDFBoxTextExtractor;
-
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
@@ -51,6 +44,11 @@ import net.datacrow.util.Hash;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.isbn.ISBN;
+
+import org.apache.log4j.Logger;
+import org.chabanois.isbn.extractor.FileISBNExtractor;
+import org.chabanois.isbn.extractor.ISBNCandidates;
+import org.chabanois.isbn.extractor.PDFBoxTextExtractor;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -149,7 +147,7 @@ public class EbookImport extends FileImporter {
                     if (page != null) {
                         Rectangle rect = new Rectangle(0,0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
                         Image front = page.getImage(rect.width, rect.height, rect, null, true, true);
-                        book.setValue(Book._K_PICTUREFRONT, new DcImageIcon(Utilities.getBytes(new ImageIcon(front))));
+                        book.setValue(Book._K_PICTUREFRONT, new DcImageIcon(Utilities.getBytes(new DcImageIcon(front))));
                     }
                 } finally {
                     if (raf != null)

@@ -39,6 +39,7 @@ import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.settings.Setting;
 import net.datacrow.settings.definitions.IDefinitions;
+import net.datacrow.util.DcImageIcon;
 
 /**
  * Wrapper for the application settings.
@@ -73,7 +74,7 @@ public class DcSettings {
         SettingsView view = new SettingsView(DcResources.getText("lblDataCrowSettings"), 
                                              applicationSettings.getSettings());
         
-        ImageIcon icon = new ImageIcon(DataCrow.installationDir + "icons/logo.jpg");
+        ImageIcon icon = new DcImageIcon(DataCrow.installationDir + "icons/logo.jpg");
         view.setDisclaimer(icon);
 
         view.setSize(new Dimension(875, 470));

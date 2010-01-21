@@ -52,7 +52,6 @@ import java.awt.image.RescaleOp;
 import java.io.File;
 import java.net.URL;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 
@@ -306,7 +305,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                 if (file.toString().toLowerCase().endsWith(".svg")) {
                     SVGtoBufferedImageConverter converter = new SVGtoBufferedImageConverter();
                     BufferedImage bi = converter.renderSVG(file.toString());
-                    picture = new DcImageIcon(Utilities.getBytes(new ImageIcon(bi)));
+                    picture = new DcImageIcon(Utilities.getBytes(new DcImageIcon(bi)));
                 } else {
                     String filename = file.toString().toLowerCase();
                     picture = new DcImageIcon(Utilities.getBytes(
@@ -377,7 +376,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     }
     
     private void update(BufferedImageOp op, BufferedImage src) {
-        picture = new DcImageIcon(Utilities.getBytes(new ImageIcon(op.filter(src, null))));
+        picture = new DcImageIcon(Utilities.getBytes(new DcImageIcon(op.filter(src, null))));
         initialize();
         changed = true;
         repaint();
@@ -395,7 +394,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         at.preConcatenate(translationTransform);
         BufferedImage destinationBI = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC).filter(src, null);
 
-        picture = new DcImageIcon(Utilities.getBytes(new ImageIcon(destinationBI)));
+        picture = new DcImageIcon(Utilities.getBytes(new DcImageIcon(destinationBI)));
         initialize();
         changed = true;
         repaint();

@@ -30,7 +30,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,6 +42,7 @@ import net.datacrow.console.components.DcImageLabel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.logging.ITextPaneAppenderListener;
 
 public class LogForm extends DcFrame implements ITextPaneAppenderListener {
@@ -96,7 +96,7 @@ public class LogForm extends DcFrame implements ITextPaneAppenderListener {
         //Logo panel
         //**********************************************************
         panelPicture.setLayout(Layout.getGBL());
-        DcImageLabel logo = ComponentFactory.getImageLabel(new ImageIcon(DataCrow.installationDir + "icons/logo.jpg"));
+        DcImageLabel logo = ComponentFactory.getImageLabel(new DcImageIcon(DataCrow.installationDir + "icons/logo.jpg"));
         ComponentFactory.setBorder(panelPicture);
 
         panelPicture.setPreferredSize(new Dimension(575,200));

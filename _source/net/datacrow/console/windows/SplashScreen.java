@@ -31,13 +31,13 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JWindow;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.DataCrow;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
 public final class SplashScreen extends JWindow {
@@ -60,7 +60,7 @@ public final class SplashScreen extends JWindow {
         //**********************************************************
         //Logo
         //**********************************************************
-        JLabel logo = new JLabel(new ImageIcon(DataCrow.installationDir + "icons/logo.jpg"));
+        JLabel logo = new JLabel(new DcImageIcon(DataCrow.installationDir + "icons/logo.jpg"));
 
         //**********************************************************
         //Status 

@@ -880,6 +880,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             children.clear();
 
         getModule().release(this);
+        
+        System.gc();
     }
     
     public void destroy() {
