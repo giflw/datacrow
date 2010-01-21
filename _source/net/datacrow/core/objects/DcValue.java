@@ -106,32 +106,34 @@ public class DcValue implements Serializable {
             setChanged(true);
 
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-            if (o instanceof Picture)
-                o = ((Picture) o).getValue(Picture._D_IMAGE);
+            if (o instanceof Picture) {
+                if (value != null) ((Picture) value).release();
+                setValueNative(((Picture) o).clone(), field);   
+            } else {
+                Picture picture = value == null ? (Picture) DcModules.get(DcModules._PICTURE).getItem() : (Picture) value;
+                value = picture; 
 
-            Picture picture = value == null ? (Picture) DcModules.get(DcModules._PICTURE).getItem() : (Picture) value;
-            value = picture; 
+                DcImageIcon currentImage = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
+                DcImageIcon newImage = o instanceof DcImageIcon ? (DcImageIcon) o : 
+                	                   o instanceof byte[] ? new DcImageIcon((byte[]) o) : null;
 
-            DcImageIcon currentImage = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
-            DcImageIcon newImage = o instanceof DcImageIcon ? (DcImageIcon) o : 
-            	                   o instanceof byte[] ? new DcImageIcon((byte[]) o) : null;
-
-            if (currentImage != newImage) {
-                
-            	// prevent empty and incorrect images to be saved
-	        	if (	newImage != null && 
-	        			newImage.getIconHeight() != 0 && 
-	        			newImage.getIconWidth() != 0) {
-	        		
-	        	    if (currentImage != null) currentImage.flush();
-	                picture.setValue(Picture._D_IMAGE, newImage);
-                	picture.isEdited(true);
-                    setValueNative(picture, field);
-	            } else if (currentImage != null) {
-	                currentImage.flush();
-	                ((Picture) value).isDeleted(true);
-                    setValueNative(picture, field);
-                }
+                if (currentImage != newImage) {
+                    
+                	// prevent empty and incorrect images to be saved
+		        	if (	newImage != null && 
+		        			newImage.getIconHeight() != 0 && 
+		        			newImage.getIconWidth() != 0) {
+		        		
+		        	    if (currentImage != null) currentImage.flush();
+		                picture.setValue(Picture._D_IMAGE, newImage);
+	                	picture.isEdited(true);
+                        setValueNative(picture, field);
+		            } else if (currentImage != null) {
+		                currentImage.flush();
+		                ((Picture) value).isDeleted(true);
+                        setValueNative(picture, field);
+                    }
+	            }
             }
        } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
     	   if (o instanceof DcImageIcon) {

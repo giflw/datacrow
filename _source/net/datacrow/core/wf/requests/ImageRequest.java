@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Collection;
 
+import javax.swing.ImageIcon;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -135,10 +137,8 @@ public class ImageRequest implements IRequest {
             byte[] image = icon.getBytes();
             if (image != null && image.length > 10) {
                 Utilities.writeToFile(image, file);
-                Utilities.writeScaledImageToFile(icon, picture.getScaledFilename(imageFile));
+                Utilities.writeScaledImageToFile(new ImageIcon(image), picture.getScaledFilename(imageFile));
             }
-
-            icon.flush();
             
         } catch (Exception e) {
             logger.error("Could not save [" + imageFile + "]", e);
