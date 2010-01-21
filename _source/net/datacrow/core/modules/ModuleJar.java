@@ -99,8 +99,8 @@ public class ModuleJar {
             byte[] icon16 = module.getIcon16();
             byte[] icon32 = module.getIcon32();
             
-            icon16 = icon16 == null ? Utilities.getBytes(IconLibrary._icoIcon16, DcImageIcon._TYPE_PNG) : icon16;
-            icon32 = icon32 == null ? Utilities.getBytes(IconLibrary._icoIcon32, DcImageIcon._TYPE_PNG) : icon32;
+            icon16 = icon16 == null ? Utilities.getBytes(IconLibrary._icoIcon16.getImage(), DcImageIcon._TYPE_PNG) : icon16;
+            icon32 = icon32 == null ? Utilities.getBytes(IconLibrary._icoIcon32.getImage(), DcImageIcon._TYPE_PNG) : icon32;
 
             net.datacrow.util.zip.ZipFile zf = new net.datacrow.util.zip.ZipFile(DataCrow.moduleDir, filename);
             

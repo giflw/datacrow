@@ -166,12 +166,12 @@ public class PanelBasicInfo extends ModuleWizardPanel {
 
         try {
             if (pic16.isChanged() || getWizard() instanceof CreateModuleWizard) {
-                module.setIcon16(Utilities.getBytes(icon16, DcImageIcon._TYPE_PNG));
+                module.setIcon16(Utilities.getBytes(icon16.getImage(), DcImageIcon._TYPE_PNG));
                 module.setIcon16Filename(saveIcon(new DcImageIcon(module.getIcon16()), "_small"));
             }
             
             if (pic32.isChanged() || getWizard() instanceof CreateModuleWizard) {
-                module.setIcon32(Utilities.getBytes(icon32, DcImageIcon._TYPE_PNG));
+                module.setIcon32(Utilities.getBytes(icon32.getImage(), DcImageIcon._TYPE_PNG));
                 module.setIcon32Filename(saveIcon(new DcImageIcon(module.getIcon32()), ""));                
             }
         } catch (Exception e) {

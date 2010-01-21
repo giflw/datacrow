@@ -74,7 +74,7 @@ public class DcImageIcon extends ImageIcon {
     	getImage().flush();
         tracker.removeImage(getImage());
         
-        System.gc();
+        //System.gc();
     }
     
     public String getFilename() {

@@ -881,7 +881,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
 
         getModule().release(this);
         
-        System.gc();
+       // System.gc();
     }
     
     public void destroy() {

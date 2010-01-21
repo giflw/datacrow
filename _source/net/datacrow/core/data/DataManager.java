@@ -1047,6 +1047,7 @@ public class DataManager {
     
     public static void serialize() {
         try {
+            saveCache = false;
             if (saveCache) {
                 logger.info(DcResources.getText("msgWritingItemCache"));
                 CacheWriter writer = new CacheWriter();

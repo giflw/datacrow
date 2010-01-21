@@ -381,11 +381,11 @@ public class Utilities {
         return new DcImageIcon(bytes);
     }
     
-    public static byte[] getBytes(ImageIcon icon) {
+    public static byte[] getBytes(DcImageIcon icon) {
         return getBytes(icon, DcImageIcon._TYPE_PNG);
     }
     
-    public static byte[] getBytes(ImageIcon icon, int type) {
+    public static byte[] getBytes(DcImageIcon icon, int type) {
         return getBytes(icon.getImage(), type);
     }
     
