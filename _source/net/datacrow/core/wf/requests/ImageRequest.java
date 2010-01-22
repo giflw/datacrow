@@ -142,7 +142,6 @@ public class ImageRequest implements IRequest {
                 Utilities.writeScaledImageToFile(icon, picture.getScaledFilename(imageFile));
                 icon.flush();
             }
-            
         } catch (Exception e) {
             logger.error("Could not save [" + imageFile + "]", e);
         }

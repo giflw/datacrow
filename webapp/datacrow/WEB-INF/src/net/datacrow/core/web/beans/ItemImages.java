@@ -114,7 +114,7 @@ public class ItemImages extends DcBean {
                 
                 if (picture == null) continue;
                 
-                picture.loadImage(true);
+                picture.loadImage(false);
                 if (picture.getValue(Picture._D_IMAGE) != null) {
                     DcWebImage wi = new DcWebImage();
                     wi.setFieldIdx(field.getIndex());

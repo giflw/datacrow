@@ -53,8 +53,10 @@ public class ImageCleaner {
      * @param image
      */
     public synchronized static void addImage(Image image) {
-        if (!exists(image) && image != null)
+        if (!exists(image) && image != null) {
+            image.flush();
             references.add(new WeakReference<Image>(image));
+        }
     }
 
     /**
