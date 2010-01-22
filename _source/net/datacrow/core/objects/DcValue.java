@@ -110,7 +110,7 @@ public class DcValue implements Serializable {
                 if (value != null) ((Picture) value).release();
 
                 // TODO: test; removed the clone call 
-                setValueNative((Picture) o, field);   
+                setValueNative(o, field);   
             } else {
                 Picture picture = value == null ? (Picture) DcModules.get(DcModules._PICTURE).getItem() : (Picture) value;
                 value = picture; 
