@@ -4,6 +4,7 @@ Data Crow 3.8.8  [Release on xx/01/2010] [testing: high] [target: production]
 
 [Fixed]
 - Memory issues with the images module.
+- Photo of persons not shown in the picture tab of the quick view.
 
 
 -----------------------------------------------------------------------------------------
