@@ -444,8 +444,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     public void stateChanged(ChangeEvent evt) {
         JTabbedPane pane = (JTabbedPane) evt.getSource();
         
-        if ((hasRelatedItems && pane.getSelectedIndex() > 1) || 
-            (!hasRelatedItems &&  pane.getSelectedIndex() > 0))
+        if (pane.getSelectedIndex() > 0)
             loadImage();
     }
     
