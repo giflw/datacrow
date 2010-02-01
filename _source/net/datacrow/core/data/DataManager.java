@@ -1015,6 +1015,7 @@ public class DataManager {
         boolean gracefulShutdown = DcSettings.getBoolean(DcRepository.Settings.stGracefulShutdown);
         
         useCache = false;
+        saveCache = false;
         
         if (!gracefulShutdown || !useCache || !deserialize()) {
             long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
