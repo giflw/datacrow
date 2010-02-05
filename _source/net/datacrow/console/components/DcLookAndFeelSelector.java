@@ -248,8 +248,12 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
             if (laf != null) {
                 DataCrow.mainFrame.updateLAF(laf);
                 DataCrow.mainFrame.setViews();
-                if (parent != null)
+                if (parent != null) {
                     SwingUtilities.updateComponentTreeUI(parent.getContentPane());
+                    parent.repaint();
+                    parent.validate();
+                    parent.close();
+                }
             }
         }
     }
