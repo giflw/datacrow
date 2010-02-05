@@ -29,6 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcFrame;
@@ -57,6 +58,8 @@ public class LogForm extends DcFrame {
     private void build() {
         getContentPane().setLayout(Layout.getGBL());
 
+        SwingUtilities.updateComponentTreeUI(LogPanel.getInstance());
+        
         add(LogPanel.getInstance(), Layout.getGBC( 0, 1, 1, 1, 20.0, 50.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets( 5, 0, 0, 0), 0, 0));        
