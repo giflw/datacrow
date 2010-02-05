@@ -1,11 +1,14 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.8  [Release on xx/01/2010] [testing: high] [target: production]
+Data Crow 3.8.8  [Release on 05/02/2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - Memory issues with the images module.
 - Photo of persons not shown in the picture tab of the quick view.
 - Switching between look and feels does not always work correctly.
+
+[Changed]
+- Log form is now scalable (size is remembered) and correctly styled.
 
 
 -----------------------------------------------------------------------------------------

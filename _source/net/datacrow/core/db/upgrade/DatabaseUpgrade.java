@@ -40,8 +40,8 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.UpgradeDialog;
+import net.datacrow.console.windows.log.LogForm;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
@@ -115,7 +115,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             if (upgraded) {
                 DataManager.setUseCache(false);
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
-                LogForm.getInstance().setVisible(false);
+                new LogForm();
                 DataCrow.showSplashScreen(true);
             }
             
@@ -171,8 +171,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             System.exit(0);
         
 
-        LogForm.getInstance().setVisible(true);
-        LogForm.getInstance().toFront();
+        new LogForm();
 
         MappingModule mappingMod = new MappingModule(DcModules.get(DcModules._SOFTWARE), DcModules.get(DcModules._SOFTWARE + DcModules._CATEGORY), Software._K_CATEGORIES);
         createTable(mappingMod);
@@ -220,8 +219,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 " from the Software, Movie, Audio CD and Music Album modules and its values will be stored in the external references field. Continue?"))
             System.exit(0);
         
-        LogForm.getInstance().setVisible(true);
-        LogForm.getInstance().toFront();
+        new LogForm();
 
         createTable(DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._MOVIE));
         createTable(DcModules.get(DcModules._EXTERNALREFERENCE + DcModules._AUDIOCD));
@@ -557,7 +555,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         MappingModule movLan = new MappingModule(DcModules.get(DcModules._MOVIE), lan, Movie._D_LANGUAGE);
         MappingModule movCtr = new MappingModule(DcModules.get(DcModules._MOVIE), ctr, Movie._F_COUNTRY);        
 
-        LogForm.getInstance().setVisible(true);
+        new LogForm();
         
         prepareTable(DcModules.get(DcModules._CONTACTPERSON), "COUNTRY", ContactPerson._K_COUNTRY);
         createTable(ctr);

@@ -41,7 +41,6 @@ import javax.swing.UIManager;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.MainFrame;
-import net.datacrow.console.windows.LogForm;
 import net.datacrow.console.windows.SelectExpienceLevelDialog;
 import net.datacrow.console.windows.SelectLanguageDialog;
 import net.datacrow.console.windows.SplashScreen;
@@ -49,6 +48,7 @@ import net.datacrow.console.windows.TipOfTheDayDialog;
 import net.datacrow.console.windows.drivemanager.DriveManagerDialog;
 import net.datacrow.console.windows.help.StartupHelpDialog;
 import net.datacrow.console.windows.loan.LoanInformationForm;
+import net.datacrow.console.windows.log.LogPanel;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
 import net.datacrow.console.windows.security.LoginDialog;
 import net.datacrow.console.wizards.tool.ToolSelectWizard;
@@ -268,7 +268,7 @@ public class DataCrow {
                 while (en.hasMoreElements()) {
                     Appender appender = (Appender) en.nextElement();
                     if (appender instanceof TextPaneAppender)
-                        ((TextPaneAppender) appender).addListener(LogForm.getInstance());
+                        ((TextPaneAppender) appender).addListener(LogPanel.getInstance());
                 }             
         
                 logger.info(DcResources.getText("msgApplicationStarts"));
