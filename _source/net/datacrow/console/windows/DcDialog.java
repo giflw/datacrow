@@ -85,7 +85,10 @@ public class DcDialog extends JDialog implements IDialog {
                 active.notifyAll();
             }
         }
-        super.dispose();   
+        
+        try {
+            super.dispose();
+        } catch (Exception e) {}
     }
 
     @Override
