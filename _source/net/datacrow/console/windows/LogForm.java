@@ -25,7 +25,6 @@
 
 package net.datacrow.console.windows;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -38,11 +37,11 @@ import javax.swing.JTextArea;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcImageLabel;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.DcImageIcon;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.logging.ITextPaneAppenderListener;
 
 public class LogForm extends DcFrame implements ITextPaneAppenderListener {
@@ -83,27 +82,14 @@ public class LogForm extends DcFrame implements ITextPaneAppenderListener {
 
     @Override
 	public void close() {
+        DcSettings.set(DcRepository.Settings.stLogFormSize, getSize());
     	setVisible(false);
 	}
 
 	private void buildPanel() {
         
         JPanel panelLogging = new JPanel();
-        JPanel panelPicture = new JPanel();
         JPanel panelProductInfo = new JPanel();
-
-        //**********************************************************
-        //Logo panel
-        //**********************************************************
-        panelPicture.setLayout(Layout.getGBL());
-        DcImageLabel logo = ComponentFactory.getImageLabel(new DcImageIcon(DataCrow.installationDir + "icons/logo.jpg"));
-        ComponentFactory.setBorder(panelPicture);
-
-        panelPicture.setPreferredSize(new Dimension(575,200));
-        panelPicture.setMinimumSize(new Dimension(575,200));
-        panelPicture.add(logo,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
-                               ,GridBagConstraints.NORTH, GridBagConstraints.BOTH,
-                                new Insets(0, 0, 0, 0), 0, 0));
 
         //**********************************************************
         //Logging panel
@@ -134,20 +120,16 @@ public class LogForm extends DcFrame implements ITextPaneAppenderListener {
         //**********************************************************
         getContentPane().setLayout(Layout.getGBL());
         
-        // Build the panel
-        this.getContentPane().add(   panelPicture,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                                                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                                                    new Insets( 5, 5, 0, 5), 0, 0));
-        this.getContentPane().add(   panelLogging,  Layout.getGBC( 0, 1, 1, 1, 20.0, 20.0
+        this.getContentPane().add(   panelLogging,  Layout.getGBC( 0, 1, 1, 1, 20.0, 50.0
                                                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                                                    new Insets( 0, 0, 0, 0), 0, 0));
+                                                    new Insets( 5, 0, 0, 0), 0, 0));
         this.getContentPane().add(panelProductInfo, Layout.getGBC( 0, 2, 1, 1, 0.0, 0.0
                                                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                                                     new Insets( 5, 0, 5, 0), 0, 0));
         pack();
 
-        setSize(590, 600);
-        setResizable(false);
+        setSize(DcSettings.getDimension(DcRepository.Settings.stLogFormSize));
+        setResizable(true);
         
         setCenteredLocation();
     }
