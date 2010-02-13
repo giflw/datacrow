@@ -84,7 +84,7 @@ public class AudioCdSynchronizer extends DefaultSynchronizer {
         super.merge(target, source, osh);
 
         Collection<DcObject> oldTracks = target.getChildren() == null ? new ArrayList<DcObject>() : target.getChildren();
-        Collection<DcObject> newTracks = source.getChildren() == null ? new ArrayList<DcObject>() : source.getChildren();
+        Collection<DcObject> newTracks = source.getCurrentChildren() == null ? new ArrayList<DcObject>() : source.getCurrentChildren();
         
         if (oldTracks.size() == 0) {
             for (DcObject track : newTracks) {

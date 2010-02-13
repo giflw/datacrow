@@ -108,7 +108,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                 upgraded |= convertSoftwareCategories();
             }
             
-            if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 8, 0))) {
+            if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 9, 0))) {
                 changeSettings();
             }            
 
@@ -143,7 +143,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             logger.error("Could not set the default database properties.", e);
         }   
         
-        DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, Long.valueOf(20000));
+        DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, Long.valueOf(120000));
         DcSettings.set(DcRepository.Settings.stHsqlCacheSizeScale, Long.valueOf(6));
         DcSettings.set(DcRepository.Settings.stHsqlCacheScale, Long.valueOf(8));
     }

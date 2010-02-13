@@ -1,4 +1,15 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.8.9  [Release on 13/02/2010] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+Note: Known performance issues will be fixed with the 4.0 version. These cannot be solved
+in the current Data Crow 3 version.
+
+[Fixed]
+- Imdb.com was no longer working.
+- Audio Tracks were no longer updated by the online search and synchronizer.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.8.8  [Release on 05/02/2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 

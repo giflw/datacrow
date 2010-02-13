@@ -433,14 +433,14 @@ public class DcObjectList extends DcList implements IViewComponent {
 
                 } catch (Exception e) {
                     try {
-                        sleep(1000);
+                        sleep(10000);
                     } catch (InterruptedException e1) {
                         logger.error(e, e);
                     }
                 }
                 
                 try {
-                    sleep(1000);
+                    sleep(10000);
                 } catch (InterruptedException e) {
                     logger.error(e, e);
                 }
