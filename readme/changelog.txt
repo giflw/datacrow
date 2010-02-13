@@ -7,6 +7,8 @@ in the current Data Crow 3 version.
 [Fixed]
 - Imdb.com was no longer working.
 - Audio Tracks were no longer updated by the online search and synchronizer.
+- Flickering pictures in the view.
+- Log file created in the old location (previous installation of Data Crow).
 
 
 -----------------------------------------------------------------------------------------

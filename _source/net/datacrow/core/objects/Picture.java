@@ -158,11 +158,11 @@ public class Picture extends DcObject {
     
     public DcImageIcon getScaledPicture() {
         String filename = getScaledFilename();
-        if (filename != null && (isEdited() || scaledImage == null)) {
+        if (filename != null) {
             if (scaledImage != null) scaledImage.flush();
-            scaledImage = new DcImageIcon(new File(DataCrow.imageDir, filename));
+            return new DcImageIcon(new File(DataCrow.imageDir, filename));
         }
-        return scaledImage;
+        return null;
     }
     
     public String getScaledFilename() {

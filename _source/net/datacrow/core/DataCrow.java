@@ -91,7 +91,7 @@ import org.apache.log4j.PropertyConfigurator;
  */
 public class DataCrow {
 
-    private static Logger logger = Logger.getLogger(DataCrow.class.getName());
+    private static Logger logger;
     
     private static Platform platform = new Platform();
     private static Version version = new Version(3, 8, 9, 0);
@@ -119,7 +119,7 @@ public class DataCrow {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         try {
-            long totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;
+            
             
             boolean nocache = false;
             boolean webserverMode = false; 
@@ -217,11 +217,17 @@ public class DataCrow {
             DataCrow.installationDir = DataCrow.installationDir.replaceAll("\\\\", "/");
             DataCrow.installationDir += !DataCrow.installationDir.endsWith("\\") && !DataCrow.installationDir.endsWith("/") ? "/" : "";
             
+            long totalstart = 0;
+            
             try {
                 
                 checkCurrentDir();
                 createDirectories();
                 initLog4j();
+                
+                logger = Logger.getLogger(DataCrow.class.getName());
+                totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;                
+                
                 initDbProperties();
                 installLafs();
                 
@@ -425,7 +431,7 @@ public class DataCrow {
                 }
                 
             } catch (Exception e) {
-                logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
+                if (logger != null)  logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
                 e.printStackTrace();
                 new NativeMessageBox("Error", e.toString());
                 System.exit(0);

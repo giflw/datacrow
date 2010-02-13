@@ -178,8 +178,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     }
     
     protected void updateView(Collection<DcObject> dcos) {
-        //getView().getCurrent().cancelCurrentTask();    
-        getView().getCurrent().add(dcos);      
+        getView().getCurrent().add(dcos);  
+        getView().getCurrent().revalidate();
+        getView().getCurrent().repaint(1000);
     }
     
     public void setDefaultSelection() {
