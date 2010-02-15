@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.10  [Release on 13/02/2010] [testing: high] [target: production]
+Data Crow 3.8.10  [Release on 16/02/2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 Note: Known performance issues will be fixed with the 4.0 version. These cannot be solved
 in the current Data Crow 3 version.
