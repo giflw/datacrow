@@ -85,12 +85,17 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         textObjectName.setText(module.getObjectName());
         textObjectNamePlural.setText(module.getObjectNamePlural());
         checkCanBeLended.setSelected(module.canBeLend());
+        checkFileBacked.setSelected(module.isFileBacked());
         
         if (module.getIcon16() != null)
             pic16.setIcon(new DcImageIcon(module.getIcon16()));
         
         if (module.getIcon32() != null)
             pic32.setIcon(new DcImageIcon(module.getIcon32()));
+        
+        checkFileBacked.setVisible(!getModule().getModuleClass().equals(DcPropertyModule.class));
+        if (getModule().getModuleClass().equals(DcPropertyModule.class))
+            checkFileBacked.setSelected(false);
         
         checkCanBeLended.setVisible(!getModule().getModuleClass().equals(DcPropertyModule.class));
         if (getModule().getModuleClass().equals(DcPropertyModule.class))
