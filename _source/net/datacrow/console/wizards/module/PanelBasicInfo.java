@@ -246,69 +246,72 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         checkFileBacked = ComponentFactory.getCheckBox(DcResources.getText("lblFileBacked"));
         textObjectNamePlural = ComponentFactory.getShortTextField(25);
         
+        int y = 0;
+        add(ComponentFactory.getLabel(DcResources.getText("lblDescription")), 
+                Layout.getGBC(0, y, 1, 1, 1.0, 1.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 5, 5, 5, 5), 0, 0));  
+        add(scollDesc,        
+                Layout.getGBC(1, y++, 1, 1, 2.0, 2.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                new Insets( 5, 5, 5, 5), 0, 0));  
+        
+        
         if (!exists) {
             add(ComponentFactory.getLabel(DcResources.getText("lblName")), 
-                    Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets( 5, 5, 5, 5), 0, 0));
             add(textName,         
-                    Layout.getGBC(1, 0, 1, 1, 1.0, 1.0
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
             add(ComponentFactory.getLabel(DcResources.getText("lblItemName")), 
-                    Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets( 5, 5, 5, 5), 0, 0));  
             add(textObjectName,         
-                    Layout.getGBC(1, 2, 1, 1, 1.0, 1.0
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
             add(ComponentFactory.getLabel(DcResources.getText("lblItemNamePlural")), 
-                    Layout.getGBC(0, 3, 1, 1, 1.0, 1.0
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets( 5, 5, 5, 5), 0, 0));  
             add(textObjectNamePlural,         
-                    Layout.getGBC(1, 3, 1, 1, 1.0, 1.0
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
             add(checkContainerManaged, 
-                    Layout.getGBC(1, 4, 2, 1, 1.0, 1.0
-                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets( 5, 5, 5, 5), 0, 0));
-            add(checkFileBacked, 
-                    Layout.getGBC(1, 5, 2, 1, 1.0, 1.0
+                    Layout.getGBC(1, y++, 2, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets( 5, 5, 5, 5), 0, 0));
         }
         
+        add(checkFileBacked, 
+                Layout.getGBC(1, y++, 2, 1, 1.0, 1.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 5, 5, 5, 5), 0, 0));        
         add(checkCanBeLended, 
-                Layout.getGBC(1, 6, 2, 1, 1.0, 1.0
+                Layout.getGBC(1, y++, 2, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets( 5, 5, 5, 5), 0, 0));
-        add(ComponentFactory.getLabel(DcResources.getText("lblDescription")), 
-                Layout.getGBC(0, 7, 1, 1, 1.0, 1.0
-               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets( 5, 5, 5, 5), 0, 0));  
-        add(scollDesc,        
-                Layout.getGBC(1, 7, 1, 1, 2.0, 2.0
-               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                new Insets( 5, 5, 5, 5), 0, 0));  
 
         pic16 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon16.png"));
         pic32 = ComponentFactory.getIconSelectField(new DcImageIcon(DataCrow.installationDir + "icons/icon32.png"));
             
         add(ComponentFactory.getLabel(DcResources.getText("lblIcon16")), 
-                     Layout.getGBC(0, 10, 1, 1, 1.0, 1.0
+                     Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                      new Insets(5, 5, 5, 5), 0, 0)); 
-        add(pic16,   Layout.getGBC(1, 10, 1, 1, 1.0, 1.0
+        add(pic16,   Layout.getGBC(1, y++, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                      new Insets(5, 5, 5, 5), 0, 0)); 
         add(ComponentFactory.getLabel(DcResources.getText("lblIcon32")), 
-                     Layout.getGBC(0, 11, 1, 1, 1.0, 1.0
+                     Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                      new Insets(5, 5, 5, 5), 0, 0)); 
-        add(pic32,   Layout.getGBC(1, 11, 1, 1, 1.0, 1.0
+        add(pic32,   Layout.getGBC(1, y++, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                      new Insets(5, 5, 5, 5), 0, 0)); 
     }
