@@ -194,7 +194,7 @@ public class Freedb {
 		String output = connection.getString();
 
 		//Preliminary freedb error check, error codes 4xx and 5xx indicate an error
-		if (output.startsWith("4") || output.startsWith("5")) {
+		if (output.startsWith("4") || output.startsWith("5") || output.startsWith("202")) {
 			throw new Exception(DcResources.getText("msgFreeDBServerReturnedError", output));
         }
 		return output;
