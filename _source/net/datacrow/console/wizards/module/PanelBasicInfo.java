@@ -86,6 +86,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         textObjectNamePlural.setText(module.getObjectNamePlural());
         checkCanBeLended.setSelected(module.canBeLend());
         checkFileBacked.setSelected(module.isFileBacked());
+        checkContainerManaged.setSelected(module.isContainerManaged());
         
         if (module.getIcon16() != null)
             pic16.setIcon(new DcImageIcon(module.getIcon16()));
@@ -93,13 +94,17 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         if (module.getIcon32() != null)
             pic32.setIcon(new DcImageIcon(module.getIcon32()));
         
-        checkFileBacked.setVisible(!getModule().getModuleClass().equals(DcPropertyModule.class));
-        if (getModule().getModuleClass().equals(DcPropertyModule.class))
-            checkFileBacked.setSelected(false);
+        boolean propertyModule = getModule().getModuleClass().equals(DcPropertyModule.class);
         
-        checkCanBeLended.setVisible(!getModule().getModuleClass().equals(DcPropertyModule.class));
-        if (getModule().getModuleClass().equals(DcPropertyModule.class))
+        checkFileBacked.setVisible(!propertyModule);
+        checkCanBeLended.setVisible(!propertyModule);
+        checkContainerManaged.setVisible(!propertyModule);
+        
+        if (propertyModule) {
+            checkFileBacked.setSelected(false);
             checkCanBeLended.setSelected(false);
+            checkContainerManaged.setSelected(false);
+        }
     }
     
     private String saveIcon(DcImageIcon icon, String suffix) throws WizardException {

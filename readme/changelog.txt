@@ -5,8 +5,10 @@ Note: Known performance issues will be fixed with the 4.0 version. These cannot 
 in the current Data Crow 3 version.
 
 [Fixed]
-- Bol.com was no longer working
-- Altering a module made the file fields disappear.
+- Bol.com was no longer working (item URLs were changed).
+- Altering a module made the file fields disappear (the property 'file-backed' was not 
+  saved correctly).
+- The FreeDB server did not deliver helpful error message when the disc query failed.
 
 
 -----------------------------------------------------------------------------------------
