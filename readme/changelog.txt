@@ -12,7 +12,13 @@ in the current Data Crow 3 version.
 - The error handling of the report creation process has been improved. 
 - Data Crow did not remember whether it's main view was maximized.
 - Table view duplicates tracks when saving a new item.
- 
+- The list disappears when altering a property from within one of the administration 
+  module.
+- Forms for child modules cannot be designed (the menu item is not available).
+
+[Changed]
+- The installer allows you to select the specific modules you would like to install.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.9  [Release on 13/02/2010] [testing: high] [target: production]

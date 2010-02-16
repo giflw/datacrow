@@ -45,7 +45,7 @@
     </panels>
     
     <packs>
-        <pack name="Core" required="yes">
+        <pack name="Data Crow" required="yes" preselected="yes">
             <description>Data Crow</description>
             <file src="log4j.properties" targetdir="$INSTALL_PATH"/>
             <file src="datacrow.exe" targetdir="$INSTALL_PATH"/>
@@ -78,9 +78,19 @@
             <file src="data" targetdir="$INSTALL_PATH"/>
             <file src="webapp/datacrow/mediaimages" targetdir="$INSTALL_PATH/webapp/datacrow"/>
         </pack>
+        
+        <pack name="PDF and HTML reports" required="no">
+            <description>Data Crow HTML and PDF reports.</description>
+            <file src="reports" targetdir="$INSTALL_PATH"/>
+        </pack>           
+        
+        <pack name="Modules (all)" required="no" preselected="yes">
+            <description>Installs all standard modules.</description>
+            <file src="modules" targetdir="$INSTALL_PATH"/>
+        </pack>
 
-       <pack name="Web" required="no">
-            <description>Web Module</description>
+        <pack name="Web Module" required="no" preselected="yes">
+            <description>The web module consists of a web server and a web GUI.</description>
             <file src="lib/jetty" targetdir="$INSTALL_PATH/lib"/>
             <file src="webapp/datacrow/common" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/css" targetdir="$INSTALL_PATH/webapp/datacrow"/>
@@ -99,17 +109,202 @@
             <file src="webapp/datacrow/itemrelate.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/login.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
             <file src="webapp/datacrow/search.jsp" targetdir="$INSTALL_PATH/webapp/datacrow"/>
-    </pack>
-
-        <pack name="Modules" required="no">
-            <description>Data Crow Modules</description>
-            <file src="modules" targetdir="$INSTALL_PATH"/>
+        </pack>
+    
+        <pack name="Audio CD module" required="no" preselected="no">
+            <description>Audio CD module</description>
+            <file src="modules/audiocd.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/audiocd.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/audiotrack.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/audiotrack.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/musicartist.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/musicartist.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/item.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/external reference.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/loan.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/permission.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/contactperson.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/person.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/super.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/tab.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/template.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/user.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/state.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/storage medium.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/platform.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/genre.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/category.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/data" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/xsd" targetdir="$INSTALL_PATH/modules"/>            
         </pack>  
         
-        <pack name="Reports" required="no">
-            <description>Data Crow Reports</description>
-            <file src="reports" targetdir="$INSTALL_PATH"/>
-        </pack>        
+        <pack name="Music album module" required="no" preselected="no">
+            <description>Music album module (for file based music albums)</description>
+            <file src="modules/musictrack.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/musictrack.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/musicalbum.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/musicalbum.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/musicartist.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/musicartist.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/item.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/external reference.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/loan.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/permission.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/contactperson.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/person.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/super.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/tab.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/template.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/user.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/state.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/storage medium.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/platform.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/genre.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/category.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/data" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/xsd" targetdir="$INSTALL_PATH/modules"/>            
+        </pack>  
+        
+        <pack name="Movie module" required="no" preselected="no">
+            <description>Movie module including actors and directors</description>
+            <file src="modules/movie.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/movie.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/actor.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/actor.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/director.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/director.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/item.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/external reference.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/loan.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/permission.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/contactperson.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/person.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/super.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/tab.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/template.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/user.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/state.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/storage medium.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/platform.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/genre.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/category.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/data" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/xsd" targetdir="$INSTALL_PATH/modules"/>            
+        </pack>
+        
+        <pack name="Book module" required="no" preselected="no">
+            <description>Book module including authors and publishers</description>
+            <file src="modules/book.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/book.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/author.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/author.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/bookpublisher.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/bookpublisher.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/item.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/external reference.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/loan.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/permission.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/contactperson.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/person.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/super.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/tab.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/template.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/user.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/state.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/storage medium.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/platform.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/genre.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/category.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/data" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/xsd" targetdir="$INSTALL_PATH/modules"/>            
+        </pack>
+        
+        <pack name="Software module" required="no" preselected="no">
+            <description>Software module including developers and publishers</description>
+            <file src="modules/software.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/software.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/developer.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/developer.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/softwarepublisher.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/softwarepublisher.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/item.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/external reference.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/loan.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/permission.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/contactperson.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/person.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/super.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/tab.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/template.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/user.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/state.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/storage medium.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/platform.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/genre.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/category.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/data" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/xsd" targetdir="$INSTALL_PATH/modules"/>            
+        </pack>          
+        
+        <pack name="Image module" required="no" preselected="no">
+            <description>Image module</description>
+            <file src="modules/image.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/image.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/item.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/external reference.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/loan.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/permission.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/contactperson.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/person.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/super.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/tab.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/template.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/user.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/state.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/storage medium.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/platform.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/genre.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/category.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/data" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/xsd" targetdir="$INSTALL_PATH/modules"/>            
+        </pack>         
+        
+        <pack name="Media module" required="no" preselected="no">
+            <description>The media module shows all media such as movies and software in a single module.</description>
+            <file src="modules/media.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/media.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/container.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/item.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/external reference.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/loan.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/permission.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/contactperson.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/person.jar" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/super.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/tab.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/template.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/user.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/state.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/storage medium.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/platform.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/genre.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/category.properties" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/data" targetdir="$INSTALL_PATH/modules"/>
+            <file src="modules/xsd" targetdir="$INSTALL_PATH/modules"/>            
+        </pack>  
         
     </packs>
     
