@@ -435,6 +435,8 @@ public class DcTable extends JTable implements IViewComponent {
             cancelEdit();
             DcObject dco = getModuleForRow(row).getItem();
             
+            if (dco == null) return null;
+            
             for (DcField field : dco.getFields()) {
                 try {
                     col = getColumnIndexForField(field.getIndex());
