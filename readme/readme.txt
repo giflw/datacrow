@@ -150,10 +150,6 @@ Additional parameters:
      Use this parameter when Data Crow starts incorrectly and complains 
      about missing directories (non Windows platform only). 
     
-    -nocache
-     Forces Data Crow to ignore the cached items and load everything fresh from the 
-     database.
-     
     -webserver
      Starts the web server without starting the actual Data Crow application.
      Can be used in combination with the credentials parameter to bypass all the GUI
