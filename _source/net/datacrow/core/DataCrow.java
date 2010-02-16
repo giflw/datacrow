@@ -141,7 +141,7 @@ public class DataCrow {
                 } else if (args[i].toLowerCase().startsWith("-db:")) {
                     db = args[i].substring("-db:".length());
                 } else if (args[i].toLowerCase().startsWith("-nocache")) {
-                    nocache = true;        
+                    nocache = true;  // no longer used.      
                 } else if (args[i].toLowerCase().startsWith("-help")) {
                     StartupHelpDialog dialog = new StartupHelpDialog();
                     DcSwingUtilities.openDialogNativeModal(dialog);

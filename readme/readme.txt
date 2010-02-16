@@ -70,8 +70,8 @@ Windows XP, Windows 98 and Ubuntu (latest version at the moment of testing).
 Systems used: P4 2.4 Ghz, Core 2 Duo 2.2ghz
 
 Minimum requirement: 
-An 800 Mhz system is perfectly capable of running Data Crow.
-Data Crow needs, for large collections, at least 256 MB.
+An 1000 Mhz system is perfectly capable of running Data Crow.
+Data Crow needs, for large collections, at least 256 MB of free memory.
 (a collection of 10,000 items or more is considered large).
 
 Data Crow needs Java:
