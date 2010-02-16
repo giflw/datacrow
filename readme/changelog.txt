@@ -5,15 +5,15 @@ Note: Known performance issues will be fixed with the 4.0 version. These cannot 
 in the current Data Crow 3 version.
 
 [Fixed]
-- Bol.com was no longer working (item URLs were changed).
+- Bol.com was no longer working (item links on bol.com were changed).
 - Altering a module made the file fields disappear (the property 'file-backed' was not 
   saved correctly).
 - The FreeDB server did not deliver helpful error message when the disc query failed.
 - The error handling of the report creation process has been improved. 
-- Data Crow did not remember whether it's main view was maximized.
+- Data Crow did not remember (after a restart) whether its main view was maximized.
 - Table view duplicates tracks when saving a new item.
 - The list disappears when altering a property from within one of the administration 
-  module.
+  menu options.
 - Forms for child modules cannot be designed (the menu item is not available).
 
 [Changed]

@@ -434,12 +434,16 @@ public class DcTable extends JTable implements IViewComponent {
         } else {
             cancelEdit();
             DcObject dco = getModuleForRow(row).getItem();
-            for (TableColumn column : columns.values()) {
-                col = column.getModelIndex();
-                int field = getFieldForColumnIndex(col);
-
-                Object value = getValueAt(row, col, true);
-                dco.setValue(field, value);
+            
+            for (DcField field : dco.getFields()) {
+                try {
+                    col = getColumnIndexForField(field.getIndex());
+    
+                    Object value = getValueAt(row, col, true);
+                    dco.setValue(field.getIndex(), value);
+                } catch (Exception e) {
+                    logger.error("Could not set value for field " + field.getLabel(), e);
+                }
             }
 
             if (view != null && dco != null && view.getType() != View._TYPE_INSERT)
