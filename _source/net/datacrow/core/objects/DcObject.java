@@ -1034,6 +1034,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             beforeSave();
             setValue(_SYS_CREATED, getCurrentDate());
             
+//            setValueLowLevel(DcObject._ID, null);
             setIDs();
             
             if (queued) {

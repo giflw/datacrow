@@ -116,7 +116,7 @@ Upgrade paths:
   [Version 3.4.12 and lower]  
   Install and run version 3.4.13 prior to installing the 3.4.14 version.
 
-  [Version 3.4.14 and higher]  
+  [Version 3.4.12 and higher]  
   Install and run the latest version.
 
 
@@ -180,7 +180,7 @@ Fixing installation / upgrade issues:
 
 When experiencing problems it can be useful to start Data Crow with both the -clearsettings 
 and the -nocache parameters: java -Xmx256m -jar datacrow.jar -nocache - clearsettings
-Note that all your settings will be disgarded when you start Data Crow with these parameters!
+Note that all your settings will be discarded when you start Data Crow with these parameters!
 
 
 ----------------------------------------------------------------------------------------
