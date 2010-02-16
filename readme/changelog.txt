@@ -10,6 +10,7 @@ in the current Data Crow 3 version.
   saved correctly).
 - The FreeDB server did not deliver helpful error message when the disc query failed.
 - The error handling of the report creation process has been improved. 
+- Data Crow did not remember whether it's main view was maximized.
  
 
 -----------------------------------------------------------------------------------------

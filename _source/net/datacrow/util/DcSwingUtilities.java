@@ -144,16 +144,22 @@ public class DcSwingUtilities {
             dialog.setModal(true);
             dialog.setModal(active);
             
-            SwingUtilities.invokeAndWait(new Runnable() {
-                public void run() {
-                    dialog.setVisible(true);
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run() {
+                        dialog.setVisible(true);
+                    }
+                });
+                
+                synchronized (active) {
+                    while (active.get() == true)
+                        active.wait();
                 }
-            });
-            
-            synchronized (active) {
-                while (active.get() == true)
-                    active.wait();
+                
+            } else {
+                dialog.setVisible(true);
             }
+
         } catch (Exception ite) {
             // can't depend on the logger; most likely the logger has not yet been initialized
             ite.printStackTrace();
