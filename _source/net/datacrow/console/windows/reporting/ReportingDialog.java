@@ -192,6 +192,8 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
             
         } catch (FileNotFoundException fnfe) {
             DcSwingUtilities.displayWarningMessage("msgSelectTargetFile");
+        } catch (Throwable t) {
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgCreateReportFailedUnexpect", t.toString()));
         } 
     }
 

@@ -737,7 +737,7 @@ public class DataCrow {
         dir.mkdirs();
         
         if (!dir.exists()) {
-            String message = "Data Crow was unable to create the " + name + " directory. " +
+            String message = "Data Crow was unable to create the " + name + " directory (" + dir + "). " +
                 "This indicates that the user running Data Crow has insufficient permissions. " +
                 "The user running Data Crow must have full control over the Data Crow folder " +
                 "and all if its sub directories.";
@@ -762,7 +762,7 @@ public class DataCrow {
                 throw new IOException("File cannot be created in directory " + dir);
 
         } catch (Throwable e) {
-            String message = "Data Crow does not have permissions to modify files in the " + name + " directory. " +
+             String message = "Data Crow does not have permissions to modify files in the " + name + " directory. " +
                 "This indicates that the user running Data Crow has insufficient permissions. " +
                 "The user running Data Crow must have full control over the Data Crow folder and all of its sub folders. " +
                 "Please correct this before starting Data Crow again (see the documentation of your operating system).";

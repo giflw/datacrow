@@ -9,7 +9,8 @@ in the current Data Crow 3 version.
 - Altering a module made the file fields disappear (the property 'file-backed' was not 
   saved correctly).
 - The FreeDB server did not deliver helpful error message when the disc query failed.
-
+- The error handling of the report creation process has been improved. 
+ 
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.9  [Release on 13/02/2010] [testing: high] [target: production]
