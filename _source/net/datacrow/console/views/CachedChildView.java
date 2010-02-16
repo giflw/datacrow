@@ -78,9 +78,10 @@ public class CachedChildView extends View implements ActionListener {
     @Override
     public void add(Collection<DcObject> c) {
         for (DcObject dco : c) {
-            dco.setIDs();
-            if (!children.contains(dco))
+            if (!children.contains(dco)) {
+                //dco.setIDs();
                 children.add(dco);
+            }
         }
     }
     
@@ -95,9 +96,9 @@ public class CachedChildView extends View implements ActionListener {
     }     
     
     protected void syncCache() {
+        DcObject[] c = children.toArray(new DcObject[0]);
         for (DcObject dco : vc.getItems()) {
             boolean exists = false;
-            DcObject[] c = children.toArray(new DcObject[0]);
             for (int j = 0; j < c.length; j++) {
                 DcObject dcoCached = c[j];
                 if (dcoCached.getID().equals(dco.getID())) {
