@@ -446,7 +446,7 @@ public class DcTable extends JTable implements IViewComponent {
                 }
             }
 
-            if (view != null && dco != null && view.getType() != View._TYPE_INSERT)
+            if (view != null && view.getType() != View._TYPE_INSERT)
                 dco.markAsUnchanged();
 
             return dco;
