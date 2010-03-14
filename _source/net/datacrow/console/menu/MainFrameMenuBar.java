@@ -124,8 +124,6 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
             PluginHelper.add(menuTools, "FileImport");
 
         // tools menu
-        if (module.getImporterClass() != null)
-            PluginHelper.add(menuTools, "UpdateAll");
         
         if (module.deliversOnlineService()) {
             menuTools.addSeparator();
@@ -204,6 +202,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         
         if (!module.isAbstract()) {
             menuTools.addSeparator();
+            PluginHelper.add(menuTools, "UpdateAll");            
             PluginHelper.add(menuTools, "AutoIncrementer");
             PluginHelper.add(menuTools, "TitleRewriter");
         }
