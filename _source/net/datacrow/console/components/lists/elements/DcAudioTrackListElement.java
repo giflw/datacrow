@@ -64,9 +64,9 @@ public class DcAudioTrackListElement extends DcObjectListElement {
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
         panelInfo = getPanel();
-        JLabel labelNr = getLabel(AudioTrack._F_TRACKNUMBER, false, 20);
+        JLabel labelNr = getLabel(AudioTrack._F_TRACKNUMBER, false, 30);
         JLabel labelTitle = getLabel(AudioTrack._A_TITLE, false, 300);
-        JLabel labelLength = getLabel(AudioTrack._H_PLAYLENGTH, false, 40);
+        JLabel labelLength = getLabel(AudioTrack._H_PLAYLENGTH, false, 100);
         
         panelInfo.add(labelNr);
         panelInfo.add(labelTitle);

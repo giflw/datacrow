@@ -64,9 +64,9 @@ public class DcMusicTrackListElement extends DcObjectListElement {
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
         panelInfo = getPanel();
-        JLabel labelTrack = getLabel(MusicTrack._F_TRACKNUMBER, false, 20);
-        JLabel labelTitle = getLabel(MusicTrack._A_TITLE, false, 290);
-        JLabel labelPlaylength = getLabel(MusicTrack._J_PLAYLENGTH, false, 50);
+        JLabel labelTrack = getLabel(MusicTrack._F_TRACKNUMBER, false, 30);
+        JLabel labelTitle = getLabel(MusicTrack._A_TITLE, false, 300);
+        JLabel labelPlaylength = getLabel(MusicTrack._J_PLAYLENGTH, false, 100);
         
         panelInfo.add(labelTrack);
         panelInfo.add(labelTitle);

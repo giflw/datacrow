@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.8.11  [Release on xx/xx/2010] [testing: high] [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Update all was not available from the tools menu.
+- Web Server cannot be started from the command line.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.8.10  [Release on 16/02/2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 Note: Known performance issues will be fixed with the 4.0 version. These cannot be solved

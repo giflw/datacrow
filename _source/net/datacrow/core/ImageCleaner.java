@@ -100,7 +100,9 @@ public class ImageCleaner {
             }
         }
         
-        DataCrow.mainFrame.repaint();
+        if (DataCrow.mainFrame != null)
+            DataCrow.mainFrame.repaint();
+        
         logger.info(DcResources.getText("msgImagesInStore", new String[] {"" + references.size(), "" + collected}));
         references.removeAll(remove);
         remove.clear();
