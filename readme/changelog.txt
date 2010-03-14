@@ -2,6 +2,9 @@
 Data Crow 3.8.11  [Release on 14/03/2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
+[Changed]
+- Updated Italian language pack (big thanks to Marco Artioli).
+
 [Fixed]
 - Update all was not available from the tools menu.
 - Web Server cannot be started from the command line.
