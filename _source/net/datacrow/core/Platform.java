@@ -35,6 +35,7 @@ public final class Platform {
 	private boolean isMac; 
 	private boolean isLinux; 
 	private boolean isVista;
+	private boolean isWindows7;
 	
 	private boolean isJava2;
 	private boolean isJava14;
@@ -51,6 +52,7 @@ public final class Platform {
 		isVista = isWin && os.indexOf("Vista")!=-1;
 		String version = System.getProperty("java.version").substring(0,3);
 		isJavaSun = System.getProperty("java.vendor").indexOf("Sun") > -1;
+		isWindows7 = isWin && os.startsWith("Windows 7");
 		
 		isJava2  = version.compareTo("1.1") > 0;
 		isJava14 = version.compareTo("1.3") > 0;
@@ -84,6 +86,10 @@ public final class Platform {
 	 */
     public final boolean isJavaSun() {
         return isJavaSun;
+    }
+
+    public boolean isWindows7() {
+        return isWindows7;
     }
 
     /**

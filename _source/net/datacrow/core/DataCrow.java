@@ -94,7 +94,7 @@ public class DataCrow {
     private static Logger logger;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 8, 10, 0);
+    private static Version version = new Version(3, 8, 11, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -119,8 +119,6 @@ public class DataCrow {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         try {
-            
-            
             boolean nocache = false;
             boolean webserverMode = false; 
             
@@ -220,6 +218,18 @@ public class DataCrow {
             long totalstart = 0;
             
             try {
+                
+                if (!new File("datacrow.chk").exists() && (platform.isVista() || platform.isWindows7())) {
+                    NativeMessageBox dlg = new NativeMessageBox(
+                            "Windows 7 / Windows Vista", 
+                            "For Windows Vista and Windows 7 users it is best NOT to start Data Crow from the Program Files directory. " +
+                            "These Operating Systems pose too many restrictions on applications " +
+                            "running from this folder. Data Crow needs write access to its own directories which is in general " +
+                            "not allowed by Windows 7 and Vista (when running from the Program Files directory). " +
+                            "Note that you can just cut and paste it to any other directory, there is no need to re-install. ");
+                    DcSwingUtilities.openDialogNativeModal(dlg);
+                    new File("datacrow.chk").createNewFile();
+                }
                 
                 checkCurrentDir();
                 createDirectories();
