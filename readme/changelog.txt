@@ -5,6 +5,12 @@ Data Crow 3.8.11  [Release on xx/xx/2010] [testing: high] [target: production]
 [Fixed]
 - Update all was not available from the tools menu.
 - Web Server cannot be started from the command line.
+- Item cannot be deleted after opening it from within the child tab of the item form.
+- Item of custom module with child relation cannot be deleted. Data Crow states that 
+  there are referencing items (the children). It should however be able to delete this
+  item regardless if it has children or not (and delete the children).
+- NullpointerException when starting Data Crow after restoring a database. Due to a
+  missing field the UI fails to initialize correctly and causes Data Crow to shutdown. 
 
 
 -----------------------------------------------------------------------------------------

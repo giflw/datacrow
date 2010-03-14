@@ -326,7 +326,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Field ? getField().equals(((Field) obj).getField()) : false;
+            return obj != null && obj instanceof Field && getField() != null ? getField().equals(((Field) obj).getField()) : false;
         }
         
         public int compareTo(Field o) {

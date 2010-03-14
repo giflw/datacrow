@@ -1059,8 +1059,10 @@ public class DcModule implements Comparable<DcModule> {
      * @param module The module index. 
      */
     public boolean hasActualReferenceTo(int module) {
+        int parentRefIdx = getParentReferenceFieldIndex();
+        boolean isMapping = DcModules.get(module).getType() == DcModule._TYPE_MAPPING_MODULE;
         for (DcField field : getFields()) {
-            if (field != null && field.getReferenceIdx() == module)
+            if (field != null && (isMapping || parentRefIdx != field.getIndex()) && field.getReferenceIdx() == module)
                 return true;
         }
         return false;
