@@ -84,6 +84,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private String ID;
 
     private boolean startSearchOnOpen = false;
+    private boolean disablePerfectMatch = false;
     
     protected SearchTask task;
     
@@ -143,6 +144,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     
     public DcModule getModule() {
         return DcModules.get(module);
+    }
+    
+    public void disablePerfectMatch() {
+        disablePerfectMatch = true;
     }
 
     public void addObject(DcObject dco) {
@@ -292,7 +297,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
     
     private void checkPerfectMatch(DcObject dco) {
-        if (!panelSettings.isAutoAddAllowed())
+        if (!panelSettings.isAutoAddAllowed() || disablePerfectMatch)
             return;
         
         SearchMode mode = panelService.getMode();

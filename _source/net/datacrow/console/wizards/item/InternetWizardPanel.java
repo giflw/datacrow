@@ -93,6 +93,7 @@ public class InternetWizardPanel extends ItemWizardPanel implements IWizardPanel
         if (internetSearchForm != null) {
             internetSearchForm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             internetSearchForm.addDoubleClickListener(this);
+            internetSearchForm.disablePerfectMatch();
             setLayout(Layout.getGBL());
             add(internetSearchForm.getContentPanel(), Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
