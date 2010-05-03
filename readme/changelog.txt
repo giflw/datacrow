@@ -9,6 +9,7 @@ Data Crow 3.8.12  [Release on xx/x/2010] [testing: high] [target: production]
 - 2988565    IMDB import fails to parse some years
 - 2987886    Concurrent Modification Exc. in FreeResourcesTask
 - 2987098    Containers
+- 2970691    Item wizard with ISBN search adds item directly
 
 
 -----------------------------------------------------------------------------------------
