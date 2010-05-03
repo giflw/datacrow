@@ -969,18 +969,18 @@ public class DataManager {
             }
         } else {
         	if (modIdx == DcModules._LOAN) {
-                for (Collection<Loan> objects : loans.values())
+                for (Collection<Loan> objects : new ArrayList<Collection<Loan>>(loans.values()))
                     add(c, df, objects);
         	} else if (objects.containsKey(modIdx)) {
                 add(c, df, new ArrayList<DcObject>(objects.get(modIdx)));
             } else if (references.containsKey(modIdx)) {
-                for (Collection<DcMapping> objects : references.get(modIdx).values())
+                for (Collection<DcMapping> objects : new ArrayList<Collection<DcMapping>>(references.get(modIdx).values()))
                     add(c, df, objects);
             } else if (modIdx == DcModules._PICTURE) {
-                for (Collection<Picture> objects : pictures.values())
+                for (Collection<Picture> objects : new ArrayList<Collection<Picture>>(pictures.values()))
                     add(c, df, objects);                
             } else if (children.containsKey(modIdx)) {
-                for (Collection<DcObject> objects : children.get(modIdx).values())
+                for (Collection<DcObject> objects : new ArrayList<Collection<DcObject>>(children.get(modIdx).values()))
                     add(c, df, objects);
             }
         }
@@ -996,7 +996,7 @@ public class DataManager {
     }
 
     private static void add(Collection<DcObject> data, DataFilter df, Collection<? extends DcObject> c) {
-        for (DcObject dco : c) {
+        for (DcObject dco : new ArrayList<DcObject>(c)) {
             if (df == null || df.applies(dco)) 
                 data.add(dco);
         }

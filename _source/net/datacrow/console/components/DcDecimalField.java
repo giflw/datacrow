@@ -54,8 +54,15 @@ public class DcDecimalField extends JTextField implements IComponent {
 
     public Object getValue() {
         String text = getText();
-        text = text.replaceAll("\\" + DcSettings.getString(DcRepository.Settings.stDecimalGroupingSymbol), "");
-        text = text.replaceAll("\\" + DcSettings.getString(DcRepository.Settings.stDecimalSeparatorSymbol), ".");
+        
+        String s = DcSettings.getString(DcRepository.Settings.stDecimalSeparatorSymbol);
+        char decimalSep = s != null && s.length() > 0 ? s.charAt(0) : ',';
+        s = DcSettings.getString(DcRepository.Settings.stDecimalGroupingSymbol);
+        char groupingSep = s != null && s.length() > 0 ? s.charAt(0) : '.';
+        
+        text = text.replaceAll("\\" + groupingSep, "");
+        text = text.replaceAll("\\" + decimalSep, ".");
+        
         return text.length() == 0 ? null : Double.valueOf(text);
     }
     
@@ -72,7 +79,7 @@ public class DcDecimalField extends JTextField implements IComponent {
             if (s == null || s.trim().length() == 0) return;
 
             String sep = DcSettings.getString(DcRepository.Settings.stDecimalSeparatorSymbol);
-            String grp = DcSettings.getString(DcRepository.Settings.stDecimalSeparatorSymbol);
+            String grp = DcSettings.getString(DcRepository.Settings.stDecimalGroupingSymbol);
             
             if (s.length() == 1) {
                 String check = getText(0, getContent().length());
