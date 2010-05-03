@@ -72,6 +72,11 @@ public class ContainerTreePanel extends TreePanel {
         while ((node = findNode(dco.toString(), getTopNode(), true)) != null) {
             model.removeNodeFromParent(node);
         }
+        
+        if (parentNode.getUserObject() instanceof NodeElement) {
+            NodeElement elem = (NodeElement) parentNode.getUserObject();
+            elem.removeValue(dco);
+        }
     }
     
     @Override

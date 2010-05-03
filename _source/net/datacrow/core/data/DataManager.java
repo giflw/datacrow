@@ -325,6 +325,9 @@ public class DataManager {
      * @return The children or an empty collection.
      */
     public static Collection<DcObject> getChildren(String parentId, int childIdx) {
+        
+        if (children.get(childIdx) == null) return new ArrayList<DcObject>();
+        
         List<DcObject> c = children.get(childIdx).get(parentId);
         c = c == null ? new ArrayList<DcObject>() : new ArrayList<DcObject>(c);
         children.get(childIdx).put(parentId, c);
@@ -551,6 +554,7 @@ public class DataManager {
     @SuppressWarnings("unchecked")
     private static void updateRelated(DcObject dco, boolean delete) {
         // updated or create the references
+        
         for (DcField field : dco.getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 int mappingIdx = DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex());
