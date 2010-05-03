@@ -407,9 +407,7 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     protected void deleteItem() {
         if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-            //String id = dco.getID();
-            //dco.clearValues();
-            //dco.setValue(DcObject._ID, id);
+
             dco.setSilent(true);
             dco.addRequest(new CloseWindowRequest(this));
             
@@ -423,6 +421,10 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     @SuppressWarnings("unchecked")
     protected boolean isChanged() {
+        
+        if (dcoOrig.isDestroyed()) 
+            return false;
+        
         boolean changed = dcoOrig.isChanged();
         
         if (childView != null && dcoOrig.getCurrentChildren().size() == 0)
@@ -472,7 +474,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     for (DcMapping newMapping : newList) {
                         boolean found = false;
                         for (DcMapping oldMapping : oldList) {
-                            if (oldMapping.getReferencedId().equals(newMapping.getReferencedId()))
+                            if (newMapping.getReferencedId().equals(oldMapping.getReferencedId()))
                                 found = true;
                         }
                         changed = !found;
