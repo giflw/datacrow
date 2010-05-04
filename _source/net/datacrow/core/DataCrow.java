@@ -222,11 +222,10 @@ public class DataCrow {
                 if (!new File("datacrow.chk").exists() && (platform.isVista() || platform.isWindows7())) {
                     NativeMessageBox dlg = new NativeMessageBox(
                             "Windows 7 / Windows Vista", 
-                            "For Windows Vista and Windows 7 users it is best NOT to start Data Crow from the Program Files directory. " +
-                            "These Operating Systems pose too many restrictions on applications " +
-                            "running from this folder. Data Crow needs write access to its own directories which is in general " +
-                            "not allowed by Windows 7 and Vista (when running from the Program Files directory). " +
-                            "Note that you can just cut and paste it to any other directory, there is no need to re-install. ");
+                            "For Windows Vista and Windows 7 users you have to select to run Data Crow 'as administrator'. " +
+                            "Right click 'datacrow.exe' and select 'run as administrator'. You can also choose to modify " +
+                            "the shortcut. Right click on the shortcut and select the 'compatibility' tab. Tick the option " +
+                            "'run as administrator'.");
                     DcSwingUtilities.openDialogNativeModal(dlg);
                     new File("datacrow.chk").createNewFile();
                 }

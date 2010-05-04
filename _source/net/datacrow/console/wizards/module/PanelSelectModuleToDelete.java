@@ -25,6 +25,8 @@
 
 package net.datacrow.console.wizards.module;
 
+import java.util.Collection;
+
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -39,6 +41,21 @@ public class PanelSelectModuleToDelete extends PanelSelectModule {
     @Override
     public String getHelpText() {
         return DcResources.getText("msgSelectModuleToDelete");
+    }
+    
+    @Override
+    public Object apply() {
+        int module = super.getSelectedModule();
+        
+        for (DcModule m : DcModules.getCustomModules()) 
+            if (m.getIndex() == module) return m.getXmlModule();
+        
+        return null;
+    }    
+    
+    @Override
+    protected Collection<DcModule> getModules() {
+        return DcModules.getCustomModules();
     }
 
     @Override

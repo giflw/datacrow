@@ -262,6 +262,11 @@ public class DcModules {
             if (module.isCustomModule())
                 modules.add(module);
         }
+        
+        for (DcModule module : propertyBaseModules.values())
+            if (module.isCustomModule() && !modules.contains(module))
+                modules.add(module);
+        
         return modules;
     }
 
@@ -508,7 +513,7 @@ public class DcModules {
      * @param key
      */
     public static DcModule get(int key) {
-        return modules.get(key);
+        return  modules.get(key);//modules.containsKey(key) ? modules.get(key) : propertyBaseModules.get(key);
     }
 
     /**

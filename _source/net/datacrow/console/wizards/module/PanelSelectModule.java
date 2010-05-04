@@ -29,6 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,6 +94,10 @@ public class PanelSelectModule extends ModuleWizardPanel {
                    !module.isAbstract());
     }
     
+    protected Collection<DcModule> getModules() {
+        return DcModules.getAllModules();
+    }
+    
     private void build() {
         setLayout(Layout.getGBL());
         
@@ -122,7 +127,7 @@ public class PanelSelectModule extends ModuleWizardPanel {
         int y = 0;
         int x = 0;
         
-        for (DcModule module : DcModules.getAllModules()) {
+        for (DcModule module : getModules()) {
             if (isModuleAllowed(module)) {
                 JRadioButton rb = ComponentFactory.getRadioButton(module.getLabel(), module.getIcon16(), "" + module.getIndex());
                 rb.addMouseListener(new ModuleSelectionListener());
