@@ -45,6 +45,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcMultiLineToolTip;
+import net.datacrow.console.components.panels.BackupFilePreviewPanel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.backup.Backup;
@@ -84,6 +85,8 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
 
         BackupFileFilter filter = new BackupFileFilter();
         fileFieldSource = ComponentFactory.getFileField(false, false, filter);
+        fileFieldSource.setPreview(new BackupFilePreviewPanel());
+        
         fileFieldTarget = ComponentFactory.getFileField(false, true);
 
         buildDialog();
@@ -219,9 +222,7 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         checkRestoreDatabase.setSelected(DcSettings.getBoolean(DcRepository.Settings.stRestoreDatabase));
         
         panelRestore.setToolTipText(DcResources.getText("tpRestore"));
-
-        panelRestore.setBorder(
-                ComponentFactory.getTitleBorder(DcResources.getText("lblRestoreHeader")));
+        panelRestore.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblRestoreHeader")));
 
         //**********************************************************
         //Log Panel

@@ -34,6 +34,7 @@ import java.io.RandomAccessFile;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToolTip;
 import javax.swing.filechooser.FileFilter;
@@ -57,6 +58,8 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
 
     private ActionListener al;
     private FileFilter filter;
+    
+    private JPanel previewPanel;
 
     private String title = DcResources.getText("lblFileBrowser");
     private File file = null;
@@ -95,6 +98,10 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         }
     }
 
+    public void setPreview(JPanel previewPanel) {
+        this.previewPanel = previewPanel;
+    }
+    
     public void clear() {
         text = null;
         button = null;
@@ -146,6 +153,9 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
     protected void showFileOpenDialog() {
         BrowserDialog dialog = new BrowserDialog(title, filter);
         dialog.setFont(ComponentFactory.getStandardFont());
+        
+        if (previewPanel != null)
+            dialog.setPreview(previewPanel);
 
         file = dialog.showOpenFileDialog(this, null);
         text.setText(getFilename());

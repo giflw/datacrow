@@ -31,9 +31,11 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
 import net.datacrow.console.components.DcFileChooser;
+import net.datacrow.console.components.panels.BackupFilePreviewPanel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
@@ -54,6 +56,12 @@ public class BrowserDialog extends JFrame {
         
         if (filter != null) 
             browser.setFileFilter(filter);
+    }
+    
+    public void setPreview(JPanel panel) {
+        BackupFilePreviewPanel preview = new BackupFilePreviewPanel();
+        browser.setAccessory(preview);
+        browser.addPropertyChangeListener(preview);
     }
 
     @Override
