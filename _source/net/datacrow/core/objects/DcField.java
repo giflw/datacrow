@@ -362,7 +362,7 @@ public class DcField implements Serializable{
      * @return
      */
     public boolean isSearchable() {
-        return searchable;
+        return searchable || getValueType() == DcRepository.ValueTypes._PICTURE;
     }
 
     /**

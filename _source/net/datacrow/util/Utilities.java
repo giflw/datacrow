@@ -500,7 +500,7 @@ public class Utilities {
         else if (!empty && o instanceof Collection)
             empty = ((Collection) o).size() == 0;
         else if (!empty && o instanceof Picture)
-            empty = ((Picture) o).getValue(Picture._D_IMAGE) == null;
+            empty = !((Picture) o).hasImage();
         
         return empty;
     }

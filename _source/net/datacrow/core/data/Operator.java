@@ -116,8 +116,10 @@ public enum Operator {
     public static Collection<Operator> get(DcField field) {
         ArrayList<Operator> operators = new ArrayList<Operator>();
 
-        operators.add(EQUAL_TO);
-        operators.add(NOT_EQUAL_TO);
+        if (field.getValueType() != DcRepository.ValueTypes._PICTURE) {
+            operators.add(EQUAL_TO);
+            operators.add(NOT_EQUAL_TO);
+        }
         
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
             operators.add(IS_EMPTY);
