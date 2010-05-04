@@ -2,8 +2,12 @@
 Data Crow 3.8.12  [Release on May 3rd 2010] [testing: high] [target: moderate]
 -----------------------------------------------------------------------------------------
 
+[Changed]
+- Updated French translation! Thanks to skorpionnan.
+
 [Fixed]
 - 2991768 Can't close detached dialog window after item delete (unconfirmed fix)
+- 2984361 Custom property module not in delete wizard
 - 2988925 Regional Settings - Decimal Grouping Error (can now be left empty)
 - 2988556 IMDB import adds trash chars to Genre item
 - 2988565 IMDB import fails to parse some years
