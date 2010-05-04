@@ -200,6 +200,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         for (int i = 0; i < size; i++) {
             try {
                 DefaultMutableTreeNode child = (DefaultMutableTreeNode) parent.getChildAt(i);
+                collapseChildren(child);
                 tree.collapsePath(new TreePath(child.getPath()));
             } catch (Exception e) {
                 logger.error("An error occurred while collapsing leafs of " + parent, e);
