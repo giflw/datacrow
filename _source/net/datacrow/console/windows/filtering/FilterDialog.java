@@ -45,7 +45,7 @@ import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.panels.FieldSelectionPanel;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
-import net.datacrow.console.windows.DcDialog;
+import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
@@ -58,8 +58,14 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.PollerTask;
+import net.datacrow.util.Utilities;
 
-public class FilterDialog extends DcDialog implements ActionListener {
+import org.apache.log4j.Logger;
+
+public class FilterDialog extends DcFrame implements ActionListener {
+    
+    private static Logger logger = Logger.getLogger(FilterDialog.class.getName());
 
     private final DcModule module;
     
@@ -72,9 +78,8 @@ public class FilterDialog extends DcDialog implements ActionListener {
     private ManageFiltersPanel manageFiltersPanel;
     
     public FilterDialog(DcModule module, MasterView parent) {
-        super(DataCrow.mainFrame);
+        super(DcResources.getText("lblFilter"), IconLibrary._icoFilter);
         
-        setTitle(DcResources.getText("lblFilter"));
         setHelpIndex("dc.filters");
         
         this.parent = parent;
@@ -84,8 +89,6 @@ public class FilterDialog extends DcDialog implements ActionListener {
         
         setSize(module.getSettings().getDimension(DcRepository.ModuleSettings.stFilterDialogSize));
         setCenteredLocation();
-        
-        setModal(true);
     }
 
     public void filter() {
@@ -314,6 +317,7 @@ public class FilterDialog extends DcDialog implements ActionListener {
         
         @Override
         public void run() {
+            
             View view = parent.getCurrent();
             boolean saved = view.isChangesSaved();
             
@@ -321,6 +325,13 @@ public class FilterDialog extends DcDialog implements ActionListener {
                 if (DcSwingUtilities.displayQuestion("msgNotSaved"))
                     view.save(false);
             }
+            
+            PollerTask poller = new PollerTask(this, "Filtering");
+            poller.start();
+            
+            try {
+                sleep(1000);
+            } catch (Exception e) {}
             
             view.undoChanges();
 
@@ -335,8 +346,14 @@ public class FilterDialog extends DcDialog implements ActionListener {
 
             DataManager.bindData(module.getSearchView(),  result);
             DataFilters.setCurrent(module.getIndex(), df);
-            DataCrow.mainFrame.setSelectedTab(0);        
-            close();
+            DataCrow.mainFrame.setSelectedTab(0);   
+            
+            try {
+                poller.finished(true);
+            } catch (Exception e) {
+                logger.error(e, e);
+                DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
+            }
         }
     }    
     

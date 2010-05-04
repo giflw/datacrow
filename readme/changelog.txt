@@ -1,9 +1,19 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.8.13  [Release on May xx 2010] [testing: high] [target: moderate]
+-----------------------------------------------------------------------------------------
+
+[Changed]
+- 2927679 Collapse All Behavior
+- 2943392 Floating Filter Dialog
+- 2943409 Filter - Does not Show working status
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.8.12  [Release on May 3rd 2010] [testing: high] [target: moderate]
 -----------------------------------------------------------------------------------------
 
 [Changed]
-- Updated French translation! Thanks to skorpionnan.
+- Updated French translation! Thanks to Skorpionnan.
 
 [Fixed]
 - 2991768 Can't close detached dialog window after item delete (unconfirmed fix)

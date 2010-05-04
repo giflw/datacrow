@@ -65,9 +65,15 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.PollerTask;
+import net.datacrow.util.Utilities;
+
+import org.apache.log4j.Logger;
 
 public class DcQuickFilterToolBar extends JToolBar implements ActionListener, MouseListener, KeyListener {
 
+    private static Logger logger = Logger.getLogger(DcQuickFilterToolBar.class.getName());
+    
     private final DcEditableComboBox comboCriteria = new DcEditableComboBox();
     private final DcComboBox comboFields = ComponentFactory.getComboBox(new DefaultComboBoxModel());
     private final DcComboBox comboFilters = ComponentFactory.getComboBox();
@@ -94,13 +100,38 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         search(getDataFilter());
     }
     
-    private void search(DataFilter df) {
-        DcObject[] result = DataManager.get(module.getIndex(), df);
-        if (result.length == 0)
-            DcModules.getCurrent().getSearchView().clear();
+    private class FilterTask extends Thread {
+        
+        private final DataFilter df;
+        
+        public FilterTask(DataFilter df) {
+            this.df = df;
+        }
+        
+        @Override
+        public void run() {
+            PollerTask poller = new PollerTask(this, "Filtering");
+            poller.start();
+            
+            DcObject[] result = DataManager.get(module.getIndex(), df);
+            if (result.length == 0)
+                DcModules.getCurrent().getSearchView().clear();
 
-        DataManager.bindData(module.getSearchView(), result);
-        DataFilters.setCurrent(module.getIndex(), df);
+            DataManager.bindData(module.getSearchView(), result);
+            DataFilters.setCurrent(module.getIndex(), df);
+            
+            try {
+                poller.finished(true);
+            } catch (Exception e) {
+                logger.error(e, e);
+                DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
+            }
+        }
+    }
+    
+    private void search(DataFilter df) {
+        FilterTask ft = new FilterTask(df);
+        ft.start();
     }
     
     private Object getValue() {
