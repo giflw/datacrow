@@ -119,7 +119,10 @@ public enum Operator {
         operators.add(EQUAL_TO);
         operators.add(NOT_EQUAL_TO);
         
-        if (field.getValueType() == DcRepository.ValueTypes._DATE) {
+        if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+            operators.add(IS_EMPTY);
+            operators.add(IS_FILLED);
+        } else if (field.getValueType() == DcRepository.ValueTypes._DATE) {
         	operators.add(BEFORE);
             operators.add(AFTER);
     	} else if (field.getValueType() == DcRepository.ValueTypes._LONG) {

@@ -1,78 +1,128 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <XML_DIZ_INFO>
-	<MASTER_PAD_VERSION_INFO>
-		<MASTER_PAD_VERSION>3.10</MASTER_PAD_VERSION>
-		<MASTER_PAD_EDITOR>PADGen 3.1.0.41 http://www.padgen.org</MASTER_PAD_EDITOR>
-		<MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
-	</MASTER_PAD_VERSION_INFO>
-	<Company_Info>
-		<Company_Name>Robert Jan van der Waals</Company_Name>
-		<Address_1>Zoeterwoudsesingel 99</Address_1>
-		<Address_2 />
-		<City_Town>Leiden</City_Town>
-		<State_Province>ZH</State_Province>
-		<Zip_Postal_Code>2313 EN</Zip_Postal_Code>
-		<Country>Netherlands</Country>
-		<Company_WebSite_URL>http://www.datacrow.net</Company_WebSite_URL>
-		<Contact_Info>
-			<Author_First_Name>Robert Jan</Author_First_Name>
-			<Author_Last_Name>van der Waals</Author_Last_Name>
-			<Author_Email>info@datacrow.net</Author_Email>
-			<Contact_First_Name>Robert Jan</Contact_First_Name>
-			<Contact_Last_Name>van der Waals</Contact_Last_Name>
-			<Contact_Email>info@datacrow.net</Contact_Email>
-		</Contact_Info>
-		<Support_Info>
-			<Sales_Email>info@datacrow.net</Sales_Email>
-			<Support_Email>info@datacrow.net</Support_Email>
-			<General_Email>info@datacrow.net</General_Email>
-			<Sales_Phone />
-			<Support_Phone />
-			<General_Phone />
-			<Fax_Phone />
-		</Support_Info>
-	</Company_Info>
-	<Program_Info>
-		<Program_Name>Data Crow</Program_Name>
-		<Program_Version>3.8.11</Program_Version>
-		<Program_Release_Month>03</Program_Release_Month>
-		<Program_Release_Day>14</Program_Release_Day>
-		<Program_Release_Year>2010</Program_Release_Year>
-		<Program_Cost_Dollars>0</Program_Cost_Dollars>
-		<Program_Cost_Other_Code />
-		<Program_Cost_Other />
-		<Program_Type>Freeware</Program_Type>
-		<Program_Release_Status>Minor Update</Program_Release_Status>
-		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
-		<Program_OS_Support>Java,Linux,Linux Gnome,Linux GPL,Linux Open Source,Mac OS X,Mac Other,Win2000,Win98,WinOther,WinServer,WinVista,WinVista x64,WinXP,Other</Program_OS_Support>
-		<Program_Language>English,Dutch,French,German,Italian,Spanish</Program_Language>
-		<Program_Change_Info>Bug fixes</Program_Change_Info>
-		<Program_Specific_Category>Home/Hobby</Program_Specific_Category>
-		<Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
-		<Program_System_Requirements>512MB of memory / P3 800MHZ</Program_System_Requirements>
-		<File_Info>
-			<File_Size_Bytes>40507028</File_Size_Bytes>
-			<File_Size_K>39557</File_Size_K>
-			<File_Size_MB>38.63</File_Size_MB>
-		</File_Info>
-		<Expire_Info>
-			<Has_Expire_Info>N</Has_Expire_Info>
-			<Expire_Count />
-			<Expire_Based_On>Days</Expire_Based_On>
-			<Expire_Other_Info />
-			<Expire_Month />
-			<Expire_Day />
-			<Expire_Year />
-		</Expire_Info>
-	</Program_Info>
-	<Program_Descriptions>
-		<English>
-			<Keywords>Cataloging, Software, Audio,Books, Movies,Music, Games, Images</Keywords>
-			<Char_Desc_45>The Ultimate Cataloger for anything</Char_Desc_45>
-			<Char_Desc_80>The Ultimate Cataloger for anything. Highly customizable.</Char_Desc_80>
-			<Char_Desc_250>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here!</Char_Desc_250>
-			<Char_Desc_450>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.</Char_Desc_450>
-			<Char_Desc_2000>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself. Don't strain yourself in organizing your items and trying to keep track of their location, start using the best cataloging software today. Start using Data Crow.
+  <MASTER_PAD_VERSION_INFO>
+    <MASTER_PAD_VERSION>3.10</MASTER_PAD_VERSION>
+    <MASTER_PAD_EDITOR>PADManager 2.0.61</MASTER_PAD_EDITOR>
+    <MASTER_PAD_EDITOR_URL>http://robosoft.rudenko.com</MASTER_PAD_EDITOR_URL>
+    <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
+  </MASTER_PAD_VERSION_INFO>
+  <RoboSoft>
+    <Company_UIN>CMP-00A504CD49A</Company_UIN>
+    <Company_Description></Company_Description>
+    <Product_UIN>APP-00A504F5A86</Product_UIN>
+    <Publish_on_CD>FALSE</Publish_on_CD>
+    <RSProductType></RSProductType>
+    <Search_String></Search_String>
+    <Press_Release_Search_String></Press_Release_Search_String>
+    <NewsFeed_Search_String></NewsFeed_Search_String>
+    <Search_Engine_Search_String></Search_Engine_Search_String>
+    <Web_Directories_Search_String></Web_Directories_Search_String>
+    <Search_String_Unique></Search_String_Unique>
+    <Comments_For_Reviewer></Comments_For_Reviewer>
+    <Backlink></Backlink>
+  </RoboSoft>
+  <Company_Info>
+    <Company_Name>Robert Jan van der Waals</Company_Name>
+    <Address_1>Zoeterwoudsesingel 99</Address_1>
+    <Address_2></Address_2>
+    <City_Town>Leiden</City_Town>
+    <State_Province>ZH</State_Province>
+    <Zip_Postal_Code>2313 EN</Zip_Postal_Code>
+    <Country>Netherlands</Country>
+    <Company_WebSite_URL>http://www.datacrow.net</Company_WebSite_URL>
+    <Contact_Info>
+      <Contact_First_Name>Robert Jan</Contact_First_Name>
+      <Contact_Last_Name>van der Waals</Contact_Last_Name>
+      <Contact_Email>info@datacrow.net</Contact_Email>
+      <Author_First_Name>Robert Jan</Author_First_Name>
+      <Author_Last_Name>van der Waals</Author_Last_Name>
+      <Author_Email>info@datacrow.net</Author_Email>
+    </Contact_Info>
+    <Support_Info>
+      <Sales_Email>info@datacrow.net</Sales_Email>
+      <Support_Email>info@datacrow.net</Support_Email>
+      <General_Email>info@datacrow.net</General_Email>
+      <Sales_Phone></Sales_Phone>
+      <Support_Phone></Support_Phone>
+      <General_Phone></General_Phone>
+      <Fax_Phone></Fax_Phone>
+    </Support_Info>
+  </Company_Info>
+  <Program_Info>
+    <Program_Name>Data Crow</Program_Name>
+    <Program_Version>3.8.12</Program_Version>
+    <Program_Release_Month>05</Program_Release_Month>
+    <Program_Release_Day>03</Program_Release_Day>
+    <Program_Release_Year>2010</Program_Release_Year>
+    <Program_Cost_Dollars>0</Program_Cost_Dollars>
+    <Program_Type>Freeware</Program_Type>
+    <Program_Release_Status>Minor Update</Program_Release_Status>
+    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
+    <Program_OS_Support>WinXP,WinVista,WinVista x64,Win2000,WinOther,Other,Mac OS X,Mac Other,WinServer,Win98,Linux,Java,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
+    <Program_Language>English,Dutch,French,German,Italian,Spanish</Program_Language>
+    <Program_Change_Info>Bug fixes</Program_Change_Info>
+    <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
+    <Program_System_Requirements>512MB of memory / P3 800MHZ</Program_System_Requirements>
+    <File_Info>
+      <File_Size_Bytes>40431536</File_Size_Bytes>
+      <File_Size_K>39483</File_Size_K>
+      <File_Size_MB>38.56</File_Size_MB>
+      <Filename_Versioned></Filename_Versioned>
+      <Filename_Previous></Filename_Previous>
+      <Filename_Generic></Filename_Generic>
+      <Filename_Long></Filename_Long>
+    </File_Info>
+    <Expire_Info>
+      <Has_Expire_Info>N</Has_Expire_Info>
+      <Expire_Based_On>Days</Expire_Based_On>
+      <Expire_Count></Expire_Count>
+      <Expire_Other_Info></Expire_Other_Info>
+      <Expire_Month></Expire_Month>
+      <Expire_Day></Expire_Day>
+      <Expire_Year></Expire_Year>
+    </Expire_Info>
+    <Program_Cost_Other_Code></Program_Cost_Other_Code>
+    <Program_Cost_Other></Program_Cost_Other>
+    <Limitations></Limitations>
+    <Awards></Awards>
+    <Program_Specific_Category></Program_Specific_Category>
+    <Program_Categories></Program_Categories>
+    <Includes_JAVA_VM></Includes_JAVA_VM>
+    <Includes_VB_Runtime></Includes_VB_Runtime>
+    <Includes_DirectX></Includes_DirectX>
+  </Program_Info>
+  <Web_Info>
+    <Application_URLs>
+      <Application_Info_URL>http://www.datacrow.net</Application_Info_URL>
+      <Application_Order_URL>http://www.datacrow.net</Application_Order_URL>
+      <Application_Screenshot_URL>http://www.datacrow.net/pics/screenshots/software.png</Application_Screenshot_URL>
+      <Application_Icon_URL>http://www.datacrow.net/datacrow.gif</Application_Icon_URL>
+      <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
+    </Application_URLs>
+    <Download_URLs>
+      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.8.11/datacrow_3_8_11_installer.zip</Primary_Download_URL>
+      <Secondary_Download_URL></Secondary_Download_URL>
+      <Additional_Download_URL_1></Additional_Download_URL_1>
+      <Additional_Download_URL_2></Additional_Download_URL_2>
+    </Download_URLs>
+  </Web_Info>
+  <Permissions>
+    <Distribution_Permissions>This product can be freely distributed through the Internet. To put it onto a CD, contact rwaals@datacrow.net.</Distribution_Permissions>
+    <EULA>Data Crow: The Ultimate Cataloger
+Copyright (C) 2010 Robert Jan van der Waals
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses.</EULA>
+  </Permissions>
+  <Program_Descriptions>
+    <English>
+      <Keywords>Cataloging, Software, Audio,Books, Movies,Music, Games, Images</Keywords>
+      <Char_Desc_45>The Ultimate Cataloger for anything</Char_Desc_45>
+      <Char_Desc_80>The Ultimate Cataloger for anything. Highly customizable.</Char_Desc_80>
+      <Char_Desc_250>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here!</Char_Desc_250>
+      <Char_Desc_450>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.</Char_Desc_450>
+      <Char_Desc_2000>Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself. Don't strain yourself in organizing your items and trying to keep track of their location, start using the best cataloging software today. Start using Data Crow.
 
 - Out of the box experience.
 - Audio, image, software, book, movie and photo collections organizer.
@@ -91,141 +141,6 @@
 - Auto number your items using the auto numbering functionality.
 - Create a backup of your items and settings by using the "backup &amp; restore" functionality.
 - Easily upgrade to newer versions of Data Crow.</Char_Desc_2000>
-		</English>
-	</Program_Descriptions>
-	<Web_Info>
-		<Application_URLs>
-			<Application_Info_URL>http://www.datacrow.net</Application_Info_URL>
-			<Application_Order_URL>http://www.datacrow.net</Application_Order_URL>
-			<Application_Screenshot_URL>http://www.datacrow.net/pics/screenshots/software.png</Application_Screenshot_URL>
-			<Application_Icon_URL>http://www.datacrow.net/datacrow.gif</Application_Icon_URL>
-			<Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
-		</Application_URLs>
-		<Download_URLs>
-			<Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.8.11/datacrow_3_8_11_installer.zip</Primary_Download_URL>
-			<Secondary_Download_URL />
-			<Additional_Download_URL_1 />
-			<Additional_Download_URL_2 />
-		</Download_URLs>
-	</Web_Info>
-	<Permissions>
-		<Distribution_Permissions>This product can be freely distributed through the Internet. To put it onto a CD, contact rwaals@datacrow.net.</Distribution_Permissions>
-		<EULA>Data Crow: The Ultimate Cataloger
-Copyright (C) 2010 Robert Jan van der Waals
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses.</EULA>
-	</Permissions>
-	<Affiliates>
-		<Affiliates_FORM>Y</Affiliates_FORM>
-		<Affiliates_VERSION>1.4</Affiliates_VERSION>
-		<Affiliates_URL>http://www.asp-shareware.org/pad/extensions/Affiliates.htm</Affiliates_URL>
-		<Affiliates_Information_Page />
-		<Affiliates_Avangate_Order_Page />
-		<Affiliates_Avangate_Vendor_ID />
-		<Affiliates_Avangate_Product_ID />
-		<Affiliates_Avangate_Maximum_Commission_Rate />
-		<Affiliates_BMTMicro_Order_Page />
-		<Affiliates_BMTMicro_Vendor_ID />
-		<Affiliates_BMTMicro_Product_ID />
-		<Affiliates_BMTMicro_Maximum_Commission_Rate />
-		<Affiliates_Cleverbridge_Order_Page />
-		<Affiliates_Cleverbridge_Vendor_ID />
-		<Affiliates_Cleverbridge_Product_ID />
-		<Affiliates_Cleverbridge_Maximum_Commission_Rate />
-		<Affiliates_clixGalore_Order_Page />
-		<Affiliates_clixGalore_Vendor_ID />
-		<Affiliates_clixGalore_Product_ID />
-		<Affiliates_clixGalore_Maximum_Commission_Rate />
-		<Affiliates_CommissionJunction_Order_Page />
-		<Affiliates_CommissionJunction_Vendor_ID />
-		<Affiliates_CommissionJunction_Product_ID />
-		<Affiliates_CommissionJunction_Maximum_Commission_Rate />
-		<Affiliates_DigiBuy_Order_Page />
-		<Affiliates_DigiBuy_Vendor_ID />
-		<Affiliates_DigiBuy_Product_ID />
-		<Affiliates_DigiBuy_Maximum_Commission_Rate />
-		<Affiliates_DigitalCandle_Order_Page />
-		<Affiliates_DigitalCandle_Vendor_ID />
-		<Affiliates_DigitalCandle_Product_ID />
-		<Affiliates_DigitalCandle_Maximum_Commission_Rate />
-		<Affiliates_Emetrix_Order_Page />
-		<Affiliates_Emetrix_Vendor_ID />
-		<Affiliates_Emetrix_Product_ID />
-		<Affiliates_Emetrix_Maximum_Commission_Rate />
-		<Affiliates_eSellerate_Order_Page />
-		<Affiliates_eSellerate_Vendor_ID />
-		<Affiliates_eSellerate_Product_ID />
-		<Affiliates_eSellerate_Maximum_Commission_Rate />
-		<Affiliates_Kagi_Order_Page />
-		<Affiliates_Kagi_Vendor_ID />
-		<Affiliates_Kagi_Product_ID />
-		<Affiliates_Kagi_Maximum_Commission_Rate />
-		<Affiliates_LinkShare_Order_Page />
-		<Affiliates_LinkShare_Vendor_ID />
-		<Affiliates_LinkShare_Product_ID />
-		<Affiliates_LinkShare_Maximum_Commission_Rate />
-		<Affiliates_NorthStarSol_Order_Page />
-		<Affiliates_NorthStarSol_Vendor_ID />
-		<Affiliates_NorthStarSol_Product_ID />
-		<Affiliates_NorthStarSol_Maximum_Commission_Rate />
-		<Affiliates_OneNetworkDirect_Order_Page />
-		<Affiliates_OneNetworkDirect_Vendor_ID />
-		<Affiliates_OneNetworkDirect_Product_ID />
-		<Affiliates_OneNetworkDirect_Maximum_Commission_Rate />
-		<Affiliates_Order1_Order_Page />
-		<Affiliates_Order1_Vendor_ID />
-		<Affiliates_Order1_Product_ID />
-		<Affiliates_Order1_Maximum_Commission_Rate />
-		<Affiliates_Osolis_Order_Page />
-		<Affiliates_Osolis_Vendor_ID />
-		<Affiliates_Osolis_Product_ID />
-		<Affiliates_Osolis_Maximum_Commission_Rate />
-		<Affiliates_Plimus_Order_Page />
-		<Affiliates_Plimus_Vendor_ID />
-		<Affiliates_Plimus_Product_ID />
-		<Affiliates_Plimus_Maximum_Commission_Rate />
-		<Affiliates_Regnet_Order_Page />
-		<Affiliates_Regnet_Vendor_ID />
-		<Affiliates_Regnet_Product_ID />
-		<Affiliates_Regnet_Maximum_Commission_Rate />
-		<Affiliates_Regnow_Order_Page />
-		<Affiliates_Regnow_Vendor_ID />
-		<Affiliates_Regnow_Product_ID />
-		<Affiliates_Regnow_Maximum_Commission_Rate />
-		<Affiliates_Regsoft_Order_Page />
-		<Affiliates_Regsoft_Vendor_ID />
-		<Affiliates_Regsoft_Product_ID />
-		<Affiliates_Regsoft_Maximum_Commission_Rate />
-		<Affiliates_ShareIt_Order_Page />
-		<Affiliates_ShareIt_Vendor_ID />
-		<Affiliates_ShareIt_Product_ID />
-		<Affiliates_ShareIt_Maximum_Commission_Rate />
-		<Affiliates_Shareasale_Order_Page />
-		<Affiliates_Shareasale_Vendor_ID />
-		<Affiliates_Shareasale_Product_ID />
-		<Affiliates_Shareasale_Maximum_Commission_Rate />
-		<Affiliates_SWReg_Order_Page />
-		<Affiliates_SWReg_Vendor_ID />
-		<Affiliates_SWReg_Product_ID />
-		<Affiliates_SWReg_Maximum_Commission_Rate />
-		<Affiliates_V-Share_Order_Page />
-		<Affiliates_V-Share_Vendor_ID />
-		<Affiliates_V-Share_Product_ID />
-		<Affiliates_V-Share_Maximum_Commission_Rate />
-		<Affiliates_VFree_Order_Page />
-		<Affiliates_VFree_Vendor_ID />
-		<Affiliates_VFree_Product_ID />
-		<Affiliates_VFree_Maximum_Commission_Rate />
-		<Affiliates_Yaskifo_Order_Page />
-		<Affiliates_Yaskifo_Vendor_ID />
-		<Affiliates_Yaskifo_Product_ID />
-		<Affiliates_Yaskifo_Maximum_Commission_Rate />
-	</Affiliates>
-	<ASP>
-		<ASP_FORM>Y</ASP_FORM>
-		<ASP_Member>N</ASP_Member>
-		<ASP_Member_Number />
-	</ASP>
+    </English>
+  </Program_Descriptions>
 </XML_DIZ_INFO>

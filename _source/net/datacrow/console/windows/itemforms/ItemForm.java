@@ -605,7 +605,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             } else if (isChanged()) {
                 dco.saveUpdate(true);
             } else {
-                DcSwingUtilities.displayWarningMessage("msgNoChangesToSave");
+                close();
             }
             
         } catch (ValidationException vExp) {

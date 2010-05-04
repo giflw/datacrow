@@ -8,7 +8,12 @@ Data Crow 3.8.13  [Release on May xx 2010] [testing: high] [target: moderate]
 - 2943409 Filter - Does not Show working status
 - 2944044 Amendment to the Sort Order (filter)
 - 2948618 Add 'copy' option to quickview
-- 2948686 Close Tool Select Wizard after chosing & better explanation
+- 2948686 Close Tool Select Wizard after choosing & better explanation
+- The 'container managed' option is now also available when altering a module.
+- 2955087 Suppress "There are no changes to save" dialog
+- Backup & Restore is now also available when running in the beginner experience level.
+- 2955092 Visual indication of Beginner/Expert mode
+- Added the username to the title of the Data Crow window.
 
 
 -----------------------------------------------------------------------------------------

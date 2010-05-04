@@ -43,10 +43,12 @@ public abstract class UserMode {
     public static void setUserMode(int mode) {
         if (current != mode) {
             current = mode;
+            
             DataCrow.mainFrame.updateMenuBar();
         }
         
         DcSettings.set(DcRepository.Settings.stXpMode, mode);
+        DataCrow.mainFrame.setTitle();
     }
 
     /**

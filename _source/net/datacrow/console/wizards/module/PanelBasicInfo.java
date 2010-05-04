@@ -287,12 +287,12 @@ public class PanelBasicInfo extends ModuleWizardPanel {
                     Layout.getGBC(1, y++, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets( 5, 5, 5, 5), 0, 0));
-            add(checkContainerManaged, 
-                    Layout.getGBC(1, y++, 2, 1, 1.0, 1.0
-                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets( 5, 5, 5, 5), 0, 0));
         }
         
+        add(checkContainerManaged, 
+                Layout.getGBC(1, y++, 2, 1, 1.0, 1.0
+               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 5, 5, 5, 5), 0, 0));
         add(checkFileBacked, 
                 Layout.getGBC(1, y++, 2, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
