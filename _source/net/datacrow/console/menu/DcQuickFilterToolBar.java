@@ -110,7 +110,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         
         @Override
         public void run() {
-            PollerTask poller = new PollerTask(this, "Filtering");
+            PollerTask poller = new PollerTask(this, DcResources.getText("lblFiltering"));
             poller.start();
             
             DcObject[] result = DataManager.get(module.getIndex(), df);

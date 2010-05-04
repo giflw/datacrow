@@ -60,6 +60,7 @@ import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.console.windows.reporting.ReportingDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -264,7 +265,10 @@ public class View extends DcPanel implements ListSelectionListener {
         for (int i = 0; i < rowCount; i++)
             objects.add(getItemAt(i));
         
+        DataFilter def = DataFilters.getCurrent(vc.getModule().getIndex());
+        
         DataFilter df = new DataFilter(vc.getModule().getIndex());
+        df.setSortOrder(def.getSortOrder());
         df.setOrder(vc.getModule().getSettings().getStringArray(DcRepository.ModuleSettings.stSearchOrder));
         df.sort(objects);
 

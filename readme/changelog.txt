@@ -6,6 +6,9 @@ Data Crow 3.8.13  [Release on May xx 2010] [testing: high] [target: moderate]
 - 2927679 Collapse All Behavior
 - 2943392 Floating Filter Dialog
 - 2943409 Filter - Does not Show working status
+- 2944044 Amendment to the Sort Order (filter)
+- 2948618 Add 'copy' option to quickview
+- 2948686 Close Tool Select Wizard after chosing & better explanation
 
 
 -----------------------------------------------------------------------------------------

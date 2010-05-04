@@ -23,51 +23,45 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components;
+package net.datacrow.console.components.panels;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JComponent;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.core.plugin.Plugin;
+import net.datacrow.core.resources.DcResources;
 
-public class DcPluginField extends JComponent implements ActionListener {
+public class SortOrderPanel extends JPanel {
     
-    private DcButton bt;
-    private Plugin plugin;
+    private JComboBox cbOrder = ComponentFactory.getComboBox();
     
-    public DcPluginField(Plugin plugin) {
-        this.plugin = plugin;
+    public SortOrderPanel() {
         build();
     }
     
-    public void addActionListener(ActionListener al) {
-        bt.addActionListener(al);
+    public int getSortOrder() {
+        return cbOrder.getSelectedIndex();
+    }
+    
+    public void setSortOrder(int order) {
+        if (order > -1) cbOrder.setSelectedIndex(order);
     }
     
     private void build() {
-        DcLongTextField fldHelp = ComponentFactory.getHelpTextField();
-        fldHelp.setText(plugin.getHelpText());
-        
-        bt = ComponentFactory.getIconButton(plugin.getIcon());
-        bt.addActionListener(this);
-        
         setLayout(Layout.getGBL());
         
-        add(bt, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
-            GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-            new Insets(5, 5, 5, 5), 0, 0));
-        add(fldHelp, Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,
-            GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-            new Insets(5, 5, 5, 5), 0, 0));
-    }
-
-    public void actionPerformed(ActionEvent ae) {
-        plugin.actionPerformed(ae);
+        cbOrder.addItem(DcResources.getText("lblAscending"));
+        cbOrder.addItem(DcResources.getText("lblDescending"));
+        
+        add(ComponentFactory.getLabel(DcResources.getText("lblSortOrder")),
+                Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 5, 5, 5, 5), 0, 0));
+        add(cbOrder,
+                Layout.getGBC( 1, 0, 1, 1, 20.0, 20.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                new Insets( 5, 5, 5, 5), 0, 0));        
     }
 }

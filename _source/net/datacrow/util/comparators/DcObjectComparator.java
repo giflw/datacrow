@@ -34,10 +34,20 @@ import net.datacrow.core.objects.DcObject;
 
 public class DcObjectComparator implements Comparator<DcObject> {
 
+    public static final int _SORTORDER_ASCENDING = 0;
+    public static final int _SORTORDER_DESCENDING = 1;
+    
     private final int field;
+    private final int order;
     
     public DcObjectComparator(int field) {
         this.field = field;
+        this.order = _SORTORDER_ASCENDING;
+    }
+    
+    public DcObjectComparator(int field, int order) {
+        this.field = field;
+        this.order = order;
     }
     
     public int compare(DcObject dco1, DcObject dco2) {
@@ -50,6 +60,11 @@ public class DcObjectComparator implements Comparator<DcObject> {
             return -1;
         else if (o2 == null)
             return 1;
+        
+        if (order == _SORTORDER_DESCENDING) {
+            o1 = dco2.getValue(field);
+            o2 = dco1.getValue(field);
+        }
         
         DcField fld = dco1.getField(field);
         if (o1 instanceof Number && o2 instanceof Number &&
@@ -69,8 +84,13 @@ public class DcObjectComparator implements Comparator<DcObject> {
             return d1.compareTo(d2);
 
         } else {
-            return dco1.getDisplayString(field).toLowerCase().compareTo(
-                   dco2.getDisplayString(field).toLowerCase());
+            if (order == _SORTORDER_DESCENDING) {
+                return dco2.getDisplayString(field).toLowerCase().compareTo(
+                       dco1.getDisplayString(field).toLowerCase());  
+            } else {
+                return dco1.getDisplayString(field).toLowerCase().compareTo(
+                       dco2.getDisplayString(field).toLowerCase());   
+            }
         }
     }
 }

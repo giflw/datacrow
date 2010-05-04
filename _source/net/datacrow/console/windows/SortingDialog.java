@@ -36,8 +36,10 @@ import javax.swing.JPanel;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.FieldSelectionPanel;
+import net.datacrow.console.components.panels.SortOrderPanel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -47,6 +49,8 @@ import net.datacrow.settings.DcSettings;
 public class SortingDialog extends DcDialog implements ActionListener {
 
     private FieldSelectionPanel panelSorting;
+    private SortOrderPanel panelSortOrder = new SortOrderPanel();
+    
     private int module;
     
     public SortingDialog(int module) {
@@ -86,7 +90,11 @@ public class SortingDialog extends DcDialog implements ActionListener {
             // Set the sort order in the settings and overrule the sorting of the currently
             // applied filter.
             DcModules.get(module).setSetting(DcRepository.ModuleSettings.stSearchOrder, order);
-            DataFilters.getCurrent(module).setOrder(order);
+            
+            DataFilter df = DataFilters.getCurrent(module);
+            df.setOrder(order);
+            df.setSortOrder(panelSortOrder.getSortOrder());
+            DataFilters.setCurrent(module, df);
         }
 
         DcModules.get(module).getSearchView().sort();
@@ -114,10 +122,13 @@ public class SortingDialog extends DcDialog implements ActionListener {
         //**********************************************************
         //Main Panel
         //**********************************************************
-        getContentPane().add(panelSorting,  Layout.getGBC( 0, 0, 1, 1, 40.0, 40.0
+        getContentPane().add(panelSorting,   Layout.getGBC( 0, 0, 1, 1, 40.0, 40.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 5, 5, 5), 0, 0));
-        getContentPane().add(panelActions,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+        getContentPane().add(panelSortOrder, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 5, 5, 5, 5), 0, 0));
+        getContentPane().add(panelActions,   Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 5, 5, 5, 5), 0, 0));
         

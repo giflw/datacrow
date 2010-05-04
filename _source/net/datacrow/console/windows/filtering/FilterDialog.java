@@ -43,6 +43,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.panels.FieldSelectionPanel;
+import net.datacrow.console.components.panels.SortOrderPanel;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.DcFrame;
@@ -76,6 +77,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
     private DefineFilterEntryPanel defineFilterPanel;
     private FieldSelectionPanel sortingPanel;
     private ManageFiltersPanel manageFiltersPanel;
+    private SortOrderPanel sortOrderPanel = new SortOrderPanel();
     
     public FilterDialog(DcModule module, MasterView parent) {
         super(DcResources.getText("lblFilter"), IconLibrary._icoFilter);
@@ -100,6 +102,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
         DataFilter filter = new DataFilter(module.getIndex());
         filter.setEntries(defineFilterPanel.getEntries());
         filter.setOrder(sortingPanel.getSelectedFields());
+        filter.setSortOrder(sortOrderPanel.getSortOrder());
         return filter;
     }
 
@@ -107,13 +110,24 @@ public class FilterDialog extends DcFrame implements ActionListener {
         getContentPane().setLayout(Layout.getGBL());
         
         defineFilterPanel = new DefineFilterEntryPanel(module);
+        
+        JPanel panelSort = new JPanel();
+        panelSort.setLayout(Layout.getGBL());
+        
         sortingPanel = new FieldSelectionPanel(module, false);
         sortingPanel.setSelectedFields(module.getSettings().getStringArray(DcRepository.ModuleSettings.stSearchOrder));
+        
+        panelSort.add(sortingPanel,   Layout.getGBC( 0, 0, 1, 1, 40.0, 40.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets( 0, 5, 5, 5), 0, 0));
+        panelSort.add(sortOrderPanel, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 5, 5, 5, 5), 0, 0));
         
         manageFiltersPanel = new ManageFiltersPanel(); 
         
         filterTabs.addTab(DcResources.getText("lblFilter"), IconLibrary._icoSearch, defineFilterPanel);
-        filterTabs.addTab(DcResources.getText("lblSort"), IconLibrary._icoSort, sortingPanel);
+        filterTabs.addTab(DcResources.getText("lblSort"), IconLibrary._icoSort, panelSort);
         filterTabs.addTab(DcResources.getText("lblManage"), IconLibrary._icoFilter, manageFiltersPanel);
         
         getContentPane().add(filterTabs,       Layout.getGBC( 0, 0, 1, 1, 100.0, 100.0
@@ -134,6 +148,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
             defineFilterPanel.addEntry();
         }
         sortingPanel.setSelectedFields(filter.getOrder());
+        sortOrderPanel.setSortOrder(filter.getSortOrder());
     }
     
     private class ManageFiltersPanel extends JPanel implements ActionListener {
@@ -326,7 +341,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
                     view.save(false);
             }
             
-            PollerTask poller = new PollerTask(this, "Filtering");
+            PollerTask poller = new PollerTask(this, DcResources.getText("lblFiltering"));
             poller.start();
             
             try {

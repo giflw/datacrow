@@ -53,6 +53,7 @@ public class DataFilter {
     private int module;
 
     private String name;
+    private int sortOrder = DcObjectComparator._SORTORDER_ASCENDING;
     
     private DcField[] order;
     private Collection<DataFilterEntry> entries = new ArrayList<DataFilterEntry>();
@@ -85,6 +86,10 @@ public class DataFilter {
         this.module = module;
     }    
     
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
     /**
      * Creates a filter using the supplied entries.
      * @param module
@@ -104,6 +109,10 @@ public class DataFilter {
         DcModule m = DcModules.get(module);
         for (int i = 0; i < s.length; i++)
             order[i] = m.getField(s[i]);
+    }
+    
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
     }
     
     /**
@@ -238,12 +247,12 @@ public class DataFilter {
         }
         
         if (order.length == 1) {
-            Collections.sort(c, new DcObjectComparator(order[0].getIndex()));
+            Collections.sort(c, new DcObjectComparator(order[0].getIndex(), sortOrder));
         } else {
             ArrayList<DcObjectComparator> dcocs = new ArrayList<DcObjectComparator>();
             for (int i = 0; i < order.length; i++) {
                 if (order[i] != null) {
-                    DcObjectComparator dcoc = new DcObjectComparator(order[i].getIndex());
+                    DcObjectComparator dcoc = new DcObjectComparator(order[i].getIndex(), sortOrder);
                     dcocs.add(dcoc);
                 }
             }
@@ -277,6 +286,9 @@ public class DataFilter {
     private void parse(String xml) throws Exception {
         module = Integer.parseInt(StringUtils.getValueBetween("<MODULE>", "</MODULE>", xml));
         name = StringUtils.getValueBetween("<NAME>", "</NAME>", xml);
+        
+        if (xml.contains("<SORTORDER>"))
+            sortOrder = Integer.parseInt(StringUtils.getValueBetween("<SORTORDER>", "</SORTORDER>", xml));
         
         String sEntries = StringUtils.getValueBetween("<ENTRIES>", "</ENTRIES>", xml);
         int idx = sEntries.indexOf("<ENTRY>");
@@ -346,6 +358,7 @@ public class DataFilter {
         
         storage += "<NAME>" + getName() + "</NAME>\n";
         storage += "<MODULE>" + getModule() + "</MODULE>\n";
+        storage += "<SORTORDER>" + getSortOrder() + "</SORTORDER>\n";
         
         storage += "<ENTRIES>\n";
         

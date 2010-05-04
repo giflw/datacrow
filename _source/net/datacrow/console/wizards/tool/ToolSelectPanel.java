@@ -27,6 +27,8 @@ package net.datacrow.console.wizards.tool;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -44,7 +46,7 @@ import net.datacrow.core.security.SecurityCentre;
 
 import org.apache.log4j.Logger;
 
-public class ToolSelectPanel extends ToolSelectBasePanel {
+public class ToolSelectPanel extends ToolSelectBasePanel implements ActionListener {
 
     private static Logger logger = Logger.getLogger(ToolSelectPanel.class.getName());
     
@@ -113,10 +115,18 @@ public class ToolSelectPanel extends ToolSelectBasePanel {
         for (Plugin plugin : plugins) {
             if (SecurityCentre.getInstance().getUser().isAuthorized(plugin)) {
                 DcPluginField fld = new DcPluginField(plugin);
+                
+                fld.addActionListener(this);
                 add(fld, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                     new Insets( 0, 5, 5, 5), 0, 0));
             }
         }
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        try {
+            getWizard().finish();
+        } catch (Exception e) {}
     }
 }

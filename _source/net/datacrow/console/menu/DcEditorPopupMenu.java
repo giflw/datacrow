@@ -139,6 +139,6 @@ public class DcEditorPopupMenu extends DcPopupMenu implements ActionListener  {
         else if (ae.getActionCommand().equals("paste"))
            c.paste(); 
         else if (ae.getActionCommand().equals("selectAll"))
-            c.selectAll(); 
+           c.selectAll(); 
     }
 }

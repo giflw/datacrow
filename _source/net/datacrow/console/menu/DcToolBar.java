@@ -175,5 +175,4 @@ public class DcToolBar extends JToolBar implements MouseListener {
                 setLabelsVisible(!DcSettings.getBoolean(DcRepository.Settings.stShowMenuBarLabels));
         }        
     }    
-
 }

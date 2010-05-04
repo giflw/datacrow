@@ -46,7 +46,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.console.components.DcPictureField;
-import net.datacrow.console.components.DcPopupMenu;
+import net.datacrow.console.menu.DcEditorPopupMenu;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
@@ -438,7 +438,11 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     private void showPopupMenu(int x, int y) {
         PopupMenu popupMenu = new PopupMenu();
-        popupMenu.show(this, x, y);
+        
+        if (descriptionPane.isShowing())
+            popupMenu.show(descriptionPane, x, y);
+        else 
+            popupMenu.show(this, x, y);
     }    
     
     public void stateChanged(ChangeEvent evt) {
@@ -449,21 +453,27 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }
     
     public void mouseReleased(MouseEvent e) {
-        if (SwingUtilities.isRightMouseButton(e)) {
+        if (SwingUtilities.isRightMouseButton(e))
             showPopupMenu(e.getX(), e.getY());
-        } 
 
-        if (e.getClickCount() == 2 && dco != null) {
+        if (e.getClickCount() == 2 && dco != null)
             dco.getModule().getCurrentSearchView().open();
-        }
     }
+
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mousePressed(MouseEvent e) {}
     public void mouseClicked(MouseEvent e) {}
     
-    private static class PopupMenu extends DcPopupMenu {
+    private class PopupMenu extends DcEditorPopupMenu {
         public PopupMenu() {
+            super(descriptionPane);
+            
+            addSeparator();
+
+            if (!descriptionPane.isShowing())
+                removeAll();
+            
             PluginHelper.add(this, "ToggleQuickView");
             PluginHelper.add(this, "QuickViewSettings");
         }

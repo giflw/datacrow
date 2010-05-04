@@ -80,12 +80,13 @@ public class ToolSelectWizard extends Wizard {
 
     @Override
     public void next() throws WizardException {
+
         ToolSelectBasePanel panel = (ToolSelectBasePanel) getCurrent();
         Tool tool = panel.getTool();
         tool = tool == null ? new Tool() : tool;
         
         super.next();
-        
+
         panel = (ToolSelectBasePanel) getCurrent();
         panel.setTool(tool);
         panel.onActivation();
