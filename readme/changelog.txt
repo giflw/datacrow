@@ -1,15 +1,17 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.12  [Release on xx/x/2010] [testing: high] [target: production]
+Data Crow 3.8.12  [Release on May 3rd 2010] [testing: high] [target: moderate]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- 2991768    Can't close detached dialog window after item delete
-- 2988925    Regional Settings - Decimal Grouping Error
-- 2988556    IMDB import adds trash chars to Genre item
-- 2988565    IMDB import fails to parse some years
-- 2987886    Concurrent Modification Exc. in FreeResourcesTask
-- 2987098    Containers
-- 2970691    Item wizard with ISBN search adds item directly
+- 2991768 Can't close detached dialog window after item delete (unconfirmed fix)
+- 2988925 Regional Settings - Decimal Grouping Error (can now be left empty)
+- 2988556 IMDB import adds trash chars to Genre item
+- 2988565 IMDB import fails to parse some years
+- 2987886 Concurrent Modification Exception in FreeResourcesTask
+- 2987098 Containers (containers are now removed from the view after deleting them)
+- 2970691 Item wizard with ISBN search adds item directly
+- 2970693 ISBN online search does not retrieve results (bol.com)
+- 2981541 Director field IMDB.com (now adds aspect ratio, director and color to movie)
 
 
 -----------------------------------------------------------------------------------------
