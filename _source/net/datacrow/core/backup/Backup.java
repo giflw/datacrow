@@ -100,7 +100,7 @@ public class Backup extends Thread {
 
     private ZipOutputStream getZipOutputStream(String target) {
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmm");
         String date = format.format(cal.getTime());
 
         String filename = "datacrow_backup_" + date + ".bck";

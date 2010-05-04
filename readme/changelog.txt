@@ -16,6 +16,7 @@ Data Crow 3.8.13  [Release on May xx 2010] [testing: high] [target: moderate]
 - Added the username to the title of the Data Crow window.
 - 2943367 Filter to select Picture-Front "is empty"
 - Added "Is Filled" option to the quick filter toolbar.
+- Added HH:mm (hours and minutes) to the backup file name.
 
 
 -----------------------------------------------------------------------------------------
