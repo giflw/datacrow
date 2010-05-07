@@ -1,6 +1,9 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.13  [Release on May xx 2010] [testing: high] [target: moderate]
+Data Crow 3.8.13  [Release on May 7th 2010] [testing: high] [target: moderate]
 -----------------------------------------------------------------------------------------
+
+[Fixed]
+- Track titles were missing for Discogs.com.
 
 [Changed]
 - 2927679 Collapse All Behavior
@@ -14,9 +17,11 @@ Data Crow 3.8.13  [Release on May xx 2010] [testing: high] [target: moderate]
 - Backup & Restore is now also available when running in the beginner experience level.
 - 2955092 Visual indication of Beginner/Expert mode
 - Added the username to the title of the Data Crow window.
-- 2943367 Filter to select Picture-Front "is empty"
+- 2943367 Filter to select Pictures "is empty"
 - Added "Is Filled" option to the quick filter toolbar.
 - Added HH:mm (hours and minutes) to the backup file name.
+- 2989153 Comment Addition for Backup files. A comment can now be added to a backup file. 
+  The comment is shown when browsing for a backup file to restore.
 
 
 -----------------------------------------------------------------------------------------
