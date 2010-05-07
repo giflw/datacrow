@@ -74,6 +74,9 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
     private JCheckBox checkRestoreDatabase = ComponentFactory.getCheckBox(DcResources.getText("lblRestoreDatabase"));
     
     private JTextArea textLog = ComponentFactory.getTextArea();
+    
+    private JTextArea textComment = ComponentFactory.getTextArea();
+    
     private JProgressBar progressBar = new JProgressBar();
     
     private boolean canBeClosed = true;
@@ -136,7 +139,7 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
     private void backup() {
         File directory = fileFieldTarget.getFile();
         if (directory != null) {
-            Backup bck = new Backup(this, fileFieldTarget.getFile());
+            Backup bck = new Backup(this, fileFieldTarget.getFile(), textComment.getText().trim());
             bck.start();
         } else {
             DcSwingUtilities.displayWarningMessage("msgSelectOutputDir");
@@ -175,17 +178,25 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
 
         buttonBackup.addActionListener(this);
         buttonBackup.setActionCommand("backup");
-
+        
+        JScrollPane commentScroller = new JScrollPane(textComment);
+        commentScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelBackup.add(fileFieldTarget, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 0, 5, 5, 5), 0, 0));
         panelBackup.add(buttonBackup,  Layout.getGBC( 1, 0, 1, 1, 0.0, 0.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                  new Insets( 0, 0, 5, 5), 0, 0));
+        panelBackup.add(ComponentFactory.getLabel(DcResources.getText("lblComment")), 
+                Layout.getGBC( 0, 1, 2, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        panelBackup.add(commentScroller, Layout.getGBC( 0, 2, 2, 1, 10.0, 10.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        
         panelBackup.setToolTipText(DcResources.getText("tpBackup"));
-
-        panelBackup.setBorder(
-                ComponentFactory.getTitleBorder(DcResources.getText("lblBackupHeader")));
+        panelBackup.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblBackupHeader")));
 
         //**********************************************************
         //Restore Restore Panel

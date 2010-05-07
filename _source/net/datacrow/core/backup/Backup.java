@@ -54,14 +54,16 @@ public class Backup extends Thread {
 
     private File directory;
     private IBackupRestoreListener listener;
+    private String comment;
  
     /**
      * Creates a new instance.
      * @param listener The listener which will be informed of events and errors.
      * @param directory The directory where the backup will be created.
      */
-    public Backup(IBackupRestoreListener listener, File directory) {
+    public Backup(IBackupRestoreListener listener, File directory, String comment) {
         this.directory = directory;
+        this.comment = comment;
         this.listener = listener;
     }
     
@@ -143,6 +145,10 @@ public class Backup extends Thread {
                 zout.putNextEntry(versionEntry);
                 String version = String.valueOf(DataCrow.getVersion().toString());
                 zout.write(version.getBytes(), 0, version.getBytes().length);
+                
+                if (comment.length() > 0)
+                    zout.write(("\n" + comment).getBytes(), 0, ("\n" + comment).getBytes().length);
+                
                 zout.closeEntry();
                 
                 for (String file : files) {

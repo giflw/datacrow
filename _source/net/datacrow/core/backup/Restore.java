@@ -155,10 +155,14 @@ public class Restore extends Thread {
             
             StringBuffer sb = new StringBuffer();
             byte[] b = new byte[4096];
-            for (int n; (n = bis.read(b)) != -1;)
-                sb.append(new String(b, 0, n));
+            for (int n; (n = bis.read(b)) != -1;) {
+                String s = new String(b, 0, n);
+                sb.append(s);
+            }
 
-            version = new Version(sb.toString());
+            String s = sb.toString();
+            s = s.indexOf("\n") > -1 ? s.substring(0, s.indexOf("\n")) : s;
+            version = new Version(s);
             
             bis.close();
             is.close();
