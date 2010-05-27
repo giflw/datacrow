@@ -381,7 +381,8 @@ public class ItemForm extends DcFrame implements ActionListener {
                     ((Picture) newValue).loadImage(false);
     
                 boolean empty = Utilities.getComparableString(oldValue).length() == 0;
-                if ((empty || overwrite) && !Utilities.isEmpty(newValue))
+                
+                if ((empty || overwrite) && (!Utilities.isEmpty(newValue) || (empty && newValue instanceof Picture)))
                      ComponentFactory.setValue(component, newValue);
             }
         } catch (Exception e) {

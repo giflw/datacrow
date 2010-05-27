@@ -646,7 +646,7 @@ public class Utilities {
         }
         
         BufferedImage bi = gc.createCompatibleImage(w, h, Transparency.TRANSLUCENT);
-
+        
         Graphics g = bi.createGraphics();
         DcSwingUtilities.setRenderingHint(g);
         g.drawImage(image, 0, 0, w, h, null);
