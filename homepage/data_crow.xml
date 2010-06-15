@@ -68,9 +68,9 @@
   </NewsFeed>
   <Program_Info>
     <Program_Name>Data Crow</Program_Name>
-    <Program_Version>3.8.13</Program_Version>
-    <Program_Release_Month>05</Program_Release_Month>
-    <Program_Release_Day>07</Program_Release_Day>
+    <Program_Version>3.8.15</Program_Version>
+    <Program_Release_Month>06</Program_Release_Month>
+    <Program_Release_Day>15</Program_Release_Day>
     <Program_Release_Year>2010</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
     <Program_Type>Freeware</Program_Type>
@@ -82,9 +82,9 @@
     <Program_System_Requirements>512MB of memory / P3 800MHZ</Program_System_Requirements>
     <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
     <File_Info>
-      <File_Size_Bytes>40449615</File_Size_Bytes>
-      <File_Size_K>39501</File_Size_K>
-      <File_Size_MB>38.58</File_Size_MB>
+      <File_Size_Bytes>40442010</File_Size_Bytes>
+      <File_Size_K>39494</File_Size_K>
+      <File_Size_MB>38.57</File_Size_MB>
       <Filename_Versioned></Filename_Versioned>
       <Filename_Previous></Filename_Previous>
       <Filename_Generic></Filename_Generic>
@@ -99,12 +99,12 @@
       <Expire_Day></Expire_Day>
       <Expire_Year></Expire_Year>
     </Expire_Info>
+    <Program_Categories>Home &amp; Hobby :: Home Inventory,MP3 &amp; Audio :: Organizers,Education :: Collecting,Multimedia and Design :: Cataloging</Program_Categories>
     <Program_Cost_Other_Code></Program_Cost_Other_Code>
     <Program_Cost_Other></Program_Cost_Other>
     <Limitations></Limitations>
     <Awards></Awards>
     <Program_Specific_Category></Program_Specific_Category>
-    <Program_Categories></Program_Categories>
     <Includes_JAVA_VM></Includes_JAVA_VM>
     <Includes_VB_Runtime></Includes_VB_Runtime>
     <Includes_DirectX></Includes_DirectX>
@@ -118,7 +118,7 @@
       <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.8.11/datacrow_3_8_11_installer.zip</Primary_Download_URL>
+      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.8.15/datacrow_3_8_15_installer.zip</Primary_Download_URL>
       <Secondary_Download_URL></Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>
