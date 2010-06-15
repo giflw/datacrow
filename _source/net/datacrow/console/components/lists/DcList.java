@@ -128,7 +128,7 @@ public class DcList extends JList implements ComponentListener {
 
     @Override
     public int locationToIndex(Point location) {
-        return locationToNearestIndex(location);
+        return ((DcListUI) ui).locationToIndex(this, location);
     }
 
     public int locationToNearestIndex(Point location) {
@@ -151,14 +151,14 @@ public class DcList extends JList implements ComponentListener {
     public int getLastVisibleIndex() {
         Rectangle r = getVisibleRect();
         Point visibleLR = new Point(0, (r.y + r.height) - 1);
-        int index = locationToIndex(visibleLR);
+        int index = locationToNearestIndex(visibleLR);
         return index;
     }
     
     public int getFirstIndexOnLastVisibleRow() {
         Rectangle r = getVisibleRect();
         Point visibleLR = new Point(0, (r.y + r.height) - 1);
-        return locationToIndex(visibleLR);
+        return locationToNearestIndex(visibleLR);
     }    
     
     @Override

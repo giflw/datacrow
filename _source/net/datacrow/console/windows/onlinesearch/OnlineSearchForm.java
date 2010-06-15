@@ -287,7 +287,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                     SwingUtilities.invokeLater(
                             new Thread(new Runnable() { 
                                 public void run() {
-                                    ItemForm itemForm = new ItemForm(true, false, o, true);
+                                    ItemForm itemForm = new ItemForm(false, false, o, true);
                                     itemForm.setVisible(true);
                                 }
                             }));

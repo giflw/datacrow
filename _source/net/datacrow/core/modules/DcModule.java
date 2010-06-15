@@ -1369,8 +1369,8 @@ public class DcModule implements Comparable<DcModule> {
         if (isContainerManaged()) {
             systemFields.put(Integer.valueOf(DcObject._SYS_CONTAINER),
                     new DcField(DcObject._SYS_CONTAINER, getIndex(), "Container",
-                                false, true, false, true, false,
-                                10, ComponentFactory._REFERENCEFIELD, DcModules._CONTAINER, DcRepository.ValueTypes._DCOBJECTREFERENCE,
+                                true, true, false, true, true, 
+                                10, ComponentFactory._REFERENCESFIELD, DcModules._CONTAINER, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                                 "Container"));
         }
         

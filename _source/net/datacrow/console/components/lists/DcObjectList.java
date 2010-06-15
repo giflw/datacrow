@@ -147,7 +147,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     public int getItemCount() {
         return getDcModel().getSize();
     }
-
+    
     public Collection<DcObject> getItems() {
         Collection<DcObject> objects = new ArrayList<DcObject>();
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
@@ -420,27 +420,23 @@ public class DcObjectList extends DcList implements IViewComponent {
                     for (int i = 0; i < first; i++) {
                         if (view.getType() == View._TYPE_SEARCH)
                             getElement(i).clear();
-                        else
-                            getElement(i).flushImage();
                     }
                     
                     for (int i = last; i < size; i++) {
                         if (view.getType() == View._TYPE_SEARCH)
                             getElement(i).clear();
-                        else
-                            getElement(i).flushImage();
                     }
 
                 } catch (Exception e) {
                     try {
-                        sleep(10000);
+                        sleep(100000);
                     } catch (InterruptedException e1) {
                         logger.error(e, e);
                     }
                 }
                 
                 try {
-                    sleep(10000);
+                    sleep(100000);
                 } catch (InterruptedException e) {
                     logger.error(e, e);
                 }

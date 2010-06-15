@@ -95,21 +95,28 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         try {
             
             boolean upgraded = false;
-            if (DatabaseManager.getVersion().isOlder(new Version(3, 5, 0, 0))) {
+            
+            Version v = DatabaseManager.getVersion();
+            
+            if (v.isOlder(new Version(3, 5, 0, 0))) {
                 upgraded |= convertMappingModules();
                 upgraded |= convertMovieCountriesAndLanguages();
             }
             
-            if (DatabaseManager.getVersion().isOlder(new Version(3, 6, 0, 0))) {
+            if (v.isOlder(new Version(3, 6, 0, 0))) {
                 upgraded |= convertExternalReferences();
             }
             
-            if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 0, 0))) {
+            if (v.isOlder(new Version(3, 8, 0, 0))) {
                 upgraded |= convertSoftwareCategories();
             }
             
-            if (DatabaseManager.getVersion().isOlder(new Version(3, 8, 9, 0))) {
+            if (v.isOlder(new Version(3, 8, 9, 0))) {
                 changeSettings();
+            }  
+            
+            if (v.isOlder(new Version(3, 8, 15, 0))) {
+                upgraded |= convertContainers();
             }            
 
             if (upgraded) {
@@ -192,6 +199,62 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         rs.close();
         ps.close();
+        conn.close();
+        
+        return true;
+    }
+    
+    private boolean convertContainers() throws Exception {
+        
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = conn.createStatement();
+
+        ResultSet rs;
+        PreparedStatement ps;
+        
+        for (DcModule module : DcModules.getAllModules()) {
+            try {
+                if (!module.isAbstract() && module.getType() != DcModule._TYPE_TEMPLATE_MODULE && module.isContainerManaged()) {
+
+                    try {
+                        conn = DatabaseManager.getConnection();
+                        stmt = conn.createStatement();
+                        stmt.executeQuery("SELECT TOP 1 " + module.getField(DcObject._SYS_CONTAINER).getDatabaseFieldName() + " FROM " + module.getTableName());
+                        
+                    } catch (Exception e) {
+                        stmt.close();
+                        conn.close();
+                        return false;
+                    }
+                    
+                    MappingModule mm = new MappingModule(module, DcModules.get(DcModules._CONTAINER), DcObject._SYS_CONTAINER);
+                    createTable(mm);
+                    
+                    rs = stmt.executeQuery("SELECT ID, " + module.getField(DcObject._SYS_CONTAINER).getDatabaseFieldName() + " FROM " + module.getTableName() + " WHERE " + 
+                                           module.getField(DcObject._SYS_CONTAINER).getDatabaseFieldName() + " IS NOT NULL");
+                    
+                    ps = conn.prepareStatement("INSERT INTO " + mm.getTableName() + 
+                            " (" + mm.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " + 
+                                   mm.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ") " +
+                            "VALUES (?, ?)");
+    
+                    while (rs.next()) {
+                        ps.setLong(1, rs.getLong(1));
+                        ps.setLong(2, rs.getLong(2));
+                        ps.execute();
+                    }
+                    
+                    stmt.execute("ALTER TABLE " + module.getTableName() + " DROP COLUMN " + module.getField(DcObject._SYS_CONTAINER).getDatabaseFieldName());
+                    
+                    rs.close();
+                    ps.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        stmt.close();
         conn.close();
         
         return true;

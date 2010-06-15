@@ -110,16 +110,12 @@ public abstract class DcObjectListElement extends DcListElement {
         dco = null;
     }
     
-    public void flushImage() {
-//        if (dco != null)
-//            dco.flushImages();
-    }
-    
     @Override
     public void clear() {
+        // DO NOT DESTROY THE COMPONENTS. This component is re-used!
+        // DO NOT ENABLE THIS: super.clear(); 
         removeAll();
-        
-//        if (dco != null)
-//            dco.freeResources();
+        if (dco != null)
+            dco.freeResources();
     }
 }

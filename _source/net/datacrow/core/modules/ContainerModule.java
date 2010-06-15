@@ -66,6 +66,11 @@ public class ContainerModule extends DcParentModule {
         super(index, topModule, name, description, objectName, objectNamePlural,
               tableName, tableShortName);
     }
+    
+    @Override
+    public boolean isServingMultipleModules() {
+        return true;
+    }
 
     /**
      * Creates this module based on an XML module definition.

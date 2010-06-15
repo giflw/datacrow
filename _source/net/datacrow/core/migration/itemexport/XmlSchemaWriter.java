@@ -82,7 +82,6 @@ public class XmlSchemaWriter extends XmlBaseWriter {
                     newLine();
                 }
                 handled.add(so.getModule().getSystemObjectName());
-                dco.release();
             }
         }
         

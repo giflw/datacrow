@@ -186,17 +186,23 @@ public class StringUtils {
     }    
     
     public static String normalize2(String s) {
-        s = s.replaceAll("[טיךכ]","e");
-        s = s.replaceAll("[ûש]","u");
-        s = s.replaceAll("[ןמ]","i");
-        s = s.replaceAll("[אג]","a");
-        s = s.replaceAll("Ô","o");
-
+        s = s.replaceAll("[יטךכ]","e");
+        s = s.replaceAll("[תûשü]","u");
+        s = s.replaceAll("[ןםלמ]","i");
+        s = s.replaceAll("[באגÄהדוז]","a");
+        s = s.replaceAll("[ףעפצץר]","o");
+        s = s.replaceAll("[‎ÿ]","y");
+        s = s.replaceAll("[ס]","n");
+        s = s.replaceAll("[ח]","c");
+          
         s = s.replaceAll("[ÈÉÊË]","E");
-        s = s.replaceAll("[ÛÙ]","U");
-        s = s.replaceAll("[ÏÎ]","I");
-        s = s.replaceAll("[ÀÂ]","A");
-        s = s.replaceAll("Ô","O");
+        s = s.replaceAll("[ÚÙÛÜ]","U");
+        s = s.replaceAll("[ÍÌÎÏ]","I");
+        s = s.replaceAll("[ÁÆÀÂÂÃÅ]","A");
+        s = s.replaceAll("[ÓÒÔÖÕØ]","O");
+        s = s.replaceAll("[Ý]","Y");
+        s = s.replaceAll("[Ñ]","N");
+        s = s.replaceAll("[Ç]","C");
         
         return s;
     }

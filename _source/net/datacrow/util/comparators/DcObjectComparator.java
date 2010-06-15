@@ -85,11 +85,11 @@ public class DcObjectComparator implements Comparator<DcObject> {
 
         } else {
             if (order == _SORTORDER_DESCENDING) {
-                return dco2.getDisplayString(field).toLowerCase().compareTo(
-                       dco1.getDisplayString(field).toLowerCase());  
+                return dco2.getNormalizedString(field).toLowerCase().compareTo(
+                       dco1.getNormalizedString(field).toLowerCase());  
             } else {
-                return dco1.getDisplayString(field).toLowerCase().compareTo(
-                       dco2.getDisplayString(field).toLowerCase());   
+                return dco1.getNormalizedString(field).toLowerCase().compareTo(
+                       dco2.getNormalizedString(field).toLowerCase());   
             }
         }
     }

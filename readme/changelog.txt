@@ -1,4 +1,23 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.8.15  [Release on June 15th 2010] [testing: high] [target: moderate]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Images not added when updating an item.
+- IMDB movie search only fetches the first director.
+- Context menu "delete" deletes wrong item.
+- Cache/DB inconsistent after report creation.
+- Pictures not visible.
+- Softpedia.com is no longer working.
+- Flickering images.
+- Item sorting has been amended to deal with special characters.
+
+[Changed]
+- Items can now be added when opening them from the online search form.
+- Multiple containers can now be added to a single item.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.8.14  [Release on May 27th 2010] [testing: high] [target: moderate]
 -----------------------------------------------------------------------------------------
 

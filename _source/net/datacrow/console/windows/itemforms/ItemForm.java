@@ -381,9 +381,8 @@ public class ItemForm extends DcFrame implements ActionListener {
                     ((Picture) newValue).loadImage(false);
     
                 boolean empty = Utilities.getComparableString(oldValue).length() == 0;
-                
-                if ((empty || overwrite) && (!Utilities.isEmpty(newValue) || (empty && newValue instanceof Picture)))
-                     ComponentFactory.setValue(component, newValue);
+                if ((empty || overwrite) && (!Utilities.isEmpty(newValue)))
+                    ComponentFactory.setValue(component, newValue);
             }
         } catch (Exception e) {
             logger.error("Error while setting values of [" + dco + "] on the item form", e);

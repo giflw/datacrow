@@ -71,7 +71,8 @@ public class Picture extends DcObject {
      * Checks whether an image has been defined and, if so, if the image exists.
      */
     public boolean hasImage() {
-        return isFilled(_C_FILENAME) && new File(DataCrow.imageDir, getDisplayString(_C_FILENAME)).exists();
+        return isFilled(_D_IMAGE) || 
+               isFilled(_C_FILENAME) && new File(DataCrow.imageDir, getDisplayString(_C_FILENAME)).exists();
     }
 
     @Override
@@ -130,13 +131,13 @@ public class Picture extends DcObject {
     
     public void unload(boolean nochecks) {
         
-        if (scaledImage != null) {
-            scaledImage.flush();
-            // prevent massive amounts of pictures being created;
-            // do turn this back on! just flush the image an keep using it.
-            // 11/1/2010: Seems to be better to actually clean everything out..
-            scaledImage = null;
-        }
+//        if (scaledImage != null) {
+//            scaledImage.flush();
+//            // prevent massive amounts of pictures being created;
+//            // do turn this back on! just flush the image an keep using it.
+//            // 11/1/2010: Seems to be better to actually clean everything out..
+//            scaledImage = null;
+//        }
         
         if (getValues() != null && (nochecks || (!isNew() && !edited))) {
 	    	DcImageIcon image = ((DcImageIcon) getValue(_D_IMAGE));

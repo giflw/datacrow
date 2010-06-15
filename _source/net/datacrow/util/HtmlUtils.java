@@ -67,8 +67,8 @@ public class HtmlUtils {
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         
+        //String s = new String(Utilities.readFile(new File("c:/Share/temp2.html")));
         String s = connection.getString(charset);
-        
         connection.close();        
 
         Document document = getDocument(s);
@@ -133,7 +133,7 @@ public class HtmlUtils {
                 sb.append("<title>");
                 sb.append(title);
                 sb.append("</title>\n");
-                sb.append("<head>\n");
+                sb.append("</head>\n");
             }
             
             // create the body
@@ -142,17 +142,57 @@ public class HtmlUtils {
             sb.append("</body>\n");
             sb.append("</html>\n");
             
-            // remove all script parts (don't need them and they just confuse lobo browser)
+            String[][] removeSections = {{"<script", "</script>"},
+                                         {"<style", "</style>"},   
+                                         {"onclick=\"", "\""},
+                                         {"rel=\"", "\""},
+                                         {"<!--", "-->"}};
+            
             int idx;
-            while((idx = sb.indexOf("<script")) > 0) {
-                String part1 = sb.substring(0, idx);
-                String part2 = sb.substring(sb.indexOf("</script>") + 9);
-                sb.setLength(0);
-                sb.append(part1);
-                sb.append(part2);
+            for (String[] sections : removeSections) {
+                while((idx = sb.indexOf(sections[0])) > 0) {
+                    String part1 = sb.substring(0, idx);
+                    String part2 = sb.substring(sb.indexOf(sections[1], idx + sections[0].length()) + sections[1].length());
+                    
+                    sb.setLength(0);
+                    sb.append(part1);
+                    sb.append(part2);
+                }
             }
             
-            in = new ByteArrayInputStream(sb.toString().getBytes());
+            String[] removeWords = {"&nbsp;", " href=\"#\""};
+            for (String word : removeWords) {
+                while((idx = sb.indexOf(word)) > 0) {
+                    String part1 = sb.substring(0, idx);
+                    String part2 = sb.substring(idx + word.length());
+                    
+                    sb.setLength(0);
+                    sb.append(part1);
+                    sb.append(part2);
+                }
+            }
+            
+//            String[][] removeTags = {{"<form", "</form>"}};
+//            for (String[] tags : removeTags) {
+//                while((idx = sb.indexOf(tags[0])) > 0) {
+//                    String part1 = sb.substring(0, idx);
+//                    String part2 = sb.substring(sb.indexOf(">", idx) + 1, sb.indexOf(tags[1]));
+//                    String part3 = sb.substring(sb.indexOf(tags[1]) + tags[1].length());
+//                    
+//                    sb.setLength(0);
+//                    sb.append(part1);
+//                    sb.append(part2);
+//                    sb.append(part3);
+//                }
+//            }
+            
+            s = sb.toString();
+            
+            //perform specific fixes
+            s = s.replace("width\"", "width=\"");
+            
+            in = new ByteArrayInputStream(s.getBytes());
+            
         } else {
             in = new ByteArrayInputStream(s.getBytes());
         }
@@ -166,9 +206,9 @@ public class HtmlUtils {
             parser.parse(reader);
         } catch (Exception e) {
             logger.error(e, e);
-           // Utilities.writeToFile(html.getBytes(), "d:/temp.html");
         }
-        
+
+        Utilities.writeToFile(s.getBytes(), "c:/share/temp.html");
         in.close();
         
         return document;

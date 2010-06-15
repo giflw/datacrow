@@ -60,6 +60,7 @@ import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Hash;
+import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -950,6 +951,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return value;
     }
 
+    public String getNormalizedString(int index) {
+        String s = getDisplayString(index);
+        return StringUtils.normalize2(s);
+    }
+    
     /**
      * Gets the display value for the specified field.
      * @see DcObject#_SYS_DISPLAYVALUE 
