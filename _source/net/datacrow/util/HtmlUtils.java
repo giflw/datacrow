@@ -172,20 +172,6 @@ public class HtmlUtils {
                 }
             }
             
-//            String[][] removeTags = {{"<form", "</form>"}};
-//            for (String[] tags : removeTags) {
-//                while((idx = sb.indexOf(tags[0])) > 0) {
-//                    String part1 = sb.substring(0, idx);
-//                    String part2 = sb.substring(sb.indexOf(">", idx) + 1, sb.indexOf(tags[1]));
-//                    String part3 = sb.substring(sb.indexOf(tags[1]) + tags[1].length());
-//                    
-//                    sb.setLength(0);
-//                    sb.append(part1);
-//                    sb.append(part2);
-//                    sb.append(part3);
-//                }
-//            }
-            
             s = sb.toString();
             
             //perform specific fixes
@@ -208,7 +194,6 @@ public class HtmlUtils {
             logger.error(e, e);
         }
 
-        Utilities.writeToFile(s.getBytes(), "c:/share/temp.html");
         in.close();
         
         return document;
