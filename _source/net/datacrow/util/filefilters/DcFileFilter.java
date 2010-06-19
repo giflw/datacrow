@@ -51,6 +51,9 @@ public class DcFileFilter extends javax.swing.filechooser.FileFilter {
      */
     @Override
     public boolean accept(File file) {
+        
+        if (file == null || file.toString() == null) return false;
+        
         if (file.isDirectory()) {
             return true;
         } else {
