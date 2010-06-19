@@ -1018,9 +1018,6 @@ public class DataManager {
     public void initialize() {
         boolean gracefulShutdown = DcSettings.getBoolean(DcRepository.Settings.stGracefulShutdown);
         
-        useCache = false;
-        saveCache = false;
-        
         if (!gracefulShutdown || !useCache || !deserialize()) {
             long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             loadFromDB();
@@ -1052,7 +1049,6 @@ public class DataManager {
     
     public static void serialize() {
         try {
-            saveCache = false;
             if (saveCache) {
                 logger.info(DcResources.getText("msgWritingItemCache"));
                 CacheWriter writer = new CacheWriter();

@@ -472,6 +472,13 @@ public class DataCrow {
             System.out.println("Data Crow could not be started: " + e);
             e.printStackTrace();
             new NativeMessageBox("Error", "Data Crow could not be started: " + e);
+            
+            try {
+                DcSettings.set(DcRepository.Settings.stGracefulShutdown, Boolean.FALSE);
+                DcSettings.save();
+            } catch (Exception ignore) {}
+            
+            System.exit(0);
         }
     }
     
