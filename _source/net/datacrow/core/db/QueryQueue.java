@@ -159,6 +159,7 @@ public class QueryQueue extends Thread {
                 ps.execute();
             } catch (SQLException e) {
                 success = false;
+                logger.error(e);
                 logger.error("Error while executing query " + ps, e);
             } finally {
                 close(ps);
@@ -174,6 +175,7 @@ public class QueryQueue extends Thread {
                 ps.execute();
             } catch (SQLException e) {
                 success = false;
+                logger.error(e);
                 logger.error("Error while executing query " + ps, e);
             } finally {
                 close(ps);
@@ -202,6 +204,7 @@ public class QueryQueue extends Thread {
                 
                 close(ps);
             } catch (SQLException e) {
+                logger.error(e);
                 logger.error("Error while closing result set", e);
             }
         }

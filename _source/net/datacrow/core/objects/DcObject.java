@@ -909,6 +909,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                     value.clear(nochecks);
                 }
             }
+            markAsUnchanged();
         }
     }
 

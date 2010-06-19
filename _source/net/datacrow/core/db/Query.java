@@ -144,6 +144,108 @@ public class Query {
             logger.debug("Query was generated in " + (end - start) + "ms");
         }
     } 
+
+//    /**
+//     * Constructs a new Query object from a data filter.
+//     * 
+//     * @deprecated 
+//     */
+//    @SuppressWarnings("unchecked")
+//    public Query(DataFilter filter, Requests requests) throws SQLException {
+//        
+//        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+//        
+//        setSilence(true);
+//        
+//        this.module = filter.getModule();
+//        this.requests = requests;
+//        
+//        Collection<Object> values = new ArrayList<Object>();
+//        StringBuffer where = new StringBuffer();
+//        
+//        DcModule module;
+//        DcField field;
+//        Object value;
+//        int operator;
+//        
+//        int counter = 0;
+//        for (DataFilterEntry entry : filter.getEntries()) {
+//            module = DcModules.get(entry.getModule());
+//            field = module.getField(entry.getField());
+//            operator = entry.getOperator().getIndex();
+//            value = null;//getQueryValue(entry.getValue(), field);
+//            
+//            if (counter > 0) where.append(entry.isAnd() ? " AND " : " OR ");
+//            
+//            if (field.getValueType() == DcRepository.ValueTypes._STRING)
+//                where.append("UPPER(" + module.getTableShortName() + "." + field.getDatabaseFieldName() + ")");
+//            else
+//                where.append(field.getDatabaseFieldName());
+//            
+//            if (    operator == Operator.CONTAINS.getIndex() || 
+//                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+//                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
+//                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
+//
+//                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+//                    
+//                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+//                        operator == Operator.NOT_EQUAL_TO.getIndex()) 
+//                        where.append(" NOT");
+//                    
+//                    where.append(" IN (");
+//                    
+//                    int counter2 = 0;
+//                    for (DcObject o : (Collection<DcObject>) value) {
+//                        if (counter > 0) where.append(",");
+//                        where.append("?");
+//                        values.add(o);
+//                        counter2++;
+//                    }
+//
+//                    where.append(")");
+//
+//                } else {
+//                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) where.append(" NOT");
+//                    where.append(" LIKE UPPER(?)");
+//                    values.add("%" + value + "%");
+//                }
+//                
+//            } else if (operator == Operator.ENDS_WITH.getIndex()) {
+//                where.append(" LIKE UPPER(?)");
+//                values.add("%" + value);
+//            } else if (operator == Operator.EQUAL_TO.getIndex()) {
+//                where.append(" = ?");
+//                values.add(value);
+//            } else if (operator == Operator.BEFORE.getIndex() ||
+//                       operator == Operator.LESS_THEN.getIndex()) {
+//                where.append(" < ?");
+//                values.add(value);
+//            } else if (operator == Operator.AFTER.getIndex() ||
+//                       operator == Operator.GREATER_THEN.getIndex()) {
+//                where.append(" > ?");
+//                values.add(value);
+//            } else if (operator == Operator.IS_EMPTY.getIndex()) {
+//                where.append(" IS NULL");
+//            } else if (operator == Operator.IS_FILLED.getIndex()) {
+//                where.append(" IS NOT NULL");
+//            } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
+//                where.append(" <> ?");
+//                values.add(value);
+//            } else if (operator == Operator.STARTS_WITH.getIndex()) {
+//                where.append(" LIKE UPPER(?)");
+//                values.add(entry.getValue() + "%");
+//            }
+//            counter++;
+//        }
+//        
+//        //this.queries = getSelectQueries(DcModules.get(filter.getModule()).getItem(), where, values);
+//        
+//        if (logger.isDebugEnabled()) {
+//            long end = new Date().getTime();
+//            logger.debug("Query was generated in " + (end - start) + "ms");
+//        }
+//    }
     
     public List<PreparedStatement> getQueries() {
         return queries;
