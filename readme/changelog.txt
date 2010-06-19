@@ -6,6 +6,7 @@ Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: moderate]
 - Unlikely but possible errors when saving child items.
 - Lend / borrowed grammar mistakes.
 - Is Filled and Is Empty operators have been corrected and now work for all fields.
+- Can now filter on "Not yet rated".
 
 [Changed]
 - Added additional help (explanation on default modules).
