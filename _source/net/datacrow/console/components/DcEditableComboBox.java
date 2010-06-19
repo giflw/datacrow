@@ -32,7 +32,7 @@ import net.datacrow.core.resources.DcResources;
 public class DcEditableComboBox extends DcComboBox {
 
     public DcEditableComboBox() {
-        super(new Object[] {" ", DcResources.getText("lblEmptySearchValue")});
+        super(new Object[] {DcResources.getText("lblIsFilled"),DcResources.getText("lblIsEmpty")});
         setFont(ComponentFactory.getStandardFont());
         setRenderer(ComboBoxRenderer.getInstance());        
         setEditable(true);

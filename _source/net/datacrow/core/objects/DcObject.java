@@ -561,8 +561,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * original values! (use {@link #reload()})
      */
     public void markAsUnchanged() {
-        for (DcValue value : values.values())
-            value.setChanged(false);
+        try {
+            for (DcValue value : values.values())
+                value.setChanged(false);
+        } catch (Exception ignore) {}
         
         // 22032008: Removed "markAsUnchanged" on child objects!
         // this broke saving the permissions (and possibly other item save's).

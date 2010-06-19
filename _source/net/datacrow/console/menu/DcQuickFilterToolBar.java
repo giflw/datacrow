@@ -153,10 +153,10 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         if (value != null && !value.equals("")) {
             Operator operator = Operator.CONTAINS;
             
-            if (value.equals(DcResources.getText("lblEmptySearchValue"))) {
+            if (value.equals(DcResources.getText("lblIsEmpty"))) {
                 operator = Operator.IS_EMPTY;
                 value = null;
-            } else if (value.equals(DcResources.getText("lblFilledSearchValue"))) {
+            } else if (value.equals(DcResources.getText("lblIsFilled"))) {
                 operator = Operator.IS_FILLED;
                 value = null;
             } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
@@ -211,8 +211,8 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
 
         comboCriteria.setEnabled(true);
         
-        comboCriteria.addItem(DcResources.getText("lblFilledSearchValue"));
-        comboCriteria.addItem(DcResources.getText("lblEmptySearchValue"));
+        comboCriteria.addItem(DcResources.getText("lblIsFilled"));
+        comboCriteria.addItem(DcResources.getText("lblIsEmpty"));
 
         revalidate();
     }

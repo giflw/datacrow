@@ -282,7 +282,7 @@ public class Query {
     }
     
     private boolean isEmpty(Object o) {
-        String emptyValue = DcResources.getText("lblEmptySearchValue");
+        String emptyValue = DcResources.getText("lblIsEmpty");
         return o == null || o.equals(emptyValue) || o.equals("0") || o.equals("NULL");
     }
 

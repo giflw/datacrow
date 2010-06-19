@@ -56,7 +56,7 @@ public class RatingComboBoxRenderer extends DcLabel implements ListCellRenderer 
         setText("");
         setPreferredSize(new Dimension(100, ComponentFactory.getPreferredFieldHeight()));
         
-        String emptyValue = DcResources.getText("lblEmptySearchValue");
+        String emptyValue = DcResources.getText("lblIsEmpty");
         if (value == null || value.equals(Long.valueOf(-1))) {
             setText(" ");
             setIcon(null);

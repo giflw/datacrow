@@ -5,6 +5,7 @@
     <tocitem target="dc.general.introduction" text="Introduction">
       <tocitem target="dc.general.featurelist" text="Feature list"/>
       <tocitem target="dc.general.starting" text="Starting Data Crow"/>  
+      <tocitem target="dc.general.defaultmodules" text="Default Modules"/>  
     </tocitem>      
 
     <tocitem target="dc.general.screenlayout" text="Main Window">

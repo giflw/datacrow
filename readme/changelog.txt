@@ -1,10 +1,14 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.16  [Release on June xx 2010] [testing: high] [target: moderate]
+Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: moderate]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Possible errors when saving child items.
+- Unlikely but possible errors when saving child items.
 - Lend / borrowed grammar mistakes.
+- Is Filled and Is Empty operators have been corrected and now work for all fields.
+
+[Changed]
+- Added additional help (explanation on default modules).
 
 
 -----------------------------------------------------------------------------------------
