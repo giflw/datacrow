@@ -120,6 +120,11 @@ public enum Operator {
             operators.add(EQUAL_TO);
             operators.add(NOT_EQUAL_TO);
         }
+
+        if (field.getValueType() != DcRepository.ValueTypes._BOOLEAN) {
+            operators.add(IS_EMPTY);
+            operators.add(IS_FILLED);
+        }
         
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
             operators.add(IS_EMPTY);
@@ -131,8 +136,6 @@ public enum Operator {
             operators.add(LESS_THEN);
             operators.add(GREATER_THEN);
         } else if (field.getValueType() != DcRepository.ValueTypes._BOOLEAN) {
-            operators.add(IS_EMPTY);
-            operators.add(IS_FILLED);
             
             if (field.getValueType() != DcRepository.ValueTypes._LONG &&
             	field.getValueType() != DcRepository.ValueTypes._DATE) {
