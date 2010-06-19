@@ -535,10 +535,15 @@ public class Query {
 
     private Object getQueryValue(DcObject dco, int index) {
         Object value = dco.getValue(index);
+        
         if (Utilities.isEmpty(value))
             value = null;
         else if (value instanceof DcObject)
-            value = ((DcObject) value).getID();
+            value = Long.valueOf(((DcObject) value).getID());
+        else if ((dco.getField(index).getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
+                  dco.getField(index).getValueType() == DcRepository.ValueTypes._LONG) &&
+                 value instanceof String)
+            value = Long.valueOf((String) value);
 
         return value;
     }    
