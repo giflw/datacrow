@@ -25,15 +25,11 @@
 
 package net.datacrow.console.components.panels.tree;
 
-import java.util.List;
-
 import javax.swing.JMenuBar;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import net.datacrow.console.menu.ContainerTreePanelMenuBar;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 
 public class ContainerTreePanel extends TreePanel {
@@ -124,33 +120,33 @@ public class ContainerTreePanel extends TreePanel {
     }
     
     private void createLeafs() {
-        build();
-        
-        DcModule module = DcModules.get(DcModules._CONTAINER);
-        boolean flatView = module.getSettings().getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
-
-        tree.setEnabled(false);
-        setListeningForSelection(false);
-        setSaveChanges(false);
-        
-        List<Long> keys = getValues();
-        
-        for (Long key : keys) {
-            //if (flatView || ((Container) dco).getParentContainer() == null)
-                addElement(key, top, 0);
-        }
-
-        setListeningForSelection(true);
-        setSaveChanges(true);
-        tree.setEnabled(true);
-
-        expandAll();
-        
-        if (isShowing())
-            setDefaultSelection();
-        
-        revalidate();
-        repaint();
+//        build();
+//        
+//        DcModule module = DcModules.get(DcModules._CONTAINER);
+//        boolean flatView = module.getSettings().getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
+//
+//        tree.setEnabled(false);
+//        setListeningForSelection(false);
+//        setSaveChanges(false);
+//        
+//        List<Long> keys = getValues();
+//        
+//        for (Long key : keys) {
+//            //if (flatView || ((Container) dco).getParentContainer() == null)
+//                addElement(key, top, 0);
+//        }
+//
+//        setListeningForSelection(true);
+//        setSaveChanges(true);
+//        tree.setEnabled(true);
+//
+//        expandAll();
+//        
+//        if (isShowing())
+//            setDefaultSelection();
+//        
+//        revalidate();
+//        repaint();
     }
     
     @Override

@@ -1608,7 +1608,10 @@ public class DcModule implements Comparable<DcModule> {
         return _LOAD_BEHAVIOR_MINIMAL;
     }
     
+    /**
+     * Indicates whether the items of this module will be cached or not
+     */
     public boolean isCached() {
-        return isTopModule() ? true : false;
+        return false;
     }
 }

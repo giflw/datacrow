@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
 public abstract class NodeElement {

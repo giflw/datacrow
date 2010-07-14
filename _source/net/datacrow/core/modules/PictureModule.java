@@ -119,9 +119,4 @@ public class PictureModule extends DcModule {
     public int getLoadBehavior() {
         return DcModule._LOAD_BEHAVIOR_FULL;
     }
-    
-    @Override
-    public boolean isCached() {
-        return false;
-    }    
 }

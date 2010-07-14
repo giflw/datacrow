@@ -698,18 +698,9 @@ public class DataManager {
         Collection<DataFetcher> fetchers2 = new ArrayList<DataFetcher>();
 
         for (DcModule module : DcModules.getAllModules()) {
-            
-            if (module.isAbstract() || !module.isCached()) continue;
-            
-            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+            if (module.isCached()) {
                 items.put(module.getIndex(), null);
-                fetchers1.add(new DataFetcher(module, group));        
-            
-            } else if (module.getIndex() == DcModules._USER ||
-                       module.getIndex() == DcModules._CONTACTPERSON) {
-                
-                items.put(module.getIndex(), null);
-                fetchers2.add(new DataFetcher(module, group));    
+                fetchers1.add(new DataFetcher(module, group));
             }
         }        
         
