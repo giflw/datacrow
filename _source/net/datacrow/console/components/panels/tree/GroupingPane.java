@@ -29,7 +29,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -42,7 +41,6 @@ import net.datacrow.core.modules.DcModules;
 public class GroupingPane extends JPanel {
 
     private Collection<TreePanel> panels = new ArrayList<TreePanel>();
-    private List<Long> keys = new ArrayList<Long>();
     
     private int module;
     private MasterView view;
@@ -62,6 +60,11 @@ public class GroupingPane extends JPanel {
         build();
     }
     
+    public int getItemCount() {
+        // TODO: implement
+        return 0;
+    }
+    
     public int getModule() {
         return module;
     }
@@ -70,12 +73,11 @@ public class GroupingPane extends JPanel {
         return view;
     }
     
-    public void add(List<Long> keys) {
-        this.keys.clear();
-        this.keys = keys;
-
-        for (TreePanel tp : panels)
+    public void load() {
+        for (TreePanel tp : panels) {
+            tp.clear();
             tp.createTree();
+        }
     }
 
     public TreePanel getActiveTree() {
@@ -87,60 +89,15 @@ public class GroupingPane extends JPanel {
         return null;
     }
     
-    public void add(Long key) {
-        if (!keys.contains(key)) {
-            keys.add(key);
-            
-            for (TreePanel tp : panels)
-                tp.revalidateTree(key, TreePanel._OBJECT_ADDED);
-        }
-    }
-    
-    public int getItemCount() {
-        return keys.size();
-    }
-    
     public void groupBy() {
         for (TreePanel tp : panels)
             tp.groupBy();
-    }
-    
-    public List<Long> getValues() {
-        return new ArrayList<Long>(keys);
     }
     
     public void saveChanges(boolean b) {
         for (TreePanel tp : panels)
             tp.setSaveChanges(b);
     }
-    
-    public void reset() {
-        // TODO: implement
-        
-        // avoid filling the view when it isn't visible.
-//        if (DcModules.getCurrent().getIndex() == getModule()) {
-//            add(DataManager.get(getModule(), DataFilters.getCurrent(getModule())));
-//
-//            for (TreePanel tp : panels)
-//                tp.reset();
-//        }
-    }
-    
-    protected void remove(Long key) {
-        if (keys.contains(key)) {
-            keys.remove(key);
-            for (TreePanel tp : panels)
-                tp.revalidateTree(key, TreePanel._OBJECT_REMOVED);
-        }
-    }    
-    
-    public void update(Long key) {
-        int pos = keys.indexOf(key);
-        if (pos != -1) {
-            for (TreePanel tp : panels)
-                tp.revalidateTree(key, TreePanel._OBJECT_UPDATED);
-        }
-    } 
     
     public boolean isActive() {
         boolean active = true;

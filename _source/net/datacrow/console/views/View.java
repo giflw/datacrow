@@ -554,7 +554,7 @@ public class View extends DcPanel implements ListSelectionListener {
             if (!treeVisibible && treeVisibibleSett)
                 groupingPane.groupBy();
             else if (treeVisibible && !treeVisibibleSett)
-                groupingPane.reset();
+                groupingPane.load();
             
             groupingPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
         }

@@ -169,15 +169,9 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     public void ignoreEdit(boolean b) {}
     
-    public void undoChanges() {
-        for (DcObject dco : getItems())
-            dco.markAsUnchanged();
-    }
+    public void undoChanges() {}
 
     public boolean isChangesSaved() {
-        for (DcObject dco : getItems())
-            if (dco.isChanged()) return false;
-        
         return true;
     }    
     

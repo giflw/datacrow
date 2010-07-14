@@ -88,10 +88,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         return gp.getView();
     }
     
-    public List<Long> getValues() {
-        return gp.getValues();
-    }
-    
     public boolean isListeningForSelection() {
         return listenForSelection;
     }
@@ -208,27 +204,29 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         if (tree == null)
             return;
 
-        for (int i = 0; i < top.getChildCount(); i++) {
-            DefaultMutableTreeNode pn = (DefaultMutableTreeNode) top.getChildAt(i);
-            if (pn.getUserObject() != null) {
-                ((NodeElement) pn.getUserObject()).clear();
-                for (int j = 0; j < pn.getChildCount(); j++) {
-                    DefaultMutableTreeNode cn = (DefaultMutableTreeNode) pn.getChildAt(j);
-                    if (cn.getUserObject() != null)
-                        ((NodeElement) cn.getUserObject()).clear();
+        if (top != null) {
+            for (int i = 0; i < top.getChildCount(); i++) {
+                DefaultMutableTreeNode pn = (DefaultMutableTreeNode) top.getChildAt(i);
+                if (pn.getUserObject() != null) {
+                    ((NodeElement) pn.getUserObject()).clear();
+                    for (int j = 0; j < pn.getChildCount(); j++) {
+                        DefaultMutableTreeNode cn = (DefaultMutableTreeNode) pn.getChildAt(j);
+                        if (cn.getUserObject() != null)
+                            ((NodeElement) cn.getUserObject()).clear();
+                    }
                 }
             }
-        }
         
-        ComponentFactory.clean(tree);
-        tree.removeTreeSelectionListener(this);
-        tree = null;
+            ComponentFactory.clean(tree);
+            tree.removeTreeSelectionListener(this);
+            tree = null;
+
+            top.removeAllChildren();
+            top = null;
+        }
         
         if (scroller != null)
             remove(scroller);
-        
-        top.removeAllChildren();
-        top = null;
         
         currentUserObject = null;
         

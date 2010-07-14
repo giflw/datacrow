@@ -1,26 +1,29 @@
 package net.datacrow.console.components.panels.tree;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
 public abstract class NodeElement {
-        
+
+    protected DataFilter df;
     protected Object key;
     protected ImageIcon icon;
     protected int module;
-    
-    private List<Long> keys = new ArrayList<Long>();
+
+    private int count;
+    private int i = 0;
     
     public NodeElement(int module, Object key, ImageIcon icon) {
         this.module = module;
         this.key = key;     
         this.icon = icon;
     }
-    
+
     public int getModule() {
         return module;
     }
@@ -31,14 +34,6 @@ public abstract class NodeElement {
 
     public ImageIcon getIcon() {
         return icon;
-    }
-    
-    public boolean contains(Long key) {
-        return keys != null ? keys.contains(key) : false;
-    }
-    
-    public int size() {
-        return keys == null ? 0 : keys.size();
     }
     
     public abstract List<Long> getItems();
@@ -57,39 +52,19 @@ public abstract class NodeElement {
     }
     
     public void clear() {
+        if (key instanceof DcObject)
+            ((DcObject) key).release();
+        
         key = null;
-        
-        if (keys != null)
-            keys.clear();
-        
-        keys = null;
+        icon = null;
     }
 
-    int count;
-    int i = 0;
-    
     @Override
     public String toString() {
-        
-        
-        
-        
-        if (keys == null || keys.size() == 1) {
-            return getKey();
-        } else {
-            if (i == 0)
-                count = getCount();
-            
-            
-            i++;
-            
-            if (i > 20)
-                i = 0;
-            
-            return getKey() + " (" + String.valueOf(count) + ")";
-        }
-        
-       
+        count = i == 0 ? getCount() : count;
+        i++;
+        i = i > 20 ? 0 : i;
+        return getKey() + " (" + String.valueOf(count) + ")";
     }
 
     @Override

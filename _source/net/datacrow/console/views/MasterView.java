@@ -153,9 +153,6 @@ public class MasterView {
     }
 
     public void updateItem(Long ID, DcObject dco) {
-        if (groupingPane != null)
-            groupingPane.update(ID);
-        
         for (View view : getViews())
     		view.updateItem(ID, dco);
     }    
@@ -181,29 +178,19 @@ public class MasterView {
     }
     
     public void add(DcObject dco) {
-        if (groupingPane != null) {
-            groupingPane.add(dco.getID());
-        } else {
+        if (groupingPane == null) {
             for (View view : getViews())
                 view.add(dco);
         }
     }
     
     public void bindData(List<Long> keys) {
-        
-        for (View view : getViews())
-            view.add(keys);
-        
-        
-//        if (groupingPane != null) {
-//            for (View view : getViews())
-//                view.cancelCurrentTask();
-//
-//            groupingPane.add(keys);
-//        } else {
-//            for (View view : getViews())
-//                view.add(keys);
-//        } 
+        if (groupingPane != null) {
+            groupingPane.load();
+        } else { 
+            for (View view : getViews())
+                view.add(keys);
+        }
     }
     
     public Collection<View> getViews() {

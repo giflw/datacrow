@@ -84,8 +84,6 @@ public class GroupByDialog extends DcDialog implements ActionListener {
         
         DcModules.get(module).setSetting(DcRepository.ModuleSettings.stGroupedBy, groupBy);
         DcModules.get(module).getCurrentSearchView().groupBy();
-
-        //DcModules.get(module).getSearchView().sort();
     }
     
     private void build() {

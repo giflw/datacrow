@@ -107,14 +107,14 @@ public class FieldTreePanel extends TreePanel {
     
     @Override
     protected void createTree() {
-        tree.setEnabled(false);
+        
         fields = (int[]) DcModules.get(getModule()).getSetting(DcRepository.ModuleSettings.stGroupedBy);
         
         build();
+        
         DefaultMutableTreeNode top = getTopNode();
         
         if (fields != null) {
-            
             DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
             DcModule module = DcModules.get(getModule());
 
@@ -177,13 +177,13 @@ public class FieldTreePanel extends TreePanel {
         if (isShowing())
             setDefaultSelection();
         
-        // if the tree is not active (at all) make sure the view is at least filled.
-        // Fix for: 2831212
-        if (!isActive()) {
-            setListeningForSelection(true);
-            tree.setSelectionInterval(0, 0);
-        }
-        
+//        // if the tree is not active (at all) make sure the view is at least filled.
+//        // Fix for: 2831212
+//        if (!isActive()) {
+//            setListeningForSelection(true);
+//            tree.setSelectionInterval(0, 0);
+//        }
+//        
         tree.setEnabled(true);
         revalidate();
         repaint();
@@ -209,8 +209,5 @@ public class FieldTreePanel extends TreePanel {
     }
     
     @Override
-    protected void addElement(Long key, DefaultMutableTreeNode node, int level) {
-        // TODO Auto-generated method stub
-        
-    }
+    protected void addElement(Long key, DefaultMutableTreeNode node, int level) {}
 }
