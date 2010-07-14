@@ -32,7 +32,6 @@ import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.ModuleJar;
@@ -91,7 +90,6 @@ public class AlterModuleWizard extends Wizard {
                 }
             }
 
-            DataManager.clearCache();
             close();
             
         } catch (Exception e) {

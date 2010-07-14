@@ -32,7 +32,7 @@ import net.datacrow.core.wf.requests.Requests;
 
 public class ChildForm extends DcMinimalisticItemView {
 
-    private String parentID;
+    private Long parentID;
     private final int parentModuleIdx;
     
     public ChildForm(DcObject parent, int module, boolean readonly) {
@@ -53,7 +53,7 @@ public class ChildForm extends DcMinimalisticItemView {
     @Override
     public void loadItems() {
         list.clear();
-        list.add(DataManager.getObject(parentModuleIdx, parentID).getChildren());
+        list.add(DataManager.getItem(parentModuleIdx, parentID).getChildren());
     }
     
     @Override

@@ -34,6 +34,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -145,7 +146,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
                                             module, part.getField().getIndex(), 
                                             Operator.IS_FILLED, null));
         }
-        DcObject[] eligibleItems = DataManager.get(module, df);
+        List<DcObject> eligibleItems = DataManager.get(module, df);
         Collection<DcObject> result = new ArrayList<DcObject>();
 
         Collection<DcObject> currentItems = new ArrayList<DcObject>(); 

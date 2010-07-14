@@ -157,7 +157,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             if (moduleIdx == -1)
                 return;
             
-            String parentID = dcoOrig.getParentID();
+            Long parentID = dcoOrig.getParentID();
             
             this.dcoOrig = DcModules.get(moduleIdx).getItem();
             this.dco = DcModules.get(moduleIdx).getItem();

@@ -23,60 +23,12 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.lists.elements;
+package net.datacrow.core.objects;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.Collection;
+public interface IReloadableObject {
 
-import javax.swing.JPanel;
-
-import net.datacrow.console.components.DcLabel;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.Picture;
-import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
-
-public class DcTemplateListElement extends DcObjectListElement {
-
-    private JPanel panelInfo;
+    public void load();
     
-    public DcTemplateListElement(int module) {
-        super(module);
-    }
+    public void unload();
     
-    @Override
-    public void setBackground(Color color) {
-        super.setBackground(color);
-        if (panelInfo != null)
-            panelInfo.setBackground(color);
-    }     
-    
-    @Override
-    public Collection<Picture> getPictures() {
-        return new ArrayList<Picture>();
-    }
-
-    @Override
-    public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-        
-        DcTemplate template = (DcTemplate) dco;
-        
-        String label = dco.getDisplayString(DcTemplate._SYS_TEMPLATENAME); 
-        if (template.isDefault()) 
-            label += " (" + DcResources.getText("lblDefault") + ")";
-        
-        DcLabel lbl = new DcLabel(label);
-        lbl.setPreferredSize(new Dimension(800, fieldHeight));
-        lbl.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
-        
-        panelInfo = getPanel();
-        panelInfo.add(lbl);
-        panelInfo.setPreferredSize(new Dimension(800, fieldHeight));
-        add(panelInfo);
-    } 
 }

@@ -27,6 +27,7 @@ package net.datacrow.fileimporters;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -212,11 +213,11 @@ public abstract class FileImporter implements ISynchronizerClient {
                 DataFilterEntry._AND, module, 
                 DcObject._SYS_FILENAME, Operator.EQUAL_TO, filename));
         
-        DcObject[] objects = DataManager.get(module, df);
+        List<DcObject> items = DataManager.get(module, df);
         
-        if (objects.length > 0) {
+        if (items.size() > 0) {
             getClient().addMessage(DcResources.getText("msgSkippingAlreadyImportedFile", 
-                                new String[] {filename, objects[0].toString()}));
+                                new String[] {filename, items.get(0).toString()}));
             
         } else {
             getClient().addMessage(DcResources.getText("msgProcessingFileX", filename));

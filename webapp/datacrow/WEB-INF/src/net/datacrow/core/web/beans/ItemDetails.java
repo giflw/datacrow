@@ -78,7 +78,7 @@ public class ItemDetails extends ItemBean {
 
         wod.initialize(moduleIdx);
         wod.setRowIdx(objects.getData().getRowIndex());
-        wod.setID((String) data.get(data.size() - 1));
+        wod.setID((Long) data.get(data.size() - 1));
         wod.setName(wod.getDcObject().toString());
         wod.load();
         

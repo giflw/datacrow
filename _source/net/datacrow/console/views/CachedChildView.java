@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,7 +49,7 @@ public class CachedChildView extends View implements ActionListener {
     }
     
     @Override
-    public void remove(String[] ids) {
+    public void remove(Long[] ids) {
         super.remove(ids);
         
         DcObject dco = null;
@@ -76,7 +77,7 @@ public class CachedChildView extends View implements ActionListener {
     }
     
     @Override
-    public void add(Collection<DcObject> c) {
+    public void add(List<DcObject> c) {
         for (DcObject dco : c) {
             if (!children.contains(dco)) {
                 //dco.setIDs();
@@ -86,7 +87,7 @@ public class CachedChildView extends View implements ActionListener {
     }
     
     @Override
-    public void setParentID(String ID, boolean show) {
+    public void setParentID(Long ID, boolean show) {
         if (ID != null && (vc.getItemCount() == 0 || !ID.equals(getParentID()))) {
             syncCache();
             super.setParentID(ID, show);
@@ -113,7 +114,7 @@ public class CachedChildView extends View implements ActionListener {
         }
     }
     
-    public void removeChildren(String parentID) {
+    public void removeChildren(Long parentID) {
         Collection<DcObject> c = getChildren(parentID);
         children.removeAll(c);
     }
@@ -121,15 +122,13 @@ public class CachedChildView extends View implements ActionListener {
     @Override
     public void loadChildren() {
         clearView();
-        Collection<DcObject> c = getChildren(getParentID());
-        
-        // direct add, no threads involved.
+        List<DcObject> c = getChildren(getParentID());
         vc.add(c);
     }
     
-    public Collection<DcObject> getChildren(String parentID) {
+    public List<DcObject> getChildren(Long parentID) {
         syncCache();
-        ArrayList<DcObject> c = new ArrayList<DcObject>();
+        List<DcObject> c = new ArrayList<DcObject>();
         for (int i = 0; i < children.size(); i++) {
             DcObject dco = children.get(i);
             if (dco.getParentID().equals(parentID))

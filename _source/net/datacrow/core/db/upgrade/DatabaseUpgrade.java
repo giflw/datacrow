@@ -45,7 +45,6 @@ import net.datacrow.console.windows.log.LogForm;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModule;
@@ -120,7 +119,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             }            
 
             if (upgraded) {
-                DataManager.setUseCache(false);
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
                 new LogForm();
                 DataCrow.showSplashScreen(true);
@@ -699,7 +697,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                         value = StringUtils.capitalize(value);
                     }
     
-                    String refID = getReferenceID(value, refMod);
+                    Long refID = getReferenceID(value, refMod);
                     
                     if (multiRef) {
                         // Create a mapping
@@ -716,7 +714,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                     } else {
                         sql = "UPDATE " + mod.getTableName() + " SET " + mod.getField(fieldIdx).getDatabaseFieldName() + " = ? WHERE ID = ?";
                         PreparedStatement psUpdate = conn.prepareStatement(sql);
-                        psUpdate.setString(1, refID);
+                        psUpdate.setLong(1, refID);
                         psUpdate.setString(2, ID);
                         psUpdate.execute();
                         psUpdate.close();
@@ -743,16 +741,16 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         stmt.close();
     }
     
-    private String getReferenceID(String name, DcModule refMod) throws Exception {
+    private Long getReferenceID(String name, DcModule refMod) throws Exception {
         // check if it already exists
         String sql = "SELECT ID FROM " + refMod.getTableName() + " WHERE UPPER(" + refMod.getField(DcProperty._A_NAME) + ") = UPPER(?)";
         PreparedStatement psRefID = DatabaseManager.getAdminConnection().prepareStatement(sql);
         psRefID.setString(1, name);
         ResultSet rs = psRefID.executeQuery();
 
-        String refID = null;
+        Long refID = null;
         while (rs.next())
-            refID = rs.getString(1);
+            refID = rs.getLong(1);
         
         // if not.. create the value
         if (refID == null) {

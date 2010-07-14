@@ -233,4 +233,14 @@ public class UserModule extends DcParentModule {
     public boolean equals(Object o) {
         return (o instanceof UserModule ? ((UserModule) o).getIndex() == getIndex() : false);
     }     
+    
+    @Override
+    public int getLoadBehavior() {
+        return DcModule._LOAD_BEHAVIOR_FULL;
+    }
+    
+    @Override
+    public boolean isCached() {
+        return false;
+    }        
 }

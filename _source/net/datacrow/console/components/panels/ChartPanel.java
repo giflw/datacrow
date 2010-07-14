@@ -162,11 +162,11 @@ public class ChartPanel extends DcPanel implements ActionListener {
     }
     
     private Collection<String> getUniqueValues(int module, int field) {
-        DcObject[] objects = DataManager.get(module, null);
+        List<DcObject> objects = DataManager.get(module, null);
         
         Collection<String> values = new ArrayList<String>();
-        for (int i = 0; i < objects.length; i++) {
-            String s = objects[i].getDisplayString(field);    
+        for (DcObject dco : objects) {
+            String s = dco.getDisplayString(field);    
             if (!values.contains(s) && s.length() > 0)
                 values.add(s);
         }
@@ -174,10 +174,10 @@ public class ChartPanel extends DcPanel implements ActionListener {
     }   
     
     public static int getCount(int module, DcField field, Object value) {
-        DcObject[] objects = DataManager.get(module, null);
+        List<DcObject> objects = DataManager.get(module, null);
         int count = 0;
-        for (int i = 0; i < objects.length; i++) {
-            String s1 = objects[i].getDisplayString(field.getIndex()); 
+        for (DcObject dco : objects) {
+            String s1 = dco.getDisplayString(field.getIndex()); 
             String s2 = (String) value;
             
             if ((field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION && (s1.equals(s2) || s1.indexOf(s2) >= 0)) ||
@@ -192,9 +192,9 @@ public class ChartPanel extends DcPanel implements ActionListener {
         int module = field.getModule();
         
         if (module != field.getReferenceIdx()) {
-            DcObject[] o = DataManager.get(field.getReferenceIdx(), null);
-            for (int i = 0; i < o.length; i++) 
-                categories.add(o[i].toString());
+            List<DcObject> o = DataManager.get(field.getReferenceIdx(), null);
+            for (DcObject dco : o) 
+                categories.add(dco.toString());
         } else {
             categories = getUniqueValues(module, field.getIndex());
         }
@@ -208,7 +208,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         DataFilter df = new DataFilter(module);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module, field.getIndex(), Operator.IS_EMPTY, null));
         
-        int empty = DataManager.get(field.getModule(), df).length;
+        int empty = DataManager.get(field.getModule(), df).size();
         if (empty > 0) categories.add(DcResources.getText("lblEmpty"));
         
         // create the data map. exclude zero counts

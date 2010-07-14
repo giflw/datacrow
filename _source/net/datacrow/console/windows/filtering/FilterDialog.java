@@ -32,6 +32,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -353,13 +354,13 @@ public class FilterDialog extends DcFrame implements ActionListener {
             DataFilter df = getDataFilter(); 
             DataFilters.setCurrent(module.getIndex(), df);
             
-            DcObject[] result = DataManager.get(module.getIndex(), df);
+            List<DcObject> result = DataManager.get(module.getIndex(), df);
             parent.setStatus(DcResources.getText("msgSearchHasBeenExecuted"));
 
-            if (result.length == 0)
+            if (result.size() == 0)
                 DcModules.getCurrent().getSearchView().clear();
 
-            DataManager.bindData(module.getSearchView(),  result);
+           // DataManager.bindData(module.getSearchView(),  result);
             DataFilters.setCurrent(module.getIndex(), df);
             DataCrow.mainFrame.setSelectedTab(0);   
             

@@ -29,7 +29,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +47,6 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
-import net.datacrow.core.objects.DcObject;
 
 import org.apache.log4j.Logger;
 
@@ -90,8 +88,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         return gp.getView();
     }
     
-    public List<DcObject> getItems() {
-        return gp.getItems();
+    public List<Long> getValues() {
+        return gp.getValues();
     }
     
     public boolean isListeningForSelection() {
@@ -115,8 +113,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             getView().clear(isSaveChanges());
             NodeElement currentNode = (NodeElement) currentUserObject;
             
-            if (currentNode.getValues() != null) {
-                updateView(currentNode.getSortedValues());
+            if (currentNode.getItems() != null) {
+                updateView(currentNode.getItems());
             }
         }
     }    
@@ -177,10 +175,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         }
     }
     
-    protected void updateView(Collection<DcObject> dcos) {
-        getView().getCurrent().add(dcos);  
-        getView().getCurrent().revalidate();
-        getView().getCurrent().repaint(1000);
+    protected void updateView(List<Long> keys) {
+        getView().getCurrent().add(keys);  
     }
     
     public void setDefaultSelection() {
@@ -264,7 +260,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     }     
     
     public void reset() {
-        buildTree();
+        createTree();
     }
     
     protected void setSelected(DefaultMutableTreeNode node) {
@@ -356,26 +352,26 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     protected abstract JMenuBar getMenu();
     protected abstract void createTopNode();
-    protected abstract void buildTree();
-    protected abstract void addElement(DcObject dco, DefaultMutableTreeNode node, int level);
+    protected abstract void createTree();
+    protected abstract void addElement(Long key, DefaultMutableTreeNode node, int level);
     
-    protected void revalidateTree(DcObject dco, int modus) {
+    protected void revalidateTree(Long key, int modus) {
         setListeningForSelection(false);
         setSaveChanges(false);
         
         if (modus == _OBJECT_ADDED && top.getChildCount() == 0) {
-            buildTree();
+            createTree();
             return;
         }
         
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
         if (modus == _OBJECT_REMOVED)
-            removeElement(dco, top);
+            removeElement(key, top);
 
         if (modus == _OBJECT_ADDED || modus == _OBJECT_UPDATED) {
-            removeElement(dco, top);
-            addElement(dco, top, 0);
+            removeElement(key, top);
+            addElement(key, top, 0);
         }
         
         if (logger.isDebugEnabled()) 
@@ -399,54 +395,54 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
      * Removes the item / element from the tree and removes the leaf if necessary.
      * This method is called recursively.
      */
-    protected void removeElement(DcObject dco, DefaultMutableTreeNode parentNode) {
+    protected void removeElement(Long key, DefaultMutableTreeNode parentNode) {
         
-    	DefaultMutableTreeNode parent = parentNode;
-    	
-        if (parent.getUserObject() instanceof NodeElement) {
-            NodeElement elem = (NodeElement) parent.getUserObject();
-            elem.removeValue(dco);
-        }
-        
-        int count = parent.getChildCount();
-        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-        for (int pos = count; pos > 0; pos--) {
-            try {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) parent.getChildAt(pos -1);
-                NodeElement ne = (NodeElement) node.getUserObject();
-                ne.removeValue(dco);
-                if (ne.size() == 0 && node.getChildCount() == 0) {
-                    model.removeNodeFromParent(node);
-                    ne.clear();
-                    
-                	// remove empty branches above (needed for the file tree panel)
-                    DefaultMutableTreeNode parentNode2 = parent;
-                	while (parentNode2 != null) {
-                		if (((NodeElement) node.getUserObject()).size() == 0 && parentNode2.getChildCount() == 0) {
-                			
-                		    DefaultMutableTreeNode newParent = null;
-                			try {
-                			    newParent = (DefaultMutableTreeNode) parentNode2.getParent();
-                			} catch (Exception e) {}
-                			    
-                			try {
-                			    model.removeNodeFromParent(parentNode2);
-                			    parentNode2 = newParent;
-                			} catch (IllegalArgumentException iae) {
-                			    parentNode2 = null;
-                			}
-                		} else {
-                		    parentNode2 = null;
-                		}
-                	}
-                    
-                } else {
-                	removeElement(dco, node);
-                }
-            } catch (Exception e) {
-                logger.error(e, e);
-            }
-        }
+//    	DefaultMutableTreeNode parent = parentNode;
+//    	
+//        if (parent.getUserObject() instanceof NodeElement) {
+//            NodeElement elem = (NodeElement) parent.getUserObject();
+//            elem.removeValue(key);
+//        }
+//        
+//        int count = parent.getChildCount();
+//        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+//        for (int pos = count; pos > 0; pos--) {
+//            try {
+//                DefaultMutableTreeNode node = (DefaultMutableTreeNode) parent.getChildAt(pos -1);
+//                NodeElement ne = (NodeElement) node.getUserObject();
+//                ne.removeValue(key);
+//                if (ne.size() == 0 && node.getChildCount() == 0) {
+//                    model.removeNodeFromParent(node);
+//                    ne.clear();
+//                    
+//                	// remove empty branches above (needed for the file tree panel)
+//                    DefaultMutableTreeNode parentNode2 = parent;
+//                	while (parentNode2 != null) {
+//                		if (((NodeElement) node.getUserObject()).size() == 0 && parentNode2.getChildCount() == 0) {
+//                			
+//                		    DefaultMutableTreeNode newParent = null;
+//                			try {
+//                			    newParent = (DefaultMutableTreeNode) parentNode2.getParent();
+//                			} catch (Exception e) {}
+//                			    
+//                			try {
+//                			    model.removeNodeFromParent(parentNode2);
+//                			    parentNode2 = newParent;
+//                			} catch (IllegalArgumentException iae) {
+//                			    parentNode2 = null;
+//                			}
+//                		} else {
+//                		    parentNode2 = null;
+//                		}
+//                	}
+//                    
+//                } else {
+//                	removeElement(key, node);
+//                }
+//            } catch (Exception e) {
+//                logger.error(e, e);
+//            }
+//        }
     }
     
     /************************************************************************
@@ -476,7 +472,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             currentView.clear(isSaveChanges());
             NodeElement currentNode = (NodeElement) o;
             setSelected(node);
-            updateView(currentNode.getSortedValues());
+            updateView(currentNode.getItems());
         }
     }
 }

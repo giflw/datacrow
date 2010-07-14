@@ -60,9 +60,9 @@ public class FilePatternPart {
         StringBuffer sb = new StringBuffer(prefix);
         
         if (field.getIndex() == dco.getParentReferenceFieldIndex()) {
-            String parentID = (String) dco.getValue(field.getIndex());
+            Long parentID = (Long) dco.getValue(field.getIndex());
             int parentModIdx = dco.getModule().getParent().getIndex();
-            DcObject parent = DataManager.getObject(parentModIdx, parentID);
+            DcObject parent = DataManager.getItem(parentModIdx, parentID);
             sb.append(normalize(parent.toString()));
                  
         } else if (field.getIndex() == DcObject._SYS_FILENAME) {

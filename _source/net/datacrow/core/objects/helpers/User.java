@@ -74,7 +74,7 @@ public class User extends DcObject {
     	super.checkIntegrity();
     	
     	if (!isNew() & isChanged(User._A_LOGINNAME)) {
-    		DcObject original = DataManager.getObject(DcModules._USER, getID());
+    		DcObject original = DataManager.getItem(DcModules._USER, getID());
     		setValue(User._A_LOGINNAME, original.getValue(User._A_LOGINNAME));
     		getValueDef(User._A_LOGINNAME).setChanged(false);
     		throw new ValidationException(DcResources.getText("msgLoginnameIsNotAllowedToChange"));
@@ -93,7 +93,7 @@ public class User extends DcObject {
                                             Operator.EQUAL_TO, 
                                             Boolean.TRUE));
          
-            canBeDeleted = DataManager.get(DcModules._USER, df).length > 1;
+            canBeDeleted = DataManager.get(DcModules._USER, df).size() > 1;
         }
                 
         if (canBeDeleted) {

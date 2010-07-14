@@ -123,13 +123,13 @@ public class LoanPanel extends JPanel implements ActionListener {
         l.release();
     }
     
-    private String getPersonLink(String personID) {
-        DcObject person = DataManager.getObject(DcModules._CONTACTPERSON, personID);
+    private String getPersonLink(Long personID) {
+        DcObject person = DataManager.getItem(DcModules._CONTACTPERSON, personID);
         return person != null ? descriptionPane.createLink(person, person.toString()) : "";
     }
     
     private String getLoanDescription(Loan loan) {
-        String personID = (String) loan.getValue(Loan._C_CONTACTPERSONID);
+        Long personID = (Long) loan.getValue(Loan._C_CONTACTPERSONID);
         boolean available = loan.isAvailable(dco.getID());
         
         String s;
@@ -282,7 +282,7 @@ public class LoanPanel extends JPanel implements ActionListener {
     
     public void lendItems() {
         ContactPerson contactPerson = comboPersons.getSelectedItem() instanceof ContactPerson ? (ContactPerson) comboPersons.getSelectedItem() : null;
-        final String contactPersonID = contactPerson != null ? contactPerson.getID() : null;
+        final Long contactPersonID = contactPerson != null ? contactPerson.getID() : null;
         final Date startDate = (Date) inputStartDate.getValue();
         final Date dueDate = (Date) inputDueDate.getValue();
         
@@ -319,7 +319,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         
                         o.setLoanInformation(currentLoan);
                         
-                        if (currentLoan.getID() != null && currentLoan.getID().length() > 0) 
+                        if (currentLoan.getID() != null) 
                         	currentLoan.saveUpdate(true);
                         else 
                             currentLoan.saveNew(true);

@@ -34,7 +34,6 @@ import java.util.Collection;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.MusicTrack;
 
@@ -42,9 +41,8 @@ public class DcMusicTrackListElement extends DcObjectListElement {
 
     private JPanel panelInfo;
     
-    public DcMusicTrackListElement(DcObject dco) {
-        super(dco);
-        build();
+    public DcMusicTrackListElement(int module) {
+        super(module);
     }
     
     @Override

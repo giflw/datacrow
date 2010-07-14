@@ -123,15 +123,15 @@ public class ItemRelate extends DcBean {
         VariableResolver vr = fc.getApplication().getVariableResolver();
         DcReferences references = (DcReferences) vr.resolveVariable(fc, "references");
         
-        String[] keys = references.getKeys();
+        Long[] keys = references.getKeys();
         
         DcWebObject wod = getParentObject();
         DcObject dco = wod.getDcObject();
         dco.setValue(references.getFieldIdx(), null);
 
         int referenceModIdx = dco.getField(references.getFieldIdx()).getReferenceIdx();
-        for (String key : keys) {
-            DcObject reference = DataManager.getObject(referenceModIdx, key);
+        for (Long key : keys) {
+            DcObject reference = DataManager.getItem(referenceModIdx, key);
             DataManager.createReference(dco, references.getFieldIdx(), reference);
         }
         
@@ -149,7 +149,7 @@ public class ItemRelate extends DcBean {
     
     private void setListItems(DcWebObject wod, DcReferences references, int fieldIdx) {
         int refIdx = DcModules.get(wod.getModule()).getField(fieldIdx).getReferenceIdx();
-        DcObject[] refs = DataManager.get(refIdx, null);
+        List<DcObject> refs = DataManager.get(refIdx, null);
         
         List<SelectItem> values = new ArrayList<SelectItem>();
         for (DcObject reference : refs) {
@@ -163,7 +163,7 @@ public class ItemRelate extends DcBean {
         Collection<DcMapping> currentRefs = (Collection<DcMapping>) wod.getDcObject().getValue(fieldIdx);
         if (currentRefs != null) {
             int counter = 0;
-            String[] keys = new String[currentRefs.size()];
+            Long[] keys = new Long[currentRefs.size()];
             for (DcMapping mapping : currentRefs) {
                 keys[counter++] = mapping.getReferencedObject().getID();
             }

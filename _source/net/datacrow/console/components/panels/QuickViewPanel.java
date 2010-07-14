@@ -188,7 +188,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         try {
             if (DcModules.getCurrent().isAbstract() &&
                 DcModules.getCurrent().getCurrentSearchView().getIndex() == MasterView._TABLE_VIEW) {
-                dco.reload();
+                dco.load();
                 dco.loadChildren();
             }
             
@@ -339,79 +339,86 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     @SuppressWarnings("unchecked")
     protected String addTableRow(String htmlTable, int index, String direction, int maxLength) {
+        
         String table = htmlTable;
-        if (dco.isEnabled(index)) {
-            Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
-            boolean horizontal = direction.equals(_DIRECTION_HORIZONTAL);
-
-            if (!Utilities.isEmpty(dco.getValue(index))) {
-                table += "<tr><td>\n";
-                table += "<b>" + dco.getLabel(index) + "</b>";
-                
-                if (!horizontal) {
-                    table += "</td></tr>";
+        
+        try {
+            
+            if (dco.isEnabled(index)) {
+                Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
+                boolean horizontal = direction.equals(_DIRECTION_HORIZONTAL);
+    
+                if (!Utilities.isEmpty(dco.getValue(index))) {
                     table += "<tr><td>\n";
-                } else {
-                    table += " ";
-                }
-
-                String value = "";
-                
-                // Create links
-                if (dco.getField(index).getFieldType() == ComponentFactory._FILEFIELD ||
-                    dco.getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) { 
-                
-                    String filename = dco.getDisplayString(index);
-                    filename = filename.replaceAll(" ", "%20");
-                    value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(dco.getDisplayString(index) ).getName() + "</a>";
-                } else if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
-                	value = "<a " + Utilities.getHtmlStyle() + "  href=\"" +  dco.getValue(index) + "\">" + DcResources.getText("lblLink") + "</a>";
-                } else if (dco.getField(index).getReferenceIdx() > 0 && 
-                    dco.getField(index).getReferenceIdx() != dco.getModule().getIndex()) {
+                    table += "<b>" + dco.getLabel(index) + "</b>";
                     
-                    if (dco.getField(index).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                        int i = 0;
-                        for (DcObject reference : (Collection<DcObject>) dco.getValue(index)) {
-                            if (i > 0)
-                                value += "&nbsp;/&nbsp;";
-                            
-                            if (reference instanceof DcMapping) 
-                                reference = ((DcMapping) reference).getReferencedObject();
-                            
-                            if (reference == null)
-                                continue;
-                            
-                            value += descriptionPane.createLink(reference, reference.toString());
-                            i++;
-                        }
+                    if (!horizontal) {
+                        table += "</td></tr>";
+                        table += "<tr><td>\n";
                     } else {
-                        Object o = dco.getValue(index);
-                        DcObject reference = o instanceof DcObject ? (DcObject) o : DataManager.getObject(dco.getField(index).getReferenceIdx(), (String) o);
-                        reference = reference == null && o instanceof String ? DataManager.getObjectForString(dco.getField(index).getReferenceIdx(), (String) o) : reference;
-                        value += descriptionPane.createLink(reference, reference.toString());
+                        table += " ";
                     }
-                } else { // Add simple value
-                    value = dco.getDisplayString(index);
+    
+                    String value = "";
                     
-                    if (dco.getField(index).getValueType() == DcRepository.ValueTypes._STRING) {
-                        value = value.replaceAll("[\r\n]", "<br>");
-                        value = value.replaceAll("[\t]", "    ");
+                    // Create links
+                    if (dco.getField(index).getFieldType() == ComponentFactory._FILEFIELD ||
+                        dco.getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) { 
+                    
+                        String filename = dco.getDisplayString(index);
+                        filename = filename.replaceAll(" ", "%20");
+                        value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(dco.getDisplayString(index) ).getName() + "</a>";
+                    } else if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
+                    	value = "<a " + Utilities.getHtmlStyle() + "  href=\"" +  dco.getValue(index) + "\">" + DcResources.getText("lblLink") + "</a>";
+                    } else if (dco.getField(index).getReferenceIdx() > 0 && 
+                        dco.getField(index).getReferenceIdx() != dco.getModule().getIndex()) {
+                        
+                        if (dco.getField(index).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                            int i = 0;
+                            for (DcObject reference : (Collection<DcObject>) dco.getValue(index)) {
+                                if (i > 0)
+                                    value += "&nbsp;/&nbsp;";
+                                
+                                if (reference instanceof DcMapping) 
+                                    reference = ((DcMapping) reference).getReferencedObject();
+                                
+                                if (reference == null)
+                                    continue;
+                                
+                                value += descriptionPane.createLink(reference, reference.toString());
+                                i++;
+                            }
+                        } else {
+                            Object o = dco.getValue(index);
+                            DcObject reference = o instanceof DcObject ? (DcObject) o : DataManager.getItem(dco.getField(index).getReferenceIdx(), (Long) o);
+                            reference = reference == null && o instanceof String ? DataManager.getObjectForString(dco.getField(index).getReferenceIdx(), (String) o) : reference;
+                            value += descriptionPane.createLink(reference, reference.toString());
+                        }
+                    } else { // Add simple value
+                        value = dco.getDisplayString(index);
+                        
+                        if (dco.getField(index).getValueType() == DcRepository.ValueTypes._STRING) {
+                            value = value.replaceAll("[\r\n]", "<br>");
+                            value = value.replaceAll("[\t]", "    ");
+                        }
+                      
+                        if (maxLength > 0)
+                            value = StringUtils.concatUserFriendly(value, maxLength);
+                        
+                        if (font.getStyle() == Font.BOLD) 
+                            value = "<b>" + value + "</b>";
+                        
                     }
-                  
-                    if (maxLength > 0)
-                        value = StringUtils.concatUserFriendly(value, maxLength);
-                    
-                    if (font.getStyle() == Font.BOLD) 
-                        value = "<b>" + value + "</b>";
-                    
+                        
+                    table += value;                
+                    table += "</td></tr>";
+                } else if (dco.getField(index).getValueType() == DcRepository.ValueTypes._PICTURE) {
+                    Picture picture = (Picture) dco.getValue(index);
+                    pictures.add(picture);
                 }
-                    
-                table += value;                
-                table += "</td></tr>";
-            } else if (dco.getField(index).getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) dco.getValue(index);
-                pictures.add(picture);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
         return table;

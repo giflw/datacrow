@@ -46,7 +46,7 @@ public class UserForm extends ItemForm {
         super(false, update, dco, template);
         
         // needed for saving the permissions
-        if (dco.getID() == null || dco.getID().length() == 0)
+        if (dco.getID() == null)
             dco.setIDs();
         
         addPluginPermissionPanel();

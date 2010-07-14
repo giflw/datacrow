@@ -56,14 +56,11 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
     protected static final int field1Length = 300;
     protected static final int field2Length = 120;
     
-    public DcObjectListHwElement(DcObject dco) {
-        super();
-        
-        this.dco = dco;
+    public DcObjectListHwElement(int module) {
+        super(module);
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        build();
     }
-
+    
     @Override
     public void update(DcObject dco) {
         this.dco.copy(dco, true, true);

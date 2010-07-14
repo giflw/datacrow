@@ -33,7 +33,6 @@ import java.util.Collection;
 
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcTextPane;
-import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.lists.DcObjectListComponents;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
@@ -57,8 +56,8 @@ public class DcCardObjectListElement extends DcObjectListElement {
     
     private boolean build = false;
 
-    public DcCardObjectListElement(DcObject dco) {
-        super(dco);
+    public DcCardObjectListElement(int module) {
+        super(module);
         
         setPreferredSize(size);
         setMaximumSize(size);
@@ -170,16 +169,19 @@ public class DcCardObjectListElement extends DcObjectListElement {
       
         try {
             
-            DcObjectList list = (DcObjectList) getParent().getParent();
+//            DcObjectList list = (DcObjectList) getParent().getParent();
           
-            if (list.getView() != null) {
-                list.getView().revalidate();
-                list.getView().repaint(1000);
-            }
+//            if (list.getView() != null) {
+//                list.getView().revalidate();
+//                list.getView().repaint(1000);
+//            }
 
         } catch (Exception e) {
           logger.error("Error while updating the view component (revalidate)", e);
         }
+        
+//        repaint(1000);
+//        revalidate();
     }
     
     @Override

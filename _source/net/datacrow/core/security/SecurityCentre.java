@@ -64,7 +64,7 @@ public class SecurityCentre {
     private static SecurityCentre instance = new SecurityCentre();
     
     // all logged on users
-    private Map<String, SecuredUser> users = new HashMap<String, SecuredUser>();
+    private Map<Long, SecuredUser> users = new HashMap<Long, SecuredUser>();
     
     // the current using, running on this instance
     private User user;
@@ -198,10 +198,8 @@ public class SecurityCentre {
             user.addChild(permission);
         
         try {
-            user.setSynchronizeWithDM(false);
             user.setIDs();
             user.saveNew(false);
-            
             for (DcObject permission : user.getChildren())
                 permission.saveNew(false);
             

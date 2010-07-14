@@ -77,7 +77,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     public void open() {
         DcObject dco = table.getSelectedItem();
         if (dco != null) {
-            dco.reload();
+            dco.load();
             dco.markAsUnchanged();
             DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, true, dco, this);
             itemForm.setVisible(true);
@@ -95,10 +95,10 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         
         List<DcObject> items = new ArrayList<DcObject>();
         for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
-            String ID = (String) loan.getValue(Loan._D_OBJECTID);
+            Long ID = (Long) loan.getValue(Loan._D_OBJECTID);
             for (DcModule module : DcModules.getModules()) {
                 if (module.canBeLend() && !module.isAbstract()) {
-                    DcObject dco = DataManager.getObject(module.getIndex(), ID);
+                    DcObject dco = DataManager.getItem(module.getIndex(), ID);
                     if (dco != null && !items.contains(dco))
                         items.add(dco);
                 }

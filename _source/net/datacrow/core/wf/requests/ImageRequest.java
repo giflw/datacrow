@@ -56,7 +56,7 @@ public class ImageRequest implements IRequest {
 
     private String filename;
     private DcImageIcon icon;
-    private String ID;
+    private Long ID;
     private int modus;
     
     /**
@@ -75,7 +75,7 @@ public class ImageRequest implements IRequest {
      * @param ID The Object ID.
      * @param modus Either {@link #_SAVE} or {@link #_DELETE}.
      */
-    public ImageRequest(String ID, int modus) {
+    public ImageRequest(Long ID, int modus) {
         this.ID = ID;
         this.modus = modus;
     }    
@@ -170,8 +170,8 @@ public class ImageRequest implements IRequest {
 
         private final String id; 
         
-        public Filter(String id) {
-            this.id = id;
+        public Filter(Long id) {
+            this.id = String.valueOf(id);
         }
         
         public boolean accept(File file, String filename) {

@@ -27,10 +27,9 @@ package net.datacrow.core.objects;
 
 import javax.swing.ImageIcon;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.core.data.DataManager;
-import net.datacrow.util.Utilities;
+
+import org.apache.log4j.Logger;
 
 /**
  * A mapping represents a many to many relationship.
@@ -75,6 +74,16 @@ public class DcMapping extends DcObject {
         return null;
     }
     
+    @Override
+    public void release() {
+        super.release();
+        
+        if (referencedObj != null)
+            referencedObj.release();
+            
+        referencedObj = null;
+    }
+    
     /**
      * Sets the referenced object (the child).
      * @param referencedObj
@@ -87,7 +96,7 @@ public class DcMapping extends DcObject {
      * Retrieves the referenced object.
      */
     public DcObject getReferencedObject() {
-        referencedObj = referencedObj == null ? DataManager.getObject(getReferencedModuleIdx(), getReferencedId()) : referencedObj;
+        referencedObj = referencedObj == null ? DataManager.getItem(getReferencedModuleIdx(), getReferencedId()) : referencedObj;
         return referencedObj;
     }
     
@@ -115,21 +124,8 @@ public class DcMapping extends DcObject {
     /**
      * The object ID of the referenced item.
      */
-    public String getReferencedId() {
-        String id = getValueDef(_B_REFERENCED_ID).getValueAsString();
-        
-        if (!Utilities.isEmpty(id)) {
-            try {
-                Long.parseLong(id);
-            } catch (Exception e) {
-                logger.warn("Invalid ID for reference in mapping to item " + referencedObj + ", module " + getModule(), e);
-                id = referencedObj.getID();
-                logger.warn("Invalid ID corrected to " + id);
-                setValue(_B_REFERENCED_ID, id);
-            }
-        }
-        
-        return id;
+    public Long getReferencedId() {
+        return (Long) getValueDef(_B_REFERENCED_ID).getValue();
     }
     
     @Override

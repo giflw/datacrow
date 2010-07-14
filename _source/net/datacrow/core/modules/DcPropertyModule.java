@@ -25,8 +25,6 @@
 
 package net.datacrow.core.modules;
 
-import java.util.List;
-
 import javax.swing.ImageIcon;
 
 import net.datacrow.console.ComponentFactory;
@@ -35,15 +33,10 @@ import net.datacrow.console.components.DcReferencesField;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.db.Query;
-import net.datacrow.core.db.QueryOptions;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
-
-import org.apache.log4j.Logger;
 
 /**
  * A property module is the simplest module type. <br>
@@ -62,8 +55,6 @@ public class DcPropertyModule extends DcModule {
 
     private static final long serialVersionUID = -1481435217423089270L;
 
-    private static Logger logger = Logger.getLogger(DcPropertyModule.class.getName());
-    
     protected DcMinimalisticItemView form;
     
     /**
@@ -121,24 +112,6 @@ public class DcPropertyModule extends DcModule {
         return true;
     }
 
-    /**
-     * Loads the default data. Default data is inserted for new installation.
-     */
-    @Override
-    public List<DcObject> loadData() {
-        try {
-            QueryOptions options = new QueryOptions(new DcField[] {getField(DcProperty._A_NAME)}, true, false);
-            DcObject dco = getItem();
-            Query qry = new Query(Query._SELECT, dco, options, null);
-            List<DcObject> items = DatabaseManager.executeQuery(qry);
-            dco.release();
-            return items;
-        } catch (Exception e) {
-            logger.error("Could not load data for module " + getLabel(), e);
-        }
-        return null;
-    }    
-    
     /**
      * Retrieves the index of the field on which is sorted by default.  
      * Always returns the name field. 
@@ -223,5 +196,15 @@ public class DcPropertyModule extends DcModule {
     @Override
     public boolean equals(Object o) {
         return (o instanceof DcPropertyModule ? ((DcPropertyModule) o).getIndex() == getIndex() : false);
+    }
+
+    @Override
+    public int getLoadBehavior() {
+        return DcModule._LOAD_BEHAVIOR_FULL;
+    }
+
+    @Override
+    public boolean isCached() {
+        return true;
     }
 }

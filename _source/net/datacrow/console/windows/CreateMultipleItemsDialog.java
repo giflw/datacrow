@@ -85,7 +85,7 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 		DcModule module = DcModules.get(moduleIdx);
 		DcObject dco = module.getItem();
 		if (module.isChildModule()) {
-			String parentID;
+			Long parentID;
 			if (DcSwingUtilities.getRootFrame() instanceof ItemForm)
 				parentID = ((ItemForm) DcSwingUtilities.getRootFrame()).getItem().getID();
 			else

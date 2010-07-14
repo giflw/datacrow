@@ -38,7 +38,10 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -89,7 +92,7 @@ public class Query {
     private boolean bComplyToAllConditions = true;
 
     private List<PreparedStatement> queries;
-    private String objectID;
+    private Long objectID;
 
     private Requests requests;
     
@@ -145,107 +148,127 @@ public class Query {
         }
     } 
 
-//    /**
-//     * Constructs a new Query object from a data filter.
-//     * 
-//     * @deprecated 
-//     */
-//    @SuppressWarnings("unchecked")
-//    public Query(DataFilter filter, Requests requests) throws SQLException {
-//        
-//        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-//        
-//        setSilence(true);
-//        
-//        this.module = filter.getModule();
-//        this.requests = requests;
-//        
-//        Collection<Object> values = new ArrayList<Object>();
-//        StringBuffer where = new StringBuffer();
-//        
-//        DcModule module;
-//        DcField field;
-//        Object value;
-//        int operator;
-//        
-//        int counter = 0;
-//        for (DataFilterEntry entry : filter.getEntries()) {
-//            module = DcModules.get(entry.getModule());
-//            field = module.getField(entry.getField());
-//            operator = entry.getOperator().getIndex();
-//            value = null;//getQueryValue(entry.getValue(), field);
-//            
-//            if (counter > 0) where.append(entry.isAnd() ? " AND " : " OR ");
-//            
-//            if (field.getValueType() == DcRepository.ValueTypes._STRING)
-//                where.append("UPPER(" + module.getTableShortName() + "." + field.getDatabaseFieldName() + ")");
-//            else
-//                where.append(field.getDatabaseFieldName());
-//            
-//            if (    operator == Operator.CONTAINS.getIndex() || 
-//                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
-//                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
-//                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
-//
-//                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-//                    
-//                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
-//                        operator == Operator.NOT_EQUAL_TO.getIndex()) 
-//                        where.append(" NOT");
-//                    
-//                    where.append(" IN (");
-//                    
-//                    int counter2 = 0;
-//                    for (DcObject o : (Collection<DcObject>) value) {
-//                        if (counter > 0) where.append(",");
-//                        where.append("?");
-//                        values.add(o);
-//                        counter2++;
-//                    }
-//
-//                    where.append(")");
-//
-//                } else {
-//                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) where.append(" NOT");
-//                    where.append(" LIKE UPPER(?)");
-//                    values.add("%" + value + "%");
-//                }
-//                
-//            } else if (operator == Operator.ENDS_WITH.getIndex()) {
-//                where.append(" LIKE UPPER(?)");
-//                values.add("%" + value);
-//            } else if (operator == Operator.EQUAL_TO.getIndex()) {
-//                where.append(" = ?");
-//                values.add(value);
-//            } else if (operator == Operator.BEFORE.getIndex() ||
-//                       operator == Operator.LESS_THEN.getIndex()) {
-//                where.append(" < ?");
-//                values.add(value);
-//            } else if (operator == Operator.AFTER.getIndex() ||
-//                       operator == Operator.GREATER_THEN.getIndex()) {
-//                where.append(" > ?");
-//                values.add(value);
-//            } else if (operator == Operator.IS_EMPTY.getIndex()) {
-//                where.append(" IS NULL");
-//            } else if (operator == Operator.IS_FILLED.getIndex()) {
-//                where.append(" IS NOT NULL");
-//            } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
-//                where.append(" <> ?");
-//                values.add(value);
-//            } else if (operator == Operator.STARTS_WITH.getIndex()) {
-//                where.append(" LIKE UPPER(?)");
-//                values.add(entry.getValue() + "%");
-//            }
-//            counter++;
-//        }
-//        
-//        //this.queries = getSelectQueries(DcModules.get(filter.getModule()).getItem(), where, values);
-//        
-//        if (logger.isDebugEnabled()) {
-//            long end = new Date().getTime();
-//            logger.debug("Query was generated in " + (end - start) + "ms");
-//        }
-//    }
+    /**
+     * Constructs a new Query object from a data filter.
+     */
+    @SuppressWarnings("unchecked")
+    public Query(DataFilter filter, Requests requests, int[] fields) throws SQLException {
+        
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        
+        setSilence(true);
+        
+        this.module = filter.getModule();
+        this.requests = requests;
+        
+        Collection<Object> values = new ArrayList<Object>();
+        
+        String columns = "";
+        if (fields != null && fields.length > 0) {
+            for (int field : fields) {
+                if (columns.length() > 0) columns += ", ";
+                columns += DcModules.get(module).getField(field).getDatabaseFieldName();
+            }
+        } else {
+            columns = "*";
+        }
+        
+        
+        StringBuffer sql = new StringBuffer("SELECT " + columns + " FROM " + DcModules.get(module).getTableName());
+        
+        DcModule module;
+        DcField field;
+        Object value;
+        int operator;
+        
+        int counter = 0;
+        for (DataFilterEntry entry : filter.getEntries()) {
+            module = DcModules.get(entry.getModule());
+            field = module.getField(entry.getField());
+            operator = entry.getOperator().getIndex();
+            value = getQueryValue(entry.getValue(), field);
+            
+            if (counter > 0) sql.append(entry.isAnd() ? " AND " : " OR ");
+            
+            if (counter == 0) sql.append(" WHERE ");
+            
+            if (field.getValueType() == DcRepository.ValueTypes._STRING)
+                sql.append("UPPER(" + module.getTableShortName() + "." + field.getDatabaseFieldName() + ")");
+            else
+                sql.append(field.getDatabaseFieldName());
+            
+            if (    operator == Operator.CONTAINS.getIndex() || 
+                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
+                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
+
+                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    
+                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                        operator == Operator.NOT_EQUAL_TO.getIndex()) 
+                        sql.append(" NOT");
+                    
+                    sql.append(" IN (");
+                    
+                    int counter2 = 0;
+                    for (DcObject o : (Collection<DcObject>) value) {
+                        if (counter > 0) sql.append(",");
+                        sql.append("?");
+                        values.add(o);
+                        counter2++;
+                    }
+
+                    sql.append(")");
+
+                } else {
+                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
+                    sql.append(" LIKE UPPER(?)");
+                    values.add("%" + value + "%");
+                }
+                
+            } else if (operator == Operator.ENDS_WITH.getIndex()) {
+                sql.append(" LIKE UPPER(?)");
+                values.add("%" + value);
+            } else if (operator == Operator.EQUAL_TO.getIndex()) {
+                if (value instanceof String)
+                    sql.append(" = UPPER(?)");
+                else 
+                    sql.append(" = ?");
+                
+                values.add(value);
+            } else if (operator == Operator.BEFORE.getIndex() ||
+                       operator == Operator.LESS_THEN.getIndex()) {
+                sql.append(" < ?");
+                values.add(value);
+            } else if (operator == Operator.AFTER.getIndex() ||
+                       operator == Operator.GREATER_THEN.getIndex()) {
+                sql.append(" > ?");
+                values.add(value);
+            } else if (operator == Operator.IS_EMPTY.getIndex()) {
+                sql.append(" IS NULL");
+            } else if (operator == Operator.IS_FILLED.getIndex()) {
+                sql.append(" IS NOT NULL");
+            } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
+                sql.append(" <> ?");
+                values.add(value);
+            } else if (operator == Operator.STARTS_WITH.getIndex()) {
+                sql.append(" LIKE UPPER(?)");
+                values.add(entry.getValue() + "%");
+            }
+            counter++;
+        }
+        
+        PreparedStatement ps = getPreparedStatement(sql.toString());
+        setValues(ps, values);
+        
+        this.queries = new ArrayList<PreparedStatement>();
+        this.queries.add(ps);
+        
+        if (logger.isDebugEnabled()) {
+            long end = new Date().getTime();
+            logger.debug("Query was generated in " + (end - start) + "ms");
+        }
+    }
     
     public List<PreparedStatement> getQueries() {
         return queries;
@@ -499,7 +522,7 @@ public class Query {
                 createReferences(reference);
                 
                 try { 
-                    DcObject existing = DataManager.getObject(reference.getModule().getIndex(), reference.getID());
+                    DcObject existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
                     existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
                     if (existing == null) {
                         // save the value that was set
@@ -527,7 +550,7 @@ public class Query {
                         // also created references for the sub items of this reference...
                         createReferences(reference);
                         
-                        DcObject existing = DataManager.getObject(reference.getModule().getIndex(), reference.getID());
+                        DcObject existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
                         existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
 
                         if (existing == null) {
@@ -636,14 +659,18 @@ public class Query {
     }
 
     private Object getQueryValue(DcObject dco, int index) {
-        Object value = dco.getValue(index);
+        return getQueryValue(dco.getValue(index), dco.getField(index));
+    }
+    
+    private Object getQueryValue(Object o, DcField field) {
+        Object value = o;
         
         if (Utilities.isEmpty(value))
             value = null;
         else if (value instanceof DcObject)
             value = Long.valueOf(((DcObject) value).getID());
-        else if ((dco.getField(index).getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
-                  dco.getField(index).getValueType() == DcRepository.ValueTypes._LONG) &&
+        else if ((field.getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
+                  field.getValueType() == DcRepository.ValueTypes._LONG) &&
                  value instanceof String)
             value = Long.valueOf((String) value);
 
@@ -670,13 +697,17 @@ public class Query {
             tables.add(table);
         }
 
+        
+        DcModule module; 
+        DcObject o;  
         for (String table: tables) {
             StringBuffer columns = new StringBuffer();
             String query = "";
 
+            module = DcModules.getModuleForTable(table);
             if (dco.getModule().isAbstract()) {
                 objects.clear();
-                DcObject o = DcModules.getObjectForTable(table);
+                o = module.getItem();
                 o.copy(dco, true, true);
                 objects.add(o);
             }
@@ -737,7 +768,7 @@ public class Query {
 
             query += "SELECT DISTINCT " + columns + " FROM " + table;
 
-            DcObject objectClone = DcModules.getObjectForTable(table);
+            DcObject objectClone = module.getItem();
             if (objectClone  != null)
                 objectClone.copy(dco, true, true);
 
@@ -822,7 +853,7 @@ public class Query {
         return isBatch() && endOfBatch;
     }
 
-    public String getObjectID() {
+    public Long getObjectID() {
         return objectID;
     }
 

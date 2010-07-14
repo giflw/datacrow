@@ -302,7 +302,7 @@ public class Utilities {
      * Based on date / time + random number
      * @return unique ID as String
      */
-    public static String getUniqueID() {
+    public static Long getUniqueID() {
         long temp = random.nextLong();
         if (temp < 0l) {
             temp = temp * -1;
@@ -313,7 +313,7 @@ public class Utilities {
         sb.append(calendar.get(Calendar.DAY_OF_MONTH));
         sb.append(temp);
         
-        return sb.toString();
+        return Long.valueOf(sb.toString().substring(0, 15));
     }
     
     /**
@@ -494,7 +494,7 @@ public class Utilities {
     
     @SuppressWarnings("unchecked")
 	public static boolean isEmpty(Object o) {
-        boolean empty = o == null || o.equals(Long.valueOf(-1));
+        boolean empty = o == null || o.equals(Long.valueOf(-1)) || o.equals(Long.valueOf(0));
         if (!empty && o instanceof String)
             empty = ((String) o).trim().length() == 0;
         else if (!empty && o instanceof Collection)

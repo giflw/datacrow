@@ -27,22 +27,13 @@ package net.datacrow.console.components.panels.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.swing.JMenuBar;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import net.datacrow.console.views.View;
 import net.datacrow.core.DcThread;
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.Utilities;
-import net.datacrow.util.comparators.DcObjectComparator;
 
 import org.apache.log4j.Logger;
 
@@ -92,7 +83,7 @@ public class FileTreePanel extends TreePanel {
     }
     
     @Override
-    protected void buildTree() {
+    protected void createTree() {
         build();
         
         if (isActive())
@@ -101,10 +92,10 @@ public class FileTreePanel extends TreePanel {
 
     @Override
     protected void createTopNode() {
-        top = new DefaultMutableTreeNode(DcResources.getText("lblFileTreeSystem"));
-        FileNodeElement element = new FileNodeElement(getModule(), DcResources.getText("lblFileTreeSystem"));
-        element.setValues(new ArrayList<DcObject>());
-        top.setUserObject(element);
+//        top = new DefaultMutableTreeNode(DcResources.getText("lblFileTreeSystem"));
+//        FileNodeElement element = new FileNodeElement(getModule(), DcResources.getText("lblFileTreeSystem"));
+//        element.setValues(new ArrayList<Long>());
+//        top.setUserObject(element);
     }
 
     @Override
@@ -113,18 +104,18 @@ public class FileTreePanel extends TreePanel {
     }
 
     @Override
-    protected void revalidateTree(DcObject dco, int modus) {
+    protected void revalidateTree(Long key, int modus) {
         setListeningForSelection(false);
         setSaveChanges(false);
         
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
         if (modus == _OBJECT_REMOVED)
-            removeElement(dco, top);
+            removeElement(key, top);
 
         if (modus == _OBJECT_ADDED || modus == _OBJECT_UPDATED) {
-            removeElement(dco, top);
-            addElement(dco, top, 0);
+            removeElement(key, top);
+            addElement(key, top, 0);
         }
         
         if (logger.isDebugEnabled()) 
@@ -138,49 +129,49 @@ public class FileTreePanel extends TreePanel {
     } 
  
     @Override
-	protected void addElement(DcObject dco, DefaultMutableTreeNode notused, int level) {
+	protected void addElement(Long key, DefaultMutableTreeNode notused, int level) {
     	// thread safe
-        String filename = dco.getFilename();
-        if (Utilities.isEmpty(filename)) return;
-        
-        StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
-        
-        List<String> parts = new ArrayList<String>();
-        while (st.hasMoreElements())
-            parts.add((String) st.nextElement());
-        
-        ArrayList<DefaultMutableTreeNode> nodes = findNode(parts, top);
-        if (nodes.size() != parts.size()) {
-            for (int i = nodes.size(); i < parts.size(); i++) {
-                final DefaultMutableTreeNode node = new DefaultMutableTreeNode();
-                
-                FileNodeElement element = new FileNodeElement(getModule(), parts.get(i));
-                node.setUserObject(element);
-                
-                final DefaultMutableTreeNode parent = i == 0 ? top : nodes.get(i - 1);
-                
-                if (parts.size() - 1 == i) 
-                    element.addValue(dco);
-                
-                nodes.add(node);
-                
-                try {
-                	if (!SwingUtilities.isEventDispatchThread()) {
-	                    SwingUtilities.invokeAndWait(new Runnable() {
-	                        public void run() {
-	                            insertNode(node, parent);
-	                        };
-	                    });
-                	} else {
-                		insertNode(node, parent);
-                	}
-                } catch (Exception e) {
-                    logger.error(e, e);
-                }                    
-            }
-        } else if (nodes.size() > 0) {
-            ((FileNodeElement) nodes.get(nodes.size() - 1).getUserObject()).addValue(dco);
-        }
+//        String filename = dco.getFilename();
+//        if (Utilities.isEmpty(filename)) return;
+//        
+//        StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
+//        
+//        List<String> parts = new ArrayList<String>();
+//        while (st.hasMoreElements())
+//            parts.add((String) st.nextElement());
+//        
+//        ArrayList<DefaultMutableTreeNode> nodes = findNode(parts, top);
+//        if (nodes.size() != parts.size()) {
+//            for (int i = nodes.size(); i < parts.size(); i++) {
+//                final DefaultMutableTreeNode node = new DefaultMutableTreeNode();
+//                
+//                FileNodeElement element = new FileNodeElement(getModule(), parts.get(i));
+//                node.setUserObject(element);
+//                
+//                final DefaultMutableTreeNode parent = i == 0 ? top : nodes.get(i - 1);
+//                
+//                if (parts.size() - 1 == i) 
+//                    element.addValue(dco);
+//                
+//                nodes.add(node);
+//                
+//                try {
+//                	if (!SwingUtilities.isEventDispatchThread()) {
+//	                    SwingUtilities.invokeAndWait(new Runnable() {
+//	                        public void run() {
+//	                            insertNode(node, parent);
+//	                        };
+//	                    });
+//                	} else {
+//                		insertNode(node, parent);
+//                	}
+//                } catch (Exception e) {
+//                    logger.error(e, e);
+//                }                    
+//            }
+//        } else if (nodes.size() > 0) {
+//            ((FileNodeElement) nodes.get(nodes.size() - 1).getUserObject()).addValue(dco);
+//        }
     }
     
     private class FillerThread extends DcThread {
@@ -192,68 +183,68 @@ public class FileTreePanel extends TreePanel {
         @Override
         public void run() {
             
-        	// cancel other threads of the same thread group.
-        	cancelOthers();
-            
-            build();
-
-            tree.setEnabled(false);
-            setListeningForSelection(false);
-            setSaveChanges(false);
-            
-            List<DcObject> items = getItems();
-            
-            DcObjectComparator oc = new DcObjectComparator(DcObject._SYS_FILENAME);
-            Collections.sort(items, oc);
-
-            // thread safe
-            View view = DcModules.get(getModule()).getSearchView().getCurrent();
-            if (isShowing())
-                view.initProgressBar(items.size());
-            
-            int counter = 0;
-            for (DcObject dco : items) {
-
-                // thread safe
-                if (isShowing()) {
-                    view.setMaxForProgressBar(items.size());
-                    view.updateProgressBar(counter++);
-                    view.setStatus(DcResources.getText("msgAddingXToTree", dco.toString()));
-                }
-                
-                if (isCanceled()) break;
-                
-                addElement(dco, top, 0);
-                
-                try {
-                    sleep(5);
-                } catch (Exception ignore) {}
-            }
-
-            try {
-                sleep(500);
-            } catch (Exception ignore) {}
-            
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run() {
-
-                        setListeningForSelection(true);
-                        setSaveChanges(true);
-                    	tree.setEnabled(true);
-
-                    	expandAll();
-                    	
-                    	if (isShowing())
-                    		setDefaultSelection();
-                        
-                        revalidate();
-                        repaint();
-                    };
-                });
-            } catch (Exception e) {
-                logger.error(e, e);
-            }  
+//        	// cancel other threads of the same thread group.
+//        	cancelOthers();
+//            
+//            build();
+//
+//            tree.setEnabled(false);
+//            setListeningForSelection(false);
+//            setSaveChanges(false);
+//            
+//            List<Long> keys = getValues();
+//            
+//            DcObjectComparator oc = new DcObjectComparator(DcObject._SYS_FILENAME);
+//            Collections.sort(items, oc);
+//
+//            // thread safe
+//            View view = DcModules.get(getModule()).getSearchView().getCurrent();
+//            if (isShowing())
+//                view.initProgressBar(items.size());
+//            
+//            int counter = 0;
+//            for (DcObject dco : items) {
+//
+//                // thread safe
+//                if (isShowing()) {
+//                    view.setMaxForProgressBar(items.size());
+//                    view.updateProgressBar(counter++);
+//                    view.setStatus(DcResources.getText("msgAddingXToTree", dco.toString()));
+//                }
+//                
+//                if (isCanceled()) break;
+//                
+//                addElement(dco, top, 0);
+//                
+//                try {
+//                    sleep(5);
+//                } catch (Exception ignore) {}
+//            }
+//
+//            try {
+//                sleep(500);
+//            } catch (Exception ignore) {}
+//            
+//            try {
+//                SwingUtilities.invokeAndWait(new Runnable() {
+//                    public void run() {
+//
+//                        setListeningForSelection(true);
+//                        setSaveChanges(true);
+//                    	tree.setEnabled(true);
+//
+//                    	expandAll();
+//                    	
+//                    	if (isShowing())
+//                    		setDefaultSelection();
+//                        
+//                        revalidate();
+//                        repaint();
+//                    };
+//                });
+//            } catch (Exception e) {
+//                logger.error(e, e);
+//            }  
         }
     }
 }

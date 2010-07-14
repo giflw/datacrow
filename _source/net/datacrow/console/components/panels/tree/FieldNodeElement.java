@@ -23,60 +23,33 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.lists.elements;
+package net.datacrow.console.components.panels.tree;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
-import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 
-import net.datacrow.console.components.DcLabel;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.Picture;
-import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
+import net.datacrow.core.data.DataManager;
 
-public class DcTemplateListElement extends DcObjectListElement {
-
-    private JPanel panelInfo;
+public class FieldNodeElement extends NodeElement {
     
-    public DcTemplateListElement(int module) {
-        super(module);
+    private int field;        
+    
+    public FieldNodeElement(int module, int field, Object key, ImageIcon icon) {
+        super(module, key, icon);
+        this.field = field;
     }
     
     @Override
-    public void setBackground(Color color) {
-        super.setBackground(color);
-        if (panelInfo != null)
-            panelInfo.setBackground(color);
-    }     
-    
-    @Override
-    public Collection<Picture> getPictures() {
-        return new ArrayList<Picture>();
+    public List<Long> getItems() {
+        //DataManager.getKeys(getModule(), new DataFilter(dco))
+        
+        return new ArrayList<Long>();
     }
 
     @Override
-    public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-        
-        DcTemplate template = (DcTemplate) dco;
-        
-        String label = dco.getDisplayString(DcTemplate._SYS_TEMPLATENAME); 
-        if (template.isDefault()) 
-            label += " (" + DcResources.getText("lblDefault") + ")";
-        
-        DcLabel lbl = new DcLabel(label);
-        lbl.setPreferredSize(new Dimension(800, fieldHeight));
-        lbl.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
-        
-        panelInfo = getPanel();
-        panelInfo.add(lbl);
-        panelInfo.setPreferredSize(new Dimension(800, fieldHeight));
-        add(panelInfo);
-    } 
+    public int getCount() {
+        return DataManager.getCount(module, field, key);
+    }
 }

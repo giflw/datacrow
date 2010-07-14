@@ -36,7 +36,6 @@ import java.util.zip.ZipFile;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.Version;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
@@ -123,18 +122,11 @@ public class Restore extends Thread {
 
         try {
             listener.notifyProcessingCount(3);
-            
             listener.sendMessage(DcResources.getText("msgRestartingDb"));
-            
-            DataManager.unload();
-            DataManager.setUseCache(false);
             
             SecurityCentre.getInstance().initialize();
             
             DcSwingUtilities.displayWarningMessage("msgRestoreFinishedRestarting");
-            
-            // do not save settings as the restored settings are used for upgrading purposes.
-            DataManager.clearCache();
             
             DataCrow.mainFrame.setOnExitCheckForChanges(false);
             DataCrow.mainFrame.setOnExitSaveSettings(false);

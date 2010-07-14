@@ -60,7 +60,7 @@ public class Container extends DcObject {
     
     public Container getParentContainer() {
         Object parent = getValue(_F_PARENT);
-        return parent instanceof String ? (Container) DataManager.getObject(DcModules._CONTAINER, (String) parent) : 
+        return parent instanceof String ? (Container) DataManager.getItem(DcModules._CONTAINER, (Long) parent) : 
                (Container) parent;
     }
     
@@ -79,7 +79,7 @@ public class Container extends DcObject {
     @Override
     protected void beforeSave() throws ValidationException {
         Container parent = getParentContainer();
-        String ID = getID();
+        Long ID = getID();
         
         if (parent != null && parent.getID().equals(ID)) {
             throw new ValidationException(DcResources.getText("msgCannotSetItemAsParent"));
@@ -98,7 +98,7 @@ public class Container extends DcObject {
     public Object getValue(int index) {
         if (index == _F_PARENT) {
             Object o = super.getValue(_F_PARENT);
-            return o instanceof String ? DataManager.getObject(DcModules._CONTAINER, (String) o) : o;
+            return o instanceof String ? DataManager.getItem(DcModules._CONTAINER, (Long) o) : o;
         } else {
             return super.getValue(index);
         }
@@ -109,7 +109,7 @@ public class Container extends DcObject {
         
         children.clear();
         
-        if (    (getID() != null && getID().length() > 0) &&
+        if (   (getID() != null) &&
                !isLoading &&
                 DataManager.isInitialized() &&
                 getModule().getChild() != null) {
@@ -120,9 +120,8 @@ public class Container extends DcObject {
                 DataFilter df = new DataFilter(DcModules._ITEM);
                 df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._ITEM, DcObject._SYS_CONTAINER, Operator.EQUAL_TO, this));
                 
-                DcObject[] c = DataManager.get(DcModules._ITEM, df);
-                for (DcObject child : c) 
-                    children.add(child);
+                children = DataManager.get(DcModules._ITEM, df);
+
             } finally {
                 isLoading = false;
             }

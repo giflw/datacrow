@@ -37,15 +37,12 @@ import javax.swing.JTabbedPane;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.views.MasterView;
-import net.datacrow.core.data.DataFilters;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
 
 public class GroupingPane extends JPanel {
 
     private Collection<TreePanel> panels = new ArrayList<TreePanel>();
-    private List<DcObject> items = new ArrayList<DcObject>();
+    private List<Long> keys = new ArrayList<Long>();
     
     private int module;
     private MasterView view;
@@ -73,14 +70,12 @@ public class GroupingPane extends JPanel {
         return view;
     }
     
-    public void add(DcObject[] items) {
-        this.items.clear();
-        this.items = new ArrayList<DcObject>();
-        for (DcObject item : items)
-            this.items.add(item);
-        
+    public void add(List<Long> keys) {
+        this.keys.clear();
+        this.keys = keys;
+
         for (TreePanel tp : panels)
-            tp.buildTree();
+            tp.createTree();
     }
 
     public TreePanel getActiveTree() {
@@ -92,17 +87,17 @@ public class GroupingPane extends JPanel {
         return null;
     }
     
-    public void add(DcObject dco) {
-        if (!items.contains(dco)) {
-            items.add(dco);
+    public void add(Long key) {
+        if (!keys.contains(key)) {
+            keys.add(key);
             
             for (TreePanel tp : panels)
-                tp.revalidateTree(dco, TreePanel._OBJECT_ADDED);
+                tp.revalidateTree(key, TreePanel._OBJECT_ADDED);
         }
     }
     
     public int getItemCount() {
-        return items.size();
+        return keys.size();
     }
     
     public void groupBy() {
@@ -110,8 +105,8 @@ public class GroupingPane extends JPanel {
             tp.groupBy();
     }
     
-    public List<DcObject> getItems() {
-        return new ArrayList<DcObject>(items);
+    public List<Long> getValues() {
+        return new ArrayList<Long>(keys);
     }
     
     public void saveChanges(boolean b) {
@@ -120,45 +115,30 @@ public class GroupingPane extends JPanel {
     }
     
     public void reset() {
+        // TODO: implement
+        
         // avoid filling the view when it isn't visible.
-        if (DcModules.getCurrent().getIndex() == getModule()) {
-            add(DataManager.get(getModule(), DataFilters.getCurrent(getModule())));
-
-            for (TreePanel tp : panels)
-                tp.reset();
-        }
+//        if (DcModules.getCurrent().getIndex() == getModule()) {
+//            add(DataManager.get(getModule(), DataFilters.getCurrent(getModule())));
+//
+//            for (TreePanel tp : panels)
+//                tp.reset();
+//        }
     }
     
-    public void remove(String[] ids) {
-        for (String ID : ids) {
-            DcObject result = null;
-            for (DcObject item : items) {
-                if (item.getID().equals(ID)) {
-                    result = item;
-                    break;
-                }
-            }
-            if (result != null)
-                remove(result);
-        }
-    } 
-    
-    protected void remove(DcObject dco) {
-        if (items.contains(dco)) {
-            items.remove(dco);
+    protected void remove(Long key) {
+        if (keys.contains(key)) {
+            keys.remove(key);
             for (TreePanel tp : panels)
-                tp.revalidateTree(dco, TreePanel._OBJECT_REMOVED);
+                tp.revalidateTree(key, TreePanel._OBJECT_REMOVED);
         }
     }    
     
-    public void update(DcObject dco) {
-        int pos = items.indexOf(dco);
+    public void update(Long key) {
+        int pos = keys.indexOf(key);
         if (pos != -1) {
-            DcObject o = items.get(pos);
-            o.reload();
-            
             for (TreePanel tp : panels)
-                tp.revalidateTree(dco, TreePanel._OBJECT_UPDATED);
+                tp.revalidateTree(key, TreePanel._OBJECT_UPDATED);
         }
     } 
     

@@ -25,6 +25,8 @@
 
 package net.datacrow.core.objects.helpers;
 
+import java.util.List;
+
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
@@ -60,14 +62,14 @@ public class ContactPerson extends DcObject {
         loan.setValue(Loan._C_CONTACTPERSONID, getID());
         
         DataFilter filter = new DataFilter(loan);
-        DcObject[] loans = DataManager.get(DcModules._LOAN, filter);
+        List<DcObject> loans = DataManager.get(DcModules._LOAN, filter);
         
         try {
-            if (loans == null || loans.length == 0) {
+            if (loans.size() == 0) {
                 super.delete(false);
             } else {
                 if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
-                    DatabaseManager.executeQuery("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
+                    DatabaseManager.retrieveItems("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
                                                  loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 
                                                  Query._DELETE);
                     for (DcObject dco : loans)

@@ -34,7 +34,6 @@ import java.util.Collection;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.util.Utilities;
@@ -42,10 +41,9 @@ import net.datacrow.util.Utilities;
 public class DcPropertyListElement extends DcObjectListElement {
 
     private JPanel panelInfo;
-    
-    public DcPropertyListElement(DcObject dco) {
-        super(dco);
-        build();
+
+    public DcPropertyListElement(int module) {
+        super(module);
     }
     
     @Override

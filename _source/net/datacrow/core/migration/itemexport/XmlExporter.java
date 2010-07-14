@@ -130,7 +130,7 @@ public class XmlExporter extends ItemExporter {
                 if (isCanceled()) break;
                 
                 if (DcModules.getCurrent().isAbstract())
-                    dco.reload();
+                    dco.load();
                 
                 writer.startEntity(dco);
                 client.notifyMessage(DcResources.getText("msgExportingX", dco.toString()));

@@ -31,19 +31,19 @@ package net.datacrow.core.web.model;
 public class DcReference {
 
     private String label;
-    private String id;
+    private Long ID;
 
-    public DcReference(String label, String id) {
+    public DcReference(String label, Long ID) {
         super();
         this.label = label;
-        this.id = id;
+        this.ID = ID;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public String getId() {
-        return id;
+    public Long getId() {
+        return ID;
     }
 }

@@ -119,7 +119,6 @@ public class DataCrow {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         try {
-            boolean nocache = false;
             boolean webserverMode = false; 
             
             String password = null;
@@ -138,8 +137,6 @@ public class DataCrow {
                     dir = args[i].substring(5, args[i].length());
                 } else if (args[i].toLowerCase().startsWith("-db:")) {
                     db = args[i].substring("-db:".length());
-                } else if (args[i].toLowerCase().startsWith("-nocache")) {
-                    nocache = true;  // no longer used.      
                 } else if (args[i].toLowerCase().startsWith("-help")) {
                     StartupHelpDialog dialog = new StartupHelpDialog();
                     DcSwingUtilities.openDialogNativeModal(dialog);
@@ -339,9 +336,6 @@ public class DataCrow {
                 showSplashMsg(DcResources.getText("msgInitializingDB"));
     
                 DatabaseManager.initialize();
-                
-                if (nocache || getVersion().isNewer(DatabaseManager.getOriginalVersion()))
-                    DataManager.setUseCache(false);
                 
                 // Start the UI
                 if (splashScreen == null)
@@ -643,7 +637,7 @@ public class DataCrow {
     public static void showSplashScreen(){
         if (!noSplash) {
             splashScreen = new SplashScreen();
-            splashScreen.splash();
+            //splashScreen.splash();
         }
     }
 
@@ -898,7 +892,6 @@ public class DataCrow {
             }
             
             System.out.println(DcResources.getText("msgClosingDB"));
-            DataManager.serialize();
             DatabaseManager.closeDatabases(false);
             System.out.println(DcResources.getText("msgShutdownComplete"));
         }

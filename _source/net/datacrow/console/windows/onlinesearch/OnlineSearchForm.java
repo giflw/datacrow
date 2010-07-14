@@ -81,7 +81,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private static Logger logger = Logger.getLogger(OnlineSearchForm.class.getName());
     
     private int module;
-    private String ID;
+    private Long ID;
 
     private boolean startSearchOnOpen = false;
     private boolean disablePerfectMatch = false;
@@ -192,7 +192,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     }
 
     public DcObject getDcObject() {
-        return ID != null ? DataManager.getObject(module, ID) : null;
+        return ID != null ? DataManager.getItem(module, ID) : null;
     }    
     
     public DcObject getSelectedObject() {

@@ -30,6 +30,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -151,29 +152,20 @@ public class MasterView {
             view.sort();
     }
 
-    public void removeItems(String[] ids) {
-        // remove the item from the tree
+    public void updateItem(Long ID, DcObject dco) {
         if (groupingPane != null)
-            groupingPane.remove(ids);
-        
-        for (View view : getViews())
-            view.remove(ids);
-    }
-
-    public void updateItem(String ID, DcObject dco) {
-        if (groupingPane != null)
-            groupingPane.update(dco);
+            groupingPane.update(ID);
         
         for (View view : getViews())
     		view.updateItem(ID, dco);
     }    
     
-    public void reload(String ID) {
+    public void reload(Long ID) {
         for (View view : getViews())
             view.reload(ID);
     }
     
-    public void removeFromCache(String ID) {
+    public void removeFromCache(Long ID) {
         for (View view : getViews())
             view.removeFromCache(ID);
     }    
@@ -190,28 +182,28 @@ public class MasterView {
     
     public void add(DcObject dco) {
         if (groupingPane != null) {
-            groupingPane.add(dco);
+            groupingPane.add(dco.getID());
         } else {
             for (View view : getViews())
                 view.add(dco);
         }
     }
     
-    public void add(DcObject[] objects) {
+    public void bindData(List<Long> keys) {
+        
         for (View view : getViews())
-            view.add(objects);
-    }    
-    
-    public void bindData(DcObject[] objects) {
-        if (groupingPane != null) {
-            for (View view : getViews())
-                view.cancelCurrentTask();
-
-            groupingPane.add(objects);
-        } else {
-            for (View view : getViews())
-                view.add(objects);
-        } 
+            view.add(keys);
+        
+        
+//        if (groupingPane != null) {
+//            for (View view : getViews())
+//                view.cancelCurrentTask();
+//
+//            groupingPane.add(keys);
+//        } else {
+//            for (View view : getViews())
+//                view.add(keys);
+//        } 
     }
     
     public Collection<View> getViews() {

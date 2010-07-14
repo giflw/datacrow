@@ -41,7 +41,6 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
@@ -103,7 +102,6 @@ public class SystemInfoPanel extends JPanel {
     }
     
     private int getRecordCount(DcModule module) {
-    	DcObject[] o = DataManager.get(module.getIndex(), null);
-    	return o.length;
+    	return DataManager.get(module.getIndex(), null).size();
     }    
 }

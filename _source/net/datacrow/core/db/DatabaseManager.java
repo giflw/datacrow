@@ -70,6 +70,8 @@ public class DatabaseManager {
     
     private static DcDatabase db = new DcDatabase();
     private static boolean isServerClientMode = false;
+    
+    public static boolean initialized = false;
    
     /**
      * Initializes the database. A connection with the HSQL database engine is established
@@ -105,6 +107,8 @@ public class DatabaseManager {
                 long end = new Date().getTime();
                 logger.debug("Database cleanup took " + (end - start) + "ms");
             }  
+            
+            initialized = true;
 
         } catch (Exception e) {
             logger.error("Could not find and connect to the database!", e);
@@ -242,9 +246,11 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The retrieved items or null when an error occurs.
      */
-    public static Collection<DcObject> executeQuery(String sql, int type) {
+    public static List<DcObject> retrieveItems(String sql, int type) {
         try {
-            return executeQuery(DatabaseManager.getConnection().prepareStatement(sql), type);
+            Connection conn = DatabaseManager.getConnection();
+            
+            return retrieveItems(conn.prepareStatement(sql), type);
         } catch (SQLException e) {
             logger.error("There were errors for query " + sql, e);
         }
@@ -252,25 +258,14 @@ public class DatabaseManager {
     }     
     
     /**
-     * Executes a query. The query is created based on the supplied item. 
-     * @param dco
-     * @param log Indicates if information on the query should be logged.
-     * @return The retrieved items or null when an error occurs.
-     */
-    public static List<DcObject> executeQuery(DcObject dco) throws SQLException {
-        Query query = new Query(Query._SELECT, dco, null, null);
-        return executeQuery(query.getQuery(), Query._SELECT);
-    }
-    
-    /**
      * Executes a query.  
      * @param query.
      * @return The retrieved items or null when an error occurs.
      */
-    public static List<DcObject> executeQuery(Query query) {
+    public static List<DcObject> retrieveItems(Query query) {
         List<DcObject> data = new ArrayList<DcObject>();
         for (PreparedStatement ps : query.getQueries()) {
-            Collection<DcObject> c = executeQuery(ps, query.getType());
+            Collection<DcObject> c = retrieveItems(ps, query.getType());
             if (c != null) data.addAll(c);
         }
         
@@ -283,19 +278,17 @@ public class DatabaseManager {
         }
         
         return data;
-    }      
-
+    }       
+    
     /**
-     * Executes a query. 
-     * @param sql SQL statement.
+     * Executes a query. The query is created based on the supplied item. 
+     * @param dco
      * @param log Indicates if information on the query should be logged.
-     * @return The result set.
+     * @return The retrieved items or null when an error occurs.
      */
-    public static ResultSet executeSQL(String sql, boolean log) throws Exception {
-        if (log) logger.info(sql);
-        Connection connection = getConnection();
-        Statement stmt = connection.createStatement();
-        return stmt.executeQuery(sql);
+    public static List<DcObject> retrieveItems(DcObject dco) throws SQLException {
+        Query query = new Query(Query._SELECT, dco, null, null);
+        return retrieveItems(query.getQuery(), Query._SELECT);
     }
     
     /**
@@ -305,7 +298,7 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The retrieved items or null when an error occurs.
      */
-    public static List<DcObject> executeQuery(PreparedStatement ps, int type) {
+    public static List<DcObject> retrieveItems(PreparedStatement ps, int type) {
         List<DcObject> data = null;
         
         try {
@@ -331,6 +324,49 @@ public class DatabaseManager {
         }
 
         return data;
+    }    
+    
+    public static List<Long> getKeys(int modIdx, DataFilter filter) {
+        List<Long> data = new ArrayList<Long>();
+        
+        if (filter == null)
+            filter = new DataFilter(modIdx);
+        
+        PreparedStatement ps = null;
+        try {
+            Query query = new Query(filter, null, new int[] {DcObject._ID});
+            ps = query.getQuery();
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                data.add(result.getLong(1));
+            }
+            result.close();
+        } catch (SQLException e) {
+            if (!e.getMessage().equals("No ResultSet was produced"))
+                logger.error("Error while executing query " + ps, e);
+        }
+        
+        try {
+            if (ps != null) ps.close();
+        } catch (SQLException e) {
+            logger.error(e, e);
+        }
+
+        return data;
+        
+    }
+
+    /**
+     * Executes a query. 
+     * @param sql SQL statement.
+     * @param log Indicates if information on the query should be logged.
+     * @return The result set.
+     */
+    public static ResultSet executeSQL(String sql, boolean log) throws Exception {
+        if (log) logger.info(sql);
+        Connection connection = getConnection();
+        Statement stmt = connection.createStatement();
+        return stmt.executeQuery(sql);
     }
     
     /**
@@ -358,10 +394,10 @@ public class DatabaseManager {
                 if (child.isChanged()) {
                     
                     boolean exists = false;
-                    if (child.getID() != null && child.getID().length() > 0) {
+                    if (child.getID() != null) {
                         DcObject childTest = child.getModule().getItem();
                         childTest.setValue(DcObject._ID, child.getID());
-                        Collection<DcObject> objects = executeQuery(childTest);
+                        Collection<DcObject> objects = retrieveItems(childTest);
                         exists = objects.size() > 0;
                         for (DcObject tmp : objects)
                             tmp.release();
@@ -369,11 +405,11 @@ public class DatabaseManager {
     
                     Query query;
                     if (!exists) {
-                        child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
+                        if (child.isCached()) child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
                         query = new Query(Query._INSERT, child, null, child.getRequests());
                         
                     } else {
-                        child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, child));
+                        if (child.isCached()) child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, child));
                         query = new Query(Query._UPDATE, child, null, child.getRequests());
                     }
 
@@ -406,7 +442,9 @@ public class DatabaseManager {
             
             if (children != null) {
                 for (DcObject child : children) {
-                    child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
+                    
+                    if (child.isCached()) child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
+                    
                     child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
                     query = new Query(Query._INSERT, child, null, child.getRequests());
                     query.setSilence(true);
@@ -447,11 +485,11 @@ public class DatabaseManager {
                 
             if (hasUniqueFields) {
                 DataFilter df = new DataFilter(dco);
-                DcObject[] objects = DataManager.get(o.getModule().getIndex(), df);
+                List<DcObject> items = DataManager.get(o.getModule().getIndex(), df);
                 
                 int count = 0;
-                for (int i = 0; i < objects.length; i++)
-                	count = !isExisting || !objects[i].getID().equals(o.getID()) ? count + 1 : count;
+                for (DcObject item : items)
+                	count = !isExisting || !item.getID().equals(o.getID()) ? count + 1 : count;
 
                 if (count > 0) return false;
             }

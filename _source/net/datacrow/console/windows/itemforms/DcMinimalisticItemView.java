@@ -35,6 +35,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -144,7 +145,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         return requests;
     }    
     
-    public void setObjects(Collection<DcObject> objects) {
+    public void setObjects(List<DcObject> objects) {
         list.clear();
         list.add(objects);
     }

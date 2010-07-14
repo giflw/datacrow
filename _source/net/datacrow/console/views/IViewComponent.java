@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.event.ListSelectionListener;
 
@@ -24,16 +25,17 @@ public interface IViewComponent {
     
     int getOptimalItemAdditionBatchSize();
     
-    boolean remove(String[] ids);
+    boolean remove(Long[] IDs);
     void remove(int[] indices);
     
+    void add(Long key);
     void add(DcObject item);
-    void add(DcObject[] items); 
-    void add(Collection<? extends DcObject> items);
+    void add(List<? extends DcObject> items);
+    void add(Collection<Long> keys);
     
     Collection<DcObject> getItems();
     DcObject getItemAt(int idx);
-    DcObject getItem(String ID);
+    DcObject getItem(Long ID);
     
     void setSelected(Collection<? extends DcObject> dcos);
     void setSelected(int index);
@@ -47,7 +49,7 @@ public interface IViewComponent {
 
     void deselect();
     
-    void updateItem(String ID, DcObject dco);
+    void updateItem(Long ID, DcObject dco);
     void updateItemAt(int index, DcObject dco);
 
     int[] getChangedIndices();
@@ -65,7 +67,7 @@ public interface IViewComponent {
     
     void applySettings();
     void saveSettings();
-    void updateUI(String ID);
+    void updateUI(Long ID);
     void afterUpdate();
 
     // LISTENERS
@@ -76,4 +78,6 @@ public interface IViewComponent {
     void addMouseListener(MouseListener ml);
     void removeMouseListener(MouseListener ml);
     MouseListener[] getMouseListeners();
+    
+    void visibleItemsChanged();
 }

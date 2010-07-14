@@ -59,7 +59,7 @@ public class DcWebObject extends DcSecured {
     private int rowIdx;
     
     private boolean isNew = false;
-    private String ID;
+    private Long ID;
     private String name;
     
     private int tab = 1;
@@ -259,7 +259,7 @@ public class DcWebObject extends DcSecured {
     }
     
     public DcObject getDcObject() {
-        return DataManager.getObject(getModule(), getID());        
+        return DataManager.getItem(getModule(), getID());        
     }
     
     private String current() {
@@ -342,11 +342,11 @@ public class DcWebObject extends DcSecured {
         return fields;
     }
     
-    public String getID() {
+    public Long getID() {
         return ID;
     }
 
-    public void setID(String id) {
-        ID = id;
+    public void setID(Long ID) {
+        this.ID = ID;
     }
 }

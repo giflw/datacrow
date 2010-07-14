@@ -23,60 +23,31 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.lists.elements;
+package net.datacrow.console.views;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
-import javax.swing.JPanel;
+import javax.swing.JComponent;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
-import net.datacrow.console.components.DcLabel;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.Picture;
-import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
+public class ViewScrollPane extends JScrollPane implements AdjustmentListener {
 
-public class DcTemplateListElement extends DcObjectListElement {
-
-    private JPanel panelInfo;
+    private IViewComponent component;
     
-    public DcTemplateListElement(int module) {
-        super(module);
-    }
-    
-    @Override
-    public void setBackground(Color color) {
-        super.setBackground(color);
-        if (panelInfo != null)
-            panelInfo.setBackground(color);
-    }     
-    
-    @Override
-    public Collection<Picture> getPictures() {
-        return new ArrayList<Picture>();
+    public ViewScrollPane(View view) {
+        super((JComponent) view.getViewComponent());
+
+        this.component = view.getViewComponent();
+        JScrollBar sb = getVerticalScrollBar();
+        
+        if (sb != null) 
+            sb.addAdjustmentListener(this);
     }
 
-    @Override
-    public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-        
-        DcTemplate template = (DcTemplate) dco;
-        
-        String label = dco.getDisplayString(DcTemplate._SYS_TEMPLATENAME); 
-        if (template.isDefault()) 
-            label += " (" + DcResources.getText("lblDefault") + ")";
-        
-        DcLabel lbl = new DcLabel(label);
-        lbl.setPreferredSize(new Dimension(800, fieldHeight));
-        lbl.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
-        
-        panelInfo = getPanel();
-        panelInfo.add(lbl);
-        panelInfo.setPreferredSize(new Dimension(800, fieldHeight));
-        add(panelInfo);
-    } 
+    public void adjustmentValueChanged(AdjustmentEvent e) {
+        //if (e.getValueIsAdjusting())
+            component.visibleItemsChanged();
+    }
 }

@@ -43,7 +43,6 @@ import net.datacrow.core.modules.security.UserModule;
 import net.datacrow.core.modules.upgrade.ModuleUpgradeException;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.StringUtils;
@@ -556,18 +555,15 @@ public class DcModules {
             module.applySettings();
     }
 
-    /**
-     * Finds the module based on the table name and creates a new item.
-     * @param tableName The database table name.
-     */
-    public static DcObject getObjectForTable(String tableName) {
+    public static DcModule getModuleForTable(String table) {
         for (DcModule module : modules.values()) {
-            if (module.getTableName().equalsIgnoreCase(tableName))
-                return module.getItem();
+            if (module.getTableName().equalsIgnoreCase(table))
+                return module;
         }
+        
         return null;
     }
-
+    
     /**
      * Start to load data for all modules
      */

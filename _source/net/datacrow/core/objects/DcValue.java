@@ -160,7 +160,7 @@ public class DcValue implements Serializable {
                     } else if (o instanceof DcObject) {
                         setValueNative(o, field);
                     } else if (!Utilities.isEmpty(o) && field.getReferenceIdx() != field.getModule()) {
-                        setValueNative(DataManager.getObject(field.getReferenceIdx(), o.toString()), field);
+                        setValueNative(DataManager.getItem(field.getReferenceIdx(), (Long) o), field);
                         logger.debug("Setting string value for reference field (" + field + ") value '" + o + "')");
                     }
 
@@ -265,10 +265,20 @@ public class DcValue implements Serializable {
      * Clears the value and sets it to null.
      * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
+    @SuppressWarnings("unchecked")
     public void clear(boolean nochecks) {
-        if (value != null && value instanceof Picture)
-            ((Picture) value).unload(nochecks);
-
+        if (value != null) {
+        
+            if (value instanceof Picture)
+                ((Picture) value).release();
+            else if (value instanceof DcObject) 
+                ((DcObject) value).release();
+            else if (value instanceof Collection) {
+                for (DcObject dco : (Collection<DcObject>) value)
+                    dco.release();
+            }
+        }
+        
         displayString = "";
         value = null;
     }

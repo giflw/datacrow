@@ -113,11 +113,11 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             PollerTask poller = new PollerTask(this, DcResources.getText("lblFiltering"));
             poller.start();
             
-            DcObject[] result = DataManager.get(module.getIndex(), df);
-            if (result.length == 0)
+            List<DcObject> list = DataManager.get(module.getIndex(), df);
+            if (list.size() == 0)
                 DcModules.getCurrent().getSearchView().clear();
 
-            DataManager.bindData(module.getSearchView(), result);
+           // DataManager.bindData(module.getSearchView(), list);
             DataFilters.setCurrent(module.getIndex(), df);
             
             try {
@@ -189,10 +189,10 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         comboCriteria.removeAllItems();
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-            DcObject[] objects = DataManager.get(field.getReferenceIdx(), null);
+            List<DcObject> objects = DataManager.get(field.getReferenceIdx(), null);
             comboCriteria.addItem(" ");
-            for (int i = 0; objects != null && i < objects.length; i++)
-                comboCriteria.addItem(objects[i]);
+            for (Object o : objects)
+                comboCriteria.addItem(o);
             
             comboCriteria.setRenderer(ComboBoxRenderer.getInstance());
             comboCriteria.setEditable(false);

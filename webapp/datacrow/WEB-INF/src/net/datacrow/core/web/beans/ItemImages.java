@@ -97,7 +97,7 @@ public class ItemImages extends DcBean {
         List<?> data = (List) objects.getData().getRowData();
         
         int moduleIdx = objects.getModule();
-        return DataManager.getObject(moduleIdx, (String) data.get(data.size() - 1));
+        return DataManager.getItem(moduleIdx, (Long) data.get(data.size() - 1));
     }
     
     private void loadImages() {

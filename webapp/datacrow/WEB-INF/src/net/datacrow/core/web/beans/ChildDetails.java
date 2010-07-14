@@ -91,7 +91,7 @@ public class ChildDetails extends ItemBean {
             return redirect();
 
         child.initialize(moduleIdx);
-        child.setID(String.valueOf(row.get(row.size() - 1)));
+        child.setID((Long) row.get(row.size() - 1));
         child.setName(child.getDcObject().toString());
         child.load();
         child.setChild(true);

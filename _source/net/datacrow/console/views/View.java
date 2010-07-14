@@ -57,7 +57,6 @@ import net.datacrow.console.views.tasks.DeleteTask;
 import net.datacrow.console.views.tasks.SaveTask;
 import net.datacrow.console.windows.UpdateAllDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.console.windows.reporting.ReportingDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
@@ -109,7 +108,7 @@ public class View extends DcPanel implements ListSelectionListener {
 
     private boolean actionsAllowed = true;
     
-    private String parentID;
+    private Long parentID;
     
     private final int type;
     private final int index;
@@ -286,7 +285,15 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public void add(DcObject dco) {
         add(dco, true);
+    }  
+    
+    public void add(Long key) {
+        add(key, true);
     }    
+    
+    public void add(final Long key, final boolean select) {
+        vc.add(key);
+    }
     
     public void add(final DcObject dco, final boolean select) {
 
@@ -306,21 +313,35 @@ public class View extends DcPanel implements ListSelectionListener {
             task.stopRunning();
     }
     
-    public void add(Collection<DcObject> items) {
-        add(items.toArray(new DcObject[items.size()]));
-    }
-
     /**
      * Adds the items to the view. 
      * Note: children for the insert view are added by the view component.
      * @see DcTable#add(DcObject).
      * @param items
      */
-    public void add(DcObject[] items) {
+    public void add(Collection<Long> keys) {
+        setActionsAllowed(false);
+
+        vc.deselect();
+        vc.add(keys);
+        
+        setActionsAllowed(true);
+        
+        revalidate();
+        afterUpdate();
+        setDefaultSelection();
+    }      
+    
+    /**
+     * Adds the items to the view. 
+     * Note: children for the insert view are added by the view component.
+     * @see DcTable#add(DcObject).
+     * @param items
+     */
+    public void add(List<DcObject> items) {
         setActionsAllowed(false);
 
         for (DcObject item : items) {
-            item.markAsUnchanged();
             if (getType() == View._TYPE_INSERT)
                 item.setIDs();
         }
@@ -435,7 +456,7 @@ public class View extends DcPanel implements ListSelectionListener {
             if (    DcModules.getCurrent().isAbstract() || 
                    (DcModules.getCurrent().getIndex() == DcModules._CONTAINER && 
                     dco.getModule().getIndex() != DcModules._CONTAINER))
-                dco.reload();
+                dco.load();
             
             ItemForm form = new ItemForm(false, getType() == View._TYPE_SEARCH, 
                                          dco, getType() != View._TYPE_SEARCH);
@@ -445,7 +466,7 @@ public class View extends DcPanel implements ListSelectionListener {
         }
     }
     
-    public void reload(String id) {
+    public void reload(Long id) {
         vc.updateUI(id);
 
         if (quickView != null)
@@ -580,8 +601,8 @@ public class View extends DcPanel implements ListSelectionListener {
             actionPanel.setEnabled(b);
     }
     
-    public Collection<DcObject> getItems() {
-        Collection<DcObject> items = new ArrayList<DcObject>();
+    public List<DcObject> getItems() {
+        List<DcObject> items = new ArrayList<DcObject>();
         for (int i = 0; i < getItemCount(); i++)
             items.add(getItemAt(i));
         
@@ -605,7 +626,7 @@ public class View extends DcPanel implements ListSelectionListener {
         return dco;
     }
 
-    public DcObject getItem(String ID) {
+    public DcObject getItem(Long ID) {
         return vc.getItem(ID);
     }
     
@@ -626,21 +647,21 @@ public class View extends DcPanel implements ListSelectionListener {
     }
 
     public void createReport() {
-        List<DcObject> objects = new ArrayList<DcObject>();
-        if (groupingPane != null && groupingPane.isActive())
-            objects.addAll(groupingPane.getItems());
-        else
-            objects.addAll(vc.getItems());
-        
-        if (objects.size() > 0) {
-            ReportingDialog dialog = new ReportingDialog(objects);
-            dialog.setVisible(true);
-        } else {
-            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgReportNoItems"));
-        }
+//        List<DcObject> objects = new ArrayList<DcObject>();
+//        if (groupingPane != null && groupingPane.isActive())
+//            objects.addAll(groupingPane.getValues());
+//        else
+//            objects.addAll(vc.getItems());
+//        
+//        if (objects.size() > 0) {
+//            ReportingDialog dialog = new ReportingDialog(objects);
+//            dialog.setVisible(true);
+//        } else {
+//            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgReportNoItems"));
+//        }
     }
 
-    public void remove(String[] IDs) {
+    public void remove(Long[] IDs) {
         // remove it from the view
         if (vc.remove(IDs)) {
             // at this point actions should be enabled to allow the quick view to be populated
@@ -648,7 +669,7 @@ public class View extends DcPanel implements ListSelectionListener {
             setDefaultSelection();
             
             if (isParent() && childView instanceof CachedChildView) {
-                for (String ID : IDs)
+                for (Long ID : IDs)
                     ((CachedChildView) childView).removeChildren(ID);
             }
             
@@ -660,13 +681,13 @@ public class View extends DcPanel implements ListSelectionListener {
     }
 
     public void remove(int[] indices) {
-        String[] ids = new String[indices.length];
+        Long[] IDs = new Long[indices.length];
         int i = 0;
         for (int index : indices) {
             DcObject dco = getItemAt(index);
-            ids[i++] = dco.getID();
+            IDs[i++] = dco.getID();
         }
-        remove(ids);
+        remove(IDs);
     }
 
     public void showQuickView(boolean b) {
@@ -686,7 +707,7 @@ public class View extends DcPanel implements ListSelectionListener {
             logger.warn("No element found at index " + index);
     }
 
-    public void updateItem(String ID, DcObject dco) {
+    public void updateItem(Long ID, DcObject dco) {
         vc.updateItem(ID, dco);
         
         DcObject item = getItem(ID);
@@ -702,12 +723,12 @@ public class View extends DcPanel implements ListSelectionListener {
         return objects;
     }
 
-    public void removeFromCache(String id) {
+    public void removeFromCache(Long id) {
         DcObject dco = vc.getItem(id);
         if (dco != null) dco.markAsUnchanged();
     }
 
-    public DcObject getDcObject(String ID) {
+    public DcObject getDcObject(Long ID) {
         return vc.getItem(ID);
     }
     
@@ -718,19 +739,19 @@ public class View extends DcPanel implements ListSelectionListener {
     public void loadChildren() {
         if (isParent())
             childView.loadChildren();
-        else if (isChild() && parentID != null && parentID.length() > 0) {
-            add(DataManager.getObject(getModule().getParent().getIndex(), parentID).getChildren());
+        else if (isChild() && parentID != null) {
+            add(DataManager.getItem(getModule().getParent().getIndex(), parentID).getChildren());
         }
     }
     
     /**
      * Note that the items only have to be shown after a select. 
      */
-    public void setParentID(String id, boolean show) {
-        this.parentID = id;
+    public void setParentID(Long ID, boolean show) {
+        this.parentID = ID;
     }
     
-    public String getParentID() {
+    public Long getParentID() {
         return parentID;
     }
     
@@ -789,7 +810,7 @@ public class View extends DcPanel implements ListSelectionListener {
         //**********************************************************
         panelResult.setLayout(Layout.getGBL());
 
-        JScrollPane scroller1 = new JScrollPane((Component) vc);
+        ViewScrollPane scroller1 = new ViewScrollPane(this);
         scroller1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelResult.add(scroller1,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

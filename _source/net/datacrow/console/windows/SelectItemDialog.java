@@ -34,6 +34,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -71,7 +72,7 @@ public class SelectItemDialog extends DcDialog implements ActionListener, KeyLis
         setTitle(title);
         buildDialog();
         
-        DcObject[] dcos = DataManager.get(module.getIndex(), null);
+        List<DcObject> dcos = DataManager.get(module.getIndex(), null);
         list.add(dcos);
         
         // store the elements for filtering purposes

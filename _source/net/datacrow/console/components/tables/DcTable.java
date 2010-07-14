@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.DefaultCellEditor;
@@ -97,7 +98,7 @@ public class DcTable extends JTable implements IViewComponent {
     private static Logger logger = Logger.getLogger(DcTable.class.getName());
 
     private final DcModule module;
-    private final Hashtable<String, DcObject> cache = new Hashtable<String, DcObject>();
+    private final Hashtable<Long, DcObject> cache = new Hashtable<Long, DcObject>();
     private final TableValueChangedAction tableChangeListener = new TableValueChangedAction();
     
     private final boolean caching;
@@ -123,6 +124,8 @@ public class DcTable extends JTable implements IViewComponent {
 
         this.caching = caching;
     }
+    
+    public void visibleItemsChanged() {}
 
     public DcTable(DcModule module, boolean readonly, boolean caching) {
         super(new DcTableModel());
@@ -288,7 +291,7 @@ public class DcTable extends JTable implements IViewComponent {
         setListeningForChanges(true);
     }
 
-    public void add(Collection<? extends DcObject> objects) {
+    public void add(List<? extends DcObject> objects) {
         add(objects.toArray(new DcObject[objects.size()]));
     }    
     
@@ -408,8 +411,8 @@ public class DcTable extends JTable implements IViewComponent {
         cache.clear();
     }
 
-    public void removeFromCache(String sID) {
-        cache.remove(sID);
+    public void removeFromCache(Long ID) {
+        cache.remove(ID);
     }
 
     public Collection<DcObject> getItems() {
@@ -486,7 +489,7 @@ public class DcTable extends JTable implements IViewComponent {
 
     public Collection<DcObject> getChangedObjects() {
         Collection<DcObject> objects = new ArrayList<DcObject>();
-        for (String id : cache.keySet()) {
+        for (Long id : cache.keySet()) {
             objects.add(cache.get(id));
         }
         return objects;
@@ -496,7 +499,7 @@ public class DcTable extends JTable implements IViewComponent {
         cancelEdit();
         int[] rows = new int[cache.size()];
         int counter = 0;
-        for (String id : cache.keySet()) {
+        for (Long id : cache.keySet()) {
             int row = getRowNumberWithID(id);
             rows[counter++] = row;
         }
@@ -522,7 +525,7 @@ public class DcTable extends JTable implements IViewComponent {
         setListeningForChanges(true);
     }
 
-    public int getRowNumberWithID(String ID) {
+    public int getRowNumberWithID(Long ID) {
         cancelEdit();
         for (int i = 0; i < getDcModel().getRowCount(); i++) {
             if (ID.equals(getObjectID(i)))
@@ -541,7 +544,7 @@ public class DcTable extends JTable implements IViewComponent {
             if (caching) {
                 int row = rows[i];
                 int col = getColumnIndexForField(DcObject._ID);
-                removeFromCache((String) getValueAt(row, col, true));
+                removeFromCache((Long) getValueAt(row, col, true));
             }
             getDcModel().removeRow(rows[i]);
         }
@@ -565,8 +568,7 @@ public class DcTable extends JTable implements IViewComponent {
 
     // not implemented; updating the UI of a single element is not needed for
     // tables
-    public void updateUI(String ID) {
-    }
+    public void updateUI(Long ID) {}
 
     public void setSelected(int row) {
         try {
@@ -595,7 +597,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
-    public void updateItem(String ID, DcObject dco) {
+    public void updateItem(Long ID, DcObject dco) {
         int index = getIndex(ID);
         if (index > -1)
             updateItemAt(index, dco);
@@ -659,10 +661,8 @@ public class DcTable extends JTable implements IViewComponent {
             if (row != -1 && column != -1) {
                 int col = getColumnIndexForField(DcObject._ID);
 
-                Object oID = getValueAt(row, col, true);
-                String id = oID == null ? null : oID.toString();
-
-                if (id != null && !id.equals("")) {
+                Long id = (Long) getValueAt(row, col, true);
+                if (id != null) {
                     DcObject dco;
                     if (!cache.containsKey(id)) {
                         dco = getItemAt(row);
@@ -670,8 +670,7 @@ public class DcTable extends JTable implements IViewComponent {
                         if (view.getType() != View._TYPE_INSERT)
                             dco.markAsUnchanged();
 
-                        DcObject o = DataManager.getObject(module.getIndex(),
-                                id);
+                        DcObject o = DataManager.getItem(module.getIndex(), id);
                         if (o != null) {
                             int field = getFieldForColumnIndex(column);
                             Object valueOld = o.getValue(field);
@@ -1023,12 +1022,12 @@ public class DcTable extends JTable implements IViewComponent {
     public void afterUpdate() {
     }
 
-    public DcObject getItem(String ID) {
+    public DcObject getItem(Long ID) {
         int index = getIndex(ID);
         return index >= 0 ? getItemAt(index) : null;
     }
 
-    private int getIndex(String ID) {
+    private int getIndex(Long ID) {
         for (int i = 0; i < getItemCount(); i++) {
             String objectID = getObjectID(i);
             if (ID.equals(objectID))
@@ -1061,9 +1060,9 @@ public class DcTable extends JTable implements IViewComponent {
         return super.rowAtPoint(point);
     }
 
-    public boolean remove(String[] ids) {
+    public boolean remove(Long[] ids) {
         boolean removed = false;
-        for (String ID : ids) {
+        for (Long ID : ids) {
             int idx = getIndex(ID);
             if (idx > -1) {
                 removeRow(idx);
@@ -1089,5 +1088,15 @@ public class DcTable extends JTable implements IViewComponent {
     	} catch(Exception e) {
     		super.paintComponent(g);
     	}
+    }
+
+    public void add(Long key) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void add(Collection<Long> keys) {
+        // TODO Auto-generated method stub
+        
     }
 }

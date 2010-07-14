@@ -26,6 +26,7 @@
 package net.datacrow.core.wf.requests;
 
 import java.util.Collection;
+import java.util.List;
 
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcObject;
@@ -48,14 +49,14 @@ public class UpdateDefaultTemplate implements IRequest {
     }
 
     public void execute(Collection<DcObject> objects) {
-        DcObject[] templates = DataManager.get(module, null);
-        for (int i = 0; i < templates.length; i++) {
-            if (!templates[i].getValue(DcTemplate._SYS_TEMPLATENAME).equals(templateName)) {
+        List<DcObject> templates = DataManager.get(module, null);
+        for (DcObject dco : templates) {
+            if (!dco.getValue(DcTemplate._SYS_TEMPLATENAME).equals(templateName)) {
                 try {
-                    templates[i].setValue(DcTemplate._SYS_DEFAULT, false);
-                    templates[i].saveUpdate(false);
+                    dco.setValue(DcTemplate._SYS_DEFAULT, false);
+                    dco.saveUpdate(false);
                 } catch (Exception e) {
-                    logger.error("Could not update template with ID " + templates[i].getID(), e);
+                    logger.error("Could not update template with ID " + dco.getID(), e);
                 }
             }
         }

@@ -48,8 +48,8 @@ public class DcMusicAlbumListHwElement extends DcObjectListHwElement {
 
     private JTextArea tracksField;
     
-    public DcMusicAlbumListHwElement(DcObject dco) {
-        super(dco);
+    public DcMusicAlbumListHwElement(int module) {
+        super(module);
     }
     
     @Override

@@ -159,8 +159,8 @@ public class DataFilterEntry {
         boolean isInputEmpty = Utilities.isEmpty(o);
         boolean isCheckEmpty = Utilities.isEmpty(value);
         
-        String input = isInputEmpty ? "" : o instanceof DcObject ? ((DcObject) o).getID() : o.toString().toLowerCase();
-        String check = isCheckEmpty ? "" : value instanceof DcObject ? ((DcObject) value).getID() : value.toString().toLowerCase();
+        String input = String.valueOf(isInputEmpty ? "" : o instanceof DcObject ? ((DcObject) o).getID() : o.toString().toLowerCase());
+        String check = String.valueOf(isCheckEmpty ? "" : value instanceof DcObject ? ((DcObject) value).getID() : value.toString().toLowerCase());
         
         if (dco.getField(field) == null)
         	return false;

@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -60,7 +61,7 @@ import net.datacrow.settings.DcSettings;
 
 public class DcReferencesDialog extends DcDialog implements ActionListener, KeyListener {
     
-    private Collection<DcObject> selected;
+    private List<DcObject> selected;
     private Vector<DcListElement> elements;
     private DcObjectList listRight;
     private DcObjectList listLeft;
@@ -77,11 +78,11 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         setTitle(DcModules.get(mappingModule.getReferencedModIdx()).getObjectNamePlural());
         buildDialog();
         
-        DcObject[] dcos = DataManager.get(mappingModule.getReferencedModIdx(), null);
+        List<DcObject> dcos = DataManager.get(mappingModule.getReferencedModIdx(), null);
         listLeft.add(dcos);
         
         int counter = 0;
-        String[] ids = new String[current.size()];
+        Long[] ids = new Long[current.size()];
         
         for (DcObject dco : current) {
             DcMapping mapping = (DcMapping) dco;
@@ -91,7 +92,7 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
                 ids[ counter++] = reference.getID();
             }
         }
-        listRight.add(selected.toArray(new DcObject[] {}));
+        listRight.add(selected);
         listLeft.remove(ids);
 
         // store the elements for filtering purposes

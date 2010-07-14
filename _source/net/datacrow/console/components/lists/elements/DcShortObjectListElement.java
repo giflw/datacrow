@@ -35,16 +35,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 
 public class DcShortObjectListElement extends DcObjectListElement {
 
     private JPanel panelInfo;
     
-    public DcShortObjectListElement(DcObject dco) {
-        super(dco);
-        build();
+    public DcShortObjectListElement(int module) {
+        super(module);
     }
     
     @Override

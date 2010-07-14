@@ -25,18 +25,7 @@
 
 package net.datacrow.core.data;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,8 +48,6 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.IChildModule;
-import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
@@ -74,7 +61,6 @@ import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
-import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
@@ -82,54 +68,20 @@ import net.datacrow.util.Utilities;
 import org.apache.log4j.Logger;
 
 /**
- * This is the persistence layer of Data Crow. All items are cached and stored in several
- * data structures for quick retrieval. Large data items such as images are only loaded
- * when needed and are not cached here  (only the reference to the image is stored). 
- * <br>
- * Data present represents the HSQL database information. Referential integrity is forced
- * by the database and further guaranteed by the Query class.
- * <br>
- * NOTE: There is no 'smart caching' mechanism implemented as the data sets stored in 
- *       Data Crow are, relatively, small.
- *       
  * @author Robert Jan van der Waals        
  */ 
 public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
     
-    private static boolean saveCache = true;
-    
-    // objects per module
-    private static Map<Integer, List<DcObject>> objects = 
-        new HashMap<Integer, List<DcObject>>();
-    
-    private static Map<Integer, Map<String, DcObject>> objectsByID = 
-        new HashMap<Integer, Map<String, DcObject>>();
-    
-    // all loans by DcObject ID
-    private static Map<String, List<Loan>> loans = 
-        new HashMap<String, List<Loan>>();
-    
-    // all pictures by DcObject ID
-    private static Map<String, List<Picture>> pictures = 
-        new HashMap<String, List<Picture>>();
+    private static Map<Integer, Map<Long, DcObject>> items = 
+        new HashMap<Integer, Map<Long, DcObject>>();
 
-    // all references by module and DcObject ID
-    private static Map<Integer, Map<String, Collection<DcMapping>>> references = 
-        new HashMap<Integer, Map<String, Collection<DcMapping>>>();
-
-    // all references by module and DcObject ID
-    private static Map<Integer, Map<String, List<DcObject>>> children = 
-        new HashMap<Integer, Map<String, List<DcObject>>>();
-    
     private static Map<Integer, Collection<IComponent>> listeners = 
         new HashMap<Integer, Collection<IComponent>>();
     
     private static boolean initialized = false;
     
-    private static boolean useCache = true;
-
     /**
      * Creates the data manager and loads all items.
      */
@@ -140,32 +92,26 @@ public class DataManager {
     }
     
     /**
-     * Indicates if the items have beem loaded.
+     * Indicates if the cached items have been loaded.
      */
     public static boolean isInitialized() {
         return initialized;
     }
-
-    /**
-     * Indicates if the cache should be used when loading the items.
-     * If set to false the items will be loaded directly from the database.
-     * @param b
-     */
-    public static void setUseCache(boolean b) {
-        useCache = b;
-    }
     
     /**
-     * Clears the items.
+     * Dispatch the items to the specified view.
+     * @param master View The view to be updated.
+     * @param items The items to be shown in the view.
      */
-    public static void unload() {
-        objects.clear();
-        loans.clear();
-        pictures.clear();
-        references.clear();
-        children.clear();
-    }
+    public static void bindData(final MasterView masterView, final List<Long> keys) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                masterView.bindData(keys);                
+            }
+        });
+    }    
 
+    
     /**
      * Dispatch the items to the specified view.
      * @param master View The view to be updated.
@@ -173,22 +119,38 @@ public class DataManager {
      * @param df The data filter used to filter the items to be shown.
      */
     public static void bindData(MasterView masterView, int module, DataFilter df) {
-        bindData(masterView, get(module, df));
+        bindData(masterView, getKeys(module, df));
     }    
-
-    /**
-     * Dispatch the items to the specified view.
-     * @param master View The view to be updated.
-     * @param items The items to be shown in the view.
-     */
-    public static void bindData(final MasterView masterView, final DcObject[] items) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                masterView.bindData(items);                
-            }
-        });
-    }
     
+    public static int getCount(int module, int field, Object value) {
+        int count = 0;
+        
+        try {
+            DcModule m = DcModules.get(module);
+            DcField f = m.getField(field);
+            String sql;
+            if (f.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                sql = "select count(*) from " + m.getTableName() + " where " + m.getField(field).getDatabaseFieldName() + " = ?";
+            } else {
+                m = DcModules.get(DcModules.getMappingModIdx(module, f.getReferenceIdx(), field));
+                sql = "select count(*) from " + m.getTableName() + " where " + m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?";
+            }
+                
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+            ps.setObject(1, value instanceof DcObject ? ((DcObject) value).getID() : value);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
+                count = rs.getInt(1);
+            
+            rs.close();
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+        
+        return count;
+    }
+
+
     /**
      * Update the specified cached item.
      * @param dco The item to update.
@@ -196,18 +158,7 @@ public class DataManager {
      */
     public static void update(DcObject dco, int module) {
         // get the real object
-        DcObject o = dco.getModule().getIndex() == DcModules._LOAN ? dco : 
-                     getObject(dco.getModule().getIndex(), dco.getID());
-
-        updatePictures(dco);
-        updateRelated(dco, false);
-
-        o.removeRequests();
-        o.reload();
-        
-        o.initializeReferences();
-        o.setValidate(true);
-        
+        DcObject o = getItem(dco.getModule().getIndex(), dco.getID());
         updateUiComponents(o.getModule().getIndex());
         updateView(o, 0, module, MainFrame._SEARCHTAB);
     }    
@@ -221,50 +172,16 @@ public class DataManager {
         dco.removeRequests();
         dco.setValidate(true);
         
-        updatePictures(dco);
-        
-        String key = getKey(dco);
-        if (module == DcModules._LOAN) {
-            List<Loan> c = loans.get(key);
-            c = c == null ? new ArrayList<Loan>() : c;
-            c.add((Loan) dco);
-            loans.put(key, c);
-        } else if (objects.containsKey(dco.getModule().getIndex())) {
-            Collection<DcObject> c = objects.get(dco.getModule().getIndex());
-            c.add(dco);
-            
-            Map<String, DcObject> map = objectsByID.get(dco.getModule().getIndex());
-            map = map == null ? new HashMap<String, DcObject>() : map;
+        if (items.containsKey(dco.getModule().getIndex())) {
+            Map<Long, DcObject> map = items.get(dco.getModule().getIndex());
+            map = map == null ? new HashMap<Long, DcObject>() : map;
             map.put(dco.getID(), dco);
-            
-        } else if (children.containsKey(dco.getModule().getIndex())) {
-            List<DcObject> c = children.get(dco.getModule().getIndex()).get(key);
-            c = c == null ? new ArrayList<DcObject>() : c;
-            c.add(dco);
-            children.get(dco.getModule().getIndex()).put(key, c);
-            
-            Map<String, DcObject> map = objectsByID.get(dco.getModule().getIndex());
-            map = map == null ? new HashMap<String, DcObject>() : map;
-            map.put(dco.getID(), dco);
-            
-        } else if (module == DcModules._PICTURE) {
-            List<Picture> c = pictures.get(getKey(dco));
-            c = c == null ? new ArrayList<Picture>() : c;
-            c.add((Picture) dco);
-            pictures.put(key, c);
-        } else if (references.containsKey(dco.getModule().getIndex())) {
-            Collection<DcMapping> c = references.get(dco.getModule().getIndex()).get(getKey(dco));
-            c = c == null ? new ArrayList<DcMapping>() : c;
-            c.add((DcMapping) dco);
-            references.get(dco.getModule().getIndex()).put(key, c);
         }
         
         if (dco.getModule().canBeLend())
             dco.setValue(DcObject._SYS_AVAILABLE, Boolean.TRUE);
 
-        updateRelated(dco, false);
         updateUiComponents(dco.getModule().getIndex());
-        
         if (DataCrow.mainFrame != null)
             updateView(dco, 1, module, MainFrame._INSERTTAB);
     }  
@@ -273,13 +190,13 @@ public class DataManager {
         boolean exists = false;
         
         if (o.getModule().getIndex() == DcModules._PICTURE) {
-            String objectID = (String) o.getValue(Picture._A_OBJECTID);
+            Long objectID = (Long) o.getValue(Picture._A_OBJECTID);
             if (objectID != null) {
                 Collection<Picture> pictures = getPictures(objectID);
                 exists = pictures.contains(o);
             }
         } else if (o.hasPrimaryKey()) {
-            exists = getObject(o.getModule().getIndex(), o.getID()) != null;
+            exists = getItem(o.getModule().getIndex(), o.getID()) != null;
         } else {
             logger.error("Cannot determine whether the item exists, not a picture and no ID", new Exception());
         }
@@ -293,27 +210,11 @@ public class DataManager {
      * @param module The module to which the item belongs.
      */
     public static void remove(DcObject dco, int module) {
-    	if (module == DcModules._LOAN) {
-            Collection<Loan> c = loans.get(getKey(dco));
-            if (c != null) c.remove(dco);
-    	} else if (objects.containsKey(dco.getModule().getIndex())) {
-            Collection<DcObject> c = objects.get(dco.getModule().getIndex());
-            if (c != null) c.remove(dco);
-            
-            Map<String, DcObject> map = objectsByID.get(dco.getModule().getIndex());
+        if (items.containsKey(dco.getModule().getIndex())) {
+            Map<Long, DcObject> map = items.get(dco.getModule().getIndex());
             if (map != null) map.remove(dco.getID());
-        } else if (children.containsKey(dco.getModule().getIndex())) {
-            List<DcObject> c = children.get(dco.getModule().getIndex()).get(dco.getValue(dco.getParentReferenceFieldIndex()));
-            if (c != null) c.remove(dco);
-            
-            Map<String, DcObject> map = objectsByID.get(dco.getModule().getIndex());
-            if (map != null) map.remove(dco.getID());
-        } else if (module == DcModules._PICTURE) {
-            Collection<Picture> c = pictures.get(getKey(dco));
-            if (c != null) c.remove(dco);
         }
-        
-        updateRelated(dco, true);
+
         updateUiComponents(dco.getModule().getIndex());
         updateView(dco, 2, module, MainFrame._SEARCHTAB);
     }
@@ -324,19 +225,17 @@ public class DataManager {
      * @param childIdx The child module index.
      * @return The children or an empty collection.
      */
-    public static Collection<DcObject> getChildren(String parentId, int childIdx) {
+    public static Collection<DcObject> getChildren(Long parentId, int childIdx) {
         
-        if (children.get(childIdx) == null) return new ArrayList<DcObject>();
-        
-        List<DcObject> c = children.get(childIdx).get(parentId);
-        c = c == null ? new ArrayList<DcObject>() : new ArrayList<DcObject>(c);
-        children.get(childIdx).put(parentId, c);
-        
-        DcModule module =  DcModules.get(childIdx);
-        DataFilter filter = new DataFilter(childIdx);
-        filter.setOrder(new DcField[] {module.getField(module.getDefaultSortFieldIdx())});
-        
-        filter.sort(c);
+        List<DcObject> c = new ArrayList<DcObject>(); // children.get(childIdx).get(parentId);
+//        c = c == null ? new ArrayList<DcObject>() : new ArrayList<DcObject>(c);
+//        children.get(childIdx).put(parentId, c);
+//        
+//        DcModule module =  DcModules.get(childIdx);
+//        DataFilter filter = new DataFilter(childIdx);
+//        filter.setOrder(new DcField[] {module.getField(module.getDefaultSortFieldIdx())});
+//        
+//        filter.sort(c);
         return c;
     }
     
@@ -452,8 +351,8 @@ public class DataManager {
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
         
-        DcObject[] tabs = get(DcModules._TAB, df);
-        if (tabs == null || tabs.length == 0) {
+        Collection<DcObject> tabs = get(DcModules._TAB, df);
+        if (tabs.size() == 0) {
             try {
                 Tab tab = (Tab) DcModules.get(DcModules._TAB).getItem();
                 tab.setIDs();
@@ -485,11 +384,11 @@ public class DataManager {
         DataFilter df = new DataFilter(DcModules._TAB);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
-        DcObject[] tabs = get(DcModules._TAB, df);
-        return tabs != null && tabs.length > 0 ? tabs[0] : null;
+        List<DcObject> tabs = get(DcModules._TAB, df);
+        return tabs != null && tabs.size() > 0 ? tabs.get(0) : null;
     }
     
-    public static DcObject[] getTabs(int module) {
+    public static List<DcObject> getTabs(int module) {
         DataFilter df = new DataFilter(DcModules._TAB);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
         return get(DcModules._TAB, df);
@@ -539,234 +438,22 @@ public class DataManager {
         else
             updater.run();
     }
-
-    private static String getKey(DcObject dco) {
-        if (dco.getModule().getIndex() == DcModules._PICTURE)
-            return (String) dco.getValue(Picture._A_OBJECTID);
-        else if (dco.getModule().getIndex() == DcModules._LOAN)
-            return (String) dco.getValue(Loan._D_OBJECTID);
-        else if (dco.getParentReferenceFieldIndex() > -1)
-            return dco.getParentID();
-
-        return null;
-    }    
-    
-    @SuppressWarnings("unchecked")
-    private static void updateRelated(DcObject dco, boolean delete) {
-        // updated or create the references
-        
-        for (DcField field : dco.getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                int mappingIdx = DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex());
-                Collection<DcMapping> c = getReferences(mappingIdx, dco.getID());
-                c = c == null ? c = new ArrayList<DcMapping>() : c;
-                Collection<DcMapping> mappings = (Collection<DcMapping>) dco.getValue(field.getIndex());
-                c.clear();
-                
-                if (!delete && mappings != null) {
-                    for (DcMapping mapping : mappings) {
-                        mapping.setValue(DcMapping._A_PARENT_ID, dco.getID());
-                        c.add(mapping);
-                    }
-                }
-                
-                if (delete) {
-                    if (mappings != null) {
-                        for (DcObject mapping : mappings)
-                            mapping.release();
-                    }
-
-                    int mappingModIdx = DcModules.getMappingModIdx(dco.getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
-                    Map<String, Collection<DcMapping>> map = references.get(mappingModIdx);
-                    map.remove(dco.getID());
-                }
-                
-                if (c.size() > 0) {
-                    int mappingModIdx = DcModules.getMappingModIdx(dco.getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
-                    Map<String, Collection<DcMapping>> map = references.get(mappingModIdx);
-                    map.put(dco.getID(), c);
-                }
-            }
-        }
-        
-        if (delete)
-            disgardReferences(dco);
-        else if (dco.getModule().getIndex() == DcModules._LOAN)
-            updateLoanedItems((Loan) dco);
-    }   
-    
-    /**
-     * Removes references to this object from any other item. This method should only be called
-     * when the provided item is about has been deleted from the database as well as the references
-     * to this item. 
-     * @param dco The deleted item
-     */
-    @SuppressWarnings("unchecked")
-    private static void disgardReferences(DcObject dco) {
-        DcModule mainModule = dco.getModule();
-        if (    mainModule.hasDependingModules() || 
-                mainModule.getType() == DcModule._TYPE_ASSOCIATE_MODULE ||
-                mainModule.getType() == DcModule._TYPE_PROPERTY_MODULE) {
-
-            // remove collection items holding a reference to this item
-            for (DcModule referencingMod : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-                DcModule module = referencingMod instanceof MappingModule ?
-                                    DcModules.get(((MappingModule) referencingMod).getParentModIdx()) :
-                                    referencingMod;
-                                    
-                if (module == mainModule) continue;
- 
-                for (DcField field : module.getFields()) {
-                    
-                    if (field.getReferenceIdx() == dco.getModule().getIndex()) {
-                        if (referencingMod instanceof MappingModule) {
-                            DataFilter df = new DataFilter(module.getIndex());
-                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
-                                                            module.getIndex(), 
-                                                            field.getIndex(), 
-                                                            Operator.IS_FILLED, 
-                                                            null));
-                            
-                            DcObject[] referencingItems = get(module.getIndex(), df);
-                            for (int i = 0; i < referencingItems.length; i++) {
-                                Collection<DcMapping> references = (Collection<DcMapping>) referencingItems[i].getValue(field.getIndex());
-                                Object val = null;
-                                boolean changed = false;
-                                for (DcMapping mapping : references) {
-                                    if (mapping.getReferencedId().equals(dco.getID())) {
-                                        val = mapping;
-                                        changed = true;
-                                    }
-                                }
-                                references.remove(val);
-                                
-                                if (changed) 
-                                    updateView(referencingItems[i], 0, referencingItems[i].getModule().getIndex(), MainFrame._SEARCHTAB);
-                            }
-                        } else {
-                            DataFilter df = new DataFilter(module.getIndex());
-                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
-                                                            module.getIndex(), 
-                                                            field.getIndex(), 
-                                                            Operator.EQUAL_TO, 
-                                                            dco));
-                            
-                            DcObject[] items = get(module.getIndex(), df);
-                            for (int i = 0; i < items.length; i++) {
-                                items[i].setValueLowLevel(field.getIndex(), null);
-                                updateView(items[i], 0, items[i].getModule().getIndex(), MainFrame._SEARCHTAB);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // make sure children are also removed
-        if (dco.getModule().getChild() != null) {
-            for (DcObject child : new ArrayList<DcObject>(getChildren(dco.getID(), dco.getModule().getChild().getIndex())))
-                remove(child, child.getModule().getIndex());
-        }
-        
-        pictures.remove(dco.getID());
-
-        if (dco.getModule().canBeLend())
-            loans.remove(dco.getID());
-    }
-
-    private static void updatePictures(DcObject dco) {
-        for (DcField field : dco.getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) dco.getValue(field.getIndex());
-                
-                if (picture == null) 
-                    continue;
-                    
-                List<Picture> pics = pictures.get(dco.getID());
-                pics = pics == null ? new ArrayList<Picture>() : pics;
-
-                if (picture.isNew() && picture.isEdited() && !picture.isDeleted()) {
-                    picture.markAsUnchanged();
-                    pics.add(picture);
-                    picture.unload(true);
-                    
-                } else if (picture.isEdited() && pics.contains(picture)) {
-                    Picture pic = pics.get(pics.indexOf(picture));
-                    pic.copy(picture, true, true);
-                    pic.markAsUnchanged();
-                    pic.unload(true);
-
-                } else if (pics.contains(picture) && picture.isDeleted()) {
-                    pics.remove(picture);
-                    picture.release();
-                } 
-                
-                pictures.put(dco.getID(), pics);
-            }
-        }
-    }
-    
-    private static void updateLoanedItems(Loan loan) {
-        String parentID = (String) loan.getValue(Loan._D_OBJECTID);
-        if (parentID != null) {
-            DcObject parent = null;
-            
-            for (DcModule module : DcModules.getModules()) {
-
-                if (module.canBeLend())
-                    parent = getObject(module.getIndex(), parentID);
-                
-                if (parent != null)
-                    break;
-            }
-            
-            if (parent != null) {
-                parent.reload();
-                updateView(parent, 0, parent.getModule().getIndex(), MainFrame._SEARCHTAB);
-            }
-        }
-    }
-    
-    /**
-     * Updates components like list boxes holding the module items.
-     * @param module The module for which the registered listeners should be updated.
-     */
-    private static void updateUiComponents(int module) {
-        Collection<IComponent> components = listeners.get(module);
-        
-        if (components == null) return;
-
-        for (IComponent c : components)
-            c.refresh();
-    }
-    
-    /**
-     * Register a component. The registered component will be updated with the module items.
-     * Changed, removal and additions will be reflected on the registered components. 
-     * @param component
-     * @param module
-     */
-    public static void registerUiComponent(IComponent component, int module) {
-        Collection<IComponent> c = listeners.get(module);
-        c = c == null ? new ArrayList<IComponent>() : c;
-        c.add(component);
-        listeners.put(module, c);
-        component.refresh();
-    }
-    
-    public static void unregisterUiComponent(IComponent c) {
-        for (Collection<IComponent> components : listeners.values())
-            components.remove(c);
-    }
     
     /**
      * Item count.
      * @param module
      * @param df
+     * 
+     * TODO: rewrite
      */
     public static int contains(int module, DataFilter df) {
-        DcObject[] objects = get(module, df);
-        return objects != null ? objects.length : 0;
+        List<DcObject> objects = get(module, df);
+        return objects != null ? objects.size() : 0;
+    }
+    
+    
+    public static boolean isCached(int module) {
+        return items.containsKey(module);
     }
 
     /**
@@ -774,27 +461,24 @@ public class DataManager {
      * @param parentID The item ID for which the loans are retrieved.
      * @return A collection holding loans or an empty collection.
      */
-    public static Collection<Loan> getLoans(String parentID) {
-        List<Loan> c = loans.get(parentID);
-        c = c == null ? new ArrayList<Loan>() : c;
-        loans.put(parentID, c);
-        return c;
+    public static Collection<Loan> getLoans(Long parentID) {
+        return new ArrayList<Loan>();
     }
     
     /**
      * Retrieves the actual loan.
      * @param parentID The item ID for which the loan is retrieved.
      */
-    public static Loan getCurrentLoan(String parentID) {
-        Collection<Loan> loans = getLoans(parentID);
-        for (Loan loan : new ArrayList<Loan>(loans)) {
-            if (loan.getValue(Loan._B_ENDDATE) == null)
-                return loan;
-        }
-        
-        Loan loan = (Loan) DcModules.get(DcModules._LOAN).getItem();
-        loans.add(loan);
-        return loan;
+    public static Loan getCurrentLoan(Long parentID) {
+//        Collection<Loan> loans = getLoans(parentID);
+//        for (Loan loan : new ArrayList<Loan>(loans)) {
+//            if (loan.getValue(Loan._B_ENDDATE) == null)
+//                return loan;
+//        }
+//        
+//        Loan loan = (Loan) DcModules.get(DcModules._LOAN).getItem();
+//        loans.add(loan);
+        return new Loan();
     }
     
     public static DcObject getExternalReference(int moduleIdx, String ID) {
@@ -805,7 +489,7 @@ public class DataManager {
         try {
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
             ps.setString(1, ID);
-            List<DcObject> items = DatabaseManager.executeQuery(ps, Query._SELECT);
+            List<DcObject> items = DatabaseManager.retrieveItems(ps, Query._SELECT);
             return items.size() > 0 ? items.get(0) : null;
         } catch (SQLException se) {
             logger.error(se, se);
@@ -839,28 +523,26 @@ public class DataManager {
                 
                 int idx = DcModules.getMappingModIdx(extRefModule.getIndex() - DcModules._EXTERNALREFERENCE, extRefModule.getIndex(), DcObject._SYS_EXTERNAL_REFERENCES);
                 DcModule mappingMod = DcModules.get(idx);
-                sql = "SELECT OBJECTID FROM " + mappingMod.getTableName() + 
-                      " WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?";
+                sql = "SELECT * FROM " + DcModules.get(moduleIdx) + " WHERE ID IN (" +
+                	  "SELECT OBJECTID FROM " + mappingMod.getTableName() + 
+                      " WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?)";
     
                 PreparedStatement ps2 = conn.prepareStatement(sql);
                 ps2.setString(1, referenceID);
-                ResultSet rs2 = ps2.executeQuery();
-    
-                while (rs2.next()) {
-                    result = getObject(moduleIdx, rs2.getString(1));
+                List<DcObject> items = DatabaseManager.retrieveItems(ps2, Query._SELECT);
+                
+                if (items.size() > 0) {
+                    result = items.get(0);
                     break;
                 }
-                
-                rs2.close();
-                break;
             }
         
+            ps.close();
             rs.close();
             conn.close();
         } catch (SQLException se) {
             logger.error(se, se);
         }
-            
         return result;
     }
     
@@ -880,8 +562,7 @@ public class DataManager {
         DcModule module = DcModules.get(moduleIdx);
 
         try {
-            String query = 
-                "SELECT ID FROM " + module.getTableName() + " WHERE " + 
+            String query = "SELECT * FROM " + module.getTableName() + " WHERE " + 
                 "UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + ") =  UPPER(?)";
             
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
@@ -893,18 +574,8 @@ public class DataManager {
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
                 ps.setString(2,  ";%" + s.toUpperCase() + "%;");
             
-            ResultSet rs = ps.executeQuery();
-            DcObject result = null;
-            while (rs.next()) {
-                String ID = rs.getString(1);
-                result = getObject(moduleIdx, ID);
-                break;
-            }
-            
-            rs.close();
-            ps.close();
-            
-            return result;
+            List<DcObject> items = DatabaseManager.retrieveItems(ps, Query._SELECT);
+            return items.size() > 0 ? items.get(0) : null;
             
         } catch (SQLException e) {
             logger.error(e, e);
@@ -919,9 +590,15 @@ public class DataManager {
      * @param ID
      * @return null or the item if found.
      */
-    public static DcObject getObject(int module, String ID) {
-        Map<String, DcObject> map = objectsByID.get(Integer.valueOf(module));
-        return map != null ? map.get(ID) : null;
+    public static DcObject getItem(int module, Long ID) {
+        Map<Long, DcObject> map = items.get(Integer.valueOf(module));
+        
+        if (map != null && map.containsKey(ID)) {
+            return map.get(ID);
+        } else {
+            List<DcObject> items = DatabaseManager.retrieveItems("SELECT * FROM " + DcModules.get(module).getTableName() + " WHERE ID = " + ID, Query._SELECT);
+            return items != null && items.size() > 0 ? items.get(0) : null;
+        }
     }    
   
     /**
@@ -929,11 +606,12 @@ public class DataManager {
      * @param module
      * @param parentId
      */
-    public static Collection<DcMapping> getReferences(int module, String parentId) {
-        Collection<DcMapping> c = references.get(module).get(parentId);
-        c = c == null ? new ArrayList<DcMapping>() : c;
-        references.get(module).put(parentId, c);
-        return c; 
+    public static Collection<DcObject> getReferences(int modIdx, Long parentID) {
+        DcModule module = DcModules.get(modIdx);
+        String sql = "SELECT * FROM " + module.getTableName() + " WHERE " + 
+                     module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = " + parentID;
+
+        return DatabaseManager.retrieveItems(sql, Query._SELECT);
     }
 
     /**
@@ -941,12 +619,23 @@ public class DataManager {
      * @param parentId
      * @return Either the pictures or an empty collection.
      */
-    public static Collection<Picture> getPictures(String parentId) {
-        List<Picture> c = pictures.get(parentId);
-        c = c == null ? new ArrayList<Picture>() : c;
-        pictures.put(parentId, c);
-        return c;
+    public static Collection<Picture> getPictures(Long parentID) {
+        DcModule module = DcModules.get(DcModules._PICTURE);
+        String sql = "SELECT * FROM " + module.getTableName() + " WHERE " + 
+                     module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + parentID;
+        
+        List<Picture> pictures = new ArrayList<Picture>();
+        List<DcObject> items = DatabaseManager.retrieveItems(sql, Query._SELECT);
+        
+        for (DcObject dco : items) pictures.add((Picture) dco);
+        
+        return pictures;
     }
+    
+    public static List<Long> getKeys(int module, DataFilter filter) {
+        return DatabaseManager.getKeys(module, filter);
+    }
+    
     
     /**
      * Retrieve items using the specified data filter.
@@ -954,58 +643,33 @@ public class DataManager {
      * @param modIdx
      * @param filter
      */
-    public static DcObject[] get(int modIdx, DataFilter filter) {
-        DataFilter df = filter;
-        
-        List<DcObject> c = new ArrayList<DcObject>();
-        if (DcModules.get(modIdx).isAbstract()) {
-            for (DcModule m : DcModules.getModules()) {
-                if (!m.isAbstract() && m.isTopModule()) {
-                    
-                    if ((modIdx == DcModules._MEDIA && m.getType() == DcModule._TYPE_MEDIA_MODULE) ||
-                        (modIdx == DcModules._ITEM && (m.isContainerManaged()))) {
-                     
-                        DcObject[] objects = get(m.getIndex(), df);
-                        for (int i = 0; i < objects.length; i++)
-                            c.add(objects[i]);
-                    }
-                }
+    public static List<DcObject> get(int modIdx, DataFilter filter) {
+        try {
+            if (items.containsKey(modIdx)) {
+                List<DcObject> result = new ArrayList<DcObject>();
+                for (DcObject dco : items.get(modIdx).values())
+                    result.add(dco);
+                
+                return result;
+            } else if (filter != null) {
+                Query query = new Query(filter, null, null);
+                return DatabaseManager.retrieveItems(query);
+            } else {
+                return DatabaseManager.retrieveItems(DcModules.get(modIdx).getItem());
             }
-        } else {
-        	if (modIdx == DcModules._LOAN) {
-                for (Collection<Loan> objects : new ArrayList<Collection<Loan>>(loans.values()))
-                    add(c, df, objects);
-        	} else if (objects.containsKey(modIdx)) {
-                add(c, df, new ArrayList<DcObject>(objects.get(modIdx)));
-            } else if (references.containsKey(modIdx)) {
-                for (Collection<DcMapping> objects : new ArrayList<Collection<DcMapping>>(references.get(modIdx).values()))
-                    add(c, df, objects);
-            } else if (modIdx == DcModules._PICTURE) {
-                for (Collection<Picture> objects : new ArrayList<Collection<Picture>>(pictures.values()))
-                    add(c, df, objects);                
-            } else if (children.containsKey(modIdx)) {
-                for (Collection<DcObject> objects : new ArrayList<Collection<DcObject>>(children.get(modIdx).values()))
-                    add(c, df, objects);
-            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+            return new ArrayList<DcObject>();
         }
-        
-        if (df == null) {
-            DcModule module = DcModules.get(modIdx);
-            df = new DataFilter(modIdx);
-            df.setOrder(new DcField[] {module.getField(DcProperty._SYS_DISPLAYVALUE)});
-        }
-        
-        df.sort(c);
-        return c.toArray(new DcObject[0]);
+//        if (df == null) {
+//            DcModule module = DcModules.get(modIdx);
+//            df = new DataFilter(modIdx);
+//            df.setOrder(new DcField[] {module.getField(DcProperty._SYS_DISPLAYVALUE)});
+//        }
+//        
+//        df.sort(c);
+//        return c.;
     }
-
-    private static void add(Collection<DcObject> data, DataFilter df, Collection<? extends DcObject> c) {
-        for (DcObject dco : new ArrayList<DcObject>(c)) {
-            if (df == null || df.applies(dco)) 
-                data.add(dco);
-        }
-    }    
-
     
     /***************************************
      * Initialization
@@ -1016,346 +680,46 @@ public class DataManager {
      * @see #useCache
      */
     public void initialize() {
-        boolean gracefulShutdown = DcSettings.getBoolean(DcRepository.Settings.stGracefulShutdown);
-        
-        if (!gracefulShutdown || !useCache || !deserialize()) {
-            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-            loadFromDB();
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        loadItems();
 
-            if (logger.isDebugEnabled()) {
-                long end = new Date().getTime();
-                logger.debug("Items were loaded from the database in " + (end - start) + "ms");
-            }
+        if (logger.isDebugEnabled()) {
+            long end = new Date().getTime();
+            logger.debug("Items were loaded from the database in " + (end - start) + "ms");
         }
     }
-
-    
-    /***************************************
-     * Cache
-     ***************************************/
-
-    private static final int[] cacheTypes =  
-        new int[] {CacheJob._OBJECTS, CacheJob._LOANS, CacheJob._PICTURES, CacheJob._REFERENCES, CacheJob._CHILDREN};
-    
-    public static void clearCache() {
-    	try {
-    	    saveCache = false;
-    		for (String file : new File(DataCrow.cacheDir).list())
-    			new File(DataCrow.cacheDir + file).delete();
-    	} catch (Exception e) {
-    		logger.error("Could not remove cache", e);
-    	}
-    }
-    
-    public static void serialize() {
-        try {
-            if (saveCache) {
-                logger.info(DcResources.getText("msgWritingItemCache"));
-                CacheWriter writer = new CacheWriter();
-                writer.start();
-                writer.join();
-            }
-        } catch (InterruptedException e) {
-            logger.error(e, e);
-        }
-    }
-    
-    public static boolean deserialize() {
-        File file = new File(DataCrow.cacheDir + "objects.dat");
-        if (!file.exists()) return false;
-
-        try {
-            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-            
-            CacheLoader loader = new CacheLoader();
-            loader.start();
-            loader.join();
-
-            if (logger.isDebugEnabled()) {
-                long end = new Date().getTime();
-                logger.debug("Items were loaded from disk in " + (end - start) + "ms");
-            }
-
-            start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-            
-            try {
-                DataSetCreator dsc = new DataSetCreator(objects);
-                dsc.start();
-                dsc.join();
-            } catch (Exception e) {
-                logger.error(e, e);
-            }
-            
-            if (logger.isDebugEnabled()) {
-                long end = new Date().getTime();
-                logger.debug("Item sets were created in " + (end - start) + "ms");
-            }
-            
-            return loader.isSuccess();
-        } catch (InterruptedException e) {
-            logger.error(e, e);
-        }
-        return false;
-    }
-    
-    private final static class CacheWriter extends Thread {
-        
-        @Override
-        public void run() {
-            
-            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-            
-            ThreadGroup tg = new ThreadGroup("Cache Writer");
-            for (int cacheType : cacheTypes) {
-                CacheJob cj = new CacheJob(tg, cacheType, CacheJob._JOBTYPE_WRITE);
-                cj.start();
-            }
-
-            while (tg.activeCount() > 0)
-                try { sleep(10); } catch (InterruptedException e) {}
-            
-            if (logger.isDebugEnabled()) {
-                long end = new Date().getTime();
-                logger.debug("Items were written to disk in " + (end - start) + "ms");
-            }
-        }
-    }
-    
-    private final static class CacheLoader extends Thread {
-        
-        private boolean success = true;
-        
-        public boolean isSuccess() {
-            return success;
-        }
-        
-        @Override
-        public void run() {
-            ThreadGroup tg = new ThreadGroup("Cache Loader");
-            Collection<CacheJob> jobs = new ArrayList<CacheJob>();
-            for (int cacheType : cacheTypes) {
-                CacheJob cj = new CacheJob(tg, cacheType, CacheJob._JOBTYPE_READ);
-                jobs.add(cj);
-                cj.start();
-            }
-
-            while (tg.activeCount() > 0)
-                try { sleep(10); } catch (InterruptedException e) {}
-            
-            for (CacheJob cj : jobs) 
-                success &= cj.isSuccess();
-        }
-    }
-    
-    /**
-     * Loads all items from cache. Note that ObjectsByID cannot be cached as these would get other
-     * instance IDs which will result in incorrect cached items (mismatch).
-     * @author Robert Jan van der Waals
-     */
-    private final static class CacheJob extends Thread {
-        
-        public static int _JOBTYPE_READ = 0;
-        public static int _JOBTYPE_WRITE = 1;
-        
-        public static int _OBJECTS = 0;
-        public static int _LOANS = 1;
-        public static int _PICTURES = 2;
-        public static int _REFERENCES = 3;
-        public static int _CHILDREN = 4;
-
-        private int cacheType;
-        private int jobType;
-        
-        private boolean success = false;
-        
-        private final String[] cache = new String[] {
-                "objects.dat", "loans.dat", "pictures.dat",
-                "references.dat", "children.dat"};
-        
-        public CacheJob(ThreadGroup tg, int cacheType, int jobType) {
-            super(tg,  "Cache Job - " + cacheType);
-            this.cacheType = cacheType;
-            this.jobType = jobType;
-        }
-        
-        public boolean isSuccess() {
-            return success;
-        }
-        
-        @Override
-        public void run() {
-            if (jobType == _JOBTYPE_READ)
-                read();
-            else if (jobType == _JOBTYPE_WRITE)
-                write();
-        }     
-        
-        private void write() {
-            for (List<Picture> c : pictures.values()) {
-                for (Picture p : c) 
-                    p.setValue(Picture._D_IMAGE, null);
-            }
-            
-            if (cacheType == _OBJECTS)
-                write(objects);
-            if (cacheType == _LOANS)
-                write(loans);
-            if (cacheType == _PICTURES)
-                write(pictures);
-            if (cacheType == _REFERENCES)
-                write(references);
-            if (cacheType == _CHILDREN)
-                write(children);
-        }
-        
-        private void write(Object o) {
-            try {
-                OutputStream os = new FileOutputStream(DataCrow.cacheDir + cache[cacheType]);
-                BufferedOutputStream bos = new BufferedOutputStream(os);
-                ObjectOutput oi = new ObjectOutputStream(bos);
-                oi.writeObject(o);
-                oi.close();
-                success = true;
-            } catch (IOException e) {
-                logger.error(e, e);
-            }
-        }
-        
-        private void read() {
-            try {
-                File file = new File(DataCrow.cacheDir + cache[cacheType]);
-                
-                if (!file.exists()) return;
-                
-                InputStream is = new FileInputStream(file);
-                BufferedInputStream bis = new BufferedInputStream(is);
-                ObjectInput oi = new ObjectInputStream(bis);
-                
-                if (cacheType == _OBJECTS)
-                    loadObjects(oi);
-                if (cacheType == _LOANS)
-                    loadLoans(oi);
-                if (cacheType == _PICTURES)
-                    loadPictures(oi);
-                if (cacheType == _REFERENCES)
-                    loadReferences(oi);
-                if (cacheType == _CHILDREN)
-                    loadChildren(oi);
-                                
-                oi.close();
-                bis.close();
-                is.close();
-                success = true;
-            } catch (Exception e) {
-                logger.warn("Failed to load the items from cache. The items will be loaded from the database instead.", e);
-            } catch (Error err) {
-                logger.warn("Failed to load the items from cache. The items will be loaded from the database instead.", err);
-            }            
-        }
-        
-        @SuppressWarnings("unchecked")
-        private void loadObjects(ObjectInput oi) throws ClassNotFoundException, IOException {
-            objects = (Map<Integer, List<DcObject>>) oi.readObject();
-        }
-        
-        @SuppressWarnings("unchecked")
-        private void loadLoans(ObjectInput oi) throws ClassNotFoundException, IOException {
-            loans = (Map<String, List<Loan>>) oi.readObject();
-        }
-        
-        @SuppressWarnings("unchecked")
-        private void loadPictures(ObjectInput oi) throws ClassNotFoundException, IOException {
-            pictures = (Map<String, List<Picture>>) oi.readObject();
-        }
-        
-        @SuppressWarnings("unchecked")
-        private void loadReferences(ObjectInput oi) throws ClassNotFoundException, IOException {
-            references = (Map<Integer, Map<String, Collection<DcMapping>>>) oi.readObject();
-        }
-        
-        @SuppressWarnings("unchecked")
-        private void loadChildren(ObjectInput oi) throws ClassNotFoundException, IOException {
-            children = (Map<Integer, Map<String, List<DcObject>>>) oi.readObject();
-        }
-    }
-    
 
     /***************************************
      * Load from Database
      ***************************************/
-    private void loadFromDB() {
-        objects.clear();
-        
+    private void loadItems() {
         ThreadGroup group = new ThreadGroup("data-fetchers");
-        Collection<DataFetcher> fetchers = new ArrayList<DataFetcher>();
-
-        // pictures, mappings and loans
-        setPictures();
-        setLoans();
-        
-        for (DcModule module : DcModules.getAllModules()) {
-            if (module instanceof MappingModule)
-                setReferences((MappingModule) module);
-        }         
-
-        // supporting modules
-        for (DcModule module : DcModules.getAllModules()) {
-            if (    !isLoaded(module.getIndex()) && 
-                    !module.isTopModule() && 
-                    !module.isChildModule()) {
-                
-                objects.put(module.getIndex(), null);
-                fetchers.add(new DataFetcher(module, group));            
-            }
-        }        
-        
-        doFetch(fetchers);
+        Collection<DataFetcher> fetchers1 = new ArrayList<DataFetcher>();
+        Collection<DataFetcher> fetchers2 = new ArrayList<DataFetcher>();
 
         for (DcModule module : DcModules.getAllModules()) {
-            if (   !isLoaded(module.getIndex()) && 
-                   !module.isAbstract() &&
-                    module.hasDependingModules()) {
-                objects.put(module.getIndex(), null);
-                fetchers.add(new DataFetcher(module, group));
-            }
-        }
-        
-        for (DcModule module : DcModules.getAllModules()) {
-            if (module.isChildModule() && !module.isAbstract() && !isLoaded(module.getIndex())) 
-                setChildren((IChildModule) module);
-        }
-        
-        // fill the Objects By ID set with the child items
-        for (Integer key : children.keySet()) {
-            Map<String, DcObject> map = new HashMap<String, DcObject>();
-            for (List<DcObject> c : children.get(key).values()) {
-                for (DcObject dco : c)
-                    map.put(dco.getID(), dco);
-            }
             
-            objectsByID.put(key, map);
-        }
-
-        for (DcModule module : DcModules.getAllModules()) {
-            if (!isLoaded(module.getIndex()) && !module.isAbstract() && module.isTopModule()) {
-                objects.put(module.getIndex(), null);
-                fetchers.add(new DataFetcher(module, group));
+            if (module.isAbstract() || !module.isCached()) continue;
+            
+            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+                items.put(module.getIndex(), null);
+                fetchers1.add(new DataFetcher(module, group));        
+            
+            } else if (module.getIndex() == DcModules._USER ||
+                       module.getIndex() == DcModules._CONTACTPERSON) {
+                
+                items.put(module.getIndex(), null);
+                fetchers2.add(new DataFetcher(module, group));    
             }
         }        
         
-        doFetch(fetchers); 
-        
-        // Check for null values (security issues, etc).
-        for (Integer key : objects.keySet()) {
-            Collection<DcObject> c = objects.get(key);
-            if (c == null)
-                objects.put(key, new ArrayList<DcObject>());
-        }
+        fetch(fetchers1);
+        fetch(fetchers2);
 
         Templates.refresh();
     }
     
-    private void doFetch(Collection<DataFetcher> fetchers) {
+    private void fetch(Collection<DataFetcher> fetchers) {
         for (DataFetcher fetcher : fetchers) {
             try {
                 fetcher.start();
@@ -1366,70 +730,6 @@ public class DataManager {
         }  
         fetchers.clear();
     }
-    
-    public void setPictures() {
-        for (DcObject dco : DcModules.get(DcModules._PICTURE).loadData()) {
-            Picture picture = (Picture) dco;
-            String key = getKey(dco);
-            
-            List<Picture> pics = pictures.get(key);
-            pics = pics == null ? new ArrayList<Picture>() : pics;
-            pics.add(picture);
-            
-            pictures.put(key, pics);
-         }
-    }
-    
-    private void setLoans() {
-        for (DcObject dco : DcModules.get(DcModules._LOAN).loadData()) {
-            Loan loan = (Loan) dco;
-            String key = (String) loan.getValue(Loan._D_OBJECTID);
-            
-            List<Loan> c = loans.get(key);
-            c = c == null ? c = new ArrayList<Loan>() : c;
-            c.add(loan);
-            
-            loans.put(key, c);
-         }
-    }
-    
-    private void setChildren(IChildModule childModule) {
-        Map<String, List<DcObject>> childrenMap = new HashMap<String, List<DcObject>>();
-        for (DcObject child : DcModules.get(childModule.getIndex()).loadData()) {
-            String key = child.getParentID();
-
-            List<DcObject> c = childrenMap.get(key);
-            c = c == null ? new ArrayList<DcObject>() : c;
-            c.add(child);
-
-            childrenMap.put(key, c);
-        }
-        
-        children.put(childModule.getIndex(), childrenMap);
-    }  
-    
-    private void setReferences(MappingModule mappingModule) {
-        Map<String, Collection<DcMapping>> mappings = new HashMap<String, Collection<DcMapping>>();
-        for (DcObject dco : mappingModule.loadData()) {
-            DcMapping mapping = (DcMapping) dco;
-            String parentId = mapping.getParentId();
-            
-            Collection<DcMapping> c = mappings.get(parentId);
-            c = c == null ? new ArrayList<DcMapping>() : c;
-            c.add(mapping);
-
-            mappings.put(parentId, c);
-        }
-        references.put(mappingModule.getIndex(), mappings);
-    }
-    
-    private boolean isLoaded(int module) {
-        return references.containsKey(module) || 
-               (module == DcModules._LOAN && loans.size() > 0) ||
-               (module == DcModules._PICTURE && pictures.size() > 0) ||
-               children.containsKey(module) ||
-               objects.containsKey(module);
-    }    
     
     private final static class DataFetcher extends Thread {
         
@@ -1445,21 +745,21 @@ public class DataManager {
             try {
                 long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
 
-                List<DcObject> items =  module.loadData();
-                objects.put(Integer.valueOf(module.getIndex()), items);
+                List<DcObject> rez = module.getItems();
+                Map<Long, DcObject> map = new HashMap<Long, DcObject>();
                 
-                Map<String, DcObject> map = new HashMap<String, DcObject>();
-                
-                for (DcObject dco : items)
+
+                for (DcObject dco : rez)
                     map.put(dco.getID(), dco);
 
-                objectsByID.put(Integer.valueOf(module.getIndex()), map);
+                items.put(Integer.valueOf(module.getIndex()), map);
 
                 if (logger.isDebugEnabled()) {
                     long end = new Date().getTime();
                     logger.debug("Data for " + module.getLabel()+ " was retrieved in " + (end - start) + "ms");
                 }
-                
+
+            
             } catch (OutOfMemoryError ome) {
                 ome.printStackTrace();
                 logger.error(DcResources.getText("msgOutOfMemory"), ome);
@@ -1509,8 +809,8 @@ public class DataManager {
                         }
                     }
                     
-                    if (DcModules.get(module).getInsertView() != null)
-                        DcModules.get(module).getInsertView().removeItems(new String[] {dco.getID()});
+//                    if (DcModules.get(module).getInsertView() != null)
+//                        DcModules.get(module).getInsertView().removeItems(new Long[] {dco.getID()});
                 }
             } else if (tab == MainFrame._SEARCHTAB) {
                 
@@ -1536,8 +836,8 @@ public class DataManager {
                                 masterView.updateItem(dco.getID(), dco);
                             if (mode == 1)
                                 masterView.add(dco);
-                            if (mode == 2)
-                                masterView.removeItems(new String[] {dco.getID()});
+//                            if (mode == 2)
+//                                masterView.removeItems(new Long[] {dco.getID()});
                         }
                     } catch (Exception exp) {
                         logger.error("Error while updating view for module " + mod.getLabel(), exp);
@@ -1578,34 +878,35 @@ public class DataManager {
         }
     }
     
-    private final static class DataSetCreator extends Thread {
+    /**
+     * Updates components like list boxes holding the module items.
+     * @param module The module for which the registered listeners should be updated.
+     */
+    private static void updateUiComponents(int module) {
+        Collection<IComponent> components = listeners.get(module);
         
-        private Map<Integer, List<DcObject>> objects;
-        
-        public DataSetCreator(Map<Integer, List<DcObject>> objects) {
-            this.objects = objects;
-        }
-        
-        @Override
-        public void run() {
-            for (Integer key : objects.keySet()) {
-                Collection<DcObject> c = objects.get(key);
-                Map<String, DcObject> map = new HashMap<String, DcObject>();
-                for (DcObject dco : c)
-                    map.put(dco.getID(), dco);
-                
-                objectsByID.put(key, map);
-            }
-            
-            for (Integer key : children.keySet()) {
-                Map<String, DcObject> map = new HashMap<String, DcObject>();
-                for (List<DcObject> c : children.get(key).values()) {
-                    for (DcObject dco : c)
-                        map.put(dco.getID(), dco);
-                }
-                
-                objectsByID.put(key, map);
-            }
-        }
+        if (components == null) return;
+
+        for (IComponent c : components)
+            c.refresh();
+    }
+    
+    /**
+     * Register a component. The registered component will be updated with the module items.
+     * Changed, removal and additions will be reflected on the registered components. 
+     * @param component
+     * @param module
+     */
+    public static void registerUiComponent(IComponent component, int module) {
+        Collection<IComponent> c = listeners.get(module);
+        c = c == null ? new ArrayList<IComponent>() : c;
+        c.add(component);
+        listeners.put(module, c);
+        component.refresh();
+    }
+    
+    public static void unregisterUiComponent(IComponent c) {
+        for (Collection<IComponent> components : listeners.values())
+            components.remove(c);
     }    
 }

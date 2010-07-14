@@ -58,14 +58,14 @@ public class Loan extends DcObject {
 
     /**
      * Indicates if the given item is available.
-     * @param objectID
+     * @param ID
      */
-    public boolean isAvailable(String objectID) {
+    public boolean isAvailable(Long ID) {
         Loan loan;
-        if ((getID() != null && getID().length() > 0) || getValue(_A_STARTDATE) != null)
+        if (getID() != null || getValue(_A_STARTDATE) != null)
             loan = this;
         else 
-            loan = DataManager.getCurrentLoan(objectID);
+            loan = DataManager.getCurrentLoan(ID);
         
         boolean available = true;
         Date start = (Date) loan.getValue(Loan._A_STARTDATE);
@@ -84,8 +84,8 @@ public class Loan extends DcObject {
      * @return The person or null.
      */
     public DcObject getPerson() {
-        String personID = (String) getValue(Loan._C_CONTACTPERSONID);
-        return DataManager.getObject(DcModules._CONTACTPERSON, personID);
+        Long personID = (Long) getValue(Loan._C_CONTACTPERSONID);
+        return DataManager.getItem(DcModules._CONTACTPERSON, personID);
     }
     
     public Date getDueDate() {
@@ -133,7 +133,7 @@ public class Loan extends DcObject {
     public synchronized Long getDaysLoaned() {
         Date startDate = (Date) getValue(Loan._A_STARTDATE);
         Long days = null;
-        if (startDate != null && !isAvailable((String) getValue(Loan._D_OBJECTID))) {
+        if (startDate != null && !isAvailable((Long) getValue(Loan._D_OBJECTID))) {
             calDaysLoaned.setTime(new java.util.Date());
             calDaysLoaned.setTime(startDate);
 

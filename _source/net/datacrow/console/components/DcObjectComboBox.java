@@ -74,9 +74,8 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
         for (DcObject dco : newValues)
             addItem(dco);
 
-        DcObject[] objects = DataManager.get(module, null);
-        for (int i = 0; i < objects.length; i++)
-            addItem(objects[i]);
+        for (DcObject dco :  DataManager.get(module, null))
+            addItem(dco);
 
         if (o != null)
             setSelectedItem(o);

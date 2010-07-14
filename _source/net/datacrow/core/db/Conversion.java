@@ -34,7 +34,6 @@ import java.util.StringTokenizer;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
@@ -214,8 +213,6 @@ public class Conversion {
         
         logger.info("Starting to convert reference field [" + columnName + "] to a multi references field");
 
-        // load data from the database:
-        DataManager.setUseCache(false);
         String sql = "SELECT ID, " + getColumnName() + " FROM " + DcModules.get(getModuleIdx()).getTableName() + " " +
                      "WHERE " + getColumnName() + " IS NOT NULL";
         try {
@@ -231,7 +228,7 @@ public class Conversion {
                 mapping.setValue(DcMapping._A_PARENT_ID, ID);
                 mapping.setValue(DcMapping._B_REFERENCED_ID, referenceID);
                 
-                DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null));
+                DatabaseManager.retrieveItems(new Query(Query._INSERT, mapping, null, null));
             }
             rs.close();
         } catch (Exception e) {
@@ -259,10 +256,10 @@ public class Conversion {
                 // check if the referenced item exists
                 DcObject reference = refMod.getItem();
                 reference.setValue(DcProperty._A_NAME, name);
-                List<DcObject> items = DatabaseManager.executeQuery(reference);
+                List<DcObject> items = DatabaseManager.retrieveItems(reference);
                 if (items.size() == 0) {
                     reference.setIDs();
-                    DatabaseManager.executeQuery(new Query(Query._INSERT, reference, null, null));
+                    DatabaseManager.retrieveItems(new Query(Query._INSERT, reference, null, null));
                 }
                 
                 String sql2 = "select item.ID, property.ID from " + refMod.getTableName() + " property " +
@@ -283,9 +280,9 @@ public class Conversion {
                         mapping.setValue(DcMapping._A_PARENT_ID, itemID);
                         mapping.setValue(DcMapping._B_REFERENCED_ID, propertyID);
                         
-                        items = DatabaseManager.executeQuery(mapping);
+                        items = DatabaseManager.retrieveItems(mapping);
                         if (items.size() == 0)
-                            DatabaseManager.executeQuery(new Query(Query._INSERT, mapping, null, null));
+                            DatabaseManager.retrieveItems(new Query(Query._INSERT, mapping, null, null));
                         
                     } else {
                         String sql3 = "update " + DcModules.get(getModuleIdx()).getTableName() +

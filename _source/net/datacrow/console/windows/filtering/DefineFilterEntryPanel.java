@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -190,11 +191,11 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         Dimension size = c != null ? c.getSize() : null; 
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-            DcObject[] objects = DataManager.get(field.getReferenceIdx(), null);
+            List<DcObject> objects = DataManager.get(field.getReferenceIdx(), null);
             c = ComponentFactory.getComboBox();
             ((JComboBox) c).addItem(" ");
-            for (int i = 0; objects != null && i < objects.length; i++)
-            	((JComboBox) c).addItem(objects[i]);
+            for (DcObject dco : objects)
+            	((JComboBox) c).addItem(dco);
             
             ((DcComboBox) c).setUneditable();
         } else if (field.getFieldType() == ComponentFactory._FILEFIELD || 

@@ -28,10 +28,12 @@ package net.datacrow.console.components.lists;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JViewport;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionListener;
 
 import net.datacrow.console.components.lists.elements.DcAudioCDListHwElement;
@@ -69,6 +71,8 @@ public class DcObjectList extends DcList implements IViewComponent {
     public static final int _LISTING = 2;
     
     private DcObjectListRenderer renderer = new DcObjectListRenderer();
+    
+    private ViewUpdater vu;
 
     public DcObjectList(int style, boolean wrap, boolean evenOddColors) {
         this(null, style, wrap, evenOddColors);
@@ -94,6 +98,68 @@ public class DcObjectList extends DcList implements IViewComponent {
             setLayoutOrientation(JList.VERTICAL_WRAP);
     }    
     
+    public boolean isVisibleIndex(int index) {
+        return index >= getFirstVisibleIndex() && index <= getLastVisibleIndex();
+    }
+    
+    
+    private class ViewUpdater extends Thread {
+        
+        private boolean canceled = false;
+        
+        public void cancel() {
+            canceled = true;
+        }
+        
+        @Override
+        public void run() {
+            ListModel model = getModel();
+            
+            int cache = 20;
+            
+            int first = getFirstVisibleIndex() - cache;
+            int last = getLastVisibleIndex() + cache;
+            int size = model.getSize();
+            
+            first = first < 0 ? 0 : first;
+            last = last > size ? size : last;
+            last = last < 0 ? 0 : last;
+
+            for (int i = 0; i < first && !canceled; i++) {
+                if (view.getType() == View._TYPE_SEARCH)
+                    clearElement(i);
+            }
+            
+            for (int i = last; i < size && !canceled; i++) {
+                if (view.getType() == View._TYPE_SEARCH)
+                    clearElement(i);
+            }
+            
+            revalidate();
+            repaint();
+        }
+        
+        private void clearElement(final int idx) {
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeLater(
+                        new Thread(new Runnable() { 
+                            public void run() {
+                                getElement(idx).clear();
+                            }
+                        }));
+            } else {
+                getElement(idx).clear();
+            }
+        }
+    }
+    
+    public void visibleItemsChanged() {
+        if (vu != null) vu.cancel();
+        
+        vu = new ViewUpdater();
+        vu.start();
+    }
+
     public void saveSettings() {
     }
 
@@ -117,9 +183,6 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     public void setView(View view) {
         this.view = view;
-        
-        if (module != null && module.isSelectableInUI())
-            new ViewRecycler("View recycler " + module).start();
     }
     
     public boolean allowsHorizontalTraversel() {
@@ -171,12 +234,12 @@ public class DcObjectList extends DcList implements IViewComponent {
         return objects;
     }    
     
-    public DcObject getItem(String ID) {
+    public DcObject getItem(Long ID) {
         DcObjectListElement element = getElement(ID);
         return element != null ? element.getDcObject() : null;
     }    
 
-    private DcObjectListElement getElement(String ID) {
+    private DcObjectListElement getElement(Long ID) {
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             DcObjectListElement element = (DcObjectListElement) getDcModel().getElementAt(i);
             if (element.getDcObject() != null && element.getDcObject().getID().equals(ID)) 
@@ -221,7 +284,7 @@ public class DcObjectList extends DcList implements IViewComponent {
 
     public void applySettings() {}
     
-    public void updateUI(String ID) {
+    public void updateUI(Long ID) {
         DcObjectListElement element = getElement(ID);
         if (element != null) {
             element.update();
@@ -234,7 +297,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         updateElement((DcObjectListElement) getDcModel().getElementAt(index), dco);
     }
     
-    public void updateItem(String ID, DcObject dco) {
+    public void updateItem(Long ID, DcObject dco) {
         updateElement(getElement(ID), dco);
     }    
 
@@ -292,7 +355,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         return indices;        
     }
     
-    public boolean remove(String[] ids) {
+    public boolean remove(Long[] ids) {
         boolean removed = false;
         for (int i = 0; i < ids.length; i++) {
             DcObjectListElement element = getElement(ids[i]);
@@ -315,6 +378,26 @@ public class DcObjectList extends DcList implements IViewComponent {
         return dco;
     }
     
+    public void add(Long key) {
+        DcObjectListElement element = getDisplayElement(getModule().getIndex());
+        element.setKey(key);
+        getDcModel().addElement(element);
+    }
+
+    public void add(Collection<Long> keys) {
+        clear();
+        
+        DcListModel model = new DcListModel();
+        for (Long key : keys) {
+            DcObjectListElement element = getDisplayElement(module.getIndex());
+            element.setKey(key);
+            model.addElement(element);
+        }
+        
+        setModel(model);
+        revalidate();
+    }
+    
     public void add(DcObject dco) {
         if (dco.getID() == null || dco.getID().equals("")) 
             dco.setIDs();        
@@ -322,67 +405,66 @@ public class DcObjectList extends DcList implements IViewComponent {
         if (getView() != null && getView().getType() == View._TYPE_SEARCH)
             dco.markAsUnchanged();
         
-        getDcModel().addElement(getDisplayElement(dco));
+        DcObjectListElement element = getDisplayElement(dco.getModule().getIndex());
+        getDcModel().addElement(element);
         ensureIndexIsVisible(getModel().getSize());
     }
     
-    public void add(Collection<? extends DcObject> objects) {
-        add(objects.toArray(new DcObject[objects.size()]));
-    }
-    
-    public void add(DcObject[] objects) {
+    public void add(List<? extends DcObject> objects) {
         clear();
         
         DcListModel model = new DcListModel();
-        for (DcObject dco : objects)
-            model.addElement(getDisplayElement(dco));
+        for (DcObject dco : objects) {
+            DcObjectListElement element = getDisplayElement(dco.getModule().getIndex());
+            element.setDcObject(dco);
+            model.addElement(element);
+        }
         
         setModel(model);
         revalidate();
-    }    
+    }
     
-    public DcObjectListElement getDisplayElement(DcObject dco) {
+    public DcObjectListElement getDisplayElement(int module) {
         
         DcObjectListElement element = null;
-        DcModule module = dco.getModule();
         
         if (style == _ELABORATE) {
-            if (module.getIndex() == DcModules._AUDIOCD) 
-                element = new DcAudioCDListHwElement(dco);
-            else if (module.getIndex() == DcModules._MUSICALBUM) 
-                element = new DcMusicAlbumListHwElement(dco);
-            else if (module.getIndex() == DcModules._SOFTWARE)
-                element = new DcSoftwareListHwElement(dco);
-            else if (module.getIndex() == DcModules._MOVIE)
-                element = new DcMovieListHwElement(dco);
-            else if (module.getIndex() == DcModules._BOOK)
-                element = new DcBookListHwElement(dco);
+            if (module == DcModules._AUDIOCD) 
+                element = new DcAudioCDListHwElement(module);
+            else if (module == DcModules._MUSICALBUM) 
+                element = new DcMusicAlbumListHwElement(module);
+            else if (module == DcModules._SOFTWARE)
+                element = new DcSoftwareListHwElement(module);
+            else if (module == DcModules._MOVIE)
+                element = new DcMovieListHwElement(module);
+            else if (module == DcModules._BOOK)
+                element = new DcBookListHwElement(module);
             else 
-                element = new DcCardObjectListElement(dco);
+                element = new DcCardObjectListElement(module);
         } else if (style == _CARDS) {
-            if (dco.getModule().getIndex() == DcModules._AUDIOTRACK)
-                element = new DcAudioTrackListElement(dco);
-            else if (dco.getModule().getType() == DcModule._TYPE_TEMPLATE_MODULE)
-                element = new DcTemplateListElement(dco);
-            else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
-                element = new DcMusicTrackListElement(dco);
-            else if (dco.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE)
-                element = new DcPropertyListElement(dco);
-            else if (module.isChildModule())
-                element = new DcShortObjectListElement(dco);
+            if (module == DcModules._AUDIOTRACK)
+                element = new DcAudioTrackListElement(module);
+            else if (module == DcModule._TYPE_TEMPLATE_MODULE)
+                element = new DcTemplateListElement(module);
+            else if (module == DcModules._MUSICTRACK)
+                element = new DcMusicTrackListElement(module);
+            else if (module == DcModule._TYPE_PROPERTY_MODULE)
+                element = new DcPropertyListElement(module);
+            else if (DcModules.get(module).isChildModule())
+                element = new DcShortObjectListElement(module);
             else 
-                element = new DcCardObjectListElement(dco);       
+                element = new DcCardObjectListElement(module);       
         } else if (style == _LISTING) {
-            if (dco.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE)
-                element = new DcPropertyListElement(dco);
-            else if (dco.getModule().getType() == DcModule._TYPE_TEMPLATE_MODULE)
-            	element = new DcTemplateListElement(dco);
-            else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
-                element = new DcMusicTrackListElement(dco);
-            else if (dco.getModule().getIndex() == DcModules._AUDIOTRACK)
-                element = new DcAudioTrackListElement(dco);
+            if (DcModules.get(module).getType() == DcModule._TYPE_PROPERTY_MODULE)
+                element = new DcPropertyListElement(module);
+            else if (DcModules.get(module).getType() == DcModule._TYPE_TEMPLATE_MODULE)
+            	element = new DcTemplateListElement(module);
+            else if (module == DcModules._MUSICTRACK)
+                element = new DcMusicTrackListElement(module);
+            else if (module == DcModules._AUDIOTRACK)
+                element = new DcAudioTrackListElement(module);
             else
-                element = new DcShortObjectListElement(dco);
+                element = new DcShortObjectListElement(module);
         }
         return element;
     }
@@ -394,53 +476,5 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     public void removeSelectionListener(ListSelectionListener lsl) {
         removeListSelectionListener(lsl);
-    }
-    
-    private class ViewRecycler extends Thread {
-        
-        public ViewRecycler(String name) {
-            super(name);
-            setPriority(Thread.MIN_PRIORITY);
-        }
-        
-        @Override
-        public void run() {
-            
-            ListModel model = getModel();
-            
-            while (true) {
-                try {
-                    int first = getFirstVisibleIndex() - 10;
-                    int last = first + 20;
-                    int size = model.getSize();
-                    
-                    first = first < 0 ? 0 : first;
-                    last = last > size ? size : last;
-
-                    for (int i = 0; i < first; i++) {
-                        if (view.getType() == View._TYPE_SEARCH)
-                            getElement(i).clear();
-                    }
-                    
-                    for (int i = last; i < size; i++) {
-                        if (view.getType() == View._TYPE_SEARCH)
-                            getElement(i).clear();
-                    }
-
-                } catch (Exception e) {
-                    try {
-                        sleep(100000);
-                    } catch (InterruptedException e1) {
-                        logger.error(e, e);
-                    }
-                }
-                
-                try {
-                    sleep(100000);
-                } catch (InterruptedException e) {
-                    logger.error(e, e);
-                }
-            }
-        }
     }
 }

@@ -27,6 +27,7 @@ package net.datacrow.core.objects.template;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
@@ -44,10 +45,8 @@ public class Templates {
         for (DcModule module : DcModules.getAllModules()) {
             if (module.getTemplateModule() != null) {
                 DcModule templateModule = module.getTemplateModule();
-                DcObject[] objects = DataManager.get(templateModule.getIndex(), null);
-                
-                for (int i = 0; i < objects.length; i++)
-                    templates.add((DcTemplate) objects[i]);
+                for (DcObject dco : DataManager.get(templateModule.getIndex(), null))
+                    templates.add((DcTemplate) dco);
             }
         }
     }
@@ -60,8 +59,8 @@ public class Templates {
         return null;
     }
 
-    public static Collection<DcTemplate> getTemplates(int idx) {
-        Collection<DcTemplate> result = new ArrayList<DcTemplate>();
+    public static List<DcTemplate> getTemplates(int idx) {
+        List<DcTemplate> result = new ArrayList<DcTemplate>();
         for (DcTemplate template : templates) {
             if (template.getModule().getIndex() == idx)
                 result.add((DcTemplate) template.clone());

@@ -108,7 +108,7 @@ public abstract class ItemBean extends DcBean {
             return current();
         
         DcObject dco = wo.isNew() ? DcModules.get(wo.getModule()).getItem() :
-                       DataManager.getObject(wo.getModule(), wo.getID()).clone();
+                       DataManager.getItem(wo.getModule(), wo.getID()).clone();
         
         for (DcWebField wf : wo.getFields()) {
             if (!wf.isMultiRelate())

@@ -307,14 +307,14 @@ public class DataFilter {
             String sValue = StringUtils.getValueBetween("<VALUE>", "</VALUE>", sEntry);
             String sAndOr = StringUtils.getValueBetween("<ANDOR>", "</ANDOR>", sEntry);
             
-            Object oValue = null;
+            Object value = null;
             if (sValue.length() > 0) {
                 DcField field = DcModules.get(iModule).getField(iField);
                 int valueType = field.getValueType();
                 if (valueType == DcRepository.ValueTypes._BOOLEAN) {
-                    oValue = Boolean.valueOf(sValue);
+                    value = Boolean.valueOf(sValue);
                 } else if (valueType == DcRepository.ValueTypes._DATE) {
-                    oValue = sdf.parse(sValue);
+                    value = sdf.parse(sValue);
                 } else if (valueType == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                     DataFilter df = new DataFilter(field.getReferenceIdx());
                     df.addEntry(new DataFilterEntry(DataFilterEntry._AND,
@@ -322,16 +322,16 @@ public class DataFilter {
                                                     DcObject._ID, 
                                                     Operator.EQUAL_TO, 
                                                     sValue));
-                    Object[] v = DataManager.get(field.getReferenceIdx(), df);
-                    oValue = v != null && v.length == 1 ? v[0] : sValue;
+                    List<DcObject> items = DataManager.get(field.getReferenceIdx(), df);
+                    value = items != null && items.size() == 1 ? items.get(0) : sValue;
                 } else if (valueType == DcRepository.ValueTypes._LONG) {
-                    oValue = Long.valueOf(sValue);
+                    value = Long.valueOf(sValue);
                 } else {
-                    oValue = sValue;
+                    value = sValue;
                 }
             }
 
-            addEntry(new DataFilterEntry(sAndOr, iModule, iField, operator, oValue));
+            addEntry(new DataFilterEntry(sAndOr, iModule, iField, operator, value));
             
             sEntries = sEntries.substring(sEntries.indexOf("</ENTRY>") + 8, sEntries.length());
             idx = sEntries.indexOf("<ENTRY>");
@@ -373,7 +373,7 @@ public class DataFilter {
             storage += "<MODULE>" + entry.getModule() + "</MODULE>\n";
             storage += "<FIELD>" + entry.getField() + "</FIELD>\n";
             
-            String value;
+            Object value;
             if (entry.getValue() == null) {
                 value = "";
             } else if (entry.getValue() instanceof DcObject) {

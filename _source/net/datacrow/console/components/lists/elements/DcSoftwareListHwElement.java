@@ -39,7 +39,6 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMediaObject;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.AudioCD;
@@ -49,8 +48,8 @@ public class DcSoftwareListHwElement extends DcObjectListHwElement {
 
     private JTextArea descriptionField;
     
-    public DcSoftwareListHwElement(DcObject dco) {
-        super(dco);
+    public DcSoftwareListHwElement(int module) {
+        super(module);
     }
     
     @Override

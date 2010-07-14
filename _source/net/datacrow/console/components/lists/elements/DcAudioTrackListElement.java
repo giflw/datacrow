@@ -34,7 +34,6 @@ import java.util.Collection;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.AudioTrack;
 
@@ -42,9 +41,8 @@ public class DcAudioTrackListElement extends DcObjectListElement {
 
     private JPanel panelInfo;
     
-    public DcAudioTrackListElement(DcObject dco) {
-        super(dco);
-        build();
+    public DcAudioTrackListElement(int module) {
+        super(module);
     }
     
     @Override

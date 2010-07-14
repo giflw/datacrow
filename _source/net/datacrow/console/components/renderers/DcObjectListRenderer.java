@@ -50,14 +50,18 @@ public class DcObjectListRenderer extends DcListRenderer  {
             JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
         DcObjectListElement c = (DcObjectListElement) value;
+
         c.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
 
+        if (c.getDcObject() == null)
+            c.load();
+        
     	if (c.getDcObject().getModule().canBeLend()) {
     		Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
     		if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
     			c.setForeground(Color.RED);
     	}
-        
+
     	setElementColor(isSelected, c, index);
     	return c;
     }

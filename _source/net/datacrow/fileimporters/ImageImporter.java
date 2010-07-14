@@ -95,7 +95,7 @@ public class ImageImporter extends FileImporter {
                 SVGtoBufferedImageConverter converter = new SVGtoBufferedImageConverter();
                 BufferedImage bi = converter.renderSVG(filename);
                 icon = new DcImageIcon(Utilities.getScaledImage(new DcImageIcon(bi), 400, 400));
-                filename = File.createTempFile(Utilities.getUniqueID(), ".png").toString();
+                filename = File.createTempFile(String.valueOf(Utilities.getUniqueID()), ".png").toString();
                 Utilities.writeToFile(icon, filename);
                 bi.flush();
             } else {

@@ -75,7 +75,7 @@ public class TemplateModule extends DcModule {
                                  field.getDatabaseFieldName()));
         }
     }
-    
+
     /**
      * Retrieves the module this template module has been created for.
      */
@@ -164,4 +164,14 @@ public class TemplateModule extends DcModule {
     public boolean equals(Object o) {
         return (o instanceof TemplateModule ? ((TemplateModule) o).getIndex() == getIndex() : false);
     }     
+    
+    @Override
+    public int getLoadBehavior() {
+        return DcModule._LOAD_BEHAVIOR_FULL;
+    }
+    
+    @Override
+    public boolean isCached() {
+        return true;
+    }        
 }

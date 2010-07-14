@@ -66,5 +66,10 @@ public class ExternalReferenceModule extends DcPropertyModule {
                 "externalidtype"));        
 
         getField(DcObject._ID).setEnabled(false);
-    }      
+    } 
+    
+    @Override
+    public boolean isCached() {
+        return false;
+    }    
 }

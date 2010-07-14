@@ -123,6 +123,9 @@ public class DcModule implements Comparable<DcModule> {
     public static final int _TYPE_MAPPING_MODULE = 5;
     public static final int _TYPE_TEMPLATE_MODULE = 6;
 
+    public static final int _LOAD_BEHAVIOR_FULL = 0;
+    public static final int _LOAD_BEHAVIOR_MINIMAL = 1;
+    
     private final int type;
     private final int index;
     
@@ -345,6 +348,28 @@ public class DcModule implements Comparable<DcModule> {
         // There is no use case for this (yet).
         if (!module.isEnabled()) isEnabled(false);
     }
+    
+    /**
+     * Loads all items belonging to this module.
+     */
+    public final List<DcObject> getItems() {
+        try {
+            if (isAbstract()) {
+                List<DcObject> items = new ArrayList<DcObject>();
+                for (DcObject dco : DataManager.get(getIndex(), null))
+                    items.add(dco);
+                return items;
+            } else {
+                if (getLoadBehavior() == _LOAD_BEHAVIOR_MINIMAL)
+                    return items = DatabaseManager.retrieveItems("SELECT ID FROM " + getTableName(), Query._SELECT);
+                else if (getLoadBehavior() == _LOAD_BEHAVIOR_FULL)
+                    return items = DatabaseManager.retrieveItems("SELECT * FROM " + getTableName(), Query._SELECT);
+            }
+        } catch (Exception e) {
+            logger.error("Could not load data for module " + getLabel(), e);
+        }
+        return new ArrayList<DcObject>();
+    }        
 
     public boolean hasReports() {
         return new ReportTemplates(true).hasReports(index);       
@@ -622,6 +647,9 @@ public class DcModule implements Comparable<DcModule> {
         
         if (!DataManager.isInitialized() || items == null)
             return;
+        
+        if (dco.isDestroyed())
+            return;
 
         if (items.size() < _MAX_ITEM_STORE_SIZE) {
             items.add(0, dco);
@@ -656,7 +684,7 @@ public class DcModule implements Comparable<DcModule> {
         if (!DataManager.isInitialized())
             return createItem();
         
-        if (items == null || items.size() == 0) {
+        if (items == null || items.size() < 1) {
             items = items == null ? new ArrayList<DcObject>() : items;
             for (int i = 0; i < _MAX_ITEM_STORE_SIZE / 2; i++) {
                 itemsCreated++;
@@ -665,6 +693,9 @@ public class DcModule implements Comparable<DcModule> {
         }
 
         DcObject dco = items.remove(0);
+        
+        if (dco == null) dco = createItem();
+        
         dco.clearValues(true);
         return dco;
     }  
@@ -806,28 +837,6 @@ public class DcModule implements Comparable<DcModule> {
         fields.put(field.getIndex(), field);
     }
     
-    /**
-     * Loads all items belonging to this module.
-     */
-    public List<DcObject> loadData() {
-        try {
-            if (isAbstract()) {
-                List<DcObject> items = new ArrayList<DcObject>();
-                for (DcObject dco : DataManager.get(getIndex(), null))
-                    items.add(dco);
-                return items;
-            } else {
-                DcObject dco = getItem();
-                List<DcObject> items = DatabaseManager.executeQuery(dco);
-                dco.release();
-                return items;
-            }
-        } catch (Exception e) {
-            logger.error("Could not load data for module " + getLabel(), e);
-        }
-        return null;
-    }    
-
     /**
      * Returns all views.
      */
@@ -1557,9 +1566,9 @@ public class DcModule implements Comparable<DcModule> {
         if (this instanceof DcPropertyModule && getXmlModule() != null && !getXmlModule().isServingMultipleModules()) {
             // We are (or might be) working on a property base module with a calculated tablename
             DcModule module = DcModules.get(getName()); 
-            DatabaseManager.executeQuery("DROP TABLE " + module.getTableName(), Query._DELETE);
+            DatabaseManager.retrieveItems("DROP TABLE " + module.getTableName(), Query._DELETE);
         } else {
-            DatabaseManager.executeQuery("DROP TABLE " + getTableName(), Query._DELETE);
+            DatabaseManager.retrieveItems("DROP TABLE " + getTableName(), Query._DELETE);
             if (getTemplateModule() != null)
                 getTemplateModule().delete();
         }
@@ -1593,5 +1602,13 @@ public class DcModule implements Comparable<DcModule> {
         }
         
         return items;
-    }    
+    } 
+    
+    public int getLoadBehavior() {
+        return _LOAD_BEHAVIOR_MINIMAL;
+    }
+    
+    public boolean isCached() {
+        return isTopModule() ? true : false;
+    }
 }

@@ -76,7 +76,7 @@ public class MappingModule extends DcModule {
         DcMapping mapping = new DcMapping(getIndex());
         return mapping;
     }    
-
+    
     /**
      * The referenced module index.
      * @return
@@ -84,7 +84,7 @@ public class MappingModule extends DcModule {
     public int getReferencedModIdx() {
         return getField(DcMapping._B_REFERENCED_ID).getSourceModuleIdx();
     } 
-
+    
     /**
      * This module does not have any views and therefore this method has not having to do.
      */
@@ -145,4 +145,14 @@ public class MappingModule extends DcModule {
     public Collection<DcObject> getDefaultData() throws Exception  {
         return null;
     }
+    
+    @Override
+    public int getLoadBehavior() {
+        return DcModule._LOAD_BEHAVIOR_FULL;
+    }
+    
+    @Override
+    public boolean isCached() {
+        return false;
+    }        
 }

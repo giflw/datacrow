@@ -229,10 +229,10 @@ public class AdvancedFilter extends DcSecured {
         
         Object o = value;
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-            o = DataManager.getObject(field.getReferenceIdx(), (String) value);
+            o = DataManager.getItem(field.getReferenceIdx(), (Long) value);
         } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
             Collection<DcObject> references = new ArrayList<DcObject>();
-            DcObject reference = DataManager.getObject(field.getReferenceIdx(), (String) value);
+            DcObject reference = DataManager.getItem(field.getReferenceIdx(), (Long) value);
             references.add(reference);
             o = references;
         }

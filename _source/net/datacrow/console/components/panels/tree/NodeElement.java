@@ -5,72 +5,46 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilters;
-import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
-public class NodeElement {
+public abstract class NodeElement {
         
-    private Object key;
+    protected Object key;
+    protected ImageIcon icon;
+    protected int module;
     
-    private ImageIcon icon;
-    private int module;
-    
-    private List<DcObject> values = new ArrayList<DcObject>();
+    private List<Long> keys = new ArrayList<Long>();
     
     public NodeElement(int module, Object key, ImageIcon icon) {
         this.module = module;
-        this.key = key instanceof DcMapping ? ((DcMapping) key).getReferencedObject() : key;     
+        this.key = key;     
         this.icon = icon;
     }
-
-    public void setValues(List<DcObject> values) {
-        this.values = values;
-    }
     
+    public int getModule() {
+        return module;
+    }
+
+    public void setModule(int module) {
+        this.module = module;
+    }
+
     public ImageIcon getIcon() {
         return icon;
     }
     
-    public void addValue(DcObject dco) {
-        if (!values.contains(dco))
-            values.add(dco);
-    }
-    
-    public void updateValue(DcObject dco) {
-        int pos = values.indexOf(dco);
-        if (pos != -1) {
-            DcObject o = values.get(pos);
-            o.reload();
-        }
-    }
-    
-    public boolean removeValue(DcObject dco) {
-        return values.remove(dco);
-    }
-    
-    public boolean contains(DcObject dco) {
-        return values != null ? values.contains(dco) : false;
+    public boolean contains(Long key) {
+        return keys != null ? keys.contains(key) : false;
     }
     
     public int size() {
-        return values == null ? 0 : values.size();
+        return keys == null ? 0 : keys.size();
     }
     
-    public List<DcObject> getSortedValues() {
-        if (values != null && values.size() > 1) {
-            DataFilter df = DataFilters.getCurrent(module);
-            df.sort(values);
-        }
-        return values;
-    }
-    
-    public List<DcObject> getValues() {
-        return values;
-    }
-    
+    public abstract List<Long> getItems();
+    public abstract int getCount();
+
     public String getComparableKey() {
         return getKey().toLowerCase();
     }
@@ -86,18 +60,37 @@ public class NodeElement {
     public void clear() {
         key = null;
         
-        if (values != null)
-            values.clear();
+        if (keys != null)
+            keys.clear();
         
-        values = null;
+        keys = null;
     }
 
+    int count;
+    int i = 0;
+    
     @Override
     public String toString() {
-        if (values == null || values.size() == 1) 
+        
+        
+        
+        
+        if (keys == null || keys.size() == 1) {
             return getKey();
-        else 
-            return getKey() + " (" + String.valueOf(values.size()) + ")";    
+        } else {
+            if (i == 0)
+                count = getCount();
+            
+            
+            i++;
+            
+            if (i > 20)
+                i = 0;
+            
+            return getKey() + " (" + String.valueOf(count) + ")";
+        }
+        
+       
     }
 
     @Override

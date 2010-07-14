@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
@@ -47,14 +48,20 @@ import net.datacrow.settings.DcSettings;
 public abstract class DcObjectListElement extends DcListElement {
 
     protected static final int fieldHeight = 21;
+    protected Long key;
+    protected int module;
     protected DcObject dco;
     
-    protected DcObjectListElement() {}
+    public DcObjectListElement(int module) {
+        this.module = module;
+    }
     
-    public DcObjectListElement(DcObject dco) {
+    public void setKey(Long key) {
+        this.key = key;
+    }
+    
+    public void setDcObject(DcObject dco) {
         this.dco = dco;
-        
-        setDoubleBuffered(false);
     }
 
     public DcObject getDcObject() {
@@ -62,6 +69,18 @@ public abstract class DcObjectListElement extends DcListElement {
     }
     
     public abstract Collection<Picture> getPictures();
+    
+    public void load() {
+        if (dco == null) {
+            clear();
+            
+            dco = DataManager.getItem(module, key);
+            
+            build();
+            revalidate();
+            repaint();
+        }
+    }
     
     public void update(DcObject dco) {
         clear();
@@ -108,14 +127,19 @@ public abstract class DcObjectListElement extends DcListElement {
     public void destroy() {
         super.destroy();
         dco = null;
+        key = null;
     }
     
     @Override
     public void clear() {
         // DO NOT DESTROY THE COMPONENTS. This component is re-used!
         // DO NOT ENABLE THIS: super.clear(); 
+        
         removeAll();
-        if (dco != null)
-            dco.freeResources();
+        if (dco != null) dco.release();
+        dco = null;
+        
+        revalidate();
+        repaint();
     }
 }

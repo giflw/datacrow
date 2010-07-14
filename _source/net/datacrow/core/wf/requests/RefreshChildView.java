@@ -82,15 +82,15 @@ public class RefreshChildView implements IUpdateUIRequest {
                 return;
             
             for (DcObject dco : form.getItems()) {
-                String parentID = dco.getParentID();
+                Long parentID = dco.getParentID();
                 
                 if (dco.getModule().getParent() == null && dco.getModule().isContainerManaged()) {
-                    DcObject parent = DataManager.getObject(DcModules._CONTAINER, parentID);
+                    DcObject parent = DataManager.getItem(DcModules._CONTAINER, parentID);
                     parent.getModule().getSearchView().get(MasterView._LIST_VIEW).updateItem(
                             parentID,  parent.getModule().getItem());                    
                     
                 } else {
-                    DcObject parent = DataManager.getObject(dco.getModule().getParent().getIndex(), parentID);
+                    DcObject parent = DataManager.getItem(dco.getModule().getParent().getIndex(), parentID);
                     parent.getModule().getSearchView().get(MasterView._LIST_VIEW).updateItem(
                                                            parentID, parent.getModule().getItem());
                 }

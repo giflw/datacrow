@@ -39,11 +39,11 @@ import net.datacrow.core.objects.DcObject;
 public class RemoveFromCacheRequest implements IRequest {
 
     private static final long serialVersionUID = -6911519035345853780L;
-    private String id;
+    private Long id;
     private final int module;
     private boolean executeOnFail = false;
 
-    public RemoveFromCacheRequest(int module, String id) {
+    public RemoveFromCacheRequest(int module, Long id) {
         this.id = id;
         this.module = module;
     }

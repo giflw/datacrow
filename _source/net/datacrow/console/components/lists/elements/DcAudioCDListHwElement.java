@@ -46,11 +46,11 @@ import net.datacrow.core.objects.helpers.AudioTrack;
 
 public class DcAudioCDListHwElement extends DcObjectListHwElement {
 
-    private JTextArea tracksField;
-    
-    public DcAudioCDListHwElement(DcObject dco) {
-        super(dco);
+    public DcAudioCDListHwElement(int module) {
+        super(module);
     }
+
+    private JTextArea tracksField;
     
     @Override
     public Collection<Picture> getPictures() {

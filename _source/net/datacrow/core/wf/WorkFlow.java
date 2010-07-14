@@ -26,18 +26,21 @@
 package net.datacrow.core.wf;
 
 import java.sql.ResultSet;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Media;
 import net.datacrow.core.wf.requests.Requests;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -94,6 +97,51 @@ public class WorkFlow {
         return DatabaseManager.isUnique(o, isExisting);
     }
 
+    
+    public static void setValues(ResultSet rs, DcObject item, int[] fields) {
+        try {
+            Object value;
+            String column;
+            DcField field;
+            for (int i = 0; i < fields.length; i++) {
+                field = item.getField(fields[i]);
+                column = field.getDatabaseFieldName();
+
+                if (field.isUiOnly()) continue;
+                
+                value = field.getValueType() == DcRepository.ValueTypes._BOOLEAN ? rs.getBoolean(column) : 
+                        field.getValueType() == DcRepository.ValueTypes._DATE ? rs.getDate(column) :
+                        field.getValueType() == DcRepository.ValueTypes._LONG ? rs.getLong(column) :
+                        field.getValueType() == DcRepository.ValueTypes._BIGINTEGER ? rs.getLong(column) :
+                        field.getValueType() == DcRepository.ValueTypes._DOUBLE ? rs.getDouble(column) :
+                        field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ? rs.getLong(column) :
+                        rs.getString(column);
+
+                value = Utilities.isEmpty(value) ? null : value;
+                        
+                item.setValue(fields[i], value);
+            }
+
+            if (DatabaseManager.initialized) {
+                if (fields.length > 1) {
+                    if (item.getModule().canBeLend())
+                        item.setLoanInformation();
+        
+                    if (item.getModule().getIndex() != DcModules._PICTURE)
+                        item.initializeImages();
+        
+                    item.initializeReferences();
+                }
+            }
+            
+            item.setValue(Media._SYS_MODULE, item.getModule().getObjectName());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("An error occurred while converting result set to items", e);
+        }
+    }
+    
     /**
      * Converts the result set to a collection of items.
      * @param rs An unclosed SQL result set.
@@ -109,47 +157,21 @@ public class WorkFlow {
         }
 
         try {
-            int columnCount = rs.getMetaData().getColumnCount();
-            String[] columns = new String[columnCount];
-
-            int k = 0;
-            for (int i = 1; i < columnCount + 1; i++) {
-                columns[k] = rs.getMetaData().getColumnName(i);
-                k++;
-            }
-
-            String sTableName = rs.getMetaData().getTableName(1);
+            String table = rs.getMetaData().getTableName(1);
+            DcModule module = DcModules.getModuleForTable(table);
             
+            int[] fields =  new int[rs.getMetaData().getColumnCount()];
+            for (int i = 1; i < fields.length + 1; i++)
+                fields[i-1] = module.getField(rs.getMetaData().getColumnName(i)).getIndex();
+            
+            DcObject dco;
             while (rs.next()) {
-                DcObject dco = DcModules.getObjectForTable(sTableName);
-
-                for (int i = 0; i < columns.length; i++) {
-                    int type = rs.getMetaData().getColumnType(i + 1);
-                    String column = columns[i];
-                    Object value = null;
-
-                    if (type == Types.BOOLEAN) {
-                        value = rs.getBoolean(column);
-                    } else if (type == Types.DATE) {
-                        value = rs.getDate(column);
-                    } else {
-                        value = rs.getString(column);
-                    }
-                    dco.setValueForColumn(column, value);
-                }
-
-                if (dco.getModule().canBeLend())
-                    dco.setLoanInformation();
-
-                if (dco.getModule().getIndex() != DcModules._PICTURE)
-                    dco.initializeImages();
-
-                dco.initializeReferences();
-
-                dco.setValue(Media._SYS_MODULE, dco.getModule().getObjectName());
+                dco = module.getItem();
+                setValues(rs, dco, fields);
                 objects.add(dco);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("An error occurred while converting result set to items", e);
         }
         
