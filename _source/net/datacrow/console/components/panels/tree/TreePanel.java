@@ -105,14 +105,16 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     }
     
     public void updateView() {
-        if (currentUserObject instanceof NodeElement) {
-            getView().clear(isSaveChanges());
-            NodeElement currentNode = (NodeElement) currentUserObject;
-            
-            if (currentNode.getItems() != null) {
-                updateView(currentNode.getItems());
-            }
-        }
+//        if (currentUserObject instanceof NodeElement) {
+//            getView().clear(isSaveChanges());
+//            NodeElement currentNode = (NodeElement) currentUserObject;
+//            
+//            if (currentNode.getItems() != null) {
+//                updateView(currentNode.getItems());
+//            }
+//        }
+        
+        System.out.println("BLAAAAAATTTT");
     }    
     
     public void setSaveChanges(boolean b) {
@@ -467,10 +469,18 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         
         View currentView = getView().getCurrent();
         if (currentView != null) {
+            
+            List<NodeElement> parents = new ArrayList<NodeElement>();
+            
+            for (Object parent : tree.getSelectionPath().getPath()) {
+                if (parent instanceof DefaultMutableTreeNode)
+                    parents.add((NodeElement) ((DefaultMutableTreeNode) parent).getUserObject());
+            }
+            
             currentView.clear(isSaveChanges());
             NodeElement currentNode = (NodeElement) o;
             setSelected(node);
-            updateView(currentNode.getItems());
+            updateView(currentNode.getItems(parents));
         }
     }
 }

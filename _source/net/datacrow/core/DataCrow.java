@@ -104,7 +104,6 @@ public class DataCrow {
     public static String servicesDir;
     public static String webDir;
     public static String dataDir;
-    public static String cacheDir;
     public static String resourcesDir;
     
     private static boolean debug = false;
@@ -248,7 +247,6 @@ public class DataCrow {
                 logger.info("Using installation directory: " + installationDir);
                 logger.info("Using data directory: " + dataDir);
                 logger.info("Using images directory: " + imageDir);
-                logger.info("Using cache directory: " + cacheDir);
                 
                 // load resources
                 new DcResources();
@@ -402,8 +400,9 @@ public class DataCrow {
                 splashCloser.start();
                 
                 
-                if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
-                    new VersionChecker().start();
+                // TODO: enable
+//                if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
+//                    new VersionChecker().start();
                 
                 if (!webserverMode) {
                     DataFilter df = new DataFilter(DcModules._LOAN);
@@ -730,12 +729,10 @@ public class DataCrow {
         moduleDir = DataCrow.installationDir + "modules/";
         pluginsDir = DataCrow.installationDir + "plugins/";
         servicesDir = DataCrow.installationDir + "services/";
-        cacheDir = DataCrow.dataDir + "cache/";
         resourcesDir = DataCrow.installationDir + "resources/";
         
         DataCrow.createDirectory(new File(installationDir, "modules"), "modules");
         DataCrow.createDirectory(new File(dataDir), "data");
-        DataCrow.createDirectory(new File(cacheDir), "cache");
         DataCrow.createDirectory(new File(dataDir, "temp"), "temp");
         DataCrow.createDirectory(new File(imageDir), "images");
         DataCrow.createDirectory(new File(reportDir), "reports");

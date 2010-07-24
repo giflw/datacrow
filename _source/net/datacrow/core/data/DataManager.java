@@ -127,9 +127,11 @@ public class DataManager {
         
         try {
             DcModule m = DcModules.get(module);
-            DcField f = m.getField(field);
+            DcField f = field > 0 ? m.getField(field) : null;
             String sql;
-            if (f.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+            if (f == null) {
+                sql = "select count(*) from " + m.getTableName();
+            } else if (f.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 sql = "select count(*) from " + m.getTableName() + " where " + m.getField(field).getDatabaseFieldName() + " = ?";
             } else {
                 m = DcModules.get(DcModules.getMappingModIdx(module, f.getReferenceIdx(), field));
@@ -137,7 +139,9 @@ public class DataManager {
             }
                 
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
-            ps.setObject(1, value instanceof DcObject ? ((DcObject) value).getID() : value);
+            
+            if (f != null) ps.setObject(1, value instanceof DcObject ? ((DcObject) value).getID() : value);
+            
             ResultSet rs = ps.executeQuery();
             while (rs.next())
                 count = rs.getInt(1);

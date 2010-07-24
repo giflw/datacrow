@@ -82,7 +82,7 @@ import org.apache.log4j.Logger;
  * 
  * @author Robert Jan van der Waals
  */
-public class DcObject implements Comparable<DcObject>, Serializable, IReloadableObject {
+public class DcObject implements Comparable<DcObject>, Serializable {
     
     private static final long serialVersionUID = -6969856564828155152L;
 

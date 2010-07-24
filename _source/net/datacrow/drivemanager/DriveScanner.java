@@ -26,7 +26,6 @@
 package net.datacrow.drivemanager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -50,7 +49,7 @@ public class DriveScanner {
     private DriveScan ds;
     private final String filename;
     
-    public DriveScanner(DriveManager dm, File drive) throws IOException {
+    public DriveScanner(DriveManager dm, File drive) {
         filename = StringUtils.normalize(drive.toString()) + dm.getTempFileSuffix(); 
 
         report = Logger.getAnonymousLogger();

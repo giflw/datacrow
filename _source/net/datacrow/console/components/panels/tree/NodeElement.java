@@ -4,24 +4,28 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
 public abstract class NodeElement {
 
-    protected DataFilter df;
     protected Object key;
+    protected Object value;
     protected ImageIcon icon;
     protected int module;
-
+    private String clause;
     private int count;
-    private int i = 0;
     
-    public NodeElement(int module, Object key, ImageIcon icon) {
+    public NodeElement(int module, Object key, ImageIcon icon, String clause) {
         this.module = module;
-        this.key = key;     
+        this.key = key;   
+        this.value = key instanceof DcObject ? ((DcObject) key).getID() : key.equals(DcResources.getText("lblEmpty")) ? null : key;
         this.icon = icon;
+        this.clause = clause;
+    }
+    
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public int getModule() {
@@ -36,11 +40,15 @@ public abstract class NodeElement {
         return icon;
     }
     
-    public abstract List<Long> getItems();
+    public abstract List<Long> getItems(List<NodeElement> parents);
     public abstract int getCount();
 
     public String getComparableKey() {
         return getKey().toLowerCase();
+    }
+    
+    public Object getValue() {
+        return value;
     }
     
     public String getKey() {
@@ -57,13 +65,11 @@ public abstract class NodeElement {
         
         key = null;
         icon = null;
+        clause = null;
     }
 
     @Override
     public String toString() {
-        count = i == 0 ? getCount() : count;
-        i++;
-        i = i > 20 ? 0 : i;
         return getKey() + " (" + String.valueOf(count) + ")";
     }
 
@@ -75,6 +81,10 @@ public abstract class NodeElement {
             return getComparableKey().equals(((NodeElement) o).getComparableKey());
     }
 
+    public String getWhereClause() {
+        return clause;
+    }
+    
     @Override
     public int hashCode() {
         return getComparableKey().hashCode();

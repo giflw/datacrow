@@ -25,31 +25,74 @@
 
 package net.datacrow.console.components.panels.tree;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import net.datacrow.core.data.DataManager;
+import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.util.Utilities;
 
 public class FieldNodeElement extends NodeElement {
     
-    private int field;        
+    private int field;
     
-    public FieldNodeElement(int module, int field, Object key, ImageIcon icon) {
-        super(module, key, icon);
+    public FieldNodeElement(int module, int field, Object key, ImageIcon icon, String clause) {
+        super(module, key, icon, clause);
         this.field = field;
     }
     
     @Override
-    public List<Long> getItems() {
-        //DataManager.getKeys(getModule(), new DataFilter(dco))
+    public List<Long> getItems(List<NodeElement> parents) {
+        String sql = "select ID from " + DcModules.get(module).getTableName();
+        int counter = 0;
+        for (NodeElement e : parents) {
+            if (!Utilities.isEmpty(e.getWhereClause()) && this != e) {
+                sql += counter > 0 ? " and ID in (" : " where ID in (";
+                sql += e.getWhereClause() + ")";
+                counter++;
+            }
+        }
         
-        return new ArrayList<Long>();
+        if (getWhereClause() != null) {
+            sql += counter > 0 ? " and ID in (" : " where ID in (";
+            sql += getWhereClause() + ")";
+        }
+
+        List<Long> keys = new ArrayList<Long>();
+        try {
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+            int index = 1;
+            for (NodeElement e : parents) {
+                if (!Utilities.isEmpty(e.getWhereClause()) && e.getValue() != null) {
+                    ps.setObject(index, e.getValue());
+                    index++;
+                }
+            }
+            
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                keys.add(rs.getLong(1));
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        setCount(keys.size());
+        return keys;
+    }
+    
+    public int getField() {
+        return field;
     }
 
     @Override
     public int getCount() {
-        return DataManager.getCount(module, field, key);
+        return 0;
     }
 }

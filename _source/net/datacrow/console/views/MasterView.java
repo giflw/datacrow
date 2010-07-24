@@ -185,7 +185,7 @@ public class MasterView {
     }
     
     public void bindData(List<Long> keys) {
-        if (groupingPane != null) {
+        if (groupingPane != null || !groupingPane.isActive()) {
             groupingPane.load();
         } else { 
             for (View view : getViews())

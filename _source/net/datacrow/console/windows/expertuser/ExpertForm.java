@@ -60,27 +60,27 @@ public class ExpertForm extends DcFrame implements ActionListener {
     private void buildForm() {
         JTabbedPane tabbedPane = ComponentFactory.getTabbedPane();
         
-    	SystemInfoPanel systemInfoPanel = new SystemInfoPanel();
-        MaintenancePanel maintenancePanel = new MaintenancePanel();
-        PerformancePanel performancePanel = new PerformancePanel();
+    	//SystemInfoPanel systemInfoPanel = new SystemInfoPanel();
+        //MaintenancePanel maintenancePanel = new MaintenancePanel();
+        //PerformancePanel performancePanel = new PerformancePanel();
         QueryPanel queryPanel = new QueryPanel();
         
         JPanel systemPanel = new JPanel();
         systemPanel.setLayout(Layout.getGBL());
         
-        systemInfoPanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSystemInformation")));
-        maintenancePanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblMaintenance")));
-        performancePanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblPerformanceTweaking")));
+//        systemInfoPanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSystemInformation")));
+//        maintenancePanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblMaintenance")));
+//        performancePanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblPerformanceTweaking")));
         
-        systemPanel.add(systemInfoPanel,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
-                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                  new Insets(5, 5, 5, 5), 0, 0));
-        systemPanel.add(maintenancePanel, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                  new Insets(5, 5, 5, 5), 0, 0));
-        systemPanel.add(performancePanel, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
-                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                  new Insets(5, 5, 5, 5), 0, 0));
+//        systemPanel.add(systemInfoPanel,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
+//                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+//                  new Insets(5, 5, 5, 5), 0, 0));
+//        systemPanel.add(maintenancePanel, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+//                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+//                  new Insets(5, 5, 5, 5), 0, 0));
+//        systemPanel.add(performancePanel, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+//                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+//                  new Insets(5, 5, 5, 5), 0, 0));
 
         JPanel panelActions = new JPanel();
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));

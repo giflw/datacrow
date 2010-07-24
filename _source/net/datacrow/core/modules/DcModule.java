@@ -235,7 +235,7 @@ public class DcModule implements Comparable<DcModule> {
         }
         
         this.tableName = (tableName == null ? "" : tableName).toLowerCase();
-        this.tableShortName  = (tableShortName == null ? "" : tableShortName).toLowerCase();
+        this.tableShortName  = (tableShortName == null ? (tableName != null ? tableName.substring(0, (tableName.length() > 5 ? 4 : 2)) : "") : tableShortName).toLowerCase();
         this.name = name;
         this.label = name;
         this.description = description;

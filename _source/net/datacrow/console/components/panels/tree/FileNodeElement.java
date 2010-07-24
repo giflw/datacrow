@@ -12,12 +12,12 @@ public class FileNodeElement extends NodeElement {
     
     private File file;
     
-    public FileNodeElement(int module, String key) {
-    	super(module, key, null);
+    public FileNodeElement(int module, String key, String clause) {
+    	super(module, key, null, clause);
     }
     
     @Override
-    public List<Long> getItems() {
+    public List<Long> getItems(List<NodeElement> parents) {
         return new ArrayList<Long>();
     }
 
@@ -38,7 +38,7 @@ public class FileNodeElement extends NodeElement {
     
 	@Override
     public String toString() {
-    	int count = getItems() == null ? 0 : getItems().size();
+    	int count = getCount();
         if (count <= 1) 
             return getKey();
         else 

@@ -579,7 +579,7 @@ public class Query {
         return connection.prepareStatement(sql);
     }
     
-    private void setValues(PreparedStatement ps, Collection<Object> values) throws SQLException {
+    private void setValues(PreparedStatement ps, Collection<Object> values) {
         int pos = 1;
         
         try {
