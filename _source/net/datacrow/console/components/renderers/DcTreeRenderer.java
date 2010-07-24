@@ -37,25 +37,32 @@ import net.datacrow.console.components.panels.tree.NodeElement;
 import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
 
+import org.apache.log4j.Logger;
+
 public class DcTreeRenderer extends DefaultTreeCellRenderer {
 
+    private static Logger logger = Logger.getLogger(DcTreeRenderer.class.getName());
     private static final EmptyBorder border = new EmptyBorder(2, 5, 2, 2);
     
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
         boolean expanded, boolean leaf, int row, boolean hasFocus) {
     
-        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-    
-        setBackgroundSelectionColor(DcSettings.getColor(DcRepository.Settings.stSelectionColor));
-        setForeground(Color.BLACK);
-        setBorder(border);
+        try {
+            super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
         
-        if (value instanceof DefaultMutableTreeNode) {
-            Object o = ((DefaultMutableTreeNode) value).getUserObject();
-    
-            if (o instanceof NodeElement)
-                setIcon(((NodeElement) o).getIcon());
+            setBackgroundSelectionColor(DcSettings.getColor(DcRepository.Settings.stSelectionColor));
+            setForeground(Color.BLACK);
+            setBorder(border);
+            
+            if (value instanceof DefaultMutableTreeNode) {
+                Object o = ((DefaultMutableTreeNode) value).getUserObject();
+        
+                if (o instanceof NodeElement)
+                    setIcon(((NodeElement) o).getIcon());
+            }
+        } catch (NullPointerException npe) {
+            logger.error(npe, npe);
         }
         
         return this;

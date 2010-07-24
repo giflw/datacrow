@@ -924,7 +924,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     public void destroy() {
         clearValues(true);
-        values.clear();
+        
+        if (values != null) values.clear();
+        
         values = null;
         requests.clear();
         requests = null;
