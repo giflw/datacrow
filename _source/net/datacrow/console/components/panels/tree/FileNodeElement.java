@@ -13,7 +13,7 @@ public class FileNodeElement extends NodeElement {
     private File file;
     
     public FileNodeElement(int module, String key, String clause) {
-    	super(module, key, null, clause);
+    	super(module, key, null, null, clause);
     }
     
     @Override
@@ -40,9 +40,9 @@ public class FileNodeElement extends NodeElement {
     public String toString() {
     	int count = getCount();
         if (count <= 1) 
-            return getKey();
+            return getDisplayValue();
         else 
-            return getKey() + " (" + String.valueOf(count) + ")";    
+            return getDisplayValue() + " (" + String.valueOf(count) + ")";    
     }
 
 	@Override

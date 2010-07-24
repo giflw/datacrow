@@ -5,21 +5,20 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.resources.DcResources;
 
 public abstract class NodeElement {
 
     protected Object key;
-    protected Object value;
+    protected String displayValue;
     protected ImageIcon icon;
     protected int module;
     private String clause;
     private int count;
     
-    public NodeElement(int module, Object key, ImageIcon icon, String clause) {
+    public NodeElement(int module, Object key, String displayValue, ImageIcon icon, String clause) {
         this.module = module;
         this.key = key;   
-        this.value = key instanceof DcObject ? ((DcObject) key).getID() : key.equals(DcResources.getText("lblEmpty")) ? null : key;
+        this.displayValue = displayValue;
         this.icon = icon;
         this.clause = clause;
     }
@@ -44,19 +43,15 @@ public abstract class NodeElement {
     public abstract int getCount();
 
     public String getComparableKey() {
-        return getKey().toLowerCase();
+        return getDisplayValue().toLowerCase();
     }
     
-    public Object getValue() {
-        return value;
+    public String getDisplayValue() {
+        return displayValue;
     }
     
-    public String getKey() {
-        try {
-            return key instanceof String ? (String) key : key.toString();
-        } catch (Exception e) {
-            return DcResources.getText("lblEmpty");
-        }
+    public Object getKey() {
+        return key;
     }
     
     public void clear() {
@@ -70,7 +65,7 @@ public abstract class NodeElement {
 
     @Override
     public String toString() {
-        return getKey() + " (" + String.valueOf(count) + ")";
+        return getDisplayValue() + " (" + String.valueOf(count) + ")";
     }
 
     @Override

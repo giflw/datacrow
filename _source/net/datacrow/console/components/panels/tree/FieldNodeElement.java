@@ -40,8 +40,8 @@ public class FieldNodeElement extends NodeElement {
     
     private int field;
     
-    public FieldNodeElement(int module, int field, Object key, ImageIcon icon, String clause) {
-        super(module, key, icon, clause);
+    public FieldNodeElement(int module, int field, Object key, String displayValue, ImageIcon icon, String clause) {
+        super(module, key, displayValue, icon, clause);
         this.field = field;
     }
     
@@ -67,8 +67,8 @@ public class FieldNodeElement extends NodeElement {
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
             int index = 1;
             for (NodeElement e : parents) {
-                if (!Utilities.isEmpty(e.getWhereClause()) && e.getValue() != null) {
-                    ps.setObject(index, e.getValue());
+                if (!Utilities.isEmpty(e.getWhereClause()) && e.getKey() != null) {
+                    ps.setObject(index, e.getKey());
                     index++;
                 }
             }
