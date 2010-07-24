@@ -163,7 +163,6 @@ public class FieldTreePanel extends TreePanel {
                 
                 if (counter == 0) {
                     columns.append(module.getTableName());
-                    columns.append(counter);
                     columns.append(".ID,");
                 } else {
                     columns.append(",");
@@ -180,10 +179,6 @@ public class FieldTreePanel extends TreePanel {
 
                     if (counter == 0) {
                         joins.append(module.getTableName());
-                        joins.append(" ");
-                        joins.append(module.getTableName());
-                        joins.append(counter);
-                        
                         joins.append(" inner join ");
                     } else {
                         joins.append(" left outer join ");
@@ -241,7 +236,6 @@ public class FieldTreePanel extends TreePanel {
                             joins.append(counter);
                             joins.append(".parentID = ");
                             joins.append(module.getTableName());
-                            joins.append(0);
                             joins.append(".ID ");
 
                         } else {
@@ -251,7 +245,6 @@ public class FieldTreePanel extends TreePanel {
                             joins.append(counter);
                             joins.append(" on ");
                             joins.append(module.getTableName());
-                            joins.append(0);
                             joins.append(".");
                             joins.append(field.getDatabaseFieldName());
                             joins.append("=");
@@ -268,40 +261,23 @@ public class FieldTreePanel extends TreePanel {
                     }
                 } else {
                     columns.append(module.getTableName());
-                    columns.append(counter);
                     columns.append(".");
                     columns.append(field.getDatabaseFieldName());
                     columns.append(",");
                     columns.append(module.getTableName());
-                    columns.append(counter);
                     columns.append(".");
                     columns.append(field.getDatabaseFieldName());
                     columns.append(",NULL");
                     
-                    joinOn.add(module.getTableName() + counter + ".ID");
+                    joinOn.add(module.getTableName() + ".ID");
                     
                     if (counter == 0) {
                         joins.append(module.getTableName());
-                        joins.append(" ");
-                        joins.append(module.getTableName());
-                        joins.append(counter);
-                    } else {
-                        joins.append(" inner join ");
-                        joins.append(module.getTableName());
-                        joins.append(" ");
-                        joins.append(module.getTableName());
-                        joins.append(counter);
-                        joins.append(" on ");
-                        joins.append(module.getTableName());
-                        joins.append(counter);
-                        joins.append(".ID = ");
-                        joins.append(joinOn.get(counter - 1));
-                    }
+                    } 
                     
                     if (counter > 0) order.append(",");
                     
                     order.append(module.getTableName());
-                    order.append(counter);
                     order.append(".");
                     order.append(field.getDatabaseFieldName());
                 }
