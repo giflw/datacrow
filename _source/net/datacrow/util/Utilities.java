@@ -69,7 +69,6 @@ import javax.swing.filechooser.FileSystemView;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.ImageCleaner;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
 
@@ -101,6 +100,10 @@ public class Utilities {
         } catch (Exception e) {
             logger.error("Could not load languages file", e);
         }
+    }
+    
+    public static Toolkit getToolkit() {
+        return tk;
     }
     
     public static String getMappedFilename(String filename) {
@@ -408,13 +411,15 @@ public class Utilities {
             image.flush();
         } catch (IOException e) {
             logger.error(e, e);
-        } finally {
-            try {
-            	bos.close();
-            } catch (IOException e) {
-                logger.error(e, e);
-            }
+        } 
+        
+        try {
+            baos.close();
+            bos.close();
+        } catch (IOException e) {
+            logger.error(e, e);
         }
+        
         return bytes;
     }
     
@@ -654,9 +659,6 @@ public class Utilities {
         
         bi.flush();
         image.flush();
-        
-        ImageCleaner.addImage(bi);
-        ImageCleaner.addImage(image);
         
         return bi;
     }

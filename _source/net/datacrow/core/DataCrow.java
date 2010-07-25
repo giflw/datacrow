@@ -439,8 +439,6 @@ public class DataCrow {
                 System.exit(0);
             }
             
-            new FreeResourcesTask();
-    
             int xp = DcSettings.getInt(DcRepository.Settings.stXpMode);
             if (!webserverMode && xp == -1) {
                 SelectExpienceLevelDialog dlg = new SelectExpienceLevelDialog();

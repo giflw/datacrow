@@ -31,9 +31,9 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcTextPane;
-import net.datacrow.console.components.lists.DcObjectListComponents;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -41,11 +41,7 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
 
-import org.apache.log4j.Logger;
-
 public class DcCardObjectListElement extends DcObjectListElement {
-
-    private static Logger logger = Logger.getLogger(DcCardObjectListElement.class.getName());
 
     private final static Dimension size = new Dimension(190, 210);
     private static final Dimension dimTxt = new Dimension(190, 45);
@@ -153,8 +149,8 @@ public class DcCardObjectListElement extends DcObjectListElement {
 
         build = true;
       
-        this.fldPicture = DcObjectListComponents.getPictureField();
-        this.fldTitle = DcObjectListComponents.getTextPane();
+        this.fldPicture = ComponentFactory.getPictureField(false, false);
+        this.fldTitle = ComponentFactory.getTextPane();
       
         addPicture(getPictures());
       
@@ -166,22 +162,6 @@ public class DcCardObjectListElement extends DcObjectListElement {
         add(fldTitle);
           
         super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
-      
-        try {
-            
-//            DcObjectList list = (DcObjectList) getParent().getParent();
-          
-//            if (list.getView() != null) {
-//                list.getView().revalidate();
-//                list.getView().repaint(1000);
-//            }
-
-        } catch (Exception e) {
-          logger.error("Error while updating the view component (revalidate)", e);
-        }
-        
-//        repaint(1000);
-//        revalidate();
     }
     
     @Override
@@ -196,12 +176,10 @@ public class DcCardObjectListElement extends DcObjectListElement {
     public void clear() {
         super.clear();
         
-        DcObjectListComponents.release(fldPicture);
-        DcObjectListComponents.release(fldTitle);
-        
+        if (fldPicture != null)
+            fldPicture.clear();
         fldPicture = null;
         fldTitle = null;
-        
         build = false;
     }
 }

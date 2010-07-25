@@ -167,9 +167,8 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     
     public void clear() {
         flushImage();
-        
-        initialize();
-
+        imageWidth = -1;
+        imageHeight = -1;
         picture = null;
         size = null;
         menu = null;
@@ -217,7 +216,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             } else {
                 try {
                     img = picture.getImage();
-                    if (prepareImage(img, imageWidth, imageHeight, this))
+                    if (Utilities.getToolkit().prepareImage(img, imageWidth, imageHeight, this))
                         paintImage(g);
                 } catch (Exception e) {
                     logger.error(e, e);

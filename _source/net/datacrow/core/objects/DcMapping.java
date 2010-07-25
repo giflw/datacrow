@@ -44,7 +44,7 @@ public class DcMapping extends DcObject {
     public static final int _A_PARENT_ID = 1;
     public static final int _B_REFERENCED_ID = 2;
     
-    private String label;
+    private DcObject reference = null;
     
     /**
      * Creates a new instance.
@@ -65,7 +65,10 @@ public class DcMapping extends DcObject {
     
     @Override
     public void release() {
-        label = null;
+        if (reference != null)
+            reference.release();
+          
+        reference = null;
         super.release();
     }
     
@@ -73,14 +76,15 @@ public class DcMapping extends DcObject {
      * Retrieves the referenced object.
      */
     public DcObject getReferencedObject() {
-        DcObject dco = null;
-        try {
-            dco = DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
-            this.label = dco != null ? dco.toString() : null;
-        } catch (Exception e) {
-            logger.warn(e, e);
+        if (reference != null) {
+            try {
+                reference = DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
+            } catch (Exception e) {
+                logger.warn(e, e);
+            }
         }
-        return dco;
+        
+        return reference;
     }
     
     /**
@@ -113,8 +117,7 @@ public class DcMapping extends DcObject {
     
     @Override
     public String toString() {
-        if (label == null) getReferencedObject();
-        return label;
+        return reference != null ? reference.toString() : "";
     }
 
     @Override

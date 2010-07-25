@@ -204,14 +204,4 @@ public class PermissionModule extends DcChildModule {
     public boolean equals(Object o) {
         return (o instanceof PermissionModule ? ((PermissionModule) o).getIndex() == getIndex() : false);
     }     
-    
-    @Override
-    public int getLoadBehavior() {
-        return DcModule._LOAD_BEHAVIOR_FULL;
-    }
-    
-    @Override
-    public boolean isCached() {
-        return false;
-    }        
 }

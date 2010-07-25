@@ -38,6 +38,8 @@ import net.datacrow.settings.DcSettings;
 
 public class DcObjectListRenderer extends DcListRenderer  {
 
+    private boolean render = true;
+    
     public DcObjectListRenderer() {
     }
 
@@ -51,19 +53,30 @@ public class DcObjectListRenderer extends DcListRenderer  {
 
         DcObjectListElement c = (DcObjectListElement) value;
 
-        c.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
-
-        if (c.getDcObject() == null)
-            c.load();
+        if (render) {
+            c.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
+    
+            if (c.getDcObject() == null)
+                c.load();
+            
+        	if (c.getDcObject().getModule().canBeLend()) {
+        		Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
+        		if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
+        			c.setForeground(Color.RED);
+        	}
+    
+        	setElementColor(isSelected, c, index);
+        }
         
-    	if (c.getDcObject().getModule().canBeLend()) {
-    		Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
-    		if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
-    			c.setForeground(Color.RED);
-    	}
-
-    	setElementColor(isSelected, c, index);
     	return c;
+    }
+    
+    public void stop() {
+        render = false;
+    }
+    
+    public void start() {
+        render = true;
     }
     
     @Override

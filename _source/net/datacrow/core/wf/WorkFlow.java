@@ -168,6 +168,7 @@ public class WorkFlow {
             while (rs.next()) {
                 dco = module.getItem();
                 setValues(rs, dco, fields);
+                dco.markAsUnchanged();
                 objects.add(dco);
             }
         } catch (Exception e) {

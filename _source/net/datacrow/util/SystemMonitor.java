@@ -26,8 +26,6 @@
 package net.datacrow.util;
 
 import net.datacrow.console.MainFrame;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
 
 import org.apache.log4j.Logger;
@@ -47,9 +45,7 @@ public class SystemMonitor extends Thread {
     
     @Override
     public void run() {
-        
         while (true) {
-
             try {
                 sleep(60000);
             } catch (Exception e) {
@@ -58,21 +54,6 @@ public class SystemMonitor extends Thread {
             
             if (checkMem)
                 checkMemory();
-            
-            if (logger.isDebugEnabled())
-                checkItemStores();
-        }
-    }
-    
-    private void checkItemStores() {
-        for (DcModule module : DcModules.getModules()) {
-            String moduleName = Utilities.isEmpty(module.getName()) ? module.getTableName() : module.getName();
-            
-            if (module.getItemsInStore() != 0 && module.getItemsCreated() != 0) {
-                logger.debug("[" + moduleName + "] Items currently in store: " + module.getItemsInStore() + 
-                        " (created = " + module.getItemsCreated() + ", destroyed = " + module.getItemsDestroyed() + 
-                        ", recycled = " + module.getItemsReleased() + ")");
-            }
         }
     }
     

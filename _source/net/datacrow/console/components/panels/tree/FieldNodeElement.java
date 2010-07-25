@@ -30,17 +30,16 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
 public class FieldNodeElement extends NodeElement {
     
     private int field;
     
-    public FieldNodeElement(int module, int field, Object key, String displayValue, ImageIcon icon, String clause) {
+    public FieldNodeElement(int module, int field, Object key, String displayValue, DcImageIcon icon, String clause) {
         super(module, key, displayValue, icon, clause);
         this.field = field;
         setCount(1);

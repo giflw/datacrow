@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 /**
  * Responsible for reclaiming used resources.
  * @author Robert Jan van der Waals.
+ * @deprecated
  */
 public class FreeResourcesTask {
 
@@ -66,11 +67,7 @@ public class FreeResourcesTask {
     }
     
     private static void suggestGCNow() {
-    	long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-        ImageCleaner.clean();
-        debug(start, "Clearing images in store");
-
-        start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         System.runFinalization();
         debug(start, "Running finalizers");
         

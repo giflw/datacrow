@@ -74,11 +74,12 @@ public class DcImageIcon extends ImageIcon {
     public void flush() {
     	bytes = null;
     	filename = null;
-        
-    	getImage().flush();
-        tracker.removeImage(getImage());
-        
-        //System.gc();
+
+    	Image img = getImage();
+    	img.flush();
+    	
+    	// cause possible thread lock (!)
+    	// tracker.removeImage(img);
     }
     
     public String getFilename() {
@@ -108,19 +109,10 @@ public class DcImageIcon extends ImageIcon {
     }
     
     @Override
-    protected void loadImage(Image image) {
-        super.loadImage(image);
-        tracker.removeImage(image);
-    }
-
-    @Override
     protected void finalize() throws Throwable {
         flush();
         super.finalize();
         super.setDescription(null);
         super.setImageObserver(null);
-        try {
-            super.setImage(null);
-        } catch (Exception e) {}
     }
 }

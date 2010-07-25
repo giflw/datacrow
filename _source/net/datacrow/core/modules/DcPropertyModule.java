@@ -197,9 +197,4 @@ public class DcPropertyModule extends DcModule {
     public boolean equals(Object o) {
         return (o instanceof DcPropertyModule ? ((DcPropertyModule) o).getIndex() == getIndex() : false);
     }
-
-    @Override
-    public int getLoadBehavior() {
-        return DcModule._LOAD_BEHAVIOR_FULL;
-    }
 }

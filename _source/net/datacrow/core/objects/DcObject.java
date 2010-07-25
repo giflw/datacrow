@@ -146,28 +146,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return loaded;
     }
 
-    /**
-     * Unloads this item after which only holds an ID. 
-     * The item can be loaded using the load method.
-     * @see net.datacrow.core.objects.IReloadableObject#unload()
-     */
-    public void unload() {
-        if (!loaded) return;
-        
-        Long ID = null;
-        
-        if (hasPrimaryKey()) ID = getID();
-        
-        freeResources();
-        clearValues(true);
-        
-        if (hasPrimaryKey()) setValue(_ID, ID);
-        
-        markAsUnchanged();
-        
-        loaded = false;
-    }
-    
     public void reload() {
         loaded = false;
         load();
@@ -185,7 +163,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         
         try {
             String sql = "SELECT * FROM " + getTableName() + " WHERE ID = " + getID();
-            clearValues(true);
+            clearValues();
             ResultSet rs = DatabaseManager.executeSQL(sql, false);
             
             while (rs.next()) {
@@ -691,19 +669,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     /**
      * Frees the resources hold by this items pictures.
      */
-    public void freeResources() {
-        for (DcField field : getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) getValue(field.getIndex());
-                if (picture != null)
-                    picture.unload(false);
-            }
-        }
-    }
-    
-    /**
-     * Frees the resources hold by this items pictures.
-     */
     public void flushImages() {
         for (DcField field : getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
@@ -899,7 +864,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public void release() {
         if (isDestroyed()) return;
 
-        clearValues(true);
+        clearValues();
         setValueLowLevel(DcObject._ID, null);
         
         if (requests != null)
@@ -912,9 +877,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
     
     public void destroy() {
-        clearValues(true);
-        
-        if (values != null) values.clear();
+        if (values != null) {
+            clearValues();
+            values.clear();
+        }
         
         values = null;
         requests.clear();
@@ -928,12 +894,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Resets this item. All values are set to empty.
      * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
-    public void clearValues(boolean nochecks) {
+    public void clearValues() {
         if (!isDestroyed()) {
             for (Integer key : values.keySet()) {
                 if (key.intValue() != _ID) {
                     DcValue value = values.get(key);
-                    value.clear(nochecks);
+                    value.clear();
                 }
             }
             markAsUnchanged();
@@ -1409,7 +1375,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * in parallel with its clone(s).
      * 
      * Note; this is not a shallow copy and costs just as much resources as its original.
-     * After using the clone it is best to disgard it by calling the destroy method.
+     * After using the clone it is best to discard it by calling the destroy method.
      */
     @Override
     public DcObject clone() {

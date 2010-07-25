@@ -245,7 +245,7 @@ public class DcDatabase {
         
         for (DcModule module : DcModules.getAllModules()) {
             DcObject dco = module.getItem();
-            if (!dco.getTableName().equals("")) {
+            if (!module.isAbstract()) {
                 String testQuery = "select * from " + dco.getTableName();
                 try {
                     stmt.setMaxRows(1);
@@ -258,6 +258,7 @@ public class DcDatabase {
                     createTable(dco);
                 }
             }
+            
             dco.release();
         }
         stmt.close();

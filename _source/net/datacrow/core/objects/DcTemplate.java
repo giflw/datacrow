@@ -72,19 +72,10 @@ public class DcTemplate extends DcObject {
          return ((Boolean) getValue(_SYS_DEFAULT)).booleanValue();
      }
 
-     /**
-      * Frees up resources used by the item.
-      * Doesn't do a thing for templates due to an unresolved bug.
-      */
      @Override
-     public void freeResources() {
-         // prevent images error
-     }     
-     
-     @Override
-    protected void beforeSave() throws ValidationException {
+     protected void beforeSave() throws ValidationException {
          // prevent external reference errors and the likes
-    }
+     }
 
     /**
       * The module which uses the template.

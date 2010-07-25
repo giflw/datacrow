@@ -145,9 +145,4 @@ public class MappingModule extends DcModule {
     public Collection<DcObject> getDefaultData() throws Exception  {
         return null;
     }
-    
-    @Override
-    public int getLoadBehavior() {
-        return DcModule._LOAD_BEHAVIOR_FULL;
-    }
 }

@@ -5,17 +5,18 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.util.DcImageIcon;
 
 public abstract class NodeElement {
 
     protected Object key;
     protected String displayValue;
-    protected ImageIcon icon;
+    protected DcImageIcon icon;
     protected int module;
     private String clause;
     private int count;
     
-    public NodeElement(int module, Object key, String displayValue, ImageIcon icon, String clause) {
+    public NodeElement(int module, Object key, String displayValue, DcImageIcon icon, String clause) {
         this.module = module;
         this.key = key;   
         this.displayValue = displayValue;
@@ -60,6 +61,8 @@ public abstract class NodeElement {
     public void clear() {
         if (key instanceof DcObject)
             ((DcObject) key).release();
+        
+        icon.flush();
         
         key = null;
         icon = null;

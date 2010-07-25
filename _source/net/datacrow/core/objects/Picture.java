@@ -104,7 +104,7 @@ public class Picture extends DcObject {
     
     @Override
     public void release() {
-        unload(true);
+        unload();
         super.release();
         deleted = false;
         edited = false;
@@ -115,17 +115,14 @@ public class Picture extends DcObject {
         return (String) getValue(Picture._C_FILENAME);
     }
     
-    public void unload(boolean nochecks) {
+    public void unload() {
         
-//        if (scaledImage != null) {
-//            scaledImage.flush();
-//            // prevent massive amounts of pictures being created;
-//            // do turn this back on! just flush the image an keep using it.
-//            // 11/1/2010: Seems to be better to actually clean everything out..
-//            scaledImage = null;
-//        }
+        if (scaledImage != null) {
+            scaledImage.flush();
+            scaledImage = null;
+        }
         
-        if (getValues() != null && (nochecks || (!isNew() && !edited))) {
+        if (getValues() != null && (!isNew() && !edited)) {
 	    	DcImageIcon image = ((DcImageIcon) getValue(_D_IMAGE));
 
 	    	if (image != null) image.flush();

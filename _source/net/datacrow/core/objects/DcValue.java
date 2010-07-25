@@ -265,11 +265,13 @@ public class DcValue implements Serializable {
      * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
     @SuppressWarnings("unchecked")
-    public void clear(boolean nochecks) {
+    public void clear() {
         if (value != null) {
         
             if (value instanceof Picture)
                 ((Picture) value).release();
+            else if (value instanceof DcImageIcon)
+                ((DcImageIcon) value).flush();
             else if (value instanceof DcObject) 
                 ((DcObject) value).release();
             else if (value instanceof Collection) {

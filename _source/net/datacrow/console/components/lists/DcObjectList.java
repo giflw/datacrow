@@ -115,7 +115,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         public void run() {
             ListModel model = getModel();
             
-            int cache = 20;
+            int cache = 10;
             
             int first = getFirstVisibleIndex() - cache;
             int last = getLastVisibleIndex() + cache;
@@ -382,11 +382,16 @@ public class DcObjectList extends DcList implements IViewComponent {
         clear();
         
         DcListModel model = new DcListModel();
+        
+        renderer.stop();
+        
         for (Long key : keys) {
             DcObjectListElement element = getDisplayElement(module.getIndex());
             element.setKey(key);
             model.addElement(element);
         }
+        
+        renderer.start();
         
         setModel(model);
         revalidate();

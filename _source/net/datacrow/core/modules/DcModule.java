@@ -52,7 +52,6 @@ import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
 import net.datacrow.core.migration.itemimport.CsvImporter;
@@ -113,8 +112,6 @@ public class DcModule implements Comparable<DcModule> {
 
     private static Logger logger = Logger.getLogger(DcModule.class.getName());
     
-    private static final int _MAX_ITEM_STORE_SIZE = 0;
-
     public static final int _TYPE_MODULE = 0;
     public static final int _TYPE_PROPERTY_MODULE = 1;
     public static final int _TYPE_MEDIA_MODULE = 2;
@@ -123,9 +120,6 @@ public class DcModule implements Comparable<DcModule> {
     public static final int _TYPE_MAPPING_MODULE = 5;
     public static final int _TYPE_TEMPLATE_MODULE = 6;
 
-    public static final int _LOAD_BEHAVIOR_FULL = 0;
-    public static final int _LOAD_BEHAVIOR_MINIMAL = 1;
-    
     private final int type;
     private final int index;
     
@@ -155,11 +149,6 @@ public class DcModule implements Comparable<DcModule> {
     private boolean isDefaultDataLoaded = false;
     
     private net.datacrow.settings.Settings settings;
-    
-    private List<DcObject> items;
-    private int itemsCreated = 0;
-    private int itemsDestroyed = 0;
-    private int itemsReleased = 0;
     
     @SuppressWarnings("unchecked")
     private Class synchronizerClass;
@@ -349,28 +338,6 @@ public class DcModule implements Comparable<DcModule> {
         if (!module.isEnabled()) isEnabled(false);
     }
     
-    /**
-     * Loads all items belonging to this module.
-     */
-    public final List<DcObject> getItems() {
-        try {
-            if (isAbstract()) {
-                List<DcObject> items = new ArrayList<DcObject>();
-                for (DcObject dco : DataManager.get(getIndex(), null))
-                    items.add(dco);
-                return items;
-            } else {
-                if (getLoadBehavior() == _LOAD_BEHAVIOR_MINIMAL)
-                    return items = DatabaseManager.retrieveItems("SELECT ID FROM " + getTableName(), Query._SELECT);
-                else if (getLoadBehavior() == _LOAD_BEHAVIOR_FULL)
-                    return items = DatabaseManager.retrieveItems("SELECT * FROM " + getTableName(), Query._SELECT);
-            }
-        } catch (Exception e) {
-            logger.error("Could not load data for module " + getLabel(), e);
-        }
-        return new ArrayList<DcObject>();
-    }        
-
     public boolean hasReports() {
         return new ReportTemplates(true).hasReports(index);       
     }
@@ -644,55 +611,13 @@ public class DcModule implements Comparable<DcModule> {
     }  
 
     public void release(DcObject dco) {
-        
-        if (items == null)
-            return;
-        
-        if (dco.isDestroyed())
-            return;
-
-        if (items.size() < _MAX_ITEM_STORE_SIZE) {
-            items.add(0, dco);
-            itemsReleased += 1;
-        } else { 
-            dco.destroy();
-            itemsDestroyed += 1;
-        }
-    }
-    
-    public final int getItemsInStore() {
-        return items == null ? 0 : items.size();
-    }
-    
-    public final int getItemsDestroyed() {
-        return itemsDestroyed;
-    }
-
-    public final int getItemsReleased() {
-        return itemsReleased;
-    }
-
-    public final int getItemsCreated() {
-        return itemsCreated;
+        dco.destroy();
     }
     
     /**
      * Creates a new instance of an item belonging to this module.
      */
     public synchronized final DcObject getItem() {
-//        if (items == null || items.size() < 1) {
-//            items = items == null ? new ArrayList<DcObject>() : items;
-//            for (int i = 0; i < _MAX_ITEM_STORE_SIZE / 2; i++) {
-//                itemsCreated++;
-//                items.add(createItem());
-//            }
-//        }
-//
-//        DcObject dco = items.remove(0);
-//        
-//        if (dco == null) dco = createItem();
-//        
-//        dco.clearValues(true);
         return createItem();
     }  
     
@@ -1599,15 +1524,4 @@ public class DcModule implements Comparable<DcModule> {
         
         return items;
     } 
-    
-    public int getLoadBehavior() {
-        return _LOAD_BEHAVIOR_MINIMAL;
-    }
-    
-    /**
-     * Indicates whether the items of this module will be cached or not
-     */
-    public boolean isCached() {
-        return false;
-    }
 }
