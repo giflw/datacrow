@@ -611,7 +611,7 @@ public class DataManager {
                 return DatabaseManager.retrieveItems(DcModules.get(modIdx).getItem());
             }
         } catch (SQLException se) {
-            se.printStackTrace();
+            logger.error("Error while querying for item", se);
             return new ArrayList<DcObject>();
         }
     }

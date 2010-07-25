@@ -216,6 +216,8 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             } else {
                 try {
                     img = picture.getImage();
+                    
+                    // less expensive way to prepare the image (using the default instance)
                     if (Utilities.getToolkit().prepareImage(img, imageWidth, imageHeight, this))
                         paintImage(g);
                 } catch (Exception e) {

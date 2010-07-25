@@ -248,7 +248,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                     ps.close();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e, e);
             }
         }
         

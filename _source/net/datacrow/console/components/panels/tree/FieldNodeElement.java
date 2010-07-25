@@ -35,8 +35,12 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
+import org.apache.log4j.Logger;
+
 public class FieldNodeElement extends NodeElement {
     
+    private static Logger logger = Logger.getLogger(FieldNodeElement.class.getName());
+
     private int field;
     
     public FieldNodeElement(int module, int field, Object key, String displayValue, DcImageIcon icon, String clause) {
@@ -80,7 +84,7 @@ public class FieldNodeElement extends NodeElement {
             rs.close();
             ps.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e, e);
         }
 
         setCount(keys.size());

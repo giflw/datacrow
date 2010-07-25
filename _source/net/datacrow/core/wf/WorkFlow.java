@@ -137,7 +137,6 @@ public class WorkFlow {
             item.setValue(Media._SYS_MODULE, item.getModule().getObjectName());
 
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("An error occurred while converting result set to items", e);
         }
     }
@@ -172,7 +171,6 @@ public class WorkFlow {
                 objects.add(dco);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("An error occurred while converting result set to items", e);
         }
         
