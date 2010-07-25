@@ -439,7 +439,11 @@ public class FieldTreePanel extends TreePanel {
         
         ResultSet rs;
         try {
-            rs = DatabaseManager.executeSQL("select count(*) from " + DcModules.get(getModule()).getTableName(), false);
+            sql = "select count(*) from " + DcModules.get(getModule()).getTableName();
+            if (DataFilters.isFilterActive(getModule()))
+                sql += " where id in (" + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ")";
+            
+            rs = DatabaseManager.executeSQL(sql, false);
             rs.next();
             element.setCount(rs.getInt(1));
         } catch (Exception e) {

@@ -113,13 +113,13 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             PollerTask poller = new PollerTask(this, DcResources.getText("lblFiltering"));
             poller.start();
             
+            DataFilters.setCurrent(module.getIndex(), df);
+            
             List<Long> keys = DataManager.getKeys(module.getIndex(), df);
             if (keys.size() == 0)
                 DcModules.getCurrent().getSearchView().clear();
             else 
                 DcModules.getCurrent().getSearchView().add(keys);
-            
-            DataFilters.setCurrent(module.getIndex(), df);
             
             try {
                 poller.finished(true);
