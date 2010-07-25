@@ -40,8 +40,6 @@ public class DcMapping extends DcObject {
     public static final int _A_PARENT_ID = 1;
     public static final int _B_REFERENCED_ID = 2;
     
-    private String label;
-    
     /**
      * Creates a new instance.
      * @param module
@@ -61,7 +59,6 @@ public class DcMapping extends DcObject {
     
     @Override
     public void release() {
-        label = null;
         super.release();
     }
     
@@ -69,9 +66,7 @@ public class DcMapping extends DcObject {
      * Retrieves the referenced object.
      */
     public DcObject getReferencedObject() {
-        DcObject dco = DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
-        this.label = dco.toString();
-        return dco;
+        return DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
     }
     
     /**
@@ -104,8 +99,8 @@ public class DcMapping extends DcObject {
     
     @Override
     public String toString() {
-        label = label == null ? getReferencedObject().toString() : "";
-        return label;
+        // TODO: label of reference
+        return "KUTTTTTTTT!!!!!!!!!!!!!!!!!!!!";
     }
 
     @Override
