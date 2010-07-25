@@ -94,7 +94,7 @@ public class DataCrow {
     private static Logger logger;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 8, 16, 0);
+    private static Version version = new Version(3, 9, 0, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -320,13 +320,6 @@ public class DataCrow {
                     logger.debug("Initilization of the security center took " + (end - start) + "ms");
                 } 
                 
-                if (DatabaseManager.isLocked()) {
-                    DcSwingUtilities.displayErrorMessage("msgDatabaseIsLocked");
-                    System.exit(0);
-                }
-                
-                new File(moduleDir, "contactperson.jar").delete();
-                
                 // log in
                 login(username, password);
                 
@@ -334,6 +327,11 @@ public class DataCrow {
                 showSplashMsg(DcResources.getText("msgInitializingDB"));
     
                 DatabaseManager.initialize();
+                
+                if (DatabaseManager.isLocked()) {
+                    DcSwingUtilities.displayErrorMessage("msgDatabaseIsLocked");
+                    System.exit(0);
+                }
                 
                 // Start the UI
                 if (splashScreen == null)

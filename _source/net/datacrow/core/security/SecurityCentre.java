@@ -167,6 +167,7 @@ public class SecurityCentre {
             return su;
             
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error(e, e);
             throw new SecurityException(DcResources.getText("msgUserOrPasswordIncorrect"));
         }
@@ -188,6 +189,7 @@ public class SecurityCentre {
         }
         
         User user = new User();
+        user.setIDs();
         user.setValue(User._A_LOGINNAME, "sa");
         user.setValue(User._B_ENABLED, Boolean.TRUE);
         user.setValue(User._L_ADMIN, Boolean.TRUE);

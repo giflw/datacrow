@@ -488,9 +488,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
 
     public void addChild(DcObject child) {
         child.setPartOfBatch(isPartOfBatch());
-        String parentID = child.getDisplayString(child.getParentReferenceFieldIndex());
-        if (!getID().equals(parentID))
-            child.setValue(child.getParentReferenceFieldIndex(), getID());
+        child.setValue(child.getParentReferenceFieldIndex(), getID());
 
         this.children = children == null ? new ArrayList<DcObject>() : children;
         
