@@ -115,7 +115,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         public void run() {
             ListModel model = getModel();
             
-            int cache = 10;
+            int cache = 20;
             
             int first = getFirstVisibleIndex() - cache;
             int last = getLastVisibleIndex() + cache;

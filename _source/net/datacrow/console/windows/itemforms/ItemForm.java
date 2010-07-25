@@ -145,8 +145,6 @@ public class ItemForm extends DcFrame implements ActionListener {
         this.readonly = readonly;
         this.update = update;
         this.dcoOrig = o;
-        
-        this.dcoOrig.markAsUnchanged();
         this.dcoOrig.setPartOfBatch(false);
 
         if (!update && !readonly && o.getModule().isAbstract()) {
@@ -175,8 +173,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             
         } else {
             this.dcoOrig.markAsUnchanged();
-            this.dco = o.clone();
-            this.dco.markAsUnchanged();
+            this.dco = update ? DataManager.getItem(dcoOrig.getModule().getIndex(), dcoOrig.getID()) : dcoOrig.clone();
             this.moduleIdx = dco.getModule().getIndex();
             
             for (IRequest request : o.getRequests().get())
@@ -322,12 +319,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         childView = null;
         template = null;  
         
-        if (dcoOrig != null && update) {
-            dcoOrig.freeResources();
-            // repaint the image as an image tab might have been selected
-            if (dcoOrig.getModule().getCurrentSearchView() != null)
-                dcoOrig.getModule().getCurrentSearchView().repaintQuickViewImage();
-        }
+        if (dcoOrig != null) dcoOrig.release();
         
         ComponentFactory.clean(getJMenuBar());
         setJMenuBar(null);

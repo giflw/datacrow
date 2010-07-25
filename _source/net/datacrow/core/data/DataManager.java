@@ -309,30 +309,30 @@ public class DataManager {
     
     public static List<DcObject> getReferencingItems(DcObject item) {
         List<DcObject> items = new ArrayList<DcObject>();
-        for (DcModule module : DcModules.getActualReferencingModules(item.getModule().getIndex())) {
-            if ( module.getIndex() != item.getModule().getIndex() && 
-                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
-                
-                for (DcField field : module.getFields()) {
-                    if (field.getReferenceIdx() == item.getModule().getIndex()) {
-                        DataFilter df = new DataFilter(module.getIndex());
-                        
-                        if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
-                            Collection<DcObject> c = new ArrayList<DcObject>();
-                            c.add(item);
-                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));
-                        } else {
-                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, item));
-                        }
-                        
-                        for (DcObject dco : DataManager.get(module.getIndex(), df)) {
-                            if (!items.contains(dco))
-                                items.add(dco);
-                        }
-                    }
-                }
-            }
-        }  
+//        for (DcModule module : DcModules.getActualReferencingModules(item.getModule().getIndex())) {
+//            if ( module.getIndex() != item.getModule().getIndex() && 
+//                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
+//                
+//                for (DcField field : module.getFields()) {
+//                    if (field.getReferenceIdx() == item.getModule().getIndex()) {
+//                        DataFilter df = new DataFilter(module.getIndex());
+//                        
+//                        if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+//                            Collection<DcObject> c = new ArrayList<DcObject>();
+//                            c.add(item);
+//                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));
+//                        } else {
+//                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, item));
+//                        }
+//                        
+//                        for (DcObject dco : DataManager.get(module.getIndex(), df)) {
+//                            if (!items.contains(dco))
+//                                items.add(dco);
+//                        }
+//                    }
+//                }
+//            }
+//        }  
         
         return items;
     }    
@@ -599,7 +599,8 @@ public class DataManager {
         if (map != null && map.containsKey(ID)) {
             return map.get(ID);
         } else {
-            List<DcObject> items = DatabaseManager.retrieveItems("SELECT * FROM " + DcModules.get(module).getTableName() + " WHERE ID = " + ID, Query._SELECT);
+            String sql = "SELECT * FROM " + DcModules.get(module).getTableName() + " WHERE ID = " + ID;
+            List<DcObject> items = DatabaseManager.retrieveItems(sql, Query._SELECT);
             return items != null && items.size() > 0 ? items.get(0) : null;
         }
     }    

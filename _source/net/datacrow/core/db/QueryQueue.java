@@ -89,7 +89,7 @@ public class QueryQueue extends Thread {
                         query.unload();
                     } else {
                         isLazy = true;
-                        sleep(10000);
+                        sleep(1000);
                     }
                 } catch (Exception e) {
                     logger.error(e, e);

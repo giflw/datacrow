@@ -62,7 +62,6 @@ import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.plugin.InvalidPluginException;
 import net.datacrow.core.plugin.Plugins;
@@ -455,15 +454,11 @@ public class View extends DcPanel implements ListSelectionListener {
         DcObject dco = getSelectedItem();
         
         if (dco != null) {
-            // reload the item when in an abstract view (or when we are opening an item from 
-            // the container's child view. 
-            if (    DcModules.getCurrent().isAbstract() || 
-                   (DcModules.getCurrent().getIndex() == DcModules._CONTAINER && 
-                    dco.getModule().getIndex() != DcModules._CONTAINER))
-                dco.load();
             
+            // create a fresh instance
             ItemForm form = new ItemForm(false, getType() == View._TYPE_SEARCH, 
-                                         dco, getType() != View._TYPE_SEARCH);
+                                         DataManager.getItem(dco.getModule().getIndex(), dco.getID()), 
+                                         getType() != View._TYPE_SEARCH);
             form.setVisible(true);
         } else {
             DcSwingUtilities.displayWarningMessage(DcResources.getText("msgSelectRowToOpen"));
