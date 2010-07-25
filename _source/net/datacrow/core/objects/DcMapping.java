@@ -25,6 +25,8 @@
 
 package net.datacrow.core.objects;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.core.data.DataManager;
 
 /**
@@ -35,10 +37,14 @@ import net.datacrow.core.data.DataManager;
  */
 public class DcMapping extends DcObject {
     
+    private static Logger logger = Logger.getLogger(DcMapping.class.getName());
+    
     private static final long serialVersionUID = 1314886460279316879L;
     
     public static final int _A_PARENT_ID = 1;
     public static final int _B_REFERENCED_ID = 2;
+    
+    private String label;
     
     /**
      * Creates a new instance.
@@ -59,6 +65,7 @@ public class DcMapping extends DcObject {
     
     @Override
     public void release() {
+        label = null;
         super.release();
     }
     
@@ -66,7 +73,14 @@ public class DcMapping extends DcObject {
      * Retrieves the referenced object.
      */
     public DcObject getReferencedObject() {
-        return DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
+        DcObject dco = null;
+        try {
+            dco = DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
+            this.label = dco != null ? dco.toString() : null;
+        } catch (Exception e) {
+            logger.warn(e, e);
+        }
+        return dco;
     }
     
     /**
@@ -99,8 +113,8 @@ public class DcMapping extends DcObject {
     
     @Override
     public String toString() {
-        // TODO: label of reference
-        return "KUTTTTTTTT!!!!!!!!!!!!!!!!!!!!";
+        if (label == null) getReferencedObject();
+        return label;
     }
 
     @Override
