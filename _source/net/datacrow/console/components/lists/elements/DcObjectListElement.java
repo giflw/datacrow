@@ -65,6 +65,8 @@ public abstract class DcObjectListElement extends DcListElement {
     }
 
     public DcObject getDcObject() {
+        if (dco == null) load();
+        
         return dco;
     }
     

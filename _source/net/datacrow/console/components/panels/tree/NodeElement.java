@@ -40,7 +40,10 @@ public abstract class NodeElement {
     }
     
     public abstract List<Long> getItems(List<NodeElement> parents);
-    public abstract int getCount();
+    
+    public int getCount() {
+        return count;
+    }
 
     public String getComparableKey() {
         return getDisplayValue().toLowerCase();

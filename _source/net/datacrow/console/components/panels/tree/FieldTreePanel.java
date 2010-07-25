@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -53,6 +54,8 @@ public class FieldTreePanel extends TreePanel {
     private static Logger logger = Logger.getLogger(FieldTreePanel.class.getName());
     private int[] fields;
     private String empty = DcResources.getText("lblEmpty");
+    
+    private TreeHugger treeHugger;
     
     public FieldTreePanel(GroupingPane gp) {
         super(gp);
@@ -107,17 +110,33 @@ public class FieldTreePanel extends TreePanel {
      * Initialization
      ************************************************************************/
     
+    
+    
     @Override
     protected void createTree() {
-        TreeHugger treeHugger = new TreeHugger();
+        if (treeHugger != null) {
+            treeHugger.cancel();
+         
+            while (treeHugger.isAlive()) {
+                
+            }
+        }
+        
+        treeHugger = new TreeHugger();
         treeHugger.start();
     }
     
     private class TreeHugger extends Thread {
         
+        private boolean stop = false;
+        
         @Override
         public void run() {
             createTree();
+        }
+        
+        public void cancel() {
+            stop = true;
         }
         
         protected void createTree() {
@@ -125,13 +144,18 @@ public class FieldTreePanel extends TreePanel {
             
             build();
             
-            if (fields != null) createTree(fields);
+            if (fields != null) 
+                createTree(fields);
             
-            expandAll();
-            if (isShowing()) setDefaultSelection();
-            
-            revalidate();
-            repaint();
+            SwingUtilities.invokeLater(
+                    new Thread(new Runnable() { 
+                        public void run() {
+                            revalidate();
+                            repaint();
+                            expandAll();
+                        }
+                    }));
+
         }
         
         /**
@@ -308,20 +332,20 @@ public class FieldTreePanel extends TreePanel {
                 DefaultMutableTreeNode parent;
                 DefaultMutableTreeNode previous;
                 boolean exists = false;
-                while (rs.next()) {
+                while (rs.next() && !stop) {
                     int level = 0;
                     parent = top;
                     
                     for (int idx : fields) {
+                        
+                        if (stop) break;
+                        
                         field = module.getField(idx);
                         
                         // for each level the field index is shifted to the end.
                         key = rs.getObject((level * 3) + 2);
                         value = rs.getString((level * 3) + 3);
                         icon = rs.getString((level * 3) + 4);
-
-                        if (key != null)
-                            System.out.println("");
                         
                         previous = parent.getChildCount() == 0 ? null : ((DefaultMutableTreeNode) parent.getChildAt(parent.getChildCount() - 1));
                         exists = previous == null || (((NodeElement)  previous.getUserObject()).getKey() == null && key != null) ? false : 
@@ -329,6 +353,8 @@ public class FieldTreePanel extends TreePanel {
                                 ((NodeElement)  previous.getUserObject()).getKey().equals(key);
                         
                         if (!exists) { 
+                            
+                            
                             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
                                 field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
 
@@ -373,7 +399,9 @@ public class FieldTreePanel extends TreePanel {
                             model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
-                        } else {
+                        } else { // exists
+                            FieldNodeElement fne =(FieldNodeElement) previous.getUserObject();
+                            fne.setCount(fne.getCount() + 1);
                             parent = previous;    
                         }
                         level++;
@@ -403,7 +431,21 @@ public class FieldTreePanel extends TreePanel {
         top = new DefaultMutableTreeNode(label);
         
         FieldNodeElement element = new FieldNodeElement(getModule(), -1, null, label, null, "select ID from " + DcModules.get(getModule()).getTableName());
+        
+        
+        ResultSet rs;
+        try {
+            rs = DatabaseManager.executeSQL("select count(*) from " + DcModules.get(getModule()).getTableName(), false);
+            rs.next();
+            element.setCount(rs.getInt(1));
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+        
         top.setUserObject(element);
+        
+        
+        
     }
     
     @Override

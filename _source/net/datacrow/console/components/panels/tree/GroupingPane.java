@@ -106,11 +106,6 @@ public class GroupingPane extends JPanel {
         return active;
     }
     
-    public void updateView() {
-        for (TreePanel tp : panels)
-            tp.updateView();
-    }
-    
     private void build() {
         JTabbedPane tp = ComponentFactory.getTabbedPane();
         

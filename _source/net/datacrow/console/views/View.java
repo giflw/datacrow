@@ -100,7 +100,6 @@ public class View extends DcPanel implements ListSelectionListener {
     private boolean checkForChanges = true;
 
     protected JPanel panelResult = new JPanel();
-    protected JPanel panelStatus = getStatusPanel();
     
     private JScrollPane spChildView;
     private View childView;
@@ -293,6 +292,9 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public void add(final Long key, final boolean select) {
         vc.add(key);
+        
+        if (select)
+            setSelected();
     }
     
     public void add(final DcObject dco, final boolean select) {
@@ -330,6 +332,8 @@ public class View extends DcPanel implements ListSelectionListener {
         revalidate();
         afterUpdate();
         setDefaultSelection();
+        
+        setSelected();
     }      
     
     /**
@@ -368,8 +372,8 @@ public class View extends DcPanel implements ListSelectionListener {
     public void setVisible(boolean b) {
     	if (b && groupingPane != null && vdGroupingPane != null) {
 			vdGroupingPane.setLeftComponent(groupingPane);
-			if (vc.getItemCount() == 0)
-			    groupingPane.updateView();
+//			if (vc.getItemCount() == 0)
+//			    groupingPane.groupBy(); // TODO: test
     	}
     	super.setVisible(b);
     }
@@ -564,12 +568,6 @@ public class View extends DcPanel implements ListSelectionListener {
         }
         
         vc.applySettings();
-        panelStatus.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
-        
-        if (getModule().getIndex() == DcModules._CONTAINER) {
-            if (groupingPane != null)
-                groupingPane.updateView();
-        }
     }
 
     public int getItemCount() {
@@ -848,10 +846,6 @@ public class View extends DcPanel implements ListSelectionListener {
             add(    actionPanel,    Layout.getGBC( 0, 2, 3, 1, 1.0, 1.0
                     ,GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 5, 0, 5), 0, 0));
-
-        add(    panelStatus,    Layout.getGBC( 0, 3, 3, 1, 1.0, 1.0
-                ,GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 5, 0, 5), 0, 0));
 
         ToolTipManager.sharedInstance().registerComponent((JComponent) vc);
     }

@@ -43,6 +43,7 @@ public class FieldNodeElement extends NodeElement {
     public FieldNodeElement(int module, int field, Object key, String displayValue, ImageIcon icon, String clause) {
         super(module, key, displayValue, icon, clause);
         this.field = field;
+        setCount(1);
     }
     
     @Override
@@ -89,10 +90,5 @@ public class FieldNodeElement extends NodeElement {
     
     public int getField() {
         return field;
-    }
-
-    @Override
-    public int getCount() {
-        return 0;
     }
 }

@@ -439,7 +439,7 @@ public class DataCrow {
                 System.exit(0);
             }
             
-            new FreeResourcesTask();
+            //new FreeResourcesTask();
     
             int xp = DcSettings.getInt(DcRepository.Settings.stXpMode);
             if (!webserverMode && xp == -1) {

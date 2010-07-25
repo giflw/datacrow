@@ -92,13 +92,8 @@ public class MasterView {
         if (groupingPane != null)
             groupingPane.saveChanges(false);
         
-        try {
-            if (groupingPane != null)
-                groupingPane.updateView();
-        } finally {
-            if (groupingPane != null)
-                groupingPane.saveChanges(true);
-        }
+        if (groupingPane != null)
+            groupingPane.saveChanges(true);
     }
     
     public View get(int index) {

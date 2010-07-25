@@ -191,30 +191,5 @@ public class ContainerTreePanel extends TreePanel {
 //            
 //            setSelected(node);
 //        }
-    }
-    
-    @Override
-    public void updateView() {
-//        if (currentUserObject instanceof NodeElement) {
-//            gp.getView().clear();
-//            NodeElement currentNode = (NodeElement) currentUserObject;
-//            
-//            if (currentNode.getItems() != null) {
-//                Settings settings = DcModules.get(DcModules._CONTAINER).getSettings();
-//                if (settings.getInt(DcRepository.ModuleSettings.stTreePanelShownItems) == DcModules._ITEM) {
-//                    List<DcObject> containers = currentNode.getItems();
-//                    List<DcObject> objects = new ArrayList<DcObject>();
-//                    for (DcObject container : containers ) {
-//                        objects.addAll(container.getChildren());
-//                    }
-//                    
-//                    DataFilter df = DataFilters.getCurrent(DcModules._ITEM);
-//                    df.sort(objects);
-//                    updateView(objects);
-//                } else {
-//                    updateView(currentNode.getItems());
-//                }
-//            }
-//        }
     }  
 }

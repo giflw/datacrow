@@ -110,7 +110,6 @@ public class DataManager {
             }
         });
     }    
-
     
     /**
      * Dispatch the items to the specified view.
