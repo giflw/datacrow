@@ -113,7 +113,7 @@ public class DcModule implements Comparable<DcModule> {
 
     private static Logger logger = Logger.getLogger(DcModule.class.getName());
     
-    private static final int _MAX_ITEM_STORE_SIZE = 20;
+    private static final int _MAX_ITEM_STORE_SIZE = 0;
 
     public static final int _TYPE_MODULE = 0;
     public static final int _TYPE_PROPERTY_MODULE = 1;
@@ -680,20 +680,20 @@ public class DcModule implements Comparable<DcModule> {
      * Creates a new instance of an item belonging to this module.
      */
     public synchronized final DcObject getItem() {
-        if (items == null || items.size() < 1) {
-            items = items == null ? new ArrayList<DcObject>() : items;
-            for (int i = 0; i < _MAX_ITEM_STORE_SIZE / 2; i++) {
-                itemsCreated++;
-                items.add(createItem());
-            }
-        }
-
-        DcObject dco = items.remove(0);
-        
-        if (dco == null) dco = createItem();
-        
-        dco.clearValues(true);
-        return dco;
+//        if (items == null || items.size() < 1) {
+//            items = items == null ? new ArrayList<DcObject>() : items;
+//            for (int i = 0; i < _MAX_ITEM_STORE_SIZE / 2; i++) {
+//                itemsCreated++;
+//                items.add(createItem());
+//            }
+//        }
+//
+//        DcObject dco = items.remove(0);
+//        
+//        if (dco == null) dco = createItem();
+//        
+//        dco.clearValues(true);
+        return createItem();
     }  
     
     public DcField getFileField() {

@@ -929,9 +929,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
     public void clearValues(boolean nochecks) {
-        if (isDestroyed()) {
-            logger.warn("System tried to clear all values while the object was already destroyed");
-        } else {
+        if (!isDestroyed()) {
             for (Integer key : values.keySet()) {
                 if (key.intValue() != _ID) {
                     DcValue value = values.get(key);
@@ -940,7 +938,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             }
             markAsUnchanged();
         }
-        
         loaded = false;
     }
 
