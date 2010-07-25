@@ -114,8 +114,6 @@ public class Query {
                  QueryOptions options,
                  Requests requests) throws SQLException {
 
-        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-        
         module = dco.getModule().getIndex();
 
         setSilence(dco.isSilent());
@@ -141,11 +139,6 @@ public class Query {
         }
 
         queries = getQueries(dco);
-        
-        if (logger.isDebugEnabled()) {
-            long end = new Date().getTime();
-            logger.debug("Query was generated in " + (end - start) + "ms");
-        }
     } 
 
     /**
@@ -153,8 +146,6 @@ public class Query {
      */
     @SuppressWarnings("unchecked")
     public Query(DataFilter filter, Requests requests, int[] fields) throws SQLException {
-        
-        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
         setSilence(true);
         
@@ -263,11 +254,6 @@ public class Query {
         
         this.queries = new ArrayList<PreparedStatement>();
         this.queries.add(ps);
-        
-        if (logger.isDebugEnabled()) {
-            long end = new Date().getTime();
-            logger.debug("Query was generated in " + (end - start) + "ms");
-        }
     }
     
     public List<PreparedStatement> getQueries() {

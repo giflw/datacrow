@@ -161,7 +161,6 @@ public class DcValue implements Serializable {
                         setValueNative(o, field);
                     } else if (!Utilities.isEmpty(o) && field.getReferenceIdx() != field.getModule()) {
                         setValueNative(DataManager.getItem(field.getReferenceIdx(), (Long) o), field);
-                        logger.debug("Setting string value for reference field (" + field + ") value '" + o + "')");
                     }
 
                     if (getValue() == null && !Utilities.isEmpty(o)) {

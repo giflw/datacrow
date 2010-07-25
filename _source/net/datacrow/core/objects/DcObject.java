@@ -1447,7 +1447,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     @Override
     protected void finalize() throws Throwable {
-        release();
+        destroy();
         super.finalize();
     }
 
