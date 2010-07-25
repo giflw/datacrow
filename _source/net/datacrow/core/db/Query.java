@@ -558,7 +558,6 @@ public class Query {
                             reference.saveNew(false);
                             reference.setValidate(true);
                         } else {
-                            mapping.setReferencedObject(existing);
                             mapping.setValue(DcMapping._B_REFERENCED_ID, existing.getID());
                         }
                     } catch (Exception e) {

@@ -111,7 +111,6 @@ public class Container extends DcObject {
         
         if (   (getID() != null) &&
                !isLoading &&
-                DataManager.isInitialized() &&
                 getModule().getChild() != null) {
             
             isLoading = true;

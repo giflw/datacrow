@@ -32,7 +32,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,12 +56,10 @@ import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.Tab;
 import net.datacrow.core.objects.helpers.ExternalReference;
-import net.datacrow.core.objects.template.Templates;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -74,29 +71,13 @@ public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
     
-    private static Map<Integer, Map<Long, DcObject>> items = 
-        new HashMap<Integer, Map<Long, DcObject>>();
-
     private static Map<Integer, Collection<IComponent>> listeners = 
         new HashMap<Integer, Collection<IComponent>>();
-    
-    private static boolean initialized = false;
     
     /**
      * Creates the data manager and loads all items.
      */
-    public DataManager() {
-        initialized = false;
-        initialize();
-        initialized = true;
-    }
-    
-    /**
-     * Indicates if the cached items have been loaded.
-     */
-    public static boolean isInitialized() {
-        return initialized;
-    }
+    public DataManager() {}
     
     /**
      * Dispatch the items to the specified view.
@@ -175,12 +156,6 @@ public class DataManager {
         dco.removeRequests();
         dco.setValidate(true);
         
-        if (items.containsKey(dco.getModule().getIndex())) {
-            Map<Long, DcObject> map = items.get(dco.getModule().getIndex());
-            map = map == null ? new HashMap<Long, DcObject>() : map;
-            map.put(dco.getID(), dco);
-        }
-        
         if (dco.getModule().canBeLend())
             dco.setValue(DcObject._SYS_AVAILABLE, Boolean.TRUE);
 
@@ -213,11 +188,6 @@ public class DataManager {
      * @param module The module to which the item belongs.
      */
     public static void remove(DcObject dco, int module) {
-        if (items.containsKey(dco.getModule().getIndex())) {
-            Map<Long, DcObject> map = items.get(dco.getModule().getIndex());
-            if (map != null) map.remove(dco.getID());
-        }
-
         updateUiComponents(dco.getModule().getIndex());
         updateView(dco, 2, module, MainFrame._SEARCHTAB);
     }
@@ -405,20 +375,16 @@ public class DataManager {
      */
     @SuppressWarnings("unchecked")
     public static void addMapping(DcObject parent, DcObject child, int fieldIdx) {
-        DcMapping mapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(
-                parent.getModule().getIndex(), child.getModule().getIndex(), fieldIdx)).getItem();
+        DcMapping mapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(parent.getModule().getIndex(), child.getModule().getIndex(), fieldIdx)).getItem();
         mapping.setValue(DcMapping._A_PARENT_ID, parent.getID());
         mapping.setValue(DcMapping._B_REFERENCED_ID, child.getID());
-        mapping.setReferencedObject(child);
         
         Collection<DcMapping> mappings = (Collection<DcMapping>) parent.getValue(fieldIdx);
         mappings = mappings == null ? new ArrayList<DcMapping>() : mappings;
         
         // check if a mapping exists already
         for (DcMapping m : mappings) {
-            if (m.getReferencedObject() == null) continue;
-
-            if (m.getReferencedObject().equals(child) || m.getReferencedObject().toString().equals(child.toString()))
+            if (m.getReferencedId().equals(child.getID()) || m.toString().equals(child.toString()))
                 return;
         }
         
@@ -452,11 +418,6 @@ public class DataManager {
     public static int contains(int module, DataFilter df) {
         List<DcObject> objects = get(module, df);
         return objects != null ? objects.size() : 0;
-    }
-    
-    
-    public static boolean isCached(int module) {
-        return items.containsKey(module);
     }
 
     /**
@@ -594,15 +555,9 @@ public class DataManager {
      * @return null or the item if found.
      */
     public static DcObject getItem(int module, Long ID) {
-        Map<Long, DcObject> map = items.get(Integer.valueOf(module));
-        
-        if (map != null && map.containsKey(ID)) {
-            return map.get(ID);
-        } else {
-            String sql = "SELECT * FROM " + DcModules.get(module).getTableName() + " WHERE ID = " + ID;
-            List<DcObject> items = DatabaseManager.retrieveItems(sql, Query._SELECT);
-            return items != null && items.size() > 0 ? items.get(0) : null;
-        }
+        String sql = "SELECT * FROM " + DcModules.get(module).getTableName() + " WHERE ID = " + ID;
+        List<DcObject> items = DatabaseManager.retrieveItems(sql, Query._SELECT);
+        return items != null && items.size() > 0 ? items.get(0) : null;
     }    
   
     /**
@@ -649,13 +604,7 @@ public class DataManager {
      */
     public static List<DcObject> get(int modIdx, DataFilter filter) {
         try {
-            if (items.containsKey(modIdx)) {
-                List<DcObject> result = new ArrayList<DcObject>();
-                for (DcObject dco : items.get(modIdx).values())
-                    result.add(dco);
-                
-                return result;
-            } else if (filter != null) {
+            if (filter != null) {
                 Query query = new Query(filter, null, null);
                 return DatabaseManager.retrieveItems(query);
             } else {
@@ -664,109 +613,6 @@ public class DataManager {
         } catch (SQLException se) {
             se.printStackTrace();
             return new ArrayList<DcObject>();
-        }
-//        if (df == null) {
-//            DcModule module = DcModules.get(modIdx);
-//            df = new DataFilter(modIdx);
-//            df.setOrder(new DcField[] {module.getField(DcProperty._SYS_DISPLAYVALUE)});
-//        }
-//        
-//        df.sort(c);
-//        return c.;
-    }
-    
-    /***************************************
-     * Initialization
-     ***************************************/
-    
-    /**
-     * Initialize the data manager. Loads all items from the database or from the cache.
-     * @see #useCache
-     */
-    public void initialize() {
-        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-        loadItems();
-
-        if (logger.isDebugEnabled()) {
-            long end = new Date().getTime();
-            logger.debug("Items were loaded from the database in " + (end - start) + "ms");
-        }
-    }
-
-    /***************************************
-     * Load from Database
-     ***************************************/
-    private void loadItems() {
-        ThreadGroup group = new ThreadGroup("data-fetchers");
-        Collection<DataFetcher> fetchers1 = new ArrayList<DataFetcher>();
-        Collection<DataFetcher> fetchers2 = new ArrayList<DataFetcher>();
-
-        for (DcModule module : DcModules.getAllModules()) {
-            if (module.isCached()) {
-                items.put(module.getIndex(), null);
-                fetchers1.add(new DataFetcher(module, group));
-            }
-        }        
-        
-        fetch(fetchers1);
-        fetch(fetchers2);
-
-        Templates.refresh();
-    }
-    
-    private void fetch(Collection<DataFetcher> fetchers) {
-        for (DataFetcher fetcher : fetchers) {
-            try {
-                fetcher.start();
-                fetcher.join();
-            } catch (InterruptedException e) {
-                logger.error(e, e);
-            }
-        }  
-        fetchers.clear();
-    }
-    
-    private final static class DataFetcher extends Thread {
-        
-        private DcModule module;
-        
-        public DataFetcher(DcModule module, ThreadGroup group) {
-            super(group, "datafetcher-" + module.getName());
-            this.module = module;
-        }
-        
-        @Override
-        public void run() {
-            try {
-                long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-
-                List<DcObject> rez = module.getItems();
-                Map<Long, DcObject> map = new HashMap<Long, DcObject>();
-                
-
-                for (DcObject dco : rez)
-                    map.put(dco.getID(), dco);
-
-                items.put(Integer.valueOf(module.getIndex()), map);
-
-                if (logger.isDebugEnabled()) {
-                    long end = new Date().getTime();
-                    logger.debug("Data for " + module.getLabel()+ " was retrieved in " + (end - start) + "ms");
-                }
-
-            
-            } catch (OutOfMemoryError ome) {
-                ome.printStackTrace();
-                logger.error(DcResources.getText("msgOutOfMemory"), ome);
-                DcSwingUtilities.displayErrorMessage("msgOutOfMemory");
-            } catch (Exception exp) {
-                exp.printStackTrace();
-                logger.error(DcResources.getText("msgDataLoadingError"), exp);
-                DcSwingUtilities.displayErrorMessage("msgDataLoadingError");
-
-            }
-            
-            module = null;
         }
     }
     

@@ -172,7 +172,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
             
         } else {
-            this.dcoOrig.markAsUnchanged();
+            this.dcoOrig = update ? DataManager.getItem(dcoOrig.getModule().getIndex(), dcoOrig.getID()) : dcoOrig.clone();
             this.dco = update ? DataManager.getItem(dcoOrig.getModule().getIndex(), dcoOrig.getID()) : dcoOrig.clone();
             this.moduleIdx = dco.getModule().getIndex();
             

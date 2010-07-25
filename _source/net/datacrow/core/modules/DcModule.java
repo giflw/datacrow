@@ -645,7 +645,7 @@ public class DcModule implements Comparable<DcModule> {
 
     public void release(DcObject dco) {
         
-        if (!DataManager.isInitialized() || items == null)
+        if (items == null)
             return;
         
         if (dco.isDestroyed())
@@ -680,10 +680,6 @@ public class DcModule implements Comparable<DcModule> {
      * Creates a new instance of an item belonging to this module.
      */
     public synchronized final DcObject getItem() {
-        
-        if (!DataManager.isInitialized())
-            return createItem();
-        
         if (items == null || items.size() < 1) {
             items = items == null ? new ArrayList<DcObject>() : items;
             for (int i = 0; i < _MAX_ITEM_STORE_SIZE / 2; i++) {

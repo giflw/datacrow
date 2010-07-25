@@ -1091,12 +1091,12 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     public void add(Long key) {
-        // TODO Auto-generated method stub
-        
+        add(DataManager.getItem(getModule().getIndex(), key));
     }
 
     public void add(Collection<Long> keys) {
-        // TODO Auto-generated method stub
-        
+        for (Long key : keys) {
+            add(key);
+        }
     }
 }

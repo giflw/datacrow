@@ -47,7 +47,6 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.menu.DcEditorPopupMenu;
-import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
@@ -180,21 +179,18 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     public void setObject(final DcObject dco, boolean allowSame) {
         if (dco == null || (!allowSame && dco.equals(this.dco)))
             return;
+        
+        if (this.dco  != null)
+            this.dco.release();
 
         setObject(dco);
     }   
     
     protected void setObject(DcObject dco) {
         try {
-            if (DcModules.getCurrent().isAbstract() &&
-                DcModules.getCurrent().getCurrentSearchView().getIndex() == MasterView._TABLE_VIEW) {
-                dco.load();
-                dco.loadChildren();
-            }
-            
             int tab = tabbedPane.getSelectedIndex();
             clear();
-            this.dco = dco;
+            this.dco = DataManager.getItem(dco.getModule().getIndex(), dco.getID());
             
             String html = "<html><body " + 
                            Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + 

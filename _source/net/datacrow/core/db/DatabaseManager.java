@@ -51,7 +51,6 @@ import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.Requests;
-import net.datacrow.core.wf.requests.SynchronizeWithManagerRequest;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.DcSwingUtilities;
@@ -405,11 +404,8 @@ public class DatabaseManager {
     
                     Query query;
                     if (!exists) {
-                        if (child.isCached()) child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
                         query = new Query(Query._INSERT, child, null, child.getRequests());
-                        
                     } else {
-                        if (child.isCached()) child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, child));
                         query = new Query(Query._UPDATE, child, null, child.getRequests());
                     }
 
@@ -442,9 +438,6 @@ public class DatabaseManager {
             
             if (children != null) {
                 for (DcObject child : children) {
-                    
-                    if (child.isCached()) child.addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, child));
-                    
                     child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
                     query = new Query(Query._INSERT, child, null, child.getRequests());
                     query.setSilence(true);

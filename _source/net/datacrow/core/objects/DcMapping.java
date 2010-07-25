@@ -25,11 +25,7 @@
 
 package net.datacrow.core.objects;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.core.data.DataManager;
-
-import org.apache.log4j.Logger;
 
 /**
  * A mapping represents a many to many relationship.
@@ -39,14 +35,12 @@ import org.apache.log4j.Logger;
  */
 public class DcMapping extends DcObject {
     
-    private static Logger logger = Logger.getLogger(DcMapping.class.getName());
-    
     private static final long serialVersionUID = 1314886460279316879L;
     
     public static final int _A_PARENT_ID = 1;
     public static final int _B_REFERENCED_ID = 2;
     
-    private DcObject referencedObj;
+    private String label;
     
     /**
      * Creates a new instance.
@@ -56,15 +50,6 @@ public class DcMapping extends DcObject {
         super(module);
     }
 
-    /**
-     * The icon. 
-     * @return Always returns null.
-     */
-    @Override
-    public ImageIcon getIcon() {
-        return getReferencedObject() != null ? getReferencedObject().getIcon() : null;
-    } 
-    
     /**
      * The filename to which this module is stored.
      * @return Always returns null.
@@ -76,28 +61,17 @@ public class DcMapping extends DcObject {
     
     @Override
     public void release() {
+        label = null;
         super.release();
-        
-        if (referencedObj != null)
-            referencedObj.release();
-            
-        referencedObj = null;
-    }
-    
-    /**
-     * Sets the referenced object (the child).
-     * @param referencedObj
-     */
-    public void setReferencedObject(DcObject referencedObj) {
-        this.referencedObj = referencedObj;
     }
     
     /**
      * Retrieves the referenced object.
      */
     public DcObject getReferencedObject() {
-        referencedObj = referencedObj == null ? DataManager.getItem(getReferencedModuleIdx(), getReferencedId()) : referencedObj;
-        return referencedObj;
+        DcObject dco = DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
+        this.label = dco.toString();
+        return dco;
     }
     
     /**
@@ -130,20 +104,12 @@ public class DcMapping extends DcObject {
     
     @Override
     public String toString() {
-        DcObject dco = null;
-        
-        try {
-            dco = getReferencedObject();
-        } catch (Exception e) {
-            logger.debug(e, e);
-        }
-            
-        return dco == null ? "" : dco.toString();
+        label = label == null ? getReferencedObject().toString() : "";
+        return label;
     }
 
     @Override
     public void copy(DcObject dco, boolean overwrite, boolean allowDeletes) {
         super.copy(dco, overwrite, allowDeletes);
-        setReferencedObject(((DcMapping) dco).getReferencedObject());
     }
 }

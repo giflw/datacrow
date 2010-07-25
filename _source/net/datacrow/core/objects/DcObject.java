@@ -53,7 +53,6 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.Requests;
-import net.datacrow.core.wf.requests.SynchronizeWithManagerRequest;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.settings.DcSettings;
@@ -146,10 +145,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public boolean isLoaded() {
         return loaded;
     }
-    
-    public boolean isCached() {
-        return DataManager.isCached(getModule().getIndex());
-    }
 
     /**
      * Unloads this item after which only holds an ID. 
@@ -157,7 +152,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @see net.datacrow.core.objects.IReloadableObject#unload()
      */
     public void unload() {
-        if (isCached()) return;
         if (!loaded) return;
         
         Long ID = null;
@@ -760,7 +754,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                     exists = referenceCurrent.getValue(ExternalReference._EXTERNAL_ID_TYPE).equals(reference.getValue(ExternalReference._EXTERNAL_ID_TYPE));
                     if (exists) {
                         mappingCurrent.setValue(DcMapping._B_REFERENCED_ID, mapping.getReferencedObject().getID());
-                        mappingCurrent.setReferencedObject(mapping.getReferencedObject());
                         getValueDef(DcObject._SYS_EXTERNAL_REFERENCES).setChanged(true);
                         break;
                     }
@@ -772,7 +765,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                         getModule().getIndex(), mapping.getReferencedObject().getModule().getIndex(), DcObject._SYS_EXTERNAL_REFERENCES)).getItem();
                 newMapping.setValue(DcMapping._A_PARENT_ID, getID());
                 newMapping.setValue(DcMapping._B_REFERENCED_ID, mapping.getReferencedObject().getID());
-                newMapping.setReferencedObject(mapping.getReferencedObject());
                 currentMappings.add(newMapping);
                 getValueDef(DcObject._SYS_EXTERNAL_REFERENCES).setChanged(true);
             }
@@ -905,9 +897,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * The item is unusable after this operation (!).
      */
     public void release() {
-        
-        if (DataManager.isCached(getModule().getIndex())) return;
-        
         if (isDestroyed()) return;
 
         clearValues(true);
@@ -1088,14 +1077,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             setIDs();
             
             if (queued) {
-            	if (isCached()) addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, this));
-            	
             	WorkFlow.insert(this);
             } else {
                 Query query = new Query(Query._INSERT, this, null, null);
             	DatabaseManager.retrieveItems(query);
-
-            	if (isCached()) new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._ADD, this).execute(null);
             }
         } catch (ValidationException ve) {
             executeRequests(false);
@@ -1137,13 +1122,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             setValue(_SYS_MODIFIED, getCurrentDate());
             
             if (queued) {
-            	if (isCached()) addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, this));
-            	
             	WorkFlow.update(this);
             } else {
                 Query query = new Query(Query._UPDATE, this, null, null);
                 DatabaseManager.retrieveItems(query);
-                if (isCached()) new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._UPDATE, this).execute(null);
             }
         } catch (ValidationException exp) {
             executeRequests(false);
@@ -1157,10 +1139,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Permanently deletes the item.
      */
     public void delete(boolean validate) throws ValidationException {
-        
         if (validate) beforeDelete();
-        if (isCached()) addRequest(new SynchronizeWithManagerRequest(SynchronizeWithManagerRequest._DELETE, this));
-    	
         WorkFlow.delete(this);
     }
     
