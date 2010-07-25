@@ -45,11 +45,11 @@ import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
 
 import org.apache.log4j.Logger;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class FieldTreePanel extends TreePanel {
 
@@ -396,7 +396,7 @@ public class FieldTreePanel extends TreePanel {
                             if (key == null) {
                                 ne = new FieldNodeElement(getModule(), field.getIndex(), null, empty, null, clause);
                             } else {
-                                ne = new FieldNodeElement(getModule(), field.getIndex(), key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon.getBytes()))), clause);
+                                ne = new FieldNodeElement(getModule(), field.getIndex(), key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon))), clause);
                             }
                             
                             current = new DefaultMutableTreeNode(ne);
