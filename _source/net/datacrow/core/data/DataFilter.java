@@ -28,7 +28,6 @@ package net.datacrow.core.data;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -38,8 +37,8 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 import net.datacrow.util.comparators.DcObjectComparator;
-import net.datacrow.util.comparators.DcObjectCompositeComparator;
 
 /**
  * Used when searching for items. 
@@ -196,72 +195,6 @@ public class DataFilter {
         return module;
     }
 
-    /**
-     * Test the filter on the specified item.
-     * @param dco
-     * @return Return true if the filter applies.
-     */
-    public boolean applies(DcObject dco) {
-        boolean filterApplies = true;
-
-        int counter = 0;
-        for (DataFilterEntry entry : entries) {
-            boolean entryApplies = false;
-            
-            if (dco.getModule().getIndex() != DcModules._CONTAINER)
-                dco.loadChildren();
-            
-            if (    entry.getModule() == dco.getModule().getIndex() || 
-                   (DcModules.get(entry.getModule()).isAbstract() && 
-                    dco.getModule().getType() == DcModule._TYPE_MEDIA_MODULE)) {
-                entryApplies = entry.applies(dco);
-            } else {
-                for (DcObject child : dco.getChildren())
-                    entryApplies |= entry.applies(child); 
-            }
-            
-            filterApplies = counter == 0 ? entryApplies :
-                            (entry.isAnd() ? filterApplies && entryApplies : filterApplies || entryApplies);
-            
-            counter++;
-        }
-        
-        return filterApplies;
-    }
-    
-    /**
-     * Sorts the supplied collection of items.
-     * @param c
-     */
-    public void sort(List<DcObject> c) {
-        DcModule mod = DcModules.get(module);
-        if ((order == null || order.length == 0) && mod.getDefaultSortFieldIdx() > 0) {
-            order = new DcField[1];
-            order[0] = mod.getField(mod.getDefaultSortFieldIdx());
-        }
-        
-        if (order == null || order.length == 0 || c == null || c.size() == 0 || 
-            DcModules.get(module).getTableName() == null || 
-            DcModules.get(module).getTableName().equals("")) {
-            return;
-        }
-        
-        if (order.length == 1) {
-            Collections.sort(c, new DcObjectComparator(order[0].getIndex(), sortOrder));
-        } else {
-            ArrayList<DcObjectComparator> dcocs = new ArrayList<DcObjectComparator>();
-            for (int i = 0; i < order.length; i++) {
-                if (order[i] != null) {
-                    DcObjectComparator dcoc = new DcObjectComparator(order[i].getIndex(), sortOrder);
-                    dcocs.add(dcoc);
-                }
-            }
-            
-            DcObjectCompositeComparator cc = new DcObjectCompositeComparator(dcocs);
-            Collections.sort(c, cc);
-        }
-    }
-    
     @Override
     public String toString() {
         return getName();
@@ -399,6 +332,104 @@ public class DataFilter {
         storage += "</FILTER>\n";
         
         return storage;
+    }
+    
+    public String toSQL(int[] selectFields) {
+        String columns = "";
+        if (selectFields != null && selectFields.length > 0) {
+            for (int field : selectFields) {
+                if (columns.length() > 0) columns += ", ";
+                columns += DcModules.get(module).getField(field).getDatabaseFieldName();
+            }
+        } else {
+            columns = "*";
+        }
+        
+        StringBuffer sql = new StringBuffer("SELECT " + columns + " FROM " + DcModules.get(module).getTableName() + " " +  DcModules.get(module).getTableShortName());
+        
+        DcModule module;
+        DcField field;
+        Object value;
+        int operator;
+        
+        int counter = 0;
+        String queryValue = null;
+        for (DataFilterEntry entry : getEntries()) {
+            module = DcModules.get(entry.getModule());
+            field = module.getField(entry.getField());
+            operator = entry.getOperator().getIndex();
+            value = Utilities.getQueryValue(entry.getValue(), field);
+            
+            if (value != null) {
+                queryValue = String.valueOf(value);
+                if (field.getValueType() == DcRepository.ValueTypes._DATE ||
+                    field.getValueType() == DcRepository.ValueTypes._STRING) {
+                    queryValue = queryValue.replaceAll("\'", "''");
+                }
+            }
+            
+            if (counter > 0) sql.append(entry.isAnd() ? " AND " : " OR ");
+            
+            if (counter == 0) sql.append(" WHERE ");
+            
+            if (field.getValueType() == DcRepository.ValueTypes._STRING)
+                sql.append("UPPER(" + module.getTableShortName() + "." + field.getDatabaseFieldName() + ")");
+            else
+                sql.append(field.getDatabaseFieldName());
+            
+            if (    operator == Operator.CONTAINS.getIndex() || 
+                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
+                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
+
+                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                        operator == Operator.NOT_EQUAL_TO.getIndex()) 
+                        sql.append(" NOT");
+                    
+                    sql.append(" IN (");
+                } else {
+                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
+                    sql.append(" LIKE UPPER(");
+                    sql.append("'%" + queryValue + "%')");
+                }
+                
+            } else if (operator == Operator.ENDS_WITH.getIndex()) {
+                sql.append(" LIKE UPPER(");
+                sql.append("'%" + queryValue + "')");
+            } else if (operator == Operator.EQUAL_TO.getIndex()) {
+                if (value instanceof String)
+                    sql.append(" = UPPER('"+ queryValue +"')");
+                else 
+                    sql.append(" = " + queryValue);
+            } else if (operator == Operator.BEFORE.getIndex() ||
+                       operator == Operator.LESS_THEN.getIndex()) {
+                sql.append(" < ");
+                sql.append(queryValue);
+            } else if (operator == Operator.AFTER.getIndex() ||
+                       operator == Operator.GREATER_THEN.getIndex()) {
+                sql.append(" > ");
+                sql.append(queryValue);
+            } else if (operator == Operator.IS_EMPTY.getIndex()) {
+                sql.append(" IS NULL");
+            } else if (operator == Operator.IS_FILLED.getIndex()) {
+                sql.append(" IS NOT NULL");
+            } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
+                sql.append(" <> ");
+                if (value instanceof String)
+                    sql.append(" UPPER('"+ queryValue +"')");
+                else 
+                    sql.append(queryValue);
+            } else if (operator == Operator.STARTS_WITH.getIndex()) {
+                sql.append(" LIKE UPPER(");
+                if (value instanceof String)
+                    sql.append("'"+ queryValue +"%')");
+                else 
+                    sql.append(queryValue);
+            }
+            counter++;
+        }
+        return sql.toString();
     }
 
     @Override

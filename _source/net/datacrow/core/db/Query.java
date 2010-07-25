@@ -28,7 +28,6 @@ package net.datacrow.core.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -177,7 +176,7 @@ public class Query {
             module = DcModules.get(entry.getModule());
             field = module.getField(entry.getField());
             operator = entry.getOperator().getIndex();
-            value = getQueryValue(entry.getValue(), field);
+            value = Utilities.getQueryValue(entry.getValue(), field);
             
             if (counter > 0) sql.append(entry.isAnd() ? " AND " : " OR ");
             
@@ -201,12 +200,10 @@ public class Query {
                     
                     sql.append(" IN (");
                     
-                    int counter2 = 0;
                     for (DcObject o : (Collection<DcObject>) value) {
                         if (counter > 0) sql.append(",");
                         sql.append("?");
                         values.add(o);
-                        counter2++;
                     }
 
                     sql.append(")");
@@ -569,22 +566,24 @@ public class Query {
         
         try {
             for (Object value : values) {
-                if (value instanceof String)
-                    ps.setString(pos, (String) value);
-                else if (value instanceof Long)
-                    ps.setLong(pos, (Long) value);
-                else if (value instanceof Double)
-                    ps.setDouble(pos, (Double) value);
-                else if (value instanceof Integer)
-                    ps.setInt(pos, (Integer) value);
-                else if (value instanceof Boolean)
-                    ps.setBoolean(pos, (Boolean) value);
-                else if (value instanceof Date)
-                    ps.setDate(pos, new java.sql.Date(((Date) value).getTime()));
-                else
-                    ps.setNull(pos, Types.NULL);
-                
-                pos++;
+                ps.setObject(pos, value);
+//                
+//                if (value instanceof String)
+//                    ps.setString(pos, (String) value);
+//                else if (value instanceof Long)
+//                    ps.setLong(pos, (Long) value);
+//                else if (value instanceof Double)
+//                    ps.setDouble(pos, (Double) value);
+//                else if (value instanceof Integer)
+//                    ps.setInt(pos, (Integer) value);
+//                else if (value instanceof Boolean)
+//                    ps.setBoolean(pos, (Boolean) value);
+//                else if (value instanceof Date)
+//                    ps.setDate(pos, new java.sql.Date(((Date) value).getTime()));
+//                else
+//                    ps.setNull(pos, Types.NULL);
+//                
+//                pos++;
             }
         
         } catch (Exception e) {
@@ -644,24 +643,9 @@ public class Query {
     }
 
     private Object getQueryValue(DcObject dco, int index) {
-        return getQueryValue(dco.getValue(index), dco.getField(index));
+        return Utilities.getQueryValue(dco.getValue(index), dco.getField(index));
     }
     
-    private Object getQueryValue(Object o, DcField field) {
-        Object value = o;
-        
-        if (Utilities.isEmpty(value))
-            value = null;
-        else if (value instanceof DcObject)
-            value = Long.valueOf(((DcObject) value).getID());
-        else if ((field.getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
-                  field.getValueType() == DcRepository.ValueTypes._LONG) &&
-                 value instanceof String)
-            value = Long.valueOf((String) value);
-
-        return value;
-    }    
-
     private List<PreparedStatement> getSelectQueries(DcObject dco) throws SQLException {
         List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
         Collection<String> tables = new ArrayList<String>();

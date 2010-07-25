@@ -52,9 +52,7 @@ import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.migration.itemexport.IItemExporterClient;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.reporting.ReportDictionaryGenerator;
@@ -98,7 +96,7 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
         try {
             this.items = items;
             
-            DataFilters.getCurrent(DcModules.getCurrent().getIndex()).sort(items);
+//            DataFilters.getCurrent(DcModules.getCurrent().getIndex()).sort(items);
 
             setHelpIndex("dc.reports");
     

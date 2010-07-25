@@ -236,14 +236,6 @@ public class DataCrow {
                 initDbProperties();
                 installLafs();
                 
-                // TODO: remove after version 4.0
-                try {
-                    new File(moduleDir, "editiontype.jar").delete();
-                    new File(moduleDir, "binding.jar").delete();
-                } catch (Exception e) {
-                    logger.error(e, e);
-                }
-                
                 logger.info("Using installation directory: " + installationDir);
                 logger.info("Using data directory: " + dataDir);
                 logger.info("Using images directory: " + imageDir);
@@ -327,11 +319,6 @@ public class DataCrow {
                 showSplashMsg(DcResources.getText("msgInitializingDB"));
     
                 DatabaseManager.initialize();
-                
-                if (DatabaseManager.isLocked()) {
-                    DcSwingUtilities.displayErrorMessage("msgDatabaseIsLocked");
-                    System.exit(0);
-                }
                 
                 // Start the UI
                 if (splashScreen == null)

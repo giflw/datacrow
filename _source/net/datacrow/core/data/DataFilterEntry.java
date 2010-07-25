@@ -25,15 +25,8 @@
 
 package net.datacrow.core.data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.Utilities;
 
 /**
  * A data filter entry belongs to a data filter.
@@ -146,111 +139,6 @@ public class DataFilterEntry {
         this.value = value;
     }
 
-    /**
-     * Checks if the supplies item lives up to the filter entry.
-     * @see Operator
-     * @param dco
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public boolean applies(DcObject dco) {
-
-        Object o = dco.getValue(field);
-        boolean isInputEmpty = Utilities.isEmpty(o);
-        boolean isCheckEmpty = Utilities.isEmpty(value);
-        
-        String input = String.valueOf(isInputEmpty ? "" : o instanceof DcObject ? ((DcObject) o).getID() : o.toString().toLowerCase());
-        String check = String.valueOf(isCheckEmpty ? "" : value instanceof DcObject ? ((DcObject) value).getID() : value.toString().toLowerCase());
-        
-        if (dco.getField(field) == null)
-        	return false;
-        
-        if (operator.getIndex() == Operator.CONTAINS.getIndex()) {
-            if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                Collection<DcObject> c1 = (Collection<DcObject>) o;
-                Collection<DcObject> c2 = (Collection<DcObject>) value;
-                return contains(c1, c2);
-            } else { 
-                return input.indexOf(check) > -1 || input.equals(check);
-            }
-        } else if (operator.getIndex() == Operator.DOES_NOT_CONTAIN.getIndex()) {
-            if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                Collection<DcObject> c1 = (Collection<DcObject>) o;
-                Collection<DcObject> c2 = (Collection<DcObject>) value;
-                return !contains(c1, c2);
-            } else { 
-                return input.indexOf(check) == -1;
-            }
-        } else if (operator.getIndex() == Operator.ENDS_WITH.getIndex()) {
-            return input.endsWith(check);
-        } else if (operator.getIndex() == Operator.EQUAL_TO.getIndex()) {
-        	if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                Collection<DcObject> c1 = (Collection<DcObject>) o;
-                
-                Collection<DcObject> c2;
-                if (value instanceof Collection) {
-                    c2 = (Collection<DcObject>) value;
-                } else {
-                    c2 = new ArrayList<DcObject>();
-                    c2.add((DcObject) value);
-                }
-
-                return contains(c1, c2);
-            } else { 
-                return input.equals(check);
-            }
-        } else if (operator.getIndex() == Operator.BEFORE.getIndex()) {
-            return isInputEmpty ? false : ((Date) o).before((Date) value);
-        } else if (operator.getIndex() == Operator.AFTER.getIndex()) {
-            return isInputEmpty ? false : ((Date) o).after((Date) value);
-        } else if (operator.getIndex() == Operator.GREATER_THEN.getIndex()) {
-            return isInputEmpty ? false : 
-                Integer.valueOf(input).intValue() > Integer.valueOf(check).intValue();
-        } else if (operator.getIndex() == Operator.IS_EMPTY.getIndex()) {
-            return isInputEmpty;
-        } else if (operator.getIndex() == Operator.IS_FILLED.getIndex()) {
-            return !isInputEmpty;
-        } else if (operator.getIndex() == Operator.LESS_THEN.getIndex()) {
-            if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DATE) {
-                return isInputEmpty ? false : ((Date) o).before((Date) value);
-            } else {
-                return isInputEmpty ? false : 
-                    Integer.valueOf(input).intValue() < Integer.valueOf(check).intValue();
-            }
-        } else if (operator.getIndex() == Operator.NOT_EQUAL_TO.getIndex()) {
-            if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                Collection c1 = (Collection) o;
-                Collection c2 = (Collection) value;
-                return !contains(c1, c2);
-            } else { 
-                return !input.equals(check);
-            }            
-        } else if (operator.getIndex() == Operator.STARTS_WITH.getIndex()) {
-            return input.startsWith(check);
-        }
-        
-        return true;
-    }
-
-    private boolean contains(Collection<DcObject> c1, Collection<DcObject> c2) {
-        boolean contains = false;
-        
-        if (c2 == null) {
-            contains = true;
-        } else if (c1 != null) {
-            contains = true;
-            for (DcObject dco2 : c2 ) {
-                boolean b = false;
-                for (DcObject dco1 : c1)
-                    b = dco1.toString().equals(dco2.toString()) ? true : b;
-
-                contains &= b; 
-            }
-        }
-
-        return contains;
-    }
-    
     @Override
     public String toString() {
         return getAndOr() + " " + DcModules.get(module).getField(field).getLabel() + " " +

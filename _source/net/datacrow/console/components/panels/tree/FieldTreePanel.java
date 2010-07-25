@@ -36,11 +36,13 @@ import javax.swing.tree.DefaultTreeModel;
 
 import net.datacrow.console.menu.FieldTreePanelMenuBar;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
@@ -203,7 +205,7 @@ public class FieldTreePanel extends TreePanel {
 
                     if (counter == 0) {
                         joins.append(module.getTableName());
-                        joins.append(" inner join ");
+                        joins.append(" left outer join ");
                     } else {
                         joins.append(" left outer join ");
                     }
@@ -430,8 +432,8 @@ public class FieldTreePanel extends TreePanel {
         
         top = new DefaultMutableTreeNode(label);
         
-        FieldNodeElement element = new FieldNodeElement(getModule(), -1, null, label, null, "select ID from " + DcModules.get(getModule()).getTableName());
-        
+        String sql = DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID});
+        FieldNodeElement element = new FieldNodeElement(getModule(), -1, null, label, null, sql);
         
         ResultSet rs;
         try {
@@ -443,9 +445,6 @@ public class FieldTreePanel extends TreePanel {
         }
         
         top.setUserObject(element);
-        
-        
-        
     }
     
     @Override

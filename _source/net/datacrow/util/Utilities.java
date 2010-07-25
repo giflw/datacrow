@@ -69,6 +69,8 @@ import javax.swing.filechooser.FileSystemView;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
 
@@ -105,6 +107,21 @@ public class Utilities {
     public static Toolkit getToolkit() {
         return tk;
     }
+    
+    public static Object getQueryValue(Object o, DcField field) {
+        Object value = o;
+        
+        if (Utilities.isEmpty(value))
+            value = null;
+        else if (value instanceof DcObject)
+            value = Long.valueOf(((DcObject) value).getID());
+        else if ((field.getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
+                  field.getValueType() == DcRepository.ValueTypes._LONG) &&
+                 value instanceof String)
+            value = Long.valueOf((String) value);
+
+        return value;
+    }  
     
     public static String getMappedFilename(String filename) {
         String s = filename;
