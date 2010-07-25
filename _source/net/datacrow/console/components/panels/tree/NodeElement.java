@@ -59,10 +59,8 @@ public abstract class NodeElement {
     }
     
     public void clear() {
-        if (key instanceof DcObject)
-            ((DcObject) key).release();
-        
-        icon.flush();
+        if (key instanceof DcObject) ((DcObject) key).release();
+        if (icon != null) icon.flush();
         
         key = null;
         icon = null;

@@ -118,6 +118,10 @@ public class DataFilters {
     	return df == null ? getDefaultDataFilter(module) : df;
     }
     
+    public static boolean isFilterActive(int module) {
+        return activeFilters.get(module) != null;
+    }
+    
     /**
      * Save all filters to file for future use.
      */

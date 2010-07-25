@@ -87,7 +87,7 @@ public class DataManager {
     public static void bindData(final MasterView masterView, final List<Long> keys) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                masterView.bindData(keys);                
+                masterView.add(keys);                
             }
         });
     }    

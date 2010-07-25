@@ -103,7 +103,6 @@ public class ItemSearch extends DcBean {
         return "#{itemSearch.actionListener}";
     }
 
-    @SuppressWarnings("unchecked")
     public String search(boolean advanced) {
         
         if (!isLoggedIn())
@@ -216,7 +215,7 @@ public class ItemSearch extends DcBean {
         DataFilter df = advanced ?  af.getFilter() : getFilter(wo);
         for (DcObject dco :  DataManager.get(wo.getModule(), df)) {
 
-            if (max != 0 && count == max) break;
+            if (count == max) break;
 
             List<Object> values = new ArrayList<Object>();
             

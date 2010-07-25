@@ -38,9 +38,7 @@ import javax.swing.ImageIcon;
 
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -143,7 +141,6 @@ public class Query {
     /**
      * Constructs a new Query object from a data filter.
      */
-    @SuppressWarnings("unchecked")
     public Query(DataFilter filter, Requests requests, int[] fields) throws SQLException {
         
         setSilence(true);
@@ -151,103 +148,7 @@ public class Query {
         this.module = filter.getModule();
         this.requests = requests;
         
-        Collection<Object> values = new ArrayList<Object>();
-        
-        String columns = "";
-        if (fields != null && fields.length > 0) {
-            for (int field : fields) {
-                if (columns.length() > 0) columns += ", ";
-                columns += DcModules.get(module).getField(field).getDatabaseFieldName();
-            }
-        } else {
-            columns = "*";
-        }
-        
-        
-        StringBuffer sql = new StringBuffer("SELECT " + columns + " FROM " + DcModules.get(module).getTableName());
-        
-        DcModule module;
-        DcField field;
-        Object value;
-        int operator;
-        
-        int counter = 0;
-        for (DataFilterEntry entry : filter.getEntries()) {
-            module = DcModules.get(entry.getModule());
-            field = module.getField(entry.getField());
-            operator = entry.getOperator().getIndex();
-            value = Utilities.getQueryValue(entry.getValue(), field);
-            
-            if (counter > 0) sql.append(entry.isAnd() ? " AND " : " OR ");
-            
-            if (counter == 0) sql.append(" WHERE ");
-            
-            if (field.getValueType() == DcRepository.ValueTypes._STRING)
-                sql.append("UPPER(" + module.getTableShortName() + "." + field.getDatabaseFieldName() + ")");
-            else
-                sql.append(field.getDatabaseFieldName());
-            
-            if (    operator == Operator.CONTAINS.getIndex() || 
-                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
-                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
-                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
-
-                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                    
-                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
-                        operator == Operator.NOT_EQUAL_TO.getIndex()) 
-                        sql.append(" NOT");
-                    
-                    sql.append(" IN (");
-                    
-                    for (DcObject o : (Collection<DcObject>) value) {
-                        if (counter > 0) sql.append(",");
-                        sql.append("?");
-                        values.add(o);
-                    }
-
-                    sql.append(")");
-
-                } else {
-                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
-                    sql.append(" LIKE UPPER(?)");
-                    values.add("%" + value + "%");
-                }
-                
-            } else if (operator == Operator.ENDS_WITH.getIndex()) {
-                sql.append(" LIKE UPPER(?)");
-                values.add("%" + value);
-            } else if (operator == Operator.EQUAL_TO.getIndex()) {
-                if (value instanceof String)
-                    sql.append(" = UPPER(?)");
-                else 
-                    sql.append(" = ?");
-                
-                values.add(value);
-            } else if (operator == Operator.BEFORE.getIndex() ||
-                       operator == Operator.LESS_THEN.getIndex()) {
-                sql.append(" < ?");
-                values.add(value);
-            } else if (operator == Operator.AFTER.getIndex() ||
-                       operator == Operator.GREATER_THEN.getIndex()) {
-                sql.append(" > ?");
-                values.add(value);
-            } else if (operator == Operator.IS_EMPTY.getIndex()) {
-                sql.append(" IS NULL");
-            } else if (operator == Operator.IS_FILLED.getIndex()) {
-                sql.append(" IS NOT NULL");
-            } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
-                sql.append(" <> ?");
-                values.add(value);
-            } else if (operator == Operator.STARTS_WITH.getIndex()) {
-                sql.append(" LIKE UPPER(?)");
-                values.add(entry.getValue() + "%");
-            }
-            counter++;
-        }
-        
-        PreparedStatement ps = getPreparedStatement(sql.toString());
-        setValues(ps, values);
+        PreparedStatement ps = getPreparedStatement(filter.toSQL(null));
         
         this.queries = new ArrayList<PreparedStatement>();
         this.queries.add(ps);

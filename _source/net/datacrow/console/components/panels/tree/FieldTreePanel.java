@@ -310,7 +310,9 @@ public class FieldTreePanel extends TreePanel {
                 counter++;
             }
             
-            createTree(columns.toString() + " " + joins.toString() + " " + order.toString());
+            
+            
+            createTree(columns.toString() + " " + joins.toString() + (DataFilters.isFilterActive(getModule()) ? " WHERE ID IN ("  + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ") " : " ") + order.toString());
         }
         
         private void createTree(String sql) {

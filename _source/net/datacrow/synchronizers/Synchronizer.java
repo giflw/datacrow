@@ -103,7 +103,6 @@ public abstract class Synchronizer {
         thread.start();
     }
     
-    @SuppressWarnings("unchecked")
     protected void setValue(DcObject dco, int field, Object value) {
 
         // empty value, no need to update

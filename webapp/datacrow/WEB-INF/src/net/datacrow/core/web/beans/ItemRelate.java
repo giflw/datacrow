@@ -89,7 +89,6 @@ public class ItemRelate extends DcBean {
                (DcWebObject) vr.resolveVariable(fc, "webObject");
     }
     
-    @SuppressWarnings("unchecked")
     public String open() {
 
         if (!isLoggedIn())

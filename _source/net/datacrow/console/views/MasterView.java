@@ -179,7 +179,7 @@ public class MasterView {
         }
     }
     
-    public void bindData(List<Long> keys) {
+    public void add(List<Long> keys) {
         if (groupingPane != null || !groupingPane.isActive()) {
             groupingPane.load();
         } else { 

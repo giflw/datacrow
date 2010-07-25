@@ -514,8 +514,7 @@ public class Utilities {
         return out.toString();
     }       
     
-    @SuppressWarnings("unchecked")
-	public static boolean isEmpty(Object o) {
+    public static boolean isEmpty(Object o) {
         boolean empty = o == null || o.equals(Long.valueOf(-1)) || o.equals(Long.valueOf(0));
         if (!empty && o instanceof String)
             empty = ((String) o).trim().length() == 0;
