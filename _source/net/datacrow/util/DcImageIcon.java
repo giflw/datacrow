@@ -58,6 +58,12 @@ public class DcImageIcon extends ImageIcon {
         this.filename = filename;
     }  
     
+    public DcImageIcon(byte[] bytes, boolean storeBytes) {
+        super(bytes);
+        if (storeBytes)
+            this.bytes = bytes;
+    }
+    
     public DcImageIcon(byte[] bytes) {
         super(bytes);
         this.bytes = bytes;

@@ -396,7 +396,7 @@ public class FieldTreePanel extends TreePanel {
                             if (key == null) {
                                 ne = new FieldNodeElement(getModule(), field.getIndex(), null, empty, null, clause);
                             } else {
-                                ne = new FieldNodeElement(getModule(), field.getIndex(), key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon))), clause);
+                                ne = new FieldNodeElement(getModule(), field.getIndex(), key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon.toCharArray()), false)), clause);
                             }
                             
                             current = new DefaultMutableTreeNode(ne);
