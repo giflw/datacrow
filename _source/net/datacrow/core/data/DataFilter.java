@@ -391,6 +391,7 @@ public class DataFilter {
 
                     DcModule mapping = DcModules.get(DcModules.getMappingModIdx(getModule(), field.getReferenceIdx(), field.getIndex()));
 
+                    
                     sql.append(" IN (");
                     sql.append("SELECT ");
                     sql.append(mapping.getField(DcMapping._A_PARENT_ID));
