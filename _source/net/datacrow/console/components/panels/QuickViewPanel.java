@@ -130,21 +130,24 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             if (dco == null)
                 return;
             
+            Picture picture;
+            DcPictureField picField;
+            JPanel panel;
             for (DcFieldDefinition definition : dco.getModule().getFieldDefinitions().getDefinitions()) {
                 if (    dco.isEnabled(definition.getIndex()) && 
                         dco.getField(definition.getIndex()).getValueType() == DcRepository.ValueTypes._PICTURE) {
                     
-                    Picture picture = (Picture) dco.getValue(definition.getIndex());
+                    picture = (Picture) dco.getValue(definition.getIndex());
 
                     if (picture == null) continue;
                     
                     if (picture.hasImage()) {
                     	pictures.add(picture);    
 
-                    	DcPictureField picField = ComponentFactory.getPictureField(true, false);
+                    	picField = ComponentFactory.getPictureField(true, false);
                     	ComponentFactory.setBorder(this);
                         
-                        JPanel panel = new JPanel();
+                        panel = new JPanel();
                         panel.setLayout(Layout.getGBL());
                         panel.addMouseListener(this);
                         panel.add(picField, Layout.getGBC(0, 0, 1, 1, 10.0, 10.0,
@@ -255,8 +258,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         removeTabs();
         tabbedPane.addTab(DcResources.getText("lblDescription"), IconLibrary._icoInformation, scroller);
         
+        Component[] components;
         for (JPanel panel : imagePanels) {
-            Component[] components = panel.getComponents();
+            components = panel.getComponents();
             for (int i = 0; i < components.length; i++)
                 ComponentFactory.clean(components[i]);
         }
@@ -296,16 +300,19 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         
         int counter = 0;
         
+        boolean first;
+        StringBuffer description;
+        String value;
         Collection<DcObject> children = dco.getChildren();
         for (DcObject child : children) {
             
             if (counter > 0)
                 body.append("<b> / </b>");
 
-            boolean first = true;
-            StringBuffer description = new StringBuffer();
+            first = true;
+            description = new StringBuffer();
             for (QuickViewFieldDefinition definition : definitions.getDefinitions()) {
-                String value = child.getDisplayString(definition.getField());
+                value = child.getDisplayString(definition.getField());
                 
                 if (definition.isEnabled() && value.trim().length() > 0) {
                     

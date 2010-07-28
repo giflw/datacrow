@@ -31,7 +31,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcTextPane;
 import net.datacrow.core.DcRepository;
@@ -43,7 +42,7 @@ import net.datacrow.util.DcImageIcon;
 
 public class DcCardObjectListElement extends DcObjectListElement {
 
-    private final static Dimension size = new Dimension(190, 210);
+    private static final Dimension size = new Dimension(190, 210);
     private static final Dimension dimTxt = new Dimension(190, 45);
     private static final Dimension dimPicLbl = new Dimension(190, 160);
 
@@ -74,8 +73,9 @@ public class DcCardObjectListElement extends DcObjectListElement {
         int[] fields = (int[]) dco.getModule().getSetting(DcRepository.ModuleSettings.stCardViewItemDescription);
         if (fields != null && fields.length > 0) {
             StringBuilder sb = new StringBuilder();
+            String disp;
             for (int field :  fields) {
-                String disp = dco.getDisplayString(field);
+                disp = dco.getDisplayString(field);
                 if (disp.length() > 0) {
                     if (sb.length() > 0)
                         sb.append(" / ");
@@ -119,12 +119,14 @@ public class DcCardObjectListElement extends DcObjectListElement {
     }    
     
     private void addPicture(Collection<Picture> pictures) {
+        DcImageIcon scaledImage;
+        DcImageIcon image;
         for (Picture p : pictures) {
             
             if (p == null) continue;
                 
-            DcImageIcon scaledImage = p.getScaledPicture();
-            DcImageIcon image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
+            scaledImage = p.getScaledPicture();
+            image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
             
             if (scaledImage != null) { 
                 fldPicture.setValue(scaledImage);
@@ -149,8 +151,8 @@ public class DcCardObjectListElement extends DcObjectListElement {
 
         build = true;
       
-        this.fldPicture = ComponentFactory.getPictureField(false, false);
-        this.fldTitle = ComponentFactory.getTextPane();
+        this.fldPicture = DcObjectListComponents.getPictureField();
+        this.fldTitle = DcObjectListComponents.getTextPane();
       
         addPicture(getPictures());
       
@@ -176,8 +178,14 @@ public class DcCardObjectListElement extends DcObjectListElement {
     public void clear() {
         super.clear();
         
-        if (fldPicture != null)
+        removeAll();
+        
+        if (fldPicture != null) {
             fldPicture.clear();
+            DcObjectListComponents.release(fldPicture);
+            DcObjectListComponents.release(fldTitle);
+        }
+            
         fldPicture = null;
         fldTitle = null;
         build = false;

@@ -75,8 +75,9 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
     }
     
     public void setServer(String name) {
+        IServer server;
         for (int idx = 0; idx < comboServers.getItemCount(); idx++) {
-            IServer server = (IServer) comboServers.getItemAt(idx);
+            server = (IServer) comboServers.getItemAt(idx);
             if (server.getName().equals(name))
                 comboServers.setSelectedItem(server);
         }
@@ -85,8 +86,9 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
     public void setRegion(String code) {
         if (comboRegions == null || comboRegions.getItemCount() == 0) return;
         
+        Region region;
         for (int idx = 0; idx < comboRegions.getItemCount(); idx++) {
-            Region region = (Region) comboRegions.getItemAt(idx);
+            region = (Region) comboRegions.getItemAt(idx);
             if (region.getCode().equals(code))
                 comboRegions.setSelectedItem(region);
         }
@@ -95,8 +97,9 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
     public void setMode(String displayName) {
         if (comboModes == null || comboModes.getItemCount() == 0) return;
         
+        SearchMode mode;
         for (int idx = 0; idx < comboModes.getItemCount(); idx++) {
-            SearchMode mode = (SearchMode) comboModes.getItemAt(idx);
+            mode = (SearchMode) comboModes.getItemAt(idx);
             if (mode.getDisplayName().equals(displayName))
                 comboModes.setSelectedItem(mode);
         }

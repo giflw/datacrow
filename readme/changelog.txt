@@ -1,4 +1,25 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9  [Release on xxxxxx 2010] [testing: moderate] [target: moderate]
+-----------------------------------------------------------------------------------------
+
+[Changed]
+- Improved startup time (75% faster)
+- Lower memory usage (50 to 70%)
+- Items are always loaded directly from the database, no caching
+- Grouping pane improvements (50% faster)
+
+[Removed]
+- Media module has been made obsolete.
+
+[New]
+- Data Crow can now run in client server mode
+
+[Fixed]
+- Image not shown (or flickering) in the card view
+- ConcurrentModificationException on several occasions
+- Web version is not in synch with item changes done in the client(s) 
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: moderate]
 -----------------------------------------------------------------------------------------
 

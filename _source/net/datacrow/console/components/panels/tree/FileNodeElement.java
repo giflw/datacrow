@@ -12,13 +12,18 @@ public class FileNodeElement extends NodeElement {
     
     private File file;
     
-    public FileNodeElement(int module, String key, String clause) {
-    	super(module, key, null, null, clause);
+    public FileNodeElement(int module, String key) {
+    	super(module, key, null, null);
     }
     
     @Override
     public List<Long> getItems(List<NodeElement> parents) {
         return new ArrayList<Long>();
+    }
+
+    @Override
+    public String getWhereClause() {
+        return null;
     }
 
     @Override
@@ -61,7 +66,6 @@ public class FileNodeElement extends NodeElement {
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return 0;
     }
 }

@@ -104,9 +104,10 @@ public class LoanPanel extends JPanel implements ActionListener {
         int counter = 0;
         Boolean available = null;
         Loan l = (Loan) DcModules.get(DcModules._LOAN).getItem();
+        boolean currentStatus;
         for (DcObject o : objects) {
             dco = counter == 0 ? o : dco;
-            boolean currentStatus = l.isAvailable(o.getID());
+            currentStatus = l.isAvailable(o.getID());
             available = available == null ? currentStatus : available;
             
             if (available.booleanValue() != currentStatus) {
@@ -179,8 +180,9 @@ public class LoanPanel extends JPanel implements ActionListener {
         if (personID == null || personID.length() == 0)
             return;
         
+        Object o;
         for (int i = 0; i < comboPersons.getItemCount(); i++) {
-            Object o =  comboPersons.getItemAt(i);
+            o =  comboPersons.getItemAt(i);
             if (o instanceof ContactPerson) {
                 ContactPerson person = (ContactPerson) comboPersons.getItemAt(i);
                 if (person != null && person.getID().equals(personID)) {
@@ -202,9 +204,11 @@ public class LoanPanel extends JPanel implements ActionListener {
             return;
         }
         
+        Loan currentLoan;
+        Date startDate;
         for (DcObject o : objects) {
-            Loan currentLoan = DataManager.getCurrentLoan(o.getID());
-            Date startDate = (Date) currentLoan.getValue(Loan._A_STARTDATE);
+            currentLoan = DataManager.getCurrentLoan(o.getID());
+            startDate = (Date) currentLoan.getValue(Loan._A_STARTDATE);
             if (startDate.compareTo(endDate) > 0) {
                 DcSwingUtilities.displayWarningMessage("msgEndDateMustBeAfterStartDate");
                 return;
@@ -215,8 +219,9 @@ public class LoanPanel extends JPanel implements ActionListener {
             public void run() {
                 try {
                     int i = 0;
+                    Loan currentLoan;
                     for (DcObject o : objects) {
-                        Loan currentLoan = DataManager.getCurrentLoan(o.getID());
+                        currentLoan = DataManager.getCurrentLoan(o.getID());
                         if (currentLoan.getID() != null) {
                             currentLoan.setValue(Loan._D_OBJECTID, o.getID());
                             currentLoan.setValue(Loan._B_ENDDATE, endDate);
@@ -301,8 +306,9 @@ public class LoanPanel extends JPanel implements ActionListener {
             public void run() {
                 try {
                     int i = 0;
+                    Loan currentLoan;
                     for (DcObject o : objects) {
-                        Loan currentLoan = DataManager.getCurrentLoan(o.getID());
+                        currentLoan = DataManager.getCurrentLoan(o.getID());
                         currentLoan.setValue(Loan._D_OBJECTID, o.getID());
                         currentLoan.setValue(Loan._A_STARTDATE, startDate);
                         currentLoan.setValue(Loan._C_CONTACTPERSONID, contactPersonID);

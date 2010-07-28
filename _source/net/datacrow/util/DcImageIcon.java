@@ -45,47 +45,44 @@ public class DcImageIcon extends ImageIcon {
 	private byte[] bytes;
 	private String filename;
 
+	private static long counter = 0;
+	
     public DcImageIcon() {
         super();
     }
     
     public DcImageIcon(File file) {
-        super(file.toString());
+        this(file.toString());
     }    
     
     public DcImageIcon(String filename) {
-        super(filename);
+        super(filename, "image" + counter++);
         this.filename = filename;
     }  
     
     public DcImageIcon(byte[] bytes, boolean storeBytes) {
-        super(bytes);
+        super(bytes, "image" + counter++);
         if (storeBytes)
             this.bytes = bytes;
     }
     
     public DcImageIcon(byte[] bytes) {
-        super(bytes);
+        super(bytes, "image" + counter++);
         this.bytes = bytes;
     }
 
     public DcImageIcon(Image image) {
-        super(image);
+        super(image, "image" + counter++);
     }
 
     public DcImageIcon(URL location) {
-        super(location);
+        super(location, "image" + counter++);
     }
     
     public void flush() {
     	bytes = null;
     	filename = null;
-
-    	Image img = getImage();
-    	img.flush();
-    	
-    	// cause possible thread lock (!)
-    	// tracker.removeImage(img);
+    	getImage().flush();
     }
     
     public String getFilename() {
@@ -117,6 +114,14 @@ public class DcImageIcon extends ImageIcon {
     @Override
     protected void finalize() throws Throwable {
         flush();
+        try {
+            Image image = getImage();
+            tracker.removeImage(image);
+            setImage(null);
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        
         super.finalize();
         super.setDescription(null);
         super.setImageObserver(null);

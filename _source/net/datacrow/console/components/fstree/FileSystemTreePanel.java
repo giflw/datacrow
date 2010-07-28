@@ -89,15 +89,18 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
     
     public Collection<String> getFiles(boolean includeDirs) {
         Collection<String> selected = new ArrayList<String>();
+        FileSystemTreeNode parent;
         for (FileSystemTreeModel model : models.values()) {
-            FileSystemTreeNode parent = (FileSystemTreeNode) model.getRoot();
+            parent = (FileSystemTreeNode) model.getRoot();
             addSelectedNodes(parent, selected);
         }
         
         // cleanup (remove selected directories where files have been selected from)
+        File file;
+        String path;
         for (String s : new ArrayList<String>(selected)) {
-            File file = new File(s);
-            String path = file.getParent();
+            file = new File(s);
+            path = file.getParent();
             if (!includeDirs && file.isDirectory())
                 selected.remove(s);
             if (includeDirs && file.isFile() && selected.contains(path))
@@ -109,8 +112,9 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
 
     @SuppressWarnings("unchecked")
     public void addSelectedNodes(FileSystemTreeNode node, Collection<String> selected) {
+        FileSystemTreeNode child;
         for (Enumeration e = node.children(); e.hasMoreElements(); ) {
-            FileSystemTreeNode child = (FileSystemTreeNode) e.nextElement();
+            child = (FileSystemTreeNode) e.nextElement();
             if (child.isSelected())
                 selected.add(child.getText());
             addSelectedNodes(child, selected);
@@ -162,8 +166,9 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));  
         
+        DcTree tree;
         for (Drive drive : new Drives().getDrives()) {
-            DcTree tree = new DcTree(new FileSystemTreeModel(drive.getPath(), filter));
+            tree = new DcTree(new FileSystemTreeModel(drive.getPath(), filter));
             
             tree.setCellRenderer(new FileSystemTreeNodeRenderer());
             tree.setCellEditor(new FileSystemTreeNodeEditor());

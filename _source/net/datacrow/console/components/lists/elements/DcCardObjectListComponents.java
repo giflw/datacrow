@@ -23,66 +23,8 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.itemforms;
+package net.datacrow.console.components.lists.elements;
 
-import net.datacrow.core.data.DataManager;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.wf.requests.RefreshChildView;
-import net.datacrow.core.wf.requests.Requests;
+public class DcCardObjectListComponents {
 
-public class ChildForm extends DcMinimalisticItemView {
-
-    private Long parentID;
-    private final int parentModuleIdx;
-    
-    public ChildForm(DcObject parent, int module, boolean readonly) {
-        super(module, readonly);
-        
-        this.parentID = parent.getID();
-        this.parentModuleIdx = parent.getModule().getIndex();
-        
-        list.setEnabled(!readonly);
-    }
-    
-    @Override
-    public void clear() {
-        super.clear();
-        parentID = null;
-    }
-
-    @Override
-    public void loadItems() {
-        list.clear();
-        list.add(DataManager.getChildren(parentID, getModuleIdx()));
-    }
-    
-    @Override
-    public void open() {
-        DcObject dco = list.getSelectedItem();
-        if (dco != null) {
-            dco.markAsUnchanged();
-            ChildItemForm childItemForm = new ChildItemForm(true, dco, this);
-            childItemForm.setVisible(true);            
-        }
-    }
-    
-    @Override
-    public void createNew() {
-        DcObject dco = getModule().getItem();
-        dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
-        
-        ChildItemForm itemForm = new ChildItemForm(false, dco, this);
-        itemForm.setVisible(true);
-    }
-
-    @Override
-    public Requests getAfterDeleteRequests() {
-        Requests requests = new Requests();
-        requests.add(new RefreshChildView(this));
-        return requests;
-    }
-
-    public int getParentModuleIdx() {
-        return parentModuleIdx;
-    }   
 }

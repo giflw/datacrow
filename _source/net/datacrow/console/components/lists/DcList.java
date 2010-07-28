@@ -296,8 +296,9 @@ public class DcList extends JList implements ComponentListener {
     }    
     
     public void update() {
+        DcListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
-            DcListElement element = (DcListElement) getDcModel().getElementAt(i);
+            element = (DcListElement) getDcModel().getElementAt(i);
             element.update();
         }
         repaint();
@@ -320,8 +321,9 @@ public class DcList extends JList implements ComponentListener {
     
     public void clear() {
         try {
+           DcListElement element;
            for (int i = 0 ; i < getDcModel().getSize(); i++) {
-              DcListElement element = (DcListElement) getDcModel().getElementAt(i);
+              element = (DcListElement) getDcModel().getElementAt(i);
               element.destroy();
            }
         } catch (Exception e) {

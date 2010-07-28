@@ -150,8 +150,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
             int count = node.getChildCount();
             tree.expandPath(new TreePath(model.getPathToRoot(node)));
+            
+            DefaultMutableTreeNode current;
             for (int i = 0; i < count; i++) {
-                DefaultMutableTreeNode current = (DefaultMutableTreeNode) node.getChildAt(i);
+                current = (DefaultMutableTreeNode) node.getChildAt(i);
                 tree.expandPath(new TreePath(model.getPathToRoot(current)));
                 expandAll(current);
             }
@@ -178,9 +180,11 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     private void collapseChildren(DefaultMutableTreeNode parent) {
         int size = parent.getChildCount();
+        
+        DefaultMutableTreeNode child;
         for (int i = 0; i < size; i++) {
             try {
-                DefaultMutableTreeNode child = (DefaultMutableTreeNode) parent.getChildAt(i);
+                child = (DefaultMutableTreeNode) parent.getChildAt(i);
                 collapseChildren(child);
                 tree.collapsePath(new TreePath(child.getPath()));
             } catch (Exception e) {
@@ -194,12 +198,14 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             return;
 
         if (top != null) {
+            DefaultMutableTreeNode pn;
+            DefaultMutableTreeNode cn;
             for (int i = 0; i < top.getChildCount(); i++) {
-                DefaultMutableTreeNode pn = (DefaultMutableTreeNode) top.getChildAt(i);
+                pn = (DefaultMutableTreeNode) top.getChildAt(i);
                 if (pn.getUserObject() != null) {
                     ((NodeElement) pn.getUserObject()).clear();
                     for (int j = 0; j < pn.getChildCount(); j++) {
-                        DefaultMutableTreeNode cn = (DefaultMutableTreeNode) pn.getChildAt(j);
+                        cn = (DefaultMutableTreeNode) pn.getChildAt(j);
                         if (cn.getUserObject() != null)
                             ((NodeElement) cn.getUserObject()).clear();
                     }
@@ -270,8 +276,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         NodeElement ne = (NodeElement) node.getUserObject();
         
         List<String> elements = new ArrayList<String>();
+        NodeElement child;
         for (int i = 0; i < parent.getChildCount(); i++) {
-            NodeElement child = ((NodeElement) ((DefaultMutableTreeNode) parent.getChildAt(i)).getUserObject());
+            child = ((NodeElement) ((DefaultMutableTreeNode) parent.getChildAt(i)).getUserObject());
             elements.add(child.getComparableKey());
         }
         
@@ -318,13 +325,15 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             return getTopNode();
         
         DefaultMutableTreeNode node;
+        NodeElement ne;
+        String s;
         DefaultMutableTreeNode result = null;
         for (int i = 0; i < count; i++) {
             node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
             
             if (node.getUserObject() instanceof NodeElement) {
-                NodeElement ne = (NodeElement) node.getUserObject();
-                String s = key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
+                ne = (NodeElement) node.getUserObject();
+                s = key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
                 if (ne.getComparableKey().equalsIgnoreCase(s))
                     result = node;
             }

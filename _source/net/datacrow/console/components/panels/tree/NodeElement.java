@@ -13,15 +13,13 @@ public abstract class NodeElement {
     protected String displayValue;
     protected DcImageIcon icon;
     protected int module;
-    private String clause;
     private int count;
     
-    public NodeElement(int module, Object key, String displayValue, DcImageIcon icon, String clause) {
+    public NodeElement(int module, Object key, String displayValue, DcImageIcon icon) {
         this.module = module;
         this.key = key;   
         this.displayValue = displayValue;
         this.icon = icon;
-        this.clause = clause;
     }
     
     public void setCount(int count) {
@@ -64,7 +62,7 @@ public abstract class NodeElement {
         
         key = null;
         icon = null;
-        clause = null;
+        displayValue = null;
     }
 
     @Override
@@ -80,9 +78,7 @@ public abstract class NodeElement {
             return getComparableKey().equals(((NodeElement) o).getComparableKey());
     }
 
-    public String getWhereClause() {
-        return clause;
-    }
+    public abstract String getWhereClause();
     
     @Override
     public int hashCode() {

@@ -75,17 +75,6 @@ public class MasterView {
         return panel;
     }
     
-    public int getItemCount() {
-        int count = 0;
-        if (groupingPane == null || !groupingPane.isActive()) {
-            for (View view : getViews())
-                count = view.getItemCount() > count ? view.getItemCount() : count;
-        } else {
-            count = groupingPane != null ? groupingPane.getItemCount() : -1;
-        }
-        return count; 
-    }
-    
     public void setView(int index) {
         DataCrow.mainFrame.applyView(index);
         

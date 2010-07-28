@@ -149,9 +149,11 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
         panel.setPreferredSize(new Dimension(200,150));
         panel.setLayout(Layout.getGBL());
         
+        ImageIcon image;
+        DcPictureField label;
         for (Picture picture : pictures) {
             if (picture != null && !picture.isDeleted()) {
-                ImageIcon image = (ImageIcon) picture.getValue(Picture._D_IMAGE);
+                image = (ImageIcon) picture.getValue(Picture._D_IMAGE);
                 if (image == null) {
                 	picture.loadImage(false);
                 	image = (ImageIcon) picture.getValue(Picture._D_IMAGE);
@@ -159,7 +161,7 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
                 
                 if (image == null) continue;
                 
-                DcPictureField label = ComponentFactory.getPictureField(true, false);
+                label = ComponentFactory.getPictureField(true, false);
                 label.setValue(image);
                 panel.add(label, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                          ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
@@ -206,12 +208,14 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
         Font fontSystem = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);        
         
         super.setFont(fontNormal);
+        Component component;
+        Component subComponent;
         for (int i = 0; i < getComponents().length; i++) {
-            Component component = getComponents()[i];
+            component = getComponents()[i];
             if (component instanceof JPanel) {
                 
                 for (int j = 0; j < ((JPanel) component).getComponents().length; j++) {
-                    Component subComponent = ((JPanel) component).getComponents()[j];
+                    subComponent = ((JPanel) component).getComponents()[j];
                     if (subComponent instanceof JLabel) 
                         subComponent.setFont(fontSystem);
                     else

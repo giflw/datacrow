@@ -95,6 +95,7 @@ public class DcModuleList extends DcList implements ListSelectionListener {
 	public void addModules() {
         if (elements != null) elements.clear();
         
+        DcModule referencedMod;
         for (DcModule module : DcModules.getAllModules()) {
             try {
                 
@@ -104,7 +105,7 @@ public class DcModuleList extends DcList implements ListSelectionListener {
                     c.add(new ModulePanel(module, ModulePanel._ICON32));
                     
                     for (DcField field : module.getFields()) {
-                        DcModule referencedMod = DcModules.getReferencedModule(field);
+                        referencedMod = DcModules.getReferencedModule(field);
                         if (    referencedMod.isEnabled() &&
                         		referencedMod.getIndex() != module.getIndex() && 
                                 referencedMod.getType() != DcModule._TYPE_PROPERTY_MODULE &&
@@ -136,8 +137,9 @@ public class DcModuleList extends DcList implements ListSelectionListener {
         }
         
         Vector<ModulePanel> v = new Vector<ModulePanel>();
+        ModulePanel panel;
         for (List<ModulePanel> c : elements.values()) {
-            ModulePanel panel = c.get(0);
+            panel = c.get(0);
             if (panel.getModule() == module)
                 v.addAll(c);
             else
@@ -146,9 +148,9 @@ public class DcModuleList extends DcList implements ListSelectionListener {
         
         setListData(v);
         
-        for (ModulePanel panel : v) {
-            if (panel.getModule() == current)
-                setSelectedValue(panel, true);                
+        for (ModulePanel panel2 : v) {
+            if (panel2.getModule() == current)
+                setSelectedValue(panel2, true);                
         }
         
         listenForChanges = true;

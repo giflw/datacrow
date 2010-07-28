@@ -78,6 +78,7 @@ public class SecurityModuleList extends DcModuleList {
 	public void addModules() {
         if (elements != null) elements.clear();
         
+        DcModule referencedMod;
         Collection<DcModule> managedModules = SecurityCentre.getInstance().getManagedModules();
         for (DcModule module : managedModules) {
             try {
@@ -86,7 +87,7 @@ public class SecurityModuleList extends DcModuleList {
 	                c.add(new ModulePanel(module, ModulePanel._ICON32));
 	                
 	                for (DcField field : module.getFields()) {
-	                    DcModule referencedMod = DcModules.getReferencedModule(field);
+	                    referencedMod = DcModules.getReferencedModule(field);
                     	if (    managedModules.contains(referencedMod) &&
                     			referencedMod.isEnabled() &&
                         		referencedMod.getIndex() != module.getIndex() && 

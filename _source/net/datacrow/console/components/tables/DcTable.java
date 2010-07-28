@@ -185,10 +185,10 @@ public class DcTable extends JTable implements IViewComponent {
 
     private int getFieldForColumnIndex(int columnIndex) {
         int field = -1;
+        Integer identifier;
         for (TableColumn column : columns.values()) {
             if (column.getModelIndex() == columnIndex) {
-                Integer identifier = (Integer) column.getIdentifier();
-
+                identifier = (Integer) column.getIdentifier();
                 if (identifier != null)
                     field = identifier.intValue();
             }
@@ -198,8 +198,9 @@ public class DcTable extends JTable implements IViewComponent {
 
     public int getColumnIndexForField(int field) {
         int columnIndex = -1;
+        Integer identifier;
         for (TableColumn column : columns.values()) {
-            Integer identifier = (Integer) column.getIdentifier();
+            identifier = (Integer) column.getIdentifier();
             if (identifier != null && identifier.intValue() == field)
                 columnIndex = column.getModelIndex();
         }
@@ -245,18 +246,24 @@ public class DcTable extends JTable implements IViewComponent {
         int[] fields = dco.getFieldIndices();
 
         int row = position == -1 ? addRow() : position;
+        int field;
+        int col;
+        Picture picture;
+        Object value;
+        byte[] bytes;
+        Picture p;
         for (int i = 0; i < fields.length; i++) {
-            int field = fields[i];
-            int col = getColumnIndexForField(field);
-            Object value = dco.getValue(fields[i]);
+            field = fields[i];
+            col = getColumnIndexForField(field);
+            value = dco.getValue(fields[i]);
             
             if (view != null && view.getType() == View._TYPE_INSERT &&  value instanceof Picture) {
                 // keep images save
-                Picture picture = (Picture) value;
-                byte[] bytes = picture.getBytes();
+                picture = (Picture) value;
+                bytes = picture.getBytes();
                 
                 if (bytes != null) {
-                    Picture p = (Picture) DcModules.get(DcModules._PICTURE).getItem();
+                    p = (Picture) DcModules.get(DcModules._PICTURE).getItem();
                     p.setValue(Picture._A_OBJECTID, picture.getValue(Picture._A_OBJECTID));
                     p.setValue(Picture._B_FIELD, picture.getValue(Picture._B_FIELD));
                     p.setValue(Picture._C_FILENAME, picture.getValue(Picture._C_FILENAME));
@@ -272,8 +279,8 @@ public class DcTable extends JTable implements IViewComponent {
         }
 
         if (module.isAbstract()) {
-            int col = getColumnIndexForField(Media._SYS_MODULE);
-            Object value = dco.getModule();
+            col = getColumnIndexForField(Media._SYS_MODULE);
+            value = dco.getModule();
             model.setValueAt(value, row, col);
         }
 
@@ -317,8 +324,9 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     public void applyColumnWidths() {
+        TableColumn column;
         for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e.hasMoreElements();) {
-            TableColumn column = e.nextElement();
+            column = e.nextElement();
             if (!columnsHidden.contains(column) && column.getIdentifier() instanceof Integer)
                 column.setPreferredWidth(getPreferredWidth((Integer) column.getIdentifier()));
         }
@@ -327,8 +335,9 @@ public class DcTable extends JTable implements IViewComponent {
     public void applyHeaders() {
         DcTableHeaderRenderer.getInstance().applySettings();
 
+        TableColumn column;
         for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e.hasMoreElements();) {
-            TableColumn column = e.nextElement();
+            column = e.nextElement();
             column.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
             columns.put(column.getIdentifier(), column);
         }
@@ -393,12 +402,14 @@ public class DcTable extends JTable implements IViewComponent {
     public void removeFields(int[] fields) {
         cancelEdit();
 
+        int columnIndex;
+        int tableIndex;
+        TableColumn column;
         for (int i = 0; i < fields.length; i++) {
-            int columnIndex = getColumnIndexForField(fields[i]);
-
-            int tableIndex = convertColumnIndexToView(columnIndex);
+            columnIndex = getColumnIndexForField(fields[i]);
+            tableIndex = convertColumnIndexToView(columnIndex);
             try {
-                TableColumn column = getColumnModel().getColumn(tableIndex);
+                column = getColumnModel().getColumn(tableIndex);
                 columnsHidden.add(column);
                 removeColumn(column);
             } catch (Exception e) {
@@ -440,11 +451,11 @@ public class DcTable extends JTable implements IViewComponent {
             
             if (dco == null) return null;
             
+            Object value;
             for (DcField field : dco.getFields()) {
                 try {
                     col = getColumnIndexForField(field.getIndex());
-    
-                    Object value = getValueAt(row, col, true);
+                    value = getValueAt(row, col, true);
                     dco.setValue(field.getIndex(), value);
                 } catch (Exception e) {
                     logger.error("Could not set value for field " + field.getLabel(), e);
@@ -499,8 +510,9 @@ public class DcTable extends JTable implements IViewComponent {
         cancelEdit();
         int[] rows = new int[cache.size()];
         int counter = 0;
+        int row;
         for (Long id : cache.keySet()) {
-            int row = getRowNumberWithID(id);
+            row = getRowNumberWithID(id);
             rows[counter++] = row;
         }
         return rows;
@@ -540,10 +552,12 @@ public class DcTable extends JTable implements IViewComponent {
 
     public void remove(int[] rows) {
         cancelEdit();
+        int row;
+        int col;
         for (int i = rows.length - 1; i > -1; i--) {
             if (caching) {
-                int row = rows[i];
-                int col = getColumnIndexForField(DcObject._ID);
+                row = rows[i];
+                col = getColumnIndexForField(DcObject._ID);
                 removeFromCache((Long) getValueAt(row, col, true));
             }
             getDcModel().removeRow(rows[i]);

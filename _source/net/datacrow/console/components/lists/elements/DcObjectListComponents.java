@@ -23,66 +23,45 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.itemforms;
+package net.datacrow.console.components.lists.elements;
 
-import net.datacrow.core.data.DataManager;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.wf.requests.RefreshChildView;
-import net.datacrow.core.wf.requests.Requests;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ChildForm extends DcMinimalisticItemView {
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.DcPictureField;
+import net.datacrow.console.components.DcTextPane;
 
-    private Long parentID;
-    private final int parentModuleIdx;
+public abstract class DcObjectListComponents {
+
+    private static final int _MAX_ITEMS = 25;
     
-    public ChildForm(DcObject parent, int module, boolean readonly) {
-        super(module, readonly);
-        
-        this.parentID = parent.getID();
-        this.parentModuleIdx = parent.getModule().getIndex();
-        
-        list.setEnabled(!readonly);
-    }
+    private static List<DcTextPane> textPanes = new ArrayList<DcTextPane>();
+    private static List<DcPictureField> pictureFields = new ArrayList<DcPictureField>();
     
-    @Override
-    public void clear() {
-        super.clear();
-        parentID = null;
+    public static DcTextPane getTextPane() {
+        return textPanes.size() > 0 ? textPanes.remove(0) : ComponentFactory.getTextPane();
     }
 
-    @Override
-    public void loadItems() {
-        list.clear();
-        list.add(DataManager.getChildren(parentID, getModuleIdx()));
+    public static DcPictureField getPictureField() {
+        return pictureFields.size() > 0 ? pictureFields.remove(0) : ComponentFactory.getPictureField(false, false);
     }
     
-    @Override
-    public void open() {
-        DcObject dco = list.getSelectedItem();
-        if (dco != null) {
-            dco.markAsUnchanged();
-            ChildItemForm childItemForm = new ChildItemForm(true, dco, this);
-            childItemForm.setVisible(true);            
+    public static void release(DcPictureField picField) {
+        if (picField != null) {
+            picField.clear();
+            
+            if (pictureFields.size() < _MAX_ITEMS)
+                pictureFields.add(picField);
         }
     }
-    
-    @Override
-    public void createNew() {
-        DcObject dco = getModule().getItem();
-        dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
-        
-        ChildItemForm itemForm = new ChildItemForm(false, dco, this);
-        itemForm.setVisible(true);
-    }
 
-    @Override
-    public Requests getAfterDeleteRequests() {
-        Requests requests = new Requests();
-        requests.add(new RefreshChildView(this));
-        return requests;
+    public static void release(DcTextPane textPane) {
+        if (textPane != null) {
+            textPane.setText("");
+            
+            if (textPanes.size() < _MAX_ITEMS)
+                textPanes.add(textPane);
+        }
     }
-
-    public int getParentModuleIdx() {
-        return parentModuleIdx;
-    }   
 }

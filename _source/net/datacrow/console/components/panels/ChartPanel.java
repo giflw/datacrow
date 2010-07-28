@@ -165,8 +165,9 @@ public class ChartPanel extends DcPanel implements ActionListener {
         List<DcObject> objects = DataManager.get(module, null);
         
         Collection<String> values = new ArrayList<String>();
+        String s;
         for (DcObject dco : objects) {
-            String s = dco.getDisplayString(field);    
+            s = dco.getDisplayString(field);    
             if (!values.contains(s) && s.length() > 0)
                 values.add(s);
         }
@@ -176,9 +177,11 @@ public class ChartPanel extends DcPanel implements ActionListener {
     public static int getCount(int module, DcField field, Object value) {
         List<DcObject> objects = DataManager.get(module, null);
         int count = 0;
+        String s1;
+        String s2;
         for (DcObject dco : objects) {
-            String s1 = dco.getDisplayString(field.getIndex()); 
-            String s2 = (String) value;
+            s1 = dco.getDisplayString(field.getIndex()); 
+            s2 = (String) value;
             
             if ((field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION && (s1.equals(s2) || s1.indexOf(s2) >= 0)) ||
                 (s1.equals(s2)))
@@ -191,8 +194,9 @@ public class ChartPanel extends DcPanel implements ActionListener {
         Collection<String> categories = new ArrayList<String>();
         int module = field.getModule();
         
+        List<DcObject> o;
         if (module != field.getReferenceIdx()) {
-            List<DcObject> o = DataManager.get(field.getReferenceIdx(), null);
+            o = DataManager.get(field.getReferenceIdx(), null);
             for (DcObject dco : o) 
                 categories.add(dco.toString());
         } else {
@@ -213,6 +217,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         
         // create the data map. exclude zero counts
         Map<String, Integer> dataMap = new HashMap<String, Integer>();
+        int count;
         for (String key : categories) {
             
             try {
@@ -221,7 +226,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
                 logger.error(e, e);
             }
             
-            int count = getCount(module, field, key);
+            count = getCount(module, field, key);
             if (key.equals(DcResources.getText("lblEmpty"))) {
                 dataMap.put(key + " (" + empty + ")", empty);
             } else if (count > 0) { 
@@ -320,11 +325,12 @@ public class ChartPanel extends DcPanel implements ActionListener {
             
             double[][] data = new double[dataMap.keySet().size()][1];
             String[] labels = getSortedLabels(dataMap);
+            String key;
             for (int i = 0; i < labels.length; i++) {
                 
                 if (isCanceled()) break;
                 
-                String key = labels[i];
+                key = labels[i];
                 data[i][0] = dataMap.get(key).intValue();
             }
             
@@ -379,12 +385,14 @@ public class ChartPanel extends DcPanel implements ActionListener {
             double[][] data = new double[1][dataMap.keySet().size()];
             int maximum = 0;
             String[] labels = getSortedLabels(dataMap);
+            String key;
+            int value;
             for (int i = 0; i < labels.length; i++) {
                 
                 if (isCanceled()) break;
                 
-                String key = labels[i];
-                int value = dataMap.get(key).intValue();
+                key = labels[i];
+                value = dataMap.get(key).intValue();
                 data[0][i] = value;
                 maximum = maximum < value ? value : maximum;
             }

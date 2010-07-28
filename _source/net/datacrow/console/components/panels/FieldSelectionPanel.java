@@ -90,8 +90,9 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
     
     public void setSelectedFields(String[] fields) {
         reset();
+        DcField field;
         for (int i = 0; i < fields.length; i++) {
-            DcField field = module.getField(fields[i]);
+            field = module.getField(fields[i]);
             if (field != null) {
                 listLeft.remove(field);
                 listRight.add(field);
@@ -101,8 +102,9 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
     
     public void setSelectedFields(int[] fields) {
         reset();
+        DcField field;
         for (int i = 0; i < fields.length; i++) {
-            DcField field = module.getField(fields[i]);
+            field = module.getField(fields[i]);
             if (field != null) {
                 listLeft.remove(field);
                 listRight.add(field);
@@ -232,8 +234,9 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
             listLeft.setListData(elements);
         } else {
             Vector<DcListElement> newElements = new Vector<DcListElement>();
+            String displayValue;
             for (DcListElement element : elements) {
-                String displayValue = ((DcFieldListElement) element).getField().getLabel();
+                displayValue = ((DcFieldListElement) element).getField().getLabel();
                 if (displayValue.toLowerCase().startsWith(filter.toLowerCase()))
                     newElements.add(element);
             }

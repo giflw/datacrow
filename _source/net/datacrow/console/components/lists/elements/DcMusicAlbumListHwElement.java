@@ -105,14 +105,17 @@ public class DcMusicAlbumListHwElement extends DcObjectListHwElement {
         String description = ""; 
         int counter = 0;
         
+        String title;
+        Long i;
+        String length;
         for (DcObject track : dco.getChildren()) {
             if (counter > 0) description += " / ";
             
-            String title = (String) track.getValue(MusicTrack._A_TITLE);
+            title = (String) track.getValue(MusicTrack._A_TITLE);
             title = title == null ? "" : title; 
             
-            Long i = (Long) track.getValue(MusicTrack._J_PLAYLENGTH);
-            String length = i == null || i.equals(Long.valueOf(0)) ? "" : " " + track.getDisplayString(MusicTrack._J_PLAYLENGTH);
+            i = (Long) track.getValue(MusicTrack._J_PLAYLENGTH);
+            length = i == null || i.equals(Long.valueOf(0)) ? "" : " " + track.getDisplayString(MusicTrack._J_PLAYLENGTH);
             
             if (track.getValue(MusicTrack._F_TRACKNUMBER) != null)
                 description += track.getValue(MusicTrack._F_TRACKNUMBER) + " - ";

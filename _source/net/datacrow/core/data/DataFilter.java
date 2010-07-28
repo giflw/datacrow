@@ -35,6 +35,7 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
@@ -334,6 +335,7 @@ public class DataFilter {
         return storage;
     }
     
+    @SuppressWarnings("unchecked")
     public String toSQL(int[] selectFields) {
         String columns = "";
         if (selectFields != null && selectFields.length > 0) {
@@ -351,7 +353,7 @@ public class DataFilter {
         DcField field;
         Object value;
         int operator;
-        
+        int counter2;
         int counter = 0;
         String queryValue = null;
         for (DataFilterEntry entry : getEntries()) {
@@ -386,8 +388,25 @@ public class DataFilter {
                     if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
                         operator == Operator.NOT_EQUAL_TO.getIndex()) 
                         sql.append(" NOT");
-                    
+
+                    DcModule mapping = DcModules.get(DcModules.getMappingModIdx(getModule(), field.getReferenceIdx(), field.getIndex()));
+
                     sql.append(" IN (");
+                    sql.append("SELECT ");
+                    sql.append(mapping.getField(DcMapping._A_PARENT_ID));
+                    sql.append(" FROM ");
+                    sql.append(mapping.getTableName());
+                    sql.append(" WHERE ");
+                    sql.append(mapping.getField(DcMapping._B_REFERENCED_ID));
+                    sql.append(" IN (");
+                    
+                    counter2 = 0;
+                    for (DcObject dco : (Collection<DcObject>) value) {
+                        if (counter > 0)  sql.append(",");
+                        sql.append(dco.getID());
+                        counter2++;
+                    }
+                    sql.append("))");
                 } else {
                     if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
                     sql.append(" LIKE UPPER(");

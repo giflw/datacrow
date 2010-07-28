@@ -255,6 +255,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void sort() {
+        // TODO: re-implement sort
 //        int rowCount = getItemCount();
 //        ArrayList<DcObject> objects = new ArrayList<DcObject>();
 //        for (int i = 0; i < rowCount; i++)
@@ -295,7 +296,6 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void add(final DcObject dco, final boolean select) {
-
         dco.markAsUnchanged();
         
         if (getType() == View._TYPE_INSERT)
@@ -328,8 +328,6 @@ public class View extends DcPanel implements ListSelectionListener {
         
         revalidate();
         afterUpdate();
-        setDefaultSelection();
-        
         setSelected();
     }      
     

@@ -60,11 +60,6 @@ public class GroupingPane extends JPanel {
         build();
     }
     
-    public int getItemCount() {
-        // TODO: implement
-        return 0;
-    }
-    
     public int getModule() {
         return module;
     }

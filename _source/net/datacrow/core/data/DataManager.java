@@ -198,18 +198,10 @@ public class DataManager {
      * @param childIdx The child module index.
      * @return The children or an empty collection.
      */
-    public static Collection<DcObject> getChildren(Long parentId, int childIdx) {
-        
-        List<DcObject> c = new ArrayList<DcObject>(); // children.get(childIdx).get(parentId);
-//        c = c == null ? new ArrayList<DcObject>() : new ArrayList<DcObject>(c);
-//        children.get(childIdx).put(parentId, c);
-//        
-//        DcModule module =  DcModules.get(childIdx);
-//        DataFilter filter = new DataFilter(childIdx);
-//        filter.setOrder(new DcField[] {module.getField(module.getDefaultSortFieldIdx())});
-//        
-//        filter.sort(c);
-        return c;
+    public static List<DcObject> getChildren(Long parentId, int childIdx) {
+        DataFilter filter = new DataFilter(childIdx);
+        filter.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, DcModules.get(childIdx).getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentId));
+        return DatabaseManager.retrieveItems(filter.toSQL(null), Query._SELECT);
     }
     
     /**

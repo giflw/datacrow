@@ -271,7 +271,6 @@ public final class ComponentFactory {
             UIManager.put("Tree.leafIcon", IconLibrary._icoTreeLeaf);
             UIManager.put("Tree.openIcon", IconLibrary._icoTreeOpen);
             UIManager.put("Tree.closedIcon", IconLibrary._icoTreeClosed);
-            
         } catch (Exception e) {
             logger.error("Error while applying default UI properties", e);
         }        

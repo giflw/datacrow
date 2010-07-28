@@ -56,8 +56,9 @@ public class FileSystemTreeModel extends DefaultTreeModel {
         FileSystemTreeNode node = ((FileSystemTreeNode) parent).getChild(index);
         try {
             // check if the node exists
+            FileSystemTreeNode child;
             for (Enumeration enumeration = ((FileSystemTreeNode) parent).children(); enumeration.hasMoreElements(); ) {
-                FileSystemTreeNode child = (FileSystemTreeNode) enumeration.nextElement();
+                child = (FileSystemTreeNode) enumeration.nextElement();
                 if (child.getText().equals(node.getText()))
                     return child;
             }
@@ -98,8 +99,9 @@ public class FileSystemTreeModel extends DefaultTreeModel {
     
     public void setSelectedRecurse(FileSystemTreeNode node, boolean b) {
         node.setSelected(b);
+        FileSystemTreeNode child;
         for (int idx = 0; idx < node.getChildCount(); idx++) {
-            FileSystemTreeNode child = ((FileSystemTreeNode) getChild(node, idx));
+            child = ((FileSystemTreeNode) getChild(node, idx));
             child.setSelected(b);
             setSelectedRecurse(child, b);
         }
