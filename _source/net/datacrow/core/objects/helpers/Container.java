@@ -69,7 +69,7 @@ public class Container extends DcObject {
         DataFilter df = new DataFilter(DcModules._CONTAINER);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._CONTAINER, Container._F_PARENT, Operator.EQUAL_TO, getID()));
         
-        for (DcObject dco : DataManager.get(DcModules._CONTAINER, df)) {
+        for (DcObject dco : DataManager.get(df)) {
             children.add((Container) dco);
         }
         
@@ -118,8 +118,7 @@ public class Container extends DcObject {
             try {
                 DataFilter df = new DataFilter(DcModules._ITEM);
                 df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._ITEM, DcObject._SYS_CONTAINER, Operator.EQUAL_TO, this));
-                
-                children = DataManager.get(DcModules._ITEM, df);
+                children = DataManager.get(df);
 
             } finally {
                 isLoading = false;

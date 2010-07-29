@@ -120,7 +120,7 @@ public class FileSynchronizer {
                                     DcObject._SYS_FILEHASH, 
                                     Operator.IS_FILLED, null));
                     
-                    for (DcObject dco : DataManager.get(module.getIndex(), df)) {
+                    for (DcObject dco : DataManager.get(df)) {
                         
                         if (!keepOnRunning) break;
                         
@@ -140,7 +140,6 @@ public class FileSynchronizer {
                             dco.setValue(DcObject._SYS_FILEHASH, fi.getHash());
                             
                             try {
-                                dco.setSilent(true);
                                 dco.saveUpdate(true);
                                 
                                 String message = DcResources.getText("msgSynchronizedFile", 

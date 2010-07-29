@@ -226,12 +226,8 @@ public class LoanPanel extends JPanel implements ActionListener {
                             currentLoan.setValue(Loan._D_OBJECTID, o.getID());
                             currentLoan.setValue(Loan._B_ENDDATE, endDate);
                             currentLoan.setValue(Loan._E_DUEDATE, null);
-                
-                            currentLoan.setPartOfBatch(i == 0);
-                            currentLoan.setEndOfBatch(i == objects.size()  - 1);
-                            currentLoan.setSilent(true);
                             
-                            if (owner != null && currentLoan.isEndOfBatch()) 
+                            if (owner != null && i == objects.size()  - 1) // last item
                                 currentLoan.addRequest(new CloseWindowRequest(owner));
                             else if (owner == null)
                                 setLoanInformation(currentLoan);
@@ -313,12 +309,8 @@ public class LoanPanel extends JPanel implements ActionListener {
                         currentLoan.setValue(Loan._A_STARTDATE, startDate);
                         currentLoan.setValue(Loan._C_CONTACTPERSONID, contactPersonID);
                         currentLoan.setValue(Loan._E_DUEDATE, dueDate);
-                        currentLoan.setSilent(true);
-            
-                        currentLoan.setPartOfBatch(i == 0);
-                        currentLoan.setEndOfBatch(i == objects.size() - 1);
                         
-                        if (owner != null && currentLoan.isEndOfBatch())
+                        if (owner != null && i == objects.size() - 1) // last item
                             currentLoan.addRequest(new CloseWindowRequest(owner));
                         else if (owner == null)
                             setLoanInformation(currentLoan);                        

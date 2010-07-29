@@ -232,7 +232,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             
             if (g == null || picture == null || img == null) return;
             
-            // TODO: optional: part of settings
+            // Optional: part of settings ??
 //            Graphics2D g2d = (Graphics2D) g;
 //
 //            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);

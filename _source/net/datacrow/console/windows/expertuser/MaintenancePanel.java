@@ -63,7 +63,7 @@ public class MaintenancePanel extends DcPanel implements ActionListener {
     
     private void compactAndShutDown() {
         try {
-        	DatabaseManager.executeSQL("SHUTDOWN COMPACT", false);
+        	DatabaseManager.executeSQL("SHUTDOWN COMPACT");
         	DataCrow.mainFrame.setOnExitCheckForChanges(false);
             DataCrow.mainFrame.close();
         } catch (Exception exp) {

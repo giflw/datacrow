@@ -135,7 +135,6 @@ public class ItemRelate extends DcBean {
         }
         
         try {
-            dco.setSilent(true);
             dco.saveUpdate(false);
         } catch (ValidationException ve) {
             ve.printStackTrace();

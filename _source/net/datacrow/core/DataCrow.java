@@ -384,17 +384,15 @@ public class DataCrow {
                 Thread splashCloser = new Thread(new SplashScreenCloser());
                 splashCloser.start();
                 
-                
-                // TODO: enable
-//                if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
-//                    new VersionChecker().start();
+                if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
+                    new VersionChecker().start();
                 
                 if (!webserverMode) {
                     DataFilter df = new DataFilter(DcModules._LOAN);
                     df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
                     df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
                     
-                    for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
+                    for (DcObject loan : DataManager.get(df)) {
                         Long overdue = ((Loan) loan).getDaysTillOverdue();
                     	if (overdue != null && overdue.longValue() < 0) {
                             DcSwingUtilities.displayWarningMessage("msgThereAreOverdueItems");
@@ -500,13 +498,9 @@ public class DataCrow {
             items = module.getDefaultData();
             if (items != null) {
                 for (DcObject item : items) {
-                    item.setSilent(true);
                     item.saveNew(false);
-                    if (item.getCurrentChildren() != null) {
-                        for (DcObject child : item.getCurrentChildren()) {
-                            child.setSilent(true);
-                            child.saveNew(false);
-                        }
+                    for (DcObject child : item.getCurrentChildren()) {
+                        child.saveNew(false);
                     }
                 }
             }

@@ -76,7 +76,7 @@ public class DcMapping extends DcObject {
      * Retrieves the referenced object.
      */
     public DcObject getReferencedObject() {
-        if (reference != null) {
+        if (reference == null) {
             try {
                 reference = DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
             } catch (Exception e) {
@@ -117,6 +117,7 @@ public class DcMapping extends DcObject {
     
     @Override
     public String toString() {
+        reference = getReferencedObject();
         return reference != null ? reference.toString() : "";
     }
 

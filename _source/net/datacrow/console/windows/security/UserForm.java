@@ -93,9 +93,6 @@ public class UserForm extends ItemForm {
         apply();
         
         dco.addRequest(new CloseWindowRequest(this));
-        dco.setSilent(true);
-        dco.setPartOfBatch(false);
-        
         for (Permission permission : modulePermissionPanel.getPermissions())
             dco.addChild(permission);
         

@@ -213,7 +213,7 @@ public class ItemSearch extends DcBean {
         AdvancedFilter af = (AdvancedFilter) vr.resolveVariable(fc, "advancedFilter");
 
         DataFilter df = advanced ?  af.getFilter() : getFilter(wo);
-        for (DcObject dco :  DataManager.get(wo.getModule(), df)) {
+        for (DcObject dco :  DataManager.get(df)) {
 
             if (count == max) break;
 

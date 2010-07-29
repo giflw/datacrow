@@ -110,7 +110,7 @@ public class AutoIncrementer implements IValueEnhancer {
             if (!fillGaps) {
                 String query = "SELECT MAX(" + field.getDatabaseFieldName() + ") AS COUNTMAXIMUM FROM " +
                                module.getTableName();
-                ResultSet rs = DatabaseManager.executeSQL(query, false);
+                ResultSet rs = DatabaseManager.executeSQL(query);
                 int maximum = 0;
                 while (rs.next()) {
                     maximum = rs.getInt("COUNTMAXIMUM");
@@ -127,7 +127,7 @@ public class AutoIncrementer implements IValueEnhancer {
                 "ORDER BY 1";            
                 
                 Collection<Integer> currentValues = new ArrayList<Integer>();
-                ResultSet rs = DatabaseManager.executeSQL(qryCurrent, false);
+                ResultSet rs = DatabaseManager.executeSQL(qryCurrent);
                 while (rs.next())
                     currentValues.add(rs.getInt(field.getDatabaseFieldName()));
                 

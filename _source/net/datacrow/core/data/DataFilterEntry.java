@@ -46,10 +46,18 @@ public class DataFilterEntry {
     
     private String andOr;
 
+    public DataFilterEntry() {};
+    
     /**
-     * Creates an empty filter entry.
+     * Creates a filter entry.
+     * @param module The module to which the specified field belongs.
+     * @param field The field to be checked on.
+     * @param operator The operator.
+     * @param value The value used to test against the input.
      */
-    public DataFilterEntry() {}
+    public DataFilterEntry(int module, int field, Operator operator, Object value) {
+        this(_AND, module, field, operator, value);
+    }
     
     /**
      * Creates a filter entry.

@@ -63,6 +63,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.PollerTask;
@@ -114,12 +115,8 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             poller.start();
             
             DataFilters.setCurrent(module.getIndex(), df);
-            
-            List<Long> keys = DataManager.getKeys(module.getIndex(), df);
-            if (keys.size() == 0)
-                DcModules.getCurrent().getSearchView().clear();
-            else 
-                DcModules.getCurrent().getSearchView().add(keys);
+            List<Long> keys = DataManager.getKeys(df);
+            DcModules.getCurrent().getSearchView().add(keys);
             
             try {
                 poller.finished(true);
@@ -190,7 +187,16 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         comboCriteria.removeAllItems();
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-            List<DcObject> objects = DataManager.get(field.getReferenceIdx(), null);
+            
+            int[] fields;
+            if (DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE) {
+                fields = new int[] {DcProperty._A_NAME, DcProperty._B_ICON};
+            } else {
+                fields = new int[] {DcModules.get(field.getReferenceIdx()).getDisplayFieldIdx()};
+            }
+            
+            List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);
+            
             comboCriteria.addItem(" ");
             for (Object o : objects)
                 comboCriteria.addItem(o);

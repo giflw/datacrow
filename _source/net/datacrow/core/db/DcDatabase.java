@@ -39,7 +39,6 @@ import net.datacrow.core.db.upgrade.DatabaseUpgrade;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
@@ -158,7 +157,7 @@ public class DcDatabase {
             
             try {
                 String sql = "select top 1 * from " + module.getTableName();
-                ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                ResultSet rs = DatabaseManager.executeSQL(sql);
                 ResultSetMetaData md = rs.getMetaData();
                 
                 for (int i = 1; i < md.getColumnCount() + 1; i++) {
@@ -174,7 +173,7 @@ public class DcDatabase {
                         // the column is not used.. remove!
                         if (remove) {
                             logger.info("Removing column " + columnName + " for module " + module.getName() + " as it is no longer in use");
-                            DatabaseManager.executeSQL("alter table " + module.getTableName() + " drop column " + columnName, true);
+                            DatabaseManager.executeSQL("alter table " + module.getTableName() + " drop column " + columnName);
                         }
                     }
                 }
@@ -212,7 +211,7 @@ public class DcDatabase {
      * Adds a query to the query queue of this database.
      * @param query
      */
-    protected void addQuery(Query query) {
+    protected void queue(Query query) {
         queue.addQuery(query);
     }
 
@@ -244,22 +243,19 @@ public class DcDatabase {
         initializeSystemTable(stmt);
         
         for (DcModule module : DcModules.getAllModules()) {
-            DcObject dco = module.getItem();
             if (!module.isAbstract()) {
-                String testQuery = "select * from " + dco.getTableName();
+                String testQuery = "select * from " + module.getTableName();
                 try {
                     stmt.setMaxRows(1);
                     ResultSet result = stmt.executeQuery(testQuery);
-                    initializeColumns(connection, result.getMetaData(), dco);
-                    logger.info(DcResources.getText("msgTableFound", dco.getTableName()));
+                    initializeColumns(connection, result.getMetaData(), module);
+                    logger.info(DcResources.getText("msgTableFound", module.getTableName()));
                     result.close();
                 } catch (SQLException e) {
-                    logger.info((DcResources.getText("msgTableNotFound", dco.getTableName())));
-                    createTable(dco);
+                    logger.info((DcResources.getText("msgTableNotFound", module.getTableName())));
+                    createTable(module);
                 }
             }
-            
-            dco.release();
         }
         stmt.close();
     }
@@ -279,10 +275,10 @@ public class DcDatabase {
         }
     }
     
-    private void initializeColumns(Connection connection, ResultSetMetaData metaData, DcObject dco) throws SQLException {
-        String tablename = dco.getTableName();
+    private void initializeColumns(Connection connection, ResultSetMetaData metaData, DcModule module) throws SQLException {
+        String tablename = module.getTableName();
         
-        for (DcField field : dco.getFields()) {
+        for (DcField field : module.getFields()) {
             String column = field.getDatabaseFieldName();
             String type = field.getDataBaseFieldType();
             
@@ -324,13 +320,11 @@ public class DcDatabase {
         }
     }
 
-    private void createTable(DcObject dco) {
+    private void createTable(DcModule module) {
         try {
-            Query query = new Query(Query._CREATE, dco, null, null);
-            executeQuery(query.getQuery());
-
-            dco.getModule().setNew(true);
-            
+            Query query = new CreateQuery(module.getIndex());
+            query.run();
+            module.setNew(true);
         } catch (Exception e) {
             logger.error("An error occurred while inserting demo data", e);
         }

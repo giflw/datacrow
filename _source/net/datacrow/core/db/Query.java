@@ -25,33 +25,27 @@
 
 package net.datacrow.core.db;
 
-import java.sql.Connection;
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.core.objects.helpers.ContactPerson;
-import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.core.wf.requests.IRequest;
+import net.datacrow.core.wf.requests.IUpdateUIRequest;
 import net.datacrow.core.wf.requests.ImageRequest;
 import net.datacrow.core.wf.requests.Requests;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -65,39 +59,13 @@ import org.apache.log4j.Logger;
  * 
  * @author Robert Jan van der Waals
  */
-public class Query {
+public abstract class Query {
     
-    private static Logger logger = Logger.getLogger(Query.class.getName());
-
-    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-    public static final int _UNDEFINED = 0;
-    public static final int _UPDATE = 1;
-    public static final int _CREATE = 2;
-    public static final int _INSERT = 3;
-    public static final int _SELECT = 4;
-    public static final int _DELETE = 5;
-
-    protected static final int _SELECTPRECISE = 6;
-    protected static final int _SELECTOR = 7;
-    protected static final int _SELECTPRECISEOR = 8;
-
+    private final static Logger logger = Logger.getLogger(Query.class.getName());
     private final int module;
-    private int queryType;
-
-    private boolean bPreciseSelect = false;
-    private boolean bComplyToAllConditions = true;
-
-    private List<PreparedStatement> queries;
-    private Long objectID;
 
     private Requests requests;
-    
-    private String[] ordering;
-    private boolean bSilence = false;
-    private boolean isBatch = false;
-    private boolean endOfBatch = false;    
-    
+
     /**
      * Constructs a new Query object. 
      * @param queryType type of query
@@ -106,301 +74,82 @@ public class Query {
      * @param requests actions / requests to be executed
      * @throws SQLException
      */
-    public Query(int queryType,
-                 DcObject dco,
-                 QueryOptions options,
-                 Requests requests) throws SQLException {
-
-        module = dco.getModule().getIndex();
-
-        setSilence(dco.isSilent());
-
-        if (options != null) {
-            bPreciseSelect = options.getPreciseSelect();
-            bComplyToAllConditions = options.getComplyAllConditions();
-            ordering = options.getOrdering();
-        }
-
-        this.requests = requests == null ? new Requests() : requests;
-        this.queryType = queryType;
-        this.objectID = dco.getID();
-
-        if (this.queryType == _SELECT) {
-            if (bPreciseSelect && !bComplyToAllConditions) {
-                this.queryType = _SELECTPRECISEOR;
-            } else if (bPreciseSelect) {
-                this.queryType = _SELECTPRECISE;
-            } else if (!bComplyToAllConditions) {
-                this.queryType = _SELECTOR;
-            }
-        }
-
-        queries = getQueries(dco);
+    public Query(int module, Requests requests) {
+        this.module = module;
+        this.requests = requests;
     } 
 
-    /**
-     * Constructs a new Query object from a data filter.
-     */
-    public Query(DataFilter filter, Requests requests, int[] fields) throws SQLException {
-        
-        setSilence(true);
-        
-        this.module = filter.getModule();
-        this.requests = requests;
-        
-        PreparedStatement ps = getPreparedStatement(filter.toSQL(null));
-        
-        this.queries = new ArrayList<PreparedStatement>();
-        this.queries.add(ps);
+    protected void clear() {
+        if (requests != null) requests.clear();
+        requests = null;
     }
     
-    public List<PreparedStatement> getQueries() {
-        return queries;
-    }
+    public abstract List<DcObject> run();
     
-    public PreparedStatement getQuery() {
-        return getQueries().get(0);
-    }
-    
-    private List<PreparedStatement> getQueries(DcObject dco) throws SQLException {
-        List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
-        switch (queryType) {
-            case _UPDATE :
-                queries.addAll(getUpdateQueries(dco));
-                break;
-            case _CREATE :
-                queries.addAll(getCreateTableQuery(dco));
-                break;
-            case _INSERT :
-                queries.addAll(getInsertQueries(dco));
-                break;
-            case _DELETE :
-                queries.addAll(getDeleteQueries(dco));
-                break;
-            case _UNDEFINED :
-            case _SELECT :
-            case _SELECTPRECISE :
-            case _SELECTOR :
-            case _SELECTPRECISEOR :
-                queries.addAll(getSelectQueries(dco));
-                break;
-        }
-        return queries;
-    }
-    
-    private boolean isEmpty(Object o) {
-        String emptyValue = DcResources.getText("lblIsEmpty");
-        return o == null || o.equals(emptyValue) || o.equals("0") || o.equals("NULL");
-    }
+    protected void handleRequest(Collection<DcObject> items, boolean success) {
+        if (requests != null)  {
+            Requests uiRequests = new Requests();
 
-    @SuppressWarnings({"unchecked"})
-    private List<PreparedStatement> getInsertQueries(DcObject dco) throws SQLException {
-        
-        dco.setIDs();
-        
-        Collection<Object> values = new ArrayList<Object>();
-        StringBuffer columns = new StringBuffer();
-
-        // create non existing references
-        createReferences(dco);
-        
-        Collection<DcMapping> references = new ArrayList<DcMapping>();
-        Collection<Picture> pictures = new ArrayList<Picture>();
-
-        for (DcField field : dco.getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) dco.getValue(field.getIndex());
-                ImageIcon image = picture != null ? (ImageIcon) picture.getValue(Picture._D_IMAGE) : null; 
-                if (image != null) {
-                    if (image.getIconHeight() == 0 || image.getIconWidth() == 0) {
-                    	logger.warn("Image " + dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg" + " is invalid and will not be saved");
-                    } else {
-	                    picture.setValue(Picture._A_OBJECTID, dco.getID());
-	                    picture.setValue(Picture._B_FIELD, field.getDatabaseFieldName());
-	                    picture.setValue(Picture._C_FILENAME, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
-	                    picture.setValue(Picture._E_HEIGHT, image.getIconHeight());
-	                    picture.setValue(Picture._F_WIDTH, image.getIconWidth());
-	                    picture.isEdited(true);
-	                    pictures.add(picture);
-                    }
-                }
-            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                Collection<DcMapping> c = (Collection<DcMapping>) dco.getValue(field.getIndex());
-                if (c != null) references.addAll(c);                
-                
-            } else if (!field.isUiOnly()) {
-                if (columns.length() > 0)
-                    columns.append(", ");
-
-                if (!(dco.getValue(field.getIndex()) instanceof Picture)) {
-                    values.add(getQueryValue(dco, field.getIndex()));
-                    columns.append(field.getDatabaseFieldName());
+            for (IRequest request : requests.get()) {
+                if (request instanceof ImageRequest) {
+                    requests.remove(request);
+                    request.execute(items);
                 }
             }
+            
+            for (IRequest request : requests.get()) {
+                requests.remove(request);
+                if (request instanceof IUpdateUIRequest)
+                    uiRequests.add(request);
+                else 
+                    request.execute(items);
+            }
+
+            WorkFlow.handleRequests(items, uiRequests, success);
         }
         
-        List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
-        if (references.size() > 0) {
-            for (DcMapping mapping : references) {
-                queries.add(getPreparedStatement("INSERT INTO " + mapping.getTableName() + 
-                                    " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
-                                           mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                                     ") \r\n VALUES (" + dco.getID() + ", " + mapping.getReferencedId() + ")"));
-            }
+    }
+    
+    protected PreparedStatement getPreparedStament(String sql) throws SQLException {
+        return DatabaseManager.getAdminConnection().prepareStatement(sql);
+    }
+    
+    protected void setValues(PreparedStatement ps, Collection<Object> values) {
+        try {
+            int pos = 1;
+            for (Object value : values)
+                ps.setObject(pos, value);
+        } catch (Exception e) {
+            logger.error("Could not set values [" + values + "] for " + ps, e);
         }        
-        
-        String sqlPart = "";
-        for (int i = 0; i < values.size(); i++)
-            sqlPart += (sqlPart.length() > 0 ? ", ?" : "?"); 
-        
-        String sql = "INSERT INTO " + dco.getTableName() + " (" + columns + ") \r\n" + "VALUES (" + sqlPart + ");";
-        PreparedStatement ps = getPreparedStatement(sql);
-        setValues(ps, values);
-        queries.add(ps);
-        
-        for (Picture picture : pictures) {
-            queries.addAll(getInsertQueries(picture));
-            requests.add(new ImageRequest(picture, ImageRequest._SAVE));
-        }
-        
-        pictures.clear();
-        return queries;
+    }
+    
+    protected Object getQueryValue(DcObject dco, int index) {
+        return Utilities.getQueryValue(dco.getValue(index), dco.getField(index));
+    }
+    
+    public int getModuleIdx() {
+        return module;
+    }
+    
+    public DcModule getModule() {
+        return DcModules.get(getModuleIdx());
     }
 
-    private List<PreparedStatement> getCreateTableQuery(DcObject dco) throws SQLException {
-        String columns = "";
-
-        for (DcField field : dco.getFields()) {
-            if (!field.isUiOnly()) {
-                if (columns.length() > 0)
-                    columns += ", ";
-
-                columns += field.getDatabaseFieldName() + " " + field.getDataBaseFieldType();
-                if (field.getIndex() == DcObject._ID) {
-                    columns += " PRIMARY KEY";
-                }
-            }
-        }
-        
-        String sql = "CREATE MEMORY TABLE " + dco.getTableName() + "\r\n(" + columns + ");";
-        List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
-        queries.add(getPreparedStatementAdmin(sql));
-        return queries;
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<PreparedStatement> getUpdateQueries(DcObject dco) throws SQLException {
-        Collection<Picture> pictures = new ArrayList<Picture>();
-        Collection<Collection<DcMapping>> references = new ArrayList<Collection<DcMapping>>();
-        Collection<Object> values = new ArrayList<Object>();
-        
-        // create non existing references
-        createReferences(dco);
-        
-        List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
-        StringBuffer sbValues = new StringBuffer();
-        for (DcField field : dco.getFields()) {
-            // Make sure only changed fields are updated
-            if (!dco.isChanged(field.getIndex()))
-                continue;
-            
-            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) dco.getValue(field.getIndex());
-                if (picture != null && (picture.isNew() || picture.isEdited() || picture.isDeleted())) {
-                    picture.setValue(Picture._A_OBJECTID, dco.getID());
-                    picture.setValue(Picture._B_FIELD, field.getDatabaseFieldName());
-                    picture.setValue(Picture._C_FILENAME, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
-                    
-                    ImageIcon icon = (ImageIcon) picture.getValue(Picture._D_IMAGE);
-                    if (icon != null) {
-                        picture.setValue(Picture._E_HEIGHT, Long.valueOf(icon.getIconHeight()));
-                        picture.setValue(Picture._F_WIDTH, Long.valueOf(icon.getIconWidth()));
-                        pictures.add(picture);
-                    }
-                }
-            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                Collection<DcMapping> c = (Collection<DcMapping>) dco.getValue(field.getIndex());
-                if (c != null) references.add(c);
-                
-                if (dco.isChanged(field.getIndex())) {
-                    DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
-                    String sql = "DELETE FROM " + mappingMod.getTableName() + " WHERE " +  
-                                 mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = " + dco.getID();
-                    queries.add(getPreparedStatement(sql));
-                }
-            } else if (dco.isChanged(field.getIndex()) && !field.isUiOnly()) {
-                if (sbValues.length() > 0)
-                    sbValues.append(", ");
-
-                sbValues.append(field.getDatabaseFieldName());
-                sbValues.append(" = ?");
-                values.add(getQueryValue(dco, field.getIndex()));
-            }
-        }
-
-        String s = sbValues.toString();
-        if (dco.getModule().getIndex() != DcModules._PICTURE && !Utilities.isEmpty(values)) {
-            String sql = "UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE ID = " + dco.getID();
-            PreparedStatement ps = getPreparedStatement(sql);
-            setValues(ps, values);
-            queries.add(ps);
-        } else if (!Utilities.isEmpty(values)) {
-            String sql = "UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE " +
-                         dco.getDatabaseFieldName(Picture._A_OBJECTID) + " = " + dco.getValue(Picture._A_OBJECTID) + " AND " +
-                         dco.getDatabaseFieldName(Picture._B_FIELD) + " = ?";
-            
-            values.add(dco.getValue(Picture._B_FIELD));
-            PreparedStatement ps = getPreparedStatement(sql);
-            setValues(ps, values);
-            queries.add(ps);
-        }
-
-        if (references.size() > 0) {
-            for (Collection<DcMapping> c : references) {
-                for (DcMapping mapping : c) {
-                    String sql = "INSERT INTO " + mapping.getTableName() + 
-                                 " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
-                                 mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                                 ") \r\n VALUES (" + dco.getID() + ", " + mapping.getReferencedId() + ");";
-                    queries.add(getPreparedStatement(sql)); 
-                }
-            }
-        }
-        
-        for (Picture picture : pictures) {
-            if (picture.isNew()) {
-                queries.addAll(getInsertQueries(picture));
-                requests.add(new ImageRequest(picture, ImageRequest._SAVE));
-            } else if (picture.isEdited()) {
-                queries.addAll(getUpdateQueries(picture));
-                requests.add(new ImageRequest(picture, ImageRequest._SAVE));                
-            } else if (picture.isDeleted()) {
-                String sql = "DELETE FROM " + picture.getTableName() + " WHERE " +
-                             picture.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + dco.getID() + " AND " +
-                             picture.getField(Picture._B_FIELD).getDatabaseFieldName() + " = ?";
-                
-                PreparedStatement ps = getPreparedStatement(sql);
-                ps.setString(1, (String) picture.getValue(Picture._B_FIELD));
-                
-                queries.add(ps);
-                requests.add(new ImageRequest(picture, ImageRequest._DELETE));    
-            }
-        }
-        
-        pictures.clear();
-        return queries;
+    /**
+     * Gets the requests waiting to be executed.
+     */
+    public Requests getRequests() {
+        return requests;
     }
     
     @SuppressWarnings("unchecked")
-    private void createReferences(DcObject dco) {
+    protected void createReferences(DcObject dco) {
         for (DcField field : dco.getFields()) {        
             Object value = dco.getValue(field.getIndex());
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                
                 DcObject reference = value instanceof DcObject ? (DcObject) value : null;
-                
-                if (reference == null)
-                    continue;
+                if (reference == null) continue;
                 
                 // also created references for the sub items of this reference...
                 createReferences(reference);
@@ -450,361 +199,46 @@ public class Query {
                 }
             }
         }
-    }
+    }  
     
-    private PreparedStatement getPreparedStatement(String sql) throws SQLException {
-        return DatabaseManager.getConnection().prepareStatement(sql);
-    }
+    protected void deleteImage(Picture picture) {
+        String filename = (String) picture.getValue(Picture._C_FILENAME);
 
-    private PreparedStatement getPreparedStatementAdmin(String sql) throws SQLException {
-        Connection connection = DatabaseManager.getAdminConnection();
-        connection = connection == null ? DatabaseManager.getConnection() : connection;
-        return connection.prepareStatement(sql);
-    }
+        if (filename == null) return;
+        
+        String filename1 = DataCrow.imageDir + filename;
+
+        File file1 = new File(filename1);
+        if (file1.exists()) file1.delete();
+        
+        String filename2 = picture.getScaledFilename(DataCrow.imageDir + filename);
+        
+        File file2 = new File(filename2);
+        if (file2.exists()) file2.delete();
+    }    
     
-    private void setValues(PreparedStatement ps, Collection<Object> values) {
-        int pos = 1;
+    protected void saveImage(Picture picture) {
+        String filename = (String) picture.getValue(Picture._C_FILENAME);
+        
+        if (filename == null) return;
+        
+        File file = new File(DataCrow.imageDir, filename);
+        String imageFile = file.toString();
         
         try {
-            for (Object value : values) {
-                ps.setObject(pos, value);
-//                
-//                if (value instanceof String)
-//                    ps.setString(pos, (String) value);
-//                else if (value instanceof Long)
-//                    ps.setLong(pos, (Long) value);
-//                else if (value instanceof Double)
-//                    ps.setDouble(pos, (Double) value);
-//                else if (value instanceof Integer)
-//                    ps.setInt(pos, (Integer) value);
-//                else if (value instanceof Boolean)
-//                    ps.setBoolean(pos, (Boolean) value);
-//                else if (value instanceof Date)
-//                    ps.setDate(pos, new java.sql.Date(((Date) value).getTime()));
-//                else
-//                    ps.setNull(pos, Types.NULL);
-//                
-//                pos++;
-            }
-        
-        } catch (Exception e) {
-            logger.error("Could not set values [" + values + "] for " + ps, e);
-        }        
-    }
-    
-    private List<PreparedStatement> getDeleteQueries(DcObject dco) throws SQLException {
-        List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
-
-        DcObject loan = DcModules.get(DcModules._LOAN).getItem();
-        Picture picture = (Picture) DcModules.get(DcModules._PICTURE).getItem();
-        if (dco.hasPrimaryKey())
-            queries.add(getPreparedStatement("DELETE FROM " + dco.getTableName() + " WHERE ID = " + dco.getID()));
-
-        if (dco.getModule().canBeLend())
-            queries.add(getPreparedStatement("DELETE FROM " + loan.getTableName() + " WHERE " +
-                            loan.getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = " + dco.getID()));
-
-        // Delete children. Ignore any abstract module (parent and/or children)
-        if (	dco.getModule().getChild() != null && 
-        	   !dco.getModule().isAbstract() && 
-        	   !dco.getModule().getChild().isAbstract()) {
-        	
-            DcModule childModule = dco.getModule().getChild(); 
-            queries.add(getPreparedStatement("DELETE FROM " + childModule.getTableName() + " WHERE " + 
-                        childModule.getField(childModule.getParentReferenceFieldIndex()).getDatabaseFieldName() + " = " + dco.getID()));
-        }
-        
-        // Remove any references to the to be deleted item.
-        if (dco.getModule().hasDependingModules()) {
-            for (DcModule m : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-            	
-            	if (m.isAbstract()) continue;
-            	
-                if (m.getType() == DcModule._TYPE_MAPPING_MODULE) {
-                    queries.add(getPreparedStatement(
-                            "DELETE FROM " + m.getTableName() + " WHERE " + m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = " + dco.getID()));
-                } else {
-                    for (DcField field : m.getFields()) {
-                        if (!field.isUiOnly() && field.getReferenceIdx() == dco.getModule().getIndex()) {
-                            queries.add(getPreparedStatement(
-                                "UPDATE " + m.getTableName() + " SET " +  field.getDatabaseFieldName() + " = NULL WHERE " + 
-                                field.getDatabaseFieldName() + " = " + dco.getID()));
-                        }
-                    }
-                }
-            }
-        }
-        
-        requests.add(new ImageRequest(dco.getID(), ImageRequest._DELETE));
-        
-        queries.add(getPreparedStatement("DELETE FROM " + picture.getTableName() + " WHERE " +
-                    picture.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + dco.getID()));
-
-        return queries;
-    }
-
-    private Object getQueryValue(DcObject dco, int index) {
-        return Utilities.getQueryValue(dco.getValue(index), dco.getField(index));
-    }
-    
-    private List<PreparedStatement> getSelectQueries(DcObject dco) throws SQLException {
-        List<PreparedStatement> queries = new ArrayList<PreparedStatement>();
-        Collection<String> tables = new ArrayList<String>();
-        Collection<DcObject> objects = new ArrayList<DcObject>();
-        
-        if (dco.getModule().isAbstract()) {
-            for (DcModule module : DcModules.getModules()) {
-                if ((module instanceof DcMediaModule || dco.getModule().getIndex() != DcModules._MEDIA) && 
-                    !module.isAbstract() && !module.isChildModule()) {
-                    tables.add(module.getTableName());
-                }
-            }
-        } else {
-            objects.add(dco);
-            objects.addAll(dco.getChildren());
+            if (file.exists()) 
+                file.delete();
             
-            String table = dco.getTableName();
-            tables.add(table);
-        }
-
-        
-        DcModule module; 
-        DcObject o;  
-        for (String table: tables) {
-            StringBuffer columns = new StringBuffer();
-            String query = "";
-
-            module = DcModules.getModuleForTable(table);
-            if (dco.getModule().isAbstract()) {
-                objects.clear();
-                o = module.getItem();
-                o.copy(dco, true, true);
-                objects.add(o);
+            DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
+            byte[] bytes = icon.getBytes();
+            if (bytes != null && bytes.length > 10) {
+                Utilities.writeToFile(bytes, file);
+                icon = new DcImageIcon(bytes);
+                Utilities.writeScaledImageToFile(icon, picture.getScaledFilename(imageFile));
+                icon.flush();
             }
-
-            int counter = 0;
-            StringBuffer conditions = new StringBuffer();
-            Collection<Object> values = new ArrayList<Object>();
-            for (DcObject object : objects) {
-                for (DcField field : object.getFields()) {
-                    if (!field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._PICTURE)  {
-                        String column = field.getDatabaseFieldName();
-                        if (objects.size() > 1 && !Utilities.isEmpty(object.getTableShortName()))
-                            column = object.getTableShortName() + "." + column;
-
-                        if (counter == 0) {
-                            if (columns.length() > 0)
-                                columns.append(", ");
-
-                            // only select fields for the current module, child fields are added to the condition only
-                            columns.append(column);
-                        }
-
-                        if (object.isChanged(field.getIndex())) {
-                            Object value = getQueryValue(object, field.getIndex());
-
-                            String appender = queryType == _SELECTOR || queryType == _SELECTPRECISEOR ? " OR " : " AND ";
-                            if (conditions.length() > 0)
-                                conditions.append(appender);
-                            
-                            if (isEmpty(value)) {
-                                conditions.append(getEmptyCondition(column, field));
-                            } else {
-                                String condition;
-
-                            	String s = value instanceof String ? ((String) value).toUpperCase() : "";
-                            	s = s.replaceAll("\'", "''");
-
-                                if (queryType == _SELECT || queryType == _SELECTOR) {
-                                    if (value instanceof String) {
-                                        condition = "UPPER (" + column + ") LIKE '%" + s + "%'";
-                                    } else { 
-                                        condition = column + " = ?";
-                                        values.add(value);
-                                    }
-                                } else {
-                                    if (value instanceof String) {
-                                        condition = "UPPER (" + column + ") = " + s;
-                                    } else {
-                                        condition = column + " = " + s;
-                                    }
-                                }
-                                conditions.append(condition);
-                            }
-                        }
-                    }
-                }
-            }
-
-            query += "SELECT DISTINCT " + columns + " FROM " + table;
-
-            DcObject objectClone = module.getItem();
-            if (objectClone  != null)
-                objectClone.copy(dco, true, true);
-
-            addAvailabilityCondition(objectClone == null ? dco : objectClone, conditions);
-
-            if (conditions.length() > 0)
-                query +=  "\r\n WHERE " + conditions;
-
-            if (ordering != null) {
-                for (int i = 0; i < ordering.length; i++) {
-                    if (i == 0)
-                        query += " ORDER BY ";
-                    else
-                        query += ", ";
-
-                    query += ordering[i];
-                }
-            } else if (dco.hasPrimaryKey()) {
-                query += " ORDER BY " + dco.getField(DcObject._ID).getDatabaseFieldName();
-            }
-
-            PreparedStatement ps = getPreparedStatement(query);
-            setValues(ps, values);
-
-            queries.add(ps);
+        } catch (Exception e) {
+            logger.error("Could not save [" + imageFile + "]", e);
         }
-
-        return queries;
     }
-    
-    private boolean isInteger(DcField field) {
-        return  field.getValueType() == DcRepository.ValueTypes._LONG ||
-                field.getValueType() == DcRepository.ValueTypes._BIGINTEGER || 
-                field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
-                field.getValueType() == DcRepository.ValueTypes._DCPARENTREFERENCE;
-    }
-    
-    public void unload() {
-        if (requests != null) {
-        	for (IRequest request : requests.get())
-        		request.end();
-            requests.clear();
-        }
-        
-        if (queries != null)
-            queries.clear();
-        
-        requests = null;
-        queries = null;
-        objectID = null;
-        ordering = null;
-    }
-    
-    public int getModule() {
-        return module;
-    }
-
-    public String[] getOrdering() {
-        return ordering;
-    }
-
-    /**
-     * Indicates that the query is part of a batch and if it is at the end.
-     * @param endOfBatch
-     */
-    public void setBatch(boolean endOfBatch) {
-        this.isBatch = true;
-        this.endOfBatch = endOfBatch;
-    }
-
-    /**
-     * Indicates if the query is part of a batch
-     */
-    public boolean isBatch() {
-        return isBatch;
-    }
-
-    /**
-     * Indicates if the query is at the end of a batch
-     */
-    public boolean isEndOfBatch() {
-        return isBatch() && endOfBatch;
-    }
-
-    public Long getObjectID() {
-        return objectID;
-    }
-
-    /**
-     * The query type.
-     */
-    public int getType() {
-        return queryType;
-    }
-
-    /**
-     * Indicates if information should be communicated to the user.
-     */
-    public boolean getSilence() {
-        return bSilence;
-    }
-
-    /**
-     * Indicates if information should be communicated to the user.
-     */
-    public void setSilence(boolean silence) {
-        this.bSilence = silence;
-    }
-
-    /**
-     * Gets the requests waiting to be executed.
-     */
-    public Requests getRequests() {
-        return requests;
-    }
-    
-    private String getEmptyCondition(String column, DcField field) {
-        String emptyCondition;
-        if (isInteger(field)) 
-            emptyCondition = "(" + column + " = 0 OR " + column + " IS NULL) ";
-        else
-            emptyCondition = "(" + column + " IS NULL OR " + column + " = '') ";
-
-        return emptyCondition;
-    } 
-    
-    private void addAvailabilityCondition(DcObject dco, StringBuffer conditions) {
-        if (dco.getModule().canBeLend()) {
-            ContactPerson loanedBy = (ContactPerson) dco.getValue(DcObject._SYS_LENDBY);
-            Integer duration = (Integer) dco.getValue(DcObject._SYS_LOANDURATION);
-            String s = (String) dco.getValue(DcObject._SYS_AVAILABLE);
-
-            if (s != null || loanedBy != null || duration != null) {
-                boolean available = s == null || duration != null ? false : Boolean.valueOf(s);
-                loanedBy = available ? null : loanedBy;
-
-                if (conditions.length() > 0)
-                    conditions.append(" AND");
-
-                boolean hasChildren = dco.getChildren().size() > 0;
-                String column = hasChildren ? " " + dco.getTableShortName() + ".ID" : " ID";
-                String tablename = hasChildren ? dco.getTableShortName() : dco.getTableName();
-
-                String current = formatter.format(new Date());
-                String daysCondition = duration != null ? " AND DATEDIFF('dd', startDate , '" + current + "') >= " + duration.intValue() : "";
-                String personCondition = loanedBy != null ? " AND PersonID = " + loanedBy.getID() : "";
-
-                if (available)
-                    conditions.append(column + " NOT in (select objectID from Loans where objectID = " +
-                                      tablename + ".ID AND enddate IS NULL AND startDate <= '" + current +  "')");
-                else
-                    conditions.append(column + " in (select objectID from Loans where objectID = " +
-                                      tablename + ".ID " + daysCondition + " AND enddate IS NULL AND startDate <= '" + current +  "'" +
-                                      personCondition + ")");
-            }
-        }
-    }   
-    
-    @Override
-    public String toString() {
-        String sql = "";
-        
-        for (PreparedStatement ps : queries) {
-            sql += (sql.length() > 0 ? "\r\n" : "");
-            sql += ps.toString();
-        }
-        return sql;
-    }
-}
+ }

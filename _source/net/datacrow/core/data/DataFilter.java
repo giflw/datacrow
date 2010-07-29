@@ -85,10 +85,6 @@ public class DataFilter {
     public DataFilter(int module) {
         this.module = module;
     }    
-    
-    public int getSortOrder() {
-        return sortOrder;
-    }
 
     /**
      * Creates a filter using the supplied entries.
@@ -99,7 +95,11 @@ public class DataFilter {
         this(module);
         this.entries = entries;
     }    
-    
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
     /**
      * Sets the order. Results retrieved will be sorted based on this order.
      * @param s Array of field names (column names).
@@ -256,7 +256,7 @@ public class DataFilter {
                                                     DcObject._ID, 
                                                     Operator.EQUAL_TO, 
                                                     sValue));
-                    List<DcObject> items = DataManager.get(field.getReferenceIdx(), df);
+                    List<DcObject> items = DataManager.get(df);
                     value = items != null && items.size() == 1 ? items.get(0) : sValue;
                 } else if (valueType == DcRepository.ValueTypes._LONG) {
                     value = Long.valueOf(sValue);
@@ -336,10 +336,10 @@ public class DataFilter {
     }
     
     @SuppressWarnings("unchecked")
-    public String toSQL(int[] selectFields) {
+    public String toSQL(int[] fields) {
         String columns = "";
-        if (selectFields != null && selectFields.length > 0) {
-            for (int field : selectFields) {
+        if (fields != null && fields.length > 0) {
+            for (int field : fields) {
                 if (columns.length() > 0) columns += ", ";
                 columns += DcModules.get(module).getField(field).getDatabaseFieldName();
             }
@@ -347,7 +347,7 @@ public class DataFilter {
             columns = "*";
         }
         
-        StringBuffer sql = new StringBuffer("SELECT " + columns + " FROM " + DcModules.get(module).getTableName() + " " +  DcModules.get(module).getTableShortName());
+        StringBuffer sql = new StringBuffer("SELECT " + columns + " FROM " + DcModules.get(module).getTableName());
         
         DcModule module;
         DcField field;
@@ -360,7 +360,7 @@ public class DataFilter {
             module = DcModules.get(entry.getModule());
             field = module.getField(entry.getField());
             operator = entry.getOperator().getIndex();
-            value = Utilities.getQueryValue(entry.getValue(), field);
+            value = entry.getValue() != null ? Utilities.getQueryValue(entry.getValue(), field) : null;
             
             if (value != null) {
                 queryValue = String.valueOf(value);
@@ -375,7 +375,9 @@ public class DataFilter {
             if (counter == 0) sql.append(" WHERE ");
             
             if (field.getValueType() == DcRepository.ValueTypes._STRING)
-                sql.append("UPPER(" + module.getTableShortName() + "." + field.getDatabaseFieldName() + ")");
+                sql.append("UPPER(" + field.getDatabaseFieldName() + ")");
+            else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
+                sql.append("ID");
             else
                 sql.append(field.getDatabaseFieldName());
             
@@ -391,14 +393,13 @@ public class DataFilter {
 
                     DcModule mapping = DcModules.get(DcModules.getMappingModIdx(getModule(), field.getReferenceIdx(), field.getIndex()));
 
-                    
                     sql.append(" IN (");
                     sql.append("SELECT ");
-                    sql.append(mapping.getField(DcMapping._A_PARENT_ID));
+                    sql.append(mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName());
                     sql.append(" FROM ");
                     sql.append(mapping.getTableName());
                     sql.append(" WHERE ");
-                    sql.append(mapping.getField(DcMapping._B_REFERENCED_ID));
+                    sql.append(mapping.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
                     sql.append(" IN (");
                     
                     counter2 = 0;
@@ -449,8 +450,56 @@ public class DataFilter {
             }
             counter++;
         }
+        
+        counter = 0; 
+        
+        module = DcModules.get(getModule());
+        field = module.getField(module.getDefaultSortFieldIdx());
+        if (order != null && order.length > 0) {
+            for (DcField orderOn : order) {
+                sql.append(counter == 0 ? " ORDER BY " : ",");
+                sql.append(orderOn.getDatabaseFieldName());
+                counter++;
+            }
+        } else if (field != null && !field.isUiOnly()) {
+            sql.append(" ORDER BY ");
+            sql.append(module.getField(module.getDefaultSortFieldIdx()).getDatabaseFieldName());
+        }
+        
         return sql.toString();
     }
+    
+//    private void addAvailabilityCondition(DcObject dco, StringBuffer conditions) {
+//        if (dco.getModule().canBeLend()) {
+//            ContactPerson loanedBy = (ContactPerson) dco.getValue(DcObject._SYS_LENDBY);
+//            Integer duration = (Integer) dco.getValue(DcObject._SYS_LOANDURATION);
+//            String s = (String) dco.getValue(DcObject._SYS_AVAILABLE);
+//
+//            if (s != null || loanedBy != null || duration != null) {
+//                boolean available = s == null || duration != null ? false : Boolean.valueOf(s);
+//                loanedBy = available ? null : loanedBy;
+//
+//                if (conditions.length() > 0)
+//                    conditions.append(" AND");
+//
+//                boolean hasChildren = dco.getChildren().size() > 0;
+//                String column = hasChildren ? " " + dco.getTableShortName() + ".ID" : " ID";
+//                String tablename = hasChildren ? dco.getTableShortName() : dco.getTableName();
+//
+//                String current = formatter.format(new Date());
+//                String daysCondition = duration != null ? " AND DATEDIFF('dd', startDate , '" + current + "') >= " + duration.intValue() : "";
+//                String personCondition = loanedBy != null ? " AND PersonID = " + loanedBy.getID() : "";
+//
+//                if (available)
+//                    conditions.append(column + " NOT in (select objectID from Loans where objectID = " +
+//                                      tablename + ".ID AND enddate IS NULL AND startDate <= '" + current +  "')");
+//                else
+//                    conditions.append(column + " in (select objectID from Loans where objectID = " +
+//                                      tablename + ".ID " + daysCondition + " AND enddate IS NULL AND startDate <= '" + current +  "'" +
+//                                      personCondition + ")");
+//            }
+//        }
+//    }   
 
     @Override
     public int hashCode() {

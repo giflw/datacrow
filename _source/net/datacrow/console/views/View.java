@@ -58,6 +58,8 @@ import net.datacrow.console.views.tasks.SaveTask;
 import net.datacrow.console.windows.UpdateAllDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcObject;
@@ -255,20 +257,8 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void sort() {
-        // TODO: re-implement sort
-//        int rowCount = getItemCount();
-//        ArrayList<DcObject> objects = new ArrayList<DcObject>();
-//        for (int i = 0; i < rowCount; i++)
-//            objects.add(getItemAt(i));
-//        
-//        DataFilter def = DataFilters.getCurrent(vc.getModule().getIndex());
-//        
-//        DataFilter df = new DataFilter(vc.getModule().getIndex());
-//        df.setSortOrder(def.getSortOrder());
-//        df.setOrder(vc.getModule().getSettings().getStringArray(DcRepository.ModuleSettings.stSearchOrder));
-//        df.sort(objects);
-//
-//        add(objects);
+        DataFilter df = DataFilters.getCurrent(vc.getModule().getIndex());
+        add(DataManager.getKeys(df));
     }
     
     public void openUpdateAllDialog() {
@@ -367,8 +357,6 @@ public class View extends DcPanel implements ListSelectionListener {
     public void setVisible(boolean b) {
     	if (b && groupingPane != null && vdGroupingPane != null) {
 			vdGroupingPane.setLeftComponent(groupingPane);
-//			if (vc.getItemCount() == 0)
-//			    groupingPane.groupBy(); // TODO: test
     	}
     	super.setVisible(b);
     }

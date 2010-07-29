@@ -343,7 +343,6 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                         updateProgressBar(counter);
                         
                         dco.markAsUnchanged();
-                        dco.setSilent(true);
                         
                         if (counter == objects.length) {
                             Requests requests = getAfterDeleteRequests();
@@ -351,14 +350,11 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                                 dco.addRequest(requests.get()[j]);
                             }
                             
-                            dco.setEndOfBatch(true);
                             IRequest request = 
                                 new StatusUpdateRequest(dco.getModule().getIndex(), MainFrame._SEARCHTAB, "msgDeleteSuccessfull");
                             request.setExecuteOnFail(true);
                             dco.addRequest(request);
-                        } else {
-                            dco.setEndOfBatch(false);
-                        }
+                        } 
 
                         try {
                             dco.delete(true);

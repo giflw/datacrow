@@ -354,7 +354,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
             DataFilter df = getDataFilter(); 
             DataFilters.setCurrent(module.getIndex(), df);
             
-            List<DcObject> result = DataManager.get(module.getIndex(), df);
+            List<DcObject> result = DataManager.get(df);
             parent.setStatus(DcResources.getText("msgSearchHasBeenExecuted"));
 
             if (result.size() == 0)

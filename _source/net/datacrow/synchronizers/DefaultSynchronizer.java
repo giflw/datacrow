@@ -177,7 +177,6 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                     
                     try {
                         if (updated) {
-                            dco.setSilent(true);
                             dco.saveUpdate(true);
                             
                             while (DatabaseManager.getQueueSize() > 0) {

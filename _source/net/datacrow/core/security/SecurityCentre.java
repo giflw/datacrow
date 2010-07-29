@@ -26,7 +26,6 @@
 package net.datacrow.core.security;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.datacrow.core.db.CreateQuery;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
@@ -134,7 +133,7 @@ public class SecurityCentre {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             
-            List<DcObject> users = new WorkFlow().convert(rs);
+            List<DcObject> users = WorkFlow.getInstance().convert(rs, true);
 
             User user;
             if (users.size() == 1) {
@@ -142,7 +141,7 @@ public class SecurityCentre {
                 sql = "select * from permission where user = " + user.getID();
                 rs = stmt.executeQuery(sql);
 
-                List<DcObject> permissions = new WorkFlow().convert(rs);
+                List<DcObject> permissions = WorkFlow.getInstance().convert(rs, true);
                 for (DcObject permission : permissions)
                     user.addChild(permission);
                 
@@ -295,21 +294,15 @@ public class SecurityCentre {
     
     private void createTables() {
         try {
-            Query query = new Query(Query._CREATE, DcModules.get(DcModules._USER).getItem(), null, null);
-            for (PreparedStatement ps : query.getQueries()) 
-                ps.execute();
+            new CreateQuery(DcModules._USER).run();
         } catch (Exception se) {}
 
         try {
-            Query query = new Query(Query._CREATE, DcModules.get(DcModules._PICTURE).getItem(), null, null);
-            for (PreparedStatement ps : query.getQueries()) 
-                ps.execute();
+            new CreateQuery(DcModules._PICTURE).run();
         } catch (SQLException se) {}
 
         try {
-            Query query = new Query(Query._CREATE, DcModules.get(DcModules._PERMISSION).getItem(), null, null);
-            for (PreparedStatement ps : query.getQueries()) 
-                ps.execute();
+            new CreateQuery(DcModules._PERMISSION).run();
         } catch (SQLException se) {}
     }
 }

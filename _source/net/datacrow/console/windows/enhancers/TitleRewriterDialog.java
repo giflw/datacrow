@@ -291,7 +291,7 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
                 ResultSet rs = DatabaseManager.executeSQL(
                         "SELECT COUNT(ID) AS TOTAL FROM " + module.getTableName() +
                         " WHERE " + field.getDatabaseFieldName() + " IS NOT NULL AND " + 
-                        field.getDatabaseFieldName() + " != ''", false);
+                        field.getDatabaseFieldName() + " != ''");
                 
                 int total = 0;
                 while (rs.next()) {
@@ -303,7 +303,7 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
                 rs = DatabaseManager.executeSQL(
                         "SELECT ID, " + field.getDatabaseFieldName() + " FROM " + module.getTableName() + 
                         " WHERE " + field.getDatabaseFieldName() + " IS NOT NULL AND " + 
-                        field.getDatabaseFieldName() + " != ''", false);
+                        field.getDatabaseFieldName() + " != ''");
                 
                 while (rs.next() &&  !canceled) {
                     Long ID = rs.getLong("ID");
@@ -311,9 +311,9 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
                     String newTitle = (String) rewriter.apply(field, title);
                     
                     if (!title.equals(newTitle)) {
-                        DatabaseManager.retrieveItems(
+                        DatabaseManager.executeSQL(
                                 "UPDATE " + module.getTableName() + " SET " + field.getDatabaseFieldName() + 
-                                " = '" + newTitle + "' WHERE ID = " + ID, Query._UPDATE);
+                                " = '" + newTitle + "' WHERE ID = " + ID);
                         
                         DcObject dco = DataManager.getItem(module.getIndex(), ID);
                         dco.setValue(field.getIndex(), newTitle);

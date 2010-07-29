@@ -85,16 +85,8 @@ public class User extends DcObject {
     public void delete(boolean validate) throws ValidationException {
         boolean canBeDeleted = true;
         
-        if (isAdmin()) {
-            DataFilter df = new DataFilter(DcModules._USER);
-            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
-                                            DcModules._USER, 
-                                            User._L_ADMIN, 
-                                            Operator.EQUAL_TO, 
-                                            Boolean.TRUE));
-         
-            canBeDeleted = DataManager.get(DcModules._USER, df).size() > 1;
-        }
+        if (isAdmin())
+            canBeDeleted = DataManager.getCount(DcModules._USER, User._L_ADMIN, Boolean.TRUE) > 1;
                 
         if (canBeDeleted) {
             addRequest(new DeleteUserRequest(this));

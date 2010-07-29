@@ -25,59 +25,82 @@
 
 package net.datacrow.core.db;
 
-import java.util.LinkedList;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.wf.WorkFlow;
+import net.datacrow.core.wf.requests.Requests;
 
 import org.apache.log4j.Logger;
 
-/**
- * Queries are queued here awaiting to be executed. The query queue manages the 
- * back log of queries and executes the requests tied to the queries. The queue
- * is based on the FIFO principle.
- * 
- * @author Robert Jan van der Waals
- */
-public class QueryQueue extends Thread {
-
-    private static Logger logger = Logger.getLogger(QueryQueue.class.getName());
-
-    private final LinkedList<Query> lQueryQueue = new LinkedList<Query>();
-    private boolean isLazy = true;
+public class SelectQuery extends Query {
     
-    public QueryQueue() {}
-
+    private final static Logger logger = Logger.getLogger(SelectQuery.class.getName());
+    
+    private int[] fields;
+    private DataFilter df;
+    
     /**
-     * Indicates the back log.
+     * Constructs a new Query object from a data filter.
      */
-    public int getQueueSize() {
-    	return lQueryQueue.size();
+    public SelectQuery(DcObject dco, int[] fields) {
+        super(dco.getModule().getIndex(), dco.getRequests());
+        this.fields = fields;
+        this.df = new DataFilter(dco);
     }
     
     /**
-     * Add a query to the end of the queue. 
-     * @param query
+     * Constructs a new Query object from a data filter.
      */
-    public void addQuery(Query query) {
-        lQueryQueue.addLast(query);
+    public SelectQuery(DataFilter df, Requests requests, int[] fields) {
+        super(df.getModule(), requests);
+        this.fields = fields;
+        this.df = df;
     }
 
     @Override
-    public void run() {
-        synchronized(this) {
-            while (true) {
-                try {
-                    if (lQueryQueue.size() > 0 && isLazy) {
-                        isLazy = false;
-                        Query query = lQueryQueue.removeFirst();
-                        query.run();
-                        query.clear();
-                    } else {
-                        isLazy = true;
-                        sleep(1000);
-                    }
-                } catch (Exception e) {
-                    logger.error(e, e);
-                }
-            }
+    public List<DcObject> run()  {
+        boolean success = false;
+        
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        List<DcObject> items = null;
+        try {
+            conn = DatabaseManager.getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(df.toSQL(fields));
+            
+            items = WorkFlow.getInstance().convert(rs, fields != null);
+            
+            success = true;
+            
+        } catch (SQLException e) {
+            logger.error("Error while executing query", e);
         }
+
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            logger.error("Error while closing connection", e);
+        }
+        
+        handleRequest(items, success);
+        clear();
+        
+        return items;
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        fields = null;
     }
 }

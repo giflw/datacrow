@@ -68,11 +68,7 @@ public class SaveTask extends DataTask {
                 if (!keepOnRunning()) break;
                 
                 try {
-                    dco.setEndOfBatch(counter == objects.length);
-                    dco.setSilent(true);
-
-                    if (dco.isEndOfBatch()) {
-                        dco.setSilent(false);
+                    if (counter == objects.length) {
                         dco.addRequest(new StatusUpdateRequest(dco.getModule().getIndex(), 
                                        view.getType() == View._TYPE_SEARCH ? MainFrame._SEARCHTAB : MainFrame._INSERTTAB, "msgDataSaved"));
                     }

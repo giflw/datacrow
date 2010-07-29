@@ -68,6 +68,12 @@ public class GroupingPane extends JPanel {
         return view;
     }
     
+    public void clear() {
+        for (TreePanel tp : panels) {
+            tp.clear();
+        }
+    }
+    
     public void load() {
         for (TreePanel tp : panels) {
             tp.clear();

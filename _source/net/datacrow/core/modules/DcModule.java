@@ -53,7 +53,6 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.db.Query;
 import net.datacrow.core.migration.itemimport.CsvImporter;
 import net.datacrow.core.migration.itemimport.ItemImporterHelper;
 import net.datacrow.core.modules.xml.XmlField;
@@ -1487,9 +1486,9 @@ public class DcModule implements Comparable<DcModule> {
         if (this instanceof DcPropertyModule && getXmlModule() != null && !getXmlModule().isServingMultipleModules()) {
             // We are (or might be) working on a property base module with a calculated tablename
             DcModule module = DcModules.get(getName()); 
-            DatabaseManager.retrieveItems("DROP TABLE " + module.getTableName(), Query._DELETE);
+            DatabaseManager.executeSQL("DROP TABLE " + module.getTableName());
         } else {
-            DatabaseManager.retrieveItems("DROP TABLE " + getTableName(), Query._DELETE);
+            DatabaseManager.executeSQL("DROP TABLE " + getTableName());
             if (getTemplateModule() != null)
                 getTemplateModule().delete();
         }

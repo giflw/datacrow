@@ -54,6 +54,18 @@ public class WorkFlow {
 
     private static Logger logger = Logger.getLogger(WorkFlow.class.getName());
     
+    private static WorkFlow instanze;
+
+    static {
+        instanze = new WorkFlow();
+    }
+    
+    private WorkFlow() {}
+    
+    public static WorkFlow getInstance() {
+        return instanze;
+    }
+    
     /**
      * Saves the item to the database.
      * @param o
@@ -121,18 +133,6 @@ public class WorkFlow {
                         
                 item.setValue(fields[i], value);
             }
-
-            if (DatabaseManager.initialized) {
-                if (fields.length > 1) {
-                    if (item.getModule().canBeLend())
-                        item.setLoanInformation();
-        
-                    if (item.getModule().getIndex() != DcModules._PICTURE)
-                        item.initializeImages();
-        
-                    item.initializeReferences();
-                }
-            }
             
             item.setValue(Media._SYS_MODULE, item.getModule().getObjectName());
 
@@ -146,7 +146,7 @@ public class WorkFlow {
      * @param rs An unclosed SQL result set.
      * @return Collection of items.
      */
-    public List<DcObject> convert(ResultSet rs) {
+    public List<DcObject> convert(ResultSet rs, boolean minimal) {
         List<DcObject> objects = new ArrayList<DcObject>();
 
         try {
@@ -167,10 +167,24 @@ public class WorkFlow {
             while (rs.next()) {
                 dco = module.getItem();
                 setValues(rs, dco, fields);
+
+                if (DatabaseManager.initialized && !minimal) {
+                    if (fields.length > 1) {
+                        if (dco.getModule().canBeLend())
+                            dco.setLoanInformation();
+            
+                        if (dco.getModule().getIndex() != DcModules._PICTURE)
+                            dco.initializeImages();
+
+                        dco.initializeReferences();
+                    }
+                }
+                
                 dco.markAsUnchanged();
                 objects.add(dco);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("An error occurred while converting result set to items", e);
         }
         

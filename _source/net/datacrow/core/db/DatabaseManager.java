@@ -27,12 +27,10 @@ package net.datacrow.core.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -48,9 +46,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.security.SecuredUser;
 import net.datacrow.core.security.SecurityCentre;
-import net.datacrow.core.wf.WorkFlow;
-import net.datacrow.core.wf.requests.IRequest;
-import net.datacrow.core.wf.requests.Requests;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.DcSwingUtilities;
@@ -238,121 +233,77 @@ public class DatabaseManager {
         return null;
     }
     
-    /**
-     * Executes a query.
-     * @param sql The SQL statement.
-     * @param type The query type ({@link Query}).
-     * @param log Indicates if information on the query should be logged.
-     * @return The retrieved items or null when an error occurs.
-     */
-    public static List<DcObject> retrieveItems(String sql, int type) {
-        try {
-            Connection conn = DatabaseManager.getConnection();
-            
-            return retrieveItems(conn.prepareStatement(sql), type);
-        } catch (SQLException e) {
-            logger.error("There were errors for query " + sql, e);
-        }
-        return null;
-    }     
     
-    /**
-     * Executes a query.  
-     * @param query.
-     * @return The retrieved items or null when an error occurs.
-     */
-    public static List<DcObject> retrieveItems(Query query) {
-        List<DcObject> data = new ArrayList<DcObject>();
-        for (PreparedStatement ps : query.getQueries()) {
-            Collection<DcObject> c = retrieveItems(ps, query.getType());
-            if (c != null) data.addAll(c);
-        }
-        
-        Requests rc = query.getRequests();
-        if (rc != null) {
-            IRequest[] requests = rc.get();
-            for (int i = 0; i < requests.length; i++) {
-                requests[i].execute(data);
-            }
-        }
-        
-        return data;
-    }       
     
-    /**
-     * Executes a query. The query is created based on the supplied item. 
-     * @param dco
-     * @param log Indicates if information on the query should be logged.
-     * @return The retrieved items or null when an error occurs.
-     */
-    public static List<DcObject> retrieveItems(DcObject dco) throws SQLException {
-        Query query = new Query(Query._SELECT, dco, null, null);
-        return retrieveItems(query.getQuery(), Query._SELECT);
-    }
+//    /**
+//     * Executes a query.
+//     * @param sql The SQL statement.
+//     * @param type The query type ({@link Query}).
+//     * @param log Indicates if information on the query should be logged.
+//     * @return The retrieved items or null when an error occurs.
+//     */
+//    public static void runSQL(String sql) {
+//        try {
+//            Connection conn = DatabaseManager.getConnection();
+//            conn.createStatement().execute(sql);
+//            conn.close();
+//        } catch (SQLException e) {
+//            logger.error("There were errors for query " + sql, e);
+//        }
+//    }     
     
-    /**
-     * Executes a query. 
-     * @param ps The prepared SQL statement.
-     * @param type The query type ({@link Query}.
-     * @param log Indicates if information on the query should be logged.
-     * @return The retrieved items or null when an error occurs.
-     */
-    public static List<DcObject> retrieveItems(PreparedStatement ps, int type) {
-        List<DcObject> data = null;
-        
-        try {
-            if (    type != Query._SELECT && type != Query._SELECTOR && 
-                    type != Query._SELECTPRECISE && type != Query._SELECTPRECISEOR &&
-                    type != Query._UNDEFINED) {
-                
-                ps.execute();
-            } else {
-                ResultSet result = ps.executeQuery();
-                data = new WorkFlow().convert(result);
-                result.close();
-            }
-        } catch (SQLException e) {
-            if (!e.getMessage().equals("No ResultSet was produced"))
-                logger.error("Error while executing query " + ps, e);
-        }
-        
-        try {
-            ps.close();
-        } catch (SQLException e) {
-            logger.error(e, e);
-        }
-
-        return data;
-    }    
+//    /**
+//     * Executes a query. 
+//     * @param ps The prepared SQL statement.
+//     * @param type The query type ({@link Query}.
+//     * @param log Indicates if information on the query should be logged.
+//     * @return The retrieved items or null when an error occurs.
+//     * 
+//     * @deprecated
+//     */
+//    public static List<DcObject> retrieveItems(PreparedStatement ps, int type) {
+//        List<DcObject> data = null;
+//        
+//        try {
+//            if (    type != Query._SELECT && type != Query._SELECTOR && 
+//                    type != Query._SELECTPRECISE && type != Query._SELECTPRECISEOR &&
+//                    type != Query._UNDEFINED) {
+//                
+//                ps.execute();
+//            } else {
+//                ResultSet result = ps.executeQuery();
+//                data = WorkFlow.getInstance().convert(result, null);
+//                result.close();
+//            }
+//        } catch (SQLException e) {
+//            if (!e.getMessage().equals("No ResultSet was produced"))
+//                logger.error("Error while executing query " + ps, e);
+//        }
+//        
+//        try {
+//            ps.close();
+//        } catch (SQLException e) {
+//            logger.error(e, e);
+//        }
+//
+//        return data;
+//    }    
     
-    public static List<Long> getKeys(int modIdx, DataFilter filter) {
+    public static List<Long> getKeys(DataFilter filter) {
         List<Long> data = new ArrayList<Long>();
-        
-        if (filter == null)
-            filter = new DataFilter(modIdx);
-        
-        PreparedStatement ps = null;
+
         try {
-            Query query = new Query(filter, null, new int[] {DcObject._ID});
-            ps = query.getQuery();
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                data.add(result.getLong(1));
-            }
-            result.close();
+            ResultSet rs = DatabaseManager.executeSQL(filter.toSQL(new int[] {DcObject._ID}));
+            
+            while (rs.next())
+                data.add(rs.getLong(1));
+            
+            rs.close();
         } catch (SQLException e) {
             if (!e.getMessage().equals("No ResultSet was produced"))
-                logger.error("Error while executing query " + ps, e);
+                logger.error("Error while executing query", e);
         }
-        
-        try {
-            if (ps != null) ps.close();
-        } catch (SQLException e) {
-            logger.error(e, e);
-        }
-
         return data;
-        
     }
 
     /**
@@ -361,8 +312,7 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
-    public static ResultSet executeSQL(String sql, boolean log) throws Exception {
-        if (log) logger.info(sql);
+    public static ResultSet executeSQL(String sql) throws SQLException {
         Connection connection = getConnection();
         Statement stmt = connection.createStatement();
         return stmt.executeQuery(sql);
@@ -373,53 +323,8 @@ public class DatabaseManager {
      * @param dco
      */
     public static void update(DcObject dco) {
-        try {
-            boolean isChanged = dco.isChanged();
-            if (isChanged) {
-                Query query = new Query( Query._UPDATE, dco, null, dco.getRequests());
-                query.setSilence(dco.isSilent());
-                db.addQuery(query);
-            }
-    
-            // save children. do not save children when dealing with an abstract module as
-            // this: 1. not needed and 2. causes unwanted side-effects (container > audio cd > audio track)
-            Collection<DcObject> children = new ArrayList<DcObject>();
-            Collection<DcObject> c = dco.getCurrentChildren();
-            if (!dco.getModule().isAbstract())
-                children.addAll(c);
-            
-            int counter = 1;
-            for (DcObject child : children) {
-                if (child.isChanged()) {
-                    
-                    boolean exists = false;
-                    if (child.getID() != null) {
-                        DcObject childTest = child.getModule().getItem();
-                        childTest.setValue(DcObject._ID, child.getID());
-                        Collection<DcObject> objects = retrieveItems(childTest);
-                        exists = objects.size() > 0;
-                        for (DcObject tmp : objects)
-                            tmp.release();
-                    }
-    
-                    Query query;
-                    if (!exists) {
-                        query = new Query(Query._INSERT, child, null, child.getRequests());
-                    } else {
-                        query = new Query(Query._UPDATE, child, null, child.getRequests());
-                    }
-
-                    if (!isChanged)
-                        query.setSilence(counter != children.size());
-                    else
-                        query.setSilence(true);
-                    
-                    db.addQuery(query);
-                }
-            }
-        } catch (SQLException e) {
-            logger.error(e, e);
-        }            
+        if (dco.isChanged()) 
+            db.queue(new UpdateQuery(dco));
     }
 
     /**
@@ -428,22 +333,8 @@ public class DatabaseManager {
      */
     public static void insert(DcObject dco) {
         try {
-            dco.setIDs();
-    
-            Query query = new Query(Query._INSERT, dco, null, dco.getRequests());
-            query.setSilence(dco.isSilent());
-            db.addQuery(query);
-    
-            Collection<DcObject> children = dco.getChildren();
-            
-            if (children != null) {
-                for (DcObject child : children) {
-                    child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
-                    query = new Query(Query._INSERT, child, null, child.getRequests());
-                    query.setSilence(true);
-                    db.addQuery(query);
-                }
-            }
+            Query query = new InsertQuery(dco);
+            db.queue(query);
         } catch (SQLException e) {
             logger.error(e, e);
         }            
@@ -451,9 +342,7 @@ public class DatabaseManager {
 
     public static  void delete(DcObject dco) {
         try {
-            Query query = new Query(Query._DELETE, dco, null, dco.getRequests());
-            query.setSilence(dco.isSilent());
-            db.addQuery(query);
+            db.queue(new DeleteQuery(dco));
         } catch (SQLException e) {
             logger.error(e, e);
         }
@@ -478,7 +367,7 @@ public class DatabaseManager {
                 
             if (hasUniqueFields) {
                 DataFilter df = new DataFilter(dco);
-                List<DcObject> items = DataManager.get(o.getModule().getIndex(), df);
+                List<DcObject> items = DataManager.get(df);
                 
                 int count = 0;
                 for (DcObject item : items)

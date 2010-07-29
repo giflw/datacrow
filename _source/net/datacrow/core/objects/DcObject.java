@@ -41,8 +41,10 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.db.InsertQuery;
 import net.datacrow.core.db.Query;
 import net.datacrow.core.db.QueryQueue;
+import net.datacrow.core.db.UpdateQuery;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.helpers.ExternalReference;
@@ -95,9 +97,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     protected Collection<DcObject> children = new ArrayList<DcObject>();
 
     private boolean validate = true;
-    private boolean silent = false;
-    private boolean partOfBatch = false;
-    private boolean endOfBatch = false;
     
     public static final int _ID = 0;
     
@@ -164,7 +163,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         try {
             String sql = "SELECT * FROM " + getTableName() + " WHERE ID = " + getID();
             clearValues();
-            ResultSet rs = DatabaseManager.executeSQL(sql, false);
+            ResultSet rs = DatabaseManager.executeSQL(sql);
             
             while (rs.next()) {
                 WorkFlow.setValues(rs, this, getFieldIndices());
@@ -368,7 +367,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 setValueLowLevel(field.getIndex(), null);
         }
         
-        for (Picture picture : DataManager.getPictures(getID())) {
+        for (DcObject picture : DataManager.getPictures(getID())) {
             picture.setValue(Picture._D_IMAGE, null);
             picture.markAsUnchanged();
             setValueForColumn((String) picture.getValue(Picture._B_FIELD), picture);
@@ -410,36 +409,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     /**
-     * Indicates this item is the last in line of a batch operation (save/update/delete).
-     * @param b
-     */
-    public void setEndOfBatch(boolean b) {
-    	endOfBatch = b;
-    }
-
-    /**
-     * Indicates if this item is used in a batch process (save/update/delete).
-     * @param b
-     */
-    public void setPartOfBatch(boolean b) {
-    	partOfBatch = b;
-    }
-
-    /**
-     * Indicates if this item is used in a batch process (save/update/delete).
-     */
-    public boolean isPartOfBatch() {
-        return partOfBatch;
-    }
-
-    /**
-     * Indicates this item is the last in line of a batch operation (save/update/delete).
-     */
-    public boolean isEndOfBatch() {
-    	return endOfBatch;
-    }
-
-    /**
      * Does this field contains a value?
      * @param index
      */
@@ -456,7 +425,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     public boolean isNew() {
-        return !DataManager.exists(this);
+        return DataManager.getCount(getModule().getIndex(), DcObject._ID, getID()) > 0;
     }
     
     /**
@@ -487,19 +456,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     public void addChild(DcObject child) {
-        child.setPartOfBatch(isPartOfBatch());
         child.setValue(child.getParentReferenceFieldIndex(), getID());
-
         this.children = children == null ? new ArrayList<DcObject>() : children;
-        
-        if (endOfBatch) {
-        	setEndOfBatch(false);
-        	for (DcObject dco : getChildren())
-        	    dco.setEndOfBatch(false);
-
-        	child.setEndOfBatch(true);
-        }
-
         children.add(child);
     }
 
@@ -1040,8 +998,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (queued) {
             	WorkFlow.insert(this);
             } else {
-                Query query = new Query(Query._INSERT, this, null, null);
-            	DatabaseManager.retrieveItems(query);
+                new InsertQuery(this).run();
             }
         } catch (ValidationException ve) {
             executeRequests(false);
@@ -1085,8 +1042,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (queued) {
             	WorkFlow.update(this);
             } else {
-                Query query = new Query(Query._UPDATE, this, null, null);
-                DatabaseManager.retrieveItems(query);
+                new UpdateQuery(this).run();
             }
         } catch (ValidationException exp) {
             executeRequests(false);
@@ -1108,26 +1064,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         Collection<DcObject> items = DataManager.getReferencingItems(this);
         if (items.size() > 0) 
             throw new ValidationException(DcResources.getText("msgCannotDeleteDueToReferences", items.toString()));
-    }
-
-    /**
-     * Indicates if messages should be displayed to the user.
-     * @param b
-     */
-    public void setSilent(boolean b) {
-        this.silent = b;
-        
-        if (getCurrentChildren() != null) {
-            for (DcObject child : getCurrentChildren())
-                child.setSilent(silent);
-        }
-    }
-
-    /**
-     * Allows messages to be displayed on screen after the execution of an operation. 
-     */
-    public boolean isSilent() {
-        return this.silent;
     }
 
     /**

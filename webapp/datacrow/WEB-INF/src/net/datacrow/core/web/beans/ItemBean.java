@@ -128,8 +128,6 @@ public abstract class ItemBean extends DcBean {
         }
         
         try {
-            dco.setSilent(true);
-            
             if (wo.isNew()) {
                 dco.setIDs();
                 dco.saveNew(false);

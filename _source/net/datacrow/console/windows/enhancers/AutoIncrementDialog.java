@@ -49,7 +49,6 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -309,7 +308,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
             }            
             
             try {
-                ResultSet rs = DatabaseManager.executeSQL("SELECT COUNT(ID) AS TOTAL FROM " + module.getTableName(), false);
+                ResultSet rs = DatabaseManager.executeSQL("SELECT COUNT(ID) AS TOTAL FROM " + module.getTableName());
                 int total = 0;
                 while (rs.next()) {
                     total = rs.getInt("TOTAL");
@@ -348,12 +347,12 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
 
             Collection<Integer> currentValues = new ArrayList<Integer>();
             try {
-                ResultSet rs = DatabaseManager.executeSQL(qryCurrent, false);
+                ResultSet rs = DatabaseManager.executeSQL(qryCurrent);
                 while (rs.next() && !canceled)
                     currentValues.add(rs.getInt(field.getDatabaseFieldName()));
 
                 rs.close();
-                rs = DatabaseManager.executeSQL(qry, false);
+                rs = DatabaseManager.executeSQL(qry);
                 
                 int counter = 0;
                 while (rs.next() && !canceled) {
@@ -387,7 +386,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
                                              " SET " + field.getDatabaseFieldName() + " = " + counter  + 
                                              " WHERE ID = " + ID;
                         
-                        DatabaseManager.retrieveItems(updateQuery, Query._UPDATE);
+                        DatabaseManager.executeSQL(updateQuery);
 
                         DcObject dco = DataManager.getItem(module.getIndex(), ID);
                         dco.setValue(field.getIndex(), Long.valueOf(counter));
@@ -410,7 +409,6 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
             }
         }
     }
-    
     
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("renumber"))

@@ -23,67 +23,63 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.itemforms;
+package net.datacrow.core.db;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcTemplate;
-import net.datacrow.core.objects.ValidationException;
-import net.datacrow.core.wf.requests.CloseWindowRequest;
-import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
-import net.datacrow.core.wf.requests.UpdateDefaultTemplate;
-import net.datacrow.util.DcSwingUtilities;
 
-public class TemplateItemForm extends ItemForm {
+import org.apache.log4j.Logger;
+
+public class CreateQuery extends Query {
+
+    private final static Logger logger = Logger.getLogger(CreateQuery.class.getName());
     
-    private DcMinimalisticItemView parent;
-    
-    public TemplateItemForm(boolean update, DcObject o, DcMinimalisticItemView parent) {
-        super(false, update, o, true);
-        this.parent = parent;
+    public CreateQuery(int module) throws SQLException {
+        super(module, null);
     }
-    
+
     @Override
-    protected void saveValues() {
-        apply();
+    public List<DcObject> run() {
+        Connection conn = null;
+        Statement stmt = null;
 
-        if (((DcTemplate) dco).isDefault())
-            dco.addRequest(new UpdateDefaultTemplate((String) dco.getValue(50), dco.getModule().getIndex()));
+        String columns = "";
+        for (DcField field : getModule().getFields()) {
+            if (!field.isUiOnly()) {
+                if (columns.length() > 0)
+                    columns += ", ";
 
-        dco.addRequest(new RefreshSimpleViewRequest(parent));
-        dco.addRequest(new CloseWindowRequest(this));
+                columns += field.getDatabaseFieldName() + " " + field.getDataBaseFieldType();
+                if (field.getIndex() == DcObject._ID) {
+                    columns += " PRIMARY KEY";
+                }
+            }
+        }
         
-        if (!update)  {
-            try {
-                dco.saveNew(true);
-            } catch (ValidationException vExp) {
-                DcSwingUtilities.displayWarningMessage(vExp.getMessage());
-            }
-        } else if (isChanged()) {
-            try {
-                dco.saveUpdate(true);
-            } catch (ValidationException vExp) {
-                DcSwingUtilities.displayWarningMessage(vExp.getMessage());
-            }
-        } else if (! isChanged()) {
-            DcSwingUtilities.displayWarningMessage("msgNoChangesToSave");
+        // TODO: do we really want to use memory tables??
+        String sql = "CREATE MEMORY TABLE " + getModule().getTableName() + "\r\n(" + columns + ");";
+        
+        try { 
+            conn = DatabaseManager.getAdminConnection();
+            stmt = conn.createStatement();
+            stmt.execute(sql);
+        } catch (SQLException se) {
+            logger.error(se, se);
         }
-    }  
-    
-    /**
-     * Deletes this item from the database
-     */
-    @Override
-    protected void deleteItem() {
-        if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-            Long id = dco.getID();
-            dco.clearValues();
-            dco.setValue(DcObject._ID, id);
+        
+        try {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            logger.error("Error while closing connection", e);
+        }
 
-            dco.addRequest(new CloseWindowRequest(this));
-            dco.addRequest(new RefreshSimpleViewRequest(parent));
-            try {
-                dco.delete(false);
-            } catch (ValidationException e) {}
-        }
+        clear();
+        return null;
     }
 }

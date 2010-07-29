@@ -145,7 +145,6 @@ public class ItemForm extends DcFrame implements ActionListener {
         this.readonly = readonly;
         this.update = update;
         this.dcoOrig = o;
-        this.dcoOrig.setPartOfBatch(false);
 
         if (!update && !readonly && o.getModule().isAbstract()) {
             ItemTypeDialog dialog = new ItemTypeDialog(DcResources.getText("lblSelectModuleHelp"));
@@ -399,10 +398,7 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     protected void deleteItem() {
         if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-
-            dco.setSilent(true);
             dco.addRequest(new CloseWindowRequest(this));
-            
             try {
                 dco.delete(true);
             } catch (ValidationException e) {
@@ -579,11 +575,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     
     protected void saveValues() {
         apply();
-        
         dco.addRequest(new CloseWindowRequest(this));
-        dco.setSilent(true);
-        dco.setPartOfBatch(false);
-        
         try {
             if (!update) {
                 dco.setIDs();

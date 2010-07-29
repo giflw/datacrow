@@ -44,7 +44,7 @@ import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.db.Query;
+import net.datacrow.core.db.SelectQuery;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcAssociate;
@@ -59,6 +59,7 @@ import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
+import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
@@ -75,14 +76,11 @@ public class DataManager {
         new HashMap<Integer, Collection<IComponent>>();
     
     /**
-     * Creates the data manager and loads all items.
-     */
-    public DataManager() {}
-    
-    /**
      * Dispatch the items to the specified view.
      * @param master View The view to be updated.
      * @param items The items to be shown in the view.
+     * 
+     * @deprecated
      */
     public static void bindData(final MasterView masterView, final List<Long> keys) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -97,9 +95,11 @@ public class DataManager {
      * @param master View The view to be updated.
      * @param module The module from which the items should be displayed.
      * @param df The data filter used to filter the items to be shown.
+     * 
+     * @deprecated
      */
     public static void bindData(MasterView masterView, int module, DataFilter df) {
-        bindData(masterView, getKeys(module, df));
+        bindData(masterView, getKeys(df));
     }    
     
     public static int getCount(int module, int field, Object value) {
@@ -133,8 +133,7 @@ public class DataManager {
         
         return count;
     }
-
-
+    
     /**
      * Update the specified cached item.
      * @param dco The item to update.
@@ -164,23 +163,23 @@ public class DataManager {
             updateView(dco, 1, module, MainFrame._INSERTTAB);
     }  
     
-    public static boolean exists(DcObject o) {
-        boolean exists = false;
-        
-        if (o.getModule().getIndex() == DcModules._PICTURE) {
-            Long objectID = (Long) o.getValue(Picture._A_OBJECTID);
-            if (objectID != null) {
-                Collection<Picture> pictures = getPictures(objectID);
-                exists = pictures.contains(o);
-            }
-        } else if (o.hasPrimaryKey()) {
-            exists = getItem(o.getModule().getIndex(), o.getID()) != null;
-        } else {
-            logger.error("Cannot determine whether the item exists, not a picture and no ID", new Exception());
-        }
-        
-        return exists;
-    }
+//    public static boolean exists(DcObject o) {
+//        boolean exists = false;
+//        
+//        if (o.getModule().getIndex() == DcModules._PICTURE) {
+//            Long objectID = (Long) o.getValue(Picture._A_OBJECTID);
+//            if (objectID != null) {
+//                Collection<DcObject> pictures = getPictures(objectID);
+//                exists = pictures.contains(o);
+//            }
+//        } else if (o.hasPrimaryKey()) {
+//            exists = getItem(o.getModule().getIndex(), o.getID()) != null;
+//        } else {
+//            logger.error("Cannot determine whether the item exists, not a picture and no ID", new Exception());
+//        }
+//        
+//        return exists;
+//    }
     
     /**
      * Remove the item from the cache.
@@ -199,9 +198,9 @@ public class DataManager {
      * @return The children or an empty collection.
      */
     public static List<DcObject> getChildren(Long parentId, int childIdx) {
-        DataFilter filter = new DataFilter(childIdx);
-        filter.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, DcModules.get(childIdx).getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentId));
-        return DatabaseManager.retrieveItems(filter.toSQL(null), Query._SELECT);
+        DataFilter df = new DataFilter(childIdx);
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, DcModules.get(childIdx).getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentId));
+        return new SelectQuery(df, null, null).run();
     }
     
     /**
@@ -316,7 +315,7 @@ public class DataManager {
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
         
-        Collection<DcObject> tabs = get(DcModules._TAB, df);
+        Collection<DcObject> tabs = get(df);
         if (tabs.size() == 0) {
             try {
                 Tab tab = (Tab) DcModules.get(DcModules._TAB).getItem();
@@ -349,14 +348,14 @@ public class DataManager {
         DataFilter df = new DataFilter(DcModules._TAB);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
-        List<DcObject> tabs = get(DcModules._TAB, df);
+        List<DcObject> tabs = get(df);
         return tabs != null && tabs.size() > 0 ? tabs.get(0) : null;
     }
     
     public static List<DcObject> getTabs(int module) {
         DataFilter df = new DataFilter(DcModules._TAB);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
-        return get(DcModules._TAB, df);
+        return get(df);
     }
     
     /**
@@ -401,15 +400,11 @@ public class DataManager {
     }
     
     /**
-     * Item count.
-     * @param module
+     * Existency check
      * @param df
-     * 
-     * TODO: rewrite
      */
-    public static int contains(int module, DataFilter df) {
-        List<DcObject> objects = get(module, df);
-        return objects != null ? objects.size() : 0;
+    public static boolean exists(DataFilter df) {
+        return getKeys(df).size() > 0;
     }
 
     /**
@@ -426,6 +421,8 @@ public class DataManager {
      * @param parentID The item ID for which the loan is retrieved.
      */
     public static Loan getCurrentLoan(Long parentID) {
+        
+        // TODO: implement
 //        Collection<Loan> loans = getLoans(parentID);
 //        for (Loan loan : new ArrayList<Loan>(loans)) {
 //            if (loan.getValue(Loan._B_ENDDATE) == null)
@@ -437,21 +434,11 @@ public class DataManager {
         return new Loan();
     }
     
-    public static DcObject getExternalReference(int moduleIdx, String ID) {
-        DcModule module = DcModules.get(moduleIdx);
-        String sql = "SELECT ID FROM " + module.getTableName() + " WHERE " +
-             module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + " = ?";
-        
-        try {
-            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
-            ps.setString(1, ID);
-            List<DcObject> items = DatabaseManager.retrieveItems(ps, Query._SELECT);
-            return items.size() > 0 ? items.get(0) : null;
-        } catch (SQLException se) {
-            logger.error(se, se);
-        }
-        
-        return null;
+    public static DcObject getExternalReference(int moduleIdx, String type) {
+        DataFilter df = new DataFilter(moduleIdx);
+        df.addEntry(new DataFilterEntry(moduleIdx, ExternalReference._EXTERNAL_ID, Operator.EQUAL_TO, type));
+        List<DcObject> items = get(df, new int[] {DcObject._ID});
+        return items.size() > 0 ? items.get(0) : null;    
     }    
     
     public static DcObject getObjectByExternalID(int moduleIdx, String type, String externalID) {
@@ -485,12 +472,9 @@ public class DataManager {
     
                 PreparedStatement ps2 = conn.prepareStatement(sql);
                 ps2.setString(1, referenceID);
-                List<DcObject> items = DatabaseManager.retrieveItems(ps2, Query._SELECT);
                 
-                if (items.size() > 0) {
-                    result = items.get(0);
-                    break;
-                }
+                List<DcObject> items = WorkFlow.getInstance().convert(ps2.executeQuery(), true);
+                result = items.size() > 0 ? items.get(0) : null;
             }
         
             ps.close();
@@ -530,7 +514,7 @@ public class DataManager {
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
                 ps.setString(2,  ";%" + s.toUpperCase() + "%;");
             
-            List<DcObject> items = DatabaseManager.retrieveItems(ps, Query._SELECT);
+            List<DcObject> items = WorkFlow.getInstance().convert(ps.executeQuery(), true);
             return items.size() > 0 ? items.get(0) : null;
             
         } catch (SQLException e) {
@@ -547,8 +531,9 @@ public class DataManager {
      * @return null or the item if found.
      */
     public static DcObject getItem(int module, Long ID) {
-        String sql = "SELECT * FROM " + DcModules.get(module).getTableName() + " WHERE ID = " + ID;
-        List<DcObject> items = DatabaseManager.retrieveItems(sql, Query._SELECT);
+        DataFilter df = new DataFilter(module);
+        df.addEntry(new DataFilterEntry(module, DcObject._ID, Operator.EQUAL_TO, ID));
+        List<DcObject> items = get(df);
         return items != null && items.size() > 0 ? items.get(0) : null;
     }    
   
@@ -558,11 +543,9 @@ public class DataManager {
      * @param parentId
      */
     public static Collection<DcObject> getReferences(int modIdx, Long parentID) {
-        DcModule module = DcModules.get(modIdx);
-        String sql = "SELECT * FROM " + module.getTableName() + " WHERE " + 
-                     module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = " + parentID;
-
-        return DatabaseManager.retrieveItems(sql, Query._SELECT);
+        DataFilter df = new DataFilter(modIdx);
+        df.addEntry(new DataFilterEntry(modIdx, DcMapping._A_PARENT_ID, Operator.EQUAL_TO, parentID));
+        return get(df);
     }
 
     /**
@@ -570,43 +553,42 @@ public class DataManager {
      * @param parentId
      * @return Either the pictures or an empty collection.
      */
-    public static Collection<Picture> getPictures(Long parentID) {
-        DcModule module = DcModules.get(DcModules._PICTURE);
-        String sql = "SELECT * FROM " + module.getTableName() + " WHERE " + 
-                     module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + parentID;
-        
-        List<Picture> pictures = new ArrayList<Picture>();
-        List<DcObject> items = DatabaseManager.retrieveItems(sql, Query._SELECT);
-        
-        for (DcObject dco : items) pictures.add((Picture) dco);
-        
-        return pictures;
+    public static Collection<DcObject> getPictures(Long parentID) {
+        DataFilter df = new DataFilter(DcModules._PICTURE);
+        df.addEntry(new DataFilterEntry(DcModules._PICTURE, Picture._A_OBJECTID, Operator.EQUAL_TO, parentID));
+        return new SelectQuery(df, null, null).run();
     }
     
-    public static List<Long> getKeys(int module, DataFilter filter) {
-        return DatabaseManager.getKeys(module, filter);
+    public static List<Long> getKeys(DataFilter filter) {
+        return DatabaseManager.getKeys(filter);
     }
-    
     
     /**
      * Retrieve items using the specified data filter.
      * @see DataFilter
-     * @param modIdx
      * @param filter
+     * @param fields 
      */
-    public static List<DcObject> get(int modIdx, DataFilter filter) {
-        try {
-            if (filter != null) {
-                Query query = new Query(filter, null, null);
-                return DatabaseManager.retrieveItems(query);
-            } else {
-                return DatabaseManager.retrieveItems(DcModules.get(modIdx).getItem());
-            }
-        } catch (SQLException se) {
-            logger.error("Error while querying for item", se);
-            return new ArrayList<DcObject>();
-        }
+    public static List<DcObject> get(DataFilter filter, int[] fields) {
+        return new SelectQuery(filter, null, fields).run();
     }
+
+    /** 
+     * Overloaded 
+     * @see #get(DataFilter, int[])
+     */
+    public static List<DcObject> get(int modIdx, int[] fields) {
+        return get(new DataFilter(modIdx), fields);
+    }
+    
+    /** 
+     * Overloaded 
+     * @see #get(DataFilter, int[])
+     */
+    public static List<DcObject> get(DataFilter filter) {
+        return get(filter, null);
+    }
+
     
     private static class ViewUpdater implements Runnable {
         

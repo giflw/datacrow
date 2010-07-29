@@ -212,7 +212,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         DataFilter df = new DataFilter(module);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module, field.getIndex(), Operator.IS_EMPTY, null));
         
-        int empty = DataManager.get(field.getModule(), df).size();
+        int empty = DataManager.get(df).size();
         if (empty > 0) categories.add(DcResources.getText("lblEmpty"));
         
         // create the data map. exclude zero counts

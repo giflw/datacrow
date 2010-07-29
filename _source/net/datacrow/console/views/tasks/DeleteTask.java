@@ -67,16 +67,11 @@ public class DeleteTask extends DataTask {
                             dco.getModule().getIndex(), MainFrame._SEARCHTAB, counter));                        
                     
                     if (counter == objects.length) {
-                        dco.setSilent(false);
-                        dco.setEndOfBatch(true);
                         IRequest request = 
                             new StatusUpdateRequest(dco.getModule().getIndex(), MainFrame._SEARCHTAB, "msgDeleteSuccessfull");
                         request.setExecuteOnFail(true);
                         dco.addRequest(request);
-                    } else {
-                        dco.setSilent(true);
-                        dco.setEndOfBatch(false);
-                    }
+                    } 
                     
                     try {
                         dco.delete(true);

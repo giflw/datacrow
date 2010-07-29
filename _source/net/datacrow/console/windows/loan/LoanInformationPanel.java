@@ -94,7 +94,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
             df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._C_CONTACTPERSONID, Operator.EQUAL_TO, person.getID()));
         
         List<DcObject> items = new ArrayList<DcObject>();
-        for (DcObject loan : DataManager.get(DcModules._LOAN, df)) {
+        for (DcObject loan : DataManager.get(df)) {
             Long ID = (Long) loan.getValue(Loan._D_OBJECTID);
             for (DcModule module : DcModules.getModules()) {
                 if (module.canBeLend() && !module.isAbstract()) {

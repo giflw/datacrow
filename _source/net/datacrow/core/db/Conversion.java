@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
@@ -97,7 +98,7 @@ public class Conversion {
         if (getNewFieldType() != ComponentFactory._REFERENCESFIELD) {
             String sql = "select top 1 " + columnName + " from " + DcModules.get(moduleIdx).getTableName();
             try {
-                ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                ResultSet rs = DatabaseManager.executeSQL(sql);
                 rs.close();
             } catch (Exception se) {
                 return false;
@@ -106,7 +107,7 @@ public class Conversion {
         
         try {
             String sql = "select top 1 * from " + DcModules.get(moduleIdx).getTableName();
-            ResultSet result = DatabaseManager.executeSQL(sql, false);
+            ResultSet result = DatabaseManager.executeSQL(sql);
             ResultSetMetaData meta = result.getMetaData();
             
             if (getNewFieldType() == ComponentFactory._REFERENCESFIELD) {
@@ -123,7 +124,7 @@ public class Conversion {
                 sql = "select top 1 * from " + refMod.getTableName();
                 
                 try {
-                    ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                    ResultSet rs = DatabaseManager.executeSQL(sql);
                     rs.close();
                     
                     int pos = -1;
@@ -142,7 +143,7 @@ public class Conversion {
                               "and " + columnName + " not in (select " + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + " from " + refMod.getTableName() + ") " +
                               "and " + columnName + " not in (select ID from " + refMod.getTableName() + ")";
                         
-                        rs = DatabaseManager.executeSQL(sql, false);
+                        rs = DatabaseManager.executeSQL(sql);
                         
                         while (rs.next()) {
                             needed = true;
@@ -159,7 +160,7 @@ public class Conversion {
                 sql = "select top 1 " + columnName + " from " + DcModules.get(moduleIdx);
                 
                 try {
-                    ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                    ResultSet rs = DatabaseManager.executeSQL(sql);
                     rs.close();
                     
                     int pos = -1;
@@ -216,7 +217,9 @@ public class Conversion {
         String sql = "SELECT ID, " + getColumnName() + " FROM " + DcModules.get(getModuleIdx()).getTableName() + " " +
                      "WHERE " + getColumnName() + " IS NOT NULL";
         try {
-            ResultSet rs = DatabaseManager.executeSQL(sql, true);
+            ResultSet rs = DatabaseManager.executeSQL(sql);
+            logger.info(sql);
+            
             DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(
                     moduleIdx, refMod.getIndex(), DcModules.get(moduleIdx).getField(columnName).getIndex()));
         
@@ -224,11 +227,9 @@ public class Conversion {
             while (rs.next()) {
                 String ID = rs.getString(1);
                 String referenceID = rs.getString(2);
-                
                 mapping.setValue(DcMapping._A_PARENT_ID, ID);
                 mapping.setValue(DcMapping._B_REFERENCED_ID, referenceID);
-                
-                DatabaseManager.retrieveItems(new Query(Query._INSERT, mapping, null, null));
+                new InsertQuery(mapping).run();
             }
             rs.close();
         } catch (Exception e) {
@@ -248,7 +249,7 @@ public class Conversion {
         String sql = "select distinct " + columnName + " from " + DcModules.get(getModuleIdx()).getTableName() + " where " + columnName + " is not null";
         
         try {
-            ResultSet rs = DatabaseManager.executeSQL(sql, true);
+            ResultSet rs = DatabaseManager.executeSQL(sql);
             
             while (rs.next()) {
                 String name = rs.getString(1);
@@ -256,17 +257,17 @@ public class Conversion {
                 // check if the referenced item exists
                 DcObject reference = refMod.getItem();
                 reference.setValue(DcProperty._A_NAME, name);
-                List<DcObject> items = DatabaseManager.retrieveItems(reference);
+                List<DcObject> items = new SelectQuery(new DataFilter(reference), null, new int[] {DcObject._ID}).run();
                 if (items.size() == 0) {
                     reference.setIDs();
-                    DatabaseManager.retrieveItems(new Query(Query._INSERT, reference, null, null));
+                    new InsertQuery(reference).run();
                 }
                 
                 String sql2 = "select item.ID, property.ID from " + refMod.getTableName() + " property " +
                                "inner join " + DcModules.get(getModuleIdx()).getTableName() + " item " +
                                "on CONVERT(property." + refMod.getField(DcProperty._A_NAME).getDatabaseFieldName() + ",LONGVARCHAR) =" +
                                "CONVERT(item." + columnName + ",LONGVARCHAR) and item." + columnName + " = '" + name.replaceAll("'", "''") + "'";
-                ResultSet rs2 = DatabaseManager.executeSQL(sql2, true);
+                ResultSet rs2 = DatabaseManager.executeSQL(sql2);
                 
                 while (rs2.next()) {
                     String itemID = rs2.getString(1);
@@ -280,14 +281,14 @@ public class Conversion {
                         mapping.setValue(DcMapping._A_PARENT_ID, itemID);
                         mapping.setValue(DcMapping._B_REFERENCED_ID, propertyID);
                         
-                        items = DatabaseManager.retrieveItems(mapping);
+                        items = new SelectQuery(mapping, null).run();
                         if (items.size() == 0)
-                            DatabaseManager.retrieveItems(new Query(Query._INSERT, mapping, null, null));
+                            new InsertQuery(mapping).run();
                         
                     } else {
                         String sql3 = "update " + DcModules.get(getModuleIdx()).getTableName() +
                                       " set " + columnName + "=" + propertyID;
-                        DatabaseManager.executeSQL(sql3, true);
+                        DatabaseManager.executeSQL(sql3);
                     }
                 }
                 
@@ -305,7 +306,7 @@ public class Conversion {
             if (getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
                 DatabaseManager.executeSQL(
                         "alter table " + DcModules.get(getModuleIdx()).getTableName() + 
-                        " alter column " + columnName + " " + DcModules.get(getModuleIdx()).getField(columnName).getDataBaseFieldType(), true);
+                        " alter column " + columnName + " " + DcModules.get(getModuleIdx()).getField(columnName).getDataBaseFieldType());
             } 
             
             // note that column removal is performed by the cleanup method of the database
@@ -324,7 +325,7 @@ public class Conversion {
             if (DcModules.get(moduleIdx).getField(columnName) != null) {
                 String sql = "alter table " + DcModules.get(moduleIdx).getTableName() + " alter column " + columnName + " " +
                              DcModules.get(moduleIdx).getField(columnName).getDataBaseFieldType();
-                DatabaseManager.executeSQL(sql, true);
+                DatabaseManager.executeSQL(sql);
             }
 
         } catch (Exception se) {

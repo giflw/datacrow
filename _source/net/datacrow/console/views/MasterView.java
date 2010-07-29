@@ -132,8 +132,7 @@ public class MasterView {
     }
     
     public void sort() {
-        for (View view : getViews())
-            view.sort();
+        getCurrent().sort();
     }
 
     public void updateItem(Long ID, DcObject dco) {
@@ -154,11 +153,17 @@ public class MasterView {
     public void clear() {
         for (View view : getViews())
             view.clear();
+        
+        if (groupingPane != null)
+            groupingPane.clear();
     }
 
     public void clear(boolean saveChanges) {
         for (View view : getViews())
             view.clear(saveChanges);
+
+        if (groupingPane != null)
+            groupingPane.clear();
     }
     
     public void add(DcObject dco) {

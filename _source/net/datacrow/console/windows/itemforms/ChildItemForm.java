@@ -48,7 +48,6 @@ public class ChildItemForm extends ItemForm {
         if (!update)  {
             try {
                 dco.addRequest(new RefreshChildView(childForm));
-                dco.setSilent(true);
                 dco.saveNew(true);
             } catch (ValidationException vExp) {
                 DcSwingUtilities.displayWarningMessage(vExp.getMessage());
@@ -56,7 +55,6 @@ public class ChildItemForm extends ItemForm {
         } else if (isChanged()) {
             try {
                 dco.addRequest(new RefreshChildView(childForm));
-                dco.setSilent(true);
                 dco.saveUpdate(true);
             } catch (ValidationException vExp) {
                 DcSwingUtilities.displayWarningMessage(vExp.getMessage());
@@ -78,8 +76,6 @@ public class ChildItemForm extends ItemForm {
     @Override
     protected void deleteItem() {
         if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-            dco.setSilent(true);
-
             dco.addRequest(new CloseWindowRequest(this));
             dco.addRequest(new RefreshChildView(childForm));
             

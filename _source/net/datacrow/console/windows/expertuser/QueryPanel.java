@@ -119,7 +119,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
         }
 
         try {
-        	ResultSet result = DatabaseManager.executeSQL(sql, true);
+        	ResultSet result = DatabaseManager.executeSQL(sql);
 
             boolean empty = false;
             if (result != null) {

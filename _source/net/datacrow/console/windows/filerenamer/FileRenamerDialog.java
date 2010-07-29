@@ -130,11 +130,6 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
     }
     
     private DcObject[] getApplicableObjects(FilePattern pattern) {
-        
-        
-        
-        
-        
         DataFilter df = new DataFilter(module);
         
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
@@ -146,7 +141,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
                                             module, part.getField().getIndex(), 
                                             Operator.IS_FILLED, null));
         }
-        List<DcObject> eligibleItems = DataManager.get(module, df);
+        List<DcObject> eligibleItems = DataManager.get(df);
         Collection<DcObject> result = new ArrayList<DcObject>();
 
         Collection<DcObject> currentItems = new ArrayList<DcObject>(); 

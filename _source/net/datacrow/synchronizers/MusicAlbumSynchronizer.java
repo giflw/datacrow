@@ -112,8 +112,6 @@ public class MusicAlbumSynchronizer extends DefaultSynchronizer {
             setValue(child, MusicTrack._F_TRACKNUMBER, Long.valueOf(musicFile.getTrack()));
             
             DataManager.createReference(child, MusicTrack._H_GENRES, musicFile.getGenre());
-            
-            child.setSilent(true);
             updated = true;
         }
         

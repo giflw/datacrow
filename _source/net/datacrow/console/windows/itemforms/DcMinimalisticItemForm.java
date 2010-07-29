@@ -62,14 +62,12 @@ public class DcMinimalisticItemForm extends ItemForm {
         
         if (!update)  {
             try {
-                dco.setSilent(true);
                 dco.saveNew(true);
             } catch (ValidationException vExp) {
                 DcSwingUtilities.displayWarningMessage(vExp.getMessage());
             }
         } else if (isChanged()) {
             try {
-                dco.setSilent(true);
                 dco.saveUpdate(true);
             } catch (ValidationException vExp) {
                 DcSwingUtilities.displayWarningMessage(vExp.getMessage());
@@ -85,7 +83,6 @@ public class DcMinimalisticItemForm extends ItemForm {
     @Override
     protected void deleteItem() {
         if (DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-            dco.setSilent(true);
             dco.addRequest(new CloseWindowRequest(this));
             
             if (parent != null)

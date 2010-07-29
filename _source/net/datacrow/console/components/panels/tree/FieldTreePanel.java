@@ -317,7 +317,7 @@ public class FieldTreePanel extends TreePanel {
                 DcField field;
                 DcModule module = DcModules.get(getModule());
                 
-                ResultSet rs = DatabaseManager.executeSQL(sql, false);
+                ResultSet rs = DatabaseManager.executeSQL(sql);
                 
                 FieldNodeElement existingNe;
                 FieldNodeElement ne;
@@ -438,7 +438,7 @@ public class FieldTreePanel extends TreePanel {
             if (DataFilters.isFilterActive(getModule()))
                 sql += " where id in (" + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ")";
             
-            rs = DatabaseManager.executeSQL(sql, false);
+            rs = DatabaseManager.executeSQL(sql);
             rs.next();
             element.setCount(rs.getInt(1));
         } catch (Exception e) {

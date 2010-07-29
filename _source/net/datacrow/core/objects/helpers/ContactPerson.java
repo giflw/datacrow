@@ -25,12 +25,16 @@
 
 package net.datacrow.core.objects.helpers;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.db.Query;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
@@ -38,6 +42,8 @@ import net.datacrow.core.objects.ValidationException;
 import net.datacrow.util.DcSwingUtilities;
 
 public class ContactPerson extends DcObject {
+    
+    private static Logger logger = Logger.getLogger(ContactPerson.class.getName());
 
     private static final long serialVersionUID = 3504231999443415852L;
     
@@ -62,25 +68,30 @@ public class ContactPerson extends DcObject {
         loan.setValue(Loan._C_CONTACTPERSONID, getID());
         
         DataFilter filter = new DataFilter(loan);
-        List<DcObject> loans = DataManager.get(DcModules._LOAN, filter);
+        List<DcObject> loans = DataManager.get(filter);
         
-        try {
-            if (loans.size() == 0) {
+        if (loans.size() == 0) {
+            try {
                 super.delete(false);
-            } else {
-                if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
-                    DatabaseManager.retrieveItems("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
-                                                 loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID(), 
-                                                 Query._DELETE);
+            } catch (ValidationException e) {}
+        } else {
+            if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
+                try {
+                    DatabaseManager.executeSQL("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
+                                           loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID());
                     for (DcObject dco : loans)
                         DataManager.remove(dco, loan.getModule().getIndex());
     
-                    super.delete(false);
-                } else {
-                    getRequests().clear();
+                    try {
+                        super.delete(false);
+                    } catch (ValidationException e) {}
+                } catch (SQLException se) {
+                    logger.error(se, se);
                 }
+            } else {
+                getRequests().clear();
             }
-        } catch (ValidationException ve) {}
+        }
         
         loan.release();
     }    
