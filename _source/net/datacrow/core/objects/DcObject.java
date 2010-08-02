@@ -1247,6 +1247,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             	        newMappings.add((DcMapping) mapping.clone());
             	    
             	    setValue(field, newMappings);
+            	} else if (o != null && getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) { 
+            	    setValue(field, ((DcObject) o).clone());
+            	    
                 } else {
                     setValue(field, o);    
                 }

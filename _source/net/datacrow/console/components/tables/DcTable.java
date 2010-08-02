@@ -980,7 +980,7 @@ public class DcTable extends JTable implements IViewComponent {
             Long ID = (Long) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
             
             DcObject dco = DataManager.getItem(module.getIndex(), ID);
-            setValues(getModel(), dco, false, row);
+            setValues(getModel(), dco.clone(), false, row);
             dco.release();
             
             setListeningForChanges(listenForChanges);
