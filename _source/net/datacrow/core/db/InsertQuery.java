@@ -103,10 +103,8 @@ public class InsertQuery extends Query {
                     if (columns.length() > 0)
                         columns.append(", ");
     
-                    if (!(dco.getValue(field.getIndex()) instanceof Picture)) {
-                        values.add(getQueryValue(dco, field.getIndex()));
-                        columns.append(field.getDatabaseFieldName());
-                    }
+                    values.add(getQueryValue(dco, field.getIndex()));
+                    columns.append(field.getDatabaseFieldName());
                 }
             }
             
@@ -141,6 +139,7 @@ public class InsertQuery extends Query {
             success = true;
             
         } catch (SQLException e) {
+            e.printStackTrace();
             logger.error("An error occured while running the query", e);
         }
         

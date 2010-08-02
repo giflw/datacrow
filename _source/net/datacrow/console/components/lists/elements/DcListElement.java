@@ -37,7 +37,7 @@ import net.datacrow.settings.DcSettings;
 
 public abstract class DcListElement extends JPanel {
     
-    protected abstract void build();
+    public abstract void build();
     
     public void update() {
         clear();

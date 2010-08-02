@@ -32,15 +32,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.SwingUtilities;
-
-import net.datacrow.console.MainFrame;
-import net.datacrow.console.components.IComponent;
-import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
@@ -72,36 +65,6 @@ public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
     
-    private static Map<Integer, Collection<IComponent>> listeners = 
-        new HashMap<Integer, Collection<IComponent>>();
-    
-    /**
-     * Dispatch the items to the specified view.
-     * @param master View The view to be updated.
-     * @param items The items to be shown in the view.
-     * 
-     * @deprecated
-     */
-    public static void bindData(final MasterView masterView, final List<Long> keys) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                masterView.add(keys);                
-            }
-        });
-    }    
-    
-    /**
-     * Dispatch the items to the specified view.
-     * @param master View The view to be updated.
-     * @param module The module from which the items should be displayed.
-     * @param df The data filter used to filter the items to be shown.
-     * 
-     * @deprecated
-     */
-    public static void bindData(MasterView masterView, int module, DataFilter df) {
-        bindData(masterView, getKeys(df));
-    }    
-    
     public static int getCount(int module, int field, Object value) {
         int count = 0;
         
@@ -132,63 +95,6 @@ public class DataManager {
         }
         
         return count;
-    }
-    
-    /**
-     * Update the specified cached item.
-     * @param dco The item to update.
-     * @param module The module to which the item belongs.
-     */
-    public static void update(DcObject dco, int module) {
-        // get the real object
-        DcObject o = getItem(dco.getModule().getIndex(), dco.getID());
-        updateUiComponents(o.getModule().getIndex());
-        updateView(o, 0, module, MainFrame._SEARCHTAB);
-    }    
-    
-    /**
-     * Adds the item to the cache.
-     * @param dco The item to add.
-     * @param module The module to which the item belongs.
-     */
-    public static void add(DcObject dco, int module) {
-        dco.removeRequests();
-        dco.setValidate(true);
-        
-        if (dco.getModule().canBeLend())
-            dco.setValue(DcObject._SYS_AVAILABLE, Boolean.TRUE);
-
-        updateUiComponents(dco.getModule().getIndex());
-        if (DataCrow.mainFrame != null)
-            updateView(dco, 1, module, MainFrame._INSERTTAB);
-    }  
-    
-//    public static boolean exists(DcObject o) {
-//        boolean exists = false;
-//        
-//        if (o.getModule().getIndex() == DcModules._PICTURE) {
-//            Long objectID = (Long) o.getValue(Picture._A_OBJECTID);
-//            if (objectID != null) {
-//                Collection<DcObject> pictures = getPictures(objectID);
-//                exists = pictures.contains(o);
-//            }
-//        } else if (o.hasPrimaryKey()) {
-//            exists = getItem(o.getModule().getIndex(), o.getID()) != null;
-//        } else {
-//            logger.error("Cannot determine whether the item exists, not a picture and no ID", new Exception());
-//        }
-//        
-//        return exists;
-//    }
-    
-    /**
-     * Remove the item from the cache.
-     * @param dco The item to be removed.
-     * @param module The module to which the item belongs.
-     */
-    public static void remove(DcObject dco, int module) {
-        updateUiComponents(dco.getModule().getIndex());
-        updateView(dco, 2, module, MainFrame._SEARCHTAB);
     }
     
     /**
@@ -369,6 +275,7 @@ public class DataManager {
         DcMapping mapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(parent.getModule().getIndex(), child.getModule().getIndex(), fieldIdx)).getItem();
         mapping.setValue(DcMapping._A_PARENT_ID, parent.getID());
         mapping.setValue(DcMapping._B_REFERENCED_ID, child.getID());
+        mapping.setReference(child);
         
         Collection<DcMapping> mappings = (Collection<DcMapping>) parent.getValue(fieldIdx);
         mappings = mappings == null ? new ArrayList<DcMapping>() : mappings;
@@ -384,30 +291,6 @@ public class DataManager {
     }    
     
     /**
-     * Update the view with the specified object.
-     * @param dco The object used to update the view.
-     * @param mode The mode used to update the view (@link {@link ViewUpdater}).
-     * @param module The module to which the item belongs.
-     * @param tab The tab to update. Either {@link MainFrame#_INSERTTAB} or {@link MainFrame#_SEARCHTAB}.
-     */
-    private static void updateView(final DcObject dco, final int mode, final int module, final int tab) {
-        // Thread-safe view update
-        ViewUpdater updater = new ViewUpdater(dco, module, tab, mode);
-        if (!SwingUtilities.isEventDispatchThread())
-            SwingUtilities.invokeLater(updater);
-        else
-            updater.run();
-    }
-    
-    /**
-     * Existency check
-     * @param df
-     */
-    public static boolean exists(DataFilter df) {
-        return getKeys(df).size() > 0;
-    }
-
-    /**
      * Retrieves all the loans (actual and historic).
      * @param parentID The item ID for which the loans are retrieved.
      * @return A collection holding loans or an empty collection.
@@ -421,17 +304,11 @@ public class DataManager {
      * @param parentID The item ID for which the loan is retrieved.
      */
     public static Loan getCurrentLoan(Long parentID) {
-        
-        // TODO: implement
-//        Collection<Loan> loans = getLoans(parentID);
-//        for (Loan loan : new ArrayList<Loan>(loans)) {
-//            if (loan.getValue(Loan._B_ENDDATE) == null)
-//                return loan;
-//        }
-//        
-//        Loan loan = (Loan) DcModules.get(DcModules._LOAN).getItem();
-//        loans.add(loan);
-        return new Loan();
+        DataFilter df = new DataFilter(DcModules._LOAN);
+        df.addEntry(new DataFilterEntry(DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
+        df.addEntry(new DataFilterEntry(DcModules._LOAN, Loan._D_OBJECTID, Operator.EQUAL_TO, parentID));
+        List<DcObject> items = get(df);
+        return items.size() > 0 ? (Loan) items.get(0) : new Loan();
     }
     
     public static DcObject getExternalReference(int moduleIdx, String type) {
@@ -588,136 +465,4 @@ public class DataManager {
     public static List<DcObject> get(DataFilter filter) {
         return get(filter, null);
     }
-
-    
-    private static class ViewUpdater implements Runnable {
-        
-        private DcObject dco;
-        private int module;
-        private int tab;
-        private int mode;
-        
-        public ViewUpdater(DcObject dco, int module, int tab, int mode) {
-            this.dco = dco;
-            this.module = module;
-            this.tab = tab;
-            this.mode = mode;
-        }
-        
-        public void run() {
-            DcModule m = DcModules.get(module);
-            if (tab == MainFrame._INSERTTAB) {
-                if (mode == 0) {
-                    m.getCurrentInsertView().updateItem(dco.getID(), dco);
-                } else if (mode == 1) {
-                    
-                    if (DcModules.get(module).getSearchView() != null) {
-                        
-                        DcModules.get(module).getSearchView().add(dco);
-                        
-                        if (!DcModules.get(module).isAbstract() && dco.getModule().isTopModule()) {
-
-                            if (dco.getModule().getType() == DcModule._TYPE_MEDIA_MODULE)
-                                DcModules.get(DcModules._MEDIA).getSearchView().add(dco);
-
-                            DcModules.get(DcModules._ITEM).getSearchView().add(dco);
-                        }
-                    }
-                    
-//                    if (DcModules.get(module).getInsertView() != null)
-//                        DcModules.get(module).getInsertView().removeItems(new Long[] {dco.getID()});
-                }
-            } else if (tab == MainFrame._SEARCHTAB) {
-                
-                Collection<DcModule> modules = new ArrayList<DcModule>();
-                modules.add(m);
-                
-                if (!m.isAbstract()) {
-                    if (m.getType() == DcModule._TYPE_MEDIA_MODULE)
-                        modules.add(DcModules.get(DcModules._MEDIA));
-                    
-                    if (m.isContainerManaged())
-                        modules.add(DcModules.get(DcModules._CONTAINER));
-                }
-                
-                if (m.isAbstract())
-                    modules.add(DcModules.get(dco.getModule().getIndex()));
-                
-                for (DcModule mod : modules) {
-                    try {
-                        MasterView masterView = mod.getSearchView();
-                        if (masterView != null) {
-                            if (mode == 0)
-                                masterView.updateItem(dco.getID(), dco);
-                            if (mode == 1)
-                                masterView.add(dco);
-//                            if (mode == 2)
-//                                masterView.removeItems(new Long[] {dco.getID()});
-                        }
-                    } catch (Exception exp) {
-                        logger.error("Error while updating view for module " + mod.getLabel(), exp);
-                    }
-                }
-            }
-            
-            if (mode == 0) {
-                // after an update make sure that the quick view of the main item is updated with
-                // the changed information (as well as the grouping pane).
-                if (dco.getModule().getParent() != null) {
-                    if (dco.getModule().getParent().getSearchView() != null) {
-                        dco.getModule().getParent().getSearchView().refreshQuickView();
-                        if (dco.getModule().getParent().getSearchView().getGroupingPane() != null) {
-                            dco.getModule().getParent().getSearchView().getGroupingPane().revalidate();
-                            dco.getModule().getParent().getSearchView().getGroupingPane().repaint();
-                        }
-                    }
-                }
-                
-                if (dco.getModule().hasDependingModules()) {
-                    for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
-                        if (module.isValid() && module.isEnabled() && module.getSearchView() != null) {
-                            module.getSearchView().refreshQuickView();
-                            if (module.getSearchView().getGroupingPane() != null) {
-                                module.getSearchView().getGroupingPane().revalidate();
-                                module.getSearchView().getGroupingPane().repaint();
-                            }
-                        }
-                    }
-                }
-            }
-            dco = null;
-        }
-    }
-    
-    /**
-     * Updates components like list boxes holding the module items.
-     * @param module The module for which the registered listeners should be updated.
-     */
-    private static void updateUiComponents(int module) {
-        Collection<IComponent> components = listeners.get(module);
-        
-        if (components == null) return;
-
-        for (IComponent c : components)
-            c.refresh();
-    }
-    
-    /**
-     * Register a component. The registered component will be updated with the module items.
-     * Changed, removal and additions will be reflected on the registered components. 
-     * @param component
-     * @param module
-     */
-    public static void registerUiComponent(IComponent component, int module) {
-        Collection<IComponent> c = listeners.get(module);
-        c = c == null ? new ArrayList<IComponent>() : c;
-        c.add(component);
-        listeners.put(module, c);
-        component.refresh();
-    }
-    
-    public static void unregisterUiComponent(IComponent c) {
-        for (Collection<IComponent> components : listeners.values())
-            components.remove(c);
-    }    
 }

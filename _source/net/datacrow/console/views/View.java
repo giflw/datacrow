@@ -166,10 +166,6 @@ public class View extends DcPanel implements ListSelectionListener {
             vc.removeSelectionListener(this);
     }
 
-    public int getOptimalItemAdditionBatchSize() {
-        return vc.getOptimalItemAdditionBatchSize();
-    }
-    
     protected boolean allowsHorizontalTraversel() {
         return vc.allowsHorizontalTraversel();
     }
@@ -441,16 +437,15 @@ public class View extends DcPanel implements ListSelectionListener {
             
             // create a fresh instance
             ItemForm form = new ItemForm(false, getType() == View._TYPE_SEARCH, 
-                                         DataManager.getItem(dco.getModule().getIndex(), dco.getID()), 
-                                         getType() != View._TYPE_SEARCH);
+                                         dco, getType() != View._TYPE_SEARCH);
             form.setVisible(true);
         } else {
             DcSwingUtilities.displayWarningMessage(DcResources.getText("msgSelectRowToOpen"));
         }
     }
     
-    public void reload(Long id) {
-        vc.updateUI(id);
+    public void update(Long id) {
+        vc.update(id);
 
         if (quickView != null)
             quickView.createImageTabs();
@@ -685,7 +680,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }
 
     public void updateItem(Long ID, DcObject dco) {
-        vc.updateItem(ID, dco);
+        vc.update(ID, dco);
         
         DcObject item = getItem(ID);
         if (quickView != null && index > -1)

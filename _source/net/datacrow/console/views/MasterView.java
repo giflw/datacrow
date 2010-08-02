@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.tree.GroupingPane;
@@ -134,15 +135,20 @@ public class MasterView {
     public void sort() {
         getCurrent().sort();
     }
-
-    public void updateItem(Long ID, DcObject dco) {
-        for (View view : getViews())
-    		view.updateItem(ID, dco);
-    }    
     
-    public void reload(Long ID) {
+    public void refresh() {
+        for (View view : getViews()) {
+            view.clear();
+        }
+        
+        if (groupingPane != null)
+            groupingPane.groupBy();
+        
+    }
+
+    public void update(Long ID) {
         for (View view : getViews())
-            view.reload(ID);
+            view.update(ID);
     }
     
     public void removeFromCache(Long ID) {
@@ -173,13 +179,21 @@ public class MasterView {
         }
     }
     
-    public void add(List<Long> keys) {
-        if (groupingPane != null || !groupingPane.isActive()) {
-            groupingPane.load();
-        } else { 
-            for (View view : getViews())
-                view.add(keys);
-        }
+    public void add(final List<Long> keys) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                
+                
+                if (groupingPane != null || !groupingPane.isActive()) {
+                    groupingPane.load();
+                } else { 
+                    for (View view : getViews()) {
+                        view.clear();
+                        view.add(keys);
+                    }
+                }
+            }
+        });
     }
     
     public Collection<View> getViews() {

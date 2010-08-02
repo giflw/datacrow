@@ -391,7 +391,7 @@ public class DataFilter {
                         operator == Operator.NOT_EQUAL_TO.getIndex()) 
                         sql.append(" NOT");
 
-                    DcModule mapping = DcModules.get(DcModules.getMappingModIdx(getModule(), field.getReferenceIdx(), field.getIndex()));
+                    DcModule mapping = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
 
                     sql.append(" IN (");
                     sql.append("SELECT ");

@@ -62,6 +62,10 @@ public abstract class DcObjectListElement extends DcListElement {
     
     public void setDcObject(DcObject dco) {
         this.dco = dco;
+        
+        // when adding an existing item the renderer will take care of the loading/
+        // for new items, the component needs to be fully build.
+        if (dco.isNew()) build();
     }
 
     public DcObject getDcObject() {
@@ -85,6 +89,7 @@ public abstract class DcObjectListElement extends DcListElement {
     }
     
     public void update(DcObject dco) {
+        this.dco = dco;
         clear();
         build();
     }    
@@ -128,6 +133,10 @@ public abstract class DcObjectListElement extends DcListElement {
     @Override
     public void destroy() {
         super.destroy();
+        
+        if (dco != null)
+            dco.release();
+        
         dco = null;
         key = null;
     }
@@ -138,9 +147,12 @@ public abstract class DcObjectListElement extends DcListElement {
         // DO NOT ENABLE THIS: super.clear(); 
         
         removeAll();
-        if (dco != null) dco.release();
-        dco = null;
         
+        if (dco != null && !dco.isNew()) {
+            if (dco != null) dco.release();
+            dco = null;
+        }
+            
         revalidate();
         repaint();
     }

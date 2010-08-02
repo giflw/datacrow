@@ -32,7 +32,6 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -121,16 +120,8 @@ public class WorkFlow {
 
                 if (field.isUiOnly()) continue;
                 
-                value = field.getValueType() == DcRepository.ValueTypes._BOOLEAN ? rs.getBoolean(column) : 
-                        field.getValueType() == DcRepository.ValueTypes._DATE ? rs.getDate(column) :
-                        field.getValueType() == DcRepository.ValueTypes._LONG ? rs.getLong(column) :
-                        field.getValueType() == DcRepository.ValueTypes._BIGINTEGER ? rs.getLong(column) :
-                        field.getValueType() == DcRepository.ValueTypes._DOUBLE ? rs.getDouble(column) :
-                        field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ? rs.getLong(column) :
-                        rs.getString(column);
-
+                value = rs.getObject(column);
                 value = Utilities.isEmpty(value) ? null : value;
-                        
                 item.setValue(fields[i], value);
             }
             
@@ -179,7 +170,8 @@ public class WorkFlow {
                         dco.initializeReferences();
                     }
                 }
-                
+
+                dco.setNew(false);
                 dco.markAsUnchanged();
                 objects.add(dco);
             }

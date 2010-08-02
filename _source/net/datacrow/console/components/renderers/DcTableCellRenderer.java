@@ -62,7 +62,13 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
+        
         JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+        if (((DcTable) table).load(row)) {
+            table.repaint();
+            table.revalidate();
+        }
         
         if (DcSettings.getBoolean(DcRepository.Settings.stShowTableTooltip) && allowTooltips()) {
         	if (disabled) {

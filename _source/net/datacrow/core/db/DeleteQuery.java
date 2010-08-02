@@ -121,13 +121,16 @@ public class DeleteQuery extends Query {
             }
             
             for (DcField field : dco.getFields()) {
-                if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+                if (field.getValueType() == DcRepository.ValueTypes._PICTURE && dco.isFilled(field.getIndex()))
                     deleteImage((Picture) dco.getValue(field.getIndex()));
             }
             
             stmt.execute("DELETE FROM " + DcModules.get(DcModules._PICTURE).getTableName() + " WHERE " +
                          DcModules.get(DcModules._PICTURE).getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + dco.getID());
         
+            
+            updateView();
+            
         } catch (SQLException se) {
             logger.error(se, se);
         }

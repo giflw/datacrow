@@ -23,10 +23,14 @@ public interface IViewComponent {
     
     int getItemCount();
     
-    int getOptimalItemAdditionBatchSize();
-    
     boolean remove(Long[] IDs);
     void remove(int[] indices);
+    
+    void clear(int index);
+    
+    int getFirstVisibleIndex();
+    int getLastVisibleIndex();
+    int getViewportBufferSize();
     
     void add(Long key);
     void add(DcObject item);
@@ -49,8 +53,9 @@ public interface IViewComponent {
 
     void deselect();
     
-    void updateItem(Long ID, DcObject dco);
-    void updateItemAt(int index, DcObject dco);
+    void update(Long ID);
+    void update(Long ID, DcObject dco);
+    void afterUpdate();
 
     int[] getChangedIndices();
     void undoChanges();
@@ -67,8 +72,6 @@ public interface IViewComponent {
     
     void applySettings();
     void saveSettings();
-    void updateUI(Long ID);
-    void afterUpdate();
 
     // LISTENERS
     void addSelectionListener(ListSelectionListener lsl);

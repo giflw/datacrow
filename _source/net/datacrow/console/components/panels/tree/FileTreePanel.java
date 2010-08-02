@@ -27,15 +27,12 @@ package net.datacrow.console.components.panels.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.swing.JMenuBar;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import net.datacrow.core.DcThread;
 import net.datacrow.core.resources.DcResources;
-
-import org.apache.log4j.Logger;
 
 
 /**
@@ -47,7 +44,7 @@ import org.apache.log4j.Logger;
  */
 public class FileTreePanel extends TreePanel {
     
-    private static Logger logger = Logger.getLogger(FileTreePanel.class.getName());
+//    private static Logger logger = Logger.getLogger(FileTreePanel.class.getName());
     private ThreadGroup tg = new ThreadGroup("tree-fillers");
     
     public FileTreePanel(GroupingPane gp) {
@@ -104,8 +101,8 @@ public class FileTreePanel extends TreePanel {
     }
 
     @Override
-    protected void revalidateTree(Long key, int modus) {
-        setListeningForSelection(false);
+    protected void refresh() {
+        /*setListeningForSelection(false);
         setSaveChanges(false);
         
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
@@ -125,7 +122,7 @@ public class FileTreePanel extends TreePanel {
         revalidate();
 
         setListeningForSelection(true);
-        setSaveChanges(true);
+        setSaveChanges(true); */
     } 
  
     @Override

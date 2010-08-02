@@ -121,10 +121,8 @@ import net.datacrow.console.components.renderers.ComboBoxRenderer;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcLookAndFeel;
 import net.datacrow.core.plugin.Plugin;
 import net.datacrow.core.resources.DcResources;
@@ -234,9 +232,6 @@ public final class ComponentFactory {
             c.removeAll();
             c.removeNotify();
             c.invalidate();
-            
-            if (c instanceof IComponent)
-                DataManager.unregisterUiComponent((IComponent) c);
         }
     }    
     
@@ -472,9 +467,7 @@ public final class ComponentFactory {
     }
 
     public static final DcReferencesField getReferencesField(int mappingModIdx) {
-        DcReferencesField referencesField = new DcReferencesField(mappingModIdx);
-        DataManager.registerUiComponent(referencesField, ((MappingModule) DcModules.get(mappingModIdx)).getReferencedModIdx());
-        return referencesField;
+        return new DcReferencesField(mappingModIdx);
     }
     
     public static final DcReferencesField getSimpleReferencesField(int mappingModIdx) {
@@ -555,25 +548,9 @@ public final class ComponentFactory {
         return cb;
     }
     
-    public static final JComboBox getStateCombo(int module) {
-        DcModule m = DcModules.get(module);
-        int modIx = m.getType() != DcModule._TYPE_PROPERTY_MODULE ? m.getPropertyModule(DcModules._STATE).getIndex() : m.getIndex();
-
-        DcComboBox combo = getComboBox();
-        DataManager.registerUiComponent(combo, modIx);
-        return combo;
-    }    
-
-    public static final DcComboBox getContactPersonCombo() {
-        DcComboBox comboBox = getObjectCombo(DcModules._CONTACTPERSON);
-        DataManager.registerUiComponent(comboBox, DcModules._CONTACTPERSON);
-        return comboBox;
-    }
-
     public static final DcObjectComboBox getObjectCombo(int module) {
         DcObjectComboBox comboBox = new DcObjectComboBox(module);
         comboBox.setFont(getStandardFont());
-        DataManager.registerUiComponent(comboBox, module);
         return comboBox;
     }
     

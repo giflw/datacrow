@@ -34,6 +34,7 @@ import java.util.Collection;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.util.Utilities;
@@ -56,6 +57,12 @@ public class DcPropertyListElement extends DcObjectListElement {
     @Override
     public Collection<Picture> getPictures() {
         return new ArrayList<Picture>();
+    }
+    
+    @Override
+    public void setDcObject(DcObject dco) {
+        super.setDcObject(dco);
+        build();
     }
 
     @Override

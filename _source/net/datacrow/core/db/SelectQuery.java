@@ -71,17 +71,18 @@ public class SelectQuery extends Query {
         Statement stmt = null;
         ResultSet rs = null;
         List<DcObject> items = null;
+        String sql = df.toSQL(fields);
         try {
             conn = DatabaseManager.getConnection();
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(df.toSQL(fields));
+            rs = stmt.executeQuery(sql);
             
             items = WorkFlow.getInstance().convert(rs, fields != null);
             
             success = true;
             
         } catch (SQLException e) {
-            logger.error("Error while executing query", e);
+            logger.error("Error while executing query: " + sql, e);
         }
 
         try {

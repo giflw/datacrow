@@ -130,7 +130,7 @@ public class XmlExporter extends ItemExporter {
                 if (isCanceled()) break;
                 
                 if (DcModules.getCurrent().isAbstract())
-                    dco.load();
+                    dco.load(null);
                 
                 writer.startEntity(dco);
                 client.notifyMessage(DcResources.getText("msgExportingX", dco.toString()));
@@ -166,6 +166,8 @@ public class XmlExporter extends ItemExporter {
                 writer.endEntity(dco);
                 client.notifyProcessed();
                 bos.flush();
+                
+                dco.release();
                 
                 counter++;
             }

@@ -32,8 +32,6 @@ import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JViewport;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionListener;
 
 import net.datacrow.console.components.lists.elements.DcAudioCDListHwElement;
@@ -54,6 +52,7 @@ import net.datacrow.console.views.View;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.util.ViewUpdater;
 
 import org.apache.log4j.Logger;
 
@@ -102,62 +101,18 @@ public class DcObjectList extends DcList implements IViewComponent {
         return index >= getFirstVisibleIndex() && index <= getLastVisibleIndex();
     }
     
-    
-    private class ViewUpdater extends Thread {
-        
-        private boolean canceled = false;
-        
-        public void cancel() {
-            canceled = true;
-        }
-        
-        @Override
-        public void run() {
-            ListModel model = getModel();
-            
-            int cache = 10;
-            
-            int first = getFirstVisibleIndex() - cache;
-            int last = getLastVisibleIndex() + cache;
-            int size = model.getSize();
-            
-            first = first < 0 ? 0 : first;
-            last = last > size ? size : last;
-            last = last < 0 ? 0 : last;
-
-            for (int i = 0; i < first && !canceled; i++) {
-                if (view.getType() == View._TYPE_SEARCH)
-                    clearElement(i);
-            }
-            
-            for (int i = last; i < size && !canceled; i++) {
-                if (view.getType() == View._TYPE_SEARCH)
-                    clearElement(i);
-            }
-            
-            revalidate();
-            repaint();
-        }
-        
-        private void clearElement(final int idx) {
-            if (!SwingUtilities.isEventDispatchThread()) {
-                SwingUtilities.invokeLater(
-                        new Thread(new Runnable() { 
-                            public void run() {
-                                getElement(idx).clear();
-                            }
-                        }));
-            } else {
-                getElement(idx).clear();
-            }
-        }
-    }
-    
     public void visibleItemsChanged() {
         if (vu != null) vu.cancel();
-        
-        vu = new ViewUpdater();
+        vu = new ViewUpdater(this);
         vu.start();
+    }
+
+    public void clear(int idx) {
+        getElement(idx).clear();
+    }
+
+    public int getViewportBufferSize() {
+        return 10;
     }
 
     public void saveSettings() {
@@ -282,7 +237,7 @@ public class DcObjectList extends DcList implements IViewComponent {
 
     public void applySettings() {}
     
-    public void updateUI(Long ID) {
+    public void update(Long ID) {
         DcObjectListElement element = getElement(ID);
         if (element != null) {
             element.update();
@@ -291,11 +246,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         }
     }       
 
-    public void updateItemAt(int index, DcObject dco) {
-        updateElement((DcObjectListElement) getDcModel().getElementAt(index), dco);
-    }
-    
-    public void updateItem(Long ID, DcObject dco) {
+    public void update(Long ID, DcObject dco) {
         updateElement(getElement(ID), dco);
     }    
 
@@ -414,6 +365,7 @@ public class DcObjectList extends DcList implements IViewComponent {
             dco.markAsUnchanged();
         
         DcObjectListElement element = getDisplayElement(dco.getModule().getIndex());
+        element.setDcObject(dco);
         getDcModel().addElement(element);
         ensureIndexIsVisible(getModel().getSize());
     }

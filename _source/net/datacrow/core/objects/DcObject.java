@@ -126,6 +126,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     private boolean loaded = false;
     
+    private boolean isNew = true;
+    
     /**
      * Creates a new instance.
      * @param module
@@ -145,18 +147,18 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return loaded;
     }
 
-    public void reload() {
-        loaded = false;
-        load();
+    public void reload(int[] fields) {
+        loaded = isNew;
+        load(fields);
     }
     
     /**
      * Loads the item from the database.
      * Initializes images, references and loan information.
      */
-    public void load() {
+    public void load(int[] fields) {
         
-        if (loaded) return;
+        if (loaded || isNew) return;
         
         Long ID = getID();
         
@@ -424,8 +426,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             children.clear();
     }
 
+    public void setNew(boolean b) {
+        this.isNew = b;
+    }
+    
     public boolean isNew() {
-        return DataManager.getCount(getModule().getIndex(), DcObject._ID, getID()) > 0;
+        return isNew;
     }
     
     /**
@@ -1363,7 +1369,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if ((id1 == null && id2 != null) || (id1 != null && id2 == null) )
                 return false;
             if (id1 == null && id2 == null) 
-                return o == this;
+                return false;
             else 
                 return id1.equals(id2);
         } else {

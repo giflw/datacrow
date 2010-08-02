@@ -107,9 +107,10 @@ public class DcTable extends JTable implements IViewComponent {
     private boolean ignoreSettings = false;
 
     private View view;
-
+    
     private boolean ignoreEdit = false;
-
+    
+    private List<Integer> loadedRows = new ArrayList<Integer>();
     private ArrayList<TableColumn> columnsHidden = new ArrayList<TableColumn>();
     private Map<Object, TableColumn> columns = new HashMap<Object, TableColumn>();
 
@@ -125,8 +126,6 @@ public class DcTable extends JTable implements IViewComponent {
         this.caching = caching;
     }
     
-    public void visibleItemsChanged() {}
-
     public DcTable(DcModule module, boolean readonly, boolean caching) {
         super(new DcTableModel());
 
@@ -140,10 +139,6 @@ public class DcTable extends JTable implements IViewComponent {
         applySettings();
 
         setListeningForChanges(true);
-    }
-
-    public int getOptimalItemAdditionBatchSize() {
-        return 25;
     }
 
     public boolean allowsHorizontalTraversel() {
@@ -231,7 +226,7 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     public void add(DcObject dco, boolean setSelected) {
-        add(getModel(), dco, setSelected, -1);
+        setValues(getModel(), dco, setSelected, -1);
     }
     
     /**
@@ -241,7 +236,7 @@ public class DcTable extends JTable implements IViewComponent {
      * @param setSelected
      * @param position
      */
-    public void add(TableModel model, DcObject dco, boolean setSelected, int position) {
+    public void setValues(TableModel model, DcObject dco, boolean setSelected, int position) {
         setListeningForChanges(false);
         int[] fields = dco.getFieldIndices();
 
@@ -309,7 +304,7 @@ public class DcTable extends JTable implements IViewComponent {
         
         int row = 0;
         for (DcObject dco : objects)
-            add(model, dco, false, row++);
+            setValues(model, dco, false, row++);
         
         setModel(model);
         revalidate();
@@ -492,10 +487,10 @@ public class DcTable extends JTable implements IViewComponent {
         return result;
     }
 
-    public String getObjectID(int row) {
+    public Long getObjectID(int row) {
         int col = getColumnIndexForField(DcObject._ID);
         Object o = getValueAt(row, col, true);
-        return o == null ? null : o.toString();
+        return o == null ? null : (Long) o;
     }
 
     public Collection<DcObject> getChangedObjects() {
@@ -531,6 +526,7 @@ public class DcTable extends JTable implements IViewComponent {
     public void clear() {
         cache.clear();
         cancelEdit();
+        loadedRows.clear();
 
         setListeningForChanges(false);
         getDcModel().setRowCount(0);
@@ -577,12 +573,13 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     // not implemented; this is not used for tables
-    public void setSelected(Collection<? extends DcObject> items) {
-    }
+    public void setSelected(Collection<? extends DcObject> items) {}
 
-    // not implemented; updating the UI of a single element is not needed for
-    // tables
-    public void updateUI(Long ID) {}
+    /**
+     * TODO: implement
+     */
+    public void update(Long ID) {
+    }
 
     public void setSelected(int row) {
         try {
@@ -611,7 +608,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
-    public void updateItem(Long ID, DcObject dco) {
+    public void update(Long ID, DcObject dco) {
         int index = getIndex(ID);
         if (index > -1)
             updateItemAt(index, dco);
@@ -625,12 +622,6 @@ public class DcTable extends JTable implements IViewComponent {
         removeFromCache(dco.getID());
 
         int[] indices = dco.getFieldIndices();
-
-        try {
-            setSelected(row);
-        } catch (Exception e) {
-            logger.error("Error while trying to set the selected row in the table to " + row, e);
-        }
 
         for (int i = 0; i < indices.length; i++) {
             try {
@@ -833,8 +824,7 @@ public class DcTable extends JTable implements IViewComponent {
                     text.setEditable(false);
                     text.setFont(ComponentFactory.getUnreadableFont());
                     columnNew.setCellEditor(new DefaultCellEditor(text));
-                    columnNew.setCellRenderer(PictureTableCellRenderer
-                            .getInstance());
+                    columnNew.setCellRenderer(PictureTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._REFERENCEFIELD:
                     columnNew.setCellRenderer(ComboBoxTableCellRenderer.getInstance());
@@ -855,6 +845,7 @@ public class DcTable extends JTable implements IViewComponent {
             }
             counter++;
         }
+        
         dco.release();
     }
 
@@ -881,8 +872,8 @@ public class DcTable extends JTable implements IViewComponent {
     public void setVisibleColumns(int[] fields) {
         removeColumns();
         
-        DcFieldDefinitions definitions = (DcFieldDefinitions) module
-                .getSetting(DcRepository.ModuleSettings.stFieldDefinitions);
+        DcFieldDefinitions definitions = (DcFieldDefinitions) 
+            module.getSetting(DcRepository.ModuleSettings.stFieldDefinitions);
 
         for (int field : fields) {
 
@@ -890,9 +881,9 @@ public class DcTable extends JTable implements IViewComponent {
 
             if (!module.canBeLend()
                     && (field == DcObject._SYS_AVAILABLE
-                            || field == DcObject._SYS_LOANDURATION
-                            || field == DcObject._SYS_LENDBY
-                            || field == DcObject._SYS_LOANDAYSTILLOVERDUE || field == DcObject._SYS_LOANDUEDATE))
+                     || field == DcObject._SYS_LOANDURATION
+                     || field == DcObject._SYS_LENDBY
+                     || field == DcObject._SYS_LOANDAYSTILLOVERDUE || field == DcObject._SYS_LOANDUEDATE))
                 continue;
 
             try {
@@ -902,33 +893,29 @@ public class DcTable extends JTable implements IViewComponent {
                     continue;
 
                 if (definition.isRequired())
-                    column.setHeaderRenderer(DcTableHeaderRendererRequired
-                            .getInstance());
+                    column.setHeaderRenderer(DcTableHeaderRendererRequired.getInstance());
                 else
-                    column.setHeaderRenderer(DcTableHeaderRenderer
-                            .getInstance());
+                    column.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
 
                 String label = module.getField(field).getLabel();
 
                 if (label != null && label.length() > 0) {
                     column.setHeaderValue(label);
                 } else {
-                    column.setHeaderValue(module
-                            .getField(definition.getIndex()).getSystemName());
+                    column.setHeaderValue(module.getField(definition.getIndex()).getSystemName());
                 }
 
                 addColumn(column);
 
             } catch (Exception e) {
                 Integer key = definition.getIndex();
-                TableColumn column = columns.containsKey(key) ? columns
-                        .get(key) : null;
+                TableColumn column = columns.containsKey(key) ? columns.get(key) : null;
                 logger.debug("Error while applying settings to column "
                         + column + " for field definition "
                         + definition.getLabel());
             }
         }
-
+        
         applyColumnWidths();
         applyHeaders();
     }
@@ -980,6 +967,53 @@ public class DcTable extends JTable implements IViewComponent {
 
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
+    
+    public boolean load(int row) {
+        boolean loaded = loadedRows.contains(Integer.valueOf(row));
+        
+        if (!loaded) {
+            loadedRows.add(Integer.valueOf(row));
+            
+            boolean listenForChanges = isListeningForChanges();
+            setListeningForChanges(false);
+            
+            Long ID = (Long) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
+            
+            DcObject dco = DataManager.getItem(module.getIndex(), ID);
+            
+            setValues(getModel(), dco, false, row);
+            dco.release();
+            
+            setListeningForChanges(listenForChanges);
+            return true;
+        }
+        return false;
+    }
+    
+    public void clear(int index) {
+        // not implemented; do not unload values for editable tables
+    }
+
+    public int getFirstVisibleIndex() {
+        Rectangle viewRect = getVisibleRect();
+        return rowAtPoint(new Point(0, viewRect.y));
+    }
+
+    public int getLastVisibleIndex() {
+        Rectangle viewRect = getVisibleRect();
+        return rowAtPoint(new Point(0, viewRect.y + viewRect.height - 1));
+    }
+
+    public int getViewportBufferSize() {
+        return 10;
+    }
+
+    public void visibleItemsChanged() {
+//        if (vu != null) vu.cancel();
+//        
+//        vu = new ViewUpdater(this);
+//        vu.start();
+    }    
 
     public boolean isListeningForChanges() {
         TableModelListener[] listeners = getDcModel().getTableModelListeners();
@@ -1022,8 +1056,7 @@ public class DcTable extends JTable implements IViewComponent {
                 } else {
                     int field = getFieldForColumnIndex(e.getColumn());
                     try {
-                        if (component.isEnabled()
-                                && !module.getField(field).isUiOnly())
+                        if (component.isEnabled() && !module.getField(field).isUiOnly())
                             addRowToCache(row, e.getColumn());
                     } catch (Exception whatever) {
                         addRowToCache(row, e.getColumn());
@@ -1043,7 +1076,7 @@ public class DcTable extends JTable implements IViewComponent {
 
     private int getIndex(Long ID) {
         for (int i = 0; i < getItemCount(); i++) {
-            String objectID = getObjectID(i);
+            Long objectID = getObjectID(i);
             if (ID.equals(objectID))
                 return i;
         }
@@ -1105,7 +1138,8 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     public void add(Long key) {
-        add(DataManager.getItem(getModule().getIndex(), key));
+        int row = addRow();
+        getModel().setValueAt(key, row, getColumnIndexForField(DcObject._ID));
     }
 
     public void add(Collection<Long> keys) {

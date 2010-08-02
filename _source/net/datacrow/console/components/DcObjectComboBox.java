@@ -38,6 +38,7 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
     public DcObjectComboBox(int module) {
         super();
         this.module = module;
+        refresh();
     }
     
     @Override
@@ -45,10 +46,7 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
         setSelectedItem(value);
         
         if (value != null) {
-            boolean exists = false;
-            for (int i = 0; i < dataModel.getSize(); i++)
-                if (value.equals(dataModel.getElementAt(i)))
-                    exists = true;
+            boolean exists = dataModel.equals(value);
             
             if (!exists) {
                 addItem(value);

@@ -232,8 +232,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                     new Thread(new Runnable() { 
                         public void run() {
                             try {
-                                list.updateItem(dco.getID(), o.clone());
-                                table.updateItem(dco.getID(), o.clone());
+                                list.update(dco.getID(), o.clone());
+                                table.update(dco.getID(), o.clone());
                             } catch (Exception e) {
                                 logger.debug(e, e);
                             }

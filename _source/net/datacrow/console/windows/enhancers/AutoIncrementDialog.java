@@ -289,10 +289,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
             if (!active && !canceled) {
                 DcSwingUtilities.displayErrorMessage("msgNoRenumbersFound");
             } else {
-                // refresh the view
-                module.getSearchView().clear();
-                DataManager.bindData(module.getSearchView(), module.getIndex(), 
-                                     DataFilters.getCurrent(module.getIndex()));
+                module.getSearchView().add(DataManager.getKeys(DataFilters.getCurrent(module.getIndex())));
             }
         }
         

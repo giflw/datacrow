@@ -183,7 +183,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (dco == null || (!allowSame && dco.equals(this.dco)))
             return;
         
-        if (this.dco  != null)
+        if (this.dco != null)
             this.dco.release();
 
         setObject(dco);
@@ -294,9 +294,6 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         StringBuffer body = new StringBuffer();
         QuickViewFieldDefinitions definitions = 
             (QuickViewFieldDefinitions) module.getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
-        
-        dco.removeChildren();
-        dco.loadChildren();
         
         int counter = 0;
         

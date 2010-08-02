@@ -46,7 +46,6 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.MainFrame;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.menu.DcPropertyViewPopupMenu;
@@ -62,10 +61,8 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 import net.datacrow.core.wf.requests.Requests;
-import net.datacrow.core.wf.requests.StatusUpdateRequest;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
 import net.datacrow.util.DataTask;
@@ -349,11 +346,6 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                             for (int j = 0; j < requests.get().length; j++) {
                                 dco.addRequest(requests.get()[j]);
                             }
-                            
-                            IRequest request = 
-                                new StatusUpdateRequest(dco.getModule().getIndex(), MainFrame._SEARCHTAB, "msgDeleteSuccessfull");
-                            request.setExecuteOnFail(true);
-                            dco.addRequest(request);
                         } 
 
                         try {

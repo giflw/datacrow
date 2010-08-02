@@ -115,7 +115,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             poller.start();
             
             DataFilters.setCurrent(module.getIndex(), df);
-            List<Long> keys = DataManager.getKeys(df);
+            List<Long> keys = DataManager.getKeys(df == null ? DataFilters.getCurrent(module.getIndex()) : df);
             DcModules.getCurrent().getSearchView().add(keys);
             
             try {
@@ -190,9 +190,9 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             
             int[] fields;
             if (DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE) {
-                fields = new int[] {DcProperty._A_NAME, DcProperty._B_ICON};
+                fields = new int[] {DcObject._ID, DcProperty._A_NAME, DcProperty._B_ICON};
             } else {
-                fields = new int[] {DcModules.get(field.getReferenceIdx()).getDisplayFieldIdx()};
+                fields = new int[] {DcObject._ID, DcModules.get(field.getReferenceIdx()).getDisplayFieldIdx()};
             }
             
             List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);

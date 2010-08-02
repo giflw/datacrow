@@ -48,7 +48,6 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.db.Query;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -275,8 +274,7 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
             } else {
                 // refresh the view
                 module.getSearchView().clear();
-                DataManager.bindData(module.getSearchView(), module.getIndex(), 
-                                     DataFilters.getCurrent(module.getIndex()));
+                module.getSearchView().add(DataManager.getKeys(DataFilters.getCurrent(module.getIndex())));
             }            
         }
         

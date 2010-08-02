@@ -10,8 +10,6 @@ import net.datacrow.console.views.View;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.wf.requests.IRequest;
-import net.datacrow.core.wf.requests.StatusUpdateRequest;
 import net.datacrow.core.wf.requests.UpdateStatusProgressBarRequest;
 import net.datacrow.util.DataTask;
 import net.datacrow.util.DcSwingUtilities;
@@ -65,13 +63,6 @@ public class DeleteTask extends DataTask {
                     dco.markAsUnchanged();
                     dco.addRequest(new UpdateStatusProgressBarRequest(
                             dco.getModule().getIndex(), MainFrame._SEARCHTAB, counter));                        
-                    
-                    if (counter == objects.length) {
-                        IRequest request = 
-                            new StatusUpdateRequest(dco.getModule().getIndex(), MainFrame._SEARCHTAB, "msgDeleteSuccessfull");
-                        request.setExecuteOnFail(true);
-                        dco.addRequest(request);
-                    } 
                     
                     try {
                         dco.delete(true);

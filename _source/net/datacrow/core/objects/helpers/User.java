@@ -1,10 +1,7 @@
 package net.datacrow.core.objects.helpers;
 
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;

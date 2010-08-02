@@ -96,6 +96,7 @@ public class DatabaseManager {
             start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             
             db.cleanup();
+            db.cleanReferences();
             
             if (logger.isDebugEnabled()) {
                 long end = new Date().getTime();
@@ -232,62 +233,6 @@ public class DatabaseManager {
         
         return null;
     }
-    
-    
-    
-//    /**
-//     * Executes a query.
-//     * @param sql The SQL statement.
-//     * @param type The query type ({@link Query}).
-//     * @param log Indicates if information on the query should be logged.
-//     * @return The retrieved items or null when an error occurs.
-//     */
-//    public static void runSQL(String sql) {
-//        try {
-//            Connection conn = DatabaseManager.getConnection();
-//            conn.createStatement().execute(sql);
-//            conn.close();
-//        } catch (SQLException e) {
-//            logger.error("There were errors for query " + sql, e);
-//        }
-//    }     
-    
-//    /**
-//     * Executes a query. 
-//     * @param ps The prepared SQL statement.
-//     * @param type The query type ({@link Query}.
-//     * @param log Indicates if information on the query should be logged.
-//     * @return The retrieved items or null when an error occurs.
-//     * 
-//     * @deprecated
-//     */
-//    public static List<DcObject> retrieveItems(PreparedStatement ps, int type) {
-//        List<DcObject> data = null;
-//        
-//        try {
-//            if (    type != Query._SELECT && type != Query._SELECTOR && 
-//                    type != Query._SELECTPRECISE && type != Query._SELECTPRECISEOR &&
-//                    type != Query._UNDEFINED) {
-//                
-//                ps.execute();
-//            } else {
-//                ResultSet result = ps.executeQuery();
-//                data = WorkFlow.getInstance().convert(result, null);
-//                result.close();
-//            }
-//        } catch (SQLException e) {
-//            if (!e.getMessage().equals("No ResultSet was produced"))
-//                logger.error("Error while executing query " + ps, e);
-//        }
-//        
-//        try {
-//            ps.close();
-//        } catch (SQLException e) {
-//            logger.error(e, e);
-//        }
-//
-//        return data;
-//    }    
     
     public static List<Long> getKeys(DataFilter filter) {
         List<Long> data = new ArrayList<Long>();

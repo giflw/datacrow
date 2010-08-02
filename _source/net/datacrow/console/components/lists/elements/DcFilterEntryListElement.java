@@ -58,7 +58,7 @@ public class DcFilterEntryListElement extends DcListElement {
     }
     
     @Override
-    protected void build() {
+    public void build() {
         setLayout(new FlowLayout(FlowLayout.LEFT));
   
         DcModule module = DcModules.get(entry.getModule());

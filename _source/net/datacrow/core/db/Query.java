@@ -43,7 +43,6 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.IUpdateUIRequest;
-import net.datacrow.core.wf.requests.ImageRequest;
 import net.datacrow.core.wf.requests.Requests;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
@@ -91,13 +90,6 @@ public abstract class Query {
             Requests uiRequests = new Requests();
 
             for (IRequest request : requests.get()) {
-                if (request instanceof ImageRequest) {
-                    requests.remove(request);
-                    request.execute(items);
-                }
-            }
-            
-            for (IRequest request : requests.get()) {
                 requests.remove(request);
                 if (request instanceof IUpdateUIRequest)
                     uiRequests.add(request);
@@ -115,13 +107,15 @@ public abstract class Query {
     }
     
     protected void setValues(PreparedStatement ps, Collection<Object> values) {
-        try {
-            int pos = 1;
-            for (Object value : values)
+        int pos = 1;
+        for (Object value : values) {
+            try {
                 ps.setObject(pos, value);
-        } catch (Exception e) {
-            logger.error("Could not set values [" + values + "] for " + ps, e);
-        }        
+                pos++;
+            } catch (Exception e) {
+                logger.error("Could not set values [" + values + "] for " + ps, e);
+            }
+        }
     }
     
     protected Object getQueryValue(DcObject dco, int index) {
@@ -241,4 +235,104 @@ public abstract class Query {
             logger.error("Could not save [" + imageFile + "]", e);
         }
     }
+    
+    protected void updateView() {
+        getModule().getSearchView().refresh();
+    }
+    
+    /*private static class ViewUpdater implements Runnable {
+        
+        private DcObject dco;
+        private int module;
+        private int tab;
+        private int mode;
+        
+        public ViewUpdater(DcObject dco, int module, int tab, int mode) {
+            this.dco = dco;
+            this.module = module;
+            this.tab = tab;
+            this.mode = mode;
+        }
+        
+        public void run() {
+            DcModule m = DcModules.get(module);
+            if (tab == MainFrame._INSERTTAB) {
+                if (mode == 0) {
+                    m.getCurrentInsertView().updateItem(dco.getID(), dco);
+                } else if (mode == 1) {
+                    
+                    if (DcModules.get(module).getSearchView() != null) {
+                        
+                        DcModules.get(module).getSearchView().add(dco);
+                        
+                        if (!DcModules.get(module).isAbstract() && dco.getModule().isTopModule()) {
+
+                            if (dco.getModule().getType() == DcModule._TYPE_MEDIA_MODULE)
+                                DcModules.get(DcModules._MEDIA).getSearchView().add(dco);
+
+                            DcModules.get(DcModules._ITEM).getSearchView().add(dco);
+                        }
+                    }
+                }
+            } else if (tab == MainFrame._SEARCHTAB) {
+                
+                Collection<DcModule> modules = new ArrayList<DcModule>();
+                modules.add(m);
+                
+                if (!m.isAbstract()) {
+                    if (m.getType() == DcModule._TYPE_MEDIA_MODULE)
+                        modules.add(DcModules.get(DcModules._MEDIA));
+                    
+                    if (m.isContainerManaged())
+                        modules.add(DcModules.get(DcModules._CONTAINER));
+                }
+                
+                if (m.isAbstract())
+                    modules.add(DcModules.get(dco.getModule().getIndex()));
+                
+                for (DcModule mod : modules) {
+                    try {
+                        MasterView masterView = mod.getSearchView();
+                        if (masterView != null) {
+                            if (mode == 0)
+                                masterView.update(dco.getID());
+                            if (mode == 1)
+                                masterView.add(dco);
+//                            if (mode == 2)
+//                                masterView.removeItems(new Long[] {dco.getID()});
+                        }
+                    } catch (Exception exp) {
+                        logger.error("Error while updating view for module " + mod.getLabel(), exp);
+                    }
+                }
+            }
+            
+            if (mode == 0) {
+                // after an update make sure that the quick view of the main item is updated with
+                // the changed information (as well as the grouping pane).
+                if (dco.getModule().getParent() != null) {
+                    if (dco.getModule().getParent().getSearchView() != null) {
+                        dco.getModule().getParent().getSearchView().refreshQuickView();
+                        if (dco.getModule().getParent().getSearchView().getGroupingPane() != null) {
+                            dco.getModule().getParent().getSearchView().getGroupingPane().revalidate();
+                            dco.getModule().getParent().getSearchView().getGroupingPane().repaint();
+                        }
+                    }
+                }
+                
+                if (dco.getModule().hasDependingModules()) {
+                    for (DcModule module : DcModules.getActualReferencingModules(dco.getModule().getIndex())) {
+                        if (module.isValid() && module.isEnabled() && module.getSearchView() != null) {
+                            module.getSearchView().refreshQuickView();
+                            if (module.getSearchView().getGroupingPane() != null) {
+                                module.getSearchView().getGroupingPane().revalidate();
+                                module.getSearchView().getGroupingPane().repaint();
+                            }
+                        }
+                    }
+                }
+            }
+            dco = null;
+        } 
+    }     */  
  }

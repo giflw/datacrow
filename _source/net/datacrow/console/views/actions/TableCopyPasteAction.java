@@ -37,7 +37,6 @@ public class TableCopyPasteAction implements ActionListener {
         DcModule module = vc.getModule();
         
         int[] fields = (int[]) vc.getModule().getSetting(DcRepository.ModuleSettings.stTableColumnOrder);
-        int updateIdx = vc.getSelectedIndex();
         
         try {
             String text = (String) (clipboard.getContents(this).getTransferData(DataFlavor.stringFlavor));
@@ -68,7 +67,7 @@ public class TableCopyPasteAction implements ActionListener {
                     index = values.indexOf("\t");
                 }
                 dco.setValue(fields[fldCounter], values);
-                vc.updateItemAt(updateIdx++, dco);
+                vc.update(dco.getID(), dco);
                 dco.release();
             }
         }

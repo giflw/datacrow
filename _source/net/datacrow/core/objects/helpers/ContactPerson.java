@@ -28,18 +28,16 @@ package net.datacrow.core.objects.helpers;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.db.Query;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.util.DcSwingUtilities;
+
+import org.apache.log4j.Logger;
 
 public class ContactPerson extends DcObject {
     
@@ -78,10 +76,7 @@ public class ContactPerson extends DcObject {
             if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
                 try {
                     DatabaseManager.executeSQL("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
-                                           loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID());
-                    for (DcObject dco : loans)
-                        DataManager.remove(dco, loan.getModule().getIndex());
-    
+                                               loan.getField(Loan._C_CONTACTPERSONID) + " = " + getID());
                     try {
                         super.delete(false);
                     } catch (ValidationException e) {}

@@ -53,7 +53,7 @@ public class DcMapping extends DcObject {
     public DcMapping(int module) {
         super(module);
     }
-
+    
     /**
      * The filename to which this module is stored.
      * @return Always returns null.
@@ -70,6 +70,10 @@ public class DcMapping extends DcObject {
           
         reference = null;
         super.release();
+    }
+    
+    public void setReference(DcObject dco) {
+        this.reference = dco;
     }
     
     /**

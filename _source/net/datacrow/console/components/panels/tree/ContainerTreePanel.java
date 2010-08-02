@@ -68,6 +68,14 @@ public class ContainerTreePanel extends TreePanel {
 //        }
     }
     
+    
+    
+    @Override
+    protected void refresh() {
+        // TODO Auto-generated method stub
+        
+    }
+
     @Override
     public String getName() {
         return DcModules.get(DcModules._CONTAINER).getObjectNamePlural();

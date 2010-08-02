@@ -23,49 +23,55 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.lists.elements;
+package net.datacrow.util;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import javax.swing.SwingUtilities;
 
-import javax.swing.JLabel;
+import net.datacrow.console.views.IViewComponent;
 
-import net.datacrow.console.ComponentFactory;
-import net.datacrow.core.objects.DcField;
-
-public class DcFieldListElement extends DcListElement {
+public class ViewUpdater extends Thread {
     
-    private static final Dimension dim = new Dimension(360, 30);
+    private boolean canceled = false;
     
-    private DcField field;
+    private IViewComponent vc;
     
-    public DcFieldListElement(DcField field) {
-        this.field = field;
-        
-        setPreferredSize(dim);
-        setMinimumSize(dim);
-        
-        build();
+    public ViewUpdater(IViewComponent vc) {
+        this.vc = vc;
     }
-
-    public DcField getField() {
-        return field;
+    
+    public void cancel() {
+        canceled = true;
     }
     
     @Override
-    public void build() {
+    public void run() {
+        int first = vc.getFirstVisibleIndex() - vc.getViewportBufferSize();
+        int last = vc.getLastVisibleIndex() + vc.getViewportBufferSize();
+        int size = vc.getItemCount();
         
-        if (field == null)
-            return;
+        first = first < 0 ? 0 : first;
+        last = last > size ? size : last;
+        last = last < 0 ? 0 : last;
         
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-        JLabel labelField = ComponentFactory.getLabel(field.getLabel());
-        labelField.setPreferredSize(new Dimension(360, 30));
-        add(labelField);
+        for (int i = 0; i < first && !canceled; i++) {
+            clearElement(i);
+        }
+        
+        for (int i = last; i < size && !canceled; i++) {
+            clearElement(i);
+        }
     }
     
-    @Override
-    public void clear() {
-        super.clear();
+    private void clearElement(final int idx) {
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(
+                    new Thread(new Runnable() { 
+                        public void run() {
+                            vc.clear(idx);
+                        }
+                    }));
+        } else {
+            vc.clear(idx);
+        }
     }
 }

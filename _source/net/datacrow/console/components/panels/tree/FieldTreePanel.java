@@ -50,7 +50,6 @@ import net.datacrow.util.DcImageIcon;
 
 import org.apache.log4j.Logger;
 
-
 public class FieldTreePanel extends TreePanel {
 
     private static Logger logger = Logger.getLogger(FieldTreePanel.class.getName());

@@ -75,7 +75,7 @@ public class LoanPanel extends JPanel implements ActionListener {
     private DcDateField inputEndDate = ComponentFactory.getDateField();    
     private DcDateField inputStartDate = ComponentFactory.getDateField();
     private DcDateField inputDueDate = ComponentFactory.getDateField();
-    private JComboBox comboPersons = ComponentFactory.getContactPersonCombo();
+    private JComboBox comboPersons = ComponentFactory.getObjectCombo(DcModules._CONTACTPERSON);
     
     private DcTable tableLoans = ComponentFactory.getDCTable(DcModules.get(DcModules._LOAN), true, false);
     

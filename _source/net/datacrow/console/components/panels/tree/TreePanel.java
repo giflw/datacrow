@@ -30,7 +30,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.JMenuBar;
@@ -351,33 +350,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected abstract void createTree();
     protected abstract void addElement(Long key, DefaultMutableTreeNode node, int level);
     
-    protected void revalidateTree(Long key, int modus) {
-        setListeningForSelection(false);
-        setSaveChanges(false);
+    protected void refresh() {
+        TreePath path = tree.getSelectionPath();
+        groupBy();
+        tree.setSelectionPath(path);
         
-        if (modus == _OBJECT_ADDED && top.getChildCount() == 0) {
-            createTree();
-            return;
-        }
-        
-        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-        
-        if (modus == _OBJECT_REMOVED)
-            removeElement(key, top);
-
-        if (modus == _OBJECT_ADDED || modus == _OBJECT_UPDATED) {
-            removeElement(key, top);
-            addElement(key, top, 0);
-        }
-        
-        if (logger.isDebugEnabled()) 
-            logger.debug("Tree was update in " + (new Date().getTime() - start) + "ms");
-
-        repaint();
-        revalidate();
-
-        setListeningForSelection(true);
-        setSaveChanges(true);        
+        if (tree.getSelectionPath() == null)
+            setDefaultSelection();
     }
     
     protected boolean isActive() {

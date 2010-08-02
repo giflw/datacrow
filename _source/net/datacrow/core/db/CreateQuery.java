@@ -61,7 +61,6 @@ public class CreateQuery extends Query {
             }
         }
         
-        // TODO: do we really want to use memory tables??
         String sql = "CREATE MEMORY TABLE " + getModule().getTableName() + "\r\n(" + columns + ");";
         
         try { 

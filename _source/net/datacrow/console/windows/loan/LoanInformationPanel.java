@@ -77,7 +77,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     public void open() {
         DcObject dco = table.getSelectedItem();
         if (dco != null) {
-            dco.load();
+            dco.load(null);
             dco.markAsUnchanged();
             DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, true, dco, this);
             itemForm.setVisible(true);
