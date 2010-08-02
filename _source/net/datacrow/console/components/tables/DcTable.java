@@ -523,11 +523,27 @@ public class DcTable extends JTable implements IViewComponent {
         return value;
     }
 
+    @SuppressWarnings("unchecked")
     public void clear() {
         cache.clear();
         cancelEdit();
         loadedRows.clear();
 
+        TableModel model = getModel();
+        Object value;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                value = model.getValueAt(i, j);
+                
+                if (value instanceof DcObject) {
+                    ((DcObject) value).release();
+                } else if (value instanceof Collection) {
+                    for (DcObject dco : (Collection<DcObject>) value) 
+                        dco.release();
+                }
+            }
+        }
+        
         setListeningForChanges(false);
         getDcModel().setRowCount(0);
         setListeningForChanges(true);
@@ -968,6 +984,7 @@ public class DcTable extends JTable implements IViewComponent {
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
     
+    @SuppressWarnings("unchecked")
     public boolean load(int row) {
         boolean loaded = loadedRows.contains(Integer.valueOf(row));
         
@@ -980,7 +997,61 @@ public class DcTable extends JTable implements IViewComponent {
             Long ID = (Long) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
             
             DcObject dco = DataManager.getItem(module.getIndex(), ID);
-            setValues(getModel(), dco.clone(), false, row);
+
+            TableModel model = getModel();
+            int col;
+            Object value;
+            for (int field : dco.getFieldIndices()) {
+                col = getColumnIndexForField(field);
+                value = dco.getValue(field);
+                
+                if (value instanceof Collection) {
+                    Collection<DcObject> copy = new ArrayList<DcObject>();
+                    for (DcObject reference : (Collection<DcObject>) value) {
+                        copy.add(reference.clone());
+                    }
+                    model.setValueAt(copy, row, col);  
+                } else if (value instanceof DcObject) {
+                    model.setValueAt(((DcObject) value).clone(), row, col);  
+                } else {
+                    model.setValueAt(value, row, col);    
+                }
+            }
+
+            if (module.isAbstract()) {
+                col = getColumnIndexForField(Media._SYS_MODULE);
+                value = dco.getModule();
+                model.setValueAt(value, row, col);
+            }
+
+   
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             dco.release();
             
             setListeningForChanges(listenForChanges);
