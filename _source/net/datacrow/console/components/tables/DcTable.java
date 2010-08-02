@@ -966,7 +966,6 @@ public class DcTable extends JTable implements IViewComponent {
         setColumnSelectionAllowed(false);
         setRequestFocusEnabled(true);
         setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
-        //setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         setAlignmentY(JTable.TOP_ALIGNMENT);
         getTableHeader().setReorderingAllowed(false);
 
@@ -1024,37 +1023,10 @@ public class DcTable extends JTable implements IViewComponent {
                 model.setValueAt(value, row, col);
             }
 
-   
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             dco.release();
             
             setListeningForChanges(listenForChanges);
+
             return true;
         }
         return false;

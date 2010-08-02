@@ -31,6 +31,7 @@ import java.awt.Font;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -66,6 +67,8 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
         JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         if (((DcTable) table).load(row)) {
+            ((JViewport) table.getParent()).repaint();
+            ((JViewport) table.getParent()).revalidate();
             table.repaint();
             table.revalidate();
         }
