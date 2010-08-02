@@ -124,6 +124,13 @@ public class DcMapping extends DcObject {
         reference = getReferencedObject();
         return reference != null ? reference.toString() : "";
     }
+    
+    @Override
+    public DcObject clone() {
+        DcMapping clone = (DcMapping) super.clone();
+        clone.setReference(reference.clone());
+        return clone;
+    }
 
     @Override
     public void copy(DcObject dco, boolean overwrite, boolean allowDeletes) {
