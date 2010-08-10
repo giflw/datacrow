@@ -927,8 +927,8 @@ public final class ComponentFactory {
         c.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     }
     
-    public static final DcNumberField getIdFieldDisabled() {
-        DcNumberField textField = new DcNumberField();
+    public static final DcShortTextField getIdFieldDisabled() {
+        DcShortTextField textField = new DcShortTextField(50);
         textField.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));
         textField.setEnabled(false);
         textField.setEditable(false);

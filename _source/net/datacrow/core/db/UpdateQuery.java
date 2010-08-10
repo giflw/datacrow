@@ -107,7 +107,7 @@ public class UpdateQuery extends Query {
                     if (dco.isChanged(field.getIndex())) {
                         DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
                         String sql = "DELETE FROM " + mappingMod.getTableName() + " WHERE " +  
-                                     mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = " + dco.getID();
+                                     mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'";
                         stmt.execute(sql);
                     }
                 } else if (dco.isChanged(field.getIndex()) && !field.isUiOnly()) {
@@ -136,7 +136,7 @@ public class UpdateQuery extends Query {
                     stmt.execute("INSERT INTO " + mapping.getTableName() + 
                                  " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
                                  mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                                 ") \r\n VALUES (" + dco.getID() + ", " + mapping.getReferencedID() + ");");
+                                 ") \r\n VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "');");
                 }
             }
             
@@ -183,6 +183,8 @@ public class UpdateQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
+        dco.getModule().getSearchView().update(dco.getID());
+        
         handleRequest(null, success);
         clear();
         

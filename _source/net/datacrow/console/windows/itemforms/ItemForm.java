@@ -174,7 +174,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             this.dcoOrig = update ? DataManager.getItem(dcoOrig.getModule().getIndex(), dcoOrig.getID()) : dcoOrig.clone();
             this.dco = update ? DataManager.getItem(dcoOrig.getModule().getIndex(), dcoOrig.getID()) : dcoOrig.clone();
             this.moduleIdx = dco.getModule().getIndex();
-            
+
             for (IRequest request : o.getRequests().get())
                 dco.addRequest(request);
         }
@@ -425,6 +425,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         int[] indices = dcoOrig.getFieldIndices();
         for (int i = 0; i < indices.length && !changed; i++) {
             int index = indices[i];
+            
             if (index == DcObject._ID)
                 continue;
             
