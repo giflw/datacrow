@@ -183,8 +183,6 @@ public class UpdateQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
-        dco.getModule().getSearchView().update(dco.getID());
-        
         handleRequest(null, success);
         clear();
         
