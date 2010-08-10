@@ -63,7 +63,7 @@ public class SecurityCentre {
     private static SecurityCentre instance = new SecurityCentre();
     
     // all logged on users
-    private Map<Long, SecuredUser> users = new HashMap<Long, SecuredUser>();
+    private Map<String, SecuredUser> users = new HashMap<String, SecuredUser>();
     
     // the current using, running on this instance
     private User user;
@@ -133,15 +133,21 @@ public class SecurityCentre {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             
-            List<DcObject> users = WorkFlow.getInstance().convert(rs, true);
+            List<DcObject> users = WorkFlow.getInstance().convert(rs, new int[] {User._ID, User._A_LOGINNAME, User._B_ENABLED, User._C_NAME, User._L_ADMIN});
 
             User user;
             if (users.size() == 1) {
                 user = (User) users.get(0);
-                sql = "select * from permission where user = " + user.getID();
+                sql = "select * from permission where user = '" + user.getID() + "'";
                 rs = stmt.executeQuery(sql);
 
-                List<DcObject> permissions = WorkFlow.getInstance().convert(rs, true);
+                List<DcObject> permissions = WorkFlow.getInstance().convert(rs, new int[] {Permission._ID, 
+                                                                                           Permission._A_PLUGIN, 
+                                                                                           Permission._B_FIELD, 
+                                                                                           Permission._C_MODULE, 
+                                                                                           Permission._D_VIEW,
+                                                                                           Permission._E_EDIT,
+                                                                                           Permission._F_USER});
                 for (DcObject permission : permissions)
                     user.addChild(permission);
                 
@@ -201,9 +207,6 @@ public class SecurityCentre {
         try {
             user.setIDs();
             user.saveNew(false);
-            for (DcObject permission : user.getChildren())
-                permission.saveNew(false);
-            
         } catch (Exception e) {
             logger.error(e, e);
         }
@@ -212,9 +215,10 @@ public class SecurityCentre {
     private Collection<Permission> getDefaultPermissions() {
         Collection<Permission> permissions = new ArrayList<Permission>();
         
+        Permission permission;
         for (DcModule module : getManagedModules()) {
             for (DcField field : module.getFields()) {
-                Permission permission = (Permission) DcModules.get(DcModules._PERMISSION).getItem();
+                permission = (Permission) DcModules.get(DcModules._PERMISSION).getItem();
                 permission.setIDs();
                 permission.setValue(Permission._B_FIELD, Long.valueOf(field.getIndex()));
                 permission.setValue(Permission._C_MODULE, Long.valueOf(field.getModule()));
@@ -226,7 +230,7 @@ public class SecurityCentre {
         
         for (RegisteredPlugin plugin : Plugins.getInstance().getRegistered()) {
             if (plugin.isAuthorizable()) {
-                Permission permission = (Permission) DcModules.get(DcModules._PERMISSION).getItem();
+                permission = (Permission) DcModules.get(DcModules._PERMISSION).getItem();
                 permission.setIDs();
                 permission.setValue(Permission._A_PLUGIN, plugin.getKey());
                 permission.setValue(Permission._D_VIEW, Boolean.TRUE);

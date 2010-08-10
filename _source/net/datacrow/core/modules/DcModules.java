@@ -512,7 +512,7 @@ public class DcModules {
      * @param key
      */
     public static DcModule get(int key) {
-        return  modules.get(key);//modules.containsKey(key) ? modules.get(key) : propertyBaseModules.get(key);
+        return  modules.get(key);
     }
 
     /**

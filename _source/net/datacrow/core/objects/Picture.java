@@ -66,6 +66,19 @@ public class Picture extends DcObject {
         super(DcModules._PICTURE);
     }
     
+    @Override
+    public void initializeImages() {
+        
+    }
+    
+    @Override
+    public boolean hasPrimaryKey() {
+        return false;
+    }
+
+    @Override
+    public void initializeReferences() {}    
+    
     /**
      * Checks whether an image has been defined and, if so, if the image exists.
      */
@@ -160,11 +173,11 @@ public class Picture extends DcObject {
                 String plain = filename.substring(0, idx);
                 String scaledFilename = plain + "_small.jpg";
                 
-                if (isNew()) {
-                    return null;
-                } else {
+//                if (isNew()) {
+//                    return null;
+//                } else {
                     return scaledFilename;
-                }
+//                }
                 
             } catch (Exception e) {
                 logger.debug("Unable to determine scaled image filename for " + filename + ". Is this a new item?", e);

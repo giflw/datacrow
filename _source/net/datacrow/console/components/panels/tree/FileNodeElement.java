@@ -17,8 +17,8 @@ public class FileNodeElement extends NodeElement {
     }
     
     @Override
-    public List<Long> getItems(List<NodeElement> parents) {
-        return new ArrayList<Long>();
+    public List<String> getItems(List<NodeElement> parents) {
+        return new ArrayList<String>();
     }
 
     @Override

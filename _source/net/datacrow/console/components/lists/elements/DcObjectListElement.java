@@ -29,6 +29,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JPanel;
@@ -36,9 +37,11 @@ import javax.swing.JPanel;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.Settings;
 
 /**
  * A list element which is capable of displaying a DcObject.
@@ -48,7 +51,7 @@ import net.datacrow.settings.DcSettings;
 public abstract class DcObjectListElement extends DcListElement {
 
     protected static final int fieldHeight = 21;
-    protected Long key;
+    protected String key;
     protected int module;
     protected DcObject dco;
     
@@ -56,7 +59,7 @@ public abstract class DcObjectListElement extends DcListElement {
         this.module = module;
     }
     
-    public void setKey(Long key) {
+    public void setKey(String key) {
         this.key = key;
     }
     
@@ -69,22 +72,34 @@ public abstract class DcObjectListElement extends DcListElement {
     }
 
     public DcObject getDcObject() {
-        if (dco == null) load();
-        
+        dco = dco == null ? DataManager.getItem(module, key) : dco;
         return dco;
     }
     
     public abstract Collection<Picture> getPictures();
     
+    private boolean loading = false;
+    
     public void load() {
-        if (dco == null) {
-            clear();
+        if (dco == null && !loading) {
             
-            dco = DataManager.getItem(module, key);
+            loading = true;
+            
+            Settings settings = DcModules.get(module).getSettings();
+            Collection<Integer> fields = new ArrayList<Integer>();
+            for (int field : settings.getIntArray(DcRepository.ModuleSettings.stCardViewItemDescription))
+                fields.add(Integer.valueOf(field));
+
+            for (int field : settings.getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder))
+                fields.add(Integer.valueOf(field));
+
+            dco = DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields));
             
             build();
             revalidate();
             repaint();
+            
+            loading = false;
         }
     }
     

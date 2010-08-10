@@ -122,7 +122,7 @@ public class UpdateQuery extends Query {
     
             String s = sbValues.toString();
             if (dco.getModule().getIndex() != DcModules._PICTURE && !Utilities.isEmpty(values)) {
-                ps = conn.prepareStatement("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE ID = " + dco.getID());
+                ps = conn.prepareStatement("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE ID = '" + dco.getID() + "'");
                 setValues(ps, values);
                 ps.execute();
             } else if (!Utilities.isEmpty(values)) {
@@ -136,7 +136,7 @@ public class UpdateQuery extends Query {
                     stmt.execute("INSERT INTO " + mapping.getTableName() + 
                                  " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
                                  mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                                 ") \r\n VALUES (" + dco.getID() + ", " + mapping.getReferencedId() + ");");
+                                 ") \r\n VALUES (" + dco.getID() + ", " + mapping.getReferencedID() + ");");
                 }
             }
             
@@ -160,7 +160,7 @@ public class UpdateQuery extends Query {
                     boolean exists = false;
                     if (child.getID() != null) {
                         ResultSet rs = DatabaseManager.executeSQL("select count(*) from "
-                                        + child.getModule().getTableName() + " where ID = " + child.getID());
+                                        + child.getModule().getTableName() + " where ID = '" + child.getID() + "'");
                         rs.next();
                         exists = rs.getInt(1) > 0;
                         rs.close();

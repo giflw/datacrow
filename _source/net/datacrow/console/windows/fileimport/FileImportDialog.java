@@ -343,7 +343,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         JLabel lblContainer = ComponentFactory.getLabel(DcResources.getText("lblContainer"));
         fldContainer = ComponentFactory.getObjectCombo(DcModules._CONTAINER);
         
-        Long ID = settings.getLong(DcRepository.ModuleSettings.stImportCDContainer);
+        String ID = settings.getString(DcRepository.ModuleSettings.stImportCDContainer);
         DcObject item = DataManager.getItem(DcModules._CONTAINER, ID);
         if (item != null)
             fldContainer.setSelectedItem(item);
@@ -352,7 +352,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         JLabel labelMedium = ComponentFactory.getLabel(DcResources.getText("lblStorageMedium"));
         fldStorageMedium = ComponentFactory.getObjectCombo(idx);
         
-        ID = settings.getLong(DcRepository.ModuleSettings.stImportCDStorageMedium);
+        ID = settings.getString(DcRepository.ModuleSettings.stImportCDStorageMedium);
         item = DataManager.getItem(idx, ID);
         if (item != null)
             fldStorageMedium.setSelectedItem(item);

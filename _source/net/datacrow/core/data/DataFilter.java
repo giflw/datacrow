@@ -337,20 +337,24 @@ public class DataFilter {
     
     @SuppressWarnings("unchecked")
     public String toSQL(int[] fields) {
+        DcModule module = DcModules.get(getModule());
         String columns = "";
+        DcField field;
         if (fields != null && fields.length > 0) {
-            for (int field : fields) {
-                if (columns.length() > 0) columns += ", ";
-                columns += DcModules.get(module).getField(field).getDatabaseFieldName();
+            for (int idx : fields) {
+                field = module.getField(idx);
+                
+                if (!field.isUiOnly()) {
+                    if (columns.length() > 0) columns += ", ";
+                    columns += field.getDatabaseFieldName();
+                }
             }
         } else {
             columns = "*";
         }
         
-        StringBuffer sql = new StringBuffer("SELECT " + columns + " FROM " + DcModules.get(module).getTableName());
+        StringBuffer sql = new StringBuffer("SELECT " + columns + " FROM " + module.getTableName());
         
-        DcModule module;
-        DcField field;
         Object value;
         int operator;
         int counter2;

@@ -115,7 +115,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             poller.start();
             
             DataFilters.setCurrent(module.getIndex(), df);
-            List<Long> keys = DataManager.getKeys(df == null ? DataFilters.getCurrent(module.getIndex()) : df);
+            List<String> keys = DataManager.getKeys(df == null ? DataFilters.getCurrent(module.getIndex()) : df);
             DcModules.getCurrent().getSearchView().add(keys);
             
             try {

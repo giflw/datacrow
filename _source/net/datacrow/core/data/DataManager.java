@@ -65,6 +65,42 @@ public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
     
+//    private static HashMap<Integer, HashMap<String, String>> cache = new HashMap<Integer, HashMap<String,String>>();
+//    
+//    public DataManager() {
+//        
+//        HashMap<String, String> map;
+//        for (DcModule module : DcModules.getModules()) {
+//            if (!module.isTopModule()) continue;
+//
+//            for (DcModule reference : DcModules.getReferencedModules(module.getIndex())) {
+//                map = new HashMap<String, String>();
+//                
+//                String sql = "SELECT ID, " + reference.getField(reference.getSystemDisplayFieldIdx()).getDatabaseFieldName();
+//                
+//                if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
+//                    sql += ", ICON";
+//                
+//                sql += " FROM " + reference.getTableName();
+//                
+//                ResultSet rs;
+//                try {
+//                    rs = DatabaseManager.executeSQL(sql);
+//                    while (rs.next())
+//                        map.put(rs.getString(1), rs.getString(2));
+//                    
+//                    cache.put(reference.getIndex(), map);
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+//    
+//    public static String getDisplayString(int module, String ID) {
+//        return cache.get(module) != null ? cache.get(module).get(ID) : "";
+//    }
+    
     public static int getCount(int module, int field, Object value) {
         int count = 0;
         
@@ -103,9 +139,9 @@ public class DataManager {
      * @param childIdx The child module index.
      * @return The children or an empty collection.
      */
-    public static List<DcObject> getChildren(Long parentId, int childIdx) {
+    public static List<DcObject> getChildren(String parentID, int childIdx) {
         DataFilter df = new DataFilter(childIdx);
-        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, DcModules.get(childIdx).getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentId));
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, DcModules.get(childIdx).getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentID));
         return new SelectQuery(df, null, null).run();
     }
     
@@ -282,7 +318,7 @@ public class DataManager {
         
         // check if a mapping exists already
         for (DcMapping m : mappings) {
-            if (m.getReferencedId().equals(child.getID()) || m.toString().equals(child.toString()))
+            if (m.getReferencedID().equals(child.getID()) || m.toString().equals(child.toString()))
                 return;
         }
         
@@ -295,7 +331,8 @@ public class DataManager {
      * @param parentID The item ID for which the loans are retrieved.
      * @return A collection holding loans or an empty collection.
      */
-    public static Collection<Loan> getLoans(Long parentID) {
+    public static Collection<Loan> getLoans(String parentID) {
+        // TODO
         return new ArrayList<Loan>();
     }
     
@@ -303,7 +340,7 @@ public class DataManager {
      * Retrieves the actual loan.
      * @param parentID The item ID for which the loan is retrieved.
      */
-    public static Loan getCurrentLoan(Long parentID) {
+    public static Loan getCurrentLoan(String parentID) {
         DataFilter df = new DataFilter(DcModules._LOAN);
         df.addEntry(new DataFilterEntry(DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
         df.addEntry(new DataFilterEntry(DcModules._LOAN, Loan._D_OBJECTID, Operator.EQUAL_TO, parentID));
@@ -350,7 +387,7 @@ public class DataManager {
                 PreparedStatement ps2 = conn.prepareStatement(sql);
                 ps2.setString(1, referenceID);
                 
-                List<DcObject> items = WorkFlow.getInstance().convert(ps2.executeQuery(), true);
+                List<DcObject> items = WorkFlow.getInstance().convert(ps2.executeQuery(), new int[] {DcObject._ID});
                 result = items.size() > 0 ? items.get(0) : null;
             }
         
@@ -391,7 +428,7 @@ public class DataManager {
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
                 ps.setString(2,  ";%" + s.toUpperCase() + "%;");
             
-            List<DcObject> items = WorkFlow.getInstance().convert(ps.executeQuery(), true);
+            List<DcObject> items = WorkFlow.getInstance().convert(ps.executeQuery(), new int[] {DcObject._ID});
             return items.size() > 0 ? items.get(0) : null;
             
         } catch (SQLException e) {
@@ -401,16 +438,20 @@ public class DataManager {
         return null;
     }    
     
+    public static DcObject getItem(int module, String ID) {
+        return getItem(module, ID, null);
+    }  
+    
     /**
      * Retrieve the item based on its ID.
      * @param module
      * @param ID
      * @return null or the item if found.
      */
-    public static DcObject getItem(int module, Long ID) {
+    public static DcObject getItem(int module, String ID, int[] fields) {
         DataFilter df = new DataFilter(module);
         df.addEntry(new DataFilterEntry(module, DcObject._ID, Operator.EQUAL_TO, ID));
-        List<DcObject> items = get(df);
+        List<DcObject> items = get(df, fields);
         return items != null && items.size() > 0 ? items.get(0) : null;
     }    
   
@@ -419,7 +460,7 @@ public class DataManager {
      * @param module
      * @param parentId
      */
-    public static Collection<DcObject> getReferences(int modIdx, Long parentID) {
+    public static Collection<DcObject> getReferences(int modIdx, String parentID) {
         DataFilter df = new DataFilter(modIdx);
         df.addEntry(new DataFilterEntry(modIdx, DcMapping._A_PARENT_ID, Operator.EQUAL_TO, parentID));
         return get(df);
@@ -430,13 +471,13 @@ public class DataManager {
      * @param parentId
      * @return Either the pictures or an empty collection.
      */
-    public static Collection<DcObject> getPictures(Long parentID) {
+    public static Collection<DcObject> getPictures(String parentID) {
         DataFilter df = new DataFilter(DcModules._PICTURE);
         df.addEntry(new DataFilterEntry(DcModules._PICTURE, Picture._A_OBJECTID, Operator.EQUAL_TO, parentID));
         return new SelectQuery(df, null, null).run();
     }
     
-    public static List<Long> getKeys(DataFilter filter) {
+    public static List<String> getKeys(DataFilter filter) {
         return DatabaseManager.getKeys(filter);
     }
     

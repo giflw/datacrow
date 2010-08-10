@@ -37,4 +37,12 @@ public class Tab extends DcProperty {
     public Tab() {
         super(DcModules._TAB);
     }
+    
+    @Override
+    public void initializeImages() {
+        
+    }
+    
+    @Override
+    public void initializeReferences() {}        
 }

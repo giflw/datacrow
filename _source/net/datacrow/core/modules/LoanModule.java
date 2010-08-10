@@ -111,11 +111,11 @@ public class LoanModule extends DcModule {
                 "EndDate"));
         addField(new DcField(Loan._C_CONTACTPERSONID, getIndex(), "Contact Person",
                 false, true, false, false, false,
-                50, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._BIGINTEGER,
+                36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "PersonID"));
         addField(new DcField(Loan._D_OBJECTID, getIndex(), "Object",
                 false, true, false, false, false,
-                50, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._BIGINTEGER,
+                36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "ObjectID"));
         addField(new DcField(Loan._E_DUEDATE, getIndex(), "Due Date",
                 false, true, false, false, false,

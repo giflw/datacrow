@@ -304,14 +304,14 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
                         field.getDatabaseFieldName() + " != ''");
                 
                 while (rs.next() &&  !canceled) {
-                    Long ID = rs.getLong("ID");
+                    String ID = rs.getString("ID");
                     String title = rs.getString(field.getDatabaseFieldName());
                     String newTitle = (String) rewriter.apply(field, title);
                     
                     if (!title.equals(newTitle)) {
                         DatabaseManager.executeSQL(
                                 "UPDATE " + module.getTableName() + " SET " + field.getDatabaseFieldName() + 
-                                " = '" + newTitle + "' WHERE ID = " + ID);
+                                " = '" + newTitle + "' WHERE ID = '" + ID + "'");
                         
                         DcObject dco = DataManager.getItem(module.getIndex(), ID);
                         dco.setValue(field.getIndex(), newTitle);

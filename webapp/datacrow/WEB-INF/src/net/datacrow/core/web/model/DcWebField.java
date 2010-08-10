@@ -152,7 +152,7 @@ public class DcWebField extends DcSecured {
         List<DcReference> references = new ArrayList<DcReference>();
         if (getDcField().getFieldType() == ComponentFactory._RATINGCOMBOBOX) {
             for (int rating = -1; rating < 11; rating++)
-                references.add(new DcReference(Rating.getLabel(rating), Long.valueOf(rating)));
+                references.add(new DcReference(Rating.getLabel(rating), String.valueOf(rating)));
         } else {
             for (DcObject dco : DataManager.get(DcModules.getReferencedModule(getDcField()).getIndex(), null))
                 references.add(new DcReference(dco.toString(), dco.getID()));

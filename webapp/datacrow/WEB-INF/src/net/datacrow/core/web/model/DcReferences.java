@@ -35,7 +35,7 @@ public class DcReferences {
     private int fieldIdx;
     
     private List<SelectItem> listItems;
-    private Long[] keys;
+    private String[] keys;
     
     public DcReferences() {}
 
@@ -55,11 +55,11 @@ public class DcReferences {
         this.fieldIdx = fieldIdx;
     }
     
-    public Long[] getKeys() {
+    public String[] getKeys() {
         return keys;
     }
 
-    public void setKeys(Long[] keys) {
+    public void setKeys(String[] keys) {
         this.keys = keys;
     }
 

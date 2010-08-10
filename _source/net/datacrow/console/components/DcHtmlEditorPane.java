@@ -124,7 +124,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
                 }
             } else {
                 int module = Integer.valueOf(query.substring(query.indexOf("=") + 1));
-                DcObject dco = DataManager.getItem(module, Long.valueOf(ID));
+                DcObject dco = DataManager.getItem(module, ID);
                 
                 if (dco != null) {
                     dco.markAsUnchanged();

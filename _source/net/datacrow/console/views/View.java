@@ -106,7 +106,7 @@ public class View extends DcPanel implements ListSelectionListener {
 
     private boolean actionsAllowed = true;
     
-    private Long parentID;
+    private String parentID;
     
     private final int type;
     private final int index;
@@ -270,11 +270,11 @@ public class View extends DcPanel implements ListSelectionListener {
         add(dco, true);
     }  
     
-    public void add(Long key) {
+    public void add(String key) {
         add(key, true);
     }    
     
-    public void add(final Long key, final boolean select) {
+    public void add(final String key, final boolean select) {
         vc.add(key);
         
         if (select)
@@ -304,7 +304,7 @@ public class View extends DcPanel implements ListSelectionListener {
      * @see DcTable#add(DcObject).
      * @param items
      */
-    public void add(Collection<Long> keys) {
+    public void add(Collection<String> keys) {
         setActionsAllowed(false);
 
         vc.deselect();
@@ -434,7 +434,6 @@ public class View extends DcPanel implements ListSelectionListener {
         DcObject dco = getSelectedItem();
         
         if (dco != null) {
-            
             // create a fresh instance
             ItemForm form = new ItemForm(false, getType() == View._TYPE_SEARCH, 
                                          dco, getType() != View._TYPE_SEARCH);
@@ -444,8 +443,8 @@ public class View extends DcPanel implements ListSelectionListener {
         }
     }
     
-    public void update(Long id) {
-        vc.update(id);
+    public void update(String ID) {
+        vc.update(ID);
 
         if (quickView != null)
             quickView.createImageTabs();
@@ -538,7 +537,7 @@ public class View extends DcPanel implements ListSelectionListener {
         }
         
         if (type == _TYPE_SEARCH) {
-            add(getItems());
+            vc.clear();
         }
         
         vc.applySettings();
@@ -598,7 +597,7 @@ public class View extends DcPanel implements ListSelectionListener {
         return dco;
     }
 
-    public DcObject getItem(Long ID) {
+    public DcObject getItem(String ID) {
         return vc.getItem(ID);
     }
     
@@ -633,15 +632,15 @@ public class View extends DcPanel implements ListSelectionListener {
 //        }
     }
 
-    public void remove(Long[] IDs) {
+    public void remove(String[] keys) {
         // remove it from the view
-        if (vc.remove(IDs)) {
+        if (vc.remove(keys)) {
             // at this point actions should be enabled to allow the quick view to be populated
             setActionsAllowed(true);                
             setDefaultSelection();
             
             if (isParent() && childView instanceof CachedChildView) {
-                for (Long ID : IDs)
+                for (String ID : keys)
                     ((CachedChildView) childView).removeChildren(ID);
             }
             
@@ -653,13 +652,13 @@ public class View extends DcPanel implements ListSelectionListener {
     }
 
     public void remove(int[] indices) {
-        Long[] IDs = new Long[indices.length];
+        String[] keys = new String[indices.length];
         int i = 0;
         for (int index : indices) {
             DcObject dco = getItemAt(index);
-            IDs[i++] = dco.getID();
+            keys[i++] = dco.getID();
         }
-        remove(IDs);
+        remove(keys);
     }
 
     public void showQuickView(boolean b) {
@@ -679,7 +678,7 @@ public class View extends DcPanel implements ListSelectionListener {
             logger.warn("No element found at index " + index);
     }
 
-    public void updateItem(Long ID, DcObject dco) {
+    public void updateItem(String ID, DcObject dco) {
         vc.update(ID, dco);
         
         DcObject item = getItem(ID);
@@ -695,13 +694,13 @@ public class View extends DcPanel implements ListSelectionListener {
         return objects;
     }
 
-    public void removeFromCache(Long id) {
-        DcObject dco = vc.getItem(id);
+    public void removeFromCache(String key) {
+        DcObject dco = vc.getItem(key);
         if (dco != null) dco.markAsUnchanged();
     }
 
-    public DcObject getDcObject(Long ID) {
-        return vc.getItem(ID);
+    public DcObject getDcObject(String key) {
+        return vc.getItem(key);
     }
     
     public void cancelEdit() {
@@ -719,11 +718,11 @@ public class View extends DcPanel implements ListSelectionListener {
     /**
      * Note that the items only have to be shown after a select. 
      */
-    public void setParentID(Long ID, boolean show) {
+    public void setParentID(String ID, boolean show) {
         this.parentID = ID;
     }
     
-    public Long getParentID() {
+    public String getParentID() {
         return parentID;
     }
     

@@ -32,6 +32,7 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -108,6 +109,79 @@ public class WorkFlow {
         return DatabaseManager.isUnique(o, isExisting);
     }
 
+    /**
+     * Converts the result set to a collection of items.
+     * @param rs An unclosed SQL result set.
+     * @return Collection of items.
+     */
+    public List<DcObject> convert(ResultSet rs, int requestedFields[]) {
+        List<DcObject> objects = new ArrayList<DcObject>();
+
+        try {
+            rs.isLast();
+        } catch (Exception exp) {
+            return objects;
+        }
+
+        try {
+            String table = rs.getMetaData().getTableName(1);
+            DcModule module = DcModules.getModuleForTable(table);
+            
+            int[] fields =  new int[rs.getMetaData().getColumnCount()];
+            for (int i = 1; i < fields.length + 1; i++)
+                fields[i-1] = module.getField(rs.getMetaData().getColumnName(i)).getIndex();
+            
+            DcObject dco;
+            while (rs.next()) {
+                dco = module.getItem();
+                setValues(rs, dco, fields);
+
+                if (DatabaseManager.initialized) {
+                    
+                    boolean loan = requestedFields == null;
+                    boolean images = requestedFields == null;
+                    boolean references = requestedFields == null;
+                    
+                    if (requestedFields != null) {
+                        for (int field : requestedFields) {
+                            if (dco.getModule().canBeLend() &&
+                                (field == DcObject._SYS_AVAILABLE || 
+                                 field == DcObject._SYS_LOANDAYSTILLOVERDUE ||
+                                 field == DcObject._SYS_LOANDUEDATE ||
+                                 field == DcObject._SYS_LOANDURATION))  
+                                loan = true;
+                            else if (dco.getModule().getIndex() != DcModules._PICTURE &&
+                                     dco.getField(field).getValueType() == DcRepository.ValueTypes._PICTURE)
+                                images = true;
+                            else if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
+                                dco.initializeReferences(field);
+                        }
+                    } else {
+                        dco.initializeReferences();
+                    }
+                            
+                    if (loan) dco.setLoanInformation();
+                    if (images && dco.getModule().isHasImages()) dco.initializeImages();
+                    if (references && dco.getModule().isHasReferences()) dco.initializeReferences();
+                }
+
+                dco.setNew(false);
+                dco.markAsUnchanged();
+                objects.add(dco);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("An error occurred while converting result set to items", e);
+        }
+        
+        try {
+            rs.close();
+        } catch (Exception e) {
+            logger.warn("Failed to close the resultset", e);
+        }
+        
+        return objects;
+    }
     
     public static void setValues(ResultSet rs, DcObject item, int[] fields) {
         try {
@@ -130,62 +204,5 @@ public class WorkFlow {
         } catch (Exception e) {
             logger.error("An error occurred while converting result set to items", e);
         }
-    }
-    
-    /**
-     * Converts the result set to a collection of items.
-     * @param rs An unclosed SQL result set.
-     * @return Collection of items.
-     */
-    public List<DcObject> convert(ResultSet rs, boolean minimal) {
-        List<DcObject> objects = new ArrayList<DcObject>();
-
-        try {
-        	rs.isLast();
-        } catch (Exception exp) {
-            return objects;
-        }
-
-        try {
-            String table = rs.getMetaData().getTableName(1);
-            DcModule module = DcModules.getModuleForTable(table);
-            
-            int[] fields =  new int[rs.getMetaData().getColumnCount()];
-            for (int i = 1; i < fields.length + 1; i++)
-                fields[i-1] = module.getField(rs.getMetaData().getColumnName(i)).getIndex();
-            
-            DcObject dco;
-            while (rs.next()) {
-                dco = module.getItem();
-                setValues(rs, dco, fields);
-
-                if (DatabaseManager.initialized && !minimal) {
-                    if (fields.length > 1) {
-                        if (dco.getModule().canBeLend())
-                            dco.setLoanInformation();
-            
-                        if (dco.getModule().getIndex() != DcModules._PICTURE)
-                            dco.initializeImages();
-
-                        dco.initializeReferences();
-                    }
-                }
-
-                dco.setNew(false);
-                dco.markAsUnchanged();
-                objects.add(dco);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("An error occurred while converting result set to items", e);
-        }
-        
-        try {
-            rs.close();
-        } catch (Exception e) {
-            logger.warn("Failed to close the resultset", e);
-        }
-        
-        return objects;
     }
 }

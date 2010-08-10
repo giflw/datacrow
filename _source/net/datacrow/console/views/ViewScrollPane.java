@@ -47,7 +47,13 @@ public class ViewScrollPane extends JScrollPane implements AdjustmentListener {
     }
 
     public void adjustmentValueChanged(AdjustmentEvent e) {
-        //if (e.getValueIsAdjusting())
-            component.visibleItemsChanged();
+        if (e.getValueIsAdjusting()) {
+            component.setIgnorePaintRequests(true);
+        } else {
+            component.paintRegionChanged();
+            component.setIgnorePaintRequests(false);
+            component.revalidate();
+            component.repaint();
+        }
     }
 }

@@ -72,6 +72,8 @@ public class DcObjectList extends DcList implements IViewComponent {
     private DcObjectListRenderer renderer = new DcObjectListRenderer();
     
     private ViewUpdater vu;
+    
+    private boolean ignorePaintRequests = false;
 
     public DcObjectList(int style, boolean wrap, boolean evenOddColors) {
         this(null, style, wrap, evenOddColors);
@@ -96,12 +98,22 @@ public class DcObjectList extends DcList implements IViewComponent {
         else 
             setLayoutOrientation(JList.VERTICAL_WRAP);
     }    
-    
+
+    public void setIgnorePaintRequests(boolean b) {
+        ignorePaintRequests = b;
+    }
+
+    public boolean isIgnoringPaintRequests() {
+        return ignorePaintRequests; 
+    }
+
     public boolean isVisibleIndex(int index) {
         return index >= getFirstVisibleIndex() && index <= getLastVisibleIndex();
     }
     
-    public void visibleItemsChanged() {
+    public void activate() {}
+
+    public void paintRegionChanged() {
         if (vu != null) vu.cancel();
         vu = new ViewUpdater(this);
         vu.start();
@@ -186,12 +198,12 @@ public class DcObjectList extends DcList implements IViewComponent {
         return objects;
     }    
     
-    public DcObject getItem(Long ID) {
+    public DcObject getItem(String ID) {
         DcObjectListElement element = getElement(ID);
         return element != null ? element.getDcObject() : null;
     }    
 
-    private DcObjectListElement getElement(Long ID) {
+    private DcObjectListElement getElement(String ID) {
         DcObjectListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             element = (DcObjectListElement) getDcModel().getElementAt(i);
@@ -237,7 +249,7 @@ public class DcObjectList extends DcList implements IViewComponent {
 
     public void applySettings() {}
     
-    public void update(Long ID) {
+    public void update(String ID) {
         DcObjectListElement element = getElement(ID);
         if (element != null) {
             element.update();
@@ -246,7 +258,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         }
     }       
 
-    public void update(Long ID, DcObject dco) {
+    public void update(String ID, DcObject dco) {
         updateElement(getElement(ID), dco);
     }    
 
@@ -307,11 +319,11 @@ public class DcObjectList extends DcList implements IViewComponent {
         return indices;        
     }
     
-    public boolean remove(Long[] ids) {
+    public boolean remove(String[] keys) {
         boolean removed = false;
         DcObjectListElement element;
-        for (int i = 0; i < ids.length; i++) {
-            element = getElement(ids[i]);
+        for (String key : keys) {
+            element = getElement(key);
             if (element != null) {
             	getDcModel().removeElement(element);
             	element.destroy();
@@ -331,13 +343,13 @@ public class DcObjectList extends DcList implements IViewComponent {
         return dco;
     }
     
-    public void add(Long key) {
+    public void add(String key) {
         DcObjectListElement element = getDisplayElement(getModule().getIndex());
         element.setKey(key);
         getDcModel().addElement(element);
     }
 
-    public void add(Collection<Long> keys) {
+    public void add(Collection<String> keys) {
         clear();
         
         DcListModel model = new DcListModel();
@@ -345,7 +357,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         renderer.stop();
         
         DcObjectListElement element;
-        for (Long key : keys) {
+        for (String key : keys) {
             element = getDisplayElement(module.getIndex());
             element.setKey(key);
             model.addElement(element);

@@ -161,7 +161,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         }
     }
     
-    protected void updateView(List<Long> keys) {
+    protected void updateView(List<String> keys) {
         getView().getCurrent().add(keys);  
     }
     

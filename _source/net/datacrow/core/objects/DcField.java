@@ -118,8 +118,14 @@ public class DcField implements Serializable{
         setReadOnly(readonly);
         setSearchable(searchable);
         setTechinfo(techinfo);
-        setMaximumLength(maximumLength);
         setFieldType(fieldType);
+        
+        if (fieldType == ComponentFactory._REFERENCEFIELD) {
+            valueType = DcRepository.ValueTypes._STRING;
+            maximumLength = 36;
+        }
+        
+        setMaximumLength(maximumLength);
         setValueType(valueType);
         setDatabaseFieldName(databaseFieldName);
         setUiOnly(uiOnly);
@@ -471,32 +477,30 @@ public class DcField implements Serializable{
      */
     public String getDataBaseFieldType() {
         String s = "";
-        if (getValueType() == DcRepository.ValueTypes._STRING) {
+        
+        if (getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
+            getValueType() == DcRepository.ValueTypes._DCPARENTREFERENCE ||
+            getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+            
+            s = DcRepository.Database._FIELDSTRING + "(36)";
+            
+        } else if (getValueType() == DcRepository.ValueTypes._STRING) {
             if (getFieldType() == ComponentFactory._LONGTEXTFIELD)
                 s = DcRepository.Database._FIELDOBJECT;
             else
                 s = DcRepository.Database._FIELDSTRING + "(" + getMaximumLength() + ")";
-
         } else if (getValueType() == DcRepository.ValueTypes._DOUBLE) {
             s = DcRepository.Database._FIELDNUMERIC + "(10, 2)";
-            
         } else if (getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
-                   getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
-                   getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                   getValueType() == DcRepository.ValueTypes._DCPARENTREFERENCE ||
                    getValueType() == DcRepository.ValueTypes._LONG) {
             s = DcRepository.Database._FIELDBIGINT;
-            
         } else if (getValueType() == DcRepository.ValueTypes._ICON ||
                    getValueType() == DcRepository.ValueTypes._PICTURE ||
                    getValueType() == DcRepository.ValueTypes._BLOB) {
-            
             s = DcRepository.Database._FIELDOBJECT;
         } else if (getValueType() == DcRepository.ValueTypes._BOOLEAN) {
-            
             s = DcRepository.Database._FIELDBOOLEAN;
         } else if (getValueType() == DcRepository.ValueTypes._DATE) {
-            
             s = DcRepository.Database._FIELDDATE;
         }
 

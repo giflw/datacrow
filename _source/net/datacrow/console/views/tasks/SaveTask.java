@@ -5,8 +5,6 @@ import java.util.Collection;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.console.MainFrame;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.messageboxes.SaveQuestionBox;
@@ -14,10 +12,10 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.wf.requests.RemoveFromCacheRequest;
 import net.datacrow.core.wf.requests.StatusUpdateRequest;
-import net.datacrow.core.wf.requests.UpdateStatusProgressBarRequest;
 import net.datacrow.util.DataTask;
+
+import org.apache.log4j.Logger;
 
 public class SaveTask extends DataTask {
 
@@ -75,10 +73,12 @@ public class SaveTask extends DataTask {
 
                     if (view.getType() == View._TYPE_SEARCH) {
                         view.updateProgressBar(counter);
-                        dco.addRequest(new RemoveFromCacheRequest(dco.getModule().getIndex(), dco.getID()));
+                        // TODO: replace
+                        //dco.addRequest(new RemoveFromCacheRequest(dco.getModule().getIndex(), dco.getID()));
                         dco.saveUpdate(true);
                     } else {
-                        dco.addRequest(new UpdateStatusProgressBarRequest(dco.getModule().getIndex(), MainFrame._INSERTTAB, counter));
+                        // TODO: replace
+                        // dco.addRequest(new UpdateStatusProgressBarRequest(dco.getModule().getIndex(), MainFrame._INSERTTAB, counter));
                         dco.saveNew(true);
                     }
                 } catch (ValidationException vExp) {

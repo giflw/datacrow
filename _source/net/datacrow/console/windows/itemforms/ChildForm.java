@@ -32,7 +32,7 @@ import net.datacrow.core.wf.requests.Requests;
 
 public class ChildForm extends DcMinimalisticItemView {
 
-    private Long parentID;
+    private String parentID;
     private final int parentModuleIdx;
     
     public ChildForm(DcObject parent, int module, boolean readonly) {

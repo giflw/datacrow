@@ -63,7 +63,7 @@ public class DeleteQuery extends Query {
             stmt = conn.createStatement();
             
             if (dco.hasPrimaryKey()) {
-                stmt.execute("DELETE FROM " + dco.getTableName() + " WHERE ID = " + dco.getID());
+                stmt.execute("DELETE FROM " + dco.getTableName() + " WHERE ID = '" + dco.getID() + "'");
             } else {
                 String sql = "DELETE FROM " + dco.getTableName() + " WHERE ";
                 
@@ -89,7 +89,7 @@ public class DeleteQuery extends Query {
 
             if (dco.getModule().canBeLend())
                 stmt.execute("DELETE FROM " + DcModules.get(DcModules._LOAN).getTableName() + " WHERE " +
-                             DcModules.get(DcModules._LOAN).getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = " + dco.getID());
+                             DcModules.get(DcModules._LOAN).getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
 
             // Delete children. Ignore any abstract module (parent and/or children)
             if (    dco.getModule().getChild() != null && 
@@ -98,7 +98,7 @@ public class DeleteQuery extends Query {
                 
                 DcModule childModule = dco.getModule().getChild(); 
                 stmt.execute("DELETE FROM " + childModule.getTableName() + " WHERE " + 
-                             childModule.getField(childModule.getParentReferenceFieldIndex()).getDatabaseFieldName() + " = " + dco.getID());
+                             childModule.getField(childModule.getParentReferenceFieldIndex()).getDatabaseFieldName() + " = '" + dco.getID() + "'");
             }
             
             // Remove any references to the to be deleted item.
@@ -108,12 +108,12 @@ public class DeleteQuery extends Query {
                     
                     if (m.getType() == DcModule._TYPE_MAPPING_MODULE) {
                         stmt.execute("DELETE FROM " + m.getTableName() + " WHERE " + 
-                                     m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = " + dco.getID());
+                                     m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
                     } else {
                         for (DcField field : m.getFields()) {
                             if (!field.isUiOnly() && field.getReferenceIdx() == dco.getModule().getIndex()) {
                                 stmt.execute("UPDATE " + m.getTableName() + " SET " +  field.getDatabaseFieldName() + " = NULL WHERE " + 
-                                             field.getDatabaseFieldName() + " = " + dco.getID());
+                                             field.getDatabaseFieldName() + " = '" + dco.getID() + "'");
                             }
                         }
                     }

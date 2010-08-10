@@ -60,7 +60,7 @@ public class Container extends DcObject {
     
     public Container getParentContainer() {
         Object parent = getValue(_F_PARENT);
-        return parent instanceof String ? (Container) DataManager.getItem(DcModules._CONTAINER, (Long) parent) : 
+        return parent instanceof String ? (Container) DataManager.getItem(DcModules._CONTAINER, (String) parent) : 
                (Container) parent;
     }
     
@@ -79,7 +79,7 @@ public class Container extends DcObject {
     @Override
     protected void beforeSave() throws ValidationException {
         Container parent = getParentContainer();
-        Long ID = getID();
+        String ID = getID();
         
         if (parent != null && parent.getID().equals(ID)) {
             throw new ValidationException(DcResources.getText("msgCannotSetItemAsParent"));
@@ -98,7 +98,7 @@ public class Container extends DcObject {
     public Object getValue(int index) {
         if (index == _F_PARENT) {
             Object o = super.getValue(_F_PARENT);
-            return o instanceof String ? DataManager.getItem(DcModules._CONTAINER, (Long) o) : o;
+            return o instanceof String ? DataManager.getItem(DcModules._CONTAINER, (String) o) : o;
         } else {
             return super.getValue(index);
         }

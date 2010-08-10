@@ -72,12 +72,15 @@ public class SelectQuery extends Query {
         ResultSet rs = null;
         List<DcObject> items = null;
         String sql = df.toSQL(fields);
+        
+        logger.debug(sql);
+        
         try {
             conn = DatabaseManager.getConnection();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             
-            items = WorkFlow.getInstance().convert(rs, fields != null);
+            items = WorkFlow.getInstance().convert(rs, fields);
             
             success = true;
             

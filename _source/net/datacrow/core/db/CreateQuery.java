@@ -30,8 +30,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.Picture;
 
 import org.apache.log4j.Logger;
 
@@ -48,8 +52,9 @@ public class CreateQuery extends Query {
         Connection conn = null;
         Statement stmt = null;
 
+        DcModule module = getModule();
         String columns = "";
-        for (DcField field : getModule().getFields()) {
+        for (DcField field : module.getFields()) {
             if (!field.isUiOnly()) {
                 if (columns.length() > 0)
                     columns += ", ";
@@ -61,14 +66,40 @@ public class CreateQuery extends Query {
             }
         }
         
-        String sql = "CREATE MEMORY TABLE " + getModule().getTableName() + "\r\n(" + columns + ");";
+        String sql = "CREATE MEMORY TABLE " + module.getTableName() + "\r\n(" + columns + ");";
         
         try { 
-            conn = DatabaseManager.getAdminConnection();
+            conn = DatabaseManager.getConnection();
             stmt = conn.createStatement();
             stmt.execute(sql);
         } catch (SQLException se) {
             logger.error(se, se);
+        }
+        
+        if (module.getIndex() == DcModules._PICTURE) {
+            try { 
+                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module + " (" +
+                        module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
+                        module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
+            } catch (SQLException se) {
+                logger.error(se, se);
+            }
+        } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+            try { 
+                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module + " (" +
+                        module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
+                        module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+            } catch (SQLException se) {
+                logger.error(se, se);
+            }
+        } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
+            try { 
+                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module + " (" +
+                        module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
+                        module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+            } catch (SQLException se) {
+                logger.error(se, se);
+            }
         }
         
         try {

@@ -196,7 +196,7 @@ public class PermissionModule extends DcChildModule {
                 "Edit"));
         addField(new DcField(Permission._F_USER, DcModules._USER, "User",
                 false, true, false, false, false,
-                20, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._DCPARENTREFERENCE,
+                36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._DCPARENTREFERENCE,
                 "User"));
     }
     

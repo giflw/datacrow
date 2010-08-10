@@ -30,6 +30,7 @@ import java.util.Date;
 
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.helpers.ContactPerson;
 
 /**
  * Represents a loan.
@@ -55,12 +56,15 @@ public class Loan extends DcObject {
     public Loan() {
         super(DcModules._LOAN);
     }
+    
+    @Override
+    public void initializeReferences() {}     
 
     /**
      * Indicates if the given item is available.
      * @param ID
      */
-    public boolean isAvailable(Long ID) {
+    public boolean isAvailable(String ID) {
         Loan loan;
         if (getID() != null || getValue(_A_STARTDATE) != null)
             loan = this;
@@ -84,8 +88,8 @@ public class Loan extends DcObject {
      * @return The person or null.
      */
     public DcObject getPerson() {
-        Long personID = (Long) getValue(Loan._C_CONTACTPERSONID);
-        return DataManager.getItem(DcModules._CONTACTPERSON, personID);
+        String personID = (String) getValue(Loan._C_CONTACTPERSONID);
+        return DataManager.getItem(DcModules._CONTACTPERSON, personID, new int[] {DcObject._ID, ContactPerson._A_NAME});
     }
     
     public Date getDueDate() {
@@ -133,7 +137,7 @@ public class Loan extends DcObject {
     public synchronized Long getDaysLoaned() {
         Date startDate = (Date) getValue(Loan._A_STARTDATE);
         Long days = null;
-        if (startDate != null && !isAvailable((Long) getValue(Loan._D_OBJECTID))) {
+        if (startDate != null && !isAvailable((String) getValue(Loan._D_OBJECTID))) {
             calDaysLoaned.setTime(new java.util.Date());
             calDaysLoaned.setTime(startDate);
 

@@ -81,7 +81,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private static Logger logger = Logger.getLogger(OnlineSearchForm.class.getName());
     
     private int module;
-    private Long ID;
+    private String ID;
 
     private boolean startSearchOnOpen = false;
     private boolean disablePerfectMatch = false;

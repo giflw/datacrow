@@ -48,7 +48,7 @@ public class ContactPersonTableCellRenderer extends DcTableCellRenderer {
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);           
-        Long contactPersonID = (Long) value;
+        String contactPersonID = (String) value;
         ContactPerson contactPerson = (ContactPerson) DataManager.getItem(DcModules._CONTACTPERSON, contactPersonID);
         String description = contactPerson == null ? "" : contactPerson.toString();
         setText(description);

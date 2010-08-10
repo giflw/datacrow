@@ -23,11 +23,13 @@ public class Permission extends DcObject {
     }
     
     public boolean isEditingAllowed() {
-        return (Boolean) getValue(Permission._E_EDIT);
+        Object o = getValue(Permission._E_EDIT);
+        return o == null ? false : (Boolean) getValue(Permission._E_EDIT);
     }
 
     public boolean isViewingAllowed() {
-        return (Boolean) getValue(Permission._D_VIEW);
+        Object o = getValue(Permission._D_VIEW);
+        return o == null ? false : (Boolean) getValue(Permission._D_VIEW);
     }
     
     public int getFieldIdx() {

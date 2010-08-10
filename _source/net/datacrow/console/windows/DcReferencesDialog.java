@@ -82,18 +82,18 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         listLeft.add(dcos);
         
         int counter = 0;
-        Long[] ids = new Long[current.size()];
+        String[] keys = new String[current.size()];
         
         for (DcObject dco : current) {
             DcMapping mapping = (DcMapping) dco;
             DcObject reference = mapping.getReferencedObject();
             if (reference != null) {
                 selected.add(reference);
-                ids[ counter++] = reference.getID();
+                keys[ counter++] = reference.getID();
             }
         }
         listRight.add(selected);
-        listLeft.remove(ids);
+        listLeft.remove(keys);
 
         // store the elements for filtering purposes
         elements = new Vector<DcListElement>();

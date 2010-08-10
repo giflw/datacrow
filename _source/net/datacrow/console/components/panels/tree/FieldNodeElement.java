@@ -56,7 +56,7 @@ public class FieldNodeElement extends NodeElement {
     }
     
     @Override
-    public List<Long> getItems(List<NodeElement> parents) {
+    public List<String> getItems(List<NodeElement> parents) {
         String sql = "select ID from " + DcModules.get(module).getTableName();
         int counter = 0;
         for (NodeElement e : parents) {
@@ -72,7 +72,7 @@ public class FieldNodeElement extends NodeElement {
             sql += getWhereClause() + ")";
         }
 
-        List<Long> keys = new ArrayList<Long>();
+        List<String> keys = new ArrayList<String>();
         try {
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
             int index = 1;
@@ -85,7 +85,7 @@ public class FieldNodeElement extends NodeElement {
             
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                keys.add(rs.getLong(1));
+                keys.add(rs.getString(1));
             }
             rs.close();
             ps.close();

@@ -38,7 +38,7 @@ public abstract class NodeElement {
         return icon;
     }
     
-    public abstract List<Long> getItems(List<NodeElement> parents);
+    public abstract List<String> getItems(List<NodeElement> parents);
     
     public int getCount() {
         return count;

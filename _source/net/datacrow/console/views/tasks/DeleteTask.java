@@ -5,12 +5,10 @@ import java.util.Collection;
 
 import javax.swing.SwingUtilities;
 
-import net.datacrow.console.MainFrame;
 import net.datacrow.console.views.View;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.wf.requests.UpdateStatusProgressBarRequest;
 import net.datacrow.util.DataTask;
 import net.datacrow.util.DcSwingUtilities;
 
@@ -59,11 +57,6 @@ public class DeleteTask extends DataTask {
                 int counter = 1;
                 
                 for (DcObject dco : objects) {
-                    
-                    dco.markAsUnchanged();
-                    dco.addRequest(new UpdateStatusProgressBarRequest(
-                            dco.getModule().getIndex(), MainFrame._SEARCHTAB, counter));                        
-                    
                     try {
                         dco.delete(true);
                     } catch (ValidationException e) {
@@ -71,7 +64,8 @@ public class DeleteTask extends DataTask {
                     }
                     
                     try {
-                        sleep(300);
+                        // TODO: evaluate!
+                        sleep(10);
                     } catch (Exception ignore) {} // doesn't want to sleep..
                     
                     counter++;

@@ -158,12 +158,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public void load(int[] fields) {
         
+        long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        
         if (loaded || isNew) return;
         
-        Long ID = getID();
+        String ID = getID();
         
         try {
-            String sql = "SELECT * FROM " + getTableName() + " WHERE ID = " + getID();
+            String sql = "SELECT * FROM " + getTableName() + " WHERE ID = '" + getID() + "'";
             clearValues();
             ResultSet rs = DatabaseManager.executeSQL(sql);
             
@@ -177,6 +179,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         } catch (Exception e) {
             logger.error("An error occurred while loading the item", e);
             setValue(DcObject._ID, ID);
+        }
+        
+        if (logger.isDebugEnabled()) {
+            logger.info("Item " + toString() + " was loaded in " + (new Date().getTime() - start) + "ms");
         }
         
         loaded = true;
@@ -376,6 +382,21 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
     
+    public void initializeReferences(int index) {
+        DcField field = getField(index);
+        
+        if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+            int mappingModIdx = DcModules.getMappingModIdx(getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
+            Collection<DcObject> mo = DataManager.getReferences(mappingModIdx, getID());
+            setValue(index, mo);
+        } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE &&
+                getValue(field.getIndex()) != null) {
+                Object o = getValue(field.getIndex());
+                if (o instanceof String)
+                    setValue(index, DataManager.getItem(field.getReferenceIdx(), (String) o));    
+        }
+    }
+    
     /**
      * Loads the actual reference information. Uses the Data Manager to retrieve the 
      * references and stores them in this object.
@@ -384,20 +405,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         int[] fields = getFieldIndices();
         for (int i = 0; i < fields.length; i++) {
             DcField field = getField(fields[i]);
-            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                int mappingModIdx = DcModules.getMappingModIdx(getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
-                Collection<DcObject> mo = DataManager.getReferences(mappingModIdx, getID());
-                setValue(fields[i], mo);
-            }
-        }
-        
-        for (int i = 0; i < fields.length; i++) {
-            DcField field = getField(fields[i]);
-            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE &&
-                getValue(field.getIndex()) != null) {
-                Object o = getValue(field.getIndex());
-                if (o instanceof String)
-                    setValue(fields[i], DataManager.getItem(field.getReferenceIdx(), (Long) o));    
+            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+                initializeReferences(fields[i]);
             }
         }
     }
@@ -487,13 +497,13 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Retrieves the ID of the parent of this object. 
      * @return The parent ID or null.
      */
-    public Long getParentID() {
+    public String getParentID() {
         Object o = getValue(getParentReferenceFieldIndex());
         
         if (o instanceof DcObject)
             return ((DcObject) o).getID();
         else 
-            return (Long) o;
+            return (String) o;
     }
 
     /**
@@ -803,8 +813,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     /**
      * The internal ID
      */
-    public Long getID() {
-        return hasPrimaryKey() ? ((Long) getValue(_ID)) : null;
+    public String getID() {
+        return hasPrimaryKey() ? ((String) getValue(_ID)) : null;
     }
 
     /**
@@ -893,13 +903,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
         Object value = null;
         
-    	// recalculate loan information
-    	if (getModule().canBeLend() && index != DcObject._SYS_AVAILABLE) {
-    		Boolean available = (Boolean) getValue(DcObject._SYS_AVAILABLE);
-        	if (available != null && !available.booleanValue())
-        		setLoanInformation();
-    	}
-    	
         if (index == _SYS_DISPLAYVALUE) {
             value = toString();
         } else if (index == _SYS_MODULE) {
@@ -927,16 +930,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         else if (index == _SYS_MODULE)
             return getModule().getObjectNamePlural();
         
-        // as file mappings can be changed at any time recalculate the display value
-        if (getField(index) != null &&
-            (getField(index).getFieldType() == ComponentFactory._FILEFIELD ||
-             getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) &&
-             getValueDef(index) != null) {
-
-            getValueDef(index).createDisplayString(getField(index));
-        }
-        
-        return getValueDef(index) != null ? getValueDef(index).getDisplayString() : "";
+        return getValueDef(index) != null ? getValueDef(index).getDisplayString(getField(index)) : "";
     }
 
     /**
@@ -1131,19 +1125,18 @@ public class DcObject implements Comparable<DcObject>, Serializable {
 
     public void setIDs() {
         if (hasPrimaryKey()) {
-            Long id = getID();
+            String ID = getID();
             
-            while (id == null || String.valueOf(id).length() < 15)
-                id = Utilities.getUniqueID();
+            while (ID == null)
+                ID = Utilities.getUniqueID();
             
-            setValue(DcObject._ID, id);
+            setValue(DcObject._ID, ID);
             
             if (children != null) {
                 for (DcObject child : children) {
                     if (child.hasPrimaryKey()) {
-                        child.setValue(DcObject._ID, null);
                         child.setIDs();
-                        child.setValue(child.getParentReferenceFieldIndex(), id);
+                        child.setValue(child.getParentReferenceFieldIndex(), ID);
                     }
                 }
             }
@@ -1367,8 +1360,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (o instanceof String) {
             equals = getID() != null ? getID().equals(o) : false;
         } else if (o instanceof DcObject) {
-            Long id1 = ((DcObject) o).getID();
-            Long id2 = getID();
+            String id1 = ((DcObject) o).getID();
+            String id2 = getID();
             if ((id1 == null && id2 != null) || (id1 != null && id2 == null) )
                 return false;
             if (id1 == null && id2 == null) 

@@ -82,7 +82,7 @@ public class PictureModule extends DcModule {
     protected void initializeFields() {
         addField(new DcField(Picture._A_OBJECTID, getIndex(), "ObjectID", 
                 false, true, false, false, false,
-                50, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._BIGINTEGER, 
+                36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING, 
                 "ObjectID"));
         addField(new DcField(Picture._B_FIELD, getIndex(), "Field", 
                 false, true, false, false, false,

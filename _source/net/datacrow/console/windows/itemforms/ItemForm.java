@@ -154,7 +154,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             if (moduleIdx == -1)
                 return;
             
-            Long parentID = dcoOrig.getParentID();
+            String parentID = dcoOrig.getParentID();
             
             this.dcoOrig = DcModules.get(moduleIdx).getItem();
             this.dco = DcModules.get(moduleIdx).getItem();
@@ -462,7 +462,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     for (DcMapping newMapping : newList) {
                         boolean found = false;
                         for (DcMapping oldMapping : oldList) {
-                            if (newMapping.getReferencedId().equals(oldMapping.getReferencedId()))
+                            if (newMapping.getReferencedID().equals(oldMapping.getReferencedID()))
                                 found = true;
                         }
                         changed = !found;

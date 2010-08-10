@@ -31,7 +31,6 @@ import java.awt.Font;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.JViewport;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -47,7 +46,6 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
     private static final DcTableCellRenderer instance = new DcTableCellRenderer();
     private boolean disabled = false;
     private static final EmptyBorder border = new EmptyBorder(0, 5, 0, 5);
-    
 
     protected DcTableCellRenderer() {}
     
@@ -62,16 +60,15 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
         
         JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-        if (((DcTable) table).load(row)) {
-            ((JViewport) table.getParent()).repaint();
-            ((JViewport) table.getParent()).revalidate();
-            table.repaint();
-            table.revalidate();
-        }
+        
+        if (((DcTable) table).isIgnoringPaintRequests())
+            return c;
+        
+        
+        ((DcTable) table).load(row);
         
         if (DcSettings.getBoolean(DcRepository.Settings.stShowTableTooltip) && allowTooltips()) {
         	if (disabled) {
@@ -96,7 +93,6 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
         Color colorRowSelection = DcSettings.getColor(DcRepository.Settings.stSelectionColor);
         Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
         setFont(font);
-        
         setForeground(ComponentFactory.getCurrentForegroundColor());
 
         boolean overdue = false;

@@ -58,8 +58,6 @@ public class DcValue implements Serializable {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     
     private boolean changed = false;
-    
-    private String displayString = "";
     private Object value = null;
 
     /**
@@ -100,6 +98,9 @@ public class DcValue implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void setValue(Object o, DcField field) {
+        
+        o = o == null || o.equals("null") ? null : o;
+        
         if (!field.isUiOnly()) 
             setChanged(true);
         else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
@@ -160,7 +161,7 @@ public class DcValue implements Serializable {
                     } else if (o instanceof DcObject) {
                         setValueNative(o, field);
                     } else if (!Utilities.isEmpty(o) && field.getReferenceIdx() != field.getModule()) {
-                        setValueNative(DataManager.getItem(field.getReferenceIdx(), (Long) o), field);
+                        setValueNative(DataManager.getItem(field.getReferenceIdx(), (String) o), field);
                     }
 
                     if (getValue() == null && !Utilities.isEmpty(o)) {
@@ -249,15 +250,7 @@ public class DcValue implements Serializable {
     
     private void setValueNative(Object value, DcField field) {
         this.value = value;
-        createDisplayString(field);
         this.changed = true;
-    }
-
-    /**
-     * Returns the stored display string.
-     */
-    public String getDisplayString() {
-        return displayString;
     }
     
     /**
@@ -279,8 +272,6 @@ public class DcValue implements Serializable {
                     dco.release();
             }
         }
-        
-        displayString = "";
         value = null;
     }
     
@@ -296,7 +287,7 @@ public class DcValue implements Serializable {
     }
     
     @SuppressWarnings("unchecked")
-    public void createDisplayString(DcField field) {
+    public String getDisplayString(DcField field) {
         Object o = getValue();
         String text = "";
 
@@ -358,8 +349,7 @@ public class DcValue implements Serializable {
         } catch (Exception e) {
             logger.error("Error while creating the display string for field " + field + ", value " + o, e);
         }
-
-        this.displayString = text;
+        return text;
     }
 
     private String getDoubleDigitString(int value) {

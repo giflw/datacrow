@@ -190,6 +190,9 @@ public class DcModule implements Comparable<DcModule> {
     private boolean isContainerManaged = false;
     private boolean hasDependingModules = true;
     
+    private boolean hasImages = false;
+    private boolean hasReferences = false;
+    
     private XmlModule xmlModule;
     
     /**
@@ -242,7 +245,7 @@ public class DcModule implements Comparable<DcModule> {
         this.moduleResourceKey = "sys" + s;
         this.itemResourceKey = moduleResourceKey + "Item";
         this.itemPluralResourceKey = moduleResourceKey + "ItemPlural";
-
+        
         // lowel level determination of the type of module.
         this.type = 
             objectClass != null && objectClass.equals(DcAssociate.class) ? _TYPE_ASSOCIATE_MODULE :
@@ -281,6 +284,7 @@ public class DcModule implements Comparable<DcModule> {
         initializeSystemFields();
         initializeFields();
         initializeSettings();
+        initializeProperties();
     }
     
     /**
@@ -328,8 +332,9 @@ public class DcModule implements Comparable<DcModule> {
             addField(new DcField(xmlField, getIndex()));
         
         initializeFields();
-        
         initializeSettings();
+        initializeProperties();
+
         setServingMultipleModules(module.isServingMultipleModules());
         
         // Set it to disabled only if the XML module is defined as disabled.
@@ -345,6 +350,24 @@ public class DcModule implements Comparable<DcModule> {
         return type;
     }
     
+    private void initializeProperties() {
+        for (DcField field : getFields()) {
+            if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+                hasImages = true;
+            else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                    field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE)
+                hasReferences = true;
+        }
+    }
+    
+    public boolean isHasImages() {
+        return hasImages;
+    }
+
+    public boolean isHasReferences() {
+        return hasReferences;
+    }
+
     /**
      * Indicates if the module is abstract. An abstract module represents items belonging
      * to other modules; it represents items from multiple modules. An abstract module does
@@ -646,6 +669,23 @@ public class DcModule implements Comparable<DcModule> {
                 return definition.getIndex();
         }
         return getDefaultSortFieldIdx();
+    }
+    
+    public int[] getMinimalFields(Collection<Integer> include) {
+        Collection<Integer> fields = new ArrayList<Integer>();
+        for (DcFieldDefinition definition : getFieldDefinitions().getDefinitions())
+            if (definition.isDescriptive()) fields.add(Integer.valueOf(definition.getIndex()));
+            
+        for (Integer field : include) 
+            if (!fields.contains(field)) fields.add(field);
+        
+        if (!fields.contains(Integer.valueOf(DcObject._ID))) fields.add(Integer.valueOf(DcObject._ID));
+        
+        int[] result = new int[fields.size()];
+        int i = 0;
+        for (Integer field : fields)
+            result[i++] = field.intValue();
+        return result;
     }
 
     /**
@@ -1120,7 +1160,7 @@ public class DcModule implements Comparable<DcModule> {
         try {
             addField(new DcField(DcObject._ID, getIndex(), "ID",
                                  false, true, true, false, false,
-                                 15, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._BIGINTEGER,
+                                 36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                                  "ID"));
             addField(new DcField(DcObject._SYS_CREATED, getIndex(), "Created",
                                  false, true, true, true, true,

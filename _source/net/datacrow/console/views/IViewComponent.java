@@ -23,23 +23,26 @@ public interface IViewComponent {
     
     int getItemCount();
     
-    boolean remove(Long[] IDs);
+    boolean remove(String[] keys);
     void remove(int[] indices);
     
     void clear(int index);
+    
+    void setIgnorePaintRequests(boolean b);
+    boolean isIgnoringPaintRequests();
     
     int getFirstVisibleIndex();
     int getLastVisibleIndex();
     int getViewportBufferSize();
     
-    void add(Long key);
+    void add(String key);
     void add(DcObject item);
     void add(List<? extends DcObject> items);
-    void add(Collection<Long> keys);
+    void add(Collection<String> keys);
     
     Collection<DcObject> getItems();
     DcObject getItemAt(int idx);
-    DcObject getItem(Long ID);
+    DcObject getItem(String ID);
     
     void setSelected(Collection<? extends DcObject> dcos);
     void setSelected(int index);
@@ -53,8 +56,8 @@ public interface IViewComponent {
 
     void deselect();
     
-    void update(Long ID);
-    void update(Long ID, DcObject dco);
+    void update(String ID);
+    void update(String ID, DcObject dco);
     void afterUpdate();
 
     int[] getChangedIndices();
@@ -82,5 +85,9 @@ public interface IViewComponent {
     void removeMouseListener(MouseListener ml);
     MouseListener[] getMouseListeners();
     
-    void visibleItemsChanged();
+    void activate();
+    
+    void paintRegionChanged();
+    void repaint();
+    void revalidate();
 }

@@ -146,12 +146,12 @@ public class MasterView {
         
     }
 
-    public void update(Long ID) {
+    public void update(String ID) {
         for (View view : getViews())
             view.update(ID);
     }
     
-    public void removeFromCache(Long ID) {
+    public void removeFromCache(String ID) {
         for (View view : getViews())
             view.removeFromCache(ID);
     }    
@@ -179,7 +179,7 @@ public class MasterView {
         }
     }
     
-    public void add(final List<Long> keys) {
+    public void add(final List<String> keys) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 

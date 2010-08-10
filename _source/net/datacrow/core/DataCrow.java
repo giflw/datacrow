@@ -176,10 +176,6 @@ public class DataCrow {
                     System.out.println("Debug mode for additional logging information.");
                     System.out.println("Example: java -jar datacrow.jar -debug");                
                     System.out.println("");
-                    System.out.println("-nocache");
-                    System.out.println("Starts Data Crow without loading the items from the cache. This will cause the items to be loaded from the database (slow).");
-                    System.out.println("Example: java -jar datacrow.jar -nocache");                
-                    System.out.println("");
                     System.out.println("-clearsettings");
                     System.out.println("Loads the default Data Crow settings. Disgards all user settings.");
                     System.out.println("Example: java -jar datacrow.jar -clearsettings");                
@@ -233,7 +229,6 @@ public class DataCrow {
                 logger = Logger.getLogger(DataCrow.class.getName());
                 totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;                
                 
-                initDbProperties();
                 installLafs();
                 
                 logger.info("Using installation directory: " + installationDir);
@@ -304,6 +299,8 @@ public class DataCrow {
                 DcSettings.set(DcRepository.Settings.stConnectionString, "dc");
                 if (db != null && db.length() > 0)
                     DcSettings.set(DcRepository.Settings.stConnectionString, db);
+                
+                initDbProperties();
                 
                 start = logger.isDebugEnabled() ? new Date().getTime() : 0;
                 SecurityCentre.getInstance().initialize();
@@ -771,7 +768,7 @@ public class DataCrow {
             properties.setProperty("log4j.appender.logfile.File", DataCrow.dataDir + "data_crow.log");
             
             if (DataCrow.debug)
-                properties.setProperty("log4j.rootLogger", "debug, textpane, logfile");
+                properties.setProperty("log4j.rootLogger", "debug, textpane, logfile, stdout");
             else
                 properties.setProperty("log4j.rootLogger", "info, textpane, logfile");
             
@@ -785,7 +782,7 @@ public class DataCrow {
     
     private static void initDbProperties() {
         try {
-            File file = new File(DataCrow.dataDir, "dc.properties");
+            File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
             if (file.exists()) {
                 Properties properties = new Properties();
                 properties.load(new FileInputStream(file));

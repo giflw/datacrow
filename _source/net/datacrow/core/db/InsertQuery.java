@@ -52,14 +52,13 @@ public class InsertQuery extends Query {
     public InsertQuery(DcObject dco) throws SQLException {
         super(dco.getModule().getIndex(), dco.getRequests());
         this.dco = dco;
+        this.dco.setIDs();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<DcObject> run() {
         boolean success = false;
-        
-        dco.setIDs();
         
         Collection<Object> values = new ArrayList<Object>();
         StringBuffer columns = new StringBuffer();
@@ -113,6 +112,7 @@ public class InsertQuery extends Query {
                 sqlPart += (sqlPart.length() > 0 ? ", ?" : "?"); 
             
             String sql = "INSERT INTO " + dco.getTableName() + " (" + columns + ") \r\n" + "VALUES (" + sqlPart + ");";
+            
             ps = conn.prepareStatement(sql);
             setValues(ps, values);
             ps.execute();
@@ -121,7 +121,7 @@ public class InsertQuery extends Query {
                 stmt.execute("INSERT INTO " + mapping.getTableName() + 
                              " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
                              mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                             ") VALUES (" + dco.getID() + ", " + mapping.getReferencedId() + ")");
+                             ") VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "')");
             }
             
             for (Picture picture : pictures) {
@@ -140,6 +140,7 @@ public class InsertQuery extends Query {
             
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println(values);
             logger.error("An error occured while running the query", e);
         }
         

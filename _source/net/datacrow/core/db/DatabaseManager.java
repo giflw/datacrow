@@ -96,7 +96,6 @@ public class DatabaseManager {
             start = logger.isDebugEnabled() ? new Date().getTime() : 0;
             
             db.cleanup();
-            db.cleanReferences();
             
             if (logger.isDebugEnabled()) {
                 long end = new Date().getTime();
@@ -234,14 +233,14 @@ public class DatabaseManager {
         return null;
     }
     
-    public static List<Long> getKeys(DataFilter filter) {
-        List<Long> data = new ArrayList<Long>();
+    public static List<String> getKeys(DataFilter filter) {
+        List<String> data = new ArrayList<String>();
 
         try {
             ResultSet rs = DatabaseManager.executeSQL(filter.toSQL(new int[] {DcObject._ID}));
             
             while (rs.next())
-                data.add(rs.getLong(1));
+                data.add(rs.getString(1));
             
             rs.close();
         } catch (SQLException e) {

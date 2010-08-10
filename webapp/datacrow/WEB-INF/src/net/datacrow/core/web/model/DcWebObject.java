@@ -59,7 +59,7 @@ public class DcWebObject extends DcSecured {
     private int rowIdx;
     
     private boolean isNew = false;
-    private Long ID;
+    private String ID;
     private String name;
     
     private int tab = 1;
@@ -140,9 +140,7 @@ public class DcWebObject extends DcSecured {
                 if (wf.isReadonly() && wf.isDropDown())
                     wf.setType(DcWebField._TEXTFIELD);
                 
-                if (field.isTechnicalInfo())
-                    addTechnicalField(wf);
-                else if (wf.isImage()) 
+                if (wf.isImage()) 
                     addPictureField(wf);
                 else
                     addField(wf);
@@ -342,11 +340,11 @@ public class DcWebObject extends DcSecured {
         return fields;
     }
     
-    public Long getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(Long ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 }

@@ -25,9 +25,10 @@
 
 package net.datacrow.core.objects;
 
-import org.apache.log4j.Logger;
-
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
+
+import org.apache.log4j.Logger;
 
 /**
  * A mapping represents a many to many relationship.
@@ -64,6 +65,19 @@ public class DcMapping extends DcObject {
     }
     
     @Override
+    public void initializeImages() {
+        
+    }
+    
+    @Override
+    public boolean hasPrimaryKey() {
+        return false;
+    }
+
+    @Override
+    public void initializeReferences() {}
+
+    @Override
     public void release() {
         if (reference != null)
             reference.release();
@@ -82,7 +96,10 @@ public class DcMapping extends DcObject {
     public DcObject getReferencedObject() {
         if (reference == null) {
             try {
-                reference = DataManager.getItem(getReferencedModuleIdx(), getReferencedId());
+                reference = DataManager.getItem(
+                        getReferencedModuleIdx(), 
+                        getReferencedID(), 
+                        new int[] {DcObject._ID, DcModules.get(getReferencedModuleIdx()).getSystemDisplayFieldIdx()});
             } catch (Exception e) {
                 logger.warn(e, e);
             }
@@ -115,20 +132,23 @@ public class DcMapping extends DcObject {
     /**
      * The object ID of the referenced item.
      */
-    public Long getReferencedId() {
-        return (Long) getValueDef(_B_REFERENCED_ID).getValue();
+    public String getReferencedID() {
+        try {
+            return (String) getValueDef(_B_REFERENCED_ID).getValue();
+        } catch (Exception e) {
+            return null;
+        }
     }
     
     @Override
     public String toString() {
-        reference = getReferencedObject();
-        return reference != null ? reference.toString() : "";
+        return getReferencedObject() == null ? "" : getReferencedObject().toString();//DataManager.getDisplayString(getReferencedModuleIdx(), (String) getValueDef(_B_REFERENCED_ID).getValue());
     }
     
     @Override
     public DcObject clone() {
         DcMapping clone = (DcMapping) super.clone();
-        clone.setReference(reference.clone());
+        clone.setReference(reference != null ? reference.clone() : null);
         return clone;
     }
 

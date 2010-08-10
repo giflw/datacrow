@@ -353,7 +353,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
                 
                 int counter = 0;
                 while (rs.next() && !canceled) {
-                    Long ID = rs.getLong("ID");
+                    String ID = rs.getString("ID");
                     int current = rs.getInt(field.getDatabaseFieldName());
                     
                     boolean allow = false;
@@ -381,7 +381,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
                     if (allow) {
                         String updateQuery = "UPDATE " + module.getTableName() + 
                                              " SET " + field.getDatabaseFieldName() + " = " + counter  + 
-                                             " WHERE ID = " + ID;
+                                             " WHERE ID = '" + ID + "'";
                         
                         DatabaseManager.executeSQL(updateQuery);
 

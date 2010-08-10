@@ -122,14 +122,14 @@ public class ItemRelate extends DcBean {
         VariableResolver vr = fc.getApplication().getVariableResolver();
         DcReferences references = (DcReferences) vr.resolveVariable(fc, "references");
         
-        Long[] keys = references.getKeys();
+        String[] keys = references.getKeys();
         
         DcWebObject wod = getParentObject();
         DcObject dco = wod.getDcObject();
         dco.setValue(references.getFieldIdx(), null);
 
         int referenceModIdx = dco.getField(references.getFieldIdx()).getReferenceIdx();
-        for (Long key : keys) {
+        for (String key : keys) {
             DcObject reference = DataManager.getItem(referenceModIdx, key);
             DataManager.createReference(dco, references.getFieldIdx(), reference);
         }
@@ -161,7 +161,7 @@ public class ItemRelate extends DcBean {
         Collection<DcMapping> currentRefs = (Collection<DcMapping>) wod.getDcObject().getValue(fieldIdx);
         if (currentRefs != null) {
             int counter = 0;
-            Long[] keys = new Long[currentRefs.size()];
+            String[] keys = new String[currentRefs.size()];
             for (DcMapping mapping : currentRefs) {
                 keys[counter++] = mapping.getReferencedObject().getID();
             }

@@ -49,14 +49,14 @@ public class CachedChildView extends View implements ActionListener {
     }
     
     @Override
-    public void remove(Long[] ids) {
-        super.remove(ids);
+    public void remove(String[] keys) {
+        super.remove(keys);
         
         DcObject dco = null;
         
         for (DcObject child : children) {
-            for (int i = 0; i < ids.length; i++) {
-                if (child.getID().equals(ids[i]))
+            for (String key : keys) {
+                if (child.getID().equals(key))
                     dco = child;
             }
         }
@@ -87,10 +87,10 @@ public class CachedChildView extends View implements ActionListener {
     }
     
     @Override
-    public void setParentID(Long ID, boolean show) {
-        if (ID != null && (vc.getItemCount() == 0 || !ID.equals(getParentID()))) {
+    public void setParentID(String parentID, boolean show) {
+        if (parentID != null && (vc.getItemCount() == 0 || !parentID.equals(getParentID()))) {
             syncCache();
-            super.setParentID(ID, show);
+            super.setParentID(parentID, show);
             if (show) 
                 loadChildren();
         }
@@ -114,7 +114,7 @@ public class CachedChildView extends View implements ActionListener {
         }
     }
     
-    public void removeChildren(Long parentID) {
+    public void removeChildren(String parentID) {
         Collection<DcObject> c = getChildren(parentID);
         children.removeAll(c);
     }
@@ -126,7 +126,7 @@ public class CachedChildView extends View implements ActionListener {
         vc.add(c);
     }
     
-    public List<DcObject> getChildren(Long parentID) {
+    public List<DcObject> getChildren(String parentID) {
         syncCache();
         List<DcObject> c = new ArrayList<DcObject>();
         for (int i = 0; i < children.size(); i++) {

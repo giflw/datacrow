@@ -25,8 +25,18 @@
 
 package net.datacrow.core.db.upgrade;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import net.datacrow.console.windows.log.LogForm;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.Version;
+import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcMapping;
+import net.datacrow.core.objects.Picture;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
@@ -58,13 +68,16 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             
             boolean upgraded = false;
             
-            /*Version v = DatabaseManager.getVersion();
-            
-            if (v.isOlder(new Version(3, 5, 0, 0))) {
-                upgraded |= convertMappingModules();
-                upgraded |= convertMovieCountriesAndLanguages();
+            Version v = DatabaseManager.getVersion();
+            if (!v.equals(DataCrow.getVersion())) {
+                cleanupReferences();
             }
-            
+
+            if (v.isOlder(new Version(3, 9, 0, 0))) {
+                upgraded |= createIndexes();
+            }
+
+            /*
             if (v.isOlder(new Version(3, 6, 0, 0))) {
                 upgraded |= convertExternalReferences();
             }
@@ -96,6 +109,84 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             logger.error(msg, e);
         }            
     }
+    
+    private boolean createIndexes() {
+        
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException se) {
+            logger.error(se, se);
+        }
+
+        for (DcModule module : DcModules.getAllModules()) {
+            if (module.getIndex() == DcModules._PICTURE) {
+                try { 
+                    stmt.execute("delete from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)");
+                    stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                            module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
+                            module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
+                } catch (SQLException se) {
+                    logger.error(se, se);
+                }
+            } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+                try { 
+                    stmt.execute("delete from " + module.getTableName() + " where objectid in (select objectid from " + module.getTableName() + " group by objectid having count(distinct referencedid) > 1)");
+                    stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                            module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
+                            module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+                } catch (SQLException se) {
+                    logger.error(se, se);
+                }
+            } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
+                try { 
+                    stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                            module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
+                            module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+                } catch (SQLException se) {
+                    logger.error(se, se);
+                }
+            }
+        }
+        
+        try {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException se) {
+            // ignore
+        }
+        
+        return true;
+    }
+    
+    private void cleanupReferences() {
+
+        Connection conn = DatabaseManager.getConnection();
+        Statement stmt = null;
+        for (DcModule module : DcModules.getAllModules()) {
+            if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+                
+                try {
+                    stmt = conn.createStatement();
+                    stmt.execute("DELETE FROM " + module.getTableName() + " where " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() +
+                                 " NOT IN (SELECT ID FROM " + DcModules.get(module.getField(DcMapping._A_PARENT_ID).getSourceModuleIdx()).getTableName() + ") OR " +
+                                 module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " NOT IN (SELECT ID FROM " + 
+                                 DcModules.get(module.getField(DcMapping._B_REFERENCED_ID).getSourceModuleIdx()).getTableName() + ")"); 
+                } catch (SQLException se) {
+                    logger.error("Could not remove references", se);
+                }
+            }
+        }
+        
+        try {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException se) {
+            // ignore
+        }
+   }
     
 //    private void changeSettings() {
 //        try {

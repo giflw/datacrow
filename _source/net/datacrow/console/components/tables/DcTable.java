@@ -86,6 +86,7 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Media;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.DcTableSettings;
+import net.datacrow.settings.Settings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.util.DcImageIcon;
@@ -98,13 +99,14 @@ public class DcTable extends JTable implements IViewComponent {
     private static Logger logger = Logger.getLogger(DcTable.class.getName());
 
     private final DcModule module;
-    private final Hashtable<Long, DcObject> cache = new Hashtable<Long, DcObject>();
+    private final Hashtable<String, DcObject> cache = new Hashtable<String, DcObject>();
     private final TableValueChangedAction tableChangeListener = new TableValueChangedAction();
     
     private final boolean caching;
     private final boolean readonly;
 
     private boolean ignoreSettings = false;
+    private boolean ignorePaintRequests = false;
 
     private View view;
     
@@ -114,6 +116,8 @@ public class DcTable extends JTable implements IViewComponent {
     private ArrayList<TableColumn> columnsHidden = new ArrayList<TableColumn>();
     private Map<Object, TableColumn> columns = new HashMap<Object, TableColumn>();
 
+    private boolean loadable = false;
+    
     public DcTable(boolean readonly, boolean caching) {
         super(new DcTableModel());
 
@@ -129,10 +133,13 @@ public class DcTable extends JTable implements IViewComponent {
     public DcTable(DcModule module, boolean readonly, boolean caching) {
         super(new DcTableModel());
 
+        this.loadable = true;
         this.caching = caching;
         this.module = module;
         this.readonly = readonly;
-
+    }
+    
+    public void activate() {
         buildTable();
 
         setProperties();
@@ -164,6 +171,14 @@ public class DcTable extends JTable implements IViewComponent {
     public boolean isChangesSaved() {
         return cache.size() == 0;
     }
+    
+    public void setIgnorePaintRequests(boolean b) {
+        ignorePaintRequests = b;
+    }
+
+    public boolean isIgnoringPaintRequests() {
+        return ignorePaintRequests; 
+    }    
 
     public DcTableModel getDcModel() {
         if (!(getModel() instanceof DcTableModel))
@@ -417,7 +432,7 @@ public class DcTable extends JTable implements IViewComponent {
         cache.clear();
     }
 
-    public void removeFromCache(Long ID) {
+    public void removeFromCache(String ID) {
         cache.remove(ID);
     }
 
@@ -495,8 +510,8 @@ public class DcTable extends JTable implements IViewComponent {
 
     public Collection<DcObject> getChangedObjects() {
         Collection<DcObject> objects = new ArrayList<DcObject>();
-        for (Long id : cache.keySet()) {
-            objects.add(cache.get(id));
+        for (String key : cache.keySet()) {
+            objects.add(cache.get(key));
         }
         return objects;
     }
@@ -506,8 +521,8 @@ public class DcTable extends JTable implements IViewComponent {
         int[] rows = new int[cache.size()];
         int counter = 0;
         int row;
-        for (Long id : cache.keySet()) {
-            row = getRowNumberWithID(id);
+        for (String key : cache.keySet()) {
+            row = getRowNumberWithID(key);
             rows[counter++] = row;
         }
         return rows;
@@ -530,18 +545,8 @@ public class DcTable extends JTable implements IViewComponent {
         loadedRows.clear();
 
         TableModel model = getModel();
-        Object value;
-        for (int i = 0; i < model.getRowCount(); i++) {
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                value = model.getValueAt(i, j);
-                
-                if (value instanceof DcObject) {
-                    ((DcObject) value).release();
-                } else if (value instanceof Collection) {
-                    for (DcObject dco : (Collection<DcObject>) value) 
-                        dco.release();
-                }
-            }
+        for (int row = 0; row < model.getRowCount(); row++) {
+            clear(row);
         }
         
         setListeningForChanges(false);
@@ -549,7 +554,7 @@ public class DcTable extends JTable implements IViewComponent {
         setListeningForChanges(true);
     }
 
-    public int getRowNumberWithID(Long ID) {
+    public int getRowNumberWithID(String ID) {
         cancelEdit();
         for (int i = 0; i < getDcModel().getRowCount(); i++) {
             if (ID.equals(getObjectID(i)))
@@ -570,7 +575,7 @@ public class DcTable extends JTable implements IViewComponent {
             if (caching) {
                 row = rows[i];
                 col = getColumnIndexForField(DcObject._ID);
-                removeFromCache((Long) getValueAt(row, col, true));
+                removeFromCache((String) getValueAt(row, col, true));
             }
             getDcModel().removeRow(rows[i]);
         }
@@ -591,10 +596,8 @@ public class DcTable extends JTable implements IViewComponent {
     // not implemented; this is not used for tables
     public void setSelected(Collection<? extends DcObject> items) {}
 
-    /**
-     * TODO: implement
-     */
-    public void update(Long ID) {
+    public void update(String ID) {
+        loadedRows.remove(Integer.valueOf(getRowNumberWithID(ID)));
     }
 
     public void setSelected(int row) {
@@ -624,7 +627,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
-    public void update(Long ID, DcObject dco) {
+    public void update(String ID, DcObject dco) {
         int index = getIndex(ID);
         if (index > -1)
             updateItemAt(index, dco);
@@ -682,7 +685,7 @@ public class DcTable extends JTable implements IViewComponent {
             if (row != -1 && column != -1) {
                 int col = getColumnIndexForField(DcObject._ID);
 
-                Long id = (Long) getValueAt(row, col, true);
+                String id = (String) getValueAt(row, col, true);
                 if (id != null) {
                     DcObject dco;
                     if (!cache.containsKey(id)) {
@@ -750,7 +753,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
         c.setAutoscrolls(false);
         c.setBorder(null);
-        c.setIgnoreRepaint(true);
+        c.setIgnoreRepaint(false);
         c.setVerifyInputWhenFocusTarget(false);
         c.setEnabled(!field.isReadOnly() && !readonly);
         return c;
@@ -975,7 +978,7 @@ public class DcTable extends JTable implements IViewComponent {
         setShowHorizontalLines(false);
         setShowVerticalLines(false);
         setIntercellSpacing(new Dimension());
-
+        
         setRowHeight(DcSettings.getInt(DcRepository.Settings.stTableRowHeight));
         
         applyHeaders();
@@ -985,6 +988,9 @@ public class DcTable extends JTable implements IViewComponent {
     
     @SuppressWarnings("unchecked")
     public boolean load(int row) {
+        
+        if (!loadable) return false;
+        
         boolean loaded = loadedRows.contains(Integer.valueOf(row));
         
         if (!loaded) {
@@ -993,9 +999,15 @@ public class DcTable extends JTable implements IViewComponent {
             boolean listenForChanges = isListeningForChanges();
             setListeningForChanges(false);
             
-            Long ID = (Long) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
+            String ID = (String) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
             
-            DcObject dco = DataManager.getItem(module.getIndex(), ID);
+            
+            Settings settings = module.getSettings();
+            Collection<Integer> fields = new ArrayList<Integer>();
+            for (int field : settings.getIntArray(DcRepository.ModuleSettings.stTableColumnOrder))
+                fields.add(Integer.valueOf(field));
+            
+            DcObject dco = DataManager.getItem(module.getIndex(), ID, module.getMinimalFields(fields));
 
             TableModel model = getModel();
             int col;
@@ -1015,6 +1027,8 @@ public class DcTable extends JTable implements IViewComponent {
                 } else {
                     model.setValueAt(value, row, col);    
                 }
+                
+                ((DcTableModel) getModel()).fireTableDataChanged();
             }
 
             if (module.isAbstract()) {
@@ -1024,16 +1038,39 @@ public class DcTable extends JTable implements IViewComponent {
             }
 
             dco.release();
-            
             setListeningForChanges(listenForChanges);
+            
+            getParent().repaint();
+            repaint();
+            revalidate();
+            applyHeaders();
 
             return true;
         }
         return false;
     }
     
-    public void clear(int index) {
-        // not implemented; do not unload values for editable tables
+    @SuppressWarnings("unchecked")
+    public void clear(int row) {
+        loadedRows.remove(Integer.valueOf(row));
+        
+        TableModel model = getModel();
+        Object value;
+        
+        boolean listenForChanges = isListeningForChanges();
+        setListeningForChanges(false);
+        
+        for (int col = 0; col < model.getColumnCount(); col++) {
+            value = model.getValueAt(row, col);
+            if (value instanceof DcObject) {
+                ((DcObject) value).release();
+            } else if (value instanceof Collection) {
+                for (DcObject dco : (Collection<DcObject>) value) 
+                    dco.release();
+            }
+        }
+        
+        setListeningForChanges(listenForChanges);
     }
 
     public int getFirstVisibleIndex() {
@@ -1050,12 +1087,7 @@ public class DcTable extends JTable implements IViewComponent {
         return 10;
     }
 
-    public void visibleItemsChanged() {
-//        if (vu != null) vu.cancel();
-//        
-//        vu = new ViewUpdater(this);
-//        vu.start();
-    }    
+    public void paintRegionChanged() {}    
 
     public boolean isListeningForChanges() {
         TableModelListener[] listeners = getDcModel().getTableModelListeners();
@@ -1111,12 +1143,12 @@ public class DcTable extends JTable implements IViewComponent {
     public void afterUpdate() {
     }
 
-    public DcObject getItem(Long ID) {
+    public DcObject getItem(String ID) {
         int index = getIndex(ID);
         return index >= 0 ? getItemAt(index) : null;
     }
 
-    private int getIndex(Long ID) {
+    private int getIndex(String ID) {
         for (int i = 0; i < getItemCount(); i++) {
             Long objectID = getObjectID(i);
             if (ID.equals(objectID))
@@ -1149,10 +1181,10 @@ public class DcTable extends JTable implements IViewComponent {
         return super.rowAtPoint(point);
     }
 
-    public boolean remove(Long[] ids) {
+    public boolean remove(String[] keys) {
         boolean removed = false;
-        for (Long ID : ids) {
-            int idx = getIndex(ID);
+        for (String key : keys) {
+            int idx = getIndex(key);
             if (idx > -1) {
                 removeRow(idx);
                 removed = true;
@@ -1179,14 +1211,13 @@ public class DcTable extends JTable implements IViewComponent {
     	}
     }
 
-    public void add(Long key) {
+    public void add(String key) {
         int row = addRow();
         getModel().setValueAt(key, row, getColumnIndexForField(DcObject._ID));
     }
 
-    public void add(Collection<Long> keys) {
-        for (Long key : keys) {
+    public void add(Collection<String> keys) {
+        for (String key : keys)
             add(key);
-        }
     }
 }

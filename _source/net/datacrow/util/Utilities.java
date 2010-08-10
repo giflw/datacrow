@@ -54,12 +54,11 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -81,8 +80,6 @@ public class Utilities {
     
     private static Logger logger = Logger.getLogger(Utilities.class.getName());
 
-    private static Random random = new Random();
-    
     private static final Toolkit tk = Toolkit.getDefaultToolkit();
     private static final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private static final GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -114,7 +111,7 @@ public class Utilities {
         if (Utilities.isEmpty(value))
             value = null;
         else if (value instanceof DcObject)
-            value = Long.valueOf(((DcObject) value).getID());
+            value = ((DcObject) value).getID();
         else if ((field.getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
                   field.getValueType() == DcRepository.ValueTypes._LONG) &&
                  value instanceof String)
@@ -322,18 +319,8 @@ public class Utilities {
      * Based on date / time + random number
      * @return unique ID as String
      */
-    public static Long getUniqueID() {
-        long temp = random.nextLong();
-        if (temp < 0l) {
-            temp = temp * -1;
-        }
-        Calendar calendar = Calendar.getInstance();
-        StringBuffer sb = new StringBuffer();
-        sb.append(calendar.get(Calendar.MONTH) + 1);
-        sb.append(calendar.get(Calendar.DAY_OF_MONTH));
-        sb.append(temp);
-        
-        return Long.valueOf(sb.toString().substring(0, 15));
+    public static String getUniqueID() {
+        return UUID.randomUUID().toString();
     }
     
     /**

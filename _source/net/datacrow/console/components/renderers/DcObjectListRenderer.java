@@ -32,6 +32,7 @@ import java.awt.Rectangle;
 import javax.swing.JList;
 
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
+import net.datacrow.console.views.IViewComponent;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
@@ -52,18 +53,26 @@ public class DcObjectListRenderer extends DcListRenderer  {
             JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
         DcObjectListElement c = (DcObjectListElement) value;
-
-        if (render) {
+        IViewComponent vc = (IViewComponent) list;
+        
+        if (render && !vc.isIgnoringPaintRequests()) {
+            
             c.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
             c.load();
             
-        	if (c.getDcObject().getModule().canBeLend()) {
-        		Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
-        		if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
-        			c.setForeground(Color.RED);
-        	}
-    
-        	setElementColor(isSelected, c, index);
+            if (c.getDcObject() != null) {
+                
+                if (c.getDcObject().getModule().canBeLend()) {
+                    Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
+                    if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
+                        c.setForeground(Color.RED);
+                }
+                
+                setElementColor(isSelected, c, index);
+            }
+            
+            list.repaint();
+            list.revalidate();
         }
         
     	return c;
