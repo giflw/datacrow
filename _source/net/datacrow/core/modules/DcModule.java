@@ -674,17 +674,35 @@ public class DcModule implements Comparable<DcModule> {
     public int[] getMinimalFields(Collection<Integer> include) {
         Collection<Integer> fields = new ArrayList<Integer>();
         for (DcFieldDefinition definition : getFieldDefinitions().getDefinitions())
-            if (definition.isDescriptive()) fields.add(Integer.valueOf(definition.getIndex()));
+            if (definition.isDescriptive()) 
+                fields.add(Integer.valueOf(definition.getIndex()));
             
-        for (Integer field : include) 
-            if (!fields.contains(field)) fields.add(field);
+        if (!fields.contains(Integer.valueOf(getSystemDisplayFieldIdx())))
+            fields.add(Integer.valueOf(getSystemDisplayFieldIdx()));
         
-        if (!fields.contains(Integer.valueOf(DcObject._ID))) fields.add(Integer.valueOf(DcObject._ID));
+        if (include != null) { 
+            for (Integer field : include) 
+                if (!fields.contains(field)) 
+                    fields.add(field);
+        }
+        
+        if (getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+            if (!fields.contains(Integer.valueOf(DcAssociate._A_NAME)))
+                fields.add(Integer.valueOf(DcAssociate._A_NAME));
+            if (!fields.contains(Integer.valueOf(DcAssociate._E_FIRSTNAME)))
+                fields.add(Integer.valueOf(DcAssociate._E_FIRSTNAME));
+            if (!fields.contains(Integer.valueOf(DcAssociate._F_LASTTNAME)))
+                fields.add(Integer.valueOf(DcAssociate._F_LASTTNAME));
+        }
+        
+        if (getField(DcObject._ID) != null && !fields.contains(Integer.valueOf(DcObject._ID))) 
+            fields.add(Integer.valueOf(DcObject._ID));
         
         int[] result = new int[fields.size()];
         int i = 0;
         for (Integer field : fields)
             result[i++] = field.intValue();
+        
         return result;
     }
 

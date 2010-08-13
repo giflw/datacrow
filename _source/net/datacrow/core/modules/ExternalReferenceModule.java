@@ -1,5 +1,8 @@
 package net.datacrow.core.modules;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
@@ -22,6 +25,21 @@ public class ExternalReferenceModule extends DcPropertyModule {
             String tableShortName, String objectName, String objectNamePlural) {
         
         return new ExternalReferenceModule(index, name, tableName, tableShortName, objectName, objectNamePlural);
+    }
+    
+    @Override
+    public int[] getMinimalFields(Collection<Integer> include) {
+        Collection<Integer> c = new ArrayList<Integer>();
+        
+        if (include != null)
+            c.addAll(include);
+        
+        if (!c.contains(Integer.valueOf(ExternalReference._EXTERNAL_ID))) 
+            c.add(Integer.valueOf(ExternalReference._EXTERNAL_ID));
+        if (!c.contains(Integer.valueOf(ExternalReference._EXTERNAL_ID_TYPE))) 
+            c.add(Integer.valueOf(ExternalReference._EXTERNAL_ID_TYPE));        
+        
+        return super.getMinimalFields(c);
     }
 
     @Override

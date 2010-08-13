@@ -99,7 +99,7 @@ public class DcMapping extends DcObject {
                 reference = DataManager.getItem(
                         getReferencedModuleIdx(), 
                         getReferencedID(), 
-                        new int[] {DcObject._ID, DcModules.get(getReferencedModuleIdx()).getSystemDisplayFieldIdx()});
+                        DcModules.get(getReferencedModuleIdx()).getMinimalFields(null));
             } catch (Exception e) {
                 logger.warn(e, e);
             }

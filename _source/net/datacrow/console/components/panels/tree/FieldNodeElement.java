@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components.panels.tree;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class FieldNodeElement extends NodeElement {
         String sql = "select ID from " + DcModules.get(module).getTableName();
         int counter = 0;
         for (NodeElement e : parents) {
+            
             if (!Utilities.isEmpty(e.getWhereClause()) && this != e) {
                 sql += counter > 0 ? " and ID in (" : " where ID in (";
                 sql += e.getWhereClause() + ")";
@@ -74,6 +76,7 @@ public class FieldNodeElement extends NodeElement {
 
         List<String> keys = new ArrayList<String>();
         try {
+            Connection conn =  DatabaseManager.getConnection();
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
             int index = 1;
             for (NodeElement e : parents) {
@@ -87,6 +90,10 @@ public class FieldNodeElement extends NodeElement {
             while (rs.next()) {
                 keys.add(rs.getString(1));
             }
+            
+            logger.debug(ps);
+            
+            conn.close();
             rs.close();
             ps.close();
         } catch (Exception e) {

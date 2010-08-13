@@ -70,9 +70,6 @@ public class DcObjectListRenderer extends DcListRenderer  {
                 
                 setElementColor(isSelected, c, index);
             }
-            
-            list.repaint();
-            list.revalidate();
         }
         
     	return c;

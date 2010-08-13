@@ -60,6 +60,14 @@ public class GroupingPane extends JPanel {
         build();
     }
     
+    public boolean isHoldingItems() {
+        for (TreePanel tp : panels) {
+            return tp.isHoldingItems();
+        }
+        
+        return false;
+    }
+    
     public int getModule() {
         return module;
     }

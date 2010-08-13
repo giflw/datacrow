@@ -849,18 +849,24 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
     
     public void destroy() {
-        if (values != null) {
-            clearValues();
-            values.clear();
+        try {
+            if (values != null) {
+                clearValues();
+                values.clear();
+            }
+            
+            values = null;
+            
+            if (requests != null) 
+                requests.clear();
+            
+            requests = null;
+            children = null;
+            loaded = false;
+        } catch (Exception e) {
+            logger.error(e, e);
         }
-        
-        values = null;
-        requests.clear();
-        requests = null;
-        children = null;
-        loaded = false;
     }
-    
     
     /**
      * Resets this item. All values are set to empty.

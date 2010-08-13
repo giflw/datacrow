@@ -47,13 +47,15 @@ public class SystemMonitor extends Thread {
     public void run() {
         while (true) {
             try {
+                System.gc();
+                
+                if (checkMem)
+                    checkMemory();
+                
                 sleep(60000);
             } catch (Exception e) {
                 logger.error(e, e);
             }
-            
-            if (checkMem)
-                checkMemory();
         }
     }
     

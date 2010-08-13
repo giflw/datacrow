@@ -25,6 +25,9 @@
 
 package net.datacrow.core.modules;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
@@ -93,6 +96,26 @@ public class LoanModule extends DcModule {
         return new int[] {};
     }
 
+    @Override
+    public int[] getMinimalFields(Collection<Integer> include) {
+        Collection<Integer> c = new ArrayList<Integer>();
+        
+        if (include != null)
+            c.addAll(include);
+        
+        if (!c.contains(Integer.valueOf(Loan._A_STARTDATE))) 
+            c.add(Integer.valueOf(Loan._A_STARTDATE));
+        if (!c.contains(Integer.valueOf(Loan._B_ENDDATE))) 
+            c.add(Integer.valueOf(Loan._B_ENDDATE));
+        if (!c.contains(Integer.valueOf(Loan._C_CONTACTPERSONID))) 
+            c.add(Integer.valueOf(Loan._C_CONTACTPERSONID));
+        if (!c.contains(Integer.valueOf(Loan._D_OBJECTID))) 
+            c.add(Integer.valueOf(Loan._D_OBJECTID));
+        if (!c.contains(Integer.valueOf(Loan._E_DUEDATE))) 
+            c.add(Integer.valueOf(Loan._E_DUEDATE));
+        
+        return super.getMinimalFields(c);
+    }
     
     /**
      * Initializes the default fields.

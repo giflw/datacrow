@@ -274,8 +274,6 @@ public class ItemForm extends DcFrame implements ActionListener {
             }
 
         }
-        
-        repaint();
     }
     
     protected void applySettings() {

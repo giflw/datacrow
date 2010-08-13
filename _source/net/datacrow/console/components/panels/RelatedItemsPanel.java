@@ -29,7 +29,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JScrollPane;
@@ -44,7 +43,6 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.comparators.DcObjectComparator;
 
 public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimpleItemView {
     
@@ -87,7 +85,6 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
     public void loadItems() {
         list.clear();
         List<DcObject> items = DataManager.getReferencingItems(dco);
-        Collections.sort(items, new DcObjectComparator(DcObject._SYS_DISPLAYVALUE));
         list.add(items);
     }
     

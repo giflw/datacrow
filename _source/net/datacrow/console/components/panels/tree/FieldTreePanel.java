@@ -111,8 +111,6 @@ public class FieldTreePanel extends TreePanel {
      * Initialization
      ************************************************************************/
     
-    
-    
     @Override
     protected void createTree() {
         if (treeHugger != null) {
@@ -148,8 +146,6 @@ public class FieldTreePanel extends TreePanel {
             SwingUtilities.invokeLater(
                     new Thread(new Runnable() { 
                         public void run() {
-                            revalidate();
-                            repaint();
                             expandAll();
                         }
                     }));
@@ -306,15 +302,25 @@ public class FieldTreePanel extends TreePanel {
                 counter++;
             }
             
-            
-            
             createTree(columns.toString() + " " + joins.toString() + (DataFilters.isFilterActive(getModule()) ? " WHERE ID IN ("  + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ") " : " ") + order.toString());
         }
         
+        /**
+         * Creates a tree from the result of an SQL statement. 
+         * The SQL statement should query the values in a flat hierarchy for each level of the tree:
+         * key1-value-icon
+         * key1-value-icon / key1-value-icon
+         * key1-value-icon / key2-value-icon
+         * key1-value-icon / key1-value-icon / key1-value-icon
+         * key1-value-icon / key2-value-icon / key2-value-icon
+         * @param sql
+         */
         private void createTree(String sql) {
             try {
                 DcField field;
                 DcModule module = DcModules.get(getModule());
+                
+                logger.debug(sql);
                 
                 ResultSet rs = DatabaseManager.executeSQL(sql);
                 
@@ -351,42 +357,6 @@ public class FieldTreePanel extends TreePanel {
                                 ((NodeElement)  previous.getUserObject()).getKey().equals(key);
                         
                         if (!exists) { 
-//                            
-//                            
-//                            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-//                                field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-//
-//                                reference = DcModules.get(field.getReferenceIdx());
-//                                main = field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ? module : 
-//                                       DcModules.get(DcModules.getMappingModIdx(getModule(), reference.getIndex(), field.getIndex()));
-//
-//                                if (key != null) {
-//                                    clause = "select distinct " +
-//                                            (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ?
-//                                                    " main." + main.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() : " main.ID") +
-//                                            " from " + reference.getTableName() + " ref" +
-//                                            " inner join " + main.getTableName() + " main" + 
-//                                            (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ?
-//                                                  " on main." + main.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ref.ID" 
-//                                                : " on main." + field.getDatabaseFieldName() + " = ref.ID") +
-//                                             " and ref.ID = ?";
-//                                } else {
-//                                    if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-//                                        clause = "select ID from " + DcModules.get(getModule()).getTableName() + " where " + field.getDatabaseFieldName() + " is null";
-//                                    } else {
-//                                        clause = "select ID from " + DcModules.get(getModule()).getTableName() + " where ID not in (" +
-//                                                 "select " + main.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " from " +
-//                                                 main.getTableName() + ")";
-//                                    }  
-//                                }
-//                            } else {
-//                                if (key != null) {
-//                                    clause = "select ID from " + DcModules.get(getModule()).getTableName() + " where " + field.getDatabaseFieldName() + " = ?";
-//                                } else {
-//                                    clause = "select ID from " + DcModules.get(getModule()).getTableName() + " where " + field.getDatabaseFieldName() + " is null";
-//                                }
-//                            }
-                            
                             if (key == null) {
                                 ne = new FieldNodeElement(getModule(), field.getIndex(), null, empty, null);
                             } else {

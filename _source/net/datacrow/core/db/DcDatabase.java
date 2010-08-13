@@ -31,6 +31,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -39,6 +40,7 @@ import net.datacrow.core.db.upgrade.DatabaseUpgrade;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.DcSettings;
@@ -283,12 +285,24 @@ public class DcDatabase {
             String type = field.getDataBaseFieldType();
             
             boolean found = false;
+            boolean convert = false;
             for (int i = 1; i < metaData.getColumnCount() + 1; i++) {
                 if (metaData.getColumnName(i).equalsIgnoreCase(column)) {
                     found = true;
                     int dbSize = metaData.getColumnDisplaySize(i);
-                    if (    dbSize < field.getMaximumLength() && 
-                            field.getValueType() == DcRepository.ValueTypes._STRING) {
+                    int dbType = metaData.getColumnType(i);
+                    
+                    convert = false;
+                    if (    dbType == Types.BIGINT && 
+                           (field.getValueType() == DcRepository.ValueTypes._DCPARENTREFERENCE ||
+                            field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
+                            field.getIndex() == DcObject._ID))
+                        convert = true;
+                    else if (dbSize < field.getMaximumLength() && 
+                           (field.getValueType() == DcRepository.ValueTypes._STRING))
+                        convert = true;
+                    
+                    if (convert) {
                         logger.info(DcResources.getText("msgTableUpgradeIncorrectColumn", new String[] {tablename, field.getLabel()}));
                         executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
                     }

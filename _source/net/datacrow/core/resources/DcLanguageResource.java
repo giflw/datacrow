@@ -81,10 +81,8 @@ public class DcLanguageResource {
      */
     public void merge(DcLanguageResource resource) {
         for (String key : resource.getResourcesMap().keySet()) {
-            if (!resources.containsKey(key)) {
+            if (!resources.containsKey(key))
                 resources.put(key, resource.getResourcesMap().get(key));
-                logger.debug("Text not found for key " + key + " (" + language + ")");
-            }
         }
     }
     

@@ -332,7 +332,6 @@ public class DcList extends JList implements ComponentListener {
         
         getDcModel().clear();
         getSelectionModel().clearSelection();
-        repaint();
     }
     
     @Override

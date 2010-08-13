@@ -111,6 +111,14 @@ public class DcObjectList extends DcList implements IViewComponent {
         return index >= getFirstVisibleIndex() && index <= getLastVisibleIndex();
     }
     
+    public String getItemKey(int idx) {
+        return getElement(idx).getKey();
+    }
+
+    public int getModule(int idx) {
+        return getItemAt(idx).getModule().getIndex();
+    }
+
     public void activate() {}
 
     public void paintRegionChanged() {
@@ -207,7 +215,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         DcObjectListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             element = (DcObjectListElement) getDcModel().getElementAt(i);
-            if (element.getDcObject() != null && element.getDcObject().getID().equals(ID)) 
+            if (element.getKey() != null && element.getKey().equals(ID)) 
                 return element;
         }
         return null;
@@ -253,8 +261,6 @@ public class DcObjectList extends DcList implements IViewComponent {
         DcObjectListElement element = getElement(ID);
         if (element != null) {
             element.update();
-            revalidate();
-            repaint();
         }
     }       
 
@@ -271,52 +277,39 @@ public class DcObjectList extends DcList implements IViewComponent {
         }
     }
     
-    public void setSelected(DcObject dco, int field) {
-        int size = getDcModel().getSize();
-        for (int row = 0 ; row < size; row++) {
-            DcObjectListElement element = (DcObjectListElement) getDcModel().getElementAt(row);
-            if (element.getDcObject() != null) {
-                if (dco.getDisplayString(field).equals(element.getDcObject().getDisplayString(field))) {
-                    setSelectedIndex(row);
-                    break;
-                }
-            }
-        }
-    }
+//    public void setSelected(DcObject dco, int field) {
+//        int size = getDcModel().getSize();
+//        for (int row = 0 ; row < size; row++) {
+//            DcObjectListElement element = (DcObjectListElement) getDcModel().getElementAt(row);
+//            if (element.getDcObject() != null) {
+//                if (dco.getDisplayString(field).equals(element.getDcObject().getDisplayString(field))) {
+//                    setSelectedIndex(row);
+//                    break;
+//                }
+//            }
+//        }
+//    }
     
-    public void setSelected(Collection<? extends DcObject> dcos) {
-        int[] indices = new int[dcos.size()];
-        int counter = 0;
-        DcObjectListElement element;
-        for (DcObject o : dcos) {
-            for (int row = 0 ; row < getDcModel().getSize(); row++) {
-                element = (DcObjectListElement) getDcModel().getElementAt(row);
-                if (element.getDcObject() != null) {
-                    if (element.getDcObject().equals(o)) {
-                        indices[counter] = row;
-                        break;
-                    }
-                }
-            }
-        }
-        setSelectedIndices(indices);
-    }
+//    public void setSelected(Collection<? extends DcObject> dcos) {
+//        int[] indices = new int[dcos.size()];
+//        int counter = 0;
+//        DcObjectListElement element;
+//        for (DcObject o : dcos) {
+//            for (int row = 0 ; row < getDcModel().getSize(); row++) {
+//                element = (DcObjectListElement) getDcModel().getElementAt(row);
+//                if (element.getDcObject() != null) {
+//                    if (element.getDcObject().equals(o)) {
+//                        indices[counter] = row;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        setSelectedIndices(indices);
+//    }
     
     public int[] getChangedIndices() {
-        Collection<Integer> rows = new ArrayList<Integer>();
-        DcObjectListElement element;
-        for (int i = 0 ; i < getDcModel().getSize(); i++) {
-            element = (DcObjectListElement) getDcModel().getElementAt(i);
-            if (element.getDcObject() != null && element.getDcObject().isChanged()) 
-                rows.add(i);
-        }
-        
-        int[] indices = new int[rows.size()];
-        int counter = 0;
-        for (Integer idx : rows)
-            indices[counter++] = idx.intValue();
-
-        return indices;        
+        return new int[0];
     }
     
     public boolean remove(String[] keys) {
@@ -390,6 +383,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         for (DcObject dco : objects) {
             element = getDisplayElement(dco.getModule().getIndex());
             element.setDcObject(dco);
+            element.setKey(dco.getID());
             model.addElement(element);
         }
         

@@ -40,13 +40,7 @@ public abstract class DcListElement extends JPanel {
     public abstract void build();
     
     public void update() {
-        try {
-            clear();
-            build();
-            revalidate();
-        } catch (Exception e) {
-            //e.print
-        }
+        clear();
     }  
     
     public void destroy() {

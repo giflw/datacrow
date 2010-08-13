@@ -32,6 +32,7 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -75,9 +76,11 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     protected final boolean showImages;
     
-    private boolean hasRelatedItems = false;
+    private DcObject dco;
     
-    protected DcObject dco;
+    private String key;
+    private int module;
+    
     private LinkedList<Picture> pictures = new LinkedList<Picture>();
     private LinkedList<JPanel> imagePanels = new LinkedList<JPanel>();
 
@@ -100,9 +103,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (tabbedPane != null)
             tabbedPane.setFont(ComponentFactory.getSystemFont());
         
-        if (dco != null) {
-            setObject(dco, true);            
-        }
+        setObject(key, module);            
     }
     
     public void reloadImage() {
@@ -123,13 +124,10 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         }
     }
     
-    public void createImageTabs() {
+    public void createImageTabs(DcObject dco) {
         try {
             clearImages();
     
-            if (dco == null)
-                return;
-            
             Picture picture;
             DcPictureField picField;
             JPanel panel;
@@ -164,14 +162,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         }
     }
     
-    public boolean hasObject() {
-        return dco != null;
-    }
-    
     public void refresh() {
         int caret = descriptionPane.getCaretPosition();
-        setObject(dco, true);
-        
+        setObject(key, module);
         try {
             descriptionPane.setCaretPosition(caret);
         } catch (Exception e) {
@@ -179,21 +172,28 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         }
     }
     
-    public void setObject(final DcObject dco, boolean allowSame) {
-        if (dco == null || (!allowSame && dco.equals(this.dco)))
-            return;
-        
-        if (this.dco != null)
-            this.dco.release();
-
-        setObject(dco);
+    public void setObject(String key, int module) {
+        if (key != null) {
+            Collection<Integer> fields = new ArrayList<Integer>();
+            QuickViewFieldDefinitions definitions = 
+                (QuickViewFieldDefinitions) DcModules.get(module).getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
+            
+            for (QuickViewFieldDefinition def : definitions.getDefinitions())
+                fields.add(def.getField());
+            
+            setObject(DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields)));
+        }
     }   
     
     protected void setObject(DcObject dco) {
+        
+        
+        
         try {
             int tab = tabbedPane.getSelectedIndex();
             clear();
-            this.dco = DataManager.getItem(dco.getModule().getIndex(), dco.getID());
+            
+            this.dco = dco;
             
             String html = "<html><body " + 
                            Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + 
@@ -208,14 +208,14 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 descriptionPane.setCaretPosition(0);
             } catch (Exception exp) {}
 
-            hasRelatedItems = DataManager.getReferencingItems(dco).size() > 0;
-
-            if (hasRelatedItems) {
-                RelatedItemsPanel rip = new RelatedItemsPanel(dco);
-                tabbedPane.addTab(rip.getTitle(), rip.getIcon(), rip);
-            }
+//            hasRelatedItems = DataManager.getReferencingItems(dco).size() > 0;
+//
+//            if (hasRelatedItems) {
+//                RelatedItemsPanel rip = new RelatedItemsPanel(dco);
+//                tabbedPane.addTab(rip.getTitle(), rip.getIcon(), rip);
+//            }
             
-            createImageTabs();
+            createImageTabs(dco);
             
             boolean error = true;
             tab += 1;
@@ -232,12 +232,16 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             }
         } catch (Exception e) {
             logger.error("An error occurred while setting the information of " + dco, e);
-        }            
+        }        
     }
     
     public void clear() {
-        if (dco != null) {
-            dco = null;
+        
+        if (dco != null)
+            dco.release();
+        
+        if (key != null) {
+            key = null;
 
             try {
                 tabbedPane.setSelectedIndex(0);
@@ -270,41 +274,49 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }
     
     private String getDescriptionTable(DcObject dco) {
-        String table = "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
+        String table = "<h3>" + dco.toString() + "</h3>";
+        
+        table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
         
         QuickViewFieldDefinitions definitions = (QuickViewFieldDefinitions) 
             dco.getModule().getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
         
         for (QuickViewFieldDefinition def : definitions.getDefinitions()) {
             if (dco.getField(def.getField()).isEnabled() && def.isEnabled()) 
-                table = addTableRow(table, def.getField(), def.getDirectrion(), def.getMaxLength());    
+                table = addTableRow(dco, table, def.getField(), def.getDirectrion(), def.getMaxLength());    
         }
         
         table += "</table>";    
         
         if (dco.getModule().getChild() != null && dco.getModule().getIndex() != DcModules._USER) {
             table += "\n\n";
-            table += getChildTable(dco.getModule().getChild());
+            table += getChildTable(dco);
         }
         
         return table;
     }
     
-    private String getChildTable(DcModule module) {
-        StringBuffer body = new StringBuffer();
+    private String getChildTable(DcObject dco) {
+        DcModule module = dco.getModule().getChild();
+        Collection<DcObject> children = dco.getChildren();
+        
+        if (children == null || children.size() == 0)
+            return "";
+        
+        String table = "<br> <h3>" + DcResources.getText(module.getItemPluralResourceKey()) + "</h3>";
+        
+        table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
+
         QuickViewFieldDefinitions definitions = 
             (QuickViewFieldDefinitions) module.getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
-        
-        int counter = 0;
         
         boolean first;
         StringBuffer description;
         String value;
-        Collection<DcObject> children = dco.getChildren();
+        
         for (DcObject child : children) {
             
-            if (counter > 0)
-                body.append("<b> / </b>");
+            table += "<tr><td>";
 
             first = true;
             description = new StringBuffer();
@@ -325,20 +337,15 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 }
             }
             
-            body.append(descriptionPane.createLink(child, description.toString()));
-            
-            counter++;
+            table += descriptionPane.createLink(child, description.toString());
+            table += "</td></tr>";
         }
-        
-        String table = "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + "><tr><td>\n";
-        table += body;
-        table += "</tr></td></table>";
-        
+        table += "</table>";
         return table;
     }
     
     @SuppressWarnings("unchecked")
-    protected String addTableRow(String htmlTable, int index, String direction, int maxLength) {
+    protected String addTableRow(DcObject dco, String htmlTable, int index, String direction, int maxLength) {
         
         String table = htmlTable;
         
@@ -458,8 +465,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (SwingUtilities.isRightMouseButton(e))
             showPopupMenu(e.getX(), e.getY());
 
-        if (e.getClickCount() == 2 && dco != null)
-            dco.getModule().getCurrentSearchView().open();
+        if (e.getClickCount() == 2 && key != null)
+            DcModules.get(module).getCurrentSearchView().open();
     }
 
     public void mouseEntered(MouseEvent e) {}

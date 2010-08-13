@@ -43,8 +43,9 @@ public interface IViewComponent {
     Collection<DcObject> getItems();
     DcObject getItemAt(int idx);
     DcObject getItem(String ID);
+    String getItemKey(int idx);
+    int getModule(int idx);
     
-    void setSelected(Collection<? extends DcObject> dcos);
     void setSelected(int index);
     
     void ignoreEdit(boolean b);

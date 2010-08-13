@@ -25,13 +25,18 @@
 
 package net.datacrow.core.modules;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.CachedChildView;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.itemforms.ChildForm;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.xml.XmlModule;
+import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 
 /**
@@ -44,6 +49,8 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
 
     private static final long serialVersionUID = 8257159881800394661L;
 
+    private int[] minimalFields = null;
+    
     /**
      * Creates a new instance based on a XML definition.
      * @param xmlModule
@@ -76,6 +83,35 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
         super(index, topModule, name, description, objectName, objectNamePlural,
               tableName, tableShortName);
     }
+    
+    @Override
+    public int[] getMinimalFields(Collection<Integer> include) {
+        if (minimalFields == null || include != null) {
+            Collection<Integer> fields = new ArrayList<Integer>();
+            
+            int valueType;
+            for (DcField field : getFields()) {
+                valueType = field.getValueType();
+                if (valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                    valueType != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
+                    valueType != DcRepository.ValueTypes._PICTURE) {
+                    fields.add(Integer.valueOf(field.getIndex()));
+                }
+            }
+            minimalFields = new int[fields.size()];
+            int idx = 0;
+            
+            if (include != null) {
+                for (Integer index : include)
+                    minimalFields[idx++] = index.intValue();
+            }
+            
+            for (Integer index : fields) {
+                minimalFields[idx++] = index.intValue();
+            }
+        }
+        return minimalFields;
+    }    
     
     /**
      * Creates a new item view.

@@ -97,6 +97,13 @@ public class MappingModule extends DcModule {
     public int getParentModIdx() {
         return getField(DcMapping._A_PARENT_ID).getReferenceIdx();
     } 
+    
+    
+
+    @Override
+    public int[] getMinimalFields(Collection<Integer> include) {
+        return null;
+    }
 
     /**
      * A mapping module does not have any views.

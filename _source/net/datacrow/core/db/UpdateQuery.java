@@ -127,7 +127,7 @@ public class UpdateQuery extends Query {
                 ps.execute();
             } else if (!Utilities.isEmpty(values)) {
                 stmt.execute("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE " +
-                        dco.getDatabaseFieldName(Picture._A_OBJECTID) + " = " + dco.getValue(Picture._A_OBJECTID) + " AND " +
+                        dco.getDatabaseFieldName(Picture._A_OBJECTID) + " = '" + dco.getValue(Picture._A_OBJECTID) + "' AND " +
                         dco.getDatabaseFieldName(Picture._B_FIELD) + " = '" + dco.getValue(Picture._B_FIELD) + "'");
             }
     
@@ -149,7 +149,7 @@ public class UpdateQuery extends Query {
                     saveImage(picture);
                 } else if (picture.isDeleted()) {
                     stmt.execute("DELETE FROM " + picture.getTableName() + " WHERE " +
-                            picture.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + dco.getID() + " AND " +
+                            picture.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "' AND " +
                             picture.getField(Picture._B_FIELD).getDatabaseFieldName() + " = '" +  picture.getValue(Picture._B_FIELD) + "'");
                     deleteImage(picture);    
                 }
@@ -183,6 +183,8 @@ public class UpdateQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
+        dco.getModule().getSearchView().update(dco.getID());
+        
         handleRequest(null, success);
         clear();
         

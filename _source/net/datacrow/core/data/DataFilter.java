@@ -52,6 +52,8 @@ public class DataFilter {
 
     private int module;
 
+    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    
     private String name;
     private int sortOrder = DcObjectComparator._SORTORDER_ASCENDING;
     
@@ -360,9 +362,25 @@ public class DataFilter {
         int counter2;
         int counter = 0;
         String queryValue = null;
+        
+        List<DataFilterEntry> childEntries = new ArrayList<DataFilterEntry>();
+        
+        boolean hasConditions = false;
         for (DataFilterEntry entry : getEntries()) {
             module = DcModules.get(entry.getModule());
+            
+            if (entry.getModule() != getModule()) {
+                childEntries.add(entry);
+                continue;
+            }
+            
             field = module.getField(entry.getField());
+            
+            if (field.isUiOnly()) 
+                continue;
+            
+            hasConditions = true;
+            
             operator = entry.getOperator().getIndex();
             value = entry.getValue() != null ? Utilities.getQueryValue(entry.getValue(), field) : null;
             
@@ -406,13 +424,22 @@ public class DataFilter {
                     sql.append(mapping.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
                     sql.append(" IN (");
                     
-                    counter2 = 0;
-                    for (DcObject dco : (Collection<DcObject>) value) {
-                        if (counter > 0)  sql.append(",");
-                        sql.append(dco.getID());
-                        counter2++;
+                    
+                    if (value instanceof String) {
+                        sql.append("'");
+                        sql.append(value);
+                        sql.append("'))");
+                    } else {
+                        counter2 = 0;
+                        for (DcObject dco : (Collection<DcObject>) value) {
+                            if (counter > 0)  sql.append(",");
+                            sql.append("'");
+                            sql.append(dco.getID());
+                            sql.append("'");
+                            counter2++;
+                        }
+                        sql.append("))");
                     }
-                    sql.append("))");
                 } else {
                     if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
                     sql.append(" LIKE UPPER(");
@@ -455,15 +482,38 @@ public class DataFilter {
             counter++;
         }
         
-        counter = 0; 
+        if (childEntries.size() > 0) {
+            DcModule childModule = DcModules.get(childEntries.get(0).getModule());
+            
+            DataFilter df = new DataFilter(childModule.getIndex());
+            for (DataFilterEntry entry : childEntries) {
+                df.addEntry(entry);
+            }
+            
+            String subSelect = df.toSQL(new int[] {childModule.getParentReferenceFieldIndex()});
+            subSelect = subSelect.substring(0, subSelect.indexOf(" ORDER BY"));
+            
+            if (hasConditions)
+                sql.append(" AND ID IN (");
+            else 
+                sql.append(" WHERE ID IN (");
+            
+            sql.append(subSelect);
+            sql.append(")");
+        }
         
+        addLoanConditions(getEntries(), sql, hasConditions);
+        
+        counter = 0; 
         module = DcModules.get(getModule());
         field = module.getField(module.getDefaultSortFieldIdx());
         if (order != null && order.length > 0) {
             for (DcField orderOn : order) {
-                sql.append(counter == 0 ? " ORDER BY " : ",");
-                sql.append(orderOn.getDatabaseFieldName());
-                counter++;
+                if (orderOn != null && orderOn.getDatabaseFieldName() != null) {
+                    sql.append(counter == 0 ? " ORDER BY " : ",");
+                    sql.append(orderOn.getDatabaseFieldName());
+                    counter++;
+                }
             }
         } else if (field != null && !field.isUiOnly()) {
             sql.append(" ORDER BY ");
@@ -473,37 +523,39 @@ public class DataFilter {
         return sql.toString();
     }
     
-//    private void addAvailabilityCondition(DcObject dco, StringBuffer conditions) {
-//        if (dco.getModule().canBeLend()) {
-//            ContactPerson loanedBy = (ContactPerson) dco.getValue(DcObject._SYS_LENDBY);
-//            Integer duration = (Integer) dco.getValue(DcObject._SYS_LOANDURATION);
-//            String s = (String) dco.getValue(DcObject._SYS_AVAILABLE);
-//
-//            if (s != null || loanedBy != null || duration != null) {
-//                boolean available = s == null || duration != null ? false : Boolean.valueOf(s);
-//                loanedBy = available ? null : loanedBy;
-//
-//                if (conditions.length() > 0)
-//                    conditions.append(" AND");
-//
-//                boolean hasChildren = dco.getChildren().size() > 0;
-//                String column = hasChildren ? " " + dco.getTableShortName() + ".ID" : " ID";
-//                String tablename = hasChildren ? dco.getTableShortName() : dco.getTableName();
-//
-//                String current = formatter.format(new Date());
-//                String daysCondition = duration != null ? " AND DATEDIFF('dd', startDate , '" + current + "') >= " + duration.intValue() : "";
-//                String personCondition = loanedBy != null ? " AND PersonID = " + loanedBy.getID() : "";
-//
-//                if (available)
-//                    conditions.append(column + " NOT in (select objectID from Loans where objectID = " +
-//                                      tablename + ".ID AND enddate IS NULL AND startDate <= '" + current +  "')");
-//                else
-//                    conditions.append(column + " in (select objectID from Loans where objectID = " +
-//                                      tablename + ".ID " + daysCondition + " AND enddate IS NULL AND startDate <= '" + current +  "'" +
-//                                      personCondition + ")");
-//            }
-//        }
-//    }   
+    private void addLoanConditions(Collection<DataFilterEntry> entries, StringBuffer sql, boolean hasConditions) {
+        
+        Object person = null;
+        Object duration = null;
+        Object available = null;
+        
+        Object queryValue;
+        
+        for (DataFilterEntry entry : entries) {
+            queryValue = Utilities.getQueryValue(entry.getValue(), DcModules.get(entry.getModule()).getField(entry.getField()));
+            if (entry.getField() == DcObject._SYS_AVAILABLE)
+                available = queryValue;
+            if (entry.getField() == DcObject._SYS_LENDBY)
+                person = queryValue;
+            if (entry.getField() == DcObject._SYS_LOANDURATION)
+                duration = queryValue;
+        }
+        
+        if (available == null && person == null && duration == null)
+            return;
+        
+        sql.append(hasConditions ? " AND " : " WHERE ");
+
+        String current = formatter.format(new Date());
+        String daysCondition = duration != null ? " AND DATEDIFF('dd', startDate , '" + current + "') >= " + duration : "";
+        String personCondition = person != null ? " AND PersonID = '" + person + "'" : "";
+
+        if (available != null && Boolean.valueOf(available.toString()))
+            sql.append(" ID NOT IN (select objectID from Loans where objectID = ID AND enddate IS NULL AND startDate <= '" + current +  "')");
+        else
+            sql.append(" ID IN (select objectID from Loans where objectID = .ID " + daysCondition + 
+                       " AND enddate IS NULL AND startDate <= '" + current +  "'" + personCondition + ")");
+    }   
 
     @Override
     public int hashCode() {

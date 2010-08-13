@@ -45,12 +45,19 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
     public void setValue(Object value) {
         setSelectedItem(value);
         
-        if (value != null) {
-            boolean exists = dataModel.equals(value);
-            
-            if (!exists) {
-                addItem(value);
-                setSelectedItem(value);
+        if (getSelectedIndex() <= 0) { // 0 == empty value
+            if (value != null) {
+                for (int i = 0; i < getItemCount(); i++) {
+                    Object o = getItemAt(i);
+                    if (o.equals(value))
+                        setSelectedItem(o);
+                }
+                
+                if (getSelectedIndex() == -1) {
+                    Object dco = (value instanceof DcObject) ? value : DataManager.getItem(module, (String) value);
+                    addItem(dco);
+                    setSelectedItem(dco);
+                }
             }
         }
     }    

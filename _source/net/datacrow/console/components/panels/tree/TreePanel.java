@@ -46,6 +46,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
+import net.datacrow.core.data.DataFilters;
 
 import org.apache.log4j.Logger;
 
@@ -93,6 +94,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public void setListeningForSelection(boolean b) {
         listenForSelection = b;
+    }
+    
+    public boolean isHoldingItems() {
+        return top != null;
     }
     
     public Object getLastSelectedPathComponent() {
@@ -223,9 +228,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             remove(scroller);
         
         currentUserObject = null;
-        
-        revalidate();
-        repaint();
     }
     
     
@@ -365,61 +367,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public abstract void groupBy();
     
-    
-    /**
-     * Removes the item / element from the tree and removes the leaf if necessary.
-     * This method is called recursively.
-     */
-    protected void removeElement(Long key, DefaultMutableTreeNode parentNode) {
-        
-//    	DefaultMutableTreeNode parent = parentNode;
-//    	
-//        if (parent.getUserObject() instanceof NodeElement) {
-//            NodeElement elem = (NodeElement) parent.getUserObject();
-//            elem.removeValue(key);
-//        }
-//        
-//        int count = parent.getChildCount();
-//        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-//        for (int pos = count; pos > 0; pos--) {
-//            try {
-//                DefaultMutableTreeNode node = (DefaultMutableTreeNode) parent.getChildAt(pos -1);
-//                NodeElement ne = (NodeElement) node.getUserObject();
-//                ne.removeValue(key);
-//                if (ne.size() == 0 && node.getChildCount() == 0) {
-//                    model.removeNodeFromParent(node);
-//                    ne.clear();
-//                    
-//                	// remove empty branches above (needed for the file tree panel)
-//                    DefaultMutableTreeNode parentNode2 = parent;
-//                	while (parentNode2 != null) {
-//                		if (((NodeElement) node.getUserObject()).size() == 0 && parentNode2.getChildCount() == 0) {
-//                			
-//                		    DefaultMutableTreeNode newParent = null;
-//                			try {
-//                			    newParent = (DefaultMutableTreeNode) parentNode2.getParent();
-//                			} catch (Exception e) {}
-//                			    
-//                			try {
-//                			    model.removeNodeFromParent(parentNode2);
-//                			    parentNode2 = newParent;
-//                			} catch (IllegalArgumentException iae) {
-//                			    parentNode2 = null;
-//                			}
-//                		} else {
-//                		    parentNode2 = null;
-//                		}
-//                	}
-//                    
-//                } else {
-//                	removeElement(key, node);
-//                }
-//            } catch (Exception e) {
-//                logger.error(e, e);
-//            }
-//        }
-    }
-    
     /************************************************************************
      * Selection listener
      ************************************************************************/
@@ -448,8 +395,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             List<NodeElement> parents = new ArrayList<NodeElement>();
             
             for (Object parent : tree.getSelectionPath().getPath()) {
-                if (parent instanceof DefaultMutableTreeNode)
+                if (parent instanceof DefaultMutableTreeNode) {
+                    
+                    if (parent == top && !DataFilters.isFilterActive(getModule()))
+                        continue;
+                    
                     parents.add((NodeElement) ((DefaultMutableTreeNode) parent).getUserObject());
+                }
             }
             
             currentView.clear(isSaveChanges());

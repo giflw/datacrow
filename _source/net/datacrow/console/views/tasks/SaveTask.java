@@ -73,12 +73,8 @@ public class SaveTask extends DataTask {
 
                     if (view.getType() == View._TYPE_SEARCH) {
                         view.updateProgressBar(counter);
-                        // TODO: replace
-                        //dco.addRequest(new RemoveFromCacheRequest(dco.getModule().getIndex(), dco.getID()));
                         dco.saveUpdate(true);
                     } else {
-                        // TODO: replace
-                        // dco.addRequest(new UpdateStatusProgressBarRequest(dco.getModule().getIndex(), MainFrame._INSERTTAB, counter));
                         dco.saveNew(true);
                     }
                 } catch (ValidationException vExp) {

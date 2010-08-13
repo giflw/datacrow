@@ -78,7 +78,8 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         setTitle(DcModules.get(mappingModule.getReferencedModIdx()).getObjectNamePlural());
         buildDialog();
         
-        List<DcObject> dcos = DataManager.get(mappingModule.getReferencedModIdx(), null);
+        List<DcObject> dcos = DataManager.get(mappingModule.getReferencedModIdx(), 
+                                              DcModules.get(mappingModule.getReferencedModIdx()).getMinimalFields(null));
         listLeft.add(dcos);
         
         int counter = 0;

@@ -1,12 +1,49 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.9  [Release on xxxxxx 2010] [testing: moderate] [target: moderate]
 -----------------------------------------------------------------------------------------
+This release delivers a significant, mostly technical, change. The data layer, which 
+is the way for Data Crow to load and display items, has been rewritten.
+Items were always loaded (all of them) on startup, causing a long startup time and 
+high memory usage. Additionally it was not possible to run Data Crow in server mode 
+since each client loaded the items on startup, making it unable for the clients to
+detect changes made by other clients. 
+
+The new data layer increases the startup time of the product and lowers the memory 
+requirements. On the down side you might notice a slight performance decrease when 
+scrolling up and down in the views. This is because Data Crow now loads the items
+when they become visible on screen. Due to a smart caching mechanism the performance
+decrease has been kept as minimal as possible. On the plus side the grouping pane and
+the startup time have improved significantly (by about 75%). Additionally it is now
+possible to load a large database just as quickly as a small database, with the
+same memory requirements.
+
+The following has a direct impact on the performance of the system:
+- The number of selected field as the description for an item 
+  (View Settings > Description). Data Crow only queries for the necessary information,
+  having to query for, for example, a name, category and a container will take 
+  more time when loading the item on screen.
+- Available memory for Data Crow (Java -Xmx256m is recommended).
+
+New System Requirements:
+- Minimum amount of memory: 64MB 
+  (Data Crow will operate sluggishly and use a lot of processor power)
+- Recommended amount of memory 256MB.
+- Sun Java 1.6 or higher.
+
+[Known issues]
+- Java will start consuming a lot of the processor time when the application is running 
+  out of memory. Assign 256MB's to the application to make sure that this does not happen.
 
 [Changed]
 - Improved startup time (75% faster)
 - Lower memory usage (50 to 70%)
 - Items are always loaded directly from the database, no caching
 - Grouping pane improvements (50% faster)
+- Unique identifiers are now generated according to the UUID Java standards. This was 
+  necessary to make sure unique ID's are generated on the individual clients.
+- Added indexes on database tables.
+- Items are only loaded if and when they are actively shown on screen.
+- Changed the layout of the quick view.
 
 [Removed]
 - Media module has been made obsolete.
@@ -17,7 +54,9 @@ Data Crow 3.9  [Release on xxxxxx 2010] [testing: moderate] [target: moderate]
 [Fixed]
 - Image not shown (or flickering) in the card view
 - ConcurrentModificationException on several occasions
-- Web version is not in synch with item changes done in the client(s) 
+- Web version is not in synch with item changes done in the client(s)
+- High overall processor usage.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: moderate]

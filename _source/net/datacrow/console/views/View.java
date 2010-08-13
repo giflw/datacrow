@@ -396,6 +396,15 @@ public class View extends DcPanel implements ListSelectionListener {
         updateProgressBar(0);
     }
     
+    public void activate() {
+        if (groupingPane != null && !groupingPane.isHoldingItems()) {
+            groupingPane.groupBy();
+        }
+        
+        applyViewDividerLocation();
+        vc.activate();
+    }
+    
     public void groupBy() {
         if (groupingPane != null)
             groupingPane.groupBy();        
@@ -447,9 +456,7 @@ public class View extends DcPanel implements ListSelectionListener {
         vc.update(ID);
 
         if (quickView != null)
-            quickView.createImageTabs();
-        
-        repaint();
+            quickView.refresh();
     }  
     
     public void repaintQuickViewImage() {
@@ -579,7 +586,7 @@ public class View extends DcPanel implements ListSelectionListener {
         
         return items;
     }    
-    
+
     public DcObject getItemAt(int idx) {
         vc.cancelEdit();
         DcObject dco = vc.getItemAt(idx);
@@ -588,9 +595,6 @@ public class View extends DcPanel implements ListSelectionListener {
             if (isParent() && getType() == View._TYPE_INSERT) {
                 dco.removeChildren();
                 dco.setChildren(((CachedChildView) childView).getChildren(dco.getID()));
-                
-                // RJW: Do not set IDs, creates mayhem for the cached child view.
-                // dco.setIDs();
             }
         }        
         
@@ -680,10 +684,8 @@ public class View extends DcPanel implements ListSelectionListener {
 
     public void updateItem(String ID, DcObject dco) {
         vc.update(ID, dco);
-        
-        DcObject item = getItem(ID);
         if (quickView != null && index > -1)
-            quickView.setObject(item, true);
+            quickView.setObject(ID, dco.getModule().getIndex());
     }
     
     protected Collection<DcObject> getChangedItems() {
@@ -727,17 +729,19 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void afterSelect(int idx) {
+        
+        String key = vc.getItemKey(idx);
+        int module = vc.getModule(idx);
+        
         if (isParent() && actionsAllowed) {
-            DcObject dco = getSelectedItem();
-            childView.setParentID(dco != null ? dco.getID() : null, true);
+            childView.setParentID(key, true);
             if (!(childView instanceof CachedChildView))
                 loadChildren();
         }
 
-        if (getItemCount() > 0 && !isChild() && quickView != null && quickView.isVisible() && isActionsAllowed()) {
+        if (!isChild() && quickView != null && quickView.isVisible() && isActionsAllowed()) {
             try {
-                DcObject dco = getItemAt(idx);
-                quickView.setObject(dco, false);
+                quickView.setObject(key, module);
             } catch (Exception e) {
                 logger.error(e, e);
             }
@@ -770,8 +774,8 @@ public class View extends DcPanel implements ListSelectionListener {
             panelResult.add(spChildView,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                             new Insets(5, 5, 5, 5), 0, 0));
-            revalidate();
-            repaint();
+//            revalidate();
+//            repaint();
         }
     }
     

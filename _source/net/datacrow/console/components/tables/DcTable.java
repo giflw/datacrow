@@ -147,7 +147,7 @@ public class DcTable extends JTable implements IViewComponent {
 
         setListeningForChanges(true);
     }
-
+    
     public boolean allowsHorizontalTraversel() {
         return false;
     }
@@ -457,7 +457,7 @@ public class DcTable extends JTable implements IViewComponent {
             return cache.get(id);
         } else {
             cancelEdit();
-            DcObject dco = getModuleForRow(row).getItem();
+            DcObject dco = DataManager.getItem(getModuleForRow(row).getIndex(), id);
             
             if (dco == null) return null;
             
@@ -482,6 +482,10 @@ public class DcTable extends JTable implements IViewComponent {
     private boolean isCached(String id) {
         return id != null && cache.containsKey(id);
     }
+    
+    public int getModule(int idx) {
+        return getModuleForRow(idx).getIndex();
+    }
 
     public DcModule getModuleForRow(int row) {
         DcModule result = module;
@@ -502,10 +506,10 @@ public class DcTable extends JTable implements IViewComponent {
         return result;
     }
 
-    public Long getObjectID(int row) {
+    public String getItemKey(int row) {
         int col = getColumnIndexForField(DcObject._ID);
         Object o = getValueAt(row, col, true);
-        return o == null ? null : (Long) o;
+        return o == null ? null : (String) o;
     }
 
     public Collection<DcObject> getChangedObjects() {
@@ -557,7 +561,7 @@ public class DcTable extends JTable implements IViewComponent {
     public int getRowNumberWithID(String ID) {
         cancelEdit();
         for (int i = 0; i < getDcModel().getRowCount(); i++) {
-            if (ID.equals(getObjectID(i)))
+            if (ID.equals(getItemKey(i)))
                 return i;
         }
         return -1;
@@ -592,9 +596,6 @@ public class DcTable extends JTable implements IViewComponent {
     public void deselect() {
         getSelectionModel().clearSelection();
     }
-
-    // not implemented; this is not used for tables
-    public void setSelected(Collection<? extends DcObject> items) {}
 
     public void update(String ID) {
         loadedRows.remove(Integer.valueOf(getRowNumberWithID(ID)));
@@ -1039,10 +1040,6 @@ public class DcTable extends JTable implements IViewComponent {
 
             dco.release();
             setListeningForChanges(listenForChanges);
-            
-            getParent().repaint();
-            repaint();
-            revalidate();
             applyHeaders();
 
             return true;
@@ -1150,8 +1147,7 @@ public class DcTable extends JTable implements IViewComponent {
 
     private int getIndex(String ID) {
         for (int i = 0; i < getItemCount(); i++) {
-            Long objectID = getObjectID(i);
-            if (ID.equals(objectID))
+            if (ID.equals(getItemKey(i)))
                 return i;
         }
         return -1;

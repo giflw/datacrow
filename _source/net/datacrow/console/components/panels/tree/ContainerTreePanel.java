@@ -32,6 +32,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import net.datacrow.console.menu.ContainerTreePanelMenuBar;
 import net.datacrow.core.modules.DcModules;
 
+/**
+ * TODO implement
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class ContainerTreePanel extends TreePanel {
 
     public ContainerTreePanel(GroupingPane gp) {
@@ -55,25 +60,7 @@ public class ContainerTreePanel extends TreePanel {
     public void groupBy() {}
     
     @Override
-    protected void removeElement(Long key, DefaultMutableTreeNode parentNode) {
-//        DefaultMutableTreeNode node;
-//        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-//        while ((node = findNode(dco.toString(), getTopNode(), true)) != null) {
-//            model.removeNodeFromParent(node);
-//        }
-//        
-//        if (parentNode.getUserObject() instanceof NodeElement) {
-//            NodeElement elem = (NodeElement) parentNode.getUserObject();
-//            elem.removeValue(dco);
-//        }
-    }
-    
-    
-    
-    @Override
     protected void refresh() {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override

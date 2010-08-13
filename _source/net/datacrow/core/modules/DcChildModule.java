@@ -25,13 +25,18 @@
 
 package net.datacrow.core.modules;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.CachedChildView;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.itemforms.ChildForm;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.xml.XmlModule;
+import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 
 /**
@@ -44,6 +49,8 @@ public class DcChildModule extends DcModule implements IChildModule {
 
     private static final long serialVersionUID = 1388069555942936534L;
 
+    private int[] minimalFields = null;
+    
     /**
      * Creates a new instances of this module based on a XML definition.
      * @param xmlModule
@@ -90,6 +97,29 @@ public class DcChildModule extends DcModule implements IChildModule {
     }
 
     
+    @Override
+    public int[] getMinimalFields(Collection<Integer> include) {
+        if (minimalFields == null) {
+            Collection<Integer> fields = new ArrayList<Integer>();
+            
+            int valueType;
+            for (DcField field : getFields()) {
+                valueType = field.getValueType();
+                if (valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                    valueType != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
+                    valueType != DcRepository.ValueTypes._PICTURE) {
+                    fields.add(Integer.valueOf(field.getIndex()));
+                }
+            }
+            minimalFields = new int[fields.size()];
+            int idx = 0;
+            for (Integer index : fields) {
+                minimalFields[idx++] = index.intValue();
+            }
+        }
+        return minimalFields;
+    }
+
     /**
      * Initializes the various views.
      */

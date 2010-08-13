@@ -106,7 +106,12 @@ public class FileSystemTreeNode extends DefaultMutableTreeNode {
     @Override
     protected void finalize() throws Throwable {
         file = null;
-        children.clear();
+        
+        if (children != null)
+            children.clear();
+        
+        children = null;
+        
         super.finalize();
     }
 }

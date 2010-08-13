@@ -27,7 +27,6 @@ package net.datacrow.console.components.lists.elements;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -166,13 +165,13 @@ public class DcCardObjectListElement extends DcObjectListElement {
         super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
     }
     
-    @Override
-    public void paint(Graphics g) {
-        if (!build)
-            build();
-        
-        super.paint(g);
-    }
+//    @Override
+//    public void paint(Graphics g) {
+//        if (!build)
+//            build();
+//        
+//        super.paint(g);
+//    }
     
     @Override
     public void clear() {

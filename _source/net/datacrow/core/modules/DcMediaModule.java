@@ -25,6 +25,9 @@
 
 package net.datacrow.core.modules;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.xml.XmlModule;
@@ -104,6 +107,19 @@ public class DcMediaModule extends DcModule {
                 255, ComponentFactory._REFERENCESFIELD, DcModules._COUNTRY, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                 "Countries"));           
     }  
+    
+    @Override
+    public int[] getMinimalFields(Collection<Integer> include) {
+        Collection<Integer> c = new ArrayList<Integer>();
+        
+        if (include != null)
+            c.addAll(include);
+        
+        if (!c.contains(Integer.valueOf(DcMediaObject._A_TITLE))) 
+            c.add(Integer.valueOf(DcMediaObject._A_TITLE));
+        
+        return super.getMinimalFields(c);
+    }
 
     @Override
     public boolean equals(Object o) {

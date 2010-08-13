@@ -63,6 +63,10 @@ public abstract class DcObjectListElement extends DcListElement {
         this.key = key;
     }
     
+    public String getKey() {
+        return key;
+    }
+    
     public void setDcObject(DcObject dco) {
         this.dco = dco;
         
@@ -81,7 +85,10 @@ public abstract class DcObjectListElement extends DcListElement {
     private boolean loading = false;
     
     public void load() {
-        if (dco == null && !loading) {
+        
+        int count = getComponentCount();
+        
+        if (count == 0 && !loading) {
             
             loading = true;
             
@@ -93,11 +100,11 @@ public abstract class DcObjectListElement extends DcListElement {
             for (int field : settings.getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder))
                 fields.add(Integer.valueOf(field));
 
-            dco = DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields));
+            dco = dco == null ? DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields)) : dco;
             
             build();
-            revalidate();
-            repaint();
+//            revalidate();
+//            repaint();
             
             loading = false;
         }

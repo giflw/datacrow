@@ -45,8 +45,6 @@ public class DcImageIcon extends ImageIcon {
 	private byte[] bytes;
 	private String filename;
 
-	private static long counter = 0;
-	
     public DcImageIcon() {
         super();
     }
@@ -56,27 +54,27 @@ public class DcImageIcon extends ImageIcon {
     }    
     
     public DcImageIcon(String filename) {
-        super(filename, "image" + counter++);
+        super(filename);
         this.filename = filename;
     }  
     
     public DcImageIcon(byte[] bytes, boolean storeBytes) {
-        super(bytes, "image" + counter++);
+        super(bytes);
         if (storeBytes)
             this.bytes = bytes;
     }
     
     public DcImageIcon(byte[] bytes) {
-        super(bytes, "image" + counter++);
+        super(bytes);
         this.bytes = bytes;
     }
 
     public DcImageIcon(Image image) {
-        super(image, "image" + counter++);
+        super(image);
     }
 
     public DcImageIcon(URL location) {
-        super(location, "image" + counter++);
+        super(location);
     }
     
     public void flush() {
@@ -113,17 +111,11 @@ public class DcImageIcon extends ImageIcon {
     
     @Override
     protected void finalize() throws Throwable {
-        flush();
         try {
-            Image image = getImage();
-            tracker.removeImage(image);
-            setImage(null);
+            flush();
         } catch (Exception e) {
-            //e.printStackTrace();
+            logger.error(e, e);
         }
-        
         super.finalize();
-        super.setDescription(null);
-        super.setImageObserver(null);
     }
 }

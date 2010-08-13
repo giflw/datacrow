@@ -79,7 +79,7 @@ public class DcProperty extends DcObject {
         if (o != null && o instanceof DcProperty) {
             equals = ((DcProperty) o).getID().equals(getID());
         } else if (o instanceof String) {
-            equals = o.toString().equals(getValue(_A_NAME));
+            equals = o.toString().equals(getValue(_A_NAME)) || o.toString().equals(getValue(_ID));
         }
         return equals;
     }

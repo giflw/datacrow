@@ -67,7 +67,6 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
         if (((DcTable) table).isIgnoringPaintRequests())
             return c;
         
-        
         ((DcTable) table).load(row);
         
         if (DcSettings.getBoolean(DcRepository.Settings.stShowTableTooltip) && allowTooltips()) {

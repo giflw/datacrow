@@ -65,42 +65,6 @@ public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
     
-//    private static HashMap<Integer, HashMap<String, String>> cache = new HashMap<Integer, HashMap<String,String>>();
-//    
-//    public DataManager() {
-//        
-//        HashMap<String, String> map;
-//        for (DcModule module : DcModules.getModules()) {
-//            if (!module.isTopModule()) continue;
-//
-//            for (DcModule reference : DcModules.getReferencedModules(module.getIndex())) {
-//                map = new HashMap<String, String>();
-//                
-//                String sql = "SELECT ID, " + reference.getField(reference.getSystemDisplayFieldIdx()).getDatabaseFieldName();
-//                
-//                if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
-//                    sql += ", ICON";
-//                
-//                sql += " FROM " + reference.getTableName();
-//                
-//                ResultSet rs;
-//                try {
-//                    rs = DatabaseManager.executeSQL(sql);
-//                    while (rs.next())
-//                        map.put(rs.getString(1), rs.getString(2));
-//                    
-//                    cache.put(reference.getIndex(), map);
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-//    
-//    public static String getDisplayString(int module, String ID) {
-//        return cache.get(module) != null ? cache.get(module).get(ID) : "";
-//    }
-    
     public static int getCount(int module, int field, Object value) {
         int count = 0;
         
@@ -141,8 +105,9 @@ public class DataManager {
      */
     public static List<DcObject> getChildren(String parentID, int childIdx) {
         DataFilter df = new DataFilter(childIdx);
-        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, DcModules.get(childIdx).getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentID));
-        return new SelectQuery(df, null, null).run();
+        DcModule module = DcModules.get(childIdx);
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, module.getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentID));
+        return new SelectQuery(df, null, module.getMinimalFields(null)).run();
     }
     
     /**
@@ -212,30 +177,25 @@ public class DataManager {
     
     public static List<DcObject> getReferencingItems(DcObject item) {
         List<DcObject> items = new ArrayList<DcObject>();
-//        for (DcModule module : DcModules.getActualReferencingModules(item.getModule().getIndex())) {
-//            if ( module.getIndex() != item.getModule().getIndex() && 
-//                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
-//                
-//                for (DcField field : module.getFields()) {
-//                    if (field.getReferenceIdx() == item.getModule().getIndex()) {
-//                        DataFilter df = new DataFilter(module.getIndex());
-//                        
-//                        if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
-//                            Collection<DcObject> c = new ArrayList<DcObject>();
-//                            c.add(item);
-//                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.CONTAINS, c));
-//                        } else {
-//                            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, item));
-//                        }
-//                        
-//                        for (DcObject dco : DataManager.get(module.getIndex(), df)) {
-//                            if (!items.contains(dco))
-//                                items.add(dco);
-//                        }
-//                    }
-//                }
-//            }
-//        }  
+        
+        for (DcModule module : DcModules.getActualReferencingModules(item.getModule().getIndex())) {
+            if ( module.getIndex() != item.getModule().getIndex() && 
+                 module.getType() != DcModule._TYPE_MAPPING_MODULE &&   
+                 module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
+                
+                for (DcField field : module.getFields()) {
+                    if (field.getReferenceIdx() == item.getModule().getIndex()) {
+                        DataFilter df = new DataFilter(module.getIndex());
+                        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, item));
+                        
+                        for (DcObject dco : DataManager.get(df, module.getMinimalFields(null))) {
+                            if (!items.contains(dco))
+                                items.add(dco);
+                        }
+                    }
+                }
+            }
+        }  
         
         return items;
     }    
@@ -332,8 +292,15 @@ public class DataManager {
      * @return A collection holding loans or an empty collection.
      */
     public static Collection<Loan> getLoans(String parentID) {
-        // TODO
-        return new ArrayList<Loan>();
+        DataFilter df = new DataFilter(DcModules._LOAN);
+        df.addEntry(new DataFilterEntry(DcModules._LOAN, Loan._D_OBJECTID, Operator.EQUAL_TO, parentID));
+        Collection<DcObject> items = get(df, DcModules.get(DcModules._LOAN).getMinimalFields(null));
+        
+        Collection<Loan> loans = new ArrayList<Loan>();
+        for (DcObject item : items)
+            loans.add((Loan) item);
+        
+        return loans;
     }
     
     /**

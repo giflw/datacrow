@@ -64,9 +64,8 @@ public class DeleteTask extends DataTask {
                     }
                     
                     try {
-                        // TODO: evaluate!
                         sleep(10);
-                    } catch (Exception ignore) {} // doesn't want to sleep..
+                    } catch (Exception ignore) {}
                     
                     counter++;
                 }
