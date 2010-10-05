@@ -169,7 +169,6 @@ public class Freedb {
         return new FreedbReadResult(queryAnswer, query.isExactMatch());
     }    
     
-    @SuppressWarnings("null")
     private String askFreedb(String command) throws Exception {
 		URL url = null;
 		try {

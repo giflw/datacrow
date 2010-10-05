@@ -622,6 +622,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }
 
     public void createReport() {
+    	// TODO: re-enable
 //        List<DcObject> objects = new ArrayList<DcObject>();
 //        if (groupingPane != null && groupingPane.isActive())
 //            objects.addAll(groupingPane.getValues());

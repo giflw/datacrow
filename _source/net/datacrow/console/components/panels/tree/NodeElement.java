@@ -1,5 +1,6 @@
 package net.datacrow.console.components.panels.tree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -13,7 +14,8 @@ public abstract class NodeElement {
     protected String displayValue;
     protected DcImageIcon icon;
     protected int module;
-    private int count;
+    
+    private List<String> items = new ArrayList<String>();
     
     public NodeElement(int module, Object key, String displayValue, DcImageIcon icon) {
         this.module = module;
@@ -22,10 +24,15 @@ public abstract class NodeElement {
         this.icon = icon;
     }
     
-    public void setCount(int count) {
-        this.count = count;
+    public void addItem(String item) {
+    	if (!items.contains(item))
+    		items.add(item);
     }
-
+    
+    public int getCount() {
+        return items.size();
+    }
+    
     public int getModule() {
         return module;
     }
@@ -38,12 +45,10 @@ public abstract class NodeElement {
         return icon;
     }
     
-    public abstract List<String> getItems(List<NodeElement> parents);
-    
-    public int getCount() {
-        return count;
+    public List<String> getItems() {
+    	return items;
     }
-
+    
     public String getComparableKey() {
         return getDisplayValue().toLowerCase();
     }
@@ -63,11 +68,17 @@ public abstract class NodeElement {
         key = null;
         icon = null;
         displayValue = null;
+        
+        if (items != null) {
+        	items.clear();
+        	items = null;
+        }
+        
     }
 
     @Override
     public String toString() {
-        return getDisplayValue() + " (" + String.valueOf(count) + ")";
+        return getDisplayValue() + " (" + String.valueOf(getCount()) + ")";
     }
 
     @Override
@@ -78,8 +89,6 @@ public abstract class NodeElement {
             return getComparableKey().equals(((NodeElement) o).getComparableKey());
     }
 
-    public abstract String getWhereClause();
-    
     @Override
     public int hashCode() {
         return getComparableKey().hashCode();

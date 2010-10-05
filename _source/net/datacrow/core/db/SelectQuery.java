@@ -106,5 +106,6 @@ public class SelectQuery extends Query {
     public void clear() {
         super.clear();
         fields = null;
+        df = null;
     }
 }

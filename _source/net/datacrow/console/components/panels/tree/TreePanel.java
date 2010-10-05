@@ -46,7 +46,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
-import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.objects.DcObject;
 
 import org.apache.log4j.Logger;
 
@@ -118,6 +118,19 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public int getModule() {
         return gp.getModule();
+    }
+    
+    public void add(DcObject dco) {
+    	
+    }
+    
+    public void remove(String key) {
+    	
+    }
+    
+    public void update(DcObject dco) {
+    	remove(dco.getID());
+    	add(dco);
     }
     
     /**
@@ -391,23 +404,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         
         View currentView = getView().getCurrent();
         if (currentView != null) {
-            
-            List<NodeElement> parents = new ArrayList<NodeElement>();
-            
-            for (Object parent : tree.getSelectionPath().getPath()) {
-                if (parent instanceof DefaultMutableTreeNode) {
-                    
-                    if (parent == top && !DataFilters.isFilterActive(getModule()))
-                        continue;
-                    
-                    parents.add((NodeElement) ((DefaultMutableTreeNode) parent).getUserObject());
-                }
-            }
-            
             currentView.clear(isSaveChanges());
             NodeElement currentNode = (NodeElement) o;
             setSelected(node);
-            updateView(currentNode.getItems(parents));
+            updateView(currentNode.getItems());
         }
     }
 }

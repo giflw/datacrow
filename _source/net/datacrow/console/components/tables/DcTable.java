@@ -542,7 +542,6 @@ public class DcTable extends JTable implements IViewComponent {
         return value;
     }
 
-    @SuppressWarnings("unchecked")
     public void clear() {
         cache.clear();
         cancelEdit();

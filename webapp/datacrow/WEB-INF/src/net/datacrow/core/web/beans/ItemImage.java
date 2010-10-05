@@ -76,7 +76,6 @@ public class ItemImage extends DcBean {
         return "#{itemImage.actionListener}";
     }
     
-    @SuppressWarnings("unchecked")
     public String open() {
         
         if (!isLoggedIn())

@@ -58,7 +58,6 @@ public class ItemDetails extends ItemBean {
         return "#{itemDetails.actionListener}";
     }
     
-    @SuppressWarnings("unchecked")
     public String open() {
 
         if (!isLoggedIn())

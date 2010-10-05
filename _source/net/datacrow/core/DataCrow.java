@@ -115,7 +115,6 @@ public class DataCrow {
     public static MainFrame mainFrame;
     private static SplashScreen splashScreen;
 
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         try {
             boolean webserverMode = false; 

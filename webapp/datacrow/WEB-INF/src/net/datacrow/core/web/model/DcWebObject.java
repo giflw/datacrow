@@ -199,7 +199,6 @@ public class DcWebObject extends DcSecured {
         return childrenColumnHeaders;
     }
 
-    @SuppressWarnings("unchecked")
     public Object getChildrenColumnValue() {
         Object columnValue = null;
         if (children.isRowAvailable() && childrenColumnHeaders.isRowAvailable())
@@ -311,7 +310,6 @@ public class DcWebObject extends DcSecured {
         return children;
     }
     
-    @SuppressWarnings("unchecked")
     private void reset() {
         isNew = false;
         rowIdx = 0;

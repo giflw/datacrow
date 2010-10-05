@@ -90,7 +90,6 @@ public class XmlModuleWriter {
         writeLine("</modules>", 0);
     }
     
-    @SuppressWarnings("unchecked")
     private String getString(Class c) {
         return c == null ? "" : c.getName();
     }

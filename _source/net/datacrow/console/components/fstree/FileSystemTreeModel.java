@@ -50,7 +50,6 @@ public class FileSystemTreeModel extends DefaultTreeModel {
         this.filter = filter;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Object getChild(Object parent, int index) {
         FileSystemTreeNode node = ((FileSystemTreeNode) parent).getChild(index);

@@ -122,7 +122,6 @@ public class XmlWriter extends XmlBaseWriter {
         newLine();
     }
     
-    @SuppressWarnings("unchecked")
     private void writeValue(DcObject dco, int field) throws IOException {
        Object o = dco.getValue(field);
         

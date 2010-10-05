@@ -396,12 +396,22 @@ public class DataFilter {
             
             if (counter == 0) sql.append(" WHERE ");
             
-            if (field.getValueType() == DcRepository.ValueTypes._STRING)
-                sql.append("UPPER(" + field.getDatabaseFieldName() + ")");
-            else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
-                sql.append("ID");
-            else
+            
+            boolean useUpper = field.getValueType() == DcRepository.ValueTypes._STRING &&
+                field.getIndex() != DcObject._ID &&
+                field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
+                field.getValueType() != DcRepository.ValueTypes._DCPARENTREFERENCE &&
+                field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION;
+            
+            if (field.getValueType() == DcRepository.ValueTypes._STRING) {
+                if (useUpper) sql.append("UPPER(");
                 sql.append(field.getDatabaseFieldName());
+                if (useUpper) sql.append(")");
+            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                sql.append("ID");
+            } else {
+                sql.append(field.getDatabaseFieldName());
+            }
             
             if (    operator == Operator.CONTAINS.getIndex() || 
                     operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
@@ -442,18 +452,28 @@ public class DataFilter {
                     }
                 } else {
                     if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
-                    sql.append(" LIKE UPPER(");
-                    sql.append("'%" + queryValue + "%')");
+                    sql.append(" LIKE ");
+                    
+                    if (useUpper) sql.append("UPPER(");
+                    //sql.append(field.getDatabaseFieldName());
+                    sql.append("'%" + queryValue + "%'");
+                    if (useUpper) sql.append(")");
                 }
                 
             } else if (operator == Operator.ENDS_WITH.getIndex()) {
-                sql.append(" LIKE UPPER(");
-                sql.append("'%" + queryValue + "')");
+                sql.append(" LIKE ");
+                if (useUpper) sql.append("UPPER(");
+                sql.append("'%" + queryValue);
+                if (useUpper) sql.append(")");
             } else if (operator == Operator.EQUAL_TO.getIndex()) {
-                if (value instanceof String)
+                if (useUpper) {
                     sql.append(" = UPPER('"+ queryValue +"')");
-                else 
-                    sql.append(" = " + queryValue);
+                } else {
+                    sql.append(" = ");
+                    if (value instanceof String) sql.append("'");
+                    sql.append(queryValue);
+                    if (value instanceof String) sql.append("'");
+                }
             } else if (operator == Operator.BEFORE.getIndex() ||
                        operator == Operator.LESS_THEN.getIndex()) {
                 sql.append(" < ");
@@ -468,16 +488,25 @@ public class DataFilter {
                 sql.append(" IS NOT NULL");
             } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
                 sql.append(" <> ");
-                if (value instanceof String)
+                if (useUpper) {
                     sql.append(" UPPER('"+ queryValue +"')");
-                else 
+                } else {
+                    if (value instanceof String) sql.append("'");
                     sql.append(queryValue);
+                    if (value instanceof String) sql.append("'");
+                }
             } else if (operator == Operator.STARTS_WITH.getIndex()) {
-                sql.append(" LIKE UPPER(");
+                
+                sql.append(" LIKE ");
+                if (useUpper) sql.append("UPPER(");
+                sql.append("'%" + queryValue);
+                
                 if (value instanceof String)
-                    sql.append("'"+ queryValue +"%')");
+                    sql.append("'"+ queryValue +"%'");
                 else 
                     sql.append(queryValue);
+                
+                if (useUpper) sql.append(")");
             }
             counter++;
         }

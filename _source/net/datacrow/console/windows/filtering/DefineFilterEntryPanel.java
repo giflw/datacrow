@@ -82,7 +82,6 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         comboModules.setSelectedIndex(0);
     }
     
-    @SuppressWarnings("unchecked")
     public void applyEntry(DataFilterEntry entry) {
         DcModule module = DcModules.get(entry.getModule());
         DcField field = module.getField(entry.getField());

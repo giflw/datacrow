@@ -326,6 +326,7 @@ public class FieldTreePanel extends TreePanel {
                 
                 FieldNodeElement existingNe;
                 FieldNodeElement ne;
+                String id = null;
                 String value = null;
                 Object key = null;
                 String icon = null;
@@ -336,6 +337,9 @@ public class FieldTreePanel extends TreePanel {
                 DefaultMutableTreeNode parent;
                 DefaultMutableTreeNode previous;
                 boolean exists = false;
+                
+                FieldNodeElement topElem = (FieldNodeElement) top.getUserObject();
+                
                 while (rs.next() && !stop) {
                     int level = 0;
                     parent = top;
@@ -347,6 +351,7 @@ public class FieldTreePanel extends TreePanel {
                         field = module.getField(idx);
                         
                         // for each level the field index is shifted to the end.
+                        id = rs.getString(1);
                         key = rs.getObject((level * 3) + 2);
                         value = rs.getString((level * 3) + 3);
                         icon = rs.getString((level * 3) + 4);
@@ -363,13 +368,16 @@ public class FieldTreePanel extends TreePanel {
                                 ne = new FieldNodeElement(getModule(), field.getIndex(), key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon.toCharArray()), false)));
                             }
                             
+                            ne.addItem(id);
+                            topElem.addItem(id);
                             current = new DefaultMutableTreeNode(ne);
                             model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
                         } else { // exists
                             existingNe =(FieldNodeElement) previous.getUserObject();
-                            existingNe.setCount(existingNe.getCount() + 1);
+                            topElem.addItem(id);
+                            existingNe.addItem(id);
                             parent = previous;    
                         }
                         level++;
@@ -391,30 +399,12 @@ public class FieldTreePanel extends TreePanel {
         
         if (isActive()) {
             label += " by ";
-            
             for (int i = 0; i < fields.length; i++)
                 label += (i > 0 ? " & " : "") + mod.getField(fields[i]).getLabel();
         }
         
         top = new DefaultMutableTreeNode(label);
-        
-        //String sql = DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID});
-        FieldNodeElement element = new FieldNodeElement(getModule(), -1, null, label, null);
-        
-        ResultSet rs;
-        try {
-            String sql = "select count(*) from " + DcModules.get(getModule()).getTableName();
-            if (DataFilters.isFilterActive(getModule()))
-                sql += " where id in (" + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ")";
-            
-            rs = DatabaseManager.executeSQL(sql);
-            rs.next();
-            element.setCount(rs.getInt(1));
-        } catch (Exception e) {
-            logger.error(e, e);
-        }
-        
-        top.setUserObject(element);
+        top.setUserObject(new FieldNodeElement(getModule(), 0, null, label, null));
     }
     
     @Override

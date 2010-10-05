@@ -97,16 +97,34 @@ public class FileSynchronizer {
 
             dm.notifyJobStarted(dm.getSynchronizerListeners());
             
+            int[] fields;
+            DataFilter df;
+            String filename;
+            String hash;
+            Long size;
+            String message;
+            
+            FileInfo currentFI;
+            FileInfo fi;
+            
             while (keepOnRunning) {
                 for (DcModule module : fs.getModules()) {
                     
+                    Collection<Integer> c = new ArrayList<Integer>();
+                    c.add(Integer.valueOf(DcObject._SYS_FILEHASH));
+                    c.add(Integer.valueOf(DcObject._SYS_FILESIZE));
+                    c.add(Integer.valueOf(DcObject._SYS_FILENAME));
+
+                    fields = module.getMinimalFields(c);
+                    
                     if (!keepOnRunning) break;
                     
-                    DataFilter df = new DataFilter(module.getIndex());
+                    df = new DataFilter(module.getIndex());
                     df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
-                                                    module.getIndex(), 
+                                                    module.getIndex(),
                                                     DcObject._SYS_FILENAME, 
-                                                    Operator.IS_FILLED, null));
+                                                    Operator.IS_FILLED, 
+                                                    null));
                     
                     if (precision >= DriveManager._PRECISION_MEDIUM)
                         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
@@ -120,16 +138,16 @@ public class FileSynchronizer {
                                     DcObject._SYS_FILEHASH, 
                                     Operator.IS_FILLED, null));
                     
-                    for (DcObject dco : DataManager.get(df)) {
+                    for (DcObject dco : DataManager.get(df, fields)) {
                         
                         if (!keepOnRunning) break;
                         
-                        String filename = (String) dco.getValue(DcObject._SYS_FILENAME);
-                        String hash = (String) dco.getValue(DcObject._SYS_FILEHASH);
-                        Long size = (Long) dco.getValue(DcObject._SYS_FILESIZE);
+                        filename = (String) dco.getValue(DcObject._SYS_FILENAME);
+                        hash = (String) dco.getValue(DcObject._SYS_FILEHASH);
+                        size = (Long) dco.getValue(DcObject._SYS_FILESIZE);
                         
-                        FileInfo currentFI = new FileInfo(hash, filename, size);
-                        FileInfo fi = dm.find(currentFI, precision);
+                        currentFI = new FileInfo(hash, filename, size);
+                        fi = dm.find(currentFI, precision);
                         
                         // A result means a match was found.
                         // No longer check whether the filename is different; found = found.
@@ -142,8 +160,8 @@ public class FileSynchronizer {
                             try {
                                 dco.saveUpdate(true);
                                 
-                                String message = DcResources.getText("msgSynchronizedFile", 
-                                        new String[] {dco.toString(), fi.getFilename()}); 
+                                message = DcResources.getText("msgSynchronizedFile", 
+                                          new String[] {dco.toString(), fi.getFilename()}); 
                                 dm.sendMessage(dm.getSynchronizerListeners(), message);
                             } catch (ValidationException ve) {
                                 dm.sendMessage(dm.getSynchronizerListeners(),

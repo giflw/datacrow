@@ -37,6 +37,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
 
 public class GroupingPane extends JPanel {
 
@@ -58,6 +59,21 @@ public class GroupingPane extends JPanel {
             panels.add(new FileTreePanel(this));
         
         build();
+    }
+    
+    public void update(DcObject dco) {
+    	for (TreePanel tp : panels)
+    		tp.update(dco);
+    }
+    
+    public void remove(String key) {
+    	for (TreePanel tp : panels)
+    		tp.remove(key);
+    }
+    
+    public void add(DcObject dco) {
+    	for (TreePanel tp : panels)
+    		tp.add(dco);
     }
     
     public boolean isHoldingItems() {

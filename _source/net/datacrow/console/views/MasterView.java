@@ -109,9 +109,28 @@ public class MasterView {
         return current;
     }      
     
-    public void delete() {
+    public void update(DcObject dco) {
         for (View view : getViews())
-            view.delete();
+            view.update(dco.getID());
+
+        if (groupingPane != null)
+            groupingPane.update(dco);
+    }
+    
+    public void add(DcObject dco) {
+        for (View view : getViews())
+            view.add(dco);
+        
+        if (groupingPane != null)
+            groupingPane.add(dco);
+    }
+    
+    public void remove(DcObject dco) {
+        for (View view : getViews())
+            view.remove(new String[] {dco.getID()});
+        
+        if (groupingPane != null)
+            groupingPane.remove(dco.getID());
     }
     
     public void addView(int index, View view) {
@@ -146,11 +165,6 @@ public class MasterView {
         
     }
 
-    public void update(String ID) {
-        for (View view : getViews())
-            view.update(ID);
-    }
-    
     public void removeFromCache(String ID) {
         for (View view : getViews())
             view.removeFromCache(ID);
@@ -170,13 +184,6 @@ public class MasterView {
 
         if (groupingPane != null)
             groupingPane.clear();
-    }
-    
-    public void add(DcObject dco) {
-        if (groupingPane == null) {
-            for (View view : getViews())
-                view.add(dco);
-        }
     }
     
     public void add(final List<String> keys) {

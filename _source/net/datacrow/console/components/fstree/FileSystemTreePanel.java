@@ -110,7 +110,6 @@ public abstract class FileSystemTreePanel extends JPanel implements ActionListen
         return selected;
     }
 
-    @SuppressWarnings("unchecked")
     public void addSelectedNodes(FileSystemTreeNode node, Collection<String> selected) {
         FileSystemTreeNode child;
         for (Enumeration e = node.children(); e.hasMoreElements(); ) {

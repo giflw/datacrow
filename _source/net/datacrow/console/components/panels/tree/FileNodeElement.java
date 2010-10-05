@@ -1,8 +1,6 @@
 package net.datacrow.console.components.panels.tree;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 
@@ -14,16 +12,6 @@ public class FileNodeElement extends NodeElement {
     
     public FileNodeElement(int module, String key) {
     	super(module, key, null, null);
-    }
-    
-    @Override
-    public List<String> getItems(List<NodeElement> parents) {
-        return new ArrayList<String>();
-    }
-
-    @Override
-    public String getWhereClause() {
-        return null;
     }
 
     @Override

@@ -102,6 +102,6 @@ public class SystemInfoPanel extends JPanel {
     }
     
     private int getRecordCount(DcModule module) {
-    	return DataManager.get(module.getIndex(), null).size();
+    	return DataManager.getCount(module.getIndex(), -1, null);
     }    
 }

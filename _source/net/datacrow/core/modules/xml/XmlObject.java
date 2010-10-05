@@ -42,7 +42,6 @@ import org.w3c.dom.Element;
  */
 public abstract class XmlObject {
     
-    @SuppressWarnings("unchecked")
     public Class getClass(Element element, String tag, boolean instantiationTest) throws InvalidValueException {
         String s = XMLParser.getString(element, tag);
         try {

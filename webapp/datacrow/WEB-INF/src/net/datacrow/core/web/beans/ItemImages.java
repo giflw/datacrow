@@ -77,7 +77,6 @@ public class ItemImages extends DcBean {
         return getReturnTarget();
     }
     
-    @SuppressWarnings("unchecked")
     public String load() {
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();

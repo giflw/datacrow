@@ -52,9 +52,17 @@ public class DeleteQuery extends Query {
         super(dco.getModule().getIndex(), dco.getRequests());
         this.dco = dco;
     }
+    
+    @Override
+    protected void clear() {
+        super.clear();
+        dco.release();
+        dco = null;
+    }
 
     @Override
     public List<DcObject> run() {
+    	boolean success = false;
         Connection conn = null;
         Statement stmt = null;
 
@@ -85,6 +93,16 @@ public class DeleteQuery extends Query {
                     }
                 }
                 stmt.execute(sql);
+                
+                try {
+                    if (stmt != null) stmt.close();
+                    if (conn != null) conn.close();
+                } catch (SQLException e) {
+                    logger.error("Error while closing connection", e);
+                }
+                
+                // exit: other queries depend on ID!
+                return null;
             }
 
             if (dco.getModule().canBeLend())
@@ -127,10 +145,8 @@ public class DeleteQuery extends Query {
             
             stmt.execute("DELETE FROM " + DcModules.get(DcModules._PICTURE).getTableName() + " WHERE " +
                          DcModules.get(DcModules._PICTURE).getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + dco.getID());
-        
             
-            updateView();
-            
+            success = true;
         } catch (SQLException se) {
             logger.error(se, se);
         }
@@ -141,6 +157,8 @@ public class DeleteQuery extends Query {
         } catch (SQLException e) {
             logger.error("Error while closing connection", e);
         }
+        
+        if (success) dco.getModule().getSearchView().remove(dco);
 
         clear();
         return null;

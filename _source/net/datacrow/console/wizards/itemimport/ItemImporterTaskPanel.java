@@ -111,10 +111,9 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
     }
 
     public void notifyProcessed(DcObject item) {
-        if (    1 == 0 &&
-                wizard != null && 
-                wizard.getModule().isSelectableInUI() && 
-                wizard.getModule().getCurrentInsertView() != null) {
+        if (wizard != null && 
+            wizard.getModule().isSelectableInUI() && 
+            wizard.getModule().getCurrentInsertView() != null) {
             
             wizard.getModule().getCurrentInsertView().add(item);
         } else {

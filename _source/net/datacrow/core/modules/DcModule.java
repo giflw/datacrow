@@ -149,11 +149,8 @@ public class DcModule implements Comparable<DcModule> {
     
     private net.datacrow.settings.Settings settings;
     
-    @SuppressWarnings("unchecked")
     private Class synchronizerClass;
-    @SuppressWarnings("unchecked")
     private Class objectClass;
-    @SuppressWarnings("unchecked")
     private Class importerClass;
     
     private int childIdx = -1;
@@ -1112,7 +1109,6 @@ public class DcModule implements Comparable<DcModule> {
     /**
      * The import class.
      */
-    @SuppressWarnings("unchecked")
     public Class getImporterClass() {
         return importerClass;
     }

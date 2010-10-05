@@ -54,6 +54,13 @@ public class InsertQuery extends Query {
         this.dco = dco;
         this.dco.setIDs();
     }
+    
+    @Override
+    protected void clear() {
+        super.clear();
+        dco.release();
+        dco = null;
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -139,8 +146,6 @@ public class InsertQuery extends Query {
             success = true;
             
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println(values);
             logger.error("An error occured while running the query", e);
         }
         
@@ -152,6 +157,8 @@ public class InsertQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
+        if (success) dco.getModule().getSearchView().add(dco);
+        
         handleRequest(null, success);
         clear();
         

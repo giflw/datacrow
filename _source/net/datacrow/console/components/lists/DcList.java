@@ -272,7 +272,6 @@ public class DcList extends JList implements ComponentListener {
         getSelectionModel().setSelectionMode(selectionMode);        
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public void setListData(Vector v) {
         getDcModel().setSize(0);

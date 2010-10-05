@@ -109,6 +109,8 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
             DcObject dco = itemForm.getItem();
             
             Collection<? extends DcObject> c;
+            
+            // TODO: change this!!
             if (isUpdateSelectedItemsOnly()) {
                 c = view.getSelectedItems();
             } else {

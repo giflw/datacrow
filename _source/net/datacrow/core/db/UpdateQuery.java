@@ -59,6 +59,16 @@ public class UpdateQuery extends Query {
         this.dco = dco;
     }
     
+    @Override
+    protected void clear() {
+        super.clear();
+        
+        if (dco != null)
+        	dco.release();
+        
+        dco = null;
+    }
+    
     @SuppressWarnings("unchecked")
     @Override
     public List<DcObject> run() {
@@ -183,7 +193,7 @@ public class UpdateQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
-        dco.getModule().getSearchView().update(dco.getID());
+        if (success) dco.getModule().getSearchView().update(dco);
         
         handleRequest(null, success);
         clear();

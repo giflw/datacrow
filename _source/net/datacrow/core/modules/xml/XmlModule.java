@@ -57,7 +57,6 @@ import org.w3c.dom.NodeList;
  * 
  * @author Robert Jan van der Waals
  */
-@SuppressWarnings("unchecked")
 public class XmlModule extends XmlObject {
     
     private Document document;

@@ -98,7 +98,6 @@ public class AdvancedFind extends DcBean {
         return current();
     }
 
-    @SuppressWarnings("unchecked")
     public String deleteEntry() {
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();
@@ -108,7 +107,6 @@ public class AdvancedFind extends DcBean {
         return current();
     }
 
-    @SuppressWarnings("unchecked")
     public String editEntry() {
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();

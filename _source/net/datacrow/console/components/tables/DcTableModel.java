@@ -35,7 +35,6 @@ public class DcTableModel extends DefaultTableModel {
         super();
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public void setValueAt(Object o, int row, int column) {
         if (getRowCount() > 0 && row != -1 && column != -1) {

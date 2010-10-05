@@ -90,7 +90,6 @@ public class DcWebObjects extends Sortable {
         return columnHeaders;
     }
 
-    @SuppressWarnings("unchecked")
     public Object getColumnValue() {
         Object columnValue = null;
         if (data.isRowAvailable() && columnHeaders.isRowAvailable()) {
@@ -223,7 +222,6 @@ public class DcWebObjects extends Sortable {
         } catch (Exception ignore) {}
     }
     
-    @SuppressWarnings("unchecked")
     private int getColumnIndex(final String columnName) {
         int columnIndex = -1;
         List headers = (List) columnHeaders.getWrappedData();
