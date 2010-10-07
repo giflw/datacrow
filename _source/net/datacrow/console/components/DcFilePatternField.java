@@ -60,14 +60,17 @@ public class DcFilePatternField extends DcLongTextField implements KeyListener, 
     @Override
     public void openTextWindow() {}
 
+    @Override
     public void keyPressed(KeyEvent e) {
         e.consume();
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         e.consume();
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
         e.consume();
     }
@@ -119,6 +122,7 @@ public class DcFilePatternField extends DcLongTextField implements KeyListener, 
         return super.getSelectedText() != null ? super.getSelectedText() : "";
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("insertText"))
             insertText();

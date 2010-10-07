@@ -50,6 +50,7 @@ public class RatingComboBoxRenderer extends DcLabel implements ListCellRenderer 
         return instance;
     }
     
+    @Override
     public Component getListCellRendererComponent(
             JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         

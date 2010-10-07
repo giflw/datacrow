@@ -14,6 +14,7 @@ public abstract class ItemExporterWizardPanel extends JPanel implements IWizardP
         this.definition = wizard.getDefinition();
     }
 
+    @Override
     public void destroy() {
         wizard = null;
         definition = null;
@@ -26,7 +27,9 @@ public abstract class ItemExporterWizardPanel extends JPanel implements IWizardP
         else onDeactivation();
     }
     
+    @Override
     public void onDeactivation() {}
     
+    @Override
     public void onActivation() {}    
 }

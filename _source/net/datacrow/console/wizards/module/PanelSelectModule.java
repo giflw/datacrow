@@ -56,6 +56,7 @@ public class PanelSelectModule extends ModuleWizardPanel {
         build();
     }
 
+    @Override
     public Object apply() {
         if (selectedModule == -1) {
             DcSwingUtilities.displayMessage("msgSelectModuleFirst");
@@ -74,6 +75,7 @@ public class PanelSelectModule extends ModuleWizardPanel {
         return DcResources.getText("msgSelectModuleToAlter");
     }
     
+    @Override
     public void destroy() {
         if (components != null) {
             components.clear();
@@ -103,11 +105,16 @@ public class PanelSelectModule extends ModuleWizardPanel {
         
         final ButtonGroup bg = new ButtonGroup();
         class ModuleSelectionListener implements MouseListener {
+            @Override
             public void mouseClicked(MouseEvent e) {}
+            @Override
             public void mouseEntered(MouseEvent e) {}
+            @Override
             public void mouseExited(MouseEvent e) {}
+            @Override
             public void mousePressed(MouseEvent e) {}
 
+            @Override
             public void mouseReleased(MouseEvent e) {
                 String command = bg.getSelection().getActionCommand();
                 selectedModule = Integer.parseInt(command);

@@ -20,17 +20,21 @@ public class CreateUserRequest implements IRequest {
         this.user = user;
     }
 
+    @Override
     public void execute(Collection<DcObject> objects) {
         DatabaseManager.createUser(user, "");
     }
     
+    @Override
     public void end() {
         user = null;
     }
     
+    @Override
     public boolean getExecuteOnFail() {
         return false;
     }
 
+    @Override
     public void setExecuteOnFail(boolean b) {}
 }

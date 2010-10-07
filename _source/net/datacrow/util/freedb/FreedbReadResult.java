@@ -260,7 +260,8 @@ public class FreedbReadResult implements Comparable {
 		return q;
     }
 	
-	public int compareTo(Object o) {
+	@Override
+    public int compareTo(Object o) {
 		if (o == null) {
 			return 1;
         }

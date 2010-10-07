@@ -155,14 +155,18 @@ public class SelectItemDialog extends DcDialog implements ActionListener, KeyLis
                  new Insets( 5, 0, 5, 0), 0, 0));
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();
     }
     
+    @Override
     public void keyPressed(KeyEvent e) {}
+    @Override
     public void keyTyped(KeyEvent e) {}
 
+    @Override
     public void keyReleased(KeyEvent e) {
         DcShortTextField txtFilter = (DcShortTextField) e.getSource();
         String filter = txtFilter.getText();
@@ -180,6 +184,7 @@ public class SelectItemDialog extends DcDialog implements ActionListener, KeyLis
         }
     }
     
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2) {
             dco = list.getSelectedItem();
@@ -187,8 +192,12 @@ public class SelectItemDialog extends DcDialog implements ActionListener, KeyLis
         }
     }
     
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
 }

@@ -207,6 +207,7 @@ public class WebServerControlPanel extends JPanel implements java.awt.event.Acti
 
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("start")) 
             start();

@@ -62,6 +62,7 @@ public class BackupFilePreviewPanel extends JPanel implements PropertyChangeList
         build();
     }
     
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         String propertyName = e.getPropertyName();
         

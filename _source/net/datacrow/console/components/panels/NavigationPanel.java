@@ -82,6 +82,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
                 new Insets(0, 0, 0, 0), 0, 0));
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("rowUp"))
             table.moveRowUp();

@@ -100,6 +100,7 @@ public class SelectExpienceLevelDialog extends DcDialog implements ActionListene
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("expert"))
             UserMode.setUserMode(UserMode._XP_EXPERT);

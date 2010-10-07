@@ -177,6 +177,7 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
         comboServers.setSelectedIndex(0);
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("toggleServer"))
             toggleServer();

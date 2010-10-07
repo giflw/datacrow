@@ -120,6 +120,7 @@ public class UpgradeDialog extends DcDialog implements ActionListener {
         setSize(500, 500);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("cancel")) {
             affirmative = false;

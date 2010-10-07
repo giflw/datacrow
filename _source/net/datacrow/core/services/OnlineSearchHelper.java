@@ -280,16 +280,20 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         result = null;
     }
     
+    @Override
     public void addError(Throwable t) {
         logger.error(t, t);
     }
 
+    @Override
     public void addError(String message) {
         logger.error(message);
     }
 
+    @Override
     public void addMessage(String message) {}
 
+    @Override
     public void addObject(DcObject dco) {
         if (result != null) {
             result.add(dco);
@@ -304,25 +308,32 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
         return string.equals(item);
     }
 
+    @Override
     public void addWarning(String warning) {}
 
     public DcObject getDcObject() {
         return null;
     }
 
+    @Override
     public DcModule getModule() {
         return DcModules.get(module);
     }
 
+    @Override
     public void processed(int i) {}
 
+    @Override
     public void processing() {}
 
+    @Override
     public void processingTotal(int i) {}
 
+    @Override
     public int resultCount() {
         return result.size();
     }
 
+    @Override
     public void stopped() {}
 }

@@ -76,10 +76,12 @@ public class AutoIncrementer implements IValueEnhancer {
         this.step = step;
     }
     
+    @Override
     public String toSaveString() {
         return enabled + "/&/" + fillGaps + "/&/" + step;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -92,14 +94,17 @@ public class AutoIncrementer implements IValueEnhancer {
         return step;
     }
     
+    @Override
     public boolean isRunOnUpdating() {
         return false;
     }
     
+    @Override
     public boolean isRunOnInsert() {
         return true;
     }
     
+    @Override
     public Object apply(DcField field, Object value) {
         Object result = value;
         
@@ -153,6 +158,7 @@ public class AutoIncrementer implements IValueEnhancer {
         return field;
     }
 
+    @Override
     public void parse(String s) {
         String tmp = s;
         String s1 = tmp.substring(0, tmp.indexOf("/&/"));
@@ -168,6 +174,7 @@ public class AutoIncrementer implements IValueEnhancer {
         step = Integer.valueOf(s3);
     }
 
+    @Override
     public int getIndex() {
         return ValueEnhancers._AUTOINCREMENT;
     }

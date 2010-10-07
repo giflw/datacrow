@@ -152,6 +152,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
         box = null;
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         Calendar c = new GregorianCalendar();

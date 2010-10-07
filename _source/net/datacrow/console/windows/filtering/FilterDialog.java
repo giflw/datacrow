@@ -269,6 +269,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
                     (DataFilter) comboFilters.getSelectedItem() : null;
         }
         
+        @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().equals("delete")) {
                 DataFilter filter = (DataFilter) comboFilters.getSelectedItem();
@@ -373,6 +374,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
         }
     }    
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

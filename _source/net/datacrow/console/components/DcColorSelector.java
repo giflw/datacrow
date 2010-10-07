@@ -44,24 +44,29 @@ public class DcColorSelector extends JColorChooser implements IComponent, Change
         this.settingsKey = settingsKey;
     }
 
+    @Override
     public Object getValue() {
         return color;
     }
 
+    @Override
     public void setValue(Object o) {
         color = (Color) o;
         setColor(color);
     }
 
+    @Override
     public void clear() {
         color = null;
         settingsKey = null;        
     }
     
+    @Override
     public void setEditable(boolean b) {
         super.setEnabled(b);
     }
     
+    @Override
     public void stateChanged(ChangeEvent e) {
         Color temp = getColor();
         if (color != null && !color.equals(temp)) {
@@ -70,5 +75,6 @@ public class DcColorSelector extends JColorChooser implements IComponent, Change
         }
     }
     
+    @Override
     public void refresh() {}
 }

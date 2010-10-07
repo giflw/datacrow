@@ -37,23 +37,28 @@ public class DcFieldDefinitions implements IDefinitions {
     
     private java.util.List<DcFieldDefinition> definitions = new ArrayList<DcFieldDefinition>();
     
+    @Override
     public void add(Definition definition) {
         definitions.add((DcFieldDefinition) definition);
     }
 
+    @Override
     public void add(Collection<Definition> c) {
         for (Definition definition : c)
             add(definition);
     }
 
+    @Override
     public void clear() {
         definitions.clear();
     }
 
+    @Override
     public int getSize() {
         return definitions.size();
     }
     
+    @Override
     public Collection<DcFieldDefinition> getDefinitions() {
         return definitions;
     }    
@@ -110,6 +115,7 @@ public class DcFieldDefinitions implements IDefinitions {
         DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stQuickViewFieldDefinitions, qvDefsNew);
     }
 	
+    @Override
     public void add(String s) {
         StringTokenizer st = new StringTokenizer(s, "/&/");
         Collection<String> c = new ArrayList<String>();

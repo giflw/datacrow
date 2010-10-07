@@ -91,6 +91,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             addFieldToTable(field);
     }
     
+    @Override
     public Object apply() {
         XmlModule module = getModule();
 
@@ -199,6 +200,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
             tableSysFields.addRow(new Object[] {field});
     }
 
+    @Override
     public void destroy() {
         buttonAdd = null;
         buttonRemove = null;
@@ -316,6 +318,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
                  new Insets(5, 5, 5, 10), 0, 0)); 
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("createField"))
             createField();

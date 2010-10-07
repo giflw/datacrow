@@ -1383,6 +1383,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return equals;
     }
     
+    @Override
     public int compareTo(DcObject o) {
         return toString().compareTo(o.toString());
     }

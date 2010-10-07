@@ -310,6 +310,7 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
             this.direction = direction;
         }
         
+        @Override
         public void mouseReleased(MouseEvent e) {
             if (e.getClickCount() == 2) {
                 if (direction == _LEFT) {
@@ -336,15 +337,20 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
             }  
         }
         
+        @Override
         public void mouseEntered(MouseEvent e) {}
+        @Override
         public void mouseExited(MouseEvent e) {}
+        @Override
         public void mousePressed(MouseEvent e) {}
+        @Override
         public void mouseClicked(MouseEvent e) {}
     } 
     
     public void keyPressed(KeyEvent e) {}
     public void keyTyped(KeyEvent e) {}
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("tabSelect"))
             applyTab((String) cbTabs.getSelectedItem());
@@ -391,14 +397,18 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
         repaint();
     }
     
+    @Override
     public void componentHidden(ComponentEvent e) {}
 
+    @Override
     public void componentMoved(ComponentEvent e) {}
 
+    @Override
     public void componentResized(ComponentEvent e) {
         checkListSizes();
     }
 
+    @Override
     public void componentShown(ComponentEvent e) {}
     
 }

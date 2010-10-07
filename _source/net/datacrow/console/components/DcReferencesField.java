@@ -96,10 +96,12 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         btCreate.setActionCommand("create");
     }
     
+    @Override
     public void setEditable(boolean b) {
         btOpen.setEnabled(b);
     }
     
+    @Override
     public Object getValue() {
         return references;
     }
@@ -110,11 +112,13 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         setDescription();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void setValue(Object o) {
         setValue((Collection<DcMapping>) o);
     }
     
+    @Override
     public void clear() {
         fld = null;
         references.clear();
@@ -175,6 +179,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         fld.setCaretPosition(0);
     }
     
+    @Override
     public void notifyItemSaved(DcObject dco) {
         DcObject mapping = DcModules.get(mappingModIdx).getItem();
         mapping.setValue(DcMapping._B_REFERENCED_ID, dco.getID());
@@ -187,6 +192,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }  
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("openDialog"))
             openDialog();
@@ -194,6 +200,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
             create();        
     }
     
+    @Override
     public void refresh() {
         setDescription();
     }    

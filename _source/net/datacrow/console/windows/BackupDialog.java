@@ -96,10 +96,12 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         fileFieldTarget.setValue(DcSettings.getString(DcRepository.Settings.stBackupLocation));
     }
 
+    @Override
     public void notifyProcessed() {
         progressBar.setValue(progressBar.getValue() + 1);
     }
 
+    @Override
     public void notifyStarted() {
         canBeClosed = false;
         buttonBackup.setEnabled(false);
@@ -109,10 +111,12 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         textLog.setText("");
     }
     
+    @Override
     public void notifyProcessingCount(int count) {
         initProgressBar(count);
     }
 
+    @Override
     public void notifyStopped() {
         canBeClosed = true;
         
@@ -146,11 +150,13 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         }
     }
     
+    @Override
     public void sendError(Exception e) {
         DcSwingUtilities.displayErrorMessage(DcResources.getText("msgBackupFileCreationError", e.getMessage()));
         logger.error(e, e);
     }
 
+    @Override
     public void sendMessage(String message) {
         textLog.insert(message + '\n', 0);
         textLog.setCaretPosition(0);
@@ -311,6 +317,7 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         super.close();
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("backup"))
             backup();

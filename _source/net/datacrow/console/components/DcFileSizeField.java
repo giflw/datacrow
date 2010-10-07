@@ -55,6 +55,7 @@ public class DcFileSizeField extends JTextField implements IComponent {
         return new DecimalDocument();
     }
 
+    @Override
     public Object getValue() {
         String num = "";
         for (char c :  getText().toCharArray()) {
@@ -64,8 +65,10 @@ public class DcFileSizeField extends JTextField implements IComponent {
         return num.length() == 0 ? null : Long.valueOf(num);
     }
     
+    @Override
     public void clear() {} 
     
+    @Override
     public void setValue(Object o) {
         if (o instanceof Long)
             setText(Utilities.toFileSizeString((Long) o));
@@ -105,5 +108,6 @@ public class DcFileSizeField extends JTextField implements IComponent {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }    
     
+    @Override
     public void refresh() {}
 }

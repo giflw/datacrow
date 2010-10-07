@@ -84,16 +84,19 @@ public class Xml2RtfTransformer extends XmlTransformer implements ErrorListener 
         return "Rtf";
     }
 
+    @Override
     public void error(TransformerException e) {
         client.notifyMessage(e.getMessage());
         logger.error(e, e);
     }
 
+    @Override
     public void fatalError(TransformerException e) {
         client.notifyMessage(e.getMessage());
         logger.error(e, e);
     }
 
+    @Override
     public void warning(TransformerException e) {
         client.notifyMessage(e.getMessage());
         logger.error(e, e);

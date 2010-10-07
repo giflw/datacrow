@@ -84,6 +84,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         }
     }
     
+    @Override
     public void loadItems() {
     	table.clear();
     	
@@ -140,14 +141,19 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
             table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LOANDUEDATE, Item._SYS_LOANDAYSTILLOVERDUE});
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         DcTable table = (DcTable) e.getSource();
         if (e.getClickCount() == 2 && table.getSelectedIndex() > -1) 
             open();
     }
         
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}        
 }

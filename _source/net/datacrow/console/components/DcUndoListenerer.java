@@ -67,6 +67,7 @@ public class DcUndoListenerer {
     }
     
     protected class UndoEditListener implements UndoableEditListener {
+        @Override
         public void undoableEditHappened(UndoableEditEvent e) {
             undo.addEdit(e.getEdit());
             updateUndoState();
@@ -116,6 +117,7 @@ public class DcUndoListenerer {
             setEnabled(false);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             undo();
         }
@@ -127,6 +129,7 @@ public class DcUndoListenerer {
             setEnabled(false);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             redo();
         }

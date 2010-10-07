@@ -66,6 +66,7 @@ public class InternetWizardPanel extends ItemWizardPanel implements IWizardPanel
         return DcResources.getText("msgInternetSearch");
     }
 
+    @Override
     public void destroy() {
         if (internetSearchForm != null)
             internetSearchForm.close(false);
@@ -101,14 +102,19 @@ public class InternetWizardPanel extends ItemWizardPanel implements IWizardPanel
         }
     }
     
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2) {
             internetSearchForm.stop();
             wizard.next();
         }
     }
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
 }

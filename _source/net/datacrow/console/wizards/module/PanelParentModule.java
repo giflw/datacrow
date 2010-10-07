@@ -51,6 +51,7 @@ public class PanelParentModule extends ModuleWizardPanel {
         build();
     }
 
+    @Override
     public Object apply() {
         if (selectedModule == -1) {
             DcSwingUtilities.displayMessage("msgSelectParentModuleFirst");
@@ -65,6 +66,7 @@ public class PanelParentModule extends ModuleWizardPanel {
         return DcResources.getText("msgSelectParentModule");
     }
     
+    @Override
     public void destroy() {} 
     
     private void build() {
@@ -72,6 +74,7 @@ public class PanelParentModule extends ModuleWizardPanel {
         
         final ButtonGroup bg = new ButtonGroup();
         class ModuleSelectionListener implements ItemListener {
+            @Override
             public void itemStateChanged(ItemEvent ev) {
                 String command = bg.getSelection().getActionCommand();
                 selectedModule = Integer.parseInt(command);

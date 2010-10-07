@@ -113,6 +113,7 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
         DcSettings.set(DcRepository.Settings.stReportFile, fileField.getFilename());
     }
     
+    @Override
     public void notifyMessage(String message) {
         if (textLog != null) { 
             textLog.insert(message + '\n', 0);
@@ -120,16 +121,19 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
         }
     }
 
+    @Override
     public void notifyProcessed() {
         progressBar.setValue(progressBar.getValue() + 1);
     }
 
+    @Override
     public void notifyStarted(int count) {
         progressBar.setValue(0);
         progressBar.setMaximum(count);
         allowActions(false);
     }
 
+    @Override
     public void notifyStopped() {
         allowActions(true);
     }
@@ -394,6 +398,7 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
         applyReportSelection();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("showResults"))
             showResults();
@@ -407,6 +412,7 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
             applyReportSelection();      
     }
 
+    @Override
     public void itemStateChanged(ItemEvent ie) {
         if (ie.getStateChange() == ItemEvent.SELECTED)
             applyReportFileProperties((ReportTemplate) ie.getItem());    

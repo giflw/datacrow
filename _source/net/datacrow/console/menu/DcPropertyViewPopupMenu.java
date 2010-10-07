@@ -58,6 +58,7 @@ public class DcPropertyViewPopupMenu extends DcPopupMenu  implements ActionListe
         add(menuDelete);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("delete"))
             form.delete();

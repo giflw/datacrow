@@ -53,10 +53,12 @@ public class DriveSelectorField extends JComponent implements IComponent {
         buildComponent();
     }
 
+    @Override
     public Object getValue() {
         return getDrives();
     }
 
+    @Override
     public void setValue(Object o) {
         if (o instanceof String[]) {
             setSelectedDrives((String[]) o);
@@ -69,6 +71,7 @@ public class DriveSelectorField extends JComponent implements IComponent {
             cb.setEnabled(b);
     }
     
+    @Override
     public void clear() {
         componentMap.clear();
         componentMap = null;
@@ -83,6 +86,7 @@ public class DriveSelectorField extends JComponent implements IComponent {
         return drives;
     }    
     
+    @Override
     public void setEditable(boolean b) {}
 
     public void setSelectedDrives(String[] drives) {
@@ -142,5 +146,6 @@ public class DriveSelectorField extends JComponent implements IComponent {
                    new Insets( 0, 0, 0, 0), 0, 0));
     }
 
+    @Override
     public void refresh() {}
 }

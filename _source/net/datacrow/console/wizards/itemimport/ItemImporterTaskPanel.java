@@ -32,10 +32,12 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
         build();
     }
     
-	public Object apply() throws WizardException {
+	@Override
+    public Object apply() throws WizardException {
         return wizard.getDefinition();
     }
 
+    @Override
     public void destroy() {
     	if (importer != null) importer.cancel();
     	importer = null;
@@ -44,6 +46,7 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
     	wizard = null;
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgImportProcess");
     }
@@ -92,15 +95,18 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
         notifyStopped();
     }    
     
+    @Override
     public void notifyMessage(String msg) {
         tp.addMessage(msg);
     }
 
+    @Override
     public void notifyStarted(int count) {
         tp.clear();
         tp.initializeTask(count);
     }
 
+    @Override
     public void notifyStopped() {
         notifyMessage("\n");
         notifyMessage(DcResources.getText("msgItemsCreated", String.valueOf(created)));
@@ -110,6 +116,7 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
         notifyMessage(DcResources.getText("msgImportFinished"));
     }
 
+    @Override
     public void notifyProcessed(DcObject item) {
         if (wizard != null && 
             wizard.getModule().isSelectableInUI() && 

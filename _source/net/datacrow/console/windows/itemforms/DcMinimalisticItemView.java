@@ -188,6 +188,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         panel = null;
     }
     
+    @Override
     public void loadItems() {
         list.clear();
         DcObject dco = DcModules.get(module).getItem();
@@ -371,6 +372,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         }
     }     
     
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (!readonly) {
             if (SwingUtilities.isRightMouseButton(e)) {
@@ -390,11 +392,16 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 open();
         }
     }
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("createNew"))
             createNew();

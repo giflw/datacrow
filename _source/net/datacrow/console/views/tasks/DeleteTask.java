@@ -32,6 +32,7 @@ public class DeleteTask extends DataTask {
             
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
                     public void run() {
                         view.updateProgressBar(0);
                         view.initProgressBar(objects.length);   
@@ -74,6 +75,7 @@ public class DeleteTask extends DataTask {
             stopRunning();
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
                     public void run() {
                         view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                         view.setActionsAllowed(true);

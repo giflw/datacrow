@@ -48,17 +48,21 @@ public class DcModuleSelector extends JComponent implements IComponent {
         buildComponent();
     }
     
+    @Override
     public Object getValue() {
         return "";
     }    
     
+    @Override
     public void setValue(Object value) {
     }
     
+    @Override
     public void clear() {
         panel = null;
     } 
     
+    @Override
     public void setEditable(boolean b) {}
     
     private void buildComponent() {
@@ -93,6 +97,7 @@ public class DcModuleSelector extends JComponent implements IComponent {
             new Insets( 0, 5, 5, 5), 0, 0));
     }   
     
+    @Override
     public void refresh() {}
 
     private static class ToggleModuleAction implements ActionListener {
@@ -103,6 +108,7 @@ public class DcModuleSelector extends JComponent implements IComponent {
             this.module = module;
         }
         
+        @Override
         public void actionPerformed(ActionEvent ev) {
             if (ev.getSource() instanceof JCheckBox) {
                 JCheckBox checkbox = (JCheckBox) ev.getSource();

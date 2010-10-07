@@ -191,6 +191,7 @@ public class PluginPermissionPanel extends JPanel implements ActionListener {
             table.setValueAt(Boolean.FALSE, row, _COLUMN_AUTHORIZED);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("applyRight"))
             applyRight();

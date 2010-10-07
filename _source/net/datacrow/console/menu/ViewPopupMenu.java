@@ -240,6 +240,7 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
     
     private void locateFile(final int precision) {
         new Thread(new Runnable() { 
+            @Override
             public void run() {
                 DriveManagerSingleItemMatcher matcher = 
                     new DriveManagerSingleItemMatcher(dco, precision);
@@ -261,6 +262,7 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
         }).start();        
     }    
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         
         String filename = dco.getFilename();

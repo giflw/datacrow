@@ -118,6 +118,7 @@ public class DcSwingUtilities {
             try {
                 SwingUtilities.invokeAndWait(
                         new Thread(new Runnable() { 
+                            @Override
                             public void run() {
                                 dialog.setVisible(true);
                             }
@@ -146,6 +147,7 @@ public class DcSwingUtilities {
             
             if (!SwingUtilities.isEventDispatchThread()) {
                 SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
                     public void run() {
                         dialog.setVisible(true);
                     }

@@ -87,6 +87,7 @@ public class DcChildModule extends DcModule implements IChildModule {
     /**
      * Creates a new item view.
      */
+    @Override
     public DcMinimalisticItemView getItemView(DcObject parent, int module, boolean readonly) {
         return new ChildForm(parent, module, readonly);
     }

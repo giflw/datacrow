@@ -407,6 +407,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
         }
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("renumber"))
             renumber();

@@ -153,7 +153,8 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
                  new Insets(0, 0, 0, 0), 0, 0));
 	}
 
-	public void actionPerformed(ActionEvent ae) {
+	@Override
+    public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand().equals("save"))
 			save();
 		else if (ae.getActionCommand().equals("cancel"))

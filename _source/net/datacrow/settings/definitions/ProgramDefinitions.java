@@ -32,19 +32,23 @@ public class ProgramDefinitions implements IDefinitions {
 
     Collection<ProgramDefinition> definitions = new ArrayList<ProgramDefinition>();
     
+    @Override
     public void add(Collection<Definition> c) {
         for (Definition definition : c)
             add(definition);
     }
 
+    @Override
     public void add(Definition definition) {
         definitions.add((ProgramDefinition) definition);
     }
 
+    @Override
     public void clear() {
         definitions.clear();
     }
 
+    @Override
     public int getSize() {
         return definitions.size();
     }     
@@ -58,10 +62,12 @@ public class ProgramDefinitions implements IDefinitions {
 		return null;
 	}
 	
-	public Collection<ProgramDefinition> getDefinitions() {
+	@Override
+    public Collection<ProgramDefinition> getDefinitions() {
 	    return definitions;
 	}
     
+    @Override
     public void add(String s) {
         int index = s.indexOf("/&/");
         String extension = s.substring(0, index);

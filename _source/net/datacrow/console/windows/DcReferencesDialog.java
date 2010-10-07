@@ -236,6 +236,7 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         return unselected;
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();
@@ -243,9 +244,12 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
             save();
     }
     
+    @Override
     public void keyPressed(KeyEvent e) {}
+    @Override
     public void keyTyped(KeyEvent e) {}
 
+    @Override
     public void keyReleased(KeyEvent e) {
         DcShortTextField txtFilter = (DcShortTextField) e.getSource();
         String filter = txtFilter.getText();
@@ -276,6 +280,7 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
             this.direction = direction;
         }
         
+        @Override
         public void mouseReleased(MouseEvent e) {
             if (e.getClickCount() == 2) {
                 if (direction == _LEFT) {
@@ -292,9 +297,13 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
             }  
         }
         
+        @Override
         public void mouseEntered(MouseEvent e) {}
+        @Override
         public void mouseExited(MouseEvent e) {}
+        @Override
         public void mousePressed(MouseEvent e) {}
+        @Override
         public void mouseClicked(MouseEvent e) {}
     }     
 }

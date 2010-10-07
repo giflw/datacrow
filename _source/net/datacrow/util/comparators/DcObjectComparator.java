@@ -50,6 +50,7 @@ public class DcObjectComparator implements Comparator<DcObject> {
         this.order = order;
     }
     
+    @Override
     public int compare(DcObject dco1, DcObject dco2) {
         Object o1 = dco1.getValue(field);
         Object o2 = dco2.getValue(field);

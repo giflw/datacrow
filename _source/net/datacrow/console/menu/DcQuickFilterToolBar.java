@@ -310,6 +310,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         }
     }    
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("searchOnSelectedFilter"))
             search(comboFilters.getSelectedIndex() > 0 ? (DataFilter) comboFilters.getSelectedItem() : null);    
@@ -323,19 +324,27 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             applySelectedFilter();
     }
     
+    @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
             search();
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {}
+    @Override
     public void keyTyped(KeyEvent e) {}
 
+    @Override
     public void mouseClicked(MouseEvent e) {}
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2) {
             search();
@@ -372,6 +381,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             return obj != null && obj instanceof Field && getField() != null ? getField().equals(((Field) obj).getField()) : false;
         }
         
+        @Override
         public int compareTo(Field o) {
             return toString().compareTo(o.toString());
         }

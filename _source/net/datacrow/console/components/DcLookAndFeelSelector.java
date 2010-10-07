@@ -73,6 +73,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         this.parent = dialog;
     }
     
+    @Override
     public void clear() {
         checkNoLF = null;
         checkSystemLF = null;
@@ -89,6 +90,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         }
     }
     
+    @Override
     public Object getValue() {
         return getLookAndFeel();
     }
@@ -100,6 +102,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
     /**
      * Applies a value to this field
      */
+    @Override
     public void setValue(Object o) {
         applyModus = false;
         if (o instanceof DcLookAndFeel) { 
@@ -131,6 +134,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         }
     }     
     
+    @Override
     public void setEditable(boolean b) {
         checkNoLF.setEnabled(b);
         checkSystemLF.setEnabled(b);
@@ -266,6 +270,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
             this.type = type;
         }
         
+        @Override
         public void actionPerformed(ActionEvent arg0) {
             checkNoLF.setSelected(false);
             checkSystemLF.setSelected(false);
@@ -282,6 +287,7 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         }
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("applyInputFieldHeight")) {
             Long value = (Long) cbFieldHeight.getSelectedItem();
@@ -300,5 +306,6 @@ public class DcLookAndFeelSelector extends JComponent implements IComponent, Act
         }
     }
     
+    @Override
     public void refresh() {}
 }

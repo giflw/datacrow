@@ -92,16 +92,19 @@ public class Xml2PdfTransformer extends XmlTransformer implements ErrorListener 
         return "Pdf";
     }
 
+    @Override
     public void error(TransformerException e) {
         client.notifyMessage(e.getMessage());
         logger.error(e, e);
     }
 
+    @Override
     public void fatalError(TransformerException e) {
         client.notifyMessage(e.getMessage());
         logger.error(e, e);
     }
 
+    @Override
     public void warning(TransformerException e) {
         client.notifyMessage(e.getMessage());
         logger.error(e, e);

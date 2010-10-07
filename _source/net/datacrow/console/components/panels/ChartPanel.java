@@ -139,6 +139,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         List<String> c = new ArrayList<String>();
         c.addAll(dataMap.keySet());
         Collections.sort(c, new Comparator<String>() {
+            @Override
             public int compare(String s1, String s2) {
                 return (s1.compareTo(s2));
             }
@@ -294,6 +295,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         }
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("buildChart"))
             buildChart();
@@ -353,6 +355,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
                 
                 try {
                     SwingUtilities.invokeAndWait(new Runnable() {
+                        @Override
                         public void run() {
                             install();
                         };
@@ -418,6 +421,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
                 dataMap.clear();
                 
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         install();
                     };

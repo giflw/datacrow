@@ -340,6 +340,7 @@ public class DataCrow {
                     mainFrame = new MainFrame();
                     
                     SwingUtilities.invokeAndWait(new Runnable() {
+                        @Override
                         public void run() {
     
                             long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
@@ -638,6 +639,7 @@ public class DataCrow {
     }
 
     private static final class SplashScreenCloser implements Runnable {
+        @Override
         public void run() {
             if (splashScreen != null) 
                 splashScreen.dispose();

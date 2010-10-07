@@ -159,34 +159,45 @@ public class MusicFile implements IOnlineSearchClient {
         return length;
     }
 
+    @Override
     public void addError(Throwable t) {
         logger.error(t.getMessage(), t);
     }
 
+    @Override
     public void addError(String message) {}
 
+    @Override
     public void addMessage(String message) {}
 
+    @Override
     public void addObject(DcObject dco) {
         albums.add(dco);
     }
 
+    @Override
     public void addWarning(String warning) {}
 
+    @Override
     public DcModule getModule() {
         return DcModules.get(DcModules._MUSICALBUM);
     }
 
+    @Override
     public void processed(int i) {}
 
+    @Override
     public void processing() {}
 
+    @Override
     public void processingTotal(int i) {}
 
+    @Override
     public int resultCount() {
         return albums.size();
     }
 
+    @Override
     public void stopped() {}
 
     public DcObject getDcObject() {

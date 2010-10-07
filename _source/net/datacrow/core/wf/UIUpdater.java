@@ -74,6 +74,7 @@ public class UIUpdater implements Runnable {
     /**
      * Execute the requests.
      */
+    @Override
     public void run() {
         if (requests != null) {
             IRequest[] requestArray = requests.get();

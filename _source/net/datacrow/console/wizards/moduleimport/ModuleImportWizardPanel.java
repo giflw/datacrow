@@ -56,9 +56,12 @@ public abstract class ModuleImportWizardPanel extends JPanel implements IWizardP
     	else onDeactivation();
     }
 
-	public void onDeactivation() {}
+	@Override
+    public void onDeactivation() {}
 	
+    @Override
     public void onActivation() {}    
 
+    @Override
     public abstract String getHelpText();
 }

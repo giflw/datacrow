@@ -112,6 +112,7 @@ public class ModuleExportDefinitionDialog extends DcDialog implements ActionList
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("moduleChanged")) {
             

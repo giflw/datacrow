@@ -161,6 +161,7 @@ public abstract class FileImporter implements ISynchronizerClient {
             throw new Exception(DcResources.getText("msgSelectFiles"));
         
         Thread thread = new Thread(new Runnable() {
+            @Override
             public void run() {
                 getClient().addMessage(DcResources.getText("msgImportStarts"));
                 
@@ -389,42 +390,54 @@ public abstract class FileImporter implements ISynchronizerClient {
         }
     }
 
+    @Override
     public void addMessage(String message) {
         logger.info(message);
     }
 
+    @Override
     public void enableActions(boolean b) {}
 
+    @Override
     public int getItemPickMode() {
         return Synchronizer._ALL;
     }
 
+    @Override
     public Region getRegion() {
         return getClient().getRegion();
     }
 
+    @Override
     public SearchMode getSearchMode() {
         return getClient().getSearchMode();
     }
 
+    @Override
     public IServer getServer() {
         return getClient().getServer();
     }
 
+    @Override
     public void initialize() {}
 
+    @Override
     public void initProgressBar(int max) {}
 
+    @Override
     public boolean isCancelled() {
         return false;
     }
 
+    @Override
     public boolean isReparseFiles() {
         return false;
     }
 
+    @Override
     public void updateProgressBar() {}
 
+    @Override
     public boolean useOnlineService() {
         return client.useOnlineServices();
     }

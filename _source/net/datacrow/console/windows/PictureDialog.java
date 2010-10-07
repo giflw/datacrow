@@ -99,6 +99,7 @@ public class PictureDialog extends DcDialog implements ActionListener {
         return (DcImageIcon) pf.getValue();
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             setVisible(false);

@@ -39,6 +39,7 @@ public class DcObjectCompositeComparator implements Comparator<DcObject> {
         this.dcocs = dcocs;
     }
     
+    @Override
     public int compare(DcObject dco1, DcObject dco2) {
         for (DcObjectComparator dcoc : dcocs) {
             int result = dcoc.compare(dco1, dco2);

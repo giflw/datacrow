@@ -328,6 +328,7 @@ public class SettingsView extends DcDialog implements ActionListener {
         }
     }    
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("save"))
             save();
@@ -336,6 +337,7 @@ public class SettingsView extends DcDialog implements ActionListener {
     }    
 
     private class NodeSelectedAction implements TreeSelectionListener {
+        @Override
         public void valueChanged(TreeSelectionEvent e) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 

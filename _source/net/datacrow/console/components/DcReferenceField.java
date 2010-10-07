@@ -74,10 +74,12 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         btCreate.setActionCommand("create");
     }
 
+    @Override
     public void setEditable(boolean b) {
         btCreate.setEnabled(b);
     }
     
+    @Override
     public Object getValue() {
         return cb.getSelectedItem();
     }
@@ -86,10 +88,12 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         return cb;
     }
     
+    @Override
     public void setValue(Object o) {
         cb.setValue(o);
     }
     
+    @Override
     public void clear() {
         btCreate = null;
         cb = null;
@@ -97,10 +101,12 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         removeAll();
     }
     
+    @Override
     public void refresh() {
         cb.refresh();
     }
 
+    @Override
     public void notifyItemSaved(DcObject dco) {
         cb.setSelectedItem(dco);
     }
@@ -112,6 +118,7 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         itemForm.setVisible(true);
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("create"))
             create();

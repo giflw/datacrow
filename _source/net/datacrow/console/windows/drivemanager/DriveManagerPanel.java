@@ -59,16 +59,19 @@ public abstract class DriveManagerPanel extends JPanel implements IDriveManagerL
     protected abstract void start() throws JobAlreadyRunningException;
     protected abstract void stop();
     
+    @Override
     public void notify(String msg) {
         statusPanel.setMessage(msg);
     }
     
+    @Override
     public void notifyJobStarted() {
         notify(DcResources.getText("msgJobStartedAtX", new Date().toString()));
         statusPanel.isRunning(true);
         allowActions(false);
     }
     
+    @Override
     public void notifyJobStopped() {
         notify(DcResources.getText("msgJobStoppedAtX", new Date().toString()));
         statusPanel.isRunning(false);

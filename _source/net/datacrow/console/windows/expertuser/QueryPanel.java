@@ -342,6 +342,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
     }
 
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("runQuery"))
             runQuery();
@@ -349,6 +350,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
             clearPanel();
     }
 
+    @Override
     public void itemStateChanged(ItemEvent e) {
         setQuery();
     }

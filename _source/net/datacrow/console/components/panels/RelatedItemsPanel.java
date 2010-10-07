@@ -82,20 +82,26 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
         }
     }
     
+    @Override
     public void loadItems() {
         list.clear();
         List<DcObject> items = DataManager.getReferencingItems(dco);
         list.add(items);
     }
     
+    @Override
     public void mouseReleased(MouseEvent e) {
         DcObjectList list = (DcObjectList) e.getSource();
         if (e.getClickCount() == 2 && list.getSelectedIndex() > -1) 
             open();
     }
         
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}    
 }

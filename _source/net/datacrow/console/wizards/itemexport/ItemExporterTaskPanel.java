@@ -25,6 +25,7 @@ public class ItemExporterTaskPanel extends ItemExporterWizardPanel implements II
         build();
     }
     
+    @Override
     public Object apply() throws WizardException {
         return wizard.getDefinition();
     }
@@ -38,6 +39,7 @@ public class ItemExporterTaskPanel extends ItemExporterWizardPanel implements II
     	wizard = null;
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgExportProcess");
     }
@@ -83,17 +85,21 @@ public class ItemExporterTaskPanel extends ItemExporterWizardPanel implements II
         notifyStopped();
     }    
     
+    @Override
     public void notifyMessage(String message) {
         tp.addMessage(message);
     }
 
+    @Override
     public void notifyStarted(int count) {
         tp.clear();
         tp.initializeTask(count);
     }
 
+    @Override
     public void notifyStopped() {}
 
+    @Override
     public void notifyProcessed() {
         tp.updateProgressTask();       
     }

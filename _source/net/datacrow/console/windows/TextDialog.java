@@ -149,6 +149,7 @@ public class TextDialog extends DcDialog implements ActionListener {
                                   new Insets( 0, 0, 0, 0), 0, 0));
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             success = false;

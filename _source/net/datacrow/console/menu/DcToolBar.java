@@ -150,11 +150,16 @@ public class DcToolBar extends JToolBar implements MouseListener {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }    
     
+    @Override
     public void mouseClicked(MouseEvent e) {}
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e))
             new PopupMenu().show(this, e.getX(), e.getY());
@@ -170,6 +175,7 @@ public class DcToolBar extends JToolBar implements MouseListener {
             this.add(menuToggleLabels);
         }
         
+        @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().equals("toggleLabels"))
                 setLabelsVisible(!DcSettings.getBoolean(DcRepository.Settings.stShowMenuBarLabels));

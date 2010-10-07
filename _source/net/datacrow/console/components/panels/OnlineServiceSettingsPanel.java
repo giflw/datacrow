@@ -228,6 +228,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         dlg.setVisible(true);
     }    
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("openOverwriteSettingsDialog")) {
             openOverwriteSettingsDlg();

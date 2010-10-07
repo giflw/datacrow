@@ -10,6 +10,7 @@ import net.datacrow.console.menu.ViewPopupMenu;
 
 public class ViewMouseListener implements MouseListener {
     
+    @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
         IViewComponent vc = (IViewComponent) e.getSource();
         View view = vc.getView();
@@ -37,8 +38,12 @@ public class ViewMouseListener implements MouseListener {
         }
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
 }

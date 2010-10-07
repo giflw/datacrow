@@ -119,6 +119,7 @@ public class ServerSettingsDialog extends DcDialog implements ActionListener {
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("save")) {
             saveSettings();

@@ -33,15 +33,18 @@ public class WebFieldDefinitions implements IDefinitions {
 
     private Collection<WebFieldDefinition> definitions = new ArrayList<WebFieldDefinition>();
 
+    @Override
     public void add(Collection<Definition> c) {
         for (Definition definition : c)
             add(definition);
     }
     
+    @Override
     public void add(Definition definition) {
         definitions.add((WebFieldDefinition) definition);
     }
 
+    @Override
     public void clear() {
         definitions.clear();
     }
@@ -50,10 +53,12 @@ public class WebFieldDefinitions implements IDefinitions {
         return definitions;
     }
     
+    @Override
     public Collection<WebFieldDefinition> getDefinitions() {
         return definitions;
     }
 
+    @Override
     public int getSize() {
         return definitions.size();
     }         
@@ -79,6 +84,7 @@ public class WebFieldDefinitions implements IDefinitions {
             definitions.remove(definition);
     }    
     
+    @Override
     public void add(String s) {
         StringTokenizer st = new StringTokenizer(s, "/&/");
         int field = Integer.parseInt((String) st.nextElement());

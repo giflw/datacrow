@@ -39,12 +39,14 @@ public class DcPasswordField extends JPasswordField implements IComponent {
         ComponentFactory.setBorder(this);
     }
     
-	public void setValue(Object value) {
+	@Override
+    public void setValue(Object value) {
         String s = value == null ? "" : value.toString();
 		super.setText(s);
 	}
 
-	public Object getValue() {
+	@Override
+    public Object getValue() {
         String password = "";
         try {
             password = String.valueOf(getPassword());
@@ -52,6 +54,7 @@ public class DcPasswordField extends JPasswordField implements IComponent {
         return password;
 	}
 
+    @Override
     public void clear() {} 
     
     @Override
@@ -59,5 +62,6 @@ public class DcPasswordField extends JPasswordField implements IComponent {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }    
     
+    @Override
     public void refresh() {}
 }

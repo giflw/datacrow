@@ -13,7 +13,9 @@ public abstract class ItemImporterWizardPanel extends JPanel implements IWizardP
         else onDeactivation();
     }
     
+    @Override
     public void onDeactivation() {}
     
+    @Override
     public void onActivation() {}
 }

@@ -97,6 +97,7 @@ public class JobStatusPanel extends JPanel implements ActionListener {
         buttonStart.setEnabled(!b);
     }    
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         try {
             if (e.getActionCommand().equals("start")) 

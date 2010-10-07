@@ -118,6 +118,7 @@ public class DirectoriesAsDrivesDialog extends DcDialog implements ActionListene
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("close")) {
             close();

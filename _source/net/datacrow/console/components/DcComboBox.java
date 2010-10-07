@@ -68,10 +68,12 @@ public class DcComboBox extends JComboBox implements IComponent {
         ComponentFactory.setBorder(this);
     }
     
+    @Override
     public void clear() {
         removeAllItems();
     }
 
+    @Override
     public Object getValue() {
         return getSelectedItem();
     }
@@ -88,6 +90,7 @@ public class DcComboBox extends JComboBox implements IComponent {
         super.setEnabled(b);
     }
 
+    @Override
     public void setValue(Object value) {
         setSelectedItem(value);
     }
@@ -102,5 +105,6 @@ public class DcComboBox extends JComboBox implements IComponent {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     } 
     
+    @Override
     public void refresh() {}
 }

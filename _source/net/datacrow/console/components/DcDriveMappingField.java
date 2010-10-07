@@ -77,6 +77,7 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
         buttonRemove.setFont(ComponentFactory.getSystemFont());
     }    
     
+    @Override
     public void clear() {
         mappingTable.clear();
         mappingTable = null;
@@ -92,6 +93,7 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
      * Returns the selected Font (with the chosen size, thickness)
      * Unless the user has chosen otherwise, Arial font size 11 is returned.
      */
+    @Override
     public Object getValue() {
         String[] mappings = new String[mappingTable.getRowCount()];
         for (int row = 0; row < mappingTable.getRowCount(); row++) 
@@ -103,6 +105,7 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
     /**
      * Applies a value to this field
      */
+    @Override
     public void setValue(Object o) {
         if (o == null) return;
         
@@ -212,8 +215,10 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
         
     }
     
+    @Override
     public void setEditable(boolean b) {}
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("add"))
             addMapping(fldDrive.getText(), fldMapsTo.getText());
@@ -222,5 +227,6 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
             
     }
     
+    @Override
     public void refresh() {}
 }

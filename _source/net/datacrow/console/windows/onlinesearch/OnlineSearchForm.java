@@ -142,6 +142,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         close(true);
     }
     
+    @Override
     public DcModule getModule() {
         return DcModules.get(module);
     }
@@ -150,6 +151,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         disablePerfectMatch = true;
     }
 
+    @Override
     public void addObject(DcObject dco) {
         if (task != null && !task.isCancelled()) {
             dco.applyTemplate();
@@ -230,6 +232,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             loadedItems.put(items.indexOf(dco), Boolean.TRUE);
             SwingUtilities.invokeLater(
                     new Thread(new Runnable() { 
+                        @Override
                         public void run() {
                             try {
                                 list.update(dco.getID(), o.clone());
@@ -275,6 +278,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private void open() {
         saveSettings();
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 int selectedRow = getView().getSelectedIndex();
                 if (selectedRow == -1) {
@@ -286,6 +290,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                 if (o != null) {
                     SwingUtilities.invokeLater(
                             new Thread(new Runnable() { 
+                                @Override
                                 public void run() {
                                     ItemForm itemForm = new ItemForm(false, false, o, true);
                                     itemForm.setVisible(true);
@@ -333,6 +338,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
     public void update() {
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 DcObject o = getSelectedObject();
                 
@@ -347,6 +353,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                     
                     SwingUtilities.invokeLater(
                             new Thread(new Runnable() { 
+                                @Override
                                 public void run() {
                                     itemForm.setData(dco, panelSettings.isOverwriteAllowed(), true);
                                     close();
@@ -360,6 +367,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     public void addNew() {
         new Thread(
                 new Runnable() {
+                    @Override
                     public void run() {
                         saveSettings();
                         final Collection<DcObject> selected = new ArrayList<DcObject>(getSelectedObjects());
@@ -369,6 +377,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
                         SwingUtilities.invokeLater(
                                 new Thread(new Runnable() { 
+                                    @Override
                                     public void run() {
                                         for (DcObject o : selected) {
                                             DcObject clone = o.clone();
@@ -441,37 +450,45 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         task.start();
     }     
 
+    @Override
     public void processed(int i) {
         updateProgressBar(i);
     }
 
+    @Override
     public void processing() {
         panelService.busy(true);
     }
 
+    @Override
     public void stopped() {
         if (panelService != null)
             panelService.busy(false);
     }    
     
+    @Override
     public int resultCount() {
         return resultCount;
     }
 
+    @Override
     public void processingTotal(int i) {
         initProgressBar(i);
     }    
     
+    @Override
     public void addError(Throwable t) {
         DcSwingUtilities.displayErrorMessage(t.toString());
         logger.error(t.getMessage(), t);
     }
 
+    @Override
     public void addError(String message) {
         DcSwingUtilities.displayErrorMessage(message);
         addMessage(message);
     }
 
+    @Override
     public void addWarning(String warning) {
         if (panelService != null && !panelService.hasPerfectMatchOccured())
             DcSwingUtilities.displayWarningMessage(warning);
@@ -643,6 +660,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         return panel;
     }    
     
+    @Override
     public void addMessage(String message) {
         if (textLog != null && task != null && !task.isCancelled())
             textLog.insert(message + '\n', 0);
@@ -696,6 +714,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         super.close();
     }     
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("stopsearch"))
             stop();
@@ -715,6 +734,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         }
     }
     
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2) {
             if (ID != null)
@@ -724,6 +744,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         }
     }
     
+    @Override
     public void stateChanged(ChangeEvent e) {
         if (list == null || table == null)
             return;
@@ -738,8 +759,12 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         }
     }    
     
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
 }

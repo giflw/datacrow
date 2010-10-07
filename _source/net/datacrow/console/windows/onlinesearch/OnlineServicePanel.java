@@ -289,6 +289,7 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
                           new Insets(5, 5, 5, 5), 0, 0));      
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("stopsearch")) {
             osf.stop();
@@ -302,6 +303,7 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             perfectMatchOccured = false;
@@ -309,6 +311,8 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {}
+    @Override
     public void keyTyped(KeyEvent e) {}
 }

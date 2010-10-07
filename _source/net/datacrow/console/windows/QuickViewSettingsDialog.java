@@ -167,6 +167,7 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
         setCenteredLocation();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();
@@ -284,6 +285,7 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
             return qvDefs;
         }
         
+        @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().equals("rowToTop"))
                 table.moveRowToTop();

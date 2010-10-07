@@ -50,6 +50,7 @@ public class ComboBoxRenderer extends DcLabel implements ListCellRenderer {
         return instance;
     }    
     
+    @Override
     public Component getListCellRendererComponent(
                                        JList list,
                                        Object value,

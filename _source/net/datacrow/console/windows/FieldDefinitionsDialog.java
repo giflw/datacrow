@@ -170,6 +170,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         setCenteredLocation();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();
@@ -350,6 +351,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             return definitions;
         }
 
+        @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().equals("checkDependencies"))
                 checkDependencies();

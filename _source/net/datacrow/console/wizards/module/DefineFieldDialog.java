@@ -431,6 +431,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             comboFieldType.addItem(ft);
     }    
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("fieldTypeSelected")) {
             FieldType type = (FieldType) comboFieldType.getSelectedItem();
@@ -488,12 +489,14 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     }
 
     private static class FieldTypeComparator implements Comparator<FieldType>, Serializable {
+        @Override
         public int compare(FieldType ft1, FieldType ft2) {
             return ft1.getName().compareTo(ft2.getName());
         }
     }
     
     private static class ModuleComparator implements Comparator<DcModule>, Serializable {
+        @Override
         public int compare(DcModule m1, DcModule m2) {
             return m1.getLabel().compareTo(m2.getLabel());
         }

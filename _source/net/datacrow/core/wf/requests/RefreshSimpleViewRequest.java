@@ -47,19 +47,23 @@ public class RefreshSimpleViewRequest implements IUpdateUIRequest {
         this.view = view;
     }
     
+    @Override
     public void execute(Collection<DcObject> c) {
         SwingUtilities.invokeLater(new Updater(view));
         end();
     }
     
+    @Override
     public void end() {
         view = null;
     }
 
+    @Override
     public boolean getExecuteOnFail() {
         return executeOnFail;
     }
     
+    @Override
     public void setExecuteOnFail(boolean b) {
         executeOnFail = b;
     }
@@ -72,6 +76,7 @@ public class RefreshSimpleViewRequest implements IUpdateUIRequest {
             this.view = view;
         }
         
+        @Override
         public void run() {
             view.loadItems();
             view = null;

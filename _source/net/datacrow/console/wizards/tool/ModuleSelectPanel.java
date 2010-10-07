@@ -56,10 +56,12 @@ public class ModuleSelectPanel extends ToolSelectBasePanel {
         build();
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgToolSelectModuleSelect");
     }
 
+    @Override
     public Object apply() {
         if (module == -1) {
             DcSwingUtilities.displayMessage("msgSelectModuleFirst");
@@ -97,11 +99,16 @@ public class ModuleSelectPanel extends ToolSelectBasePanel {
         
         final ButtonGroup bg = new ButtonGroup();
         class ModuleSelectionListener implements MouseListener {
+            @Override
             public void mouseClicked(MouseEvent e) {}
+            @Override
             public void mouseEntered(MouseEvent e) {}
+            @Override
             public void mouseExited(MouseEvent e) {}
+            @Override
             public void mousePressed(MouseEvent e) {}
 
+            @Override
             public void mouseReleased(MouseEvent e) {
                 String command = bg.getSelection().getActionCommand();
                 module = Integer.parseInt(command);

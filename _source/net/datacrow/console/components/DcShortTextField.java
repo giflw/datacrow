@@ -58,6 +58,7 @@ public class DcShortTextField extends JTextField implements IComponent {
         return undoListener;
     }
     
+    @Override
     public void clear() {
         undoListener = null;
     }
@@ -67,10 +68,12 @@ public class DcShortTextField extends JTextField implements IComponent {
         return new ShortStringDocument();
     }
 
+    @Override
     public Object getValue() {
         return getText();
     }
 
+    @Override
     public void setValue(Object o) {
         if (o instanceof String)
             setText((String) o);
@@ -101,5 +104,6 @@ public class DcShortTextField extends JTextField implements IComponent {
         }
     }
 
+    @Override
     public void refresh() {}  
 }

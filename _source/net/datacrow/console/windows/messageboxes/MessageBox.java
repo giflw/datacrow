@@ -125,20 +125,24 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
         this.getContentPane().add(panel);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         close();
     }
     
+    @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
             close();
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
             close();
 
     }
+    @Override
     public void keyTyped(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
             close();

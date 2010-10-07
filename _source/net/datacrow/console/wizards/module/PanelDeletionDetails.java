@@ -107,12 +107,14 @@ public class PanelDeletionDetails extends ModuleWizardPanel {
         return DcResources.getText("msgModuleDeletionDetails");
     }
 
+    @Override
     public void destroy() {
         details = null;
         kit = null;
         document = null;
     }
 
+    @Override
     public Object apply() {
         return getModule();
     }

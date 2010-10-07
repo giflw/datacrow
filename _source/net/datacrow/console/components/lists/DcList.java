@@ -346,10 +346,14 @@ public class DcList extends JList implements ComponentListener {
         getDcModel().setListenersEnabled(b);        
     }
     
+    @Override
     public void componentHidden(ComponentEvent ce) {}
+    @Override
     public void componentShown(ComponentEvent ce) {}
+    @Override
     public void componentMoved(ComponentEvent ce) {}
 
+    @Override
     public void componentResized(ComponentEvent ce) {
         setMaxVisibleColumnsPerRow();
     }

@@ -133,6 +133,7 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
         super.close();
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

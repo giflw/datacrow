@@ -166,6 +166,7 @@ public class TabPanel extends JPanel implements ActionListener {
         refresh();
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("addTab"))
             addTab();

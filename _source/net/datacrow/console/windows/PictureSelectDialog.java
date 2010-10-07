@@ -129,6 +129,7 @@ public class PictureSelectDialog extends DcDialog implements ActionListener {
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Ok")) {
             setImage();

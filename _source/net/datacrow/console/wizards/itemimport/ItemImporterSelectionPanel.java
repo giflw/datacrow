@@ -52,11 +52,13 @@ public class ItemImporterSelectionPanel extends ItemImporterWizardPanel {
     	build();
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgSelectImportMethod");
 	}
 
-	public Object apply() {
+	@Override
+    public Object apply() {
         String command = bg.getSelection().getActionCommand();
         for (ItemImporter reader : readers) {
             if (reader.getKey().equals(command))
@@ -66,6 +68,7 @@ public class ItemImporterSelectionPanel extends ItemImporterWizardPanel {
 	    return wizard.getDefinition();
     }
 
+    @Override
     public void destroy() {
         wizard = null;
         bg  = null;

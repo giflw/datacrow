@@ -66,8 +66,10 @@ public class PanelModuleType extends ModuleWizardPanel {
         return DcResources.getText("msgSelectModuleType");
     }
 
+    @Override
     public void destroy() {} 
     
+    @Override
     public Object apply() {
         
         XmlModule module = getModule();
@@ -102,11 +104,16 @@ public class PanelModuleType extends ModuleWizardPanel {
         final ButtonGroup buttonGroup = new ButtonGroup();
 
         class ModuleTypeSelectionListener implements MouseListener {
+            @Override
             public void mouseClicked(MouseEvent arg0) {}
+            @Override
             public void mouseEntered(MouseEvent arg0) {}
+            @Override
             public void mouseExited(MouseEvent arg0) {}
+            @Override
             public void mousePressed(MouseEvent arg0) {}
 
+            @Override
             public void mouseReleased(MouseEvent arg0) {
                 String command = buttonGroup.getSelection().getActionCommand();
                 type = Integer.parseInt(command);

@@ -96,6 +96,7 @@ public class VersionChecker extends Thread {
                         "</body> </html>";
 
                     SwingUtilities.invokeAndWait(new Runnable() {
+                        @Override
                         public void run() {
                             VersionCheckerDialog dlg = new VersionCheckerDialog(html);
                             dlg.setVisible(true);

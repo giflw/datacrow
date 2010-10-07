@@ -77,19 +77,23 @@ public class TitleRewriter implements IValueEnhancer {
         return wordList;
     } 
     
+    @Override
     public String toSaveString() {
         return enabled + "/&/" + wordList;
     }
 
+    @Override
     public int getIndex() {
         return ValueEnhancers._TITLEREWRITERS;
     }
     
+    @Override
     public void parse(String s) {
         enabled = Boolean.valueOf(s.substring(0, s.indexOf("/&/"))).booleanValue();
         wordList = s.substring(s.indexOf("/&/") + 3, s.length());
     }
 
+    @Override
     public Object apply(DcField field, Object value) {
         Object result = value;
 
@@ -111,15 +115,18 @@ public class TitleRewriter implements IValueEnhancer {
         return result;
     }
     
+    @Override
     public boolean isRunOnUpdating() {
         return true;
     }
     
+    @Override
     public boolean isRunOnInsert() {
         return true;
     }
     
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }

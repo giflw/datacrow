@@ -116,6 +116,7 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
     /**
      * Creates a new item view.
      */
+    @Override
     public DcMinimalisticItemView getItemView(DcObject parent, int module, boolean readonly) {
         return new ChildForm(parent, module, readonly);
     }

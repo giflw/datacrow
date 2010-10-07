@@ -17,6 +17,7 @@ public class NativeDialog extends JDialog implements IDialog {
         super(owner);
     }
     
+    @Override
     public void setModal(AtomicBoolean active) {
         this.active = active;
     }

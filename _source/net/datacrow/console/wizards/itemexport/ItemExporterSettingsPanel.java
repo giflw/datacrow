@@ -24,6 +24,7 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
         build();
     }
     
+    @Override
     public Object apply() throws WizardException {
 
         if (target.getFile() == null || Utilities.isEmpty(target.getFilename()))
@@ -56,6 +57,7 @@ public class ItemExporterSettingsPanel extends ItemExporterWizardPanel {
         }
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgExportSettings");
     }

@@ -159,6 +159,7 @@ public class ReportSettingsPanel extends JPanel {
     
     private class ResizeListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent arg0) {
             applySelection();
         }

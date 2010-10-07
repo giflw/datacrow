@@ -14,12 +14,14 @@ public class ViewKeyListener implements KeyListener {
         this.view = view;
     }
     
+    @Override
     public void keyPressed(KeyEvent e) {
         IViewComponent vc = view.getViewComponent();
         if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
            rowFrom = vc.getSelectedIndex();
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         if ((view.allowsVerticalTraversel() && (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)) ||
             (view.allowsHorizontalTraversel() && ( e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT))) {
@@ -31,6 +33,7 @@ public class ViewKeyListener implements KeyListener {
         }
     }
 
+    @Override
     public void keyTyped(KeyEvent arg0) {}
 
 }

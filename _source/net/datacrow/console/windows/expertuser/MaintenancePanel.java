@@ -71,6 +71,7 @@ public class MaintenancePanel extends DcPanel implements ActionListener {
         }
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("compact"))
             compactAndShutDown();

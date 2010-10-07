@@ -114,6 +114,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         this.scaled = scaled;
     }
 
+    @Override
     public void setValue(Object o) {
         if (o == picture)
             return;
@@ -162,6 +163,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         return changed;
     }
     
+    @Override
     public void clear() {
         flushImage();
         imageWidth = -1;
@@ -184,6 +186,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     	return img == null;
     }
 
+    @Override
     public Object getValue() {
     	int width = picture != null ? picture.getIconWidth() : 0;
     	int height = picture != null ? picture.getIconHeight() : 0;
@@ -430,6 +433,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         }
     }    
     
+    @Override
     public void setEditable(boolean b) {
     	setEnabled(b);
     	if (!b) {
@@ -446,6 +450,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         }
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
     	if (!isEnabled())
     		return;
@@ -491,6 +496,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     public void windowIconified(WindowEvent e) {}
     public void windowOpened(WindowEvent e) {}
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     	if (!isEnabled())
     		return;
@@ -503,10 +509,15 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         }
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseReleased(MouseEvent e) {}
     
+    @Override
     public void refresh() {}
 }

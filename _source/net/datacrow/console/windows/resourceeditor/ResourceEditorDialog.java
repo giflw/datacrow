@@ -150,6 +150,7 @@ public class ResourceEditorDialog extends DcFrame implements ActionListener {
         installMenu();
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

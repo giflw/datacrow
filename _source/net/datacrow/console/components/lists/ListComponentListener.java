@@ -38,6 +38,7 @@ public class ListComponentListener implements ComponentListener {
 
     public ListComponentListener() {}
 
+    @Override
     public void componentResized(ComponentEvent e) {
         DcObjectList list = (DcObjectList) e.getSource();
         if (list.getItemCount() > 0 && 
@@ -54,7 +55,10 @@ public class ListComponentListener implements ComponentListener {
         }
     }
 
+    @Override
     public void componentShown(ComponentEvent e) {}
+    @Override
     public void componentHidden(ComponentEvent e) {}
+    @Override
     public void componentMoved(ComponentEvent e) {}
 }

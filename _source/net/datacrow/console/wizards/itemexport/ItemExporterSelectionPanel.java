@@ -25,6 +25,7 @@ public class ItemExporterSelectionPanel extends ItemExporterWizardPanel {
         build();
     }
     
+    @Override
     public Object apply() throws WizardException {
         String command = bg.getSelection().getActionCommand();
         for (ItemExporter exporter : exporters) {
@@ -35,6 +36,7 @@ public class ItemExporterSelectionPanel extends ItemExporterWizardPanel {
         return definition;
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgSelectExportMethod");
     }

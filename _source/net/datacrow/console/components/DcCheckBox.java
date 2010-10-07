@@ -40,18 +40,22 @@ public class DcCheckBox extends JCheckBox implements IComponent {
         setBackground(new JLabel().getBackground());
     }
     
+    @Override
     public void clear() {
         setSelected(false);
     }
 
+    @Override
     public Object getValue() {
         return Boolean.valueOf(isSelected());
     }
 
+    @Override
     public void setEditable(boolean b) {
         setEnabled(b);
     }
 
+    @Override
     public void setValue(Object value) {
         if (value != null) {
             Boolean b = value instanceof Boolean ? (Boolean) value : Boolean.valueOf((String) value);
@@ -69,5 +73,6 @@ public class DcCheckBox extends JCheckBox implements IComponent {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     } 
     
+    @Override
     public void refresh() {}
 }

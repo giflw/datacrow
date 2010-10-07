@@ -324,6 +324,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
     }
     
     private class NextOnEnterAction extends AbstractAction {
+        @Override
         public void actionPerformed(ActionEvent arg0) {
             try {
                 if (getCurrent() instanceof InternetWizardPanel)
@@ -340,6 +341,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
     }
 
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("restart")) {
             restarted = true;

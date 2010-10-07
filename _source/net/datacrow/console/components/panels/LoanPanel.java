@@ -216,6 +216,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         }
         
         Thread thread = new Thread(new Runnable() {
+            @Override
             public void run() {
                 try {
                     int i = 0;
@@ -299,6 +300,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         }
         
         Thread thread = new Thread(new Runnable() {
+            @Override
             public void run() {
                 try {
                     int i = 0;
@@ -433,6 +435,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         this.owner = null;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         close();
     }
@@ -476,6 +479,7 @@ public class LoanPanel extends JPanel implements ActionListener {
                      new Insets(5, 5, 5,  5), 0, 0));
         }
         
+        @Override
         public void actionPerformed(ActionEvent e) {
             lendItems();
         }
@@ -505,6 +509,7 @@ public class LoanPanel extends JPanel implements ActionListener {
                      new Insets(5, 5, 5,  5), 0, 0));
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             returnItems();
         }

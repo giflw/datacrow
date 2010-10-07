@@ -234,12 +234,14 @@ public class DcModuleList extends DcList implements ListSelectionListener {
         }          
     }
     
+    @Override
     public void valueChanged(ListSelectionEvent lse) {
         if (listenForChanges)
             setActiveModule();
     }
     
     private static class ModuleCellRenderer implements ListCellRenderer {
+        @Override
         public Component getListCellRendererComponent(
                 JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             

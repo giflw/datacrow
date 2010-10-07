@@ -112,6 +112,7 @@ public class InsertTextDialog extends DcDialog implements ActionListener {
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close")) {
             textFld.setText("");

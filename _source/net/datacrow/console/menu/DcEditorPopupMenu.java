@@ -131,6 +131,7 @@ public class DcEditorPopupMenu extends DcPopupMenu implements ActionListener  {
         this.add(menuSelectAll);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("cut"))
            c.cut(); 

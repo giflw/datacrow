@@ -143,6 +143,7 @@ public class QuestionBox extends DcDialog implements ActionListener {
         this.getContentPane().add(panel);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("confirm")) {
             affirmative = true;

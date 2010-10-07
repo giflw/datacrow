@@ -251,6 +251,7 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("applyRight"))
             applyRight();
@@ -288,6 +289,7 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
     		panel = null;
     	}
     	
+        @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().equals("viewAll"))
                 panel.enableAll(_COLUMN_VIEW);

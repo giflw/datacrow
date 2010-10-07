@@ -64,16 +64,20 @@ public class DcImageLabel extends JComponent implements IComponent {
         return new DcMultiLineToolTip();
     }
 
+    @Override
     public void clear() {
         flush();
     }
 
+    @Override
     public Object getValue() {
         return getIcon();
     }
 
+    @Override
     public void setEditable(boolean b) {}
 
+    @Override
     public void setValue(Object value) {
         setIcon((ImageIcon) value);
     }
@@ -101,5 +105,6 @@ public class DcImageLabel extends JComponent implements IComponent {
         icon = null;
     }
     
+    @Override
     public void refresh() {}
 }

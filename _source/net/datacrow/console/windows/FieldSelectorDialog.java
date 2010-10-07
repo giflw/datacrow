@@ -159,6 +159,7 @@ public class FieldSelectorDialog extends DcDialog implements ActionListener {
         return menu;
     }    
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("unselectAll"))
             fs.unselectAll();

@@ -216,6 +216,7 @@ public class DriveScannerPanel extends DriveManagerPanel implements ActionListen
         driveSelector.setValue(DcSettings.getStringArray(DcRepository.Settings.stDriveManagerDrives));
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("addExcludedDir")) {
             BrowserDialog dlg = new BrowserDialog(DcResources.getText("msgSelectDirToExclude"));

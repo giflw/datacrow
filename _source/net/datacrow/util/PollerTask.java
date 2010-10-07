@@ -27,6 +27,7 @@ public class PollerTask extends Thread {
         while (!finished && thread.isAlive()) {
             SwingUtilities.invokeLater(
                     new Thread(new Runnable() { 
+                        @Override
                         public void run() {
                             dlg.update();                                
                         }
@@ -37,6 +38,7 @@ public class PollerTask extends Thread {
         
         SwingUtilities.invokeLater(
             new Thread(new Runnable() { 
+                @Override
                 public void run() {
                     dlg.close();
                 }

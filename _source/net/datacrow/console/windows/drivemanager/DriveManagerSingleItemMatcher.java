@@ -65,6 +65,7 @@ public class DriveManagerSingleItemMatcher extends Thread {
         if (!DriveManager.getInstance().drivesWereScanned()) {
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
                     public void run() {
                         if (DcSwingUtilities.displayQuestion("msgDrivesNotScanned"))
                             DriveManagerDialog.getInstance().setVisible(true);

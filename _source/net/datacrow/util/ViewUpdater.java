@@ -66,6 +66,7 @@ public class ViewUpdater extends Thread {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(
                     new Thread(new Runnable() { 
+                        @Override
                         public void run() {
                             vc.clear(idx);
                         }

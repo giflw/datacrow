@@ -52,12 +52,15 @@ public class DcLoginNameField extends JTextField implements IComponent {
         return new LoginNameDocument();
     }
 
+    @Override
     public Object getValue() {
         return getText();
     }
 
+    @Override
     public void clear() {} 
     
+    @Override
     public void setValue(Object o) {
         setText(o != null ? (String) o : "");
     }
@@ -82,5 +85,6 @@ public class DcLoginNameField extends JTextField implements IComponent {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }    
     
+    @Override
     public void refresh() {}
 }

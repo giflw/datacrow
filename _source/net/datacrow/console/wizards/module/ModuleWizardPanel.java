@@ -59,9 +59,12 @@ public abstract class ModuleWizardPanel extends JPanel implements IWizardPanel {
     	else onDeactivation();
     }
 
-	public void onDeactivation() {}
+	@Override
+    public void onDeactivation() {}
 	
+    @Override
     public void onActivation() {}    
 
+    @Override
     public abstract String getHelpText();
 }

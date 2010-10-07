@@ -52,6 +52,7 @@ public class DcTimeField extends JComponent implements IComponent {
     	buildComponent();
     }
     
+    @Override
     public void setValue(Object o) {
         cal.clear();
         
@@ -84,6 +85,7 @@ public class DcTimeField extends JComponent implements IComponent {
         fldHours.setValue(hours + (days > 0 ? days * 24 : 0));
     }
     
+    @Override
     public void clear() {
         fldHours = null;
         fldMinutes = null;
@@ -93,6 +95,7 @@ public class DcTimeField extends JComponent implements IComponent {
     /**
      * Retrieves the value as seconds
      */
+    @Override
     public Object getValue() {
     	int seconds = fldSeconds.getValue() != null ? ((Long) fldSeconds.getValue()).intValue() : 0;
         int minutes = fldMinutes.getValue() != null ? ((Long) fldMinutes.getValue()).intValue() : 0;
@@ -105,6 +108,7 @@ public class DcTimeField extends JComponent implements IComponent {
         return value <= 0 ? null : value;
     }
     
+    @Override
     public void setEditable(boolean b) {
         setEnabled(b);
     }
@@ -144,5 +148,6 @@ public class DcTimeField extends JComponent implements IComponent {
 					    new Insets( 0, 0, 0, 0), 0, 0));
     }
     
+    @Override
     public void refresh() {}  
 }

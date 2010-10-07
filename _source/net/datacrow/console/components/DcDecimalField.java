@@ -52,6 +52,7 @@ public class DcDecimalField extends JTextField implements IComponent {
         return new DecimalDocument();
     }
 
+    @Override
     public Object getValue() {
         String text = getText();
         
@@ -66,8 +67,10 @@ public class DcDecimalField extends JTextField implements IComponent {
         return text.length() == 0 ? null : Double.valueOf(text);
     }
     
+    @Override
     public void clear() {} 
     
+    @Override
     public void setValue(Object o) {
         setText(Utilities.toString((Double) o));
     }
@@ -108,5 +111,6 @@ public class DcDecimalField extends JTextField implements IComponent {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }    
     
+    @Override
     public void refresh() {}
 }

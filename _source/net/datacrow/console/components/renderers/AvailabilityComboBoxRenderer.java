@@ -50,6 +50,7 @@ public class AvailabilityComboBoxRenderer extends DcLabel implements ListCellRen
         return instance;
     }    
     
+    @Override
     public Component getListCellRendererComponent(
                                        JList list,
                                        Object value,

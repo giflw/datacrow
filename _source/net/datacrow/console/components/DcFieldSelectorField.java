@@ -53,21 +53,25 @@ public class DcFieldSelectorField extends JComponent implements IComponent {
         buildComponent();
     }
 
+    @Override
     public Object getValue() {
         return getSelectedFields();
     }
 
+    @Override
     public void setValue(Object o) {
         if (o instanceof int[]) {
             setSelectedFields((int[]) o);
         }
     }
     
+    @Override
     public void setEditable(boolean b) {
         for (JCheckBox cb : componentMap.values()) 
             cb.setEnabled(b);
     }
     
+    @Override
     public void clear() {
         componentMap.clear();
         componentMap = null;
@@ -159,5 +163,6 @@ public class DcFieldSelectorField extends JComponent implements IComponent {
                    new Insets( 0, 0, 0, 0), 0, 0));
     }
     
+    @Override
     public void refresh() {}
 }

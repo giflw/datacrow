@@ -67,7 +67,8 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
 		}
 	}
 
-	public Object apply() throws WizardException {
+	@Override
+    public Object apply() throws WizardException {
         if (source.getFile() == null)
             throw new WizardException(DcResources.getText("msgNoFileSelected"));
         
@@ -93,6 +94,7 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
         return wizard.getDefinition();
     }
 
+    @Override
     public void destroy() {
     	source = null;
     	wizard = null;
@@ -100,6 +102,7 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
     	settings = null;
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgImportSettings");
     }

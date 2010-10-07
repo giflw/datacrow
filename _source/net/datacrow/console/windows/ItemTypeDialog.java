@@ -102,6 +102,7 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
         
         final ButtonGroup buttonGroup = new ButtonGroup();
         class SelectModuleAction implements ItemListener {
+            @Override
             public void itemStateChanged(ItemEvent ev) {
                 String command = buttonGroup.getSelection().getActionCommand();
                 selectedModule = Integer.parseInt(command);
@@ -148,6 +149,7 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
         setCenteredLocation();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source instanceof JRadioButton) {

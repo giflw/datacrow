@@ -36,7 +36,8 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
         build();
     }
     
-	public Object apply() throws WizardException {
+	@Override
+    public Object apply() throws WizardException {
         ItemImporter importer = wizard.getDefinition().getImporter();
         
         for (int i = 0; i < table.getRowCount(); i++) {
@@ -48,10 +49,12 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
         return wizard.getDefinition();
     }
 
+    @Override
     public void destroy() {
     	wizard = null;
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgImportFieldMapping");
     }

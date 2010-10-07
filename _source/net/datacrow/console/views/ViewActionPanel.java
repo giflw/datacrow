@@ -112,6 +112,7 @@ public class ViewActionPanel extends JPanel implements ActionListener {
             GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("cancelTask"))
             view.cancelTask();

@@ -148,6 +148,7 @@ public class FieldTreePanel extends TreePanel {
             
             SwingUtilities.invokeLater(
                     new Thread(new Runnable() { 
+                        @Override
                         public void run() {
                             expandAll();
                         }

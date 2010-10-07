@@ -75,6 +75,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                  new Insets(5, 5, 5, 5), 0, 0));
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("ok"))
             close();

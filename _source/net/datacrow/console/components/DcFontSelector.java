@@ -105,6 +105,7 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         comboFontSize.addItem(Integer.valueOf(18));
     }
     
+    @Override
     public void clear() {
         comboFontName = null;
         comboFontSize = null;
@@ -121,6 +122,7 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
      * Returns the selected Font (with the chosen size, thickness)
      * Unless the user has chosen otherwise, Arial font size 11 is returned.
      */
+    @Override
     public Object getValue() {
         return getFont();
     }
@@ -155,6 +157,7 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
     /**
      * Applies a value to this field
      */
+    @Override
     public void setValue(Object o) {
         Font font = (Font) o;
         try {
@@ -190,6 +193,7 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         setValue(new Font(font.getName(), font.getSize(), Font.PLAIN));
     }
 
+    @Override
     public void setEditable(boolean b) {
         comboFontName.setEditable(b);
         comboFontSize.setEditable(b);
@@ -270,6 +274,7 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         return new DcMultiLineToolTip();
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("applyDefault")) {
             applySystemFont();
@@ -279,5 +284,6 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         }
     }
     
+    @Override
     public void refresh() {}
 }

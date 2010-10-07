@@ -326,6 +326,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
 
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("addEntry")) {
             addEntry();
@@ -345,6 +346,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         }
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2 && list.getSelectedIndex() > -1) {
             DcFilterEntryListElement elem = (DcFilterEntryListElement) list.getSelectedValue();
@@ -355,8 +357,12 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
             e.consume();
         }
     }
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
 }

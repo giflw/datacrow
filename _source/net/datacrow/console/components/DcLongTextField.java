@@ -60,14 +60,17 @@ public class DcLongTextField extends JTextArea implements IComponent, MouseListe
         return new LongStringDocument();
     }
 
+    @Override
     public Object getValue() {
         return getText();
     }
 
+    @Override
     public void clear() {
         undoListener = null;
     }
     
+    @Override
     public void setValue(Object o) {
         setText((String) o);
         setCaretPosition(0);
@@ -87,13 +90,18 @@ public class DcLongTextField extends JTextArea implements IComponent, MouseListe
         textView.clear();
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2)
             openTextWindow();
     }
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
     
     @Override
@@ -106,5 +114,6 @@ public class DcLongTextField extends JTextArea implements IComponent, MouseListe
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }
     
+    @Override
     public void refresh() {}
 }

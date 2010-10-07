@@ -128,6 +128,7 @@ public class DriveManagerDialog extends DcFrame implements ActionListener {
         pack();
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("close"))
             close();

@@ -118,6 +118,7 @@ public class StartupHelpDialog extends NativeDialog implements ActionListener {
         pack();
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         setVisible(false);
     }    

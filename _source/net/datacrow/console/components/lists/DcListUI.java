@@ -586,12 +586,16 @@ public class DcListUI extends BasicListUI {
     public class MouseInputHandler implements MouseInputListener {
         private boolean ignoreMouseReleased = false;
 
+        @Override
         public void mouseClicked(MouseEvent e) {}
 
+        @Override
         public void mouseEntered(MouseEvent e) {}
 
+        @Override
         public void mouseExited(MouseEvent e) {}
 
+        @Override
         public void mousePressed(MouseEvent e) {
             ignoreMouseReleased = false;
 
@@ -667,10 +671,13 @@ public class DcListUI extends BasicListUI {
             }
         }
 
+        @Override
         public void mouseDragged(MouseEvent e) {}
 
+        @Override
         public void mouseMoved(MouseEvent e) {}
 
+        @Override
         public void mouseReleased(MouseEvent e) {
             if (!SwingUtilities.isLeftMouseButton(e))
                 return;
@@ -720,6 +727,7 @@ public class DcListUI extends BasicListUI {
      * @see #installUI
      */
     public class ListSelectionHandler implements ListSelectionListener {
+        @Override
         public void valueChanged(ListSelectionEvent e) {
             maybeUpdateLayoutState();
     

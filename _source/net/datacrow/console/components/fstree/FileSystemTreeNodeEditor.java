@@ -42,6 +42,7 @@ class FileSystemTreeNodeEditor extends AbstractCellEditor implements TreeCellEdi
     
     public FileSystemTreeNodeEditor() {}
 
+    @Override
     public Object getCellEditorValue() {
         JCheckBox cb = renderer.getLeafRenderer();
         return new FileSystemTreeNode(new File(cb.getText()), null);
@@ -52,6 +53,7 @@ class FileSystemTreeNodeEditor extends AbstractCellEditor implements TreeCellEdi
         return true;
     }
 
+    @Override
     public Component getTreeCellEditorComponent(JTree tree, Object value,
             boolean selected, boolean expanded, boolean leaf, int row) {
 
@@ -61,6 +63,7 @@ class FileSystemTreeNodeEditor extends AbstractCellEditor implements TreeCellEdi
 
         // editor always selected / focused
         ItemListener itemListener = new ItemListener() {
+            @Override
             public void itemStateChanged(ItemEvent itemEvent) {
                 if (stopCellEditing())
                     fireEditingStopped();

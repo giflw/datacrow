@@ -96,6 +96,7 @@ public class VersionCheckerDialog extends DcFrame implements ActionListener {
         setSize(400, 400);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         close();
     }

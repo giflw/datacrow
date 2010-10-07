@@ -95,6 +95,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         text.addMouseListener(this);
     }
     
+    @Override
     public void clear() {
         text = null;
         file = null;
@@ -116,6 +117,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         text.setText(file == null ? "" : Utilities.getMappedFilename(filename));
     }
     
+    @Override
     public void setValue(Object value) {
         if (value != null && value.toString().length() > 0) {
             File file = new File(value.toString());
@@ -125,10 +127,12 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         }
     }
 
+    @Override
     public Object getValue() {
         return getFileAsString();
     }    
     
+    @Override
     public void setEditable(boolean b) {
         buttonBrowse.setEnabled(b);
     }
@@ -152,6 +156,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     
     private void locateFile(final int precision) {
         new Thread(new Runnable() { 
+            @Override
             public void run() {
                 DriveManagerSingleItemMatcher matcher = 
                     new DriveManagerSingleItemMatcher(parent.getOriginalItem(), precision);
@@ -169,6 +174,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         }).start();        
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("launchFile")) {
             launch();
@@ -211,6 +217,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }   
     
+    @Override
     public void mouseReleased(MouseEvent e) {
         
         if (parent == null) {
@@ -272,10 +279,15 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
             launch();
     }
     
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}  
     
+    @Override
     public void refresh() {}
 }

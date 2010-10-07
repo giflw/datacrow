@@ -53,19 +53,23 @@ public class StatusUpdateRequest implements IRequest {
         this.msgID = msgID;
     }
 
+    @Override
     public void execute(Collection<DcObject> objects) {
         SwingUtilities.invokeLater(new Updater(module, msgID, tab));
         end();
     }
     
+    @Override
     public void end() {
         msgID = null;
     }
 
+    @Override
     public boolean getExecuteOnFail() {
         return executeOnFail;
     }
 
+    @Override
     public void setExecuteOnFail(boolean b) {
         executeOnFail = b;
     }
@@ -82,6 +86,7 @@ public class StatusUpdateRequest implements IRequest {
             this.msgID = msgID;
         }
         
+        @Override
         public void run() {
             DcModule mod = DcModules.get(module);
 

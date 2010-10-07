@@ -48,6 +48,7 @@ public class UpdateDefaultTemplate implements IRequest {
         this.module = module;
     }
 
+    @Override
     public void execute(Collection<DcObject> objects) {
         List<DcObject> templates = DataManager.get(module, null);
         for (DcObject dco : templates) {
@@ -64,13 +65,16 @@ public class UpdateDefaultTemplate implements IRequest {
         end();
     }
 
+    @Override
     public void end() {
         templateName = null;
     }
     
+    @Override
     public boolean getExecuteOnFail() {
         return false;
     }
 
+    @Override
     public void setExecuteOnFail(boolean b) {}
 }

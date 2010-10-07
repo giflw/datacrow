@@ -46,13 +46,17 @@ public class ItemImporterHelper implements IItemImporterClient {
         reader = null;
     }
     
+    @Override
     public void notifyMessage(String message) {}
 
+    @Override
     public void notifyProcessed(DcObject item) {
         items.add(item);
     }
 
+    @Override
     public void notifyStarted(int count) {}
 
+    @Override
     public void notifyStopped() {}
 }

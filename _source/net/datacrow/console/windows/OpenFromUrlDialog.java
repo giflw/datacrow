@@ -69,6 +69,7 @@ public class OpenFromUrlDialog extends DcDialog implements ActionListener {
         this.image = image;
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         try {
             if (ae.getActionCommand().equals("ok")) {

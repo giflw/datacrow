@@ -112,10 +112,12 @@ public class DcFrame extends JFrame implements WindowFocusListener {
         setLocation(Utilities.getCenteredWindowLocation(getSize(), false));
     }
 
+    @Override
     public void windowGainedFocus(WindowEvent e) {
         DcSwingUtilities.setRootFrame(this);
     }
 
+    @Override
     public void windowLostFocus(WindowEvent e) {
     }
     

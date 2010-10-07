@@ -128,6 +128,7 @@ public class PerformancePanel extends DcPanel implements ActionListener {
         DcSwingUtilities.displayMessage("msgSettingsSavedUnapplied");
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("save"))
             saveSettings();

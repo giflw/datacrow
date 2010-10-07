@@ -104,6 +104,7 @@ public class ExpertForm extends DcFrame implements ActionListener {
         setCenteredLocation();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("close"))
             close();

@@ -37,6 +37,7 @@ public class LogPanel extends JPanel implements ITextPaneAppenderListener {
         }
     }
     
+    @Override
     public void add(String message) {
         logger.insert("\r\n\r\n", 0);
         logger.insert(message, 0);

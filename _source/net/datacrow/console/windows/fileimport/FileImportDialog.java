@@ -113,14 +113,17 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         setCenteredLocation();
     }
     
+    @Override
     public int getDirectoryUsage() {
         return checkDirNameAsTitle.isSelected() ? 1 : 0;
     }
     
+    @Override
     public DcModule getModule() {
         return DcModules.get(importer.getModule());
     }
 
+    @Override
     public DcProperty getStorageMedium() {
         DcModule module = DcModules.get(importer.getModule());
         
@@ -134,6 +137,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return medium;
     }
 
+    @Override
     public void initProgressBar(int maxValue) {
         if (progressBar != null) {
             progressBar.setValue(0);
@@ -141,43 +145,53 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         }
     }
 
+    @Override
     public void updateProgressBar(int value) {
         if (progressBar != null) progressBar.setValue(value);
     }
 
+    @Override
     public void addMessage(String message) {
         if (textLog != null) textLog.insert(message + '\n', 0);
     }
 
+    @Override
     public void addError(Throwable e) {
         logger.error(e, e);
         DcSwingUtilities.displayErrorMessage(DcResources.getText("msgUnexpectedProblemDuringFileImport", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()));
     }
 
+    @Override
     public void finish() {
         if (buttonRun != null) buttonRun.setEnabled(true);
     }
 
+    @Override
     public boolean cancelled() {
         return cancelled;
     }      
     
+    @Override
     public boolean useOnlineServices() {
         return panelServer != null ? panelServer.useOnlineService() : false;
     }    
     
+    @Override
     public DcObject getDcContainer() {
         return fldContainer != null && fldContainer.getSelectedIndex() > 0 ? (DcObject) fldContainer.getSelectedItem() : null;
     }
 
+    @Override
     public Region getRegion() {
         return panelServer != null ? panelServer.getRegion() : null;
     }
 
+    @Override
     public IServer getServer() {
         return panelServer != null ? panelServer.getServer() : null;
     }
 
+    @Override
     public SearchMode getSearchMode() {
         return panelServer != null ? panelServer.getMode() : null;
     }
@@ -560,6 +574,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         setCenteredLocation();
     }    
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

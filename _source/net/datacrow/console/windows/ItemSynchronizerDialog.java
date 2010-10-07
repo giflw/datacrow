@@ -116,19 +116,23 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         synchronizer.synchronize(this);
     }
     
+    @Override
     public boolean isReparseFiles() {
         return checkReparseFiles.isSelected();
     }
     
+    @Override
     public boolean useOnlineService() {
         return panelServer.useOnlineService();
     }
     
+    @Override
     public int getItemPickMode() {
         return cbItemPickMode.getSelectedIndex() < 1 ?
                Synchronizer._ALL : Synchronizer._SELECTED;
     }
 
+    @Override
     public void initialize() {
         cancelled = false;
         initProgressBar(0);
@@ -140,6 +144,7 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         enableActions(true);
     }
     
+    @Override
     public boolean isCancelled() {
         return cancelled;
     }
@@ -178,18 +183,22 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         super.close();
     }    
     
+    @Override
     public IServer getServer() {
         return panelServer.getServer();
     }
 
+    @Override
     public SearchMode getSearchMode() {
         return panelServer.getMode();
     }
     
+    @Override
     public Region getRegion() {
         return panelServer.getRegion();
     }
     
+    @Override
     public void enableActions(boolean b) {
         if (buttonStart != null)
             buttonStart.setEnabled(b);
@@ -203,16 +212,19 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         }
     }    
     
+    @Override
     public void addMessage(String message) {
         if (textLog != null) 
             textLog.insert(message + '\n', 0);
     }
 
+    @Override
     public void initProgressBar(int maxValue) {
         progressBar.setValue(0);
         progressBar.setMaximum(maxValue);
     }
 
+    @Override
     public void updateProgressBar() {
         if (progressBar != null)
             progressBar.setValue(progressBar.getValue() + 1);
@@ -342,6 +354,7 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
                  new Insets(0, 0, 0, 0), 0, 0));
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

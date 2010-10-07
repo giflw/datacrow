@@ -55,6 +55,7 @@ public class ToolSelectPanel extends ToolSelectBasePanel implements ActionListen
         build();
     }
 
+    @Override
     public String getHelpText() {
         return DcResources.getText("msgSelectTheToolOfYourChoice");
     }
@@ -71,6 +72,7 @@ public class ToolSelectPanel extends ToolSelectBasePanel implements ActionListen
         getWizard().repaint();
     }
 
+    @Override
     public Object apply() throws WizardException {
         Tool tool = getTool();
         return tool;
@@ -124,6 +126,7 @@ public class ToolSelectPanel extends ToolSelectBasePanel implements ActionListen
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         try {
             getWizard().finish();

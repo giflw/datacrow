@@ -39,6 +39,7 @@ public abstract class ItemWizardPanel extends JPanel implements IWizardPanel {
         this.dco = dco;
     }
 
+    @Override
     public abstract String getHelpText();
     
     @Override
@@ -48,9 +49,12 @@ public abstract class ItemWizardPanel extends JPanel implements IWizardPanel {
     	else onDeactivation();
     }
 
-	public void onDeactivation() {}
+	@Override
+    public void onDeactivation() {}
 	
+    @Override
     public void onActivation() {}
 
+    @Override
     public abstract Object apply() throws WizardException;
 }

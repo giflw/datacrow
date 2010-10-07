@@ -454,16 +454,19 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         checkPatternButtonStatus();
     }
 
+    @Override
     public void notify(Exception e) {
         notify(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
         logger.error(e, e);
     }
 
+    @Override
     public void notify(String msg) {
         logFld.insert(msg + '\n', 0);
         logFld.setCaretPosition(0);
     }
 
+    @Override
     public void notifyJobStarted() {
         logFld.setText("");
         buttonStart.setEnabled(false);
@@ -471,6 +474,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         buttonStop.setEnabled(true);
     }
 
+    @Override
     public void notifyJobStopped() {
         buttonStart.setEnabled(true);
         buttonClose.setEnabled(true);
@@ -480,15 +484,18 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         DcSwingUtilities.displayMessage("msgFileRenamerFinished");
     }
 
+    @Override
     public void notifyProcessed() {
         progressBar.setValue(progressBar.getValue() + 1);
     }
     
+    @Override
     public void notifyTaskSize(int max) {
         progressBar.setValue(0);
         progressBar.setMaximum(max);
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

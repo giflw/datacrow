@@ -153,6 +153,7 @@ public class WebFieldDefinitionsDialog extends DcDialog implements ActionListene
         setCenteredLocation();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

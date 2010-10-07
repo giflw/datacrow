@@ -49,6 +49,7 @@ public class PanelImportConfiguration extends ModuleImportWizardPanel {
         build();
     }
     
+    @Override
     public Object apply() throws WizardException {
     	ImportDefinition definition = getDefinition();
     	
@@ -78,6 +79,7 @@ public class PanelImportConfiguration extends ModuleImportWizardPanel {
         return DcResources.getText("msgImportModuleConfigurationHelp");
     }
     
+    @Override
     public void destroy() {
     	group = null;
     	settingsPanel = null;

@@ -73,6 +73,7 @@ public class DcDialog extends JDialog implements IDialog {
         this(DcSwingUtilities.getRootFrame());
     }
     
+    @Override
     public void setModal(AtomicBoolean active) {
         this.active = active;
     }

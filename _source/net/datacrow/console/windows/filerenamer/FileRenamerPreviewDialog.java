@@ -223,6 +223,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("confirm")) {
             affirmative = true;
@@ -284,11 +285,16 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         }
     }
     
+    @Override
     public void mouseClicked(MouseEvent e) {}
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
             

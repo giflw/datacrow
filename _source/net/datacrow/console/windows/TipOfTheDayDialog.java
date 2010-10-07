@@ -140,6 +140,7 @@ public class TipOfTheDayDialog extends DcDialog implements ActionListener {
         super.close();
     }    
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("toggleActive"))
             DcSettings.set(DcRepository.Settings.stShowTipsOnStartup, checkShowTips.isSelected());

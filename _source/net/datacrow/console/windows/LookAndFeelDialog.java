@@ -72,6 +72,7 @@ public class LookAndFeelDialog extends DcDialog implements ActionListener  {
         setCenteredLocation();
     }
 
+    @Override
     public void actionPerformed(ActionEvent arg0) {
         close();
     }

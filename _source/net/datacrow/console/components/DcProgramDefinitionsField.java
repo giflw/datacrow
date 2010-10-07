@@ -83,6 +83,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
         return (ProgramDefinitions) getValue();
     }
     
+    @Override
     public void clear() {
         programTable.clear();
         programTable = null;
@@ -99,6 +100,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
      * Returns the selected Font (with the chosen size, thickness)
      * Unless the user has chosen otherwise, Arial font size 11 is returned.
      */
+    @Override
     public Object getValue() {
     	ProgramDefinitions definitions = new ProgramDefinitions();
         for (int i = 0; i < programTable.getRowCount(); i++) {
@@ -114,6 +116,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
     /**
      * Applies a value to this field
      */
+    @Override
     public void setValue(Object o) {
     	if (o instanceof ProgramDefinitions) {
     		ProgramDefinitions definitions = (ProgramDefinitions) o;
@@ -243,9 +246,11 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
         
     }
     
+    @Override
     public void setEditable(boolean b) {}
     
-	public void actionPerformed(ActionEvent e) {
+	@Override
+    public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("add"))
             addDefinition(extensionField.getText(), programField.getFilename());
         else if (e.getActionCommand().equals("remove"))
@@ -253,15 +258,21 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
             
 	}
     
+    @Override
     public void mouseClicked(MouseEvent e) {}
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2) {
             edit();
         }            
     }
     
+    @Override
     public void refresh() {}
 }

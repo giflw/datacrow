@@ -1060,6 +1060,7 @@ public class DcModule implements Comparable<DcModule> {
             sortedFields = new ArrayList<DcField>();
             sortedFields.addAll(fields.values());
             Collections.sort((List<DcField>) sortedFields, new Comparator<DcField>() {
+                @Override
                 public int compare(DcField fld1, DcField fld2) {
                     return fld1.getOriginalLabel().compareTo(fld2.getOriginalLabel());
                 }
@@ -1519,6 +1520,7 @@ public class DcModule implements Comparable<DcModule> {
      * Compares the supplied module with the current module. The check is performed
      * by comparing the labels.
      */
+    @Override
     public int compareTo(DcModule module) {
         return getLabel().toLowerCase().compareTo(module.getLabel().toLowerCase());
     }

@@ -60,6 +60,7 @@ public class PanelChildModule extends ModuleWizardPanel {
         build();
     }
 
+    @Override
     public Object apply() {
         XmlModule module = getModule();
         
@@ -95,6 +96,7 @@ public class PanelChildModule extends ModuleWizardPanel {
         return DcResources.getText("msgSelectChildModule");
     }
     
+    @Override
     public void destroy() {
         if (fields != null) {
             fields.clear();
@@ -107,6 +109,7 @@ public class PanelChildModule extends ModuleWizardPanel {
         
         final ButtonGroup bg = new ButtonGroup();
         class ModuleSelectionListener implements ItemListener {
+            @Override
             public void itemStateChanged(ItemEvent ev) {
                 String command = bg.getSelection().getActionCommand();
                 selectedModule = Integer.parseInt(command);

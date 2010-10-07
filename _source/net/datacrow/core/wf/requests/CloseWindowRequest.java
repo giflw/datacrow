@@ -54,19 +54,23 @@ public class CloseWindowRequest implements IRequest {
         this.window = dialog;
     }    
     
+    @Override
     public void execute(Collection<DcObject> objects) {
         SwingUtilities.invokeLater(new WindowCloser(window));
         end();
     }
 
+    @Override
     public boolean getExecuteOnFail() {
         return executeOnFail;
     }
 
+    @Override
     public void setExecuteOnFail(boolean b) {
         executeOnFail = b;
     }
     
+    @Override
     public void end() {
         window = null;
     }
@@ -79,6 +83,7 @@ public class CloseWindowRequest implements IRequest {
             this.window = window;
         }
         
+        @Override
         public void run() {
             if (window instanceof DcDialog)
                 ((DcDialog) window).close();

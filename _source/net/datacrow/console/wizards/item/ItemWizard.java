@@ -126,6 +126,7 @@ public class ItemWizard extends Wizard {
     public void next() {
         new Thread(
             new Runnable() {
+                @Override
                 public void run() {
                     try {
                         dco = (DcObject) getCurrent().apply();
@@ -135,6 +136,7 @@ public class ItemWizard extends Wizard {
                         
                         SwingUtilities.invokeLater(
                                 new Thread(new Runnable() { 
+                                    @Override
                                     public void run() {
                                         current += 1;
                                         if (current <= getStepCount()) {

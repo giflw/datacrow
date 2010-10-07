@@ -133,6 +133,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         return Character.isDigit(tablename.charAt(0)) ? "module" + tablename : tablename ;
     }
     
+    @Override
     public Object apply() throws WizardException {
         XmlModule module = getModule();
         
@@ -202,6 +203,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         return DcResources.getText("msgBasicModuleInfo");
     }
     
+    @Override
     public void destroy() {
         pic32 = null;
         pic16 = null;

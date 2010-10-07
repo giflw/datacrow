@@ -33,15 +33,18 @@ public class QuickViewFieldDefinitions implements IDefinitions {
 
     private Collection<QuickViewFieldDefinition> definitions = new ArrayList<QuickViewFieldDefinition>();
 
+    @Override
     public void add(Collection<Definition> c) {
         for (Definition definition : c)
             add(definition);
     }
     
+    @Override
     public void add(Definition definition) {
         definitions.add((QuickViewFieldDefinition) definition);
     }
 
+    @Override
     public void clear() {
         definitions.clear();
     }
@@ -50,10 +53,12 @@ public class QuickViewFieldDefinitions implements IDefinitions {
         return definitions;
     }
     
+    @Override
     public Collection<QuickViewFieldDefinition> getDefinitions() {
         return definitions;
     }
 
+    @Override
     public int getSize() {
         return definitions.size();
     }         
@@ -71,6 +76,7 @@ public class QuickViewFieldDefinitions implements IDefinitions {
             definitions.remove(definition);
     }    
     
+    @Override
     public void add(String s) {
         StringTokenizer st = new StringTokenizer(s, "/&/");
         int field = Integer.parseInt((String) st.nextElement());

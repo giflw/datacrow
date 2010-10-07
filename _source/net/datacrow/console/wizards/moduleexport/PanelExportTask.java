@@ -51,10 +51,12 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
         build();
     }
     
+    @Override
     public Object apply() throws WizardException {
         return getDefinition();
     }
 
+    @Override
     public void destroy() {
         if (exporter != null) 
             exporter.cancel();
@@ -115,35 +117,43 @@ public class PanelExportTask extends ModuleExportWizardPanel implements IModuleW
         notifyFinished();
     }    
     
+    @Override
     public void notifyMessage(String msg) {
         tp.addMessage(msg);
     }
 
+    @Override
     public void notifyNewTask() {
         tp.clear();
     }
     
+    @Override
     public void notifyStarted(int count) {
         tp.initializeTask(count);
     }
 
+    @Override
     public void notifyStartedSubProcess(int count) {
         tp.initializeSubTask(count);
     }
 
+    @Override
     public void notifyProcessed() {
         tp.updateProgressTask();
     }
 
+    @Override
     public void notifySubProcessed() {
         tp.updateProgressSubTask();
     }
 
+    @Override
     public void notifyError(Exception e) {
         logger.error(e, e);
         notifyMessage(DcResources.getText("msgModuleExportError", e.toString()));
     }
 
+    @Override
     public void notifyFinished() {
         notifyMessage(DcResources.getText("msgModuleExportFinished"));
     }

@@ -25,6 +25,7 @@ public class TableCopyPasteAction implements ActionListener {
     public TableCopyPasteAction() {
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         IViewComponent vc = (IViewComponent) e.getSource();
         if (e.getActionCommand().equals("copy"))

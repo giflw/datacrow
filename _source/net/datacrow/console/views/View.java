@@ -145,6 +145,7 @@ public class View extends DcPanel implements ListSelectionListener {
                 SecurityCentre.getInstance().getUser().isAdmin()) {
             getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE");
             getActionMap().put("DELETE", new AbstractAction() {
+                @Override
                 public void actionPerformed(ActionEvent ignored) {
                     delete();
                 }
@@ -764,6 +765,7 @@ public class View extends DcPanel implements ListSelectionListener {
         return components;
     }    
 
+    @Override
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() && actionsAllowed)
             afterSelect(vc.getSelectedIndex());

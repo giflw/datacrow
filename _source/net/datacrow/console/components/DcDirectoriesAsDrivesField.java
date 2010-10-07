@@ -70,6 +70,7 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
         buttonRemove.setFont(ComponentFactory.getSystemFont());
     }    
     
+    @Override
     public void clear() {
         textHelp = null;
         tableDirectoriesAsDrives = null;
@@ -77,6 +78,7 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
         buttonRemove = null;
     }     
     
+    @Override
     public Object getValue() {
     	int nbDirs = tableDirectoriesAsDrives.getRowCount();
         String[] dirs = new String[nbDirs];
@@ -89,6 +91,7 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
     /**
      * Applies a value to this field
      */
+    @Override
     public void setValue(Object o) {
         if (o == null) return;
         for (String dir : (String[])o) {
@@ -149,8 +152,10 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
         
     }
     
+    @Override
     public void setEditable(boolean b) {}
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("addDirectory")) {
             BrowserDialog dlg = new BrowserDialog(DcResources.getText("msgSelectDirectory"));
@@ -170,5 +175,6 @@ public class DcDirectoriesAsDrivesField extends JComponent implements IComponent
         }
     }
     
+    @Override
     public void refresh() {}
 }

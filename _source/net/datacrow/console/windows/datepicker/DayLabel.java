@@ -66,10 +66,12 @@ public class DayLabel extends DcLabel implements MouseInputListener, MouseMotion
         setForeground(Color.GRAY);
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
         parent.dayPicked(Integer.parseInt(getText()));
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
         oldBorder = this.getBorder();
         Border b = BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED);
@@ -77,12 +79,17 @@ public class DayLabel extends DcLabel implements MouseInputListener, MouseMotion
         this.setBorder(b);
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
         this.setBorder(oldBorder);
     }
 
+    @Override
     public void mouseDragged(MouseEvent e) {}
+    @Override
     public void mouseMoved(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseReleased(MouseEvent e) {}
 }

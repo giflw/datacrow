@@ -173,6 +173,7 @@ public class SaveQuestionBox extends DcDialog implements ActionListener {
         this.getContentPane().add(panel);
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("continue"))
             result = SaveQuestionBox._CONTINUE;

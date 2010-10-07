@@ -86,6 +86,7 @@ public class FieldTreePanelMenuBar extends DcMenuBar implements ActionListener {
         dlg.setVisible(true);
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("collapseAll")) {
             treePanel.collapseAll();

@@ -52,17 +52,20 @@ public class DcNumberField extends JTextField implements IComponent {
         return new NumericDocument();
     }
 
+    @Override
     public Object getValue() {
         String text = getText();
         return text.length() == 0 ? null : Long.valueOf(text);
     }
 
+    @Override
     public void clear() {} 
     
     public void setValue(int i) {
         setText(i + "");
     }
 
+    @Override
     public void setValue(Object o) {
         setText(o != null ? String.valueOf(o) : "");
     }
@@ -87,5 +90,6 @@ public class DcNumberField extends JTextField implements IComponent {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }  
     
+    @Override
     public void refresh() {}
 }

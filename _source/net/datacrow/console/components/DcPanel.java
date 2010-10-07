@@ -105,6 +105,7 @@ public class DcPanel extends JPanel {
                 labelStatus.setText(text);
             } else {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         labelStatus.setText(text);
                     }
@@ -119,6 +120,7 @@ public class DcPanel extends JPanel {
             progress.setMaximum(maxValue);
         } else {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     progress.setMaximum(maxValue);
                 }
@@ -132,6 +134,7 @@ public class DcPanel extends JPanel {
             progress.setMaximum(maxValue);
         } else {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     progress.setValue(0);
                     progress.setMaximum(maxValue);
@@ -145,6 +148,7 @@ public class DcPanel extends JPanel {
             progress.setValue(progress.getValue() + 1);
         } else {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     progress.setValue(progress.getValue() + 1);                }
             });
@@ -156,6 +160,7 @@ public class DcPanel extends JPanel {
             progress.setValue(value);
         } else {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     progress.setValue(value);
                 }

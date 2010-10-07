@@ -104,6 +104,7 @@ public class RestartDataCrowDialog extends DcDialog implements ActionListener {
                              new Insets(5, 5, 5, 5), 0, 0));
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("restart")) {
             DataCrow.mainFrame.setOnExitCheckForChanges(false);

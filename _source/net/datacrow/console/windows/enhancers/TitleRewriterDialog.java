@@ -333,6 +333,7 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
     }
     
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("rewrite"))
             rewrite();

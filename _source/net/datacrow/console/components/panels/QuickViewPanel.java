@@ -454,6 +454,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             popupMenu.show(this, x, y);
     }    
     
+    @Override
     public void stateChanged(ChangeEvent evt) {
         JTabbedPane pane = (JTabbedPane) evt.getSource();
         
@@ -461,6 +462,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             loadImage();
     }
     
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e))
             showPopupMenu(e.getX(), e.getY());
@@ -469,9 +471,13 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             DcModules.get(module).getCurrentSearchView().open();
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseClicked(MouseEvent e) {}
     
     private class PopupMenu extends DcEditorPopupMenu {

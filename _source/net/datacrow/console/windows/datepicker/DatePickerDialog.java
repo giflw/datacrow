@@ -163,6 +163,7 @@ public class DatePickerDialog extends DcDialog implements ActionListener {
         setCenteredLocation();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("save"))
             close();

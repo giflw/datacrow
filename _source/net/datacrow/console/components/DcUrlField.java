@@ -72,18 +72,22 @@ public class DcUrlField extends JComponent implements IComponent, ActionListener
         addMouseListener(new DcEditorMouseListener());
     }
     
+    @Override
     public void clear() {
         text = null;
     }
     
+    @Override
     public Object getValue() {
         return text.getText();
     }
 
+    @Override
     public void setValue(Object o) {
         text.setText(o != null ? o.toString() : "");
     }
 
+    @Override
     public void setEditable(boolean b) {
         text.setEditable(b);
     }
@@ -108,6 +112,7 @@ public class DcUrlField extends JComponent implements IComponent, ActionListener
         }
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         openURL();
     }
@@ -122,14 +127,20 @@ public class DcUrlField extends JComponent implements IComponent, ActionListener
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2)
             openURL();
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {}
+    @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
     public void mousePressed(MouseEvent e) {}
+    @Override
     public void mouseReleased(MouseEvent e) {}    
+    @Override
     public void refresh() {}  
 }

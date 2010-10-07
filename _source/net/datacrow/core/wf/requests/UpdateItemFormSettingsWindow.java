@@ -48,18 +48,22 @@ public class UpdateItemFormSettingsWindow implements IUpdateUIRequest {
         this.tabDeleted = tabDeleted;
     }
 
+    @Override
     public void execute(Collection<DcObject> objects) {
         wdw.refresh(tabDeleted);
     }
 
+    @Override
     public boolean getExecuteOnFail() {
         return executeOnFail;
     }
 
+    @Override
     public void setExecuteOnFail(boolean b) {
         executeOnFail = b;
     }
     
+    @Override
     public void end() {
         wdw = null;
     }

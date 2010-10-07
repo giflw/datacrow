@@ -108,6 +108,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         return sb.toString();
     }
     
+    @Override
     public void hyperlinkUpdate(HyperlinkEvent e) {
         if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
             URL url = e.getURL();

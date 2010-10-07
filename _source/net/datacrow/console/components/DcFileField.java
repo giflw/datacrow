@@ -102,6 +102,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         this.previewPanel = previewPanel;
     }
     
+    @Override
     public void clear() {
         text = null;
         button = null;
@@ -183,7 +184,8 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         this.al = al;
     }
 
-	public void setValue(Object value) {
+	@Override
+    public void setValue(Object value) {
         if (value != null && value.toString().length() > 0) {
         	File file = new File(value.toString());
         	setFile(file);
@@ -192,7 +194,8 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         }
 	}
 
-	public Object getValue() {
+	@Override
+    public Object getValue() {
 	    return file == null ? "" : Utilities.getOriginalFilename(file.toString());
 	}
     
@@ -201,6 +204,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         return new DcMultiLineToolTip();
     }
     
+    @Override
     public void setEditable(boolean b) {
         setEnabled(b);
     }
@@ -211,6 +215,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         button.setEnabled(b);
     }
     
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("showDirectoryOpenDialog"))
             showDirectoryOpenDialog();
@@ -220,5 +225,6 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
             showFileSaveDialog();
     }    
     
+    @Override
     public void refresh() {}
 }

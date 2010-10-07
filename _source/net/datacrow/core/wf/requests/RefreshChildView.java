@@ -50,19 +50,23 @@ public class RefreshChildView implements IUpdateUIRequest {
         this.form = form;
     }
     
+    @Override
     public void execute(Collection<DcObject> c) {
         SwingUtilities.invokeLater(new Updater(form));
         end();
     }
     
+    @Override
     public boolean getExecuteOnFail() {
         return executeOnFail;
     }
     
+    @Override
     public void setExecuteOnFail(boolean b) {
         executeOnFail = b;
     }
     
+    @Override
     public void end() {
         form = null;
     }
@@ -75,6 +79,7 @@ public class RefreshChildView implements IUpdateUIRequest {
             this.form = form;
         }
         
+        @Override
         public void run() {
             if (form != null)
                 form.loadItems();

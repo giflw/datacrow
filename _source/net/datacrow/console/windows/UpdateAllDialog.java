@@ -158,6 +158,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
             }
             
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     close();
                 }
@@ -272,6 +273,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
         pack();
     }
 
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close"))
             close();

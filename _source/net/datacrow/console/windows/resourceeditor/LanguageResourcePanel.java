@@ -422,6 +422,7 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         topicList.setSelectedIndex(0);        
     }
     
+    @Override
     public void valueChanged(ListSelectionEvent arg0) {
         setActiveTopic();
     }    

@@ -170,6 +170,7 @@ public class ChangePasswordDialog extends DcDialog implements ActionListener, Ke
                  new Insets(0, 0, 0, 0), 0, 0));
     }
     
+    @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("ok")) {
             changePassword();
@@ -179,11 +180,14 @@ public class ChangePasswordDialog extends DcDialog implements ActionListener, Ke
         }
     }
     
+    @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
             changePassword();
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {}
+    @Override
     public void keyTyped(KeyEvent e) {}
 }

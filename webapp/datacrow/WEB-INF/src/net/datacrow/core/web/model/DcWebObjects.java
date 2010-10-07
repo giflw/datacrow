@@ -197,6 +197,7 @@ public class DcWebObjects extends Sortable {
         final int columnIdx =  getColumnIndex(column);
         
         Comparator<List<?>> comparator = new Comparator<List<?>>() {
+            @Override
             public int compare(List<?> column1, List<?> column2) {
                 Object o1 = column1.get(columnIdx);
                 Object o2 = column2.get(columnIdx);

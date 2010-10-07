@@ -56,6 +56,7 @@ public class ItemDetailsWizardPanel extends ItemWizardPanel {
         return DcResources.getText("msgEditDetails");
     }
 
+    @Override
     public void destroy() {
         if (itemForm != null)
             itemForm.close(true);

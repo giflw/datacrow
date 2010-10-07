@@ -51,6 +51,7 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
         build();
     }
     
+    @Override
     public Object apply() throws WizardException {
     	ExportDefinition definition = getDefinition();
     	
@@ -84,6 +85,7 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
         return DcResources.getText("msgExportConfigurationHelp");
     }
     
+    @Override
     public void destroy() {
     	group = null;
     	settingsPanel = null;
