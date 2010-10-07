@@ -1,62 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path="_source"/>
-    <classpathentry kind="src" path="webapp/datacrow/WEB-INF/src"/>
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="help/"/>
-    <classpathentry kind="lib" path="lib/jetty/servlet-api-2.5-6.1.14.jar"/>
-    <classpathentry kind="lib" path="lib/jetty/ant-1.6.5.jar"/>
-    <classpathentry kind="lib" path="lib/jetty/core-3.1.1.jar"/>
-    <classpathentry kind="lib" path="lib/jetty/jetty-6.1.14.jar"/>
-    <classpathentry kind="lib" path="lib/jetty/jetty-util-6.1.14.jar"/>
-    <classpathentry kind="lib" path="lib/jetty/jsp-api-2.1.jar"/>
-    <classpathentry kind="lib" path="lib/laf/jtattoo.jar"/>
-    <classpathentry kind="lib" path="lib/openchart_1_2.jar"/>
-    <classpathentry kind="lib" path="lib/hsqldb.jar"/>
-    <classpathentry kind="lib" path="lib/jebml.jar"/>
-    <classpathentry kind="lib" path="lib/jhall.jar"/>
-    <classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
-    <classpathentry kind="lib" path="lib/metadata-extractor-2.3.1.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/xalan-2.5.1.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/antlr-2.7.2.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-codec-1.3.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-collections-3.1.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-digester-1.6.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-el-1.0.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-fileupload-1.0.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-lang-2.1.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-logging-1.0.4.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-validator-1.3.1.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/jsp-2.1.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/jstl-1.1.0.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/myfaces-api-1.1.6.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/myfaces-impl-1.1.6.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/oro-2.0.8.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/servlet-api-2.5-6.1.9.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/struts-1.2.8.jar"/>
-    <classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/tomahawk-1.1.8.jar"/>
-    <classpathentry kind="lib" path="lib/jacksum.jar"/>
-    <classpathentry kind="lib" path="lib/html/js.jar"/>
-    <classpathentry kind="lib" path="lib/html/cobra.jar"/>
-    <classpathentry kind="lib" path="lib/xml/xsltc.jar"/>
-    <classpathentry kind="lib" path="lib/xml/avalon-framework-4.2.0.jar"/>
-    <classpathentry kind="lib" path="lib/xml/batik-all-1.6.jar"/>
-    <classpathentry kind="lib" path="lib/xml/commons-io-1.3.1.jar"/>
-    <classpathentry kind="lib" path="lib/xml/commons-logging-1.0.4.jar"/>
-    <classpathentry kind="lib" path="lib/xml/fop.jar"/>
-    <classpathentry kind="lib" path="lib/xml/serializer-2.7.0.jar"/>
-    <classpathentry kind="lib" path="lib/xml/xalan-2.7.0.jar"/>
-    <classpathentry kind="lib" path="lib/xml/xercesImpl-2.7.1.jar"/>
-    <classpathentry kind="lib" path="lib/xml/xml-apis-1.3.02.jar"/>
-    <classpathentry kind="lib" path="lib/xml/xml-apis-ext-1.3.04.jar"/>
-    <classpathentry kind="lib" path="lib/xml/xmlgraphics-commons-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/jaudiotagger_1.0.9.jar"/>
-    <classpathentry kind="lib" path="lib/PDFRenderer.jar"/>
-    <classpathentry kind="lib" path="lib/pdf/bcmail-jdk14-132.jar"/>
-    <classpathentry kind="lib" path="lib/pdf/bcprov-jdk14-132.jar"/>
-    <classpathentry kind="lib" path="lib/pdf/FontBox-0.1.0-dev.jar"/>
-    <classpathentry kind="lib" path="lib/pdf/ISBNExtractor-1.0.jar"/>
-    <classpathentry kind="lib" path="lib/pdf/PDFBox-0.7.3.jar"/>
-    <classpathentry kind="output" path="_build"/>
+	<classpathentry kind="src" path="_source"/>
+	<classpathentry kind="src" path="webapp/datacrow/WEB-INF/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="help/"/>
+	<classpathentry kind="lib" path="lib/jetty/servlet-api-2.5-6.1.14.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/ant-1.6.5.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/core-3.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jetty-6.1.14.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jetty-util-6.1.14.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/laf/jtattoo.jar"/>
+	<classpathentry kind="lib" path="lib/openchart_1_2.jar"/>
+	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="lib/jebml.jar"/>
+	<classpathentry kind="lib" path="lib/jhall.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="lib/metadata-extractor-2.3.1.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/xalan-2.5.1.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/antlr-2.7.2.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-digester-1.6.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-el-1.0.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-fileupload-1.0.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-validator-1.3.1.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/jsp-2.1.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/jstl-1.1.0.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/myfaces-api-1.1.6.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/myfaces-impl-1.1.6.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/servlet-api-2.5-6.1.9.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/struts-1.2.8.jar"/>
+	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/tomahawk-1.1.8.jar"/>
+	<classpathentry kind="lib" path="lib/jacksum.jar"/>
+	<classpathentry kind="lib" path="lib/html/js.jar"/>
+	<classpathentry kind="lib" path="lib/html/cobra.jar"/>
+	<classpathentry kind="lib" path="lib/xml/commons-io-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/jaudiotagger_1.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/PDFRenderer.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/bcmail-jdk14-132.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/bcprov-jdk14-132.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/FontBox-0.1.0-dev.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/ISBNExtractor-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/PDFBox-0.7.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/avalon-framework-4.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/batik-all-1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/commons-io-1.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/fop.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/serializer-2.7.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xalan-2.7.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xml-apis-1.3.04.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xml-apis-ext-1.3.04.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xmlgraphics-commons-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xsltc.jar"/>
+	<classpathentry kind="output" path="_build"/>
 </classpath>

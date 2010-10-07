@@ -1,12 +1,17 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.9  [Release on xxxxxx 2010] [testing: moderate] [target: moderate]
 -----------------------------------------------------------------------------------------
+
+TODO: 
+- update PDF Box
+- update jtattoo
+- update jetty (!) 7.1.6
+    
+
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
 Items were always loaded (all of them) on startup, causing a long startup time and 
-high memory usage. Additionally it was not possible to run Data Crow in server mode 
-since each client loaded the items on startup, making it unable for the clients to
-detect changes made by other clients. 
+high memory usage.  
 
 The new data layer increases the startup time of the product and lowers the memory 
 requirements. On the down side you might notice a slight performance decrease when 
@@ -15,7 +20,7 @@ when they become visible on screen. Due to a smart caching mechanism the perform
 decrease has been kept as minimal as possible. On the plus side the grouping pane and
 the startup time have improved significantly (by about 75%). Additionally it is now
 possible to load a large database just as quickly as a small database, with the
-same memory requirements.
+same memory requirements!
 
 The following has a direct impact on the performance of the system:
 - The number of selected field as the description for an item 
@@ -39,17 +44,12 @@ New System Requirements:
 - Lower memory usage (50 to 70%)
 - Items are always loaded directly from the database, no caching
 - Grouping pane improvements (50% faster)
-- Unique identifiers are now generated according to the UUID Java standards. This was 
-  necessary to make sure unique ID's are generated on the individual clients.
-- Added indexes on database tables.
+- Unique identifiers are now generated according to the UUID Java standards.
+  (For future compatibility)
+- Added indexes on database tables. This done automatically, also for custom modules.
 - Items are only loaded if and when they are actively shown on screen.
 - Changed the layout of the quick view.
-
-[Removed]
-- Media module has been made obsolete.
-
-[New]
-- Data Crow can now run in client server mode
+- Updated Apache FOP to version 1.0; increased performance for report creation.
 
 [Fixed]
 - Image not shown (or flickering) in the card view
