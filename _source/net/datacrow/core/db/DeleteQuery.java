@@ -56,7 +56,7 @@ public class DeleteQuery extends Query {
     @Override
     protected void clear() {
         super.clear();
-        dco.release();
+        if (dco != null) dco.release();
         dco = null;
     }
 
@@ -144,7 +144,7 @@ public class DeleteQuery extends Query {
             }
             
             stmt.execute("DELETE FROM " + DcModules.get(DcModules._PICTURE).getTableName() + " WHERE " +
-                         DcModules.get(DcModules._PICTURE).getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = " + dco.getID());
+                         DcModules.get(DcModules._PICTURE).getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
             
             success = true;
         } catch (SQLException se) {
@@ -158,8 +158,9 @@ public class DeleteQuery extends Query {
             logger.error("Error while closing connection", e);
         }
         
-        if (success) dco.getModule().getSearchView().remove(dco);
-
+        if (success && dco.getModule().getSearchView() != null) 
+            dco.getModule().getSearchView().remove(dco);
+        
         clear();
         return null;
     }

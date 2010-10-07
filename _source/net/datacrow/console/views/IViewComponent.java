@@ -40,7 +40,8 @@ public interface IViewComponent {
     void add(List<? extends DcObject> items);
     void add(Collection<String> keys);
     
-    Collection<DcObject> getItems();
+    List<String> getItemKeys();
+    List<DcObject> getItems();
     DcObject getItemAt(int idx);
     DcObject getItem(String ID);
     String getItemKey(int idx);
@@ -50,7 +51,8 @@ public interface IViewComponent {
     
     void ignoreEdit(boolean b);
 
-    Collection<? extends DcObject> getSelectedItems();    
+    List<? extends DcObject> getSelectedItems();    
+    List<String> getSelectedItemKeys();
     int[] getSelectedIndices();
     int getSelectedIndex();
     DcObject getSelectedItem();

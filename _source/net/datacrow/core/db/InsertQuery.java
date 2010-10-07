@@ -58,7 +58,7 @@ public class InsertQuery extends Query {
     @Override
     protected void clear() {
         super.clear();
-        dco.release();
+        if (dco != null) dco.release();
         dco = null;
     }
 
@@ -157,7 +157,8 @@ public class InsertQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
-        if (success) dco.getModule().getSearchView().add(dco);
+        
+        if (success && dco.getModule().getSearchView() != null) dco.getModule().getSearchView().add(dco);
         
         handleRequest(null, success);
         clear();

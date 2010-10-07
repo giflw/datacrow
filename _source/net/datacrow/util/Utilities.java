@@ -383,7 +383,7 @@ public class Utilities {
         return bytes;    
     }
 
-    public static ImageIcon base64ToImage(String base64) {
+    public static DcImageIcon base64ToImage(String base64) {
         byte[] bytes = Base64.decode(base64.toCharArray());
         return new DcImageIcon(bytes);
     }

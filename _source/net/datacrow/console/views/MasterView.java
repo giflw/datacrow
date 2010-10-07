@@ -109,12 +109,12 @@ public class MasterView {
         return current;
     }      
     
-    public void update(DcObject dco) {
+    public void update(DcObject old, DcObject dco) {
         for (View view : getViews())
             view.update(dco.getID());
 
         if (groupingPane != null)
-            groupingPane.update(dco);
+            groupingPane.update(old, dco);
     }
     
     public void add(DcObject dco) {
@@ -126,11 +126,12 @@ public class MasterView {
     }
     
     public void remove(DcObject dco) {
-        for (View view : getViews())
-            view.remove(new String[] {dco.getID()});
-        
+        String key = dco.getID();
         if (groupingPane != null)
-            groupingPane.remove(dco.getID());
+            groupingPane.remove(dco);
+        
+        for (View view : getViews())
+            view.remove(new String[] {key});
     }
     
     public void addView(int index, View view) {

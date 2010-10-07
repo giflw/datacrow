@@ -1,23 +1,21 @@
 package net.datacrow.console.wizards.itemexport;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
 public class ItemExporterWizard extends Wizard {
 
     private ItemExporterDefinition definition;
-    private Collection<DcObject> items;
+    private List<String> items;
     
-	public ItemExporterWizard(int module, Collection<DcObject> items) {
+	public ItemExporterWizard(int module, List<String> items) {
 		super(module);
 		
 		setTitle(getWizardName());
@@ -32,7 +30,7 @@ public class ItemExporterWizard extends Wizard {
         return definition;
     }
     
-    public Collection<DcObject> getItems() {
+    public List<String> getItems() {
         return items;
     }
 

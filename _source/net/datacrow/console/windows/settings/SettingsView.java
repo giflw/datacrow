@@ -51,6 +51,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcImageLabel;
 import net.datacrow.console.components.DcTree;
+import net.datacrow.console.components.panels.tree.DcDefaultMutableTreeNode;
 import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.resources.DcResources;
@@ -247,13 +248,13 @@ public class SettingsView extends DcDialog implements ActionListener {
      * Each leaf contains a specific panel with the settings components.
      */
     private DefaultMutableTreeNode buildTreeModel() {
-        DefaultMutableTreeNode topTreeNode = new DefaultMutableTreeNode(DcResources.getText("lblSettings"));
+        DefaultMutableTreeNode topTreeNode = new DcDefaultMutableTreeNode(DcResources.getText("lblSettings"));
         topTreeNode.setUserObject(panelInfo);
 
         
         for (SettingsGroup group : settings.getSettingsGroups().values()) { 
             JPanel panel = new SettingsPanel(group);
-            DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(panel);
+            DefaultMutableTreeNode treeNode = new DcDefaultMutableTreeNode(panel);
 
             topTreeNode.add(treeNode);
 
@@ -269,7 +270,7 @@ public class SettingsView extends DcDialog implements ActionListener {
 
             for (SettingsGroup childGroup : group.getChildren().values()) {
                 JPanel childPanel = new SettingsPanel(childGroup);
-                DefaultMutableTreeNode childTreeNode = new DefaultMutableTreeNode(childPanel);
+                DefaultMutableTreeNode childTreeNode = new DcDefaultMutableTreeNode(childPanel);
                 treeNode.add(childTreeNode);
 
                 childPanel.setMinimumSize(new Dimension(700, 380));

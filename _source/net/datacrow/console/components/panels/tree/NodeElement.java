@@ -8,17 +8,15 @@ import javax.swing.ImageIcon;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.DcImageIcon;
 
-public abstract class NodeElement {
+public class NodeElement {
 
     protected Object key;
     protected String displayValue;
     protected DcImageIcon icon;
-    protected int module;
     
     private List<String> items = new ArrayList<String>();
     
-    public NodeElement(int module, Object key, String displayValue, DcImageIcon icon) {
-        this.module = module;
+    public NodeElement(Object key, String displayValue, DcImageIcon icon) {
         this.key = key;   
         this.displayValue = displayValue;
         this.icon = icon;
@@ -29,18 +27,14 @@ public abstract class NodeElement {
     		items.add(item);
     }
     
+    public void removeItem(String item) {
+    	items.remove(item);
+    }
+    
     public int getCount() {
         return items.size();
     }
     
-    public int getModule() {
-        return module;
-    }
-
-    public void setModule(int module) {
-        this.module = module;
-    }
-
     public ImageIcon getIcon() {
         return icon;
     }

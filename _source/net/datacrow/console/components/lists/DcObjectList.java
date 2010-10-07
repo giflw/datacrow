@@ -180,8 +180,8 @@ public class DcObjectList extends DcList implements IViewComponent {
         return getDcModel().getSize();
     }
     
-    public Collection<DcObject> getItems() {
-        Collection<DcObject> objects = new ArrayList<DcObject>();
+    public List<DcObject> getItems() {
+    	List<DcObject> objects = new ArrayList<DcObject>();
         DcObjectListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             element = (DcObjectListElement) getDcModel().getElementAt(i);
@@ -191,9 +191,19 @@ public class DcObjectList extends DcList implements IViewComponent {
         return objects;
     }
 
-    public Collection<DcObject> getSelectedItems() {
+	public List<String> getItemKeys() {
+		List<String> keys = new ArrayList<String>();
+        DcObjectListElement element;
+        for (int i = 0 ; i < getDcModel().getSize(); i++) {
+            element = (DcObjectListElement) getDcModel().getElementAt(i);
+            keys.add(element.getKey());
+        }
+        return keys;
+	}
+
+    public List<DcObject> getSelectedItems() {
         int[] indices = getSelectedIndices();
-        Collection<DcObject> objects = new ArrayList<DcObject>();
+        List<DcObject> objects = new ArrayList<DcObject>();
 
         DcObjectListElement element;
         DcObject dco;
@@ -204,7 +214,20 @@ public class DcObjectList extends DcList implements IViewComponent {
         }
 
         return objects;
-    }    
+    } 
+    
+    public List<String> getSelectedItemKeys() {
+        int[] indices = getSelectedIndices();
+        List<String> items = new ArrayList<String>();
+
+        DcObjectListElement element;
+        for (int i = 0; i < indices.length; i++) {
+            element = (DcObjectListElement) getDcModel().getElementAt(indices[i]);
+            items.add(element.getKey());
+        }
+
+        return items;
+    }  
     
     public DcObject getItem(String ID) {
         DcObjectListElement element = getElement(ID);

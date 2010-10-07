@@ -217,11 +217,20 @@ public class DcTable extends JTable implements IViewComponent {
         return columnIndex;
     }
 
-    public Collection<DcObject> getSelectedItems() {
-        Collection<DcObject> c = new ArrayList<DcObject>();
+    public List<DcObject> getSelectedItems() {
+        List<DcObject> c = new ArrayList<DcObject>();
         int[] rows = getSelectedRows();
         for (int i = 0; i < rows.length; i++)
             c.add(getItemAt(rows[i]));
+
+        return c;
+    }
+    
+    public List<String> getSelectedItemKeys() {
+        List<String> c = new ArrayList<String>();
+        int[] rows = getSelectedRows();
+        for (int i = 0; i < rows.length; i++)
+            c.add(getItemKey(rows[i]));
 
         return c;
     }
@@ -436,13 +445,21 @@ public class DcTable extends JTable implements IViewComponent {
         cache.remove(ID);
     }
 
-    public Collection<DcObject> getItems() {
-        Collection<DcObject> objects = new ArrayList<DcObject>();
+    public List<DcObject> getItems() {
+    	List<DcObject> objects = new ArrayList<DcObject>();
         for (int row = 0; row < getRowCount(); row++)
             objects.add(getItemAt(row));
         
         return objects;
     }
+    
+	public List<String> getItemKeys() {
+    	List<String> items = new ArrayList<String>();
+        for (int row = 0; row < getRowCount(); row++)
+            items.add(getItemKey(row));
+        
+        return items;
+	}
 
     public DcObject getItemAt(int row) {
         if (row == -1)

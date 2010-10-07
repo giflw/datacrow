@@ -32,6 +32,7 @@ import java.util.Collection;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcThread;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -71,12 +72,12 @@ public class XmlExporter extends ItemExporter {
     
     private class Task extends DcThread {
         
-        private Collection<DcObject> items;
+        private Collection<String> items;
         
-        public Task(Collection<DcObject> items) {
+        public Task(Collection<String> items) {
             super(null, "XML export to " + file);
             
-            this.items = new ArrayList<DcObject>();
+            this.items = new ArrayList<String>();
             this.items.addAll(items);            
         }
 
@@ -126,11 +127,10 @@ public class XmlExporter extends ItemExporter {
             
             int counter = 0;
             
-            for (DcObject dco : items) {
+            for (String item : items) {
                 if (isCanceled()) break;
                 
-                if (DcModules.getCurrent().isAbstract())
-                    dco.load(null);
+                DcObject dco = DataManager.getItem(getModule().getIndex(), item);
                 
                 writer.startEntity(dco);
                 client.notifyMessage(DcResources.getText("msgExportingX", dco.toString()));
@@ -167,6 +167,7 @@ public class XmlExporter extends ItemExporter {
                 client.notifyProcessed();
                 bos.flush();
                 
+                // release the object
                 dco.release();
                 
                 counter++;

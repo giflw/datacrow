@@ -119,12 +119,6 @@ public class DcField implements Serializable{
         setSearchable(searchable);
         setTechinfo(techinfo);
         setFieldType(fieldType);
-        
-        if (fieldType == ComponentFactory._REFERENCEFIELD) {
-            valueType = DcRepository.ValueTypes._STRING;
-            maximumLength = 36;
-        }
-        
         setMaximumLength(maximumLength);
         setValueType(valueType);
         setDatabaseFieldName(databaseFieldName);

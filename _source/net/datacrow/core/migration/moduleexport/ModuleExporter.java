@@ -3,8 +3,10 @@ package net.datacrow.core.migration.moduleexport;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.IModuleWizardClient;
 import net.datacrow.core.migration.itemexport.IItemExporterClient;
@@ -14,7 +16,6 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.ExternalReferenceModule;
 import net.datacrow.core.modules.xml.XmlModule;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Directory;
 import net.datacrow.util.Utilities;
@@ -239,8 +240,8 @@ public class ModuleExporter {
 		
 		private void exportData(int module) throws Exception {
 		    
-            Collection<DcObject> items = new ArrayList<DcObject>();
-            for (DcObject item : DataManager.get(module, null)) 
+            List<String> items = new ArrayList<String>();
+            for (String item : DataManager.getKeys(new DataFilter(module))) 
                 items.add(item);
             
             if (items.size() == 0)

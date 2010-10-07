@@ -53,7 +53,6 @@ import net.datacrow.console.windows.DcDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.migration.itemexport.IItemExporterClient;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.reporting.ReportDictionaryGenerator;
 import net.datacrow.reporting.templates.ReportTemplate;
@@ -86,9 +85,9 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
     private JProgressBar progressBar = new JProgressBar();
     private DcFileField fileField;
     
-    private List<DcObject> items;
+    private List<String> items;
 
-    public ReportingDialog(List<DcObject> items) {
+    public ReportingDialog(List<String> items) {
         super(DataCrow.mainFrame);
 
         new ReportDictionaryGenerator().generate();
@@ -96,8 +95,6 @@ public class ReportingDialog extends DcDialog implements IItemExporterClient, Ac
         try {
             this.items = items;
             
-//            DataFilters.getCurrent(DcModules.getCurrent().getIndex()).sort(items);
-
             setHelpIndex("dc.reports");
     
             fileField = ComponentFactory.getFileField(true, false, null);

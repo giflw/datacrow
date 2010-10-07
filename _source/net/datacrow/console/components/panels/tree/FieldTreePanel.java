@@ -27,6 +27,7 @@ package net.datacrow.console.components.panels.tree;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JMenuBar;
@@ -34,6 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.FieldTreePanelMenuBar;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
@@ -47,6 +49,7 @@ import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -203,7 +206,7 @@ public class FieldTreePanel extends TreePanel {
                     }
                         
                     if (    field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                            field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+                            field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
                         
                         columns.append("subselect");
                         columns.append(counter);
@@ -259,14 +262,14 @@ public class FieldTreePanel extends TreePanel {
                         } else {
                             joins.append(reference.getTableName());
                             joins.append(" ");
-                            joins.append(reference.getTableName());
+                            joins.append(" subselect");
                             joins.append(counter);
                             joins.append(" on ");
                             joins.append(module.getTableName());
                             joins.append(".");
                             joins.append(field.getDatabaseFieldName());
                             joins.append("=");
-                            joins.append(reference.getTableName());
+                            joins.append(" subselect");
                             joins.append(counter);
                             joins.append(".ID");
                         }
@@ -317,15 +320,12 @@ public class FieldTreePanel extends TreePanel {
          */
         private void createTree(String sql) {
             try {
-                DcField field;
-                DcModule module = DcModules.get(getModule());
-                
                 logger.debug(sql);
                 
                 ResultSet rs = DatabaseManager.executeSQL(sql);
                 
-                FieldNodeElement existingNe;
-                FieldNodeElement ne;
+                NodeElement existingNe;
+                NodeElement ne;
                 String id = null;
                 String value = null;
                 Object key = null;
@@ -338,17 +338,15 @@ public class FieldTreePanel extends TreePanel {
                 DefaultMutableTreeNode previous;
                 boolean exists = false;
                 
-                FieldNodeElement topElem = (FieldNodeElement) top.getUserObject();
+                NodeElement topElem = (NodeElement) top.getUserObject();
                 
                 while (rs.next() && !stop) {
                     int level = 0;
                     parent = top;
                     
-                    for (int idx : fields) {
+                    for (int idx = 0; idx < fields.length; idx++) {
                         
                         if (stop) break;
-                        
-                        field = module.getField(idx);
                         
                         // for each level the field index is shifted to the end.
                         id = rs.getString(1);
@@ -363,19 +361,19 @@ public class FieldTreePanel extends TreePanel {
                         
                         if (!exists) { 
                             if (key == null) {
-                                ne = new FieldNodeElement(getModule(), field.getIndex(), null, empty, null);
+                                ne = new NodeElement(null, empty, null);
                             } else {
-                                ne = new FieldNodeElement(getModule(), field.getIndex(), key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon.toCharArray()), false)));
+                                ne = new NodeElement(key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon.toCharArray()), false)));
                             }
                             
                             ne.addItem(id);
                             topElem.addItem(id);
-                            current = new DefaultMutableTreeNode(ne);
+                            current = new DcDefaultMutableTreeNode(ne);
                             model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
                         } else { // exists
-                            existingNe =(FieldNodeElement) previous.getUserObject();
+                            existingNe =(NodeElement) previous.getUserObject();
                             topElem.addItem(id);
                             existingNe.addItem(id);
                             parent = previous;    
@@ -403,10 +401,51 @@ public class FieldTreePanel extends TreePanel {
                 label += (i > 0 ? " & " : "") + mod.getField(fields[i]).getLabel();
         }
         
-        top = new DefaultMutableTreeNode(label);
-        top.setUserObject(new FieldNodeElement(getModule(), 0, null, label, null));
+        top = new DcDefaultMutableTreeNode(label);
+        top.setUserObject(new NodeElement(null, label, null));
+    }
+
+    @Override
+    public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
+        DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode("top");
+        add(dco, 0, node);
+        return node;
     }
     
-    @Override
-    protected void addElement(Long key, DefaultMutableTreeNode node, int level) {}
+    private void add(DcObject dco, int level, DcDefaultMutableTreeNode node) {
+        
+        int index = level;
+        
+        if (index >= fields.length) return;
+        
+        DcDefaultMutableTreeNode child;
+        DcField field = dco.getField(fields[index]);
+        Object value = dco.getValue(fields[index]);
+        index++;
+        if (Utilities.isEmpty(value)) {
+            child = new DcDefaultMutableTreeNode(new NodeElement(empty, empty, null));
+            node.add(child);
+            add(dco, index, child);
+            return;
+        } else {
+            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                Collection<DcObject> references = (Collection<DcObject>) dco.getValue(field.getIndex());
+                if (references != null && references.size() > 0) {
+
+                    for (DcObject reference : references) {
+                        child = new DcDefaultMutableTreeNode(
+                                new NodeElement(reference.toString(), reference.toString(), null));
+                        node.add(child);
+                        add(dco, index, child);
+                    }
+                }
+            } else {
+                String key = dco.getDisplayString(field.getIndex());
+                child = new DcDefaultMutableTreeNode(new NodeElement(key, key, null));
+                node.add(child);
+                add(dco, index, child);
+            }
+        }
+
+    }
 }

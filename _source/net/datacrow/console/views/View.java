@@ -57,6 +57,7 @@ import net.datacrow.console.views.tasks.DeleteTask;
 import net.datacrow.console.views.tasks.SaveTask;
 import net.datacrow.console.windows.UpdateAllDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
+import net.datacrow.console.windows.reporting.ReportingDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilters;
@@ -308,7 +309,7 @@ public class View extends DcPanel implements ListSelectionListener {
         setActionsAllowed(false);
 
         vc.deselect();
-        vc.add(keys);
+        vc.add(new ArrayList<String>(keys));
         
         setActionsAllowed(true);
         
@@ -610,8 +611,12 @@ public class View extends DcPanel implements ListSelectionListener {
         afterSelect(index);
     }
     
-    public Collection<? extends DcObject> getSelectedItems() {
+    public List<? extends DcObject> getSelectedItems() {
         return vc.getSelectedItems();
+    }
+    
+    public List<String> getSelectedItemKeys() {
+        return vc.getSelectedItemKeys();
     }
 
     public DcObject getSelectedItem() {
@@ -622,19 +627,14 @@ public class View extends DcPanel implements ListSelectionListener {
     }
 
     public void createReport() {
-    	// TODO: re-enable
-//        List<DcObject> objects = new ArrayList<DcObject>();
-//        if (groupingPane != null && groupingPane.isActive())
-//            objects.addAll(groupingPane.getValues());
-//        else
-//            objects.addAll(vc.getItems());
-//        
-//        if (objects.size() > 0) {
-//            ReportingDialog dialog = new ReportingDialog(objects);
-//            dialog.setVisible(true);
-//        } else {
-//            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgReportNoItems"));
-//        }
+    	List<String> items = vc.getItemKeys();
+        
+        if (items.size() > 0) {
+            ReportingDialog dialog = new ReportingDialog(items);
+            dialog.setVisible(true);
+        } else {
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgReportNoItems"));
+        }
     }
 
     public void remove(String[] keys) {

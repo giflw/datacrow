@@ -73,7 +73,8 @@ public class VersionChecker extends Thread {
             return;
         }
         
-        boolean checked = false;
+        // TODO: re-enable
+        boolean checked = true;
 
         while (!checked) {
             try {

@@ -61,14 +61,14 @@ public class GroupingPane extends JPanel {
         build();
     }
     
-    public void update(DcObject dco) {
+    public void update(DcObject old, DcObject dco) {
     	for (TreePanel tp : panels)
-    		tp.update(dco);
+    		tp.update(old, dco);
     }
     
-    public void remove(String key) {
+    public void remove(DcObject dco) {
     	for (TreePanel tp : panels)
-    		tp.remove(key);
+    		tp.remove(dco);
     }
     
     public void add(DcObject dco) {

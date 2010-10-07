@@ -35,8 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
@@ -516,11 +514,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     /**
      * The icon used to represent this item.
      */
-    public ImageIcon getIcon() {
+    public DcImageIcon getIcon() {
         for (DcField field : getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._ICON) {
                 String value = (String) getValue(field.getIndex());
-                ImageIcon icon = null;
+                DcImageIcon icon = null;
                 if (value != null && value.length() > 1) 
                     icon = Utilities.base64ToImage(value);
                 return icon;
@@ -842,8 +840,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (requests != null)
             requests.clear();
         
-        if (children != null)
+        if (children != null) {
+        	for (DcObject child : children)
+        		child.release();
+        	
             children.clear();
+        }
 
         getModule().release(this);
     }

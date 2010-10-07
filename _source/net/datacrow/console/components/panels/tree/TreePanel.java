@@ -54,13 +54,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     private static Logger logger = Logger.getLogger(TreePanel.class.getName());
     
-    public static final int  _OBJECT_ADDED = 0;
-    public static final int  _OBJECT_UPDATED = 1;
-    public static final int  _OBJECT_REMOVED = 2;
-    
     protected DcTree tree;
     private JScrollPane scroller;
-    protected DefaultMutableTreeNode top;
+    protected DcDefaultMutableTreeNode top;
     
     private boolean listenForSelection = true;
     
@@ -104,7 +100,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         return tree.getLastSelectedPathComponent();
     }
     
-    public DefaultMutableTreeNode getTopNode() {
+    public DcDefaultMutableTreeNode getTopNode() {
         return top;
     }
     
@@ -121,31 +117,86 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     }
     
     public void add(DcObject dco) {
-    	
-    }
-    
-    public void remove(String key) {
-    	
-    }
-    
-    public void update(DcObject dco) {
-    	remove(dco.getID());
-    	add(dco);
+        DcDefaultMutableTreeNode path = getFullPath(dco);
+        
+        if (top != null) {
+            NodeElement ne = (NodeElement) top.getUserObject();
+            ne.addItem(dco.getID());
+            add(dco, path, top);
+        }
     }
     
     /**
-     * Checks if the keys chain exists.
-     * @param keys
+     * Adds recursive
+     * @param child Does not need to exist!
+     * @param parent Existing parent
      */
-    protected boolean exists(String[] keys) {
-        boolean exists = true;
-        DefaultMutableTreeNode node = top;
-        for (int level = 1; level < keys.length; level++) {
-            node = findNode(keys[level], node, false);
-            exists &= node != null; 
-        }
+    private void add(DcObject dco, DcDefaultMutableTreeNode node, DcDefaultMutableTreeNode parent) {
+    	DcDefaultMutableTreeNode child;
+    	DcDefaultMutableTreeNode existingChild;
+    	for (int i = 0; i < node.getChildCount(); i++) {
+    	    child = (DcDefaultMutableTreeNode) node.getChildAt(i);
+    	    existingChild = findNode(child, parent, false);
+    	    
+    	    if (existingChild == null) {
+    	        child.addItem(dco.getID());
+    	        ((NodeElement) child.getUserObject()).addItem(dco.getID());
+    	        insertNode(child, parent);
+    	        existingChild = child;
+    	    } else {
+    	        existingChild.addItem(dco.getID());
+    	    }
+    	    
+    	    add(dco, child, existingChild);
+    	}
+    }
+    
+    public void remove(DcObject dco) {
+        DcDefaultMutableTreeNode path = getFullPath(dco);
         
-        return exists;
+        if (top != null) {
+            NodeElement ne = (NodeElement) top.getUserObject();
+            ne.removeItem(dco.getID());
+            remove(dco, path, top);
+        }
+    }
+    
+    /**
+     * Adds recursive
+     * @param child Does not need to exist!
+     * @param parent Existing parent
+     */
+    private void remove(DcObject dco, DcDefaultMutableTreeNode node, DcDefaultMutableTreeNode parent) {
+        DcDefaultMutableTreeNode child;
+        DcDefaultMutableTreeNode existingChild;
+        for (int i = 0; i < node.getChildCount(); i++) {
+            child = (DcDefaultMutableTreeNode) node.getChildAt(i);
+            existingChild = findNode((DcDefaultMutableTreeNode) node.getChildAt(i), parent, false);
+            if (existingChild != null) {
+                existingChild.removeItem(dco.getID());
+                
+                if (existingChild.getItemCount() == 0)
+                    removeNode(existingChild);
+                
+                remove(dco, child, existingChild);
+            }
+        }
+    }
+    
+    public void update(DcObject old, DcObject dco) {
+    	remove(old);
+    	add(dco);
+    }
+    
+    public abstract DcDefaultMutableTreeNode getFullPath(DcObject dco);
+    
+    public NodeElement getNodeElement(Object key) {
+    	if (key instanceof DcObject) {
+    		DcObject dco = (DcObject) key;
+    		return new NodeElement(key, dco.toString(), dco.getIcon());
+    	} else {
+    		return new NodeElement(key, key.toString(), null);
+    	}
     }
     
     public void collapseAll() {
@@ -153,9 +204,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         
         collapseChildren(top);
         tree.collapsePath(new TreePath(top.getPath()));
-        
-        getView().clear();
-        setSelected(top);
     }   
     
     public void expandAll() {
@@ -243,9 +291,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         currentUserObject = null;
     }
     
-    
     @Override
     public void setFont(Font font) {
+    	super.setFont(font);
         if (tree != null)
             tree.setFont(font);
     }
@@ -301,69 +349,44 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         int idx = elements.indexOf(ne.getComparableKey());
         
         model.insertNodeInto(node, parent, idx);
+        tree.expandPath(new TreePath(model.getPathToRoot(node)));
     }
-    
-    /**
-     * Retrieves the node path for the given keys. 
-     * The returned path is the actual existing path, starting with the parent node.
-     * The returned path can be shorter then the key set if the path does not (fully) 
-     * exists in the tree.
-     * @param keys
-     */
-    protected List<DefaultMutableTreeNode> findPath(Object[] keys) {
-        List<DefaultMutableTreeNode> path = new ArrayList<DefaultMutableTreeNode>();
-        DefaultMutableTreeNode parentNode = null;
-        
-        for (Object key : keys) {
-            parentNode = findNode(key, parentNode, false);
-            
-            if (parentNode != null) 
-                path.add(parentNode);
-            else 
-                break;
-        }
-        
-        return path;
-    }
-    
+
     /**
      * Recursive search method for tree nodes.
      * @param key
-     * @param parentNode
+     * @param parent
      * @param recurse
      */
-    protected DefaultMutableTreeNode findNode(Object key, DefaultMutableTreeNode parentNode, boolean recurse) {
-        int count = parentNode != null ? parentNode.getChildCount() : 0;
+    protected DcDefaultMutableTreeNode findNode(DefaultMutableTreeNode child, 
+                                              DefaultMutableTreeNode parent, 
+                                              boolean recurse) {
         
-        if (parentNode == null && key.equals(((NodeElement) getTopNode().getUserObject()).getKey()))
+        int count = parent != null ? parent.getChildCount() : 0;
+        
+        if (parent == null && getTopNode().equals(child))
             return getTopNode();
         
-        DefaultMutableTreeNode node;
-        NodeElement ne;
-        String s;
-        DefaultMutableTreeNode result = null;
+        DcDefaultMutableTreeNode node;
+        DcDefaultMutableTreeNode result = null;
         for (int i = 0; i < count; i++) {
-            node = (DefaultMutableTreeNode) parentNode.getChildAt(i);
-            
-            if (node.getUserObject() instanceof NodeElement) {
-                ne = (NodeElement) node.getUserObject();
-                s = key instanceof String ? ((String) key).toLowerCase() : key.toString().toLowerCase();
-                if (ne.getComparableKey().equalsIgnoreCase(s))
-                    result = node;
-            }
+            node = (DcDefaultMutableTreeNode) parent.getChildAt(i);
+
+            if (child.equals(node))
+                result = node;
             
             if (result == null && recurse)
-                result = findNode(key, node, recurse);
+                result = findNode(child, node, recurse);
             
             if (result != null) return result;
         }
+        
         return null;
     }  
     
     protected abstract JMenuBar getMenu();
     protected abstract void createTopNode();
     protected abstract void createTree();
-    protected abstract void addElement(Long key, DefaultMutableTreeNode node, int level);
     
     protected void refresh() {
         TreePath path = tree.getSelectionPath();
@@ -379,6 +402,34 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     }
     
     public abstract void groupBy();
+    
+    private void removeNode(DefaultMutableTreeNode child) {
+    	 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+    	 model.removeNodeFromParent(child);
+    
+    	 // remove empty branches above (needed for the file tree panel)
+    	 DefaultMutableTreeNode parent = (DefaultMutableTreeNode) child.getParent();
+    	 NodeElement ne;
+    	 while (parent != null) {
+    		 ne = ((NodeElement) child.getUserObject());
+    		 if (ne.getCount() == 0 && parent.getChildCount() == 0) {
+    			 DefaultMutableTreeNode newParent = null;
+
+    			 try {
+    				 newParent = (DefaultMutableTreeNode) parent.getParent();
+    			 } catch (Exception e) {}
+   			    
+    			 try {
+    				 model.removeNodeFromParent(parent);
+    				 parent = newParent;
+    			 } catch (IllegalArgumentException iae) {
+   			  	  	parent = null;
+   				}
+    		 } else {
+    		     parent = null;
+    		 }
+    	 }
+    }
     
     /************************************************************************
      * Selection listener

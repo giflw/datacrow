@@ -32,6 +32,7 @@ import java.util.List;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcThread;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -78,12 +79,11 @@ public class CsvExporter extends ItemExporter {
 
     private class Task extends DcThread {
         
-        private List<DcObject> items;
+        private List<String> items;
         
-        public Task(Collection<DcObject> items) {
+        public Task(Collection<String> items) {
             super(null, "CSV export to " + file);
-            
-            this.items = new ArrayList<DcObject>();
+            this.items = new ArrayList<String>();
             this.items.addAll(items);
         }
 
@@ -110,13 +110,11 @@ public class CsvExporter extends ItemExporter {
             if (items == null || items.size() == 0) return;
             
             // create the table and the header
-            DcObject dco = items.get(0);
             int counter = 0;
-            
-            for (DcField field : dco.getFields()) {
+            for (DcField field : getModule().getFields()) {
                if (isCanceled()) break;
-            
-                if (field.isEnabled()) {
+
+               if (field.isEnabled()) {
                     writeBytes(field.getSystemName(), counter != 0);
                     counter++;
                 }                
@@ -126,11 +124,13 @@ public class CsvExporter extends ItemExporter {
             
             counter = 0;
             
-            for (DcObject o : items) {
+            for (String item : items) {
+            	
+            	DcObject dco = DataManager.getItem(getModule().getIndex(), item);
                 
                 if (isCanceled()) break;
                 
-                client.notifyMessage(DcResources.getText("msgExportingX", o.toString()));
+                client.notifyMessage(DcResources.getText("msgExportingX", dco.toString()));
                 int fieldCounter = 0;
                 
                 for (DcField field : dco.getFields()) {
@@ -139,10 +139,11 @@ public class CsvExporter extends ItemExporter {
                     if (field.isEnabled()) { 
                         String s = "";
                         if (field.getFieldType() == ComponentFactory._PICTUREFIELD) {
-                            if (o.getValue(field.getIndex()) != null && o.getValue(field.getIndex()).toString().length() >= 10)
-                               s = utilities.getImageURL((Picture) o.getValue(field.getIndex()));
+                            if (	dco.getValue(field.getIndex()) != null && 
+                            		dco.getValue(field.getIndex()).toString().length() >= 10)
+                               s = utilities.getImageURL((Picture) dco.getValue(field.getIndex()));
                         } else {
-                            s = o.getDisplayString(field.getIndex());
+                            s = dco.getDisplayString(field.getIndex());
                         }
                         
                         writeBytes(s, fieldCounter != 0);
@@ -154,6 +155,9 @@ public class CsvExporter extends ItemExporter {
                 counter++;
                 client.notifyProcessed();
                 bos.flush();
+                
+                // release the object
+                dco.release();
             }
             
             bos.close();

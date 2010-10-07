@@ -3,13 +3,13 @@ package net.datacrow.core.migration.itemexport;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.util.Collection;
+import java.util.List;
 
 import net.datacrow.core.migration.ItemMigrater;
-import net.datacrow.core.objects.DcObject;
 
 public abstract class ItemExporter extends ItemMigrater {
     
-    protected Collection<DcObject> items;
+    protected Collection<String> items;
     protected BufferedOutputStream bos;
 
     protected IItemExporterClient client;
@@ -32,7 +32,7 @@ public abstract class ItemExporter extends ItemMigrater {
         this.client = client;
     }
     
-    public void setItems(Collection<DcObject> items) {
+    public void setItems(List<String> items) {
         this.items = items;
     }
 

@@ -70,8 +70,6 @@ public class Xml2PdfTransformer extends XmlTransformer implements ErrorListener 
         }
     }
     
-    
-    
     @Override
     protected void setSettings(ItemExporterSettings properties) {
         properties.set(ItemExporterSettings._ALLOWRELATIVEIMAGEPATHS, Boolean.FALSE);

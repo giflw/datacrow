@@ -112,7 +112,6 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         buttonAdd.setEnabled(true);
     }
     
-    @SuppressWarnings("unchecked")
     public void addEntry() {
         DcField field = (DcField) comboFields.getSelectedItem();
         Operator operator = (Operator) comboOperators.getSelectedItem();
@@ -120,7 +119,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         Object value = ComponentFactory.getValue(c);
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-        	Collection c = new ArrayList();
+        	Collection<Object> c = new ArrayList<Object>();
         	c.add(value);
         	value = c;
         }

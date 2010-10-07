@@ -27,10 +27,10 @@ package net.datacrow.console.components.panels.tree;
 
 import javax.swing.JMenuBar;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import net.datacrow.console.menu.ContainerTreePanelMenuBar;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
 
 /**
  * TODO implement
@@ -50,7 +50,7 @@ public class ContainerTreePanel extends TreePanel {
     
     @Override
     protected void createTopNode() {
-        top = new DefaultMutableTreeNode(DcModules.get(DcModules._CONTAINER).getLabel());
+        top = new DcDefaultMutableTreeNode(DcModules.get(DcModules._CONTAINER).getLabel());
 //        NodeElement element = new NodeElement(getModule(), DcModules.get(DcModules._CONTAINER).getLabel(), null);
 //        element.setValues(new ArrayList<DcObject>());
 //        top.setUserObject(element);
@@ -68,42 +68,42 @@ public class ContainerTreePanel extends TreePanel {
         return DcModules.get(DcModules._CONTAINER).getObjectNamePlural();
     }    
     
-    @Override
-    protected void addElement(Long key, DefaultMutableTreeNode parent, int level) {
-
-//        DcModule module = DcModules.get(DcModules._CONTAINER);
-//        boolean flatView = module.getSettings().getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
+//    @Override
+//    protected void addElement(Long key, DefaultMutableTreeNode parent, int level) {
+//
+////        DcModule module = DcModules.get(DcModules._CONTAINER);
+////        boolean flatView = module.getSettings().getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
+////        
+////        NodeElement neTop = (NodeElement) top.getUserObject();
+////        neTop.addValue(key);
 //        
-//        NodeElement neTop = (NodeElement) top.getUserObject();
-//        neTop.addValue(key);
-        
-//        Container container = (Container) dco;
-//        
-//        // Additional check to make sure that the correct parent node is being used.
-//        if (!flatView && container.getParentContainer() != null) {
-//            DefaultMutableTreeNode node = findNode(container.getParentContainer().toString(), getTopNode(), true);
-//            parent = node == null ? parent : node;
-//        }
-//        
-//        NodeElement ne = new NodeElement(DcModules._CONTAINER, container.toString(), container.getIcon());
-//        ne.addValue(container);
-//        DefaultMutableTreeNode masterNode = new DefaultMutableTreeNode(ne);
-//        insertNode(masterNode, parent);
-//        
-//        if (!flatView) {
-//            DefaultMutableTreeNode childNode;
-//            for (Container child : container.getChildContainers()) {
-//                childNode = findNode(child.toString(), masterNode, true);
-//                
-//                if (childNode == null) {
-//                    addElement(child, masterNode, level++);
-//                } else {
-//                    NodeElement element = (NodeElement) childNode.getUserObject();
-//                    element.addValue(child);
-//                }
-//            }
-//        }
-    }
+////        Container container = (Container) dco;
+////        
+////        // Additional check to make sure that the correct parent node is being used.
+////        if (!flatView && container.getParentContainer() != null) {
+////            DefaultMutableTreeNode node = findNode(container.getParentContainer().toString(), getTopNode(), true);
+////            parent = node == null ? parent : node;
+////        }
+////        
+////        NodeElement ne = new NodeElement(DcModules._CONTAINER, container.toString(), container.getIcon());
+////        ne.addValue(container);
+////        DefaultMutableTreeNode masterNode = new DcDefaultMutableTreeNode(ne);
+////        insertNode(masterNode, parent);
+////        
+////        if (!flatView) {
+////            DefaultMutableTreeNode childNode;
+////            for (Container child : container.getChildContainers()) {
+////                childNode = findNode(child.toString(), masterNode, true);
+////                
+////                if (childNode == null) {
+////                    addElement(child, masterNode, level++);
+////                } else {
+////                    NodeElement element = (NodeElement) childNode.getUserObject();
+////                    element.addValue(child);
+////                }
+////            }
+////        }
+//    }
     
     @Override
     protected void createTree() {
@@ -186,5 +186,11 @@ public class ContainerTreePanel extends TreePanel {
 //            
 //            setSelected(node);
 //        }
+    }
+
+    @Override
+    public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
+        // TODO Auto-generated method stub
+        return null;
     }  
 }

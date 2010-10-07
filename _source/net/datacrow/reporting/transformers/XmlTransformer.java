@@ -28,14 +28,13 @@ package net.datacrow.reporting.transformers;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 
 import net.datacrow.core.migration.itemexport.IItemExporterClient;
 import net.datacrow.core.migration.itemexport.ItemExporter;
 import net.datacrow.core.migration.itemexport.ItemExporterSettings;
 import net.datacrow.core.migration.itemexport.ItemExporters;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.reporting.templates.ReportTemplate;
 
@@ -49,7 +48,7 @@ public abstract class XmlTransformer {
     protected File target;
     protected File template;
     
-    protected Collection<DcObject> objects;
+    protected List<String> items;
     protected IItemExporterClient client;
     protected BufferedOutputStream bos;
     
@@ -62,12 +61,12 @@ public abstract class XmlTransformer {
     public XmlTransformer() {}
     
     public void transform(IItemExporterClient client, 
-                          Collection<DcObject> objects, 
+                          List<String> items, 
                           File target, 
                           ReportTemplate reportFile) {
         
         this.client = client;
-        this.objects = objects;
+        this.items = items;
         
         this.target = target;
         this.template = new File(reportFile.getFilename());
@@ -115,7 +114,7 @@ public abstract class XmlTransformer {
                 exporter.setSettings(settings);
                 exporter.setFile(source);
                 exporter.setClient(client);
-                exporter.setItems(objects);
+                exporter.setItems(items);
                 exporter.start();
 
                 // create the report
@@ -143,7 +142,7 @@ public abstract class XmlTransformer {
                 
                 source = null;
                 template = null;
-                objects = null;
+                items = null;
                 target = null;
                 client = null;
                 settings = null;
