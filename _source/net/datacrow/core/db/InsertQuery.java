@@ -132,8 +132,8 @@ public class InsertQuery extends Query {
             }
             
             for (Picture picture : pictures) {
-                new InsertQuery(picture).run();
                 saveImage(picture);
+                new InsertQuery(picture).run();
             }
 
             if (dco.getCurrentChildren() != null) {
@@ -158,7 +158,11 @@ public class InsertQuery extends Query {
         }
 
         
-        if (success && dco.getModule().getSearchView() != null) dco.getModule().getSearchView().add(dco);
+        if (success && dco.getModule().getSearchView() != null) { 
+            dco.getModule().getSearchView().add(dco);
+            if (dco.getModule().getInsertView() != null)
+                dco.getModule().getInsertView().remove(dco);
+        }
         
         handleRequest(null, success);
         clear();

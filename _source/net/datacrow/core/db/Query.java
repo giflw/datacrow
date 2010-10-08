@@ -213,9 +213,9 @@ public abstract class Query {
     }    
     
     protected void saveImage(Picture picture) {
-        String filename = (String) picture.getValue(Picture._C_FILENAME);
+        String filename = picture.getImageFilename();
         
-        if (filename == null) return;
+        if (filename == null)  return;
         
         File file = new File(DataCrow.imageDir, filename);
         String imageFile = file.toString();

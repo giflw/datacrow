@@ -263,7 +263,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         DcObjectListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             element = (DcObjectListElement) getDcModel().getElementAt(i);
-            if (element.getKey() != null && element.getKey().equals(ID)) 
+            if (element.getDcObject().getID().equals(ID)) 
                 return element;
         }
         return null;
