@@ -109,6 +109,10 @@ public class MasterView {
         return current;
     }      
     
+    public boolean isLoaded() {
+        return (groupingPane != null && groupingPane.isLoaded()) || getCurrent().isLoaded();
+    }
+    
     public void update(DcObject old, DcObject dco) {
         for (View view : getViews())
             view.update(dco.getID());

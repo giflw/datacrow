@@ -86,7 +86,7 @@ public class UpdateQuery extends Query {
         Connection conn = null;
         Statement stmt = null;
         
-        final DcObject old = DataManager.getItem(dco.getModule().getIndex(), dco.getID());
+        DcObject old = DataManager.getItem(dco.getModule().getIndex(), dco.getID());
 
         try {
             conn = DatabaseManager.getConnection();
@@ -196,11 +196,26 @@ public class UpdateQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
-        if (success && dco.getModule().getSearchView() != null) dco.getModule().getSearchView().update(old, dco);
+        if (success) updateUI(old, dco);
         
         handleRequest(null, success);
         clear();
         
         return null;
+    }
+    
+    private void updateUI(DcObject old, DcObject dco) {
+        if (dco.getModule().getSearchView() != null) 
+            dco.getModule().getSearchView().update(old, dco);
+        
+        // update related items: quick view and tree view
+        for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
+            if (module.getSearchView() != null) {
+                module.getSearchView().refreshQuickView();
+                if (module.getSearchView().getGroupingPane() != null) {
+                    //module.getSearchView().getGroupingPane().updateUI()
+                }
+            }
+        }
     }
 }

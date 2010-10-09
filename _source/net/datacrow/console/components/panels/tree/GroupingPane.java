@@ -66,6 +66,14 @@ public class GroupingPane extends JPanel {
     		tp.update(old, dco);
     }
     
+    public boolean isLoaded() {
+        boolean loaded = false;
+        for (TreePanel tp : panels)
+            loaded |= tp.isLoaded();
+        
+        return loaded;
+    }
+    
     public void remove(DcObject dco) {
     	for (TreePanel tp : panels)
     		tp.remove(dco);

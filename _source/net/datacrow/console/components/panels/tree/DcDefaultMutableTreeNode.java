@@ -22,6 +22,10 @@ public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
         return ((NodeElement) getUserObject()).getCount();
     }
     
+    public boolean contains(String item) {
+        return ((NodeElement) getUserObject()).getItems().contains(item);
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

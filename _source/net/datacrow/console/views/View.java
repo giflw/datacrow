@@ -555,6 +555,10 @@ public class View extends DcPanel implements ListSelectionListener {
     public int getItemCount() {
         return vc.getItemCount();
     }
+    
+    public boolean isLoaded() {
+        return vc.getItemCount() > 0;
+    }
 
     public boolean isActionsAllowed() {
         return actionsAllowed;

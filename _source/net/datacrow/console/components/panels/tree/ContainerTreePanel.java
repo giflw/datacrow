@@ -50,10 +50,8 @@ public class ContainerTreePanel extends TreePanel {
     
     @Override
     protected void createTopNode() {
-        top = new DcDefaultMutableTreeNode(DcModules.get(DcModules._CONTAINER).getLabel());
-//        NodeElement element = new NodeElement(getModule(), DcModules.get(DcModules._CONTAINER).getLabel(), null);
-//        element.setValues(new ArrayList<DcObject>());
-//        top.setUserObject(element);
+        NodeElement ne = new NodeElement(getModule(), DcModules.get(DcModules._CONTAINER).getLabel(), null);
+        top = new DcDefaultMutableTreeNode(ne);
     }
 
     @Override
