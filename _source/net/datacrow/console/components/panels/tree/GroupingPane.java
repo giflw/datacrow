@@ -61,9 +61,9 @@ public class GroupingPane extends JPanel {
         build();
     }
     
-    public void update(DcObject old, DcObject dco) {
+    public void update(DcObject dco) {
     	for (TreePanel tp : panels)
-    		tp.update(old, dco);
+    		tp.update(dco);
     }
     
     public boolean isLoaded() {
@@ -74,9 +74,9 @@ public class GroupingPane extends JPanel {
         return loaded;
     }
     
-    public void remove(DcObject dco) {
+    public void remove(String item) {
     	for (TreePanel tp : panels)
-    		tp.remove(dco);
+    		tp.remove(item);
     }
     
     public void add(DcObject dco) {
@@ -120,6 +120,19 @@ public class GroupingPane extends JPanel {
         }
         
         return null;
+    }
+    
+    public void updateView() {
+        for (TreePanel tp : panels) {
+            if (tp.isShowing()) {
+            	DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tp.getLastSelectedPathComponent();
+            	
+            	if (node != null)
+            		tp.updateView(node.getItems());
+            	else 
+            		tp.setDefaultSelection();
+            }
+        }
     }
     
     public void groupBy() {

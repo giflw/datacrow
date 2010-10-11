@@ -39,8 +39,6 @@
 	<classpathentry kind="lib" path="lib/jacksum.jar"/>
 	<classpathentry kind="lib" path="lib/html/js.jar"/>
 	<classpathentry kind="lib" path="lib/html/cobra.jar"/>
-	<classpathentry kind="lib" path="lib/xml/commons-io-1.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/xml/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/jaudiotagger_1.0.9.jar"/>
 	<classpathentry kind="lib" path="lib/PDFRenderer.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/bcmail-jdk14-132.jar"/>
@@ -48,17 +46,15 @@
 	<classpathentry kind="lib" path="lib/pdf/FontBox-0.1.0-dev.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/ISBNExtractor-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/PDFBox-0.7.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/avalon-framework-4.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/batik-all-1.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/commons-io-1.3.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/fop.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/serializer-2.7.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xalan-2.7.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xercesImpl-2.7.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xml-apis-1.3.04.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xml-apis-ext-1.3.04.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xmlgraphics-commons-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/rwaals/Documents/$Private/Data Crow/lib/xml/xsltc.jar"/>
+	<classpathentry kind="lib" path="lib/xml/avalon-framework-4.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml/batik-all-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/xml/fop.jar"/>
+	<classpathentry kind="lib" path="lib/xml/serializer-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xalan-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xml-apis-1.3.04.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xml-apis-ext-1.3.04.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xmlgraphics-commons-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/xml/xsltc.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

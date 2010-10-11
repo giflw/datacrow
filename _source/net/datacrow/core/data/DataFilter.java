@@ -376,7 +376,8 @@ public class DataFilter {
             
             field = module.getField(entry.getField());
             
-            if (field.isUiOnly()) 
+            if (field.isUiOnly() && 
+                field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) 
                 continue;
             
             hasConditions = true;

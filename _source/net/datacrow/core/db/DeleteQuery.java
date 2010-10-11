@@ -161,6 +161,7 @@ public class DeleteQuery extends Query {
         if (success && dco.getModule().getSearchView() != null) 
             dco.getModule().getSearchView().remove(dco);
         
+        handleRequest(null, success);
         clear();
         return null;
     }

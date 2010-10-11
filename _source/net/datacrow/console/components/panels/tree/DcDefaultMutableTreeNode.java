@@ -1,5 +1,7 @@
 package net.datacrow.console.components.panels.tree;
 
+import java.util.List;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
@@ -20,6 +22,10 @@ public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
     
     public int getItemCount() {
         return ((NodeElement) getUserObject()).getCount();
+    }
+    
+    public List<String> getItems() {
+        return ((NodeElement) getUserObject()).getItems();
     }
     
     public boolean contains(String item) {

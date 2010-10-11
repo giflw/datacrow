@@ -162,151 +162,193 @@ public class FieldTreePanel extends TreePanel {
          * @param fields
          */
         private void createTree(int[] fields) {
-            DcModule module = DcModules.get(getModule());
+            DcModule m = DcModules.get(getModule());
 
-            int counter = 0;
-            
-            StringBuffer columns = new StringBuffer("select ");
-            StringBuffer joins = new StringBuffer("from ");
-            StringBuffer order = new StringBuffer("order by ");
+            StringBuffer sql = new StringBuffer("");
             
             List<String> joinOn = new ArrayList<String>();
             
             DcField field;
             DcModule reference;
             DcModule main;
+            
+            Collection<DcModule> modules = new ArrayList<DcModule>();
+            
+            if (m.isAbstract()) {
+            	for (DcModule module : DcModules.getAllModules()) {
+            		if (module.getType() == m.getType() && !module.isAbstract())
+            			modules.add(module);
+            	}
+            } else {
+            	modules.add(m);
+            }
+            
+            int moduleCounter = 0;
+            int fieldCounter = 0;
+            
+            StringBuffer columns;
+            StringBuffer joins;
+            
+            for (DcModule module : modules) {
+            	
+            	fieldCounter = 0;
 
-            for (int idx : fields) {
-                field = module.getField(idx);
+            	columns = new StringBuffer("select ");
+                joins = new StringBuffer("from ");
+            	
+            	if (moduleCounter > 0)
+            		sql.append(" UNION ");
+            	
+	            for (int idx : fields) {
+	                field = module.getField(idx);
+	                if (field.isUiOnly() &&
+	                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+	                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
+	                
+	                
+	                if (fieldCounter == 0) {
+	                    columns.append(module.getTableName());
+	                    columns.append(".ID,");
+	                } else {
+	                    columns.append(",");
+	                }
+	                
+	                joinOn.add(module.getTableName() + fieldCounter + ".ID");
+	                
+	                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+	                    field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+	
+	                    reference = DcModules.get(field.getReferenceIdx());
+	                    main = field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ? module : 
+	                    DcModules.get(DcModules.getMappingModIdx(getModule(), reference.getIndex(), field.getIndex()));
+	
+	                    if (fieldCounter == 0) {
+	                        joins.append(module.getTableName());
+	                        joins.append(" left outer join ");
+	                    } else {
+	                        joins.append(" left outer join ");
+	                    }
+	                        
+	                    if (    field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+	                            field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
+	                        
+	                        columns.append("subselect");
+	                        columns.append(fieldCounter);
+	                        columns.append(".ID,");
+	                        columns.append("subselect");
+	                        columns.append(fieldCounter);
+	                        columns.append(".name,");
+	                        columns.append("subselect");
+	                        columns.append(fieldCounter);                            
+	                        columns.append(".icon");
+	
+	                        if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+	                            joins.append("(select ");
+	                            joins.append(reference.getTableName());
+	                            joins.append(".ID as ID,");
+	                            joins.append(main.getTableName());
+	                            joins.append(".");
+	                            joins.append(main.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName());
+	                            joins.append(" as parentID, ");
+	                            joins.append(reference.getTableName());
+	                            joins.append(".");
+	                            joins.append(reference.getField(reference.getSystemDisplayFieldIdx()).getDatabaseFieldName());
+	                            joins.append(" as name,");
+	                            
+	                            if (reference.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+	                                joins.append(reference.getTableName());
+	                                joins.append(".");
+	                                joins.append(reference.getField(DcProperty._B_ICON).getDatabaseFieldName());
+	                            } else {
+	                                joins.append("NULL");
+	                            }
+	                            
+	                            joins.append(" as icon");
+	                            joins.append(" from ");
+	                            joins.append(reference.getTableName());
+	                            joins.append(" inner join ");
+	                            joins.append(main.getTableName());
+	                            joins.append(" on ");
+	                            joins.append(reference.getTableName());
+	                            joins.append(".ID = ");
+	                            joins.append(main.getTableName());
+	                            joins.append(".");
+	                            joins.append(main.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
+	                            joins.append(") subselect");
+	                            joins.append(fieldCounter);
+	                            joins.append(" on ");
+	                            joins.append(" subselect");
+	                            joins.append(fieldCounter);
+	                            joins.append(".parentID = ");
+	                            joins.append(module.getTableName());
+	                            joins.append(".ID ");
+	
+	                        } else {
+	                            joins.append(reference.getTableName());
+	                            joins.append(" ");
+	                            joins.append(" subselect");
+	                            joins.append(fieldCounter);
+	                            joins.append(" on ");
+	                            joins.append(module.getTableName());
+	                            joins.append(".");
+	                            joins.append(field.getDatabaseFieldName());
+	                            joins.append("=");
+	                            joins.append(" subselect");
+	                            joins.append(fieldCounter);
+	                            joins.append(".ID");
+	                        }
+	                    }
+	                } else {
+	                    columns.append(module.getTableName());
+	                    columns.append(".");
+	                    columns.append(field.getDatabaseFieldName());
+	                    columns.append(",");
+	                    columns.append(module.getTableName());
+	                    columns.append(".");
+	                    columns.append(field.getDatabaseFieldName() + " as sjongejonge");
+	                    columns.append(",NULL");
+	                    
+	                    joinOn.add(module.getTableName() + ".ID");
+	                    
+	                    if (fieldCounter == 0) {
+	                        joins.append(module.getTableName());
+	                    } 
+	                }
+	                fieldCounter++;
+	            }
+	            
+	            if (fields == null || fields.length == 0) {
+	            	columns.append("*");
+	            	joins.append(module.getTableName());	
+	            }
+	            
+	            sql.append(columns.toString() + " " + joins.toString() + (DataFilters.isFilterActive(getModule()) ? 
+	            		   " WHERE ID IN ("  + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ") " : " "));
+	            
+	            moduleCounter++;
+            }
+
+            if (m.isAbstract()) {
+            	sql.insert(0, "select * from (");
+            	sql.append(") ");
+        	}
+
+            // index based order by
+            int level = 0;
+            sql.append("order by ");
+            for (int idx : fields) { 
+            	field = DcModules.get(getModule()).getField(idx);
                 if (field.isUiOnly() &&
                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
-                
-                
-                if (counter == 0) {
-                    columns.append(module.getTableName());
-                    columns.append(".ID,");
-                } else {
-                    columns.append(",");
-                }
-                
-                joinOn.add(module.getTableName() + counter + ".ID");
-                
-                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                    field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-
-                    reference = DcModules.get(field.getReferenceIdx());
-                    main = field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ? module : 
-                    DcModules.get(DcModules.getMappingModIdx(getModule(), reference.getIndex(), field.getIndex()));
-
-                    if (counter == 0) {
-                        joins.append(module.getTableName());
-                        joins.append(" left outer join ");
-                    } else {
-                        joins.append(" left outer join ");
-                    }
-                        
-                    if (    field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                            field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
-                        
-                        columns.append("subselect");
-                        columns.append(counter);
-                        columns.append(".ID,");
-                        columns.append("subselect");
-                        columns.append(counter);
-                        columns.append(".name,");
-                        columns.append("subselect");
-                        columns.append(counter);                            
-                        columns.append(".icon");
-
-                        if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                            joins.append("(select ");
-                            joins.append(reference.getTableName());
-                            joins.append(".ID as ID,");
-                            joins.append(main.getTableName());
-                            joins.append(".");
-                            joins.append(main.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName());
-                            joins.append(" as parentID, ");
-                            joins.append(reference.getTableName());
-                            joins.append(".");
-                            joins.append(reference.getField(reference.getSystemDisplayFieldIdx()).getDatabaseFieldName());
-                            joins.append(" as name,");
-                            
-                            if (reference.getType() == DcModule._TYPE_PROPERTY_MODULE) {
-                                joins.append(reference.getTableName());
-                                joins.append(".");
-                                joins.append(reference.getField(DcProperty._B_ICON).getDatabaseFieldName());
-                            } else {
-                                joins.append("NULL");
-                            }
-                            
-                            joins.append(" as icon");
-                            joins.append(" from ");
-                            joins.append(reference.getTableName());
-                            joins.append(" inner join ");
-                            joins.append(main.getTableName());
-                            joins.append(" on ");
-                            joins.append(reference.getTableName());
-                            joins.append(".ID = ");
-                            joins.append(main.getTableName());
-                            joins.append(".");
-                            joins.append(main.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
-                            joins.append(") subselect");
-                            joins.append(counter);
-                            joins.append(" on ");
-                            joins.append(" subselect");
-                            joins.append(counter);
-                            joins.append(".parentID = ");
-                            joins.append(module.getTableName());
-                            joins.append(".ID ");
-
-                        } else {
-                            joins.append(reference.getTableName());
-                            joins.append(" ");
-                            joins.append(" subselect");
-                            joins.append(counter);
-                            joins.append(" on ");
-                            joins.append(module.getTableName());
-                            joins.append(".");
-                            joins.append(field.getDatabaseFieldName());
-                            joins.append("=");
-                            joins.append(" subselect");
-                            joins.append(counter);
-                            joins.append(".ID");
-                        }
-
-                        if (counter > 0) order.append(",");
-                        
-                        order.append("subselect");
-                        order.append(counter);
-                        order.append(".Name");
-                    }
-                } else {
-                    columns.append(module.getTableName());
-                    columns.append(".");
-                    columns.append(field.getDatabaseFieldName());
-                    columns.append(",");
-                    columns.append(module.getTableName());
-                    columns.append(".");
-                    columns.append(field.getDatabaseFieldName());
-                    columns.append(",NULL");
-                    
-                    joinOn.add(module.getTableName() + ".ID");
-                    
-                    if (counter == 0) {
-                        joins.append(module.getTableName());
-                    } 
-                    
-                    if (counter > 0) order.append(",");
-                    
-                    order.append(module.getTableName());
-                    order.append(".");
-                    order.append(field.getDatabaseFieldName());
-                }
-                counter++;
+            	
+            	if (level > 0)
+            		sql.append(",");
+            		
+            	sql.append(String.valueOf((level * 3) + 3));
+            	level++;
             }
-            
-            createTree(columns.toString() + " " + joins.toString() + (DataFilters.isFilterActive(getModule()) ? " WHERE ID IN ("  + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ") " : " ") + order.toString());
+            createTree(sql.toString());
         }
         
         /**
@@ -331,6 +373,7 @@ public class FieldTreePanel extends TreePanel {
                 String value = null;
                 Object key = null;
                 String icon = null;
+                DcField field = null;
 
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 
@@ -346,6 +389,13 @@ public class FieldTreePanel extends TreePanel {
                     parent = top;
                     
                     for (int idx = 0; idx < fields.length; idx++) {
+                    	
+                    	field = DcModules.get(getModule()).getField(fields[idx]);
+                    	if (field.isUiOnly() &&
+                    	    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+	                        field.getFieldType() != ComponentFactory._REFERENCEFIELD) 
+                    		continue;
+                    	
                         
                         if (stop) break;
                         

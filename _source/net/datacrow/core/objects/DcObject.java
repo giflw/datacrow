@@ -168,7 +168,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             ResultSet rs = DatabaseManager.executeSQL(sql);
             
             while (rs.next()) {
-                WorkFlow.setValues(rs, this, getFieldIndices());
+                WorkFlow.setValues(rs, this, fields);
                 markAsUnchanged();
                 break;
             }

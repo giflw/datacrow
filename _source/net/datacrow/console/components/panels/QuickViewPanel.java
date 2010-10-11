@@ -240,16 +240,15 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (dco != null)
             dco.release();
         
-        if (key != null) {
+        if (key != null)
             key = null;
 
-            try {
-                tabbedPane.setSelectedIndex(0);
-            } catch (Exception e) {}
-            
-            descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
-        	clearImages();
-        }
+        try {
+            tabbedPane.setSelectedIndex(0);
+        } catch (Exception e) {}
+        
+        descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
+    	clearImages();
     }
     
     private void removeTabs() {

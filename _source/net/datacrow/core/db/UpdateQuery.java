@@ -37,7 +37,6 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -86,8 +85,6 @@ public class UpdateQuery extends Query {
         Connection conn = null;
         Statement stmt = null;
         
-        DcObject old = DataManager.getItem(dco.getModule().getIndex(), dco.getID());
-
         try {
             conn = DatabaseManager.getConnection();
             stmt = conn.createStatement();
@@ -196,7 +193,7 @@ public class UpdateQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
-        if (success) updateUI(old, dco);
+        if (success) updateUI(dco);
         
         handleRequest(null, success);
         clear();
@@ -204,9 +201,9 @@ public class UpdateQuery extends Query {
         return null;
     }
     
-    private void updateUI(DcObject old, DcObject dco) {
+    private void updateUI(DcObject dco) {
         if (dco.getModule().getSearchView() != null) 
-            dco.getModule().getSearchView().update(old, dco);
+            dco.getModule().getSearchView().update(dco);
         
         // update related items: quick view and tree view
         for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {

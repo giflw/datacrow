@@ -113,17 +113,16 @@ public class MasterView {
         return (groupingPane != null && groupingPane.isLoaded()) || getCurrent().isLoaded();
     }
     
-    public void update(DcObject old, DcObject dco) {
+    public void update(DcObject dco) {
+        if (groupingPane != null)
+            groupingPane.update(dco);
+        
         for (View view : getViews())
             view.update(dco.getID());
-
-        if (groupingPane != null)
-            groupingPane.update(old, dco);
     }
     
     public void add(DcObject dco) {
-        for (View view : getViews())
-            view.add(dco);
+    	getCurrent().add(dco);
         
         if (groupingPane != null)
             groupingPane.add(dco);
@@ -131,11 +130,12 @@ public class MasterView {
     
     public void remove(DcObject dco) {
         String key = dco.getID();
-        if (groupingPane != null)
-            groupingPane.remove(dco);
         
         for (View view : getViews())
             view.remove(new String[] {key});
+
+        if (groupingPane != null)
+            groupingPane.remove(key);
     }
     
     public void addView(int index, View view) {
@@ -195,15 +195,14 @@ public class MasterView {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                
+            	for (View view : getViews())
+                    view.clear();
                 
                 if (groupingPane != null || !groupingPane.isActive()) {
                     groupingPane.load();
                 } else { 
-                    for (View view : getViews()) {
-                        view.clear();
-                        view.add(keys);
-                    }
+                	for (View view : getViews())
+                		view.add(keys);
                 }
             }
         });
