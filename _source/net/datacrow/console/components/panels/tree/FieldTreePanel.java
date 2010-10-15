@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
 
 public class FieldTreePanel extends TreePanel {
 
-    private static Logger logger = Logger.getLogger(FieldTreePanel.class.getName());
+	private static Logger logger = Logger.getLogger(FieldTreePanel.class.getName());
     private int[] fields;
     private String empty = DcResources.getText("lblEmpty");
     
@@ -175,10 +175,7 @@ public class FieldTreePanel extends TreePanel {
             Collection<DcModule> modules = new ArrayList<DcModule>();
             
             if (m.isAbstract()) {
-            	for (DcModule module : DcModules.getAllModules()) {
-            		if (module.getType() == m.getType() && !module.isAbstract())
-            			modules.add(module);
-            	}
+            	modules = DcModules.getPersistentModules(m);
             } else {
             	modules.add(m);
             }
@@ -305,7 +302,7 @@ public class FieldTreePanel extends TreePanel {
 	                    columns.append(",");
 	                    columns.append(module.getTableName());
 	                    columns.append(".");
-	                    columns.append(field.getDatabaseFieldName() + " as sjongejonge");
+	                    columns.append(field.getDatabaseFieldName() + " as df");
 	                    columns.append(",NULL");
 	                    
 	                    joinOn.add(module.getTableName() + ".ID");
@@ -323,7 +320,7 @@ public class FieldTreePanel extends TreePanel {
 	            }
 	            
 	            sql.append(columns.toString() + " " + joins.toString() + (DataFilters.isFilterActive(getModule()) ? 
-	            		   " WHERE ID IN ("  + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}) + ") " : " "));
+	            		   " WHERE ID IN ("  + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}, false, false) + ") " : " "));
 	            
 	            moduleCounter++;
             }
@@ -335,13 +332,15 @@ public class FieldTreePanel extends TreePanel {
 
             // index based order by
             int level = 0;
-            sql.append("order by ");
             for (int idx : fields) { 
             	field = DcModules.get(getModule()).getField(idx);
                 if (field.isUiOnly() &&
                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
-            	
+
+                if (level == 0)
+                	 sql.append("order by ");
+                
             	if (level > 0)
             		sql.append(",");
             		
@@ -382,8 +381,6 @@ public class FieldTreePanel extends TreePanel {
                 DefaultMutableTreeNode previous;
                 boolean exists = false;
                 
-                NodeElement topElem = (NodeElement) top.getUserObject();
-                
                 while (rs.next() && !stop) {
                     int level = 0;
                     parent = top;
@@ -418,14 +415,14 @@ public class FieldTreePanel extends TreePanel {
                             }
                             
                             ne.addItem(id);
-                            topElem.addItem(id);
+                            //topElem.addItem(id);
                             current = new DcDefaultMutableTreeNode(ne);
                             model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
                         } else { // exists
                             existingNe =(NodeElement) previous.getUserObject();
-                            topElem.addItem(id);
+                            //topElem.addItem(id);
                             existingNe.addItem(id);
                             parent = previous;    
                         }
@@ -438,7 +435,14 @@ public class FieldTreePanel extends TreePanel {
             } catch (Exception e) {
                 logger.error(e, e);
             }
+            
+            sort();
         }
+        
+        /**
+         * Fills the top node with the sorted (!) values.
+         */
+
     }
     
     @Override

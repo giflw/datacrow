@@ -26,6 +26,7 @@
 package net.datacrow.core.wf;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,7 +115,7 @@ public class WorkFlow {
      * @param rs An unclosed SQL result set.
      * @return Collection of items.
      */
-    public List<DcObject> convert(ResultSet rs, int requestedFields[]) {
+    public List<DcObject> convert(ResultSet rs, int[] requestedFields) {
         List<DcObject> objects = new ArrayList<DcObject>();
 
         try {
@@ -124,49 +125,33 @@ public class WorkFlow {
         }
 
         try {
-            String table = rs.getMetaData().getTableName(1);
-            DcModule module = DcModules.getModuleForTable(table);
-            
-            int[] fields =  new int[rs.getMetaData().getColumnCount()];
-            for (int i = 1; i < fields.length + 1; i++)
-                fields[i-1] = module.getField(rs.getMetaData().getColumnName(i)).getIndex();
-            
+        	ResultSetMetaData md = rs.getMetaData();
+        	
+        	int fieldStart = 1;
+            int[] fields = null;
             DcObject dco;
+            DcModule module = null;
             while (rs.next()) {
-                dco = module.getItem();
-                setValues(rs, dco, fields);
+            	try {
+            		int moduleIdx = rs.getInt("MODULEIDX");
+   			 		module = DcModules.get(moduleIdx);
+   			 		fieldStart = 2;
+            	} catch (Exception e) {
+            		module = DcModules.get(md.getTableName(1));
+            	}
+            	
+            	if (fields == null) {
+	                fields = new int[md.getColumnCount() - (fieldStart - 1)];
+	                int fieldIdx = 0;
+	                for (int i = fieldStart; i < fields.length + fieldStart; i++) {
+	                	String column = md.getColumnName(i);
+	                    fields[fieldIdx++] = module.getField(column).getIndex();
+	                }
+            	}
+            	
+            	dco = module.getItem();
+                setValues(rs, dco, fields, requestedFields);
 
-                if (DatabaseManager.initialized) {
-                    
-                    boolean loan = requestedFields == null;
-                    boolean images = requestedFields == null;
-                    boolean references = requestedFields == null;
-                    
-                    if (requestedFields != null) {
-                        for (int field : requestedFields) {
-                            if (dco.getModule().canBeLend() &&
-                                (field == DcObject._SYS_AVAILABLE || 
-                                 field == DcObject._SYS_LOANDAYSTILLOVERDUE ||
-                                 field == DcObject._SYS_LOANDUEDATE ||
-                                 field == DcObject._SYS_LOANDURATION))  
-                                loan = true;
-                            else if (dco.getModule().getIndex() != DcModules._PICTURE &&
-                                     dco.getField(field).getValueType() == DcRepository.ValueTypes._PICTURE)
-                                images = true;
-                            else if (dco.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
-                                dco.initializeReferences(field);
-                        }
-                    } else {
-                        dco.initializeReferences();
-                    }
-                            
-                    if (loan) dco.setLoanInformation();
-                    if (images && dco.getModule().isHasImages()) dco.initializeImages();
-                    if (references && dco.getModule().isHasReferences()) dco.initializeReferences();
-                }
-
-                dco.setNew(false);
-                dco.markAsUnchanged();
                 objects.add(dco);
             }
         } catch (Exception e) {
@@ -183,13 +168,12 @@ public class WorkFlow {
         return objects;
     }
     
-    public static void setValues(ResultSet rs, DcObject item, int[] fields) {
+    public static void setValues(ResultSet rs, DcObject item, int[] fields, int[] requestedFields) {
         try {
             Object value;
             String column;
-            DcField field;
             for (int i = 0; i < fields.length; i++) {
-                field = item.getField(fields[i]);
+                DcField field = item.getField(fields[i]);
                 column = field.getDatabaseFieldName();
 
                 if (field.isUiOnly()) continue;
@@ -200,6 +184,37 @@ public class WorkFlow {
             }
             
             item.setValue(Media._SYS_MODULE, item.getModule().getObjectName());
+            
+            boolean loan = requestedFields == null;
+            boolean images = requestedFields == null;
+            boolean references = requestedFields == null;
+            
+            if (DatabaseManager.initialized) {
+                if (requestedFields != null) {
+                    for (int field : requestedFields) {
+                        if (item.getModule().canBeLend() &&
+                            (field == DcObject._SYS_AVAILABLE || 
+                             field == DcObject._SYS_LOANDAYSTILLOVERDUE ||
+                             field == DcObject._SYS_LOANDUEDATE ||
+                             field == DcObject._SYS_LOANDURATION))  
+                            loan |= true;
+                        else if (item.getModule().getIndex() != DcModules._PICTURE &&
+                        		item.getField(field).getValueType() == DcRepository.ValueTypes._PICTURE)
+                            images |= true;
+                        else if (item.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
+                        	item.initializeReferences(field);
+                    }
+                } else {
+                	item.initializeReferences();
+                }
+                        
+                if (loan) item.setLoanInformation();
+                if (images && item.getModule().isHasImages()) item.initializeImages();
+                if (references && item.getModule().isHasReferences()) item.initializeReferences();
+            }
+
+            item.setNew(false);
+            item.markAsUnchanged();
 
         } catch (Exception e) {
             logger.error("An error occurred while converting result set to items", e);

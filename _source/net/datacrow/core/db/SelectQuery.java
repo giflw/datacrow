@@ -71,7 +71,7 @@ public class SelectQuery extends Query {
         Statement stmt = null;
         ResultSet rs = null;
         List<DcObject> items = null;
-        String sql = df.toSQL(fields);
+        String sql = df.toSQL(fields, true, true);
         
         logger.debug(sql);
         

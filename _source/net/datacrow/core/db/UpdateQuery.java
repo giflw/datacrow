@@ -62,10 +62,6 @@ public class UpdateQuery extends Query {
     @Override
     protected void clear() {
         super.clear();
-        
-        if (dco != null)
-        	dco.release();
-        
         dco = null;
     }
     
@@ -135,10 +131,15 @@ public class UpdateQuery extends Query {
                 ps = conn.prepareStatement("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE ID = '" + dco.getID() + "'");
                 setValues(ps, values);
                 ps.execute();
+                ps.close();
             } else if (!Utilities.isEmpty(values)) {
-                stmt.execute("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE " +
+            	
+                ps = conn.prepareStatement("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE " +
                         dco.getDatabaseFieldName(Picture._A_OBJECTID) + " = '" + dco.getValue(Picture._A_OBJECTID) + "' AND " +
                         dco.getDatabaseFieldName(Picture._B_FIELD) + " = '" + dco.getValue(Picture._B_FIELD) + "'");
+                setValues(ps, values);
+                ps.execute();
+                ps.close();
             }
     
             for (Collection<DcMapping> c : references) {
@@ -163,6 +164,8 @@ public class UpdateQuery extends Query {
                             picture.getField(Picture._B_FIELD).getDatabaseFieldName() + " = '" +  picture.getValue(Picture._B_FIELD) + "'");
                     deleteImage(picture);    
                 }
+                
+                picture.release();
             }
             
             for (DcObject child : dco.getCurrentChildren()) {
@@ -177,6 +180,7 @@ public class UpdateQuery extends Query {
                     }
                     Query query = exists ? new UpdateQuery(child) : new InsertQuery(child);
                     query.run();
+                    child.release();
                 }
             }
             
@@ -193,10 +197,10 @@ public class UpdateQuery extends Query {
             logger.error("Error while closing connection", e);
         }
 
-        if (success) updateUI(dco);
-        
         handleRequest(null, success);
-        clear();
+        
+        if (success) 
+        	updateUI(dco);
         
         return null;
     }
@@ -205,7 +209,7 @@ public class UpdateQuery extends Query {
         if (dco.getModule().getSearchView() != null) 
             dco.getModule().getSearchView().update(dco);
         
-        // update related items: quick view and tree view
+        // TODO: update related items: quick view and tree view
         for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
             if (module.getSearchView() != null) {
                 module.getSearchView().refreshQuickView();

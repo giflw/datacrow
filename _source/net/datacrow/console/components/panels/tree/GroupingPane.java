@@ -108,8 +108,8 @@ public class GroupingPane extends JPanel {
     
     public void load() {
         for (TreePanel tp : panels) {
-            tp.clear();
-            tp.createTree();
+    		tp.clear();
+    		tp.createTree();
         }
     }
 
@@ -124,25 +124,35 @@ public class GroupingPane extends JPanel {
     
     public void updateView() {
         for (TreePanel tp : panels) {
-            if (tp.isShowing()) {
+            if (tp.isShowing() && tp.isActive()) {
             	DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tp.getLastSelectedPathComponent();
-            	
             	if (node != null)
-            		tp.updateView(node.getItems());
+            		tp.updateView(node.getItemsSorted(tp.top.getItems()));
             	else 
             		tp.setDefaultSelection();
             }
         }
     }
     
+    public void sort() {
+        for (TreePanel tp : panels) {
+        	if (tp.isActive()) {
+	            tp.sort();
+	            tp.refreshView();
+        	}
+        }
+    }
+    
     public void groupBy() {
         for (TreePanel tp : panels)
-            tp.groupBy();
+    		tp.groupBy();
     }
     
     public void saveChanges(boolean b) {
-        for (TreePanel tp : panels)
-            tp.setSaveChanges(b);
+        for (TreePanel tp : panels) {
+        	if (tp.isActive())
+        		tp.setSaveChanges(b);
+        }
     }
     
     public boolean isActive() {

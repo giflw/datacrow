@@ -644,6 +644,19 @@ public class DcModules {
         return c;
     }
     
+    public static List<DcModule> getPersistentModules(DcModule abstractModule) {
+    	List<DcModule> modules = new ArrayList<DcModule>();
+    	for (DcModule module : DcModules.getAllModules()) {
+    		if (!module.isEnabled() || module.isAbstract() || !module.isTopModule()) continue;
+    		if ((abstractModule.getType() == DcModule._TYPE_MEDIA_MODULE &&
+    		     module.getType() == DcModule._TYPE_MEDIA_MODULE) ||
+    		    (abstractModule.getType() != DcModule._TYPE_MEDIA_MODULE && module.isContainerManaged())) {
+    			modules.add(module);
+    		}
+    	}
+    	return modules;
+    }
+    
     /**
      * Retrieves all enabled modules
      */

@@ -316,7 +316,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         childView = null;
         template = null;  
         
-        if (dcoOrig != null) dcoOrig.release();
+        //if (dcoOrig != null) dcoOrig.release();
         
         ComponentFactory.clean(getJMenuBar());
         setJMenuBar(null);

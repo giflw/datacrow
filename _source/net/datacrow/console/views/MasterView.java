@@ -128,8 +128,7 @@ public class MasterView {
             groupingPane.add(dco);
     }
     
-    public void remove(DcObject dco) {
-        String key = dco.getID();
+    public void remove(String key) {
         
         for (View view : getViews())
             view.remove(new String[] {key});
@@ -157,7 +156,11 @@ public class MasterView {
     }
     
     public void sort() {
-        getCurrent().sort();
+    	if (getGroupingPane() == null || !getGroupingPane().isActive()) {
+    		groupingPane.sort();
+    	} else {
+    		getCurrent().sort();
+    	}
     }
     
     public void refresh() {

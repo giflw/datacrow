@@ -57,14 +57,14 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
     
     private DcModule module;
     
-    public FieldSelectionPanel(DcModule module, boolean allowPictureFields) {
+    public FieldSelectionPanel(DcModule module, boolean allowPictureFields, boolean allowUiFields) {
         this.module = module;
 
         build();
 
         for (DcField field : module.getFields()) {
             if (    field.isEnabled() && 
-                    
+                    (!field.isUiOnly() || allowUiFields) &&
                     (allowPictureFields ||
                     (field.getValueType() != DcRepository.ValueTypes._PICTURE &&
                      field.getValueType() != DcRepository.ValueTypes._ICON)))

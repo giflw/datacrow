@@ -32,6 +32,9 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 
+/**
+ * @author Robert Jan van der Waals
+ */
 public class DcObjectComparator implements Comparator<DcObject> {
 
     public static final int _SORTORDER_ASCENDING = 0;

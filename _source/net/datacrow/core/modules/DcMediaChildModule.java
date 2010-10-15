@@ -92,7 +92,8 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
             int valueType;
             for (DcField field : getFields()) {
                 valueType = field.getValueType();
-                if (valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                if (!field.isUiOnly() &&
+                    valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
                     valueType != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
                     valueType != DcRepository.ValueTypes._PICTURE) {
                     fields.add(Integer.valueOf(field.getIndex()));

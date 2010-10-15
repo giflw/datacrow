@@ -110,7 +110,7 @@ public class CardViewSettingsDialog extends DcDialog implements ActionListener {
         JTabbedPane tp = ComponentFactory.getTabbedPane();
         
         DcModule module = DcModules.getCurrent();
-        fsp = new FieldSelectionPanel(module, false);
+        fsp = new FieldSelectionPanel(module, false, true);
         
         int[] fields = (int[]) module.getSetting(DcRepository.ModuleSettings.stCardViewItemDescription);
         fsp.setSelectedFields(fields);

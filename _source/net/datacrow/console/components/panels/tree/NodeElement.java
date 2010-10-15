@@ -40,9 +40,29 @@ public class NodeElement {
     }
     
     public List<String> getItems() {
-    	return items;
+    	return new ArrayList(items);
     }
     
+    public List<String> getItemsSorted(List<String> allOrderedItems) {
+    	
+    	if (allOrderedItems.size() == items.size()) 
+    		return new ArrayList<String>(items);
+    	
+    	List<String> result = new ArrayList<String>();
+    	for (String orderedItem : allOrderedItems) {
+    		for (String item : items) {
+    			if (item.equals(orderedItem)) {
+    				result.add(item);
+    			}
+    		}
+    	}
+    	return result;
+    }
+    
+    public void setItems(List<String> items) {
+    	this.items = items;
+    }
+
     public String getComparableKey() {
         return getDisplayValue().toLowerCase();
     }

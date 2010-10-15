@@ -60,7 +60,7 @@ public class SortingDialog extends DcDialog implements ActionListener {
         setTitle(DcResources.getText("lblSort"));
         
         this.module = module;
-        this.panelSorting = new FieldSelectionPanel(DcModules.get(module), true);
+        this.panelSorting = new FieldSelectionPanel(DcModules.get(module), true, false);
         this.panelSorting.setSelectedFields(
                 DcModules.get(module).getSettings().getStringArray(DcRepository.ModuleSettings.stSearchOrder));
         

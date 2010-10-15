@@ -56,7 +56,6 @@ public class DeleteQuery extends Query {
     @Override
     protected void clear() {
         super.clear();
-        if (dco != null) dco.release();
         dco = null;
     }
 
@@ -65,6 +64,8 @@ public class DeleteQuery extends Query {
     	boolean success = false;
         Connection conn = null;
         Statement stmt = null;
+        
+        String ID = dco.getID();
 
         try { 
             conn = DatabaseManager.getAdminConnection();
@@ -158,10 +159,11 @@ public class DeleteQuery extends Query {
             logger.error("Error while closing connection", e);
         }
         
-        if (success && dco.getModule().getSearchView() != null) 
-            dco.getModule().getSearchView().remove(dco);
-        
         handleRequest(null, success);
+        
+        if (success && dco.getModule().getSearchView() != null) 
+            dco.getModule().getSearchView().remove(ID);
+
         clear();
         return null;
     }

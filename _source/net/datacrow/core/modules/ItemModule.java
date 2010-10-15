@@ -61,6 +61,11 @@ public class ItemModule extends DcChildModule {
         super(index, topModule, name, description, objectName, objectNamePlural,
               tableName, tableShortName);
     }
+    
+    @Override
+    public boolean isContainerManaged() {
+        return true;
+    }
 
     @Override
     public int getParentReferenceFieldIndex() {

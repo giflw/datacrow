@@ -168,7 +168,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             ResultSet rs = DatabaseManager.executeSQL(sql);
             
             while (rs.next()) {
-                WorkFlow.setValues(rs, this, fields);
+                WorkFlow.setValues(rs, this, fields, fields);
                 markAsUnchanged();
                 break;
             }
@@ -1135,7 +1135,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (hasPrimaryKey()) {
             String ID = getID();
             
-            while (ID == null)
+            while (Utilities.isEmpty(ID))
                 ID = Utilities.getUniqueID();
             
             setValue(DcObject._ID, ID);

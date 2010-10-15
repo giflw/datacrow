@@ -76,7 +76,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     protected final boolean showImages;
     
-    private DcObject dco;
+	private DcObject dco;
     
     private String key;
     private int module;
@@ -186,14 +186,14 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }   
     
     protected void setObject(DcObject dco) {
-        
-        
-        
         try {
             int tab = tabbedPane.getSelectedIndex();
             clear();
             
             this.dco = dco;
+            
+            if (DcModules.getCurrent().isAbstract())
+            	this.dco.reload(dco.getFieldIndices());
             
             String html = "<html><body " + 
                            Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + 
@@ -237,8 +237,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     public void clear() {
         
-        if (dco != null)
-            dco.release();
+        dco = null;
         
         if (key != null)
             key = null;

@@ -30,6 +30,9 @@ import java.util.Comparator;
 
 import net.datacrow.core.objects.DcObject;
 
+/** 
+ * @author Robert Jan van der Waals
+ */
 public class DcObjectCompositeComparator implements Comparator<DcObject> {
 
     private Collection<DcObjectComparator> dcocs;

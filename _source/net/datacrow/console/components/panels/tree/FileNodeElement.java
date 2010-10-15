@@ -10,8 +10,9 @@ public class FileNodeElement extends NodeElement {
     
     private File file;
     
-    public FileNodeElement(String key) {
-    	super(key, null, null);
+    public FileNodeElement(String key, File file) {
+    	super(key, key, null);
+    	this.file = file;
     }
 
     @Override

@@ -115,7 +115,7 @@ public class FilterDialog extends DcFrame implements ActionListener {
         JPanel panelSort = new JPanel();
         panelSort.setLayout(Layout.getGBL());
         
-        sortingPanel = new FieldSelectionPanel(module, false);
+        sortingPanel = new FieldSelectionPanel(module, false, false);
         sortingPanel.setSelectedFields(module.getSettings().getStringArray(DcRepository.ModuleSettings.stSearchOrder));
         
         panelSort.add(sortingPanel,   Layout.getGBC( 0, 0, 1, 1, 40.0, 40.0

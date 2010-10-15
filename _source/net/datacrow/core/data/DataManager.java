@@ -383,7 +383,13 @@ public class DataManager {
         DcModule module = DcModules.get(moduleIdx);
 
         try {
-            String query = "SELECT * FROM " + module.getTableName() + " WHERE " + 
+        	String columns = module.getIndex() + " AS MODULEIDX";
+        	for (DcField field : module.getFields()) {
+        		if (!field.isUiOnly())
+        			columns += "," + field.getDatabaseFieldName();
+        	}
+        	
+            String query = "SELECT " + columns + " FROM " + module.getTableName() + " WHERE " + 
                 "UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + ") =  UPPER(?)";
             
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
@@ -430,6 +436,8 @@ public class DataManager {
     public static Collection<DcObject> getReferences(int modIdx, String parentID) {
         DataFilter df = new DataFilter(modIdx);
         df.addEntry(new DataFilterEntry(modIdx, DcMapping._A_PARENT_ID, Operator.EQUAL_TO, parentID));
+        
+        // TODO: check used to be all fields instead..
         return get(df);
     }
 

@@ -58,50 +58,17 @@ public class ContainerTreePanel extends TreePanel {
     public void groupBy() {}
     
     @Override
-    protected void refresh() {
-    }
-
+	public void sort() {}
+    
     @Override
+    public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
+        return null;
+    }  
+
+	@Override
     public String getName() {
         return DcModules.get(DcModules._CONTAINER).getObjectNamePlural();
     }    
-    
-//    @Override
-//    protected void addElement(Long key, DefaultMutableTreeNode parent, int level) {
-//
-////        DcModule module = DcModules.get(DcModules._CONTAINER);
-////        boolean flatView = module.getSettings().getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
-////        
-////        NodeElement neTop = (NodeElement) top.getUserObject();
-////        neTop.addValue(key);
-//        
-////        Container container = (Container) dco;
-////        
-////        // Additional check to make sure that the correct parent node is being used.
-////        if (!flatView && container.getParentContainer() != null) {
-////            DefaultMutableTreeNode node = findNode(container.getParentContainer().toString(), getTopNode(), true);
-////            parent = node == null ? parent : node;
-////        }
-////        
-////        NodeElement ne = new NodeElement(DcModules._CONTAINER, container.toString(), container.getIcon());
-////        ne.addValue(container);
-////        DefaultMutableTreeNode masterNode = new DcDefaultMutableTreeNode(ne);
-////        insertNode(masterNode, parent);
-////        
-////        if (!flatView) {
-////            DefaultMutableTreeNode childNode;
-////            for (Container child : container.getChildContainers()) {
-////                childNode = findNode(child.toString(), masterNode, true);
-////                
-////                if (childNode == null) {
-////                    addElement(child, masterNode, level++);
-////                } else {
-////                    NodeElement element = (NodeElement) childNode.getUserObject();
-////                    element.addValue(child);
-////                }
-////            }
-////        }
-//    }
     
     @Override
     protected void createTree() {
@@ -186,9 +153,5 @@ public class ContainerTreePanel extends TreePanel {
 //        }
     }
 
-    @Override
-    public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
-        // TODO Auto-generated method stub
-        return null;
-    }  
+
 }

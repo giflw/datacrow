@@ -120,7 +120,7 @@ public class DcObjectList extends DcList implements IViewComponent {
 
     @Override
     public int getModule(int idx) {
-        return getItemAt(idx).getModule().getIndex();
+        return getElement(idx).getModule();
     }
 
     @Override
@@ -263,7 +263,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         DcObjectListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             element = (DcObjectListElement) getDcModel().getElementAt(i);
-            if (element.getDcObject().getID().equals(ID)) 
+            if (element.getKey().equals(ID)) 
                 return element;
         }
         return null;

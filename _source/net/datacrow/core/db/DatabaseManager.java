@@ -237,10 +237,15 @@ public class DatabaseManager {
         List<String> data = new ArrayList<String>();
 
         try {
-            ResultSet rs = DatabaseManager.executeSQL(filter.toSQL(new int[] {DcObject._ID}));
+        	String sql = filter.toSQL(new int[] {DcObject._ID}, true, false);
+        	
+        	if (logger.isDebugEnabled())
+        		logger.debug(sql);
+        	
+            ResultSet rs = DatabaseManager.executeSQL(sql);
             
             while (rs.next())
-                data.add(rs.getString(1));
+                data.add(rs.getString("ID"));
             
             rs.close();
         } catch (SQLException e) {

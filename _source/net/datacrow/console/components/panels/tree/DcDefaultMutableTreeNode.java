@@ -28,6 +28,10 @@ public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
         return ((NodeElement) getUserObject()).getItems();
     }
     
+    public List<String> getItemsSorted(List<String> allSortedItems) {
+        return ((NodeElement) getUserObject()).getItemsSorted(allSortedItems);
+    }
+    
     public boolean contains(String item) {
         return ((NodeElement) getUserObject()).getItems().contains(item);
     }

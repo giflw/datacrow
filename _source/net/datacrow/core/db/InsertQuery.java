@@ -58,7 +58,6 @@ public class InsertQuery extends Query {
     @Override
     protected void clear() {
         super.clear();
-        if (dco != null) dco.release();
         dco = null;
     }
 
@@ -72,6 +71,8 @@ public class InsertQuery extends Query {
 
         // create non existing references
         createReferences(dco);
+	       
+        String ID = dco.getID();
         
         Collection<DcMapping> references = new ArrayList<DcMapping>();
         Collection<Picture> pictures = new ArrayList<Picture>();
@@ -132,14 +133,16 @@ public class InsertQuery extends Query {
             }
             
             for (Picture picture : pictures) {
-                saveImage(picture);
                 new InsertQuery(picture).run();
+                saveImage(picture);
+                picture.release();
             }
 
             if (dco.getCurrentChildren() != null) {
                 for (DcObject child : dco.getCurrentChildren()) {
                     child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
                     new InsertQuery(child).run();
+                    child.release();
                 }
             }
             
@@ -156,15 +159,15 @@ public class InsertQuery extends Query {
         } catch (SQLException e) {
             logger.error("Error while closing connection", e);
         }
-
         
+        handleRequest(null, success);
+
         if (success && dco.getModule().getSearchView() != null) { 
             dco.getModule().getSearchView().add(dco);
             if (dco.getModule().getInsertView() != null)
-                dco.getModule().getInsertView().remove(dco);
+                dco.getModule().getInsertView().remove(ID);
         }
         
-        handleRequest(null, success);
         clear();
         
         return null;

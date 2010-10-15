@@ -37,6 +37,7 @@ import javax.swing.JPanel;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -59,6 +60,10 @@ public abstract class DcObjectListElement extends DcListElement {
         this.module = module;
     }
     
+    public int getModule() {
+    	return module;
+    }
+    
     public void setKey(String key) {
         this.key = key;
     }
@@ -69,6 +74,7 @@ public abstract class DcObjectListElement extends DcListElement {
     
     public void setDcObject(DcObject dco) {
         this.dco = dco;
+        this.key = dco.getID();
         
         // when adding an existing item the renderer will take care of the loading/
         // for new items, the component needs to be fully build.
@@ -89,25 +95,34 @@ public abstract class DcObjectListElement extends DcListElement {
         int count = getComponentCount();
         
         if (count == 0 && !loading) {
+            DcModule module = DcModules.get(getModule());
             
+            if (dco == null) {
+            	dco = module.isAbstract() ? DataManager.getItem(getModule(), key, new int[] {DcObject._ID}) :
+            								DataManager.getItem(getModule(), key, module.getMinimalFields(getFields(getModule())));
+            	
+            	this.module = dco.getModule().getIndex();
+	        	if (module.isAbstract()) {
+	        		dco.reload(dco.getModule().getMinimalFields(getFields(this.module)));
+	        	}
+            }
+	        	
             loading = true;
-            
-            Settings settings = DcModules.get(module).getSettings();
-            Collection<Integer> fields = new ArrayList<Integer>();
-            for (int field : settings.getIntArray(DcRepository.ModuleSettings.stCardViewItemDescription))
-                fields.add(Integer.valueOf(field));
-
-            for (int field : settings.getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder))
-                fields.add(Integer.valueOf(field));
-
-            dco = dco == null ? DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields)) : dco;
-            
             build();
-//            revalidate();
-//            repaint();
-            
             loading = false;
         }
+    }
+    
+    private Collection<Integer> getFields(int module) {
+        Settings settings = DcModules.get(module).getSettings();
+        Collection<Integer> fields = new ArrayList<Integer>();
+        for (int field : settings.getIntArray(DcRepository.ModuleSettings.stCardViewItemDescription))
+            fields.add(Integer.valueOf(field));
+
+        for (int field : settings.getIntArray(DcRepository.ModuleSettings.stCardViewPictureOrder))
+            fields.add(Integer.valueOf(field));
+        
+        return fields;
     }
     
     public void update(DcObject dco) {
@@ -171,7 +186,7 @@ public abstract class DcObjectListElement extends DcListElement {
         removeAll();
         
         if (dco != null && !dco.isNew()) {
-            if (dco != null) dco.release();
+            dco.release();
             dco = null;
         }
             

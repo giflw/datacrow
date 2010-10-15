@@ -118,8 +118,7 @@ public class Container extends DcObject {
             try {
                 DataFilter df = new DataFilter(DcModules._ITEM);
                 df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._ITEM, DcObject._SYS_CONTAINER, Operator.EQUAL_TO, this));
-                children = DataManager.get(df);
-
+                children = DataManager.get(df, new int[] {DcObject._ID});
             } finally {
                 isLoading = false;
             }

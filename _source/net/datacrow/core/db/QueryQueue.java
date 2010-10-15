@@ -69,7 +69,6 @@ public class QueryQueue extends Thread {
                         isLazy = false;
                         Query query = lQueryQueue.removeFirst();
                         query.run();
-                        query.clear();
                     } else {
                         isLazy = true;
                         sleep(1000);
