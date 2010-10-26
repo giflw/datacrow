@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -103,11 +104,24 @@ public class DataManager {
      * @param childIdx The child module index.
      * @return The children or an empty collection.
      */
-    public static List<DcObject> getChildren(String parentID, int childIdx) {
+    public static Map<String, Integer> getChildrendKeys(String parentID, int childIdx) {
         DataFilter df = new DataFilter(childIdx);
         DcModule module = DcModules.get(childIdx);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, module.getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentID));
-        return new SelectQuery(df, null, module.getMinimalFields(null)).run();
+        return getKeys(df);
+    }
+    
+    /**
+     * Retrieves the children for the specified parent.
+     * @param parentId The parent object ID.
+     * @param childIdx The child module index.
+     * @return The children or an empty collection.
+     */
+    public static List<DcObject> getChildren(String parentID, int childIdx, int[] fields) {
+        DataFilter df = new DataFilter(childIdx);
+        DcModule module = DcModules.get(childIdx);
+        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, module.getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentID));
+        return new SelectQuery(df, null, fields).run();
     }
     
     /**
@@ -217,7 +231,7 @@ public class DataManager {
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._D_MODULE, Operator.EQUAL_TO, Long.valueOf(module)));
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._TAB, Tab._A_NAME, Operator.EQUAL_TO, name));
         
-        Collection<DcObject> tabs = get(df);
+        Collection<String> tabs = getKeyList(df);
         if (tabs.size() == 0) {
             try {
                 Tab tab = (Tab) DcModules.get(DcModules._TAB).getItem();
@@ -436,8 +450,6 @@ public class DataManager {
     public static Collection<DcObject> getReferences(int modIdx, String parentID) {
         DataFilter df = new DataFilter(modIdx);
         df.addEntry(new DataFilterEntry(modIdx, DcMapping._A_PARENT_ID, Operator.EQUAL_TO, parentID));
-        
-        // TODO: check used to be all fields instead..
         return get(df);
     }
 
@@ -452,7 +464,12 @@ public class DataManager {
         return new SelectQuery(df, null, null).run();
     }
     
-    public static List<String> getKeys(DataFilter filter) {
+    
+    public static List<String> getKeyList(DataFilter filter) {
+        return new ArrayList<String>(DatabaseManager.getKeys(filter).keySet());
+    }
+    
+    public static Map<String, Integer> getKeys(DataFilter filter) {
         return DatabaseManager.getKeys(filter);
     }
     

@@ -4,8 +4,8 @@ import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.event.ListSelectionListener;
 
@@ -35,10 +35,10 @@ public interface IViewComponent {
     int getLastVisibleIndex();
     int getViewportBufferSize();
     
-    void add(String key);
+    int add(String key);
     void add(DcObject item);
     void add(List<? extends DcObject> items);
-    void add(Collection<String> keys);
+    void add(Map<String, Integer> keys);
     
     List<String> getItemKeys();
     List<DcObject> getItems();

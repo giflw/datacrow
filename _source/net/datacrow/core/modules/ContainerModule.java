@@ -84,8 +84,13 @@ public class ContainerModule extends DcParentModule {
     public int[] getSupportedViews() {
         return new int[] {MasterView._LIST_VIEW};
     }
+    
+    @Override
+	public boolean isContainerManaged() {
+		return false;
+	}
 
-    /**
+	/**
      * Initializes the various views.
      */
     @Override

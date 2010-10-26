@@ -43,6 +43,7 @@ import net.datacrow.console.views.View;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -108,43 +109,43 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
         public void run() {
             DcObject dco = itemForm.getItem();
             
-            Collection<? extends DcObject> c;
+            Collection<String> keys;
             
-            // TODO: change this!!
             if (isUpdateSelectedItemsOnly()) {
-                c = view.getSelectedItems();
+            	keys = view.getSelectedItemKeys();
             } else {
-                c = view.getItems();
+            	keys = view.getItemKeys();
             }
 
             int count = 1;
-            initProgressBar(c.size());
+            initProgressBar(keys.size());
             view.setListSelectionListenersEnabled(false);
             try {
                 
-	            for (DcObject item : c) {
+	            for (String key : keys) {
 	                
 	                if (!keepOnRunning) break;
 	                
-	                DcObject clone = item.clone();
-	                clone.markAsUnchanged();
-	                clone.copy(dco, true, false);
+	                DcObject item = DataManager.getItem(dco.getModule().getIndex(), key);
 	                
-                    if (clone.isChanged()) {
+	                item.markAsUnchanged();
+	                item.copy(dco, true, false);
+	                
+                    if (item.isChanged()) {
                         try {
                             if (view.getType() == View._TYPE_SEARCH) {
-                                clone.saveUpdate(false, false);
+                            	item.saveUpdate(false, false);
                             } else if (view.getType() == View._TYPE_INSERT) {
-                                view.updateItem(item.getID(), clone);
+                                view.updateItem(item.getID(), item);
                             }
                         } catch (Exception e) {
                             // warn the user of the event that occurred (for example an incorrect parent for a container)
                             DcSwingUtilities.displayErrorMessage(e.getMessage());
                         }
                     }
-	                
+
 	                updateProgressBar(count);
-	
+
 	                try {
 	                    sleep(200);
 	                } catch (Exception e) {

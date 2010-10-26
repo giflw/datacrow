@@ -142,7 +142,7 @@ public class XmlExporter extends ItemExporter {
                 }
 
                 if (dco.getChildren().size() == 0)
-                    dco.loadChildren();
+                    dco.loadChildren(null);
                 
                 if (dco.getModule().getChild() != null) {
                     

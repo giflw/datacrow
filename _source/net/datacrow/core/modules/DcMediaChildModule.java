@@ -99,7 +99,7 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
                     fields.add(Integer.valueOf(field.getIndex()));
                 }
             }
-            minimalFields = new int[fields.size()];
+            minimalFields = new int[fields.size() + (include != null ? include.size() : 0)];
             int idx = 0;
             
             if (include != null) {

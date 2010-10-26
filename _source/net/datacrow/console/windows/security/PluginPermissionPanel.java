@@ -83,7 +83,7 @@ public class PluginPermissionPanel extends JPanel implements ActionListener {
     }
     
     private void initialize() {
-        user.loadChildren();
+        user.loadChildren(null);
 
         for (RegisteredPlugin plugin : Plugins.getInstance().getRegistered()) {
             DcObject permission = null;

@@ -90,6 +90,11 @@ public abstract class DcObjectListElement extends DcListElement {
     
     private boolean loading = false;
     
+    public int[] getFields() {
+    	DcModule module = DcModules.get(getModule());
+    	return module.isAbstract() ? new int[] {DcObject._ID} : module.getMinimalFields(getFields(getModule()));
+    }
+    
     public void load() {
         
         int count = getComponentCount();
@@ -98,9 +103,7 @@ public abstract class DcObjectListElement extends DcListElement {
             DcModule module = DcModules.get(getModule());
             
             if (dco == null) {
-            	dco = module.isAbstract() ? DataManager.getItem(getModule(), key, new int[] {DcObject._ID}) :
-            								DataManager.getItem(getModule(), key, module.getMinimalFields(getFields(getModule())));
-            	
+            	dco = DataManager.getItem(getModule(), key, getFields());
             	this.module = dco.getModule().getIndex();
 	        	if (module.isAbstract()) {
 	        		dco.reload(dco.getModule().getMinimalFields(getFields(this.module)));

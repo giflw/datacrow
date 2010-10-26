@@ -105,6 +105,10 @@ public class DcDatabase {
         return new Version(major, minor, build, patch);
     }
     
+    public boolean isNew() {
+    	return getVersion(DatabaseManager.getConnection()).equals(new Version(0, 0, 0, 0));
+    }
+    
     private void updateVersion(Connection connection) throws SQLException {
         Version v = DataCrow.getVersion();
         Statement stmt = connection.createStatement();
@@ -123,7 +127,9 @@ public class DcDatabase {
     protected void initiliaze() throws Exception {
         
         Connection connection = DatabaseManager.getAdminConnection();
-        new DatabaseUpgrade().start();
+        
+        if (!isNew())
+        	new DatabaseUpgrade().start();
         
         startQueryQueue();
         initialize(connection);

@@ -28,21 +28,26 @@ package net.datacrow.console.components.panels.tree;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.views.MasterView;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.settings.DcSettings;
 
-public class GroupingPane extends JPanel {
+public class GroupingPane extends JPanel implements ChangeListener {
 
-    private Collection<TreePanel> panels = new ArrayList<TreePanel>();
+	private List<TreePanel> panels = new ArrayList<TreePanel>();
     
+	private int current = 0;
     private int module;
     private MasterView view;
     
@@ -60,6 +65,11 @@ public class GroupingPane extends JPanel {
         
         build();
     }
+    
+    @Override
+	public boolean isEnabled() {
+		return super.isEnabled() && DcSettings.getBoolean(DcRepository.Settings.stShowGroupingPanel);
+	}
     
     public void update(DcObject dco) {
     	for (TreePanel tp : panels)
@@ -106,28 +116,21 @@ public class GroupingPane extends JPanel {
         }
     }
     
-    public void load() {
-        for (TreePanel tp : panels) {
-    		tp.clear();
-    		tp.createTree();
-        }
+    private TreePanel getCurrent() {
+    	return panels.get(current);
     }
-
-    public TreePanel getActiveTree() {
-        for (TreePanel tp : panels) {
-            if (tp.isShowing())
-                return tp;
-        }
-        
-        return null;
+    
+    public void load() {
+    	TreePanel tp = getCurrent();
+		tp.groupBy();
     }
     
     public void updateView() {
         for (TreePanel tp : panels) {
-            if (tp.isShowing() && tp.isActive()) {
+            if (tp.isEnabled()) {
             	DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tp.getLastSelectedPathComponent();
             	if (node != null)
-            		tp.updateView(node.getItemsSorted(tp.top.getItems()));
+            		tp.updateView(node.getItemsSorted(tp.top.getItemList()));
             	else 
             		tp.setDefaultSelection();
             }
@@ -136,7 +139,7 @@ public class GroupingPane extends JPanel {
     
     public void sort() {
         for (TreePanel tp : panels) {
-        	if (tp.isActive()) {
+        	if (tp.isEnabled() && tp.isLoaded()) {
 	            tp.sort();
 	            tp.refreshView();
         	}
@@ -149,21 +152,14 @@ public class GroupingPane extends JPanel {
     }
     
     public void saveChanges(boolean b) {
-        for (TreePanel tp : panels) {
-        	if (tp.isActive())
-        		tp.setSaveChanges(b);
-        }
-    }
-    
-    public boolean isActive() {
-        boolean active = true;
         for (TreePanel tp : panels)
-            active &= tp.isActive();
-        return active;
+    		tp.setSaveChanges(b);
     }
     
     private void build() {
         JTabbedPane tp = ComponentFactory.getTabbedPane();
+        
+        tp.addChangeListener(this);
         
         for (TreePanel panel : panels)
             tp.addTab(panel.getName(), panel);
@@ -174,4 +170,11 @@ public class GroupingPane extends JPanel {
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0,0,0,0), 0, 0));
     }
+    
+    @Override
+	public void stateChanged(ChangeEvent ce) {
+        JTabbedPane pane = (JTabbedPane) ce.getSource();
+        current = pane.getSelectedIndex();
+        panels.get(current).activate();
+	}
 }

@@ -133,9 +133,14 @@ public class DcListUI extends BasicListUI {
                         paintCell(g, index, itemBounds, renderer, dataModel, selModel, leadIndex);
                     } catch (Exception exp) {
                         // An exception occured. Probably an incorrect element. Rebuild and retry
-                        list.setSelectedIndex(index);
-                        ((DcListElement) list.getSelectedValue()).update();
-                        paintCell(g, index, itemBounds, renderer, dataModel, selModel, leadIndex);
+                    	
+                        try {
+	                        list.setSelectedIndex(index);
+	                        ((DcListElement) list.getSelectedValue()).update();
+	                        paintCell(g, index, itemBounds, renderer, dataModel, selModel, leadIndex);
+                        } catch (Exception e)  {
+                        	return;
+                        }
                     }
                     
                     itemBounds.x += itemBounds.width;

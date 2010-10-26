@@ -644,6 +644,18 @@ public class DcModules {
         return c;
     }
     
+    public static List<DcModule> getAbstractModules(DcModule m) {
+    	List<DcModule> modules = new ArrayList<DcModule>();
+    	if (m.isContainerManaged())
+    		modules.add(DcModules.get(DcModules._ITEM));
+    	
+    	if (m.getType() == DcModule._TYPE_MEDIA_MODULE)
+    		modules.add(DcModules.get(DcModules._MEDIA));
+    	
+    	return modules;
+    }
+    
+    
     public static List<DcModule> getPersistentModules(DcModule abstractModule) {
     	List<DcModule> modules = new ArrayList<DcModule>();
     	for (DcModule module : DcModules.getAllModules()) {

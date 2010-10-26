@@ -259,19 +259,6 @@ public class DcValue implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void clear() {
-        if (value != null) {
-        
-            if (value instanceof Picture)
-                ((Picture) value).release();
-            else if (value instanceof DcImageIcon)
-                ((DcImageIcon) value).flush();
-            else if (value instanceof DcObject) 
-                ((DcObject) value).release();
-            else if (value instanceof Collection) {
-                for (DcObject dco : (Collection<DcObject>) value)
-                    dco.release();
-            }
-        }
         value = null;
     }
     

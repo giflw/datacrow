@@ -1,7 +1,8 @@
 package net.datacrow.console.components.panels.tree;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 
@@ -14,7 +15,7 @@ public class NodeElement {
     protected String displayValue;
     protected DcImageIcon icon;
     
-    private List<String> items = new ArrayList<String>();
+    private Map<String, Integer> items = new LinkedHashMap<String, Integer>();
     
     public NodeElement(Object key, String displayValue, DcImageIcon icon) {
         this.key = key;   
@@ -22,9 +23,9 @@ public class NodeElement {
         this.icon = icon;
     }
     
-    public void addItem(String item) {
-    	if (!items.contains(item))
-    		items.add(item);
+    public void addItem(String item, Integer moduleIdx) {
+    	if (!items.containsKey(item))
+    		items.put(item, moduleIdx);
     }
     
     public void removeItem(String item) {
@@ -39,27 +40,29 @@ public class NodeElement {
         return icon;
     }
     
-    public List<String> getItems() {
-    	return new ArrayList(items);
+    public Map<String, Integer> getItems() {
+    	return items;
     }
     
-    public List<String> getItemsSorted(List<String> allOrderedItems) {
+    public Map<String, Integer> getItemsSorted(List<String> allOrderedItems) {
+    	
+    	Map<String, Integer> items = getItems();
     	
     	if (allOrderedItems.size() == items.size()) 
-    		return new ArrayList<String>(items);
+    		return items;
     	
-    	List<String> result = new ArrayList<String>();
+    	Map<String, Integer> result = new LinkedHashMap();
     	for (String orderedItem : allOrderedItems) {
-    		for (String item : items) {
+    		for (String item : items.keySet()) {
     			if (item.equals(orderedItem)) {
-    				result.add(item);
+    				result.put(item, items.get(item));
     			}
     		}
     	}
     	return result;
     }
     
-    public void setItems(List<String> items) {
+    public void setItems(Map<String, Integer> items) {
     	this.items = items;
     }
 

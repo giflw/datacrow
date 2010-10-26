@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 
 public class DcObjectComboBox extends DcComboBox implements IComponent {
@@ -79,7 +80,7 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
         for (DcObject dco : newValues)
             addItem(dco);
 
-        for (DcObject dco :  DataManager.get(module, null))
+        for (DcObject dco : DataManager.get(module, DcModules.get(module).getMinimalFields(null)))
             addItem(dco);
 
         if (o != null)

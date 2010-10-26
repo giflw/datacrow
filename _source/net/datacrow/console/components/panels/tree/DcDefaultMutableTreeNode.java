@@ -1,6 +1,8 @@
 package net.datacrow.console.components.panels.tree;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -10,9 +12,9 @@ public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
         super(userObject);
     }
 
-    public void addItem(String item) {
+    public void addItem(String item, Integer moduleIdx) {
         NodeElement ne = (NodeElement) getUserObject();
-        ne.addItem(item);
+        ne.addItem(item, moduleIdx);
     }
     
     public void removeItem(String item) {
@@ -24,16 +26,20 @@ public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
         return ((NodeElement) getUserObject()).getCount();
     }
     
-    public List<String> getItems() {
+    public Map<String, Integer> getItems() {
         return ((NodeElement) getUserObject()).getItems();
     }
+
+    public List<String> getItemList() {
+        return new ArrayList<String>(((NodeElement) getUserObject()).getItems().keySet());
+    }
     
-    public List<String> getItemsSorted(List<String> allSortedItems) {
+    public Map<String, Integer> getItemsSorted(List<String> allSortedItems) {
         return ((NodeElement) getUserObject()).getItemsSorted(allSortedItems);
     }
     
     public boolean contains(String item) {
-        return ((NodeElement) getUserObject()).getItems().contains(item);
+        return ((NodeElement) getUserObject()).getItems().containsKey(item);
     }
     
     @Override

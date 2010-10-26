@@ -27,8 +27,8 @@ package net.datacrow.console.components.lists;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JList;
 import javax.swing.JViewport;
@@ -394,23 +394,22 @@ public class DcObjectList extends DcList implements IViewComponent {
     }
     
     @Override
-    public void add(String key) {
+    public int add(String key) {
         DcObjectListElement element = getDisplayElement(getModule().getIndex());
         element.setKey(key);
         getDcModel().addElement(element);
+        return 0;
     }
 
-    @Override
-    public void add(Collection<String> keys) {
+    public void add(Map<String, Integer> keys) {
         clear();
         
         DcListModel model = new DcListModel();
-        
         renderer.stop();
         
         DcObjectListElement element;
-        for (String key : keys) {
-            element = getDisplayElement(module.getIndex());
+        for (String key : keys.keySet()) {
+        	element = getDisplayElement(keys.get(key));
             element.setKey(key);
             model.addElement(element);
         }
@@ -478,7 +477,7 @@ public class DcObjectList extends DcList implements IViewComponent {
                 element = new DcMusicTrackListElement(module);
             else if (module == DcModule._TYPE_PROPERTY_MODULE)
                 element = new DcPropertyListElement(module);
-            else if (DcModules.get(module).isChildModule())
+            else if (DcModules.get(module).isChildModule() && module != DcModules.getCurrent().getIndex())
                 element = new DcShortObjectListElement(module);
             else 
                 element = new DcCardObjectListElement(module);       

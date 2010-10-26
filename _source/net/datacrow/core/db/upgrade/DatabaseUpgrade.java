@@ -111,7 +111,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
     }
     
     private boolean createIndexes() {
-        
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = null;
 

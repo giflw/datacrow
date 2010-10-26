@@ -92,15 +92,13 @@ public class FieldTreePanel extends TreePanel {
     }
     
     @Override
-    public boolean isActive() {
-        boolean active = isEnabled() && top != null && fields != null && fields.length > 0;
-        
-        if (active) {
+    public boolean isEnabled() {
+    	boolean enabled = super.isEnabled() && fields != null && fields.length > 0;
+        if (enabled) {
             for (int i = 0; i < fields.length; i++)
-                active &= fields[i] != -1;
+            	enabled &= fields[i] != -1;
         }
-            
-        return active;
+        return enabled;
     }
     
     @Override
@@ -109,8 +107,18 @@ public class FieldTreePanel extends TreePanel {
         fields = null;
         super.reset();
     } 
+    
+    @Override
+	public boolean isChanged(DcObject dco) {
+    	boolean changed = false;
+    	if (fields != null) {
+    		for (int field : fields)
+    			changed |= dco.isChanged(field);
+    	}
+    	return changed;
+	}
 
-    /************************************************************************
+	/************************************************************************
      * Initialization
      ************************************************************************/
     
@@ -121,6 +129,7 @@ public class FieldTreePanel extends TreePanel {
             while (treeHugger.isAlive()) {} // allow it to hang until the thread ends..
         }
         
+        activated = true;
         treeHugger = new TreeHugger();
         treeHugger.start();
     }
@@ -206,6 +215,9 @@ public class FieldTreePanel extends TreePanel {
 	                if (fieldCounter == 0) {
 	                    columns.append(module.getTableName());
 	                    columns.append(".ID,");
+	                    columns.append(module.getIndex());
+	                    columns.append("AS MODULEIDX,");	                    
+	                    
 	                } else {
 	                    columns.append(",");
 	                }
@@ -344,7 +356,7 @@ public class FieldTreePanel extends TreePanel {
             	if (level > 0)
             		sql.append(",");
             		
-            	sql.append(String.valueOf((level * 3) + 3));
+            	sql.append(String.valueOf((level * 3) + 4));
             	level++;
             }
             createTree(sql.toString());
@@ -373,6 +385,7 @@ public class FieldTreePanel extends TreePanel {
                 Object key = null;
                 String icon = null;
                 DcField field = null;
+                int module;
 
                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                 
@@ -398,9 +411,10 @@ public class FieldTreePanel extends TreePanel {
                         
                         // for each level the field index is shifted to the end.
                         id = rs.getString(1);
-                        key = rs.getObject((level * 3) + 2);
-                        value = rs.getString((level * 3) + 3);
-                        icon = rs.getString((level * 3) + 4);
+                        module = rs.getInt(2);
+                        key = rs.getObject((level * 3) + 3);
+                        value = rs.getString((level * 3) + 4);
+                        icon = rs.getString((level * 3) + 5);
                         
                         previous = parent.getChildCount() == 0 ? null : ((DefaultMutableTreeNode) parent.getChildAt(parent.getChildCount() - 1));
                         exists = previous == null || (((NodeElement)  previous.getUserObject()).getKey() == null && key != null) ? false : 
@@ -414,7 +428,7 @@ public class FieldTreePanel extends TreePanel {
                                 ne = new NodeElement(key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon.toCharArray()), false)));
                             }
                             
-                            ne.addItem(id);
+                            ne.addItem(id, module);
                             //topElem.addItem(id);
                             current = new DcDefaultMutableTreeNode(ne);
                             model.insertNodeInto(current, parent, parent.getChildCount());
@@ -423,7 +437,7 @@ public class FieldTreePanel extends TreePanel {
                         } else { // exists
                             existingNe =(NodeElement) previous.getUserObject();
                             //topElem.addItem(id);
-                            existingNe.addItem(id);
+                            existingNe.addItem(id, module);
                             parent = previous;    
                         }
                         level++;
@@ -450,7 +464,7 @@ public class FieldTreePanel extends TreePanel {
         DcModule mod = DcModules.get(getModule());
         String label = mod.getObjectNamePlural();
         
-        if (isActive()) {
+        if (isEnabled()) {
             label += " by ";
             for (int i = 0; i < fields.length; i++)
                 label += (i > 0 ? " & " : "") + mod.getField(fields[i]).getLabel();
@@ -464,6 +478,16 @@ public class FieldTreePanel extends TreePanel {
     public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
         DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode("top");
         add(dco, 0, node);
+        
+//        if (logger.isDebugEnabled()) {
+//        	for (int idx = 0; idx < node.getChildCount(); idx++) {
+//        		JFrame frame = new JFrame();
+//        		frame.getContentPane().add(new JScrollPane(new JTree(node)));
+//        		frame.pack();
+//        		frame.setVisible(true);
+//        	}
+//        }
+        
         return node;
     }
     
@@ -471,7 +495,7 @@ public class FieldTreePanel extends TreePanel {
         
         int index = level;
         
-        if (index >= fields.length) return;
+        if (fields == null || index >= fields.length) return;
         
         DcDefaultMutableTreeNode child;
         DcField field = dco.getField(fields[index]);
@@ -481,16 +505,14 @@ public class FieldTreePanel extends TreePanel {
             child = new DcDefaultMutableTreeNode(new NodeElement(empty, empty, null));
             node.add(child);
             add(dco, index, child);
-            return;
+            //return;
         } else {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 Collection<DcObject> references = (Collection<DcObject>) dco.getValue(field.getIndex());
                 if (references != null && references.size() > 0) {
-
                     for (DcObject reference : references) {
-                        child = new DcDefaultMutableTreeNode(
-                                new NodeElement(reference.toString(), reference.toString(), null));
-                        node.add(child);
+                        child = new DcDefaultMutableTreeNode(new NodeElement(reference.toString(), reference.toString(), reference.getIcon()));
+                        node.insert(child, 0);
                         add(dco, index, child);
                     }
                 }

@@ -155,7 +155,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
                 items.addAll(view.getSelectedItems());
             
             for (DcObject parent : items) {
-                parent.loadChildren();
+                parent.loadChildren(null);
                 currentItems.addAll(parent.getChildren());
             }
         } else {

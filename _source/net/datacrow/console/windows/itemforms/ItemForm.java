@@ -414,7 +414,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         boolean changed = dcoOrig.isChanged();
         
         if (childView != null && dcoOrig.getCurrentChildren().size() == 0)
-            dcoOrig.loadChildren();
+            dcoOrig.loadChildren(null);
         
         if (childView != null &&
             dcoOrig.getCurrentChildren().size() != childView.getItems().size())

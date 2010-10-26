@@ -35,6 +35,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Picture;
 
 public class DcShortObjectListElement extends DcObjectListElement {
@@ -55,6 +59,14 @@ public class DcShortObjectListElement extends DcObjectListElement {
     @Override
     public Collection<Picture> getPictures() {
         return new ArrayList<Picture>();
+    }
+    
+    @Override
+    public int[] getFields() {
+    	// only return one field for performance reasons, especially for abstract module children
+    	DcModule module = DcModules.get(getModule());
+    	return module.getType() == DcModule._TYPE_PROPERTY_MODULE ? 
+    			new int[] {DcProperty._ID, module.getDisplayFieldIdx(), DcProperty._B_ICON} : new int[] {DcObject._ID, module.getDisplayFieldIdx()};
     }
 
     @Override

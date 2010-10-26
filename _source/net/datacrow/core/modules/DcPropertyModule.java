@@ -25,6 +25,8 @@
 
 package net.datacrow.core.modules;
 
+import java.util.Collection;
+
 import javax.swing.ImageIcon;
 
 import net.datacrow.console.ComponentFactory;
@@ -153,7 +155,12 @@ public class DcPropertyModule extends DcModule {
         return false;
     }
     
-    /**
+    @Override
+	public int[] getMinimalFields(Collection<Integer> include) {
+		return new int[] {DcObject._ID, DcProperty._A_NAME, DcProperty._B_ICON, DcProperty._C_ALTERNATIVE_NAMES};
+	}
+
+	/**
      * Initializes the default fields.
      */
     @Override

@@ -446,13 +446,13 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Load all children. Children will only be loaded when no child information
      * is present yet. Will not overwrite existing values.
      */
-    public void loadChildren() {
+    public void loadChildren(int[] fields) {
         if (getModule().getChild() == null || isNew()) 
             return;
         
         children.clear();
         int childIdx = getModule().getChild().getIndex();
-        for (DcObject dco : DataManager.getChildren(getID(), childIdx)) {
+        for (DcObject dco : DataManager.getChildren(getID(), childIdx, fields)) {
             children.add(dco);
         }
     }  
@@ -480,7 +480,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @return The children or null of none.
      */
     public List<DcObject> getChildren() {
-        loadChildren();
+    	if (getModule().getChild() != null)
+    		loadChildren(getModule().getChild().getMinimalFields(null));
+    	
         return getCurrentChildren();
     }
     
@@ -934,7 +936,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public String getDisplayString(int index) {
         if (index == _SYS_DISPLAYVALUE)
-            return toString();
+            return getValueDef(getSystemDisplayFieldIdx()).getDisplayString(getField(getSystemDisplayFieldIdx()));
         else if (index == _SYS_MODULE)
             return getModule().getObjectNamePlural();
         

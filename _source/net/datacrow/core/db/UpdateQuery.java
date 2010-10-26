@@ -36,6 +36,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -199,7 +200,7 @@ public class UpdateQuery extends Query {
 
         handleRequest(null, success);
         
-        if (success) 
+        if (success && DataCrow.isInitialized()) 
         	updateUI(dco);
         
         return null;
@@ -209,14 +210,14 @@ public class UpdateQuery extends Query {
         if (dco.getModule().getSearchView() != null) 
             dco.getModule().getSearchView().update(dco);
         
-        // TODO: update related items: quick view and tree view
-        for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-            if (module.getSearchView() != null) {
-                module.getSearchView().refreshQuickView();
-                if (module.getSearchView().getGroupingPane() != null) {
-                    //module.getSearchView().getGroupingPane().updateUI()
-                }
-            }
-        }
+    	for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
+    		if (module.getSearchView() != null)
+    			module.getSearchView().refreshQuickView();
+    	}
+
+    	for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
+    		if (module.getSearchView() != null)
+    			module.getSearchView().update(dco);
+    	}
     }
 }

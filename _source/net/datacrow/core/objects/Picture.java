@@ -67,9 +67,7 @@ public class Picture extends DcObject {
     }
     
     @Override
-    public void initializeImages() {
-        
-    }
+    public void initializeImages() {}
     
     @Override
     public boolean hasPrimaryKey() {
@@ -172,13 +170,7 @@ public class Picture extends DcObject {
                 int idx = filename.indexOf(".jpg");
                 String plain = filename.substring(0, idx);
                 String scaledFilename = plain + "_small.jpg";
-                
-//                if (isNew()) {
-//                    return null;
-//                } else {
-                    return scaledFilename;
-//                }
-                
+                return scaledFilename;
             } catch (Exception e) {
                 logger.debug("Unable to determine scaled image filename for " + filename + ". Is this a new item?", e);
             }
@@ -240,5 +232,11 @@ public class Picture extends DcObject {
         }
         
         return equals;
-   }    
+   }
+
+	@Override
+	protected void finalize() throws Throwable {
+		unload();
+		super.finalize();
+	}    
 }

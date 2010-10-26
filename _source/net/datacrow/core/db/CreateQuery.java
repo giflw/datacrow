@@ -78,7 +78,7 @@ public class CreateQuery extends Query {
         
         if (module.getIndex() == DcModules._PICTURE) {
             try { 
-                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module + " (" +
+                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                         module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
                         module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
             } catch (SQLException se) {
@@ -86,7 +86,7 @@ public class CreateQuery extends Query {
             }
         } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
             try { 
-                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module + " (" +
+                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                         module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                         module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
             } catch (SQLException se) {
@@ -94,7 +94,7 @@ public class CreateQuery extends Query {
             }
         } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
             try { 
-                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module + " (" +
+                stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                         module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                         module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
             } catch (SQLException se) {

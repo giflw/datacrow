@@ -29,8 +29,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -46,9 +48,11 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcTree;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
@@ -65,6 +69,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected GroupingPane gp;
     protected Object currentUserObject;
     
+    protected boolean activated = false;
     private boolean saveChanges = true;
     
     public TreePanel(GroupingPane gp) {
@@ -82,6 +87,18 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         build();
     }
     
+    public void activate() {
+    	if (isShowing() && isEnabled() && !activated) {
+    		activated = true;
+    		groupBy();
+    	}
+    }
+    
+    @Override
+	public boolean isEnabled() {
+		return super.isEnabled() && DcSettings.getBoolean(DcRepository.Settings.stShowGroupingPanel);
+	}
+
     public MasterView getView() {
         return gp.getView();
     }
@@ -129,12 +146,11 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public void add(DcObject dco) {
         DcDefaultMutableTreeNode path = getFullPath(dco);
-        
         String item = dco.getID();
         if (top != null) {
             NodeElement ne = (NodeElement) top.getUserObject();
-            ne.addItem(item);
-            add(item, path, top);
+            ne.addItem(item, dco.getModule().getIndex());
+            add(item, dco.getModule().getIndex(), path, top);
         }
     }
     
@@ -143,24 +159,28 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
      * @param child Does not need to exist!
      * @param parent Existing parent
      */
-    private void add(String item, DcDefaultMutableTreeNode node, DcDefaultMutableTreeNode parent) {
-    	DcDefaultMutableTreeNode child;
+    private void add(String item, int module, DcDefaultMutableTreeNode node, DcDefaultMutableTreeNode parent) {
     	DcDefaultMutableTreeNode existingChild;
-    	for (int i = 0; i < node.getChildCount(); i++) {
-    	    child = (DcDefaultMutableTreeNode) node.getChildAt(i);
+
+    	// need to add to a collection as nodes will be removed once placed in the actual tree (!)
+    	Collection<DcDefaultMutableTreeNode> nodes = new ArrayList<DcDefaultMutableTreeNode>();
+    	for (int i = 0; i < node.getChildCount(); i++)
+    		nodes.add((DcDefaultMutableTreeNode) node.getChildAt(i));
+    	
+    	for (DcDefaultMutableTreeNode child : nodes) {
     	    existingChild = findNode(child, parent, false);
     	    
     	    if (existingChild == null) {
-    	        child.addItem(item);
-    	        ((NodeElement) child.getUserObject()).addItem(item);
+    	    	// will be removed from the node as well: 
+    	    	
+    	        child.addItem(item, Integer.valueOf(module));
     	        insertNode(child, parent);
     	        existingChild = child;
     	    } else {
-    	        existingChild.addItem(item);
+    	        existingChild.addItem(item, Integer.valueOf(module));
     	        setSelected(existingChild);
     	    }
-    	    
-    	    add(item, child, existingChild);
+    	    add(item, module, child, existingChild);
     	}
     }
     
@@ -169,6 +189,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	
     	top.removeItem(item);
     	remove(item, top);
+    	repaint();
     }
     
     /**
@@ -178,7 +199,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
      */
     private void remove(String item, DcDefaultMutableTreeNode node) {
         DcDefaultMutableTreeNode child;
-        for (int i = 0; i < node.getChildCount(); i++) {
+        for (int i = node.getChildCount() -1; i > -1 ; i--) {
             child = (DcDefaultMutableTreeNode) node.getChildAt(i);
             child.removeItem(item);
             
@@ -188,9 +209,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         }
     }
     
+    public abstract boolean isChanged(DcObject dco);
+    
     public void update(DcObject dco) {
-    	remove(dco.getID());
-    	add(dco);
+    	if (isChanged(dco)) {
+    		remove(dco.getID());
+    		add(dco);
+    	}
     }
     
     public abstract DcDefaultMutableTreeNode getFullPath(DcObject dco);
@@ -232,14 +257,14 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         }
     }
     
-    protected void updateView(List<String> keys) {
+    protected void updateView(Map<String, Integer> keys) {
         getView().getCurrent().add(keys);  
     }
     
     public void setDefaultSelection() {
         setListeningForSelection(true);
         try {
-            if (isActive())
+            if (isEnabled())
                 tree.setSelectionInterval(1, 1);
             else 
                 tree.setSelectionInterval(0, 0);
@@ -353,7 +378,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         Collections.sort(elements);
         int idx = elements.indexOf(ne.getComparableKey());
         
-        model.insertNodeInto(node, parent, idx + 1);
+        model.insertNodeInto(node, parent, parent.getChildCount() == 0 ? 0 : idx);
         
         tree.expandPath(new TreePath(model.getPathToRoot(node)));
         setSelected(node);
@@ -397,16 +422,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected abstract void createTree();
     
     public void refreshView() {
-    	getView().getCurrent().clear();
     	DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-    	if (node != null)
-    		getView().getCurrent().add(node.getItemsSorted(top.getItems()));
+    	if (node != null) {
+    		getView().getCurrent().clear();
+    		getView().getCurrent().add(node.getItemsSorted(top.getItemList()));
+    	}
     }
-    
-    protected boolean isActive() {
-    	return isEnabled() && top != null;
-    }
-    
+
     public abstract void groupBy();
     
     private void removeNode(DefaultMutableTreeNode child) {
@@ -464,10 +486,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         
         View currentView = getView().getCurrent();
         if (currentView != null) {
-            currentView.clear(isSaveChanges());
+        	try {
+        		currentView.clear(isSaveChanges());
+        	} catch (Exception ee) {}
+        		
             NodeElement currentNode = (NodeElement) o;
             setSelected(node);
-            updateView(currentNode.getItemsSorted(top.getItems()));
+            updateView(currentNode.getItemsSorted(top.getItemList()));
         }
     }
 }

@@ -52,9 +52,4 @@ public class FileNodeElement extends NodeElement {
         else 
             return getKey().equals(((FileNodeElement) o).getKey());
     }
-
-    @Override
-    public int getCount() {
-        return 0;
-    }
 }

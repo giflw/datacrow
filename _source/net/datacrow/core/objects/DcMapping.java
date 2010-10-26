@@ -27,6 +27,7 @@ package net.datacrow.core.objects;
 
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.util.DcImageIcon;
 
 import org.apache.log4j.Logger;
 
@@ -141,6 +142,11 @@ public class DcMapping extends DcObject {
     }
     
     @Override
+	public DcImageIcon getIcon() {
+		return getReferencedObject() == null ? super.getIcon() : getReferencedObject().getIcon();
+	}
+
+	@Override
     public String toString() {
         return getReferencedObject() == null ? "" : getReferencedObject().toString();//DataManager.getDisplayString(getReferencedModuleIdx(), (String) getValueDef(_B_REFERENCED_ID).getValue());
     }

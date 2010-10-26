@@ -32,7 +32,6 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 
 /**
@@ -90,9 +89,11 @@ public class RefreshChildView implements IUpdateUIRequest {
                 String parentID = dco.getParentID();
                 
                 if (dco.getModule().getParent() == null && dco.getModule().isContainerManaged()) {
-                    DcObject parent = DataManager.getItem(DcModules._CONTAINER, parentID);
-                    parent.getModule().getSearchView().get(MasterView._LIST_VIEW).updateItem(
-                            parentID,  parent.getModule().getItem());                    
+                	
+                	// TODO: implement
+//                    DcObject parent = DataManager.getItem(DcModules._CONTAINER, parentID);
+//                    parent.getModule().getSearchView().get(MasterView._LIST_VIEW).updateItem(
+//                            parentID,  parent.getModule().getItem());                    
                     
                 } else {
                     DcObject parent = DataManager.getItem(dco.getModule().getParent().getIndex(), parentID);

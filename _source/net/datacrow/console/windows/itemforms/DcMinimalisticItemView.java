@@ -194,7 +194,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         DcObject dco = DcModules.get(module).getItem();
         DataFilter filter = new DataFilter(module);
         filter.setOrder(new DcField[] {dco.getField(DcModules.get(module).getDefaultSortFieldIdx())});
-        list.add(DataManager.get(module, null));
+        list.add(DataManager.getKeys(filter));
         dco.release();
     }    
 

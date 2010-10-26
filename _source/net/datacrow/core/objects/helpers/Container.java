@@ -105,7 +105,7 @@ public class Container extends DcObject {
     }
 
     @Override
-    public void loadChildren() {
+    public void loadChildren(int[] fields) {
         
         children.clear();
         

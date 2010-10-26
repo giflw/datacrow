@@ -63,7 +63,9 @@ public class FileTreePanel extends TreePanel {
     }
 
     @Override
-    public void groupBy() {}
+    public void groupBy() {
+    	createTree();
+    }
     
     @Override
     public String getName() {
@@ -72,28 +74,40 @@ public class FileTreePanel extends TreePanel {
     
     @Override
     public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
-        DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode(DcResources.getText("lblFileTreeSystem"));
+        DcDefaultMutableTreeNode previous = new DcDefaultMutableTreeNode(DcResources.getText("lblFileTreeSystem"));
+        DcDefaultMutableTreeNode top = previous;
+        DcDefaultMutableTreeNode node;
         String filename = dco.getFilename();
         if (filename != null) {
 	        StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
 	        while (st.hasMoreElements()) {
-	        	node.add(new DcDefaultMutableTreeNode(new FileNodeElement((String) st.nextElement(), new File(filename))));
+	        	node = new DcDefaultMutableTreeNode(new FileNodeElement((String) st.nextElement(), new File(filename)));
+	        	previous.add(node);
+	        	previous = node;
 	        }
         }   
-        return node;
+        return top;
     }
     
-    /************************************************************************
+    @Override
+	public boolean isChanged(DcObject dco) {
+    	return dco.isChanged(DcObject._SYS_FILENAME);
+	}
+
+	/************************************************************************
      * Initialization
      ************************************************************************/
     
     @Override
     protected void createTree() {
+        build();
+    	
         if (treeHugger != null) {
             treeHugger.cancel();
             while (treeHugger.isAlive()) {} // allow it to hang until the thread ends..
         }
-        
+
+        activated = true;
         treeHugger = new TreeHugger();
         treeHugger.start();
     }
@@ -140,6 +154,8 @@ public class FileTreePanel extends TreePanel {
             		sql.append(" UNION ");
             	
             	sql.append("SELECT ID, ");
+            	sql.append(module.getIndex());
+            	sql.append(" AS MODULEIDX, ");
             	sql.append(module.getFileField().getDatabaseFieldName());
             	sql.append(" AS FILENAME FROM ");
             	sql.append(module.getTableName());
@@ -177,6 +193,7 @@ public class FileTreePanel extends TreePanel {
                 
                 NodeElement existingNe;
                 NodeElement ne;
+                int module;
                 String id = null;
                 String key = null;
                 String filename = null;
@@ -193,7 +210,8 @@ public class FileTreePanel extends TreePanel {
                     parent = top;
                     
                     id = rs.getString(1);
-                    filename = rs.getString(2);
+                    module = rs.getInt(2);
+                    filename = rs.getString(3);
                     
                     StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
                     while (st.hasMoreElements()) {
@@ -209,15 +227,14 @@ public class FileTreePanel extends TreePanel {
                         
                         if (!exists) { 
                             ne = new FileNodeElement(key, new File(filename));
-                            
-                            ne.addItem(id);
+                            ne.addItem(id, module);
                             current = new DcDefaultMutableTreeNode(ne);
                             model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
                         } else { // exists
                             existingNe =(NodeElement) previous.getUserObject();
-                            existingNe.addItem(id);
+                            existingNe.addItem(id, module);
                             parent = previous;    
                         }
                         level++;

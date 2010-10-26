@@ -695,6 +695,9 @@ public class DcModule implements Comparable<DcModule> {
         if (getField(DcObject._ID) != null && !fields.contains(Integer.valueOf(DcObject._ID))) 
             fields.add(Integer.valueOf(DcObject._ID));
         
+        if (!fields.contains(Integer.valueOf(DcObject._SYS_DISPLAYVALUE)))
+        	fields.add(DcObject._SYS_DISPLAYVALUE);	
+        
         int[] result = new int[fields.size()];
         int i = 0;
         for (Integer field : fields)

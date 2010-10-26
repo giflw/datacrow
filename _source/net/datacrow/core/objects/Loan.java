@@ -89,7 +89,11 @@ public class Loan extends DcObject {
      */
     public DcObject getPerson() {
         String personID = (String) getValue(Loan._C_CONTACTPERSONID);
-        return DataManager.getItem(DcModules._CONTACTPERSON, personID, new int[] {DcObject._ID, ContactPerson._A_NAME});
+        
+        if (personID == null)
+        	return null;
+        else 
+        	return DataManager.getItem(DcModules._CONTACTPERSON, personID, new int[] {DcObject._ID, ContactPerson._A_NAME});
     }
     
     public Date getDueDate() {

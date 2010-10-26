@@ -35,6 +35,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -243,14 +244,9 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void setDefaultSelection() {
-        try {
-            int total = getItemCount();
-            if (total > 0) {
-                vc.setSelected(0);
-                afterSelect(0);
-            }
-        } catch (Exception e) {
-            logger.error(e, e);
+        int total = getItemCount();
+        if (total > 0) {
+        	setSelected(0);
         }
     }
     
@@ -306,11 +302,11 @@ public class View extends DcPanel implements ListSelectionListener {
      * @see DcTable#add(DcObject).
      * @param items
      */
-    public void add(Collection<String> keys) {
+    public void add(Map<String, Integer> keys) {
         setActionsAllowed(false);
 
         vc.deselect();
-        vc.add(new ArrayList<String>(keys));
+        vc.add(keys);
         
         setActionsAllowed(true);
         
@@ -344,11 +340,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }    
     
     protected void setSelected() {
-        int idx = getItemCount() - 1;
-        if (idx >= 0) {
-            vc.setSelected(idx);
-            afterSelect(idx);
-        }
+        setSelected(0);
     }    
     
     @Override
@@ -405,6 +397,9 @@ public class View extends DcPanel implements ListSelectionListener {
         
         applyViewDividerLocation();
         vc.activate();
+        
+        if (childView != null) 
+        	childView.activate();
     }
     
     public void groupBy() {
@@ -539,8 +534,6 @@ public class View extends DcPanel implements ListSelectionListener {
             groupingPane.setVisible(treeVisibibleSett);
             if (!treeVisibible && treeVisibibleSett)
                 groupingPane.groupBy();
-            else if (treeVisibible && !treeVisibibleSett)
-                groupingPane.load();
             
             groupingPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
         }
@@ -622,6 +615,10 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public List<String> getSelectedItemKeys() {
         return vc.getSelectedItemKeys();
+    }
+    
+    public List<String> getItemKeys() {
+        return vc.getItemKeys();
     }
 
     public DcObject getSelectedItem() {
@@ -735,6 +732,8 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void afterSelect(int idx) {
+    	
+    	if (vc.getItemCount() == 0) return;
         
         String key = vc.getItemKey(idx);
         int module = vc.getModule(idx);
@@ -781,8 +780,6 @@ public class View extends DcPanel implements ListSelectionListener {
             panelResult.add(spChildView,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                             new Insets(5, 5, 5, 5), 0, 0));
-//            revalidate();
-//            repaint();
         }
     }
     

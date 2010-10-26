@@ -64,6 +64,10 @@ public class DcPropertyListElement extends DcObjectListElement {
         super.setDcObject(dco);
         build();
     }
+    
+    public int[] getFields() {
+    	return new int[] {DcObject._ID, DcProperty._A_NAME, DcProperty._B_ICON};
+    }
 
     @Override
     public void build() {

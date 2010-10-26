@@ -30,6 +30,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -161,8 +162,18 @@ public class DeleteQuery extends Query {
         
         handleRequest(null, success);
         
-        if (success && dco.getModule().getSearchView() != null) 
+        if (DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) {
             dco.getModule().getSearchView().remove(ID);
+        	for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
+        		if (module.getSearchView() != null)
+        			module.getSearchView().refreshQuickView();
+        	}
+            
+        	for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
+        		if (module.getSearchView() != null)
+        			module.getSearchView().remove(ID);
+        	}
+        }
 
         clear();
         return null;

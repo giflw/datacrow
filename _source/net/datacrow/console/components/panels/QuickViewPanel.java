@@ -173,6 +173,10 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }
     
     public void setObject(String key, int module) {
+    	
+    	if (dco != null && dco.getID().equals(key))
+    		return;
+    	
         if (key != null) {
             Collection<Integer> fields = new ArrayList<Integer>();
             QuickViewFieldDefinitions definitions = 
@@ -188,12 +192,13 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     protected void setObject(DcObject dco) {
         try {
             int tab = tabbedPane.getSelectedIndex();
+            module = dco.getModule().getIndex();
             clear();
             
             this.dco = dco;
             
             if (DcModules.getCurrent().isAbstract())
-            	this.dco.reload(dco.getFieldIndices());
+            	this.dco.reload(dco.getModule().getMinimalFields(null));
             
             String html = "<html><body " + 
                            Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + 
@@ -242,10 +247,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (key != null)
             key = null;
 
-        try {
-            tabbedPane.setSelectedIndex(0);
-        } catch (Exception e) {}
-        
+        tabbedPane.setSelectedIndex(0);
         descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
     	clearImages();
     }
@@ -301,7 +303,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (children == null || children.size() == 0)
             return "";
         
-        String table = "<br> <h3>" + DcResources.getText(module.getItemPluralResourceKey()) + "</h3>";
+        String table = "<br> <h3>" + module.getObjectNamePlural() + "</h3>";
         
         table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
 
@@ -313,6 +315,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         String value;
         
         for (DcObject child : children) {
+        	
+        	if (dco.getModule().getIndex() == DcModules._CONTAINER)
+        		child.load(child.getModule().getMinimalFields(null));
             
             table += "<tr><td>";
 
@@ -465,7 +470,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (SwingUtilities.isRightMouseButton(e))
             showPopupMenu(e.getX(), e.getY());
 
-        if (e.getClickCount() == 2 && key != null)
+        if (e.getClickCount() == 2 && dco != null)
             DcModules.get(module).getCurrentSearchView().open();
     }
 

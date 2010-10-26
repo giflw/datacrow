@@ -30,9 +30,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -233,8 +234,8 @@ public class DatabaseManager {
         return null;
     }
     
-    public static List<String> getKeys(DataFilter filter) {
-        List<String> data = new ArrayList<String>();
+    public static Map<String, Integer> getKeys(DataFilter filter) {
+    	Map<String, Integer> data = new LinkedHashMap<String, Integer>();
 
         try {
         	String sql = filter.toSQL(new int[] {DcObject._ID}, true, false);
@@ -244,8 +245,16 @@ public class DatabaseManager {
         	
             ResultSet rs = DatabaseManager.executeSQL(sql);
             
-            while (rs.next())
-                data.add(rs.getString("ID"));
+            int moduleIdx;
+            while (rs.next()) {
+            	
+            	try {
+            		moduleIdx = rs.getInt("MODULEIDX");
+            	} catch (Exception e) {
+            		moduleIdx = filter.getModule();
+            	}
+            	data.put(rs.getString("ID"), moduleIdx);
+            }
             
             rs.close();
         } catch (SQLException e) {

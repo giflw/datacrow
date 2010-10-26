@@ -35,7 +35,10 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
@@ -162,10 +165,14 @@ public class InsertQuery extends Query {
         
         handleRequest(null, success);
 
-        if (success && dco.getModule().getSearchView() != null) { 
+        if (DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) { 
             dco.getModule().getSearchView().add(dco);
             if (dco.getModule().getInsertView() != null)
                 dco.getModule().getInsertView().remove(ID);
+            
+        	for (DcModule module : DcModules.getAbstractModules(dco.getModule()))
+        		if (module.getSearchView() != null)
+        			module.getSearchView().add(dco);
         }
         
         clear();

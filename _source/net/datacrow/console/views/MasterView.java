@@ -30,7 +30,6 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -78,12 +77,8 @@ public class MasterView {
     
     public void setView(int index) {
         DataCrow.mainFrame.applyView(index);
-        
         if (groupingPane != null)
             groupingPane.saveChanges(false);
-        
-        if (groupingPane != null)
-            groupingPane.saveChanges(true);
     }
     
     public View get(int index) {
@@ -91,8 +86,9 @@ public class MasterView {
     }
     
     public void refreshQuickView() {
-        for (View view : views.values())
+        for (View view : views.values()) {
             view.refreshQuickView();
+        }
     }
     
     public View getCurrent() {
@@ -114,7 +110,7 @@ public class MasterView {
     }
     
     public void update(DcObject dco) {
-        if (groupingPane != null)
+        if (groupingPane != null && groupingPane.isEnabled())
             groupingPane.update(dco);
         
         for (View view : getViews())
@@ -124,7 +120,7 @@ public class MasterView {
     public void add(DcObject dco) {
     	getCurrent().add(dco);
         
-        if (groupingPane != null)
+        if (groupingPane != null && groupingPane.isEnabled())
             groupingPane.add(dco);
     }
     
@@ -133,7 +129,7 @@ public class MasterView {
         for (View view : getViews())
             view.remove(new String[] {key});
 
-        if (groupingPane != null)
+        if (groupingPane != null && groupingPane.isEnabled())
             groupingPane.remove(key);
     }
     
@@ -156,10 +152,10 @@ public class MasterView {
     }
     
     public void sort() {
-    	if (getGroupingPane() == null || !getGroupingPane().isActive()) {
-    		groupingPane.sort();
-    	} else {
+    	if (getGroupingPane() == null || !getGroupingPane().isEnabled()) {
     		getCurrent().sort();
+    	} else {
+    		groupingPane.sort();
     	}
     }
     
@@ -168,7 +164,7 @@ public class MasterView {
             view.clear();
         }
         
-        if (groupingPane != null)
+        if (groupingPane != null && groupingPane.isEnabled())
             groupingPane.groupBy();
         
     }
@@ -190,18 +186,18 @@ public class MasterView {
         for (View view : getViews())
             view.clear(saveChanges);
 
-        if (groupingPane != null)
+        if (groupingPane != null && groupingPane.isEnabled())
             groupingPane.clear();
     }
     
-    public void add(final List<String> keys) {
+    public void add(final Map<String, Integer> keys) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
             	for (View view : getViews())
                     view.clear();
                 
-                if (groupingPane != null || !groupingPane.isActive()) {
+                if (groupingPane != null && groupingPane.isEnabled()) {
                     groupingPane.load();
                 } else { 
                 	for (View view : getViews())

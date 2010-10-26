@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -115,7 +116,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             poller.start();
             
             DataFilters.setCurrent(module.getIndex(), df);
-            List<String> keys = DataManager.getKeys(df == null ? DataFilters.getCurrent(module.getIndex()) : df);
+            Map<String, Integer> keys = DataManager.getKeys(df == null ? DataFilters.getCurrent(module.getIndex()) : df);
             DcModules.getCurrent().getSearchView().add(keys);
             
             try {

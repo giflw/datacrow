@@ -33,13 +33,13 @@ public class User extends DcObject {
     }
     
     @Override
-    public void loadChildren() {
+    public void loadChildren(int[] fields) {
         // Permissions do not need to be reloaded as the number of permission is static.
         // Note that doing this for other modules will re-introduce the bug: deleted children are shown.
         if (getModule().getChild() != null && children.size() == 0) {
             children.clear();
             int childIdx = getModule().getChild().getIndex();
-            for (DcObject dco : DataManager.getChildren(getID(), childIdx))
+            for (DcObject dco : DataManager.getChildren(getID(), childIdx, fields))
                 children.add(dco);
         }
     }      

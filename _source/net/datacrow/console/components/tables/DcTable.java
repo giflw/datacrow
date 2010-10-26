@@ -639,12 +639,16 @@ public class DcTable extends JTable implements IViewComponent {
     @Override
     public void update(String ID) {
         loadedRows.remove(Integer.valueOf(getRowNumberWithID(ID)));
+        removeFromCache(ID);
     }
-
-    @Override
+    
+	@Override
     public void setSelected(int row) {
+		
+		if (row + 1 > getRowCount())
+			return;
+		
         try {
-            
             int selectedCol = getSelectedColumn();
             
             if (getSelectedRow() > -1) {
@@ -654,7 +658,8 @@ public class DcTable extends JTable implements IViewComponent {
 
             getSelectionModel().setValueIsAdjusting(true);
 
-            selectedCol = selectedCol < 0 ? getColumnCount() - 1 : selectedCol; 
+            selectedCol = selectedCol < 0 ? getColumnCount() - 1 : selectedCol;
+            selectedCol = selectedCol == -1 ? 0 : selectedCol;
             
             addRowSelectionInterval(row, row);
             addColumnSelectionInterval(0, selectedCol);
@@ -1040,13 +1045,15 @@ public class DcTable extends JTable implements IViewComponent {
         boolean loaded = loadedRows.contains(Integer.valueOf(row));
         
         if (!loaded) {
+        	
+            int selectedRow = getSelectedRow();
+        	
             loadedRows.add(Integer.valueOf(row));
             
             boolean listenForChanges = isListeningForChanges();
             setListeningForChanges(false);
             
             String ID = (String) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
-            
             
             Settings settings = module.getSettings();
             Collection<Integer> fields = new ArrayList<Integer>();
@@ -1074,6 +1081,7 @@ public class DcTable extends JTable implements IViewComponent {
                     model.setValueAt(value, row, col);    
                 }
                 
+                // clears the selection as well..
                 ((DcTableModel) getModel()).fireTableDataChanged();
             }
 
@@ -1084,9 +1092,11 @@ public class DcTable extends JTable implements IViewComponent {
             }
 
             dco.release();
-            setListeningForChanges(listenForChanges);
             applyHeaders();
+            setSelected(selectedRow);
 
+            setListeningForChanges(listenForChanges);
+            
             return true;
         }
         return false;
@@ -1270,14 +1280,17 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     @Override
-    public void add(String key) {
+    public int add(String key) {
         int row = addRow();
         getModel().setValueAt(key, row, getColumnIndexForField(DcObject._ID));
+        return row;
     }
 
     @Override
-    public void add(Collection<String> keys) {
-        for (String key : keys)
-            add(key);
+    public void add(Map<String, Integer> keys) {
+        for (String key : keys.keySet()) {
+            int row = add(key);
+            getModel().setValueAt(keys.get(key), row, getColumnIndexForField(Media._SYS_MODULE));
+        }
     }
 }

@@ -245,7 +245,7 @@ public class ModuleExporter {
 		private void exportData(int module) throws Exception {
 		    
             List<String> items = new ArrayList<String>();
-            for (String item : DataManager.getKeys(new DataFilter(module))) 
+            for (String item : DataManager.getKeyList(new DataFilter(module))) 
                 items.add(item);
             
             if (items.size() == 0)

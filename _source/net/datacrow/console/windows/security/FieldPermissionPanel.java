@@ -94,7 +94,7 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
     }
     
     private void initialize() {
-        user.loadChildren();
+        user.loadChildren(null);
 
         for (DcField field : module.getFields()) {
             DcObject permission = null;

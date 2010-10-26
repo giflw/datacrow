@@ -106,6 +106,7 @@ public class DataCrow {
     public static String dataDir;
     public static String resourcesDir;
     
+    private static boolean initialized = false;
     private static boolean debug = false;
     private static boolean noSplash = false;
     private static boolean isWebModuleInstalled = false;
@@ -412,6 +413,8 @@ public class DataCrow {
                     DriveManager.getInstance().startDrivePoller();
                 }
                 
+                initialized = true;
+                
             } catch (Exception e) {
                 if (logger != null)  logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
                 e.printStackTrace();
@@ -451,6 +454,10 @@ public class DataCrow {
             
             System.exit(0);
         }
+    }
+    
+    public static boolean isInitialized() {
+    	return initialized;
     }
     
     private static void loadDefaultData() {
