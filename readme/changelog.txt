@@ -1,13 +1,6 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9  [Release on xxxxxx 2010] [testing: moderate] [target: moderate]
+Data Crow BETA 3.9 [Release on October 27, 2010] [testing: LOW] [target: BETA]
 -----------------------------------------------------------------------------------------
-
-TODO: 
-- update PDF Box
-- update jtattoo
-- update jetty (!) 7.1.6
-    
-
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
 Items were always loaded (all of them) on startup, causing a long startup time and 
@@ -36,6 +29,7 @@ New System Requirements:
 - Sun Java 1.6 or higher.
 
 [Known issues]
+- Web site is not working yet (!)
 - Java will start consuming a lot of the processor time when the application is running 
   out of memory. Assign 256MB's to the application to make sure that this does not happen.
 
@@ -59,7 +53,7 @@ New System Requirements:
 
 
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: moderate]
+Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -73,7 +67,7 @@ Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: moderate]
 
 
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.15  [Release on June 15th 2010] [testing: high] [target: moderate]
+Data Crow 3.8.15  [Release on June 15th 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -92,7 +86,7 @@ Data Crow 3.8.15  [Release on June 15th 2010] [testing: high] [target: moderate]
 
 
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.14  [Release on May 27th 2010] [testing: high] [target: moderate]
+Data Crow 3.8.14  [Release on May 27th 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -100,7 +94,7 @@ Data Crow 3.8.14  [Release on May 27th 2010] [testing: high] [target: moderate]
 
 
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.13  [Release on May 7th 2010] [testing: high] [target: moderate]
+Data Crow 3.8.13  [Release on May 7th 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -126,7 +120,7 @@ Data Crow 3.8.13  [Release on May 7th 2010] [testing: high] [target: moderate]
 
 
 -----------------------------------------------------------------------------------------
-Data Crow 3.8.12  [Release on May 3rd 2010] [testing: high] [target: moderate]
+Data Crow 3.8.12  [Release on May 3rd 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 
 [Changed]

@@ -3,8 +3,8 @@
 <installation version="1.0">
 
     <info>
-        <appname>Data Crow</appname>
-        <appversion>3.8.16</appversion>
+        <appname>Data Crow BETA</appname>
+        <appversion>3.8.9</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
