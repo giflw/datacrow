@@ -36,6 +36,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -177,6 +179,7 @@ public class FileTreePanel extends TreePanel {
                         @Override
                         public void run() {
                             expandAll();
+                            setDefaultSelection();
                         }
                     }));
         }
@@ -205,6 +208,9 @@ public class FileTreePanel extends TreePanel {
                 DefaultMutableTreeNode previous;
                 boolean exists = false;
                 
+                Collection<String> keys = DataFilters.isFilterActive(getModule()) ? 
+                							DataManager.getKeyList(DataFilters.getCurrent(getModule())) : null;
+                
                 while (rs.next() && !stop) {
                     int level = 0;
                     parent = top;
@@ -213,10 +219,12 @@ public class FileTreePanel extends TreePanel {
                     module = rs.getInt(2);
                     filename = rs.getString(3);
                     
+                    if (keys != null && !keys.contains(id)) continue;
+                    
                     StringTokenizer st = new StringTokenizer(filename, (filename.indexOf("/") > -1 ? "/" : "\\"));
                     while (st.hasMoreElements()) {
                     	key = (String) st.nextElement();
-                    
+                    	
                         if (stop) break;
                         
                         // check the whole last leaf

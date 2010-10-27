@@ -160,9 +160,9 @@ public class FieldTreePanel extends TreePanel {
                         @Override
                         public void run() {
                             expandAll();
+                            setDefaultSelection();
                         }
                     }));
-
         }
         
         /**
@@ -216,7 +216,7 @@ public class FieldTreePanel extends TreePanel {
 	                    columns.append(module.getTableName());
 	                    columns.append(".ID,");
 	                    columns.append(module.getIndex());
-	                    columns.append("AS MODULEIDX,");	                    
+	                    columns.append(" AS MODULEIDX,");	                    
 	                    
 	                } else {
 	                    columns.append(",");
@@ -452,11 +452,6 @@ public class FieldTreePanel extends TreePanel {
             
             sort();
         }
-        
-        /**
-         * Fills the top node with the sorted (!) values.
-         */
-
     }
     
     @Override

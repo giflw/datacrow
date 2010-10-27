@@ -35,10 +35,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 
 import net.datacrow.console.menu.ContainerTreePanelMenuBar;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -77,7 +80,9 @@ public class ContainerTreePanel extends TreePanel {
     }
 
     @Override
-    public void groupBy() {}
+    public void groupBy() {
+    	createTree();
+    }
     
     @Override
 	public void sort() {}
@@ -142,22 +147,12 @@ public class ContainerTreePanel extends TreePanel {
 	    	
 		    	DcModule module = DcModules.get(DcModules._CONTAINER);
 		    	
-		    	StringBuffer sb = new StringBuffer();
-		    	sb.append("SELECT ID, ");
-		    	sb.append(module.getField(Container._A_NAME).getDatabaseFieldName());
-		    	sb.append(", ");
-		    	sb.append(module.getField(Container._F_PARENT).getDatabaseFieldName());
-		    	sb.append(", ");
-		    	sb.append(module.getField(Container._E_ICON).getDatabaseFieldName());
-		    	sb.append(" FROM ");
-		    	sb.append(module.getTableName());
-		    	sb.append(" ORDER BY ");
-		    	sb.append(module.getField(Container._A_NAME).getDatabaseFieldName());
+		    	DataFilter df = DataFilters.getCurrent(DcModules._CONTAINER);
+		    	sql = df.toSQL(new int[] {Container._ID, Container._A_NAME, Container._F_PARENT, Container._E_ICON}, true, false);
 		    	
 		    	conn = DatabaseManager.getConnection();
 		    	stmt = conn.createStatement();
 		    	
-		    	sql = sb.toString();
 		    	logger.debug(sql);
 		    	rs = stmt.executeQuery(sql);
 		    	
@@ -176,10 +171,10 @@ public class ContainerTreePanel extends TreePanel {
 		    	boolean flatView = settings.getBoolean(DcRepository.ModuleSettings.stContainerTreePanelFlat);
 		    	
 		    	while (rs.next()) {
-		    		id = rs.getString(1); 
-		    		name = rs.getString(2);
-		    		parentId = rs.getString(3);
-		    		icon = rs.getString(4);
+		    		id = rs.getString(module.getField(Container._ID).getDatabaseFieldName()); 
+		    		name = rs.getString(module.getField(Container._A_NAME).getDatabaseFieldName());
+		    		parentId = rs.getString(module.getField(Container._F_PARENT).getDatabaseFieldName());
+		    		icon = rs.getString(module.getField(Container._E_ICON).getDatabaseFieldName());
 		    		
 		    		if (parentId != null && !flatView) {
 		    			Collection<String> children = relations.get(parentId);
@@ -218,7 +213,15 @@ public class ContainerTreePanel extends TreePanel {
 			} catch (Exception e) {
 				logger.error("Error while closing connection (statement, resultset and/or connection)", e);
 			}
-	
+			
+            SwingUtilities.invokeLater(
+                    new Thread(new Runnable() { 
+                        @Override
+                        public void run() {
+                            expandAll();
+                            setDefaultSelection();
+                        }
+                    }));
 	    }
 
 	    private void createChildren(DefaultTreeModel model,

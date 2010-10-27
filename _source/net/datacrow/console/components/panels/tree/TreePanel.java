@@ -91,6 +91,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	if (isShowing() && isEnabled() && !activated) {
     		activated = true;
     		groupBy();
+    	} else if (activated) {
+    		refreshView();
     	}
     }
     
@@ -264,10 +266,14 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     public void setDefaultSelection() {
         setListeningForSelection(true);
         try {
-            if (isEnabled())
-                tree.setSelectionInterval(1, 1);
-            else 
+            if (isEnabled()) {
+            	if (top.getChildCount() > 0)
+            		tree.setSelectionInterval(1, 1);
+            	else
+            		tree.setSelectionInterval(0, 0);
+            } else { 
                 tree.setSelectionInterval(0, 0);
+            }
         } catch (Exception e) {
             logger.error(e, e);
         }

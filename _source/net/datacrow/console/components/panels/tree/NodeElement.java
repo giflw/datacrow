@@ -33,7 +33,7 @@ public class NodeElement {
     }
     
     public int getCount() {
-        return items.size();
+        return items != null ? items.size() : 0;
     }
     
     public ImageIcon getIcon() {

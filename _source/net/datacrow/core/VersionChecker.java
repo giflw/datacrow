@@ -73,9 +73,7 @@ public class VersionChecker extends Thread {
             return;
         }
         
-        // TODO: re-enable
-        boolean checked = true;
-
+        boolean checked = false;
         while (!checked) {
             try {
                 HttpConnection conn =  HttpConnectionUtil.getConnection(address);
