@@ -137,6 +137,8 @@ public class GroupingPane extends JPanel implements ChangeListener {
             		tp.setDefaultSelection();
             } else if (tp.isShowing()) {
             	DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tp.getLastSelectedPathComponent();
+            	if (node == null) 
+            		tp.setDefaultSelection();
             	if (node != null)
             		tp.updateView(tp.top.getItems());
             }

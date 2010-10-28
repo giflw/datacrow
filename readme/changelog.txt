@@ -53,8 +53,8 @@ New System Requirements:
 - High overall processor usage.
 - Quick filter; sometimes the list is not filled correctly
 - Changing fonts; not properly delegated to all views / components
-- 
-
+- File structure not displayed correctly in the File Structure tree.
+- Open report button was enabled even when the report was still being processed.
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: production]

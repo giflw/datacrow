@@ -119,6 +119,7 @@ public abstract class XmlTransformer {
 
                 // create the report
                 if (exporter.isSuccessfull() && !canceled) {
+                	client.notifyStarted(0);
                     client.notifyMessage(DcResources.getText("msgTransformingOutput", getFileType()));
                     transform();
                     client.notifyMessage(DcResources.getText("msgTransformationSuccessful", target.toString()));

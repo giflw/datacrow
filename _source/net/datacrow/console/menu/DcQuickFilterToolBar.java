@@ -88,7 +88,10 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         
         // set default value (if applicable)
         int fieldIdx = module.getSettings().getInt(DcRepository.ModuleSettings.stQuickFilterDefaultField);
-        comboFields.setSelectedItem(new Field(module.getField(fieldIdx)));
+        if (fieldIdx > 0)
+        	comboFields.setSelectedItem(new Field(module.getField(fieldIdx)));
+        else 
+        	comboFields.setSelectedIndex(0);
     }
     
     @Override
@@ -186,6 +189,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             c = ((DcReferenceField) c).getComboBox();
         
         comboCriteria.removeAllItems();
+        comboCriteria.addItem(" ");
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
             
@@ -197,8 +201,6 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             }
             
             List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);
-            
-            comboCriteria.addItem(" ");
             for (Object o : objects)
                 comboCriteria.addItem(o);
             
@@ -213,7 +215,6 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             comboCriteria.setRenderer(combo.getRenderer());
             comboCriteria.setEditable(false);
         } else {
-        	comboCriteria.addItem(" ");
             comboCriteria.setEditable(true);
         }
 
