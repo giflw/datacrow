@@ -54,6 +54,7 @@ public class DcTreeRenderer extends DefaultTreeCellRenderer {
             setBackgroundSelectionColor(DcSettings.getColor(DcRepository.Settings.stSelectionColor));
             setForeground(Color.BLACK);
             setBorder(border);
+            setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
             
             if (value instanceof DefaultMutableTreeNode) {
                 Object o = ((DefaultMutableTreeNode) value).getUserObject();

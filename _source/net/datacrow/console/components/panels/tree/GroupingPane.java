@@ -25,6 +25,8 @@
 
 package net.datacrow.console.components.panels.tree;
 
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -176,5 +178,18 @@ public class GroupingPane extends JPanel implements ChangeListener {
         JTabbedPane pane = (JTabbedPane) ce.getSource();
         current = pane.getSelectedIndex();
         panels.get(current).activate();
+	}
+
+	@Override
+	public void setFont(Font font) {
+		super.setFont(font);
+		
+		if (panels != null) {
+			for (JPanel panel : panels)
+				panel.setFont(font);
+		}
+		
+		for (Component c : getComponents()) 
+			c.setFont(font);
 	}
 }

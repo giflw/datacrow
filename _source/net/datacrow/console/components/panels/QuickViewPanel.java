@@ -411,6 +411,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     private void buildPanel() {
         // description panel
+    	tabbedPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
+    	
         descriptionPane = ComponentFactory.getHtmlEditorPane();
         descriptionPane.addMouseListener(this);
 
@@ -458,8 +460,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
 	public void setFont(Font font) {
 		super.setFont(font);
 		
-		
-		tabbedPane.setFont(font);
+		if (tabbedPane != null)
+			tabbedPane.setFont(font);
 	}
 
 	@Override

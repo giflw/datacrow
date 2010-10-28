@@ -524,8 +524,8 @@ public class View extends DcPanel implements ListSelectionListener {
         
         if (quickView != null) {
         	quickView.refresh();
-//            quickView.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
-//            quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
+            quickView.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
+            quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
         }
         
         if (groupingPane != null) {

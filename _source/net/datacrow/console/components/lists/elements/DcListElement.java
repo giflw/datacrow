@@ -50,13 +50,15 @@ public abstract class DcListElement extends JPanel {
     @Override
     public void setFont(Font font) {
         Font fontNormal = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
-        Font fontSystem = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);        
+        Font fontSystem = DcSettings.getFont(DcRepository.Settings.stSystemFontBold);        
         
         super.setFont(fontNormal);
         Component component;
         Component subComponent;
         for (int i = 0; i < getComponents().length; i++) {
             component = getComponents()[i];
+            component.setFont(fontSystem);
+            
             if (component instanceof JPanel) {
                 
                 for (int j = 0; j < ((JPanel) component).getComponents().length; j++) {

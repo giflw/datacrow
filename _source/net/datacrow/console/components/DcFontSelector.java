@@ -111,7 +111,6 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
         comboFontSize = null;
         textField = null;
         comboFontStyle = null;
-      //  buttonUseSystemDefault = null;
         labelFont = null;
         labelFontSize = null;
         labelExample = null;

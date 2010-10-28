@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components.panels.tree;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -338,6 +339,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	super.setFont(font);
         if (tree != null)
             tree.setFont(font);
+        
+        for (Component c : getComponents())
+        	c.setFont(font);
     }
     
     protected void build() {
@@ -472,6 +476,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	 
     	 tree.revalidate();
     }
+    
+    
     
     /************************************************************************
      * Selection listener

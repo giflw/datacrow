@@ -28,6 +28,7 @@ package net.datacrow.console.windows.settings;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.Hashtable;
@@ -129,8 +130,16 @@ public class SettingsPanel extends JPanel {
     public String toString() {
         return group.toString();
     }
+    
+    @Override
+	public void setFont(Font font) {
+		super.setFont(font);
+		
+		for (Component c : getComponents())
+			c.setFont(font);
+	}
 
-    public void initializeSettings() {
+	public void initializeSettings() {
         for (Setting setting : components.keySet()) {
             Component c = components.get(setting);
             Object value = setting.getValue();

@@ -140,7 +140,7 @@ public abstract class DcObjectListElement extends DcListElement {
     		c.setForeground(fg);
     	}
     }
-
+    
     public JPanel getPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
