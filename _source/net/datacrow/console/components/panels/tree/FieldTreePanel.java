@@ -39,6 +39,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.FieldTreePanelMenuBar;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -49,6 +50,7 @@ import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.PollerTask;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -136,11 +138,21 @@ public class FieldTreePanel extends TreePanel {
     
     private class TreeHugger extends Thread {
         
+    	private PollerTask poller;
+    	
         private boolean stop = false;
         
         @Override
         public void run() {
-            createTree();
+            if (poller != null) poller.finished(true);
+            
+            poller = new PollerTask(this, DcResources.getText("lblGroupingItems"));
+            poller.start();
+
+        	createTree();
+        	
+            poller.finished(true);
+            poller = null;
         }
         
         public void cancel() {
@@ -148,7 +160,8 @@ public class FieldTreePanel extends TreePanel {
         }
         
         protected void createTree() {
-            fields = (int[]) DcModules.get(getModule()).getSetting(DcRepository.ModuleSettings.stGroupedBy);
+
+        	fields = (int[]) DcModules.get(getModule()).getSetting(DcRepository.ModuleSettings.stGroupedBy);
             
             build();
             
@@ -331,9 +344,8 @@ public class FieldTreePanel extends TreePanel {
 	            	joins.append(module.getTableName());	
 	            }
 	            
-	            sql.append(columns.toString() + " " + joins.toString() + (DataFilters.isFilterActive(getModule()) ? 
-	            		   " WHERE ID IN ("  + DataFilters.getCurrent(getModule()).toSQL(new int[] {DcObject._ID}, false, false) + ") " : " "));
-	            
+	            sql.append(columns.toString() + " " + joins.toString());
+	            sql.append(" ");
 	            moduleCounter++;
             }
 
@@ -351,7 +363,7 @@ public class FieldTreePanel extends TreePanel {
                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
 
                 if (level == 0)
-                	 sql.append("order by ");
+                	 sql.append(" order by ");
                 
             	if (level > 0)
             		sql.append(",");
@@ -394,6 +406,9 @@ public class FieldTreePanel extends TreePanel {
                 DefaultMutableTreeNode previous;
                 boolean exists = false;
                 
+                Collection<String> keys = DataFilters.isFilterActive(getModule()) ? 
+						DataManager.getKeyList(DataFilters.getCurrent(getModule())) : null;
+                
                 while (rs.next() && !stop) {
                     int level = 0;
                     parent = top;
@@ -415,6 +430,8 @@ public class FieldTreePanel extends TreePanel {
                         key = rs.getObject((level * 3) + 3);
                         value = rs.getString((level * 3) + 4);
                         icon = rs.getString((level * 3) + 5);
+                        
+                        if (keys != null && !keys.contains(id)) continue;
                         
                         previous = parent.getChildCount() == 0 ? null : ((DefaultMutableTreeNode) parent.getChildAt(parent.getChildCount() - 1));
                         exists = previous == null || (((NodeElement)  previous.getUserObject()).getKey() == null && key != null) ? false : 
@@ -473,16 +490,6 @@ public class FieldTreePanel extends TreePanel {
     public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
         DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode("top");
         add(dco, 0, node);
-        
-//        if (logger.isDebugEnabled()) {
-//        	for (int idx = 0; idx < node.getChildCount(); idx++) {
-//        		JFrame frame = new JFrame();
-//        		frame.getContentPane().add(new JScrollPane(new JTree(node)));
-//        		frame.pack();
-//        		frame.setVisible(true);
-//        	}
-//        }
-        
         return node;
     }
     

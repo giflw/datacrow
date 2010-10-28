@@ -58,8 +58,6 @@ import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
  */
 public class ItemSearch extends DcBean {
     
-    private static final int max = 0;
-
     public String search() {
         return search(false);
     }
@@ -214,11 +212,7 @@ public class ItemSearch extends DcBean {
 
         DataFilter df = advanced ?  af.getFilter() : getFilter(wo);
         for (DcObject dco :  DataManager.get(df)) {
-
-            if (count == max) break;
-
             List<Object> values = new ArrayList<Object>();
-            
             
             for (WebFieldDefinition def : DcModules.get(wo.getModule()).getWebFieldDefinitions().getDefinitions()) {
                 DcField field = DcModules.get(wo.getModule()).getField(def.getField());

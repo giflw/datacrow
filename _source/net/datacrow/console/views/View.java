@@ -523,8 +523,9 @@ public class View extends DcPanel implements ListSelectionListener {
         setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
         
         if (quickView != null) {
-            quickView.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
-            quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
+        	quickView.refresh();
+//            quickView.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
+//            quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
         }
         
         if (groupingPane != null) {
@@ -534,15 +535,16 @@ public class View extends DcPanel implements ListSelectionListener {
             groupingPane.setVisible(treeVisibibleSett);
             if (!treeVisibible && treeVisibibleSett)
                 groupingPane.groupBy();
+            else 
+            	groupingPane.updateView();
             
             groupingPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
+        } else {
+	        if (type == _TYPE_SEARCH)
+	            vc.clear();
+	        
+	        vc.applySettings();
         }
-        
-        if (type == _TYPE_SEARCH) {
-            vc.clear();
-        }
-        
-        vc.applySettings();
     }
 
     public int getItemCount() {
@@ -605,8 +607,10 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void setSelected(int index) {
-        vc.setSelected(index);
-        afterSelect(index);
+    	if (vc.getItemCount() > 0) { 
+	        vc.setSelected(index);
+	        afterSelect(index);
+    	}
     }
     
     public List<? extends DcObject> getSelectedItems() {
@@ -732,9 +736,6 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void afterSelect(int idx) {
-    	
-    	if (vc.getItemCount() == 0) return;
-        
         String key = vc.getItemKey(idx);
         int module = vc.getModule(idx);
         

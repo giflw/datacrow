@@ -269,10 +269,7 @@ public class OnlineSearchHelper implements IOnlineSearchClient {
      * Free resources.
      * @param except Do not clear the resources of this item.
      */
-    public void clear(DcObject except) {
-        for (DcObject dco : result)
-            if (dco != except) dco.release();
-        
+    public void clear() {
         task = null;
         server = null;
         region = null;

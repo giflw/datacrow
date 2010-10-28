@@ -127,7 +127,7 @@ public class DcChildModule extends DcModule implements IChildModule {
     @Override
     protected void initializeUI() {
         if (insertView == null && hasInsertView()) {
-            insertView = new MasterView();
+            insertView = new MasterView(getIndex());
          
             DcTable table = new DcTable(this, false, true);
             View view = new CachedChildView(insertView, View._TYPE_INSERT, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
@@ -137,7 +137,7 @@ public class DcChildModule extends DcModule implements IChildModule {
         }
 
         if (searchView == null && hasSearchView()) {
-            searchView = new MasterView();
+            searchView = new MasterView(getIndex());
             searchView.setTreePanel(this);
             
             DcTable table = new DcTable(this, false, true);

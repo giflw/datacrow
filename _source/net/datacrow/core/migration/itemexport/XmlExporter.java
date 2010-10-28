@@ -116,7 +116,6 @@ public class XmlExporter extends ItemExporter {
             XmlSchemaWriter schema = new XmlSchemaWriter(schemaFile);
             DcObject dco = DcModules.getCurrent().getItem();
             schema.create(dco);
-            dco.release();
         }
         
         private void generateXml(String schemaFile) throws Exception {
@@ -168,8 +167,7 @@ public class XmlExporter extends ItemExporter {
                 bos.flush();
                 
                 // release the object
-                dco.release();
-                
+                dco.destroy();
                 counter++;
             }
             

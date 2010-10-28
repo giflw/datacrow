@@ -173,8 +173,6 @@ public class FileSynchronizer {
                         if (fi != null)
                             fi.clear();
                         
-                        dco.release();
-                        
                         try {
                             sleep(2000);
                         } catch (Exception e) {

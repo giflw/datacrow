@@ -61,7 +61,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
                     
                     DcObject tmp = module.getItem();
                     handle(tmp, handled);
-                    tmp.release();
+                    tmp.destroy();
                 }
             }
         } else {

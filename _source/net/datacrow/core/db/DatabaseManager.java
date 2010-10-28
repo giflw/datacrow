@@ -333,8 +333,6 @@ public class DatabaseManager {
 
                 if (count > 0) return false;
             }
-            
-            dco.release();
         }
         return true;
     }

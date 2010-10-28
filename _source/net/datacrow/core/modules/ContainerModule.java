@@ -96,7 +96,7 @@ public class ContainerModule extends DcParentModule {
     @Override
     protected void initializeUI()  {
         if (searchView == null && hasSearchView() ) {
-            searchView = new MasterView();
+            searchView = new MasterView(getIndex());
             searchView.setTreePanel(this);
             
             // list view

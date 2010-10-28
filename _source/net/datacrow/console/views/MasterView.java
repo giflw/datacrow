@@ -55,6 +55,12 @@ public class MasterView {
     private final Map<Integer, View> views = new HashMap<Integer, View>();
     private GroupingPane groupingPane;
     
+    private int module;
+    
+    public MasterView(int module) {
+    	this.module = module;
+    }
+    
     public void setTreePanel(DcModule module) {
         if (!module.isChildModule())
             this.groupingPane = new GroupingPane(module.getIndex(), this);
@@ -91,8 +97,12 @@ public class MasterView {
         }
     }
     
+    private DcModule getModule() {
+    	return DcModules.get(module);
+    }
+    
     public View getCurrent() {
-        int view = DcModules.getCurrent().getSettings().getInt(DcRepository.ModuleSettings.stDefaultView);
+        int view = getModule().getSettings().getInt(DcRepository.ModuleSettings.stDefaultView);
         View current = get(view);
         
         // Get the first available view if the view cannot be found (for whatever reason)

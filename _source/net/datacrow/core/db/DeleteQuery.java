@@ -170,7 +170,7 @@ public class DeleteQuery extends Query {
         	}
             
         	for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
-        		if (module.getSearchView() != null)
+        		if (module.isSearchViewInitialized())
         			module.getSearchView().remove(ID);
         	}
         }

@@ -96,16 +96,6 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         buildPanel();
     }    
     
-    @Override
-    public void setFont(Font font) {
-        super.setFont(font);
-
-        if (tabbedPane != null)
-            tabbedPane.setFont(ComponentFactory.getSystemFont());
-        
-        setObject(key, module);            
-    }
-    
     public void reloadImage() {
         if (tabbedPane.getSelectedIndex() > 0)
             loadImage();
@@ -164,6 +154,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     public void refresh() {
         int caret = descriptionPane.getCaretPosition();
+        dco = null;
         setObject(key, module);
         try {
             descriptionPane.setCaretPosition(caret);
@@ -196,6 +187,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             clear();
             
             this.dco = dco;
+            this.key = dco.getID();
             
             if (DcModules.getCurrent().isAbstract())
             	this.dco.reload(dco.getModule().getMinimalFields(null));
@@ -213,13 +205,6 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 descriptionPane.setCaretPosition(0);
             } catch (Exception exp) {}
 
-//            hasRelatedItems = DataManager.getReferencingItems(dco).size() > 0;
-//
-//            if (hasRelatedItems) {
-//                RelatedItemsPanel rip = new RelatedItemsPanel(dco);
-//                tabbedPane.addTab(rip.getTitle(), rip.getIcon(), rip);
-//            }
-            
             createImageTabs(dco);
             
             boolean error = true;
@@ -241,12 +226,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }
     
     public void clear() {
-        
         dco = null;
-        
-        if (key != null)
-            key = null;
-
         tabbedPane.setSelectedIndex(0);
         descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
     	clearImages();
@@ -475,6 +455,14 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }
 
     @Override
+	public void setFont(Font font) {
+		super.setFont(font);
+		
+		
+		tabbedPane.setFont(font);
+	}
+
+	@Override
     public void mouseEntered(MouseEvent e) {}
     @Override
     public void mouseExited(MouseEvent e) {}

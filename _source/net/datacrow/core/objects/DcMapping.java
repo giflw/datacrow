@@ -79,15 +79,12 @@ public class DcMapping extends DcObject {
     public void initializeReferences() {}
 
     @Override
-    public void release() {
-        if (reference != null)
-            reference.release();
-          
+	public void destroy() {
         reference = null;
-        super.release();
-    }
-    
-    public void setReference(DcObject dco) {
+        super.destroy();
+	}
+
+	public void setReference(DcObject dco) {
         this.reference = dco;
     }
     

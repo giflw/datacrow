@@ -32,7 +32,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -56,8 +56,6 @@ import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.PollerTask;
@@ -352,16 +350,15 @@ public class FilterDialog extends DcFrame implements ActionListener {
             
             view.undoChanges();
 
+            parent.clear();
+            
             DataFilter df = getDataFilter(); 
             DataFilters.setCurrent(module.getIndex(), df);
             
-            List<DcObject> result = DataManager.get(df);
+            Map<String, Integer> keys = DataManager.getKeys(df);
             parent.setStatus(DcResources.getText("msgSearchHasBeenExecuted"));
+            parent.add(keys);
 
-            if (result.size() == 0)
-                DcModules.getCurrent().getSearchView().clear();
-
-           // DataManager.bindData(module.getSearchView(),  result);
             DataFilters.setCurrent(module.getIndex(), df);
             DataCrow.mainFrame.setSelectedTab(0);   
             

@@ -155,9 +155,6 @@ public class CsvExporter extends ItemExporter {
                 counter++;
                 client.notifyProcessed();
                 bos.flush();
-                
-                // release the object
-                dco.release();
             }
             
             bos.close();

@@ -913,8 +913,6 @@ public class DcTable extends JTable implements IViewComponent {
             }
             counter++;
         }
-        
-        dco.release();
     }
 
     @Override
@@ -1091,7 +1089,6 @@ public class DcTable extends JTable implements IViewComponent {
                 model.setValueAt(value, row, col);
             }
 
-            dco.release();
             applyHeaders();
             setSelected(selectedRow);
 
@@ -1106,23 +1103,8 @@ public class DcTable extends JTable implements IViewComponent {
     @SuppressWarnings("unchecked")
     public void clear(int row) {
         loadedRows.remove(Integer.valueOf(row));
-        
-        TableModel model = getModel();
-        Object value;
-        
         boolean listenForChanges = isListeningForChanges();
         setListeningForChanges(false);
-        
-        for (int col = 0; col < model.getColumnCount(); col++) {
-            value = model.getValueAt(row, col);
-            if (value instanceof DcObject) {
-                ((DcObject) value).release();
-            } else if (value instanceof Collection) {
-                for (DcObject dco : (Collection<DcObject>) value) 
-                    dco.release();
-            }
-        }
-        
         setListeningForChanges(listenForChanges);
     }
 

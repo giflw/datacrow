@@ -746,6 +746,10 @@ public class DcModule implements Comparable<DcModule> {
         }
         return null;
     }
+
+    public boolean isSearchViewInitialized() {
+    	return searchView != null;
+    }
     
     /**
      * The insert view (shown in the new tab)
@@ -1410,7 +1414,7 @@ public class DcModule implements Comparable<DcModule> {
      */
     protected void initializeUI()  {
         if (insertView == null && hasInsertView()) {
-            insertView = new MasterView();
+            insertView = new MasterView(getIndex());
 
             // table view
             DcTable table = new DcTable(this, false, true);
@@ -1431,7 +1435,7 @@ public class DcModule implements Comparable<DcModule> {
         }
         
         if (searchView == null && hasSearchView() ) {
-            searchView = new MasterView();
+            searchView = new MasterView(getIndex());
             searchView.setTreePanel(this);
             
             // table view

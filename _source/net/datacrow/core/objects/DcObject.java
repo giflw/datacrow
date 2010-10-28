@@ -848,7 +848,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         	
             children.clear();
         }
-
         getModule().release(this);
     }
     
@@ -860,6 +859,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             }
             
             values = null;
+
+            if (children != null)
+            	children.clear();
             
             if (requests != null) 
                 requests.clear();

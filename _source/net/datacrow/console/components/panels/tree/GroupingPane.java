@@ -127,7 +127,7 @@ public class GroupingPane extends JPanel implements ChangeListener {
     
     public void updateView() {
         for (TreePanel tp : panels) {
-            if (tp.isEnabled()) {
+            if (tp.isEnabled() && tp.isShowing()) {
             	DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tp.getLastSelectedPathComponent();
             	if (node != null)
             		tp.updateView(node.getItemsSorted(tp.top.getItemList()));

@@ -54,7 +54,7 @@ public class GroupByDialog extends DcDialog implements ActionListener {
         setTitle(DcResources.getText("lblGrouping"));
         
         this.module = module;
-        this.panelSorting = new FieldSelectionPanel(DcModules.get(module), true, false);
+        this.panelSorting = new FieldSelectionPanel(DcModules.get(module), false, true);
         
         int[] groupBy = DcModules.get(module).getSettings().getIntArray(DcRepository.ModuleSettings.stGroupedBy);
         if (groupBy != null)
@@ -81,6 +81,8 @@ public class GroupByDialog extends DcDialog implements ActionListener {
         int counter = 0;
         for (DcField field : fields)
             groupBy[counter++] = field.getIndex();
+        
+        close();
         
         DcModules.get(module).setSetting(DcRepository.ModuleSettings.stGroupedBy, groupBy);
         DcModules.get(module).getCurrentSearchView().groupBy();

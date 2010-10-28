@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.util.DcImageIcon;
 
 public class NodeElement {
@@ -79,7 +78,6 @@ public class NodeElement {
     }
     
     public void clear() {
-        if (key instanceof DcObject) ((DcObject) key).release();
         if (icon != null) icon.flush();
         
         key = null;

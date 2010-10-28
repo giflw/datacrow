@@ -121,7 +121,6 @@ public class LoanPanel extends JPanel implements ActionListener {
         loan = DataManager.getCurrentLoan(dco.getID());
         buildPanel(loan.isAvailable(dco.getID())); 
         setLoanInformation(loan);
-        l.release();
     }
     
     private String getPersonLink(String personID) {

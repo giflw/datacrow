@@ -1,6 +1,7 @@
 -----------------------------------------------------------------------------------------
-Data Crow BETA 3.9 [Release on October 27, 2010] [testing: LOW] [target: BETA]
+Data Crow 3.9 [Release on November xx, 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
 Items were always loaded (all of them) on startup, causing a long startup time and 
@@ -29,7 +30,6 @@ New System Requirements:
 - Sun Java 1.6 or higher.
 
 [Known issues]
-- Web site is not working yet (!)
 - Java will start consuming a lot of the processor time when the application is running 
   out of memory. Assign 256MB's to the application to make sure that this does not happen.
 

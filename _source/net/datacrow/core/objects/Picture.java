@@ -114,9 +114,8 @@ public class Picture extends DcObject {
     }
     
     @Override
-    public void release() {
+    public void destroy() {
         unload();
-        super.release();
         deleted = false;
         edited = false;
         scaledImage = null;

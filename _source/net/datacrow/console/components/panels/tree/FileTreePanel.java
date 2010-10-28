@@ -43,6 +43,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.PollerTask;
 
 import org.apache.log4j.Logger;
 
@@ -123,11 +124,21 @@ public class FileTreePanel extends TreePanel {
     
     private class TreeHugger extends Thread {
         
+    	private PollerTask poller;
+
         private boolean stop = false;
         
         @Override
         public void run() {
+            if (poller != null) poller.finished(true);
+            
+            poller = new PollerTask(this, DcResources.getText("lblGroupingItems"));
+            poller.start();
+            
             createTree();
+            
+            poller.finished(true);
+            poller = null;
         }
         
         public void cancel() {

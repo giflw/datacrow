@@ -166,6 +166,9 @@ public class Restore extends Thread {
         } else if (version != null && version.isOlder(new Version(3, 4, 13, 0))) {
             if (!DcSwingUtilities.displayQuestion("msgOldVersion3.4.12"))
                 return false;
+        } else if (version != null && version.isOlder(new Version(3, 8, 16, 0))) {
+            if (!DcSwingUtilities.displayQuestion("msgOldVersion3.8.16"))
+                return false;
         }
         
         return true;

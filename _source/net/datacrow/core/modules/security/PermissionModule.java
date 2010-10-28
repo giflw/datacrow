@@ -157,7 +157,7 @@ public class PermissionModule extends DcChildModule {
     @Override
     protected void initializeUI()  {
         if (searchView == null) {
-            searchView = new MasterView();
+            searchView = new MasterView(getIndex());
             searchView.setTreePanel(this);
             
             DcTable table = new DcTable(this, true, true);

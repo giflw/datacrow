@@ -261,7 +261,6 @@ public class Conversion {
                 if (items.size() == 0) {
                     reference.setIDs();
                     new InsertQuery(reference).run();
-                    reference.release();
                 }
                 
                 String sql2 = "select item.ID, property.ID from " + refMod.getTableName() + " property " +

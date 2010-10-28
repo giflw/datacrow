@@ -134,7 +134,7 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
     protected void initializeUI() {
         if (searchView == null && insertView == null) {
             if (hasInsertView()) {
-                insertView = new MasterView();
+                insertView = new MasterView(getIndex());
                 DcTable table = new DcTable(this, false, true);
                 View view = new CachedChildView(insertView, View._TYPE_INSERT, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
                 table.setView(view);
@@ -143,7 +143,7 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
             }
 
             if (hasSearchView()) {
-                searchView = new MasterView();
+                searchView = new MasterView(getIndex());
                 searchView.setTreePanel(this);
                 
                 DcTable table = new DcTable(this, false, true);

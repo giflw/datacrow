@@ -108,7 +108,7 @@ public class DcValue implements Serializable {
 
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
             if (o instanceof Picture) {
-                if (value != null) ((Picture) value).release();
+                if (value != null) ((Picture) value).destroy();
 
                 setValueNative(o, field);   
             } else {

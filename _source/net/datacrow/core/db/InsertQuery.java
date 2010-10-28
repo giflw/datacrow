@@ -138,14 +138,12 @@ public class InsertQuery extends Query {
             for (Picture picture : pictures) {
                 new InsertQuery(picture).run();
                 saveImage(picture);
-                picture.release();
             }
 
             if (dco.getCurrentChildren() != null) {
                 for (DcObject child : dco.getCurrentChildren()) {
                     child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
                     new InsertQuery(child).run();
-                    child.release();
                 }
             }
             
@@ -171,12 +169,11 @@ public class InsertQuery extends Query {
                 dco.getModule().getInsertView().remove(ID);
             
         	for (DcModule module : DcModules.getAbstractModules(dco.getModule()))
-        		if (module.getSearchView() != null)
+        		if (module.isSearchViewInitialized() && !module.isChildModule())
         			module.getSearchView().add(dco);
         }
         
         clear();
-        
         return null;
     }
 }

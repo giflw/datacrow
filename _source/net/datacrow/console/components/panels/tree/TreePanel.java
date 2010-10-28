@@ -220,6 +220,12 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	}
     }
     
+    /**
+     * This method is used to determine the full tree structure for this item.
+     * The structure can be used to add the item to the tree. 
+     * @param dco
+     * @return node containing tree structure
+     */
     public abstract DcDefaultMutableTreeNode getFullPath(DcObject dco);
     
     public NodeElement getNodeElement(Object key) {

@@ -155,7 +155,7 @@ public class UserModule extends DcParentModule {
     @Override
     protected void initializeUI()  {
         if (searchView == null) {
-            searchView = new MasterView();
+            searchView = new MasterView(getIndex());
             searchView.setTreePanel(this);
             
             // table view

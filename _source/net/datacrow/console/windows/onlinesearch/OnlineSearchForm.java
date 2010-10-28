@@ -694,7 +694,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         
         // result is a direct clone; other items can safely be removed
         for (DcObject dco : items)
-            dco.release();
+            dco.destroy();
         
         loadedItems.clear();
         loadedItems = null;

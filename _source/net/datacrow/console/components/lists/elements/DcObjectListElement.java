@@ -173,10 +173,6 @@ public abstract class DcObjectListElement extends DcListElement {
     @Override
     public void destroy() {
         super.destroy();
-        
-        if (dco != null)
-            dco.release();
-        
         dco = null;
         key = null;
     }

@@ -165,8 +165,6 @@ public class UpdateQuery extends Query {
                             picture.getField(Picture._B_FIELD).getDatabaseFieldName() + " = '" +  picture.getValue(Picture._B_FIELD) + "'");
                     deleteImage(picture);    
                 }
-                
-                picture.release();
             }
             
             for (DcObject child : dco.getCurrentChildren()) {
@@ -181,7 +179,6 @@ public class UpdateQuery extends Query {
                     }
                     Query query = exists ? new UpdateQuery(child) : new InsertQuery(child);
                     query.run();
-                    child.release();
                 }
             }
             
@@ -211,12 +208,12 @@ public class UpdateQuery extends Query {
             dco.getModule().getSearchView().update(dco);
         
     	for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-    		if (module.getSearchView() != null)
+    		if (module.isSearchViewInitialized())
     			module.getSearchView().refreshQuickView();
     	}
 
     	for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
-    		if (module.getSearchView() != null)
+    		if (module.isSearchViewInitialized())
     			module.getSearchView().update(dco);
     	}
     }

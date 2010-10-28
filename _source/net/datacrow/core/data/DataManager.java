@@ -172,7 +172,7 @@ public class DataManager {
                     OnlineSearchHelper osh = new OnlineSearchHelper(moduleIdx, SearchTask._ITEM_MODE_FULL);
                     DcObject queried = osh.query(ref, name, new int[] {module.getSystemDisplayFieldIdx()});
                     ref = queried != null ? queried : ref;
-                    osh.clear(ref);
+                    osh.clear();
                 }
                 
                 ref.setIDs();
