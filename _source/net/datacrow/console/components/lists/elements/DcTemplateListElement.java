@@ -79,4 +79,10 @@ public class DcTemplateListElement extends DcObjectListElement {
         panelInfo.setPreferredSize(new Dimension(800, fieldHeight));
         add(panelInfo);
     } 
+    
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		panelInfo = null;
+	}
 }

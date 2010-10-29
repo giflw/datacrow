@@ -95,9 +95,9 @@ public class DcFilterEntryListElement extends DcListElement {
         add(labelVal);
     }
     
-    @Override
-    public void clear() {
-        super.clear();
-        entry = null;
-    }
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		entry = null;
+	}
 } 

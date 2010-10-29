@@ -108,4 +108,10 @@ public class DcSoftwareListHwElement extends DcObjectListHwElement {
         add(getPicturePanel(getPictures()), Layout.getGBC( 4, 0, 1, 4, 10.0, 10.0,
             GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(1, 1, 1, 1), 0, 0));
     } 
+    
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		descriptionField = null;
+	}
 }

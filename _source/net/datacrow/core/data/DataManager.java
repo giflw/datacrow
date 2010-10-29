@@ -54,7 +54,9 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.wf.WorkFlow;
+import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -94,8 +96,90 @@ public class DataManager {
         } catch (Exception e) {
             logger.error(e, e);
         }
-        
         return count;
+    }
+
+    /**
+     * Specifically created for the web interface. 
+     * Returns the entire result set as a flat string structure.
+     * 
+     * @param df
+     * @param fields
+     * @param definitions
+     * @return
+     */
+    public static List<List<String>> getValues(DataFilter df, int[] fields, List<WebFieldDefinition> definitions) {
+    	
+    	List<List<String>> result = new ArrayList<List<String>>();
+    	
+    	ResultSet rs = null;
+    	DcField field;
+    	
+    	try {
+    		
+	    	String sql = df.toSQLFlatStructure(fields);
+	    	rs = DatabaseManager.executeSQL(sql);
+	    	List<String> values;
+	    	
+	    	int maxLength;
+	    	String ID;
+	    	String value;
+	    	String previousID = null;
+	    	boolean concat = false;
+	    	
+	    	DcModule module = DcModules.get(df.getModule());
+	    	DcObject template = module.getItem();
+	    		
+	    	while(rs.next()) {
+	    		values = new ArrayList<String>();
+	    		ID = rs.getString("ID");
+
+	    		// concatenate previous result set (needed for multiple references)
+	    		if (ID.equals(previousID)) {
+	    			values = result.get(result.size() - 1);
+	    			concat = true;
+	    		}
+	    		
+	    		for (int i = 0; i < fields.length; i++) {
+	    			field = module.getField(fields[i]);
+
+    				if (!field.isUiOnly() && 
+    					field.getValueType() != DcRepository.ValueTypes._STRING &&
+    					field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+
+    					template.setValue(field.getIndex(), rs.getObject(i+1));
+    					value = template.getDisplayString(field.getIndex());
+	    			} else {
+    					value = rs.getString(i + 1);
+    				}
+
+	    			if (!concat) {
+		    			maxLength = fields[i] != DcObject._ID ? definitions.get(i).getMaxTextLength() : 0;
+		    			value = value == null ? "" : StringUtils.concatUserFriendly(value, maxLength);
+		    			values.add(value);
+	    			} else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+	    				value = values.get(i) + ", " + value;
+	    				values.set(i, value);
+	    			}
+	    		}
+
+	    		previousID = ID;
+	    		result.add(values);
+	    		concat = false;
+	    	}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+        
+    	if (rs != null) {
+    		try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+    	}  
+    	
+    	return result;
     }
     
     /**

@@ -428,6 +428,13 @@ public class LoanPanel extends JPanel implements ActionListener {
         panelLend = null;
         panelReturn = null;
         
+        buttonLend = null;
+        buttonReturn = null;
+        
+        inputEndDate = null;
+        inputDueDate = null;
+        inputStartDate = null;
+        
         this.tableLoans.clear();
         this.tableLoans = null;
         

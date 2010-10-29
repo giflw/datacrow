@@ -51,13 +51,6 @@ public class BackupFilePreviewPanel extends JPanel implements PropertyChangeList
     
     private DcLongTextField preview = ComponentFactory.getLongTextField();
     
-//    JFileChooser chooser = new JFileChooser();
-//    BackupFilePreviewPanel preview = new BackupFilePreviewPanel();
-//    chooser.setAccessory(preview);
-//    chooser.addPropertyChangeListener(preview);
-
-    
-    
     public BackupFilePreviewPanel() {
         build();
     }

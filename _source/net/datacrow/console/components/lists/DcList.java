@@ -319,16 +319,6 @@ public class DcList extends JList implements ComponentListener {
     }    
     
     public void clear() {
-        try {
-           DcListElement element;
-           for (int i = 0 ; i < getDcModel().getSize(); i++) {
-              element = (DcListElement) getDcModel().getElementAt(i);
-              element.destroy();
-           }
-        } catch (Exception e) {
-            logger.error("Error while clearing the view", e);
-        }
-        
         getDcModel().clear();
         getSelectionModel().clearSelection();
     }

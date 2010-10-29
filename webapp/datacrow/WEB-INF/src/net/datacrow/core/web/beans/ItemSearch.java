@@ -42,7 +42,6 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.web.WebUtilities;
 import net.datacrow.core.web.model.AdvancedFilter;
 import net.datacrow.core.web.model.DcWebField;
 import net.datacrow.core.web.model.DcWebModule;
@@ -203,28 +202,30 @@ public class ItemSearch extends DcBean {
     }
     
     private void applyFilter(DcWebObjects wo, boolean advanced) {
-        List<List<?>> result = new ArrayList<List<?>>();
-        int count = 0;
-        
         FacesContext fc = FacesContext.getCurrentInstance();
         VariableResolver vr = fc.getApplication().getVariableResolver();
         AdvancedFilter af = (AdvancedFilter) vr.resolveVariable(fc, "advancedFilter");
 
         DataFilter df = advanced ?  af.getFilter() : getFilter(wo);
-        for (DcObject dco :  DataManager.get(df)) {
-            List<Object> values = new ArrayList<Object>();
-            
-            for (WebFieldDefinition def : DcModules.get(wo.getModule()).getWebFieldDefinitions().getDefinitions()) {
-                DcField field = DcModules.get(wo.getModule()).getField(def.getField());
-                
-                if (field != null && def.isOverview() && getUser().isAuthorized(field) && field.isEnabled())
-                    values.add( WebUtilities.getValue(dco, def, dco.getValue(def.getField())));
-            }
-            
-            values.add(dco.getID());
-            result.add(values);
-            count++;
-        }
-        wo.setObjects(result);
+        
+    	List<WebFieldDefinition> definitions = new ArrayList<WebFieldDefinition>();
+    	DcField field;
+    	for (WebFieldDefinition def : DcModules.get(wo.getModule()).getWebFieldDefinitions().getDefinitions()) {
+    		field = DcModules.get(wo.getModule()).getField(def.getField());
+    		if (	field != null && def.isOverview() && getUser().isAuthorized(field) && 
+    				field.isEnabled() && 
+    				field.getIndex() != DcObject._ID) {
+    			
+    			definitions.add(def);
+    		}
+    	}
+
+    	int[] fields = new int[definitions.size() + 1];
+    	for (int i = 0; i < fields.length - 1; i++)
+    		fields[i] = definitions.get(i).getField();
+    	
+    	 List<List<String>> result = DataManager.getValues(df, fields, definitions);
+
+    	 wo.setObjects(result);
     }
 }

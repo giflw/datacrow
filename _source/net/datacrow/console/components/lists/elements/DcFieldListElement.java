@@ -63,9 +63,10 @@ public class DcFieldListElement extends DcListElement {
         labelField.setPreferredSize(new Dimension(360, 30));
         add(labelField);
     }
-    
-    @Override
-    public void clear() {
-        super.clear();
-    }
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		field = null;
+	}
 }

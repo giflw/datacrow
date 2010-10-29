@@ -375,7 +375,6 @@ public class DcObjectList extends DcList implements IViewComponent {
             element = getElement(key);
             if (element != null) {
             	getDcModel().removeElement(element);
-            	element.destroy();
                 removed = true;
             }
         }

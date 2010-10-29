@@ -38,6 +38,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.Picture;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
@@ -341,6 +342,141 @@ public class DataFilter {
         return storage;
     }
     
+    /**
+     * Creates an entirely flat structure of the data.
+     * - Items will be returned duplicated in case of multiple references.
+     * - Pictures get their filename returned
+     * 
+     * @param fields
+     * @param order
+     * @return
+     */
+    public String toSQLFlatStructure(int[] fields) {
+    	DcModule module = DcModules.get(getModule());
+    	int[] queryFields = fields == null || fields.length == 0 ? module.getFieldIndices() : fields;
+    	
+    	StringBuffer sql = new StringBuffer();
+    	StringBuffer joins = new StringBuffer();
+    	
+    	sql.append("SELECT ");
+    	joins.append(" FROM ");
+    	joins.append(module.getTableName());
+    	joins.append(" MAINTABLE ");
+    	
+    	DcModule mapping;
+    	DcModule reference;
+    	String subTable;
+    	String mapTable;
+    	int tableCounter = 0;
+    	int columnCounter = 0;
+    	
+    	for (int idx : queryFields) {
+    		DcField field = module.getField(idx);
+    		
+    		if (columnCounter > 0)
+    			sql.append(", ");
+    		
+    		if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+    			mapping = DcModules.get(DcModules.getMappingModIdx(module.getIndex(), field.getReferenceIdx(), field.getIndex()));
+    			reference = DcModules.get(field.getReferenceIdx());
+    			
+    			mapTable = " MAPTABLE" + tableCounter;
+    			
+    			joins.append(" LEFT OUTER JOIN ");
+    			joins.append(mapping.getTableName());
+    			joins.append(mapTable);
+    			joins.append(" ON ");
+    			joins.append(mapTable);
+    			joins.append(".");
+    			joins.append(mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName());
+    			joins.append(" = MAINTABLE.ID");
+    			
+    			subTable = " SUBTABLE" + tableCounter;
+    			joins.append(" INNER JOIN ");
+    			joins.append(reference.getTableName());
+    			joins.append(subTable);
+    			joins.append(" ON ");
+    			joins.append(subTable);
+    			joins.append(".ID");
+    			joins.append(" = ");
+    			joins.append(mapTable);
+    			joins.append(".");
+    			joins.append(mapping.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
+    			
+    			sql.append(subTable);
+    			sql.append(".");
+    			sql.append(reference.getField(reference.getDisplayFieldIdx()).getDatabaseFieldName());
+    			tableCounter++;
+    			
+    		} else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+    			reference = DcModules.get(field.getReferenceIdx());
+    			subTable = " SUBTABLE" + tableCounter;
+    			joins.append(" LEFT OUTER JOIN ");
+    			joins.append(reference.getTableName());
+    			joins.append(subTable);
+    			joins.append(" ON ");
+    			joins.append(subTable);
+    			joins.append(".ID = MAINTABLE.");
+    			joins.append(field.getDatabaseFieldName());
+    			
+    			sql.append(subTable);
+    			sql.append(".");
+    			sql.append(reference.getField(reference.getDisplayFieldIdx()).getDatabaseFieldName());
+    			tableCounter++;
+    			
+    		} else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+    			reference = DcModules.get(DcModules._PICTURE);
+    			subTable = " SUBTABLE" + tableCounter;
+    			
+    			sql.append("(case when ");
+    			sql.append(subTable);
+    			sql.append(".OBJECTID IS NULL then '' else ");
+    			sql.append("'/mediaimages/'+MAINTABLE.ID+'_");
+    			sql.append(field.getDatabaseFieldName());
+    			sql.append("_small.jpg' ");
+    			sql.append("END) AS ");
+    			sql.append(field.getDatabaseFieldName());
+    			
+    			joins.append(" LEFT OUTER JOIN ");
+    			joins.append(reference.getTableName());
+    			joins.append(subTable);
+    			joins.append(" ON ");
+    			joins.append(subTable);
+    			joins.append(".OBJECTID = MAINTABLE.ID");
+    			joins.append(" AND ");
+    			joins.append(subTable);
+    			joins.append(".");
+    			joins.append(reference.getField(Picture._B_FIELD));
+    			joins.append("='");
+    			joins.append(field.getDatabaseFieldName());
+    			joins.append("'");
+
+    		} else if (field.getIndex() == DcObject._SYS_AVAILABLE || 
+    				   field.getIndex() == DcObject._SYS_LOANDURATION || 
+    				   field.getIndex() == DcObject._SYS_LOANDUEDATE || 
+    				   field.getIndex() == DcObject._SYS_LOANDAYSTILLOVERDUE) {
+
+    			// TODO: implement
+    			// reference = DcModules.get(DcModules._LOAN);
+    			// subTable = " SUBTABLE" + tableCounter;
+    			// joins.append(" LEFT OUTER JOIN ");
+    			
+    		} else if (!field.isUiOnly()) {
+    			sql.append("MAINTABLE.");
+    			sql.append(field.getDatabaseFieldName());
+    		} else {
+    			sql.append("'N/A' AS ");
+    			sql.append("NA");
+    			sql.append(columnCounter);
+    		}
+    		columnCounter++;
+    	}
+    	
+    	sql.append(joins.toString());
+    	addEntries(sql, module);
+    	return sql.toString();
+    }
+    
     @SuppressWarnings("unchecked")
     public String toSQL(int[] fields, boolean order, boolean includeMod) {
         DcField field;
@@ -405,187 +541,11 @@ public class DataFilter {
 			
 			sql.append(" FROM ");
 			sql.append(module.getTableName());
-			
+
 			if (order) addOrderByClause(sql);
 			
-			Object value;
-	        int operator;
-	        int counter2;
-	        int counter = 0;
-	        String queryValue = null;
-	        
-	        List<DataFilterEntry> childEntries = new ArrayList<DataFilterEntry>();
-	        
-	        boolean hasConditions = false;
-	        DcModule entryModule; 
-	        for (DataFilterEntry entry : getEntries()) {
-	        	
-	        	if (!m.isAbstract()) {
-		        	entryModule = DcModules.get(entry.getModule());
-		            if (entry.getModule() != getModule()) {
-		                childEntries.add(entry);
-		                continue;
-		            }
-	        	} else {
-	        		entryModule = module;
-	        	}
-	            
-	            field = entryModule.getField(entry.getField());
-	            
-	            if (field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) 
-	                continue;
-	            
-	            hasConditions = true;
-	            
-	            operator = entry.getOperator().getIndex();
-	            value = entry.getValue() != null ? Utilities.getQueryValue(entry.getValue(), field) : null;
-	            
-	            if (value != null) {
-	                queryValue = String.valueOf(value);
-	                if (field.getValueType() == DcRepository.ValueTypes._DATE ||
-	                    field.getValueType() == DcRepository.ValueTypes._STRING) {
-	                    queryValue = queryValue.replaceAll("\'", "''");
-	                }
-	            }
-	            
-	            if (counter > 0) sql.append(entry.isAnd() ? " AND " : " OR ");
-	            
-	            if (counter == 0) sql.append(" WHERE ");
-	            
-	            
-	            boolean useUpper = field.getValueType() == DcRepository.ValueTypes._STRING &&
-	                field.getIndex() != DcObject._ID &&
-	                field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
-	                field.getValueType() != DcRepository.ValueTypes._DCPARENTREFERENCE &&
-	                field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION;
-	            
-	            if (field.getValueType() == DcRepository.ValueTypes._STRING) {
-	                if (useUpper) sql.append("UPPER(");
-	                sql.append(field.getDatabaseFieldName());
-	                if (useUpper) sql.append(")");
-	            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-	                sql.append("ID");
-	            } else {
-	                sql.append(field.getDatabaseFieldName());
-	            }
-	            
-	            if (    operator == Operator.CONTAINS.getIndex() || 
-	                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
-	                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
-	                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
+	        addEntries(sql, module);
 
-	                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-	                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
-	                        operator == Operator.NOT_EQUAL_TO.getIndex()) 
-	                        sql.append(" NOT");
-
-	                    sql.append(" IN (");
-	                    
-	                    DcModule mapping = DcModules.get(DcModules.getMappingModIdx(entryModule.getIndex(), field.getReferenceIdx(), field.getIndex()));
-                    	sql.append("SELECT ");
-	                    sql.append(mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName());
-	                    sql.append(" FROM ");
-	                    sql.append(mapping.getTableName());
-	                    sql.append(" WHERE ");
-	                    sql.append(mapping.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
-		
-	                    sql.append(" IN (");
-	                    if (value instanceof String) {
-	                        sql.append("'");
-	                        sql.append(value);
-	                        sql.append("')");
-	                    } else {
-	                        counter2 = 0;
-	                        for (DcObject dco : (Collection<DcObject>) value) {
-	                            if (counter2 > 0)  sql.append(",");
-	                            sql.append("'");
-	                            sql.append(dco.getID());
-	                            sql.append("'");
-	                            counter2++;
-	                        }
-	                        sql.append(")");
-	                    }
-	                    sql.append(")");
-	                } else {
-	                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
-	                    sql.append(" LIKE ");
-	                    
-	                    if (useUpper) sql.append("UPPER(");
-	                    sql.append("'%" + queryValue + "%'");
-	                    if (useUpper) sql.append(")");
-	                }
-
-	            } else if (operator == Operator.ENDS_WITH.getIndex()) {
-	                sql.append(" LIKE ");
-	                if (useUpper) sql.append("UPPER(");
-	                sql.append("'%" + queryValue);
-	                if (useUpper) sql.append(")");
-	            } else if (operator == Operator.EQUAL_TO.getIndex()) {
-	                if (useUpper) {
-	                    sql.append(" = UPPER('"+ queryValue +"')");
-	                } else {
-	                    sql.append(" = ");
-	                    if (value instanceof String) sql.append("'");
-	                    sql.append(queryValue);
-	                    if (value instanceof String) sql.append("'");
-	                }
-	            } else if (operator == Operator.BEFORE.getIndex() ||
-	                       operator == Operator.LESS_THEN.getIndex()) {
-	                sql.append(" < ");
-	                sql.append(queryValue);
-	            } else if (operator == Operator.AFTER.getIndex() ||
-	                       operator == Operator.GREATER_THEN.getIndex()) {
-	                sql.append(" > ");
-	                sql.append(queryValue);
-	            } else if (operator == Operator.IS_EMPTY.getIndex()) {
-	                sql.append(" IS NULL");
-	            } else if (operator == Operator.IS_FILLED.getIndex()) {
-	                sql.append(" IS NOT NULL");
-	            } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
-	                sql.append(" <> ");
-	                if (useUpper) {
-	                    sql.append(" UPPER('"+ queryValue +"')");
-	                } else {
-	                    if (value instanceof String) sql.append("'");
-	                    sql.append(queryValue);
-	                    if (value instanceof String) sql.append("'");
-	                }
-	            } else if (operator == Operator.STARTS_WITH.getIndex()) {
-	                
-	                sql.append(" LIKE ");
-	                if (useUpper) sql.append("UPPER(");
-	                sql.append("'%" + queryValue);
-	                
-	                if (value instanceof String)
-	                    sql.append("'"+ queryValue +"%'");
-	                else 
-	                    sql.append(queryValue);
-	                
-	                if (useUpper) sql.append(")");
-	            }
-	            counter++;
-	        }
-	        
-	        if (childEntries.size() > 0) {
-	            DcModule childModule = DcModules.get(childEntries.get(0).getModule());
-	            
-	            DataFilter df = new DataFilter(childModule.getIndex());
-	            for (DataFilterEntry entry : childEntries)
-	                df.addEntry(entry);
-	            
-	            String subSelect = df.toSQL(new int[] {childModule.getParentReferenceFieldIndex()}, false, false);
-	            
-	            if (hasConditions)
-	                sql.append(" AND ID IN (");
-	            else 
-	                sql.append(" WHERE ID IN (");
-	            
-	            sql.append(subSelect);
-	            sql.append(")");
-	        }
-	        
-	        addLoanConditions(getEntries(), sql, hasConditions);
-	        
 	        moduleCounter++;
         }
         
@@ -594,6 +554,190 @@ public class DataFilter {
         // add a join to the reference table part of the sort
         if (order) addOrderBy(sql);
         return sql.toString();
+    }
+    
+    private void addEntries(StringBuffer sql, DcModule module) {
+    	boolean hasConditions = false;
+        DcModule entryModule; 
+        
+        List<DataFilterEntry> childEntries = new ArrayList<DataFilterEntry>();
+
+		Object value;
+        int operator;
+        int counter2;
+        int counter = 0;
+        String queryValue = null;
+        DcField field;
+        
+        DcModule m = DcModules.get(getModule());
+        
+        for (DataFilterEntry entry : getEntries()) {
+        	
+        	if (!m.isAbstract()) {
+	        	entryModule = DcModules.get(entry.getModule());
+	            if (entry.getModule() != getModule()) {
+	                childEntries.add(entry);
+	                continue;
+	            }
+        	} else {
+        		entryModule = module;
+        	}
+            
+            field = entryModule.getField(entry.getField());
+            
+            if (field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) 
+                continue;
+            
+            hasConditions = true;
+            
+            operator = entry.getOperator().getIndex();
+            value = entry.getValue() != null ? Utilities.getQueryValue(entry.getValue(), field) : null;
+            
+            if (value != null) {
+                queryValue = String.valueOf(value);
+                if (field.getValueType() == DcRepository.ValueTypes._DATE ||
+                    field.getValueType() == DcRepository.ValueTypes._STRING) {
+                    queryValue = queryValue.replaceAll("\'", "''");
+                }
+            }
+            
+            if (counter > 0) sql.append(entry.isAnd() ? " AND " : " OR ");
+            
+            if (counter == 0) sql.append(" WHERE ");
+            
+            
+            boolean useUpper = field.getValueType() == DcRepository.ValueTypes._STRING &&
+                field.getIndex() != DcObject._ID &&
+                field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
+                field.getValueType() != DcRepository.ValueTypes._DCPARENTREFERENCE &&
+                field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION;
+            
+            if (field.getValueType() == DcRepository.ValueTypes._STRING) {
+                if (useUpper) sql.append("UPPER(");
+                sql.append(field.getDatabaseFieldName());
+                if (useUpper) sql.append(")");
+            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                sql.append("ID");
+            } else {
+                sql.append(field.getDatabaseFieldName());
+            }
+            
+            if (    operator == Operator.CONTAINS.getIndex() || 
+                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
+                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
+
+                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                        operator == Operator.NOT_EQUAL_TO.getIndex()) 
+                        sql.append(" NOT");
+
+                    sql.append(" IN (");
+                    
+                    DcModule mapping = DcModules.get(DcModules.getMappingModIdx(entryModule.getIndex(), field.getReferenceIdx(), field.getIndex()));
+                	sql.append("SELECT ");
+                    sql.append(mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName());
+                    sql.append(" FROM ");
+                    sql.append(mapping.getTableName());
+                    sql.append(" WHERE ");
+                    sql.append(mapping.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
+	
+                    sql.append(" IN (");
+                    if (value instanceof String) {
+                        sql.append("'");
+                        sql.append(value);
+                        sql.append("')");
+                    } else {
+                        counter2 = 0;
+                        for (DcObject dco : (Collection<DcObject>) value) {
+                            if (counter2 > 0)  sql.append(",");
+                            sql.append("'");
+                            sql.append(dco.getID());
+                            sql.append("'");
+                            counter2++;
+                        }
+                        sql.append(")");
+                    }
+                    sql.append(")");
+                } else {
+                    if (operator == Operator.DOES_NOT_CONTAIN.getIndex()) sql.append(" NOT");
+                    sql.append(" LIKE ");
+                    
+                    if (useUpper) sql.append("UPPER(");
+                    sql.append("'%" + queryValue + "%'");
+                    if (useUpper) sql.append(")");
+                }
+
+            } else if (operator == Operator.ENDS_WITH.getIndex()) {
+                sql.append(" LIKE ");
+                if (useUpper) sql.append("UPPER(");
+                sql.append("'%" + queryValue);
+                if (useUpper) sql.append(")");
+            } else if (operator == Operator.EQUAL_TO.getIndex()) {
+                if (useUpper) {
+                    sql.append(" = UPPER('"+ queryValue +"')");
+                } else {
+                    sql.append(" = ");
+                    if (value instanceof String) sql.append("'");
+                    sql.append(queryValue);
+                    if (value instanceof String) sql.append("'");
+                }
+            } else if (operator == Operator.BEFORE.getIndex() ||
+                       operator == Operator.LESS_THEN.getIndex()) {
+                sql.append(" < ");
+                sql.append(queryValue);
+            } else if (operator == Operator.AFTER.getIndex() ||
+                       operator == Operator.GREATER_THEN.getIndex()) {
+                sql.append(" > ");
+                sql.append(queryValue);
+            } else if (operator == Operator.IS_EMPTY.getIndex()) {
+                sql.append(" IS NULL");
+            } else if (operator == Operator.IS_FILLED.getIndex()) {
+                sql.append(" IS NOT NULL");
+            } else if (operator == Operator.NOT_EQUAL_TO.getIndex()) {
+                sql.append(" <> ");
+                if (useUpper) {
+                    sql.append(" UPPER('"+ queryValue +"')");
+                } else {
+                    if (value instanceof String) sql.append("'");
+                    sql.append(queryValue);
+                    if (value instanceof String) sql.append("'");
+                }
+            } else if (operator == Operator.STARTS_WITH.getIndex()) {
+                
+                sql.append(" LIKE ");
+                if (useUpper) sql.append("UPPER(");
+                sql.append("'%" + queryValue);
+                
+                if (value instanceof String)
+                    sql.append("'"+ queryValue +"%'");
+                else 
+                    sql.append(queryValue);
+                
+                if (useUpper) sql.append(")");
+            }
+            counter++;
+        }
+        
+        if (childEntries.size() > 0) {
+            DcModule childModule = DcModules.get(childEntries.get(0).getModule());
+            
+            DataFilter df = new DataFilter(childModule.getIndex());
+            for (DataFilterEntry entry : childEntries)
+                df.addEntry(entry);
+            
+            String subSelect = df.toSQL(new int[] {childModule.getParentReferenceFieldIndex()}, false, false);
+            
+            if (hasConditions)
+                sql.append(" AND ID IN (");
+            else 
+                sql.append(" WHERE ID IN (");
+            
+            sql.append(subSelect);
+            sql.append(")");
+        }
+        
+        addLoanConditions(getEntries(), sql, hasConditions);
     }
     
     private void addOrderByClause(StringBuffer sql) {
@@ -677,7 +821,7 @@ public class DataFilter {
         if (available != null && Boolean.valueOf(available.toString()))
             sql.append(" ID NOT IN (select objectID from Loans where objectID = ID AND enddate IS NULL AND startDate <= '" + current +  "')");
         else
-            sql.append(" ID IN (select objectID from Loans where objectID = .ID " + daysCondition + 
+            sql.append(" ID IN (select objectID from Loans where objectID = ID " + daysCondition + 
                        " AND enddate IS NULL AND startDate <= '" + current +  "'" + personCondition + ")");
     }   
 

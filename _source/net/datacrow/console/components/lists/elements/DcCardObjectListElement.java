@@ -122,7 +122,7 @@ public class DcCardObjectListElement extends DcObjectListElement {
         DcImageIcon image;
         for (Picture p : pictures) {
             
-            if (p == null) continue;
+            if (p == null || !p.hasImage()) continue;
                 
             scaledImage = p.getScaledPicture();
             image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
@@ -165,14 +165,6 @@ public class DcCardObjectListElement extends DcObjectListElement {
         super.setBackground(DcSettings.getColor(DcRepository.Settings.stCardViewBackgroundColor));
     }
     
-//    @Override
-//    public void paint(Graphics g) {
-//        if (!build)
-//            build();
-//        
-//        super.paint(g);
-//    }
-    
     @Override
     public void clear() {
         super.clear();
@@ -189,4 +181,9 @@ public class DcCardObjectListElement extends DcObjectListElement {
         fldTitle = null;
         build = false;
     }
+    
+	@Override
+	protected void finalize() throws Throwable {
+		clear();
+	}
 }

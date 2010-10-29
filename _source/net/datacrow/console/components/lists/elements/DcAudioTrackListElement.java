@@ -73,4 +73,10 @@ public class DcAudioTrackListElement extends DcObjectListElement {
         panelInfo.setPreferredSize(new Dimension(50000, fieldHeight));
         add(panelInfo);
     } 
+    
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		panelInfo = null;
+	}
 }

@@ -67,5 +67,11 @@ public class DcChildObjectListElement extends DcObjectListElement {
         panelInfo.add(label);
         panelInfo.setPreferredSize(new Dimension(360, fieldHeight));
         add(panelInfo);
-    } 
+    }
+    
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		panelInfo = null;
+	}
 }

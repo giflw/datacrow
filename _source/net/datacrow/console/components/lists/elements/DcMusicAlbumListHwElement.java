@@ -130,4 +130,10 @@ public class DcMusicAlbumListHwElement extends DcObjectListHwElement {
         textField.setText(description);
         return textField;        
     }
+    
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		tracksField = null;
+	}
 }

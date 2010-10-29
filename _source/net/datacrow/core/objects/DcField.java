@@ -145,7 +145,6 @@ public class DcField implements Serializable{
      * The module reference index.
      */
     public int getReferenceIdx() {
-        
         try {
             return DcModules.getReferencedModule(this).getIndex();
         } catch (Exception e) {

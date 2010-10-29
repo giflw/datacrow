@@ -67,7 +67,6 @@ public class HtmlUtils {
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         
-        //String s = new String(Utilities.readFile(new File("c:/Share/temp2.html")));
         String s = connection.getString(charset);
         connection.close();        
 

@@ -171,13 +171,6 @@ public abstract class DcObjectListElement extends DcListElement {
     }
     
     @Override
-    public void destroy() {
-        super.destroy();
-        dco = null;
-        key = null;
-    }
-    
-    @Override
     public void clear() {
         // DO NOT DESTROY THE COMPONENTS. This component is re-used!
         // DO NOT ENABLE THIS: super.clear(); 
@@ -192,4 +185,11 @@ public abstract class DcObjectListElement extends DcListElement {
         revalidate();
         repaint();
     }
+    
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+        dco = null;
+        key = null;
+	}
 }

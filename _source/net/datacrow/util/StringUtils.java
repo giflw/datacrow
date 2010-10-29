@@ -120,8 +120,8 @@ public class StringUtils {
     }
     
     public static String concatUserFriendly(String s, int length) {
-        if (s.length() <= length)
-            return s;
+    	if (length <= 0) return s;
+        if (s.length() <= length) return s;
         
         s = s.substring(0, length - 1);
         for (int i = s.length() - 1; i > 0; i--) {

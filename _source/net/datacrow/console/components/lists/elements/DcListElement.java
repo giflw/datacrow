@@ -43,10 +43,6 @@ public abstract class DcListElement extends JPanel {
         clear();
     }  
     
-    public void destroy() {
-        clear();
-    }    
-    
     @Override
     public void setFont(Font font) {
         Font fontNormal = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
@@ -78,4 +74,9 @@ public abstract class DcListElement extends JPanel {
         if (getParent() != null)
             getParent().remove(this);
     }
+    
+	@Override
+	protected void finalize() throws Throwable {
+		clear();
+	}
 }

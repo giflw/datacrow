@@ -9,6 +9,9 @@ import net.datacrow.core.web.model.DcWebField;
 import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.util.StringUtils;
 
+/**
+ * @author rwaals
+ */
 public abstract class WebUtilities {
     
     public static String getValue(DcObject dco, DcWebField wf, Object value) {
@@ -18,7 +21,7 @@ public abstract class WebUtilities {
     public static String getValue(DcObject dco, WebFieldDefinition def, Object value) {
         return getValue(dco, def.getField(), def.getMaxTextLength(), value);
     }
-    
+
     private static String getValue(DcObject dco, int fieldIdx, int maxTextLength, Object value) {
         DcField field = dco.getField(fieldIdx);
         String s = "";

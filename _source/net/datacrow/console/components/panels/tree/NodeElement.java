@@ -88,7 +88,6 @@ public class NodeElement {
         	items.clear();
         	items = null;
         }
-        
     }
 
     @Override
@@ -108,4 +107,10 @@ public class NodeElement {
     public int hashCode() {
         return getComparableKey().hashCode();
     }
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		clear();
+	}
 }

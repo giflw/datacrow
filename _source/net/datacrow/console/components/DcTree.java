@@ -77,6 +77,8 @@ public class DcTree extends JTree {
     
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    	try {
+    		super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    	} catch (Exception e) {}
     }      
 }
