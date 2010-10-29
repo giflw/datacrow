@@ -57,6 +57,8 @@ New System Requirements:
 - Open report button was enabled even when the report was still being processed.
 - IMDB search; most information was not imported due to site changed
 - IMDB search; multiple directors was not working
+- MetaCritics online service no longer working.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: production]
