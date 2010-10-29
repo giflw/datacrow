@@ -4,7 +4,7 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.9
+Version 3.9 BETA 2
 Created on October 27, 2010
 Created by Robert Jan van der Waals
 

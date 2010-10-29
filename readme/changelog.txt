@@ -57,7 +57,12 @@ New System Requirements:
 - Open report button was enabled even when the report was still being processed.
 - IMDB search; most information was not imported due to site changed
 - IMDB search; multiple directors was not working
-- MetaCritics online service no longer working.
+- MetaCritics online service no longer working (games & movies).
+- FreeBookSpot could not be repaired and has been removed.
+- Bol.com online service retrieved "no image" pictures.
+- Barnes & Nobles search was completely broken.
+- Discogs.com; images were no longer imported.
+- MCU.es was beyond repair and has been removed.
 
 
 -----------------------------------------------------------------------------------------
