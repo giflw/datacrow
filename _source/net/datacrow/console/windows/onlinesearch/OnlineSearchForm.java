@@ -580,6 +580,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         sp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         
         table = new DcTable(getModule(), true, false);
+        table.setDynamicLoading(false);
+        table.activate();
         JScrollPane sp2 = new JScrollPane(table);
         table.addMouseListener(this);
         sp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

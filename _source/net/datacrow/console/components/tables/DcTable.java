@@ -139,6 +139,10 @@ public class DcTable extends JTable implements IViewComponent {
         this.readonly = readonly;
     }
     
+    public void setDynamicLoading(boolean b) {
+    	loadable = b;
+    }
+    
     @Override
     public void activate() {
         buildTable();
