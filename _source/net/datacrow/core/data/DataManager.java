@@ -78,15 +78,23 @@ public class DataManager {
             if (f == null) {
                 sql = "select count(*) from " + m.getTableName();
             } else if (f.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                sql = "select count(*) from " + m.getTableName() + " where " + m.getField(field).getDatabaseFieldName() + " = ?";
+                sql = "select count(*) from " + m.getTableName() + " where " + m.getField(field).getDatabaseFieldName() + 
+                      (value == null ? " IS NULL " : " = ?");
             } else {
-                m = DcModules.get(DcModules.getMappingModIdx(module, f.getReferenceIdx(), field));
-                sql = "select count(*) from " + m.getTableName() + " where " + m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?";
+                if (value != null) {
+                	m = DcModules.get(DcModules.getMappingModIdx(module, f.getReferenceIdx(), field));
+                	sql = "select count(*) from " + m.getTableName() + " where " + m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?";
+                } else { 
+                	DcModule mapping = DcModules.get(DcModules.getMappingModIdx(module, f.getReferenceIdx(), field));
+                	sql = "select count(*) from " + m.getTableName() + " MAINTABLE where not exists (select " + 
+                	      mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " from " + mapping.getTableName() + " where " +
+                	      mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = MAINTABLE.ID)"; 
+                }
             }
                 
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
             
-            if (f != null) ps.setObject(1, value instanceof DcObject ? ((DcObject) value).getID() : value);
+            if (f != null && value != null) ps.setObject(1, value instanceof DcObject ? ((DcObject) value).getID() : value);
             
             ResultSet rs = ps.executeQuery();
             while (rs.next())

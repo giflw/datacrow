@@ -31,12 +31,14 @@ import java.sql.Statement;
 
 import net.datacrow.console.windows.log.LogForm;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
@@ -58,16 +60,12 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
     
     public void start() {
         try {
-            
             boolean upgraded = false;
-            
             Version v = DatabaseManager.getVersion();
-            if (!v.equals(DataCrow.getVersion())) {
-                cleanupReferences();
-            }
-
             if (v.isOlder(new Version(3, 9, 0, 0))) {
-                upgraded |= createIndexes();
+            	cleanupReferences();
+            	DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, Long.valueOf(0));
+            	upgraded |= createIndexes();
             }
 
             if (upgraded) {

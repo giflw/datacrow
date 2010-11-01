@@ -453,6 +453,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     public DcObjectListElement getDisplayElement(int module) {
         
         DcObjectListElement element = null;
+        int moduleType = DcModules.get(module).getType();
         
         if (style == _ELABORATE) {
             if (module == DcModules._AUDIOCD) 
@@ -470,13 +471,14 @@ public class DcObjectList extends DcList implements IViewComponent {
         } else if (style == _CARDS) {
             if (module == DcModules._AUDIOTRACK)
                 element = new DcAudioTrackListElement(module);
-            else if (module == DcModule._TYPE_TEMPLATE_MODULE)
+            else if (moduleType == DcModule._TYPE_TEMPLATE_MODULE)
                 element = new DcTemplateListElement(module);
             else if (module == DcModules._MUSICTRACK)
                 element = new DcMusicTrackListElement(module);
-            else if (module == DcModule._TYPE_PROPERTY_MODULE)
+            else if (moduleType == DcModule._TYPE_PROPERTY_MODULE)
                 element = new DcPropertyListElement(module);
-            else if (DcModules.get(module).isChildModule() && module != DcModules.getCurrent().getIndex())
+            else if (DcModules.get(module).isChildModule() && 
+            		 module != DcModules.getCurrent().getIndex())
                 element = new DcShortObjectListElement(module);
             else 
                 element = new DcCardObjectListElement(module);       

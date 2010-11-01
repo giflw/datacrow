@@ -48,6 +48,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.menu.DcEditorPopupMenu;
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
@@ -121,9 +122,20 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             Picture picture;
             DcPictureField picField;
             JPanel panel;
+
+//            QuickViewFieldDefinitions definitions = (QuickViewFieldDefinitions) 
+//            dco.getModule().getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
+        
+            // TODO: rethink this
+            Collection<Integer> pictureDescFields = new ArrayList<Integer>();
+//            for (QuickViewFieldDefinition def : definitions.getDefinitions())
+//            	if (dco.getField(def.getField()).getValueType() == DcRepository.ValueTypes._PICTURE && def.isEnabled())
+//            		pictureDescFields.add(def.getField());
+            
             for (DcFieldDefinition definition : dco.getModule().getFieldDefinitions().getDefinitions()) {
                 if (    dco.isEnabled(definition.getIndex()) && 
-                        dco.getField(definition.getIndex()).getValueType() == DcRepository.ValueTypes._PICTURE) {
+                        dco.getField(definition.getIndex()).getValueType() == DcRepository.ValueTypes._PICTURE &&
+                        !pictureDescFields.contains(definition.getIndex())) {
                     
                     picture = (Picture) dco.getValue(definition.getIndex());
 
@@ -283,7 +295,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (children == null || children.size() == 0)
             return "";
         
-        String table = "<br> <h3>" + module.getObjectNamePlural() + "</h3>";
+        String table = "<br><h3>" + module.getObjectNamePlural() + "</h3>";
         
         table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
 
@@ -356,6 +368,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     String filename = dco.getDisplayString(index);
                     filename = filename.replaceAll(" ", "%20");
                     value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(dco.getDisplayString(index) ).getName() + "</a>";
+                } else if (dco.getField(index).getFieldType() == ComponentFactory._PICTUREFIELD) {
+                	Picture p = (Picture) dco.getValue(index);
+                	value = "<p><img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\"></p><br>";
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
                 	value = "<a " + Utilities.getHtmlStyle() + "  href=\"" +  dco.getValue(index) + "\">" + DcResources.getText("lblLink") + "</a>";
                 } else if (dco.getField(index).getReferenceIdx() > 0 && 

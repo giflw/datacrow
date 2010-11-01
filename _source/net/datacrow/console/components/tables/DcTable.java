@@ -1104,7 +1104,6 @@ public class DcTable extends JTable implements IViewComponent {
     }
     
     @Override
-    @SuppressWarnings("unchecked")
     public void clear(int row) {
         loadedRows.remove(Integer.valueOf(row));
         boolean listenForChanges = isListeningForChanges();

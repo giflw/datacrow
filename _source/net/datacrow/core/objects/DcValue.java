@@ -257,7 +257,6 @@ public class DcValue implements Serializable {
      * Clears the value and sets it to null.
      * @param nochecks Just do it, do not check whether we are dealing with an edited item
      */
-    @SuppressWarnings("unchecked")
     public void clear() {
         value = null;
     }

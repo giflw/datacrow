@@ -110,7 +110,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblRunOnStartup",
                             false,
                             false));   
-
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stShowToolSelectorOnStartup,
@@ -165,6 +164,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblRetrieveEditorialReviews",
                             false,
                             false));   
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stHighRenderingQuality,
+                            Boolean.FALSE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblHighRenderingQuality",
+                            false,
+                            true));   
         getSettings().addSetting(_Regional,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stLanguage,
@@ -402,7 +410,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.Settings.stGarbageCollectionIntervalMs,
-                            480000,
+                            0,
                             -1,
                             "",
                             "",

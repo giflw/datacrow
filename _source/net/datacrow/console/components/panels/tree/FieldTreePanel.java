@@ -510,7 +510,8 @@ public class FieldTreePanel extends TreePanel {
             //return;
         } else {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                Collection<DcObject> references = (Collection<DcObject>) dco.getValue(field.getIndex());
+                @SuppressWarnings("unchecked")
+				Collection<DcObject> references = (Collection<DcObject>) dco.getValue(field.getIndex());
                 if (references != null && references.size() > 0) {
                     for (DcObject reference : references) {
                         child = new DcDefaultMutableTreeNode(new NodeElement(reference.toString(), reference.toString(), reference.getIcon()));

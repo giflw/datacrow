@@ -85,7 +85,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         PluginHelper.add(menuView, "ToggleQuickView");
         PluginHelper.add(menuView, "ToggleGroupingPane");
         PluginHelper.add(menuView, "ToggleToolbarLabels");
-        
+        PluginHelper.add(menuView, "ToggleToolbar");
+
         // modules menu
         DcMenu subMenuModule = ComponentFactory.getMenu(DcResources.getText("lblActiveModule"));
         for (DcModule module : DcModules.getModules()) {

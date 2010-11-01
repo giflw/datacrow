@@ -147,6 +147,10 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         listRight = new DcFieldList();
         listRight.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listRight.addMouseListener(new ListMouseListener(ListMouseListener._LEFT));
+
+        NavigationPanel panelNav = new NavigationPanel(listRight);
+
+        
         
         JScrollPane scrollerLeft = new JScrollPane(listLeft);
         scrollerLeft.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -182,6 +186,11 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         add(scrollerRight, Layout.getGBC( 1, 2, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 0, 0, 0), 0, 0));
+
+        add(panelNav,  Layout.getGBC(2, 2, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                new Insets(0, 5, 5, 5), 0, 0));
+
     }
     
     private class ListMouseListener implements MouseListener {

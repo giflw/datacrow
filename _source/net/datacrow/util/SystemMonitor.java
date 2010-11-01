@@ -26,7 +26,9 @@
 package net.datacrow.util;
 
 import net.datacrow.console.MainFrame;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +37,6 @@ public class SystemMonitor extends Thread {
     private static Logger logger = Logger.getLogger(MainFrame.class.getName());
     
     private Runtime runtime;
-    
     private boolean checkMem = true;
     
     public SystemMonitor() {
@@ -47,12 +48,17 @@ public class SystemMonitor extends Thread {
     public void run() {
         while (true) {
             try {
-                System.gc();
+            	
+            	long interval = DcSettings.getLong(DcRepository.Settings.stGarbageCollectionIntervalMs);
+            	interval = interval > 0 ? interval : 60000;
+            	
+                sleep(interval);
+
+                if (DcSettings.getLong(DcRepository.Settings.stGarbageCollectionIntervalMs) > 0)
+                	System.gc();
                 
                 if (checkMem)
                     checkMemory();
-                
-                sleep(60000);
             } catch (Exception e) {
                 logger.error(e, e);
             }

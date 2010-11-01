@@ -224,11 +224,13 @@ public class ItemForm extends DcFrame implements ActionListener {
             @Override
             public void windowOpened(WindowEvent we) {
                 try {
+                	
                     for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
                         int index = definition.getIndex();
                         DcField field = dco.getField(index);
                         JComponent component = fields.get(field);
-                        if ((   component instanceof JTextField || component instanceof DcLongTextField) && 
+                        if (    component.isShowing() &&
+                        		(component instanceof JTextField || component instanceof DcLongTextField) && 
                                 field.isEnabled() && component.getParent() != null) {
                             component.requestFocusInWindow();
                             break;

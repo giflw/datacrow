@@ -11,7 +11,6 @@
 	<classpathentry kind="lib" path="lib/jetty/jetty-util-6.1.14.jar"/>
 	<classpathentry kind="lib" path="lib/jetty/jsp-api-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/laf/jtattoo.jar"/>
-	<classpathentry kind="lib" path="lib/openchart_1_2.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib/jebml.jar"/>
 	<classpathentry kind="lib" path="lib/jhall.jar"/>
@@ -56,5 +55,6 @@
 	<classpathentry kind="lib" path="lib/xml/xml-apis-ext-1.3.04.jar"/>
 	<classpathentry kind="lib" path="lib/xml/xmlgraphics-commons-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/xml/xsltc.jar"/>
+	<classpathentry kind="lib" path="lib/openchart2-1.4.3.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

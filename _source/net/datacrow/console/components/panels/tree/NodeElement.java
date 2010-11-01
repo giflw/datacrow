@@ -50,7 +50,7 @@ public class NodeElement {
     	if (allOrderedItems.size() == items.size()) 
     		return items;
     	
-    	Map<String, Integer> result = new LinkedHashMap();
+    	Map<String, Integer> result = new LinkedHashMap<String, Integer>();
     	for (String orderedItem : allOrderedItems) {
     		for (String item : items.keySet()) {
     			if (item.equals(orderedItem)) {

@@ -12,7 +12,7 @@ import javax.swing.event.ListSelectionListener;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcObject;
 
-public interface IViewComponent {
+public interface IViewComponent extends ISortableComponent {
     
     void clear();
     

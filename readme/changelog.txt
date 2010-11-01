@@ -1,7 +1,6 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9 beta II [Release on October 29, 2010] [testing: high] [target: beta]
+Data Crow 3.9 [Release on November xx, 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
-
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
 Items were always loaded (all of them) on startup, causing a long startup time and 
@@ -45,6 +44,18 @@ New System Requirements:
 - Changed the layout of the quick view.
 - Updated Apache FOP to version 1.0; increased performance for report creation.
 - Showing a progress bar when building the tree / grouping panel
+- Pictures are now shown within the quick view panel. If a picture field is added 
+  to the description of the quick view panel it will no longer be displayed in a 
+  separate tab.
+- Toolbar can now be completely disabled (F12).
+- Garbage collection scheduler is now disabled by default. If needed it can be turned
+  on in the expert user dialog.
+- Fields in view settings and grouping pane can now be ordered without having to 
+  remove and add the fields again.
+- Added m4a to the music file importer.
+- Added an option to enable high quality rendering of images (lowers performance and
+  increases memory usage).
+- Improved performance for the chart panel.
 
 [Fixed]
 - Image not shown (or flickering) in the card view
@@ -63,6 +74,7 @@ New System Requirements:
 - Barnes & Nobles search was completely broken.
 - Discogs.com; images were no longer imported.
 - MCU.es was beyond repair and has been removed.
+- First visible field in item form is now selected / focused.
 
 
 -----------------------------------------------------------------------------------------

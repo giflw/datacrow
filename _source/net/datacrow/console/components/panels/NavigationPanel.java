@@ -35,20 +35,20 @@ import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.tables.DcTable;
+import net.datacrow.console.views.ISortableComponent;
 import net.datacrow.core.IconLibrary;
 
 public class NavigationPanel extends JPanel implements ActionListener {
     
-    private DcTable table;
+    private ISortableComponent component;
     
-    public NavigationPanel(DcTable table) {
-        this.table = table; 
+    public NavigationPanel(ISortableComponent sc) {
+        this.component = sc; 
         build();
     }
     
     public void clear() {
-        table = null;
+    	component = null; 
     }
     
     private void build() {
@@ -85,12 +85,12 @@ public class NavigationPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("rowUp"))
-            table.moveRowUp();
+            component.moveRowUp();
         else if (ae.getActionCommand().equals("rowDown"))
-            table.moveRowDown();
+        	component.moveRowDown();
         else if (ae.getActionCommand().equals("rowToTop"))
-            table.moveRowToTop();
+        	component.moveRowToTop();
         else if (ae.getActionCommand().equals("rowToBottom"))
-            table.moveRowToBottom();
+        	component.moveRowToBottom();
     }
 }

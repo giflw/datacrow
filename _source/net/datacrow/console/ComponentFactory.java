@@ -775,7 +775,11 @@ public final class ComponentFactory {
     }
 
     public static final DcButton getButton(String buttonText) {
-        DcButton button = new DcButton();
+    	return getButton(buttonText, null);
+    }
+    
+    public static final DcButton getButton(String buttonText, ImageIcon icon) {
+        DcButton button = icon == null ? new DcButton() : new DcButton(icon);
         ToolTipManager.sharedInstance().registerComponent(button);
         button.setName("bt" + buttonText);
         button.setText(buttonText);

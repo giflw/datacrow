@@ -30,12 +30,11 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -49,23 +48,22 @@ import net.datacrow.console.components.DcPanel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.DcThread;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.data.Operator;
+import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
-import com.approximatrix.charting.CoordSystem;
-import com.approximatrix.charting.charting.model.ObjectChartDataModel;
-import com.approximatrix.charting.charting.render.BarChartRenderer;
-import com.approximatrix.charting.charting.render.PieChartRenderer;
+import com.approximatrix.charting.coordsystem.BoxCoordSystem;
+import com.approximatrix.charting.model.ChartDataModel;
+import com.approximatrix.charting.model.ObjectChartDataModel;
+import com.approximatrix.charting.render.BarChartRenderer;
+import com.approximatrix.charting.render.PieChartRenderer;
 
 
 public class ChartPanel extends DcPanel implements ActionListener {
@@ -74,10 +72,10 @@ public class ChartPanel extends DcPanel implements ActionListener {
     
     private JComboBox comboFields;
     private JComboBox comboTypes;
-    private JButton button = ComponentFactory.getIconButton(IconLibrary._icoAccept);
+    private JButton btnAccept = ComponentFactory.getIconButton(IconLibrary._icoAccept);
     
     private ThreadGroup tg = new ThreadGroup("chart-builders");
-    private com.approximatrix.charting.charting.swing.ChartPanel chart;
+    private com.approximatrix.charting.swing.ChartPanel chart;
     
     private final int module;
     
@@ -94,7 +92,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         comboFields = null;
         comboTypes = null;
         chart = null;
-        button = null;
+        btnAccept = null;
         tg = null;
     }
     
@@ -102,7 +100,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
     public void setEnabled(boolean b) {
         comboFields.setEnabled(b);
         comboTypes.setEnabled(b);
-        button.setEnabled(b);
+        btnAccept.setEnabled(b);
     }
     
     private void buildChart() {
@@ -135,19 +133,6 @@ public class ChartPanel extends DcPanel implements ActionListener {
         revalidate();
     }
     
-    private String[] getSortedLabels(Map<String, Integer> dataMap) {
-        List<String> c = new ArrayList<String>();
-        c.addAll(dataMap.keySet());
-        Collections.sort(c, new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                return (s1.compareTo(s2));
-            }
-        });
-        
-        return c.toArray(new String[0]);        
-    }
-    
     private void buildBar(DcField field) {
         deinstall();
         setEnabled(false);
@@ -162,78 +147,63 @@ public class ChartPanel extends DcPanel implements ActionListener {
         new PieChartBuilder(field.getIndex()).start();
     }
     
-    private Collection<String> getUniqueValues(int module, int field) {
-        List<DcObject> objects = DataManager.get(module, null);
-        
-        Collection<String> values = new ArrayList<String>();
-        String s;
-        for (DcObject dco : objects) {
-            s = dco.getDisplayString(field);    
-            if (!values.contains(s) && s.length() > 0)
-                values.add(s);
-        }
-        return values;
-    }   
-    
-    public static int getCount(int module, DcField field, Object value) {
-        List<DcObject> objects = DataManager.get(module, null);
-        int count = 0;
-        String s1;
-        String s2;
-        for (DcObject dco : objects) {
-            s1 = dco.getDisplayString(field.getIndex()); 
-            s2 = (String) value;
-            
-            if ((field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION && (s1.equals(s2) || s1.indexOf(s2) >= 0)) ||
-                (s1.equals(s2)))
-                count++;
-        }
-        return count;
-    }    
-    
     private Map<String, Integer> getDataMap(DcField field) {
-        Collection<String> categories = new ArrayList<String>();
-        int module = field.getModule();
+        DcModule mainModule = DcModules.get(field.getModule());
+        DcModule referenceModule = DcModules.get(field.getReferenceIdx());
+        DcModule mappingModule = DcModules.get(DcModules.getMappingModIdx(module, field.getReferenceIdx(), field.getIndex()));
         
-        List<DcObject> o;
-        if (module != field.getReferenceIdx()) {
-            o = DataManager.get(field.getReferenceIdx(), null);
-            for (DcObject dco : o) 
-                categories.add(dco.toString());
+        String sql;
+        if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+        	sql = "select sub." + referenceModule.getField(referenceModule.getDisplayFieldIdx()).getDatabaseFieldName() +
+        	      ", count(parent.id) from " + mainModule.getTableName() + 
+        	      " parent inner join " + referenceModule.getTableName() + " sub on " +
+        	      " parent. " + field.getDatabaseFieldName() + " = sub.ID " +
+        	      " group by sub." + referenceModule.getField(referenceModule.getDisplayFieldIdx()).getDatabaseFieldName() +
+        	      " order by 1";
+        } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+        	sql = "select sub." + referenceModule.getField(referenceModule.getDisplayFieldIdx()).getDatabaseFieldName() + 
+        	      ", count(parent.id) from " + mainModule.getTableName() + " parent " +
+        		  " inner join " + mappingModule.getTableName() + " mapping on " +
+        		  " parent. ID = mapping." + mappingModule.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() +
+        		  " inner join " + referenceModule.getTableName() + " sub on " +
+        		  " mapping." + mappingModule.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = sub.ID " +
+        		  " group by sub." + referenceModule.getField(referenceModule.getDisplayFieldIdx()).getDatabaseFieldName() +
+        		  " order by 1";
         } else {
-            categories = getUniqueValues(module, field.getIndex());
+        	sql = "select " + field.getDatabaseFieldName() + ", count(ID) from " + mainModule.getTableName() + 
+        	      " group by " + field.getDatabaseFieldName() + 
+        	      " order by 1";
         }
-        
-        if (categories.size() == 0) {
-            DcSwingUtilities.displayMessage("msgCouldNotCreateChart");
-            return null;
-        }
-        
-        // check for empty values and include these
-        DataFilter df = new DataFilter(module);
-        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module, field.getIndex(), Operator.IS_EMPTY, null));
-        
-        int empty = DataManager.get(df).size();
-        if (empty > 0) categories.add(DcResources.getText("lblEmpty"));
         
         // create the data map. exclude zero counts
         Map<String, Integer> dataMap = new HashMap<String, Integer>();
-        int count;
-        for (String key : categories) {
-            
-            try {
-                Thread.sleep(5);
-            } catch (Exception e) {
-                logger.error(e, e);
-            }
-            
-            count = getCount(module, field, key);
-            if (key.equals(DcResources.getText("lblEmpty"))) {
-                dataMap.put(key + " (" + empty + ")", empty);
-            } else if (count > 0) { 
-                dataMap.put(key + " (" + count + ")", count);
-            }
+        ResultSet rs = null;
+        
+        try {
+	        rs = DatabaseManager.executeSQL(sql);
+	        
+	        int count;
+	        int total = 0;
+	        while (rs.next()) {
+	        	count = rs.getInt(2);
+	        	total += count;
+	        	dataMap.put(rs.getString(1), Integer.valueOf(count));
+	        }
+	        
+	        count = DataManager.getCount(module, -1, null);
+	        if (total < count) 
+	        	dataMap.put(DcResources.getText("lblEmpty"), Integer.valueOf(count - total));
+	        
+        } catch (SQLException se) {
+        	DcSwingUtilities.displayErrorMessage("msgChartCreationError");
+            logger.error(DcResources.getText("msgChartCreationError"), se);
         }
+        
+        try {
+        	if (rs != null) rs.close();
+        } catch (SQLException se) {
+			logger.error(se, se);
+		}
         
         return dataMap.size() > 0 ? dataMap : null;
     }    
@@ -268,16 +238,17 @@ public class ChartPanel extends DcPanel implements ActionListener {
         
         panel.add(comboFields);
         panel.add(comboTypes);
-        panel.add(button);
+        panel.add(btnAccept);
         
         for (DcField field : getFields()) 
-            comboFields.addItem(field);
+        	if (!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
+        		comboFields.addItem(field);
         
         comboTypes.addItem(DcResources.getText("lblPie"));
         comboTypes.addItem(DcResources.getText("lblBar"));
         
-        button.addActionListener(this);
-        button.setActionCommand("buildChart");
+        btnAccept.addActionListener(this);
+        btnAccept.setActionCommand("buildChart");
         add(   panel, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
               ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                new Insets(5, 5, 5, 5), 0, 0));
@@ -290,15 +261,18 @@ public class ChartPanel extends DcPanel implements ActionListener {
             comboFields.setFont(font);
             comboTypes.setFont(font);
             
-            if (chart != null)
-                chart.setFont(font);
+            if (chart != null) {
+                chart.setFont(font); 
+                chart.getLegend().setFont(font);
+            }
         }
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("buildChart"))
+        if (e.getActionCommand().equals("buildChart")) {
             buildChart();
+        } 
     }
     
     
@@ -326,32 +300,32 @@ public class ChartPanel extends DcPanel implements ActionListener {
             }
             
             double[][] data = new double[dataMap.keySet().size()][1];
-            String[] labels = getSortedLabels(dataMap);
-            String key;
-            for (int i = 0; i < labels.length; i++) {
-                
-                if (isCanceled()) break;
-                
-                key = labels[i];
-                data[i][0] = dataMap.get(key).intValue();
+            String[] labels = new String[dataMap.keySet().size()];
+            int i = 0;
+            int value;
+            for (String key : dataMap.keySet()) {
+            	value = dataMap.get(key).intValue();
+            	key = key == null ? DcResources.getText("lblEmpty") : key;
+            	labels[i] = key + " (" + String.valueOf(value) + ")";
+                data[i][0] = value;
+                i++;	
             }
-            
             
             if (!isCanceled()) {
                 // create the model
                 ObjectChartDataModel model = new ObjectChartDataModel(
-                        data, new String[] {field.getLabel()}, labels, 
-                        ComponentFactory.getSystemFont(), true);
+                        data, new String[] {field.getLabel()}, labels);
                 
                 // create the chart
-                CoordSystem coord = new CoordSystem(model);
+                BoxCoordSystem coord = new BoxCoordSystem(model);
                 coord.setPaintAxes(false);
                 
-                chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, field.getLabel());
+                chart = new com.approximatrix.charting.swing.ChartPanel(model, field.getLabel());
                 chart.setCoordSystem(coord);
                 chart.addChartRenderer(new PieChartRenderer(model), 0);
                 
-                dataMap.clear();
+                chart.setFont(ComponentFactory.getStandardFont()); 
+                chart.getLegend().setFont(ComponentFactory.getStandardFont());
                 
                 try {
                     SwingUtilities.invokeAndWait(new Runnable() {
@@ -386,39 +360,41 @@ public class ChartPanel extends DcPanel implements ActionListener {
             if (dataMap == null) return;
             
             double[][] data = new double[1][dataMap.keySet().size()];
+            String[] labels = new String[dataMap.keySet().size()];
+            int i = 0;
             int maximum = 0;
-            String[] labels = getSortedLabels(dataMap);
-            String key;
             int value;
-            for (int i = 0; i < labels.length; i++) {
-                
-                if (isCanceled()) break;
-                
-                key = labels[i];
-                value = dataMap.get(key).intValue();
+            for (String key : dataMap.keySet()) {
+            	value = dataMap.get(key).intValue();
+            	key = key == null ? DcResources.getText("lblEmpty") : key;
                 data[0][i] = value;
+                labels[i] = key + " (" + value + ")";
                 maximum = maximum < value ? value : maximum;
+                i++;	
             }
+            
             
             if (!isCanceled()) {
                 // create the model
-                ObjectChartDataModel model = 
+            	ChartDataModel model = 
                     new ObjectChartDataModel(data, labels, 
-                            new String[] {DcModules.get(module).getField(fieldIdx).getLabel()}, 
-                            ComponentFactory.getSystemFont(), true);  
+                            new String[] {DcModules.get(module).getField(fieldIdx).getLabel()});  
                 
                 // create the chart
-                CoordSystem coord = new CoordSystem(model);
+                BoxCoordSystem coord = new BoxCoordSystem(model);
         
-                model.setManualScale(true);
-                model.setMinimumValue(new Double(0.0));
-                model.setMaximumValue(new Double(maximum * 1.5));
+                model.setAutoScale(false);
+                model.setMinimumValueX(new Double(0.0));
+                model.setMinimumValueY(new Double(0.0));
+                model.setMaximumValueX(new Double(maximum));
+                model.setMaximumValueY(new Double(maximum));
                 
-                chart = new com.approximatrix.charting.charting.swing.ChartPanel(model, " ");
+                chart = new com.approximatrix.charting.swing.ChartPanel(model, " ");
                 chart.setCoordSystem(coord);
                 chart.addChartRenderer(new BarChartRenderer(coord, model), 0);
                 
-                dataMap.clear();
+                chart.setFont(ComponentFactory.getStandardFont()); 
+                chart.getLegend().setFont(ComponentFactory.getStandardFont());
                 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override

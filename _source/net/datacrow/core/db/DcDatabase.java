@@ -168,11 +168,13 @@ public class DcDatabase {
                 ResultSet rs = DatabaseManager.executeSQL(sql);
                 ResultSetMetaData md = rs.getMetaData();
                 
+                String columnName;
+                boolean remove;
                 for (int i = 1; i < md.getColumnCount() + 1; i++) {
-                    String columnName = md.getColumnName(i);
-                    
+                	columnName = md.getColumnName(i);
+                	remove = false;
+                	
                     if (!columnName.startsWith("_KEEP_")) { 
-                        boolean remove = true;
                         for (DcField field : module.getFields()) {
                             if (columnName.equalsIgnoreCase(field.getDatabaseFieldName())) 
                                 remove = field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ? true : false; 

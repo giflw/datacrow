@@ -33,13 +33,13 @@ import javax.swing.JList;
 import net.datacrow.console.components.lists.elements.DcFieldListElement;
 import net.datacrow.console.components.lists.elements.DcListElement;
 import net.datacrow.console.components.renderers.DcListRenderer;
+import net.datacrow.console.views.ISortableComponent;
 import net.datacrow.core.objects.DcField;
 
-public class DcFieldList extends DcList {
+public class DcFieldList extends DcList implements ISortableComponent {
     
     public DcFieldList() {
         super(new DcListModel());
-        
         setCellRenderer(new DcListRenderer(true));
         setLayoutOrientation(JList.VERTICAL_WRAP);
     }    

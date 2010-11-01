@@ -43,9 +43,10 @@ import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 /**
- * Used when searching for items. 
+ * Used to filter for items. 
  * A filter is created out of filter entries (see {@link DataFilterEntry}).
- * Filters can be saved to a file.
+ * Filters can be saved to a file for reuse. Filters are used on the web as well as in 
+ * the normal GUI.
  *  
  * @author Robert Jan van der Waals
  */
@@ -456,7 +457,7 @@ public class DataFilter {
     				   field.getIndex() == DcObject._SYS_LOANDUEDATE || 
     				   field.getIndex() == DcObject._SYS_LOANDAYSTILLOVERDUE) {
 
-    			// TODO: implement
+    			// TODO: implement for web site
     			// reference = DcModules.get(DcModules._LOAN);
     			// subTable = " SUBTABLE" + tableCounter;
     			// joins.append(" LEFT OUTER JOIN ");
@@ -477,7 +478,6 @@ public class DataFilter {
     	return sql.toString();
     }
     
-    @SuppressWarnings("unchecked")
     public String toSQL(int[] fields, boolean order, boolean includeMod) {
         DcField field;
         
@@ -556,7 +556,8 @@ public class DataFilter {
         return sql.toString();
     }
     
-    private void addEntries(StringBuffer sql, DcModule module) {
+    @SuppressWarnings("unchecked")
+	private void addEntries(StringBuffer sql, DcModule module) {
     	boolean hasConditions = false;
         DcModule entryModule; 
         
