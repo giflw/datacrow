@@ -446,14 +446,12 @@ public class FieldTreePanel extends TreePanel {
                             }
                             
                             ne.addItem(id, module);
-                            //topElem.addItem(id);
                             current = new DcDefaultMutableTreeNode(ne);
                             model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
                         } else { // exists
                             existingNe =(NodeElement) previous.getUserObject();
-                            //topElem.addItem(id);
                             existingNe.addItem(id, module);
                             parent = previous;    
                         }
@@ -507,7 +505,6 @@ public class FieldTreePanel extends TreePanel {
             child = new DcDefaultMutableTreeNode(new NodeElement(empty, empty, null));
             node.add(child);
             add(dco, index, child);
-            //return;
         } else {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 @SuppressWarnings("unchecked")

@@ -58,12 +58,11 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
-
-import com.approximatrix.charting.coordsystem.BoxCoordSystem;
-import com.approximatrix.charting.model.ChartDataModel;
-import com.approximatrix.charting.model.ObjectChartDataModel;
-import com.approximatrix.charting.render.BarChartRenderer;
-import com.approximatrix.charting.render.PieChartRenderer;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 
 public class ChartPanel extends DcPanel implements ActionListener {
@@ -75,7 +74,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
     private JButton btnAccept = ComponentFactory.getIconButton(IconLibrary._icoAccept);
     
     private ThreadGroup tg = new ThreadGroup("chart-builders");
-    private com.approximatrix.charting.swing.ChartPanel chart;
+    private org.jfree.chart.ChartPanel chartPanel;
     
     private final int module;
     
@@ -91,7 +90,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         super.clear();
         comboFields = null;
         comboTypes = null;
-        chart = null;
+        chartPanel = null;
         btnAccept = null;
         tg = null;
     }
@@ -115,17 +114,16 @@ public class ChartPanel extends DcPanel implements ActionListener {
     }
     
     private void deinstall() {
-        if (chart != null) {
-            chart.removeAll();
-            remove(chart);
-            chart = null;
+        if (chartPanel != null) {
+        	chartPanel.removeAll();
+            remove(chartPanel);
+            chartPanel = null;
             repaint();
         }
     }
     
     private void install() {
-        chart.setBorder(ComponentFactory.getTitleBorder(""));
-        add(chart, Layout.getGBC( 0, 1, 2, 1, 40.0, 40.0
+    	add(chartPanel, Layout.getGBC( 0, 1, 2, 1, 40.0, 40.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets(5, 5, 5, 5), 0, 0));
      
@@ -261,10 +259,8 @@ public class ChartPanel extends DcPanel implements ActionListener {
             comboFields.setFont(font);
             comboTypes.setFont(font);
             
-            if (chart != null) {
-                chart.setFont(font); 
-                chart.getLegend().setFont(font);
-            }
+            if (chartPanel != null)
+            	chartPanel.setFont(font); 
         }
     }
     
@@ -274,8 +270,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
             buildChart();
         } 
     }
-    
-    
+
     private class PieChartBuilder extends DcThread {
         
         private final int fieldIdx;
@@ -298,36 +293,27 @@ public class ChartPanel extends DcPanel implements ActionListener {
             	setEnabled(true);
             	return;
             }
-            
-            double[][] data = new double[dataMap.keySet().size()][1];
-            String[] labels = new String[dataMap.keySet().size()];
-            int i = 0;
+
+            DefaultPieDataset dataset = new DefaultPieDataset();
             int value;
+            int total = 0;
             for (String key : dataMap.keySet()) {
             	value = dataMap.get(key).intValue();
             	key = key == null ? DcResources.getText("lblEmpty") : key;
-            	labels[i] = key + " (" + String.valueOf(value) + ")";
-                data[i][0] = value;
-                i++;	
+            	dataset.setValue(key, Integer.valueOf(value));
+            	total += value;
             }
             
+            int all = DataManager.getCount(module, -1, null);
+            if (total < all)
+            	dataset.setValue(DcResources.getText("lblEmpty"), Integer.valueOf(all - total));
+            
             if (!isCanceled()) {
-                // create the model
-                ObjectChartDataModel model = new ObjectChartDataModel(
-                        data, new String[] {field.getLabel()}, labels);
-                
-                // create the chart
-                BoxCoordSystem coord = new BoxCoordSystem(model);
-                coord.setPaintAxes(false);
-                
-                chart = new com.approximatrix.charting.swing.ChartPanel(model, field.getLabel());
-                chart.setCoordSystem(coord);
-                chart.addChartRenderer(new PieChartRenderer(model), 0);
-                
-                chart.setFont(ComponentFactory.getStandardFont()); 
-                chart.getLegend().setFont(ComponentFactory.getStandardFont());
-                
-                try {
+            	JFreeChart chart = ChartFactory.createPieChart(null, dataset, true, true, false);
+            	chartPanel = new org.jfree.chart.ChartPanel(chart);
+            	chartPanel.setFont(ComponentFactory.getStandardFont());
+
+            	try {
                     SwingUtilities.invokeAndWait(new Runnable() {
                         @Override
                         public void run() {
@@ -359,43 +345,27 @@ public class ChartPanel extends DcPanel implements ActionListener {
             
             if (dataMap == null) return;
             
-            double[][] data = new double[1][dataMap.keySet().size()];
-            String[] labels = new String[dataMap.keySet().size()];
-            int i = 0;
-            int maximum = 0;
+            DcField field = DcModules.get(module).getField(fieldIdx);
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+            int total = 0;
             int value;
             for (String key : dataMap.keySet()) {
             	value = dataMap.get(key).intValue();
-            	key = key == null ? DcResources.getText("lblEmpty") : key;
-                data[0][i] = value;
-                labels[i] = key + " (" + value + ")";
-                maximum = maximum < value ? value : maximum;
-                i++;	
+      	    	key = key == null ? DcResources.getText("lblEmpty") : key;
+       	        dataset.addValue(value, key, field.getLabel());
+       	        total += value;
             }
             
+            int all = DataManager.getCount(module, -1, null);
+            if (total < all)
+            	dataset.addValue(all - total, DcResources.getText("lblEmpty"), field.getLabel());
             
             if (!isCanceled()) {
-                // create the model
-            	ChartDataModel model = 
-                    new ObjectChartDataModel(data, labels, 
-                            new String[] {DcModules.get(module).getField(fieldIdx).getLabel()});  
-                
-                // create the chart
-                BoxCoordSystem coord = new BoxCoordSystem(model);
-        
-                model.setAutoScale(false);
-                model.setMinimumValueX(new Double(0.0));
-                model.setMinimumValueY(new Double(0.0));
-                model.setMaximumValueX(new Double(maximum));
-                model.setMaximumValueY(new Double(maximum));
-                
-                chart = new com.approximatrix.charting.swing.ChartPanel(model, " ");
-                chart.setCoordSystem(coord);
-                chart.addChartRenderer(new BarChartRenderer(coord, model), 0);
-                
-                chart.setFont(ComponentFactory.getStandardFont()); 
-                chart.getLegend().setFont(ComponentFactory.getStandardFont());
-                
+                JFreeChart chart = ChartFactory.createBarChart(
+                		null, null, null, dataset, PlotOrientation.VERTICAL, true, true, false);
+            	chartPanel = new org.jfree.chart.ChartPanel(chart);
+            	chartPanel.setFont(ComponentFactory.getStandardFont());
+            	
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -404,5 +374,5 @@ public class ChartPanel extends DcPanel implements ActionListener {
                 });
             }
         }
-    }
+    } 
 }
