@@ -112,13 +112,13 @@ public class XmlWriter extends XmlBaseWriter {
 
     public void startRelations(DcModule childModule) throws IOException {
         ident(valueIdent);
-        writeTag("<" + getValidTag(childModule.getObjectNamePlural()) + ">");
+        writeTag("<" + getValidTag(childModule.getSystemObjectNamePlural()) + ">");
         newLine();
     }
 
     public void endRelations(DcModule childModule) throws IOException {
         ident(valueIdent);
-        writeTag("</" + getValidTag(childModule.getObjectNamePlural()) + ">");
+        writeTag("</" + getValidTag(childModule.getSystemObjectNamePlural()) + ">");
         newLine();
     }
     

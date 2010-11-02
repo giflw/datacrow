@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.menu.ViewPopupMenu;
+import net.datacrow.core.objects.DcObject;
 
 public class ViewMouseListener implements MouseListener {
     
@@ -25,7 +26,11 @@ public class ViewMouseListener implements MouseListener {
             }
 
             if (vc.getSelectedIndex() > -1) {
-                ViewPopupMenu menu = new ViewPopupMenu(vc.getSelectedItem(), view.getType(), view.getIndex()); 
+            	DcObject dco = vc.getSelectedItem();
+            	
+            	// item gotten via "getSelectedItem" is not loaded fully (!) 
+            	dco.reload();
+                ViewPopupMenu menu = new ViewPopupMenu(dco, view.getType(), view.getIndex()); 
                 Component component = (Component) vc;
                 menu.setInvoker(component);
                 menu.show(component, e.getX(), e.getY());

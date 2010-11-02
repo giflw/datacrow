@@ -297,13 +297,15 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     protected JPanel getDirectoryUsagePanel() {
         JPanel panelDirs = new JPanel();
         panelDirs.setLayout(Layout.getGBL());
-        panelDirs.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblDirectoryUsage")));
         panelDirs.add(checkDirNameAsTitle, Layout.getGBC( 0, 3, 3, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 0, 5), 0, 0));
         
         int dirUsage = settings.getInt(DcRepository.ModuleSettings.stFileImportDirectoryUsage);
         checkDirNameAsTitle.setSelected(dirUsage == 1);
+
+        panelDirs.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblDirectoryUsage")));
+        
         return panelDirs;
     }
     
@@ -422,14 +424,9 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         panelGeneral.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblGroupGeneral")));
         checkSaveDirectly.setSelected(settings.getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly));
         
-        panel.add(getDirectoryUsagePanel(), Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(10, 0, 0, 0), 0, 0));
-        
         panel.add(panelGeneral, Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(10, 0, 0, 0), 0, 0));
-
         
         return panel;
     }

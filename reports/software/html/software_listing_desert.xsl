@@ -25,7 +25,7 @@
       <tr>
         <th>Title</th>
         <th>Year</th>
-        <th>Publisher</th>
+        <th>Categories</th>
         <th>Platform</th>
         <th>Rating</th>
         <th>Cover</th>
@@ -35,7 +35,7 @@
         <tr>
           <td class="listing"><xsl:value-of select="title"/>&#x00A0;</td>
           <td class="listing"><xsl:value-of select="year"/>&#x00A0;</td>
-          <td class="listing"><xsl:for-each select="software-item/publishers/publisher"><xsl:value-of select="name"/>&#160;</xsl:for-each>&#x00A0;</td>
+          <td class="listing"><xsl:for-each select="categories/category"><xsl:value-of select="name"/>&#160;</xsl:for-each>&#x00A0;</td>
           <td class="listing"><xsl:value-of select="platform"/>&#x00A0;</td>
           <td class="listing"><xsl:value-of select="rating"/>&#x00A0;</td>
           <td class="listing">

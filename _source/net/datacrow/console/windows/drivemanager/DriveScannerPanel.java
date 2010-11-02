@@ -213,6 +213,8 @@ public class DriveScannerPanel extends DriveManagerPanel implements ActionListen
                 tableSkipDirs.addRow(new Object[] {excludedDir});
         }
         
+        tableSkipDirs.applyHeaders();
+        
         driveSelector.setValue(DcSettings.getStringArray(DcRepository.Settings.stDriveManagerDrives));
     }
     

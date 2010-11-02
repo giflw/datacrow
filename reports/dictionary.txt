@@ -507,6 +507,7 @@ xsl reference name  [software-item]
   Label                   = label
   Languages               = languages
   Lend By                 = lend-by
+  License                 = license
   Modified                = modified
   Multiplayer ?           = multiplayer-
   Picture Back            = picture-back

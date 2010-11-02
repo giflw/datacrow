@@ -123,12 +123,12 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
                 JMenuItem miLocateHP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnHashAndSize")));
                 miLocateHP.addActionListener(this);
                 miLocateHP.setActionCommand("locateFileHP");
-                miLocateHP.setEnabled(!file.exists());
+                miLocateHP.setEnabled(!file.exists() && dco.isFilled(DcObject._SYS_FILEHASH) && dco.isFilled(DcObject._SYS_FILESIZE));
                 
                 JMenuItem miLocateMP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilenameAndSize")));
                 miLocateMP.addActionListener(this);
                 miLocateMP.setActionCommand("locateFileMP");
-                miLocateMP.setEnabled(!file.exists());            
+                miLocateMP.setEnabled(!file.exists() && dco.isFilled(DcObject._SYS_FILESIZE));            
 
                 JMenuItem miLocateLP = ComponentFactory.getMenuItem(IconLibrary._icoDriveScanner, DcResources.getText("lblLocateFile", DcResources.getText("lblMatchOnFilename")));
                 miLocateLP.addActionListener(this);

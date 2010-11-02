@@ -30,7 +30,6 @@ public class DcPictureFieldMenu extends JMenuBar {
         JMenuItem miGrayscale = ComponentFactory.getMenuItem(IconLibrary._icoGrayscale, DcResources.getText("lblGrayscale"));
         JMenuItem miSharpen = ComponentFactory.getMenuItem(DcResources.getText("lblSharpen"));
         JMenuItem miBlur = ComponentFactory.getMenuItem(DcResources.getText("lblBlur"));
-        JMenuItem miBrighten = ComponentFactory.getMenuItem(DcResources.getText("lblBrighten"));
         
         JMenuItem miDelete = ComponentFactory.getMenuItem(DcResources.getText("lblDelete"));
         
@@ -49,9 +48,6 @@ public class DcPictureFieldMenu extends JMenuBar {
         miBlur.setActionCommand("blur");
         miBlur.addActionListener(pf);
 
-        miBrighten.setActionCommand("brighten");
-        miBrighten.addActionListener(pf);
-        
         miOpenFromFile.setActionCommand("open_from_file");
         miOpenFromFile.addActionListener(pf);
 
@@ -75,12 +71,15 @@ public class DcPictureFieldMenu extends JMenuBar {
         
         menuEdit.add(miRotateLeft);
         menuEdit.add(miRotateRight);
+        
         menuEdit.addSeparator();
+        
         menuEdit.add(miGrayscale);
         menuEdit.add(miSharpen);
         menuEdit.add(miBlur);
-        menuEdit.add(miBrighten);
+        
         menuEdit.addSeparator();
+        
         menuEdit.add(miDelete);
         
         add(menuFile);

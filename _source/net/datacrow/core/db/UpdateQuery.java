@@ -197,7 +197,7 @@ public class UpdateQuery extends Query {
 
         handleRequest(null, success);
         
-        if (success && DataCrow.isInitialized()) 
+        if (dco.isUpdateGUI() && success && DataCrow.isInitialized()) 
         	updateUI(dco);
         
         return null;

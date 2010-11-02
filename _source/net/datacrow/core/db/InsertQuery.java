@@ -163,7 +163,7 @@ public class InsertQuery extends Query {
         
         handleRequest(null, success);
 
-        if (DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) { 
+        if (dco.isUpdateGUI() && DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) { 
             dco.getModule().getSearchView().add(dco);
             if (dco.getModule().getInsertView() != null)
                 dco.getModule().getInsertView().remove(ID);

@@ -202,7 +202,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             this.key = dco.getID();
             
             if (DcModules.getCurrent().isAbstract())
-            	this.dco.reload(dco.getModule().getMinimalFields(null));
+            	this.dco.reload();
             
             String html = "<html><body " + 
                            Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + 

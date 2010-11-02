@@ -95,6 +95,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     protected Collection<DcObject> children = new ArrayList<DcObject>();
 
     private boolean validate = true;
+    private boolean updateGUI = true;
     
     public static final int _ID = 0;
     
@@ -141,13 +142,21 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         markAsUnchanged();
     } 
     
-    public boolean isLoaded() {
+    public boolean isUpdateGUI() {
+		return updateGUI;
+	}
+
+	public void setUpdateGUI(boolean updateGUI) {
+		this.updateGUI = updateGUI;
+	}
+
+	public boolean isLoaded() {
         return loaded;
     }
 
-    public void reload(int[] fields) {
+    public void reload() {
         loaded = isNew;
-        load(fields);
+        load(getFieldIndices());
     }
     
     /**
@@ -161,6 +170,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (loaded || isNew) return;
         
         String ID = getID();
+        
+        fields = fields == null ? getFieldIndices() : fields;
         
         try {
             String sql = "SELECT * FROM " + getTableName() + " WHERE ID = '" + getID() + "'";

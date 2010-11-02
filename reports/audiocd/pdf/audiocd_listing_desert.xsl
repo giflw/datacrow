@@ -61,7 +61,9 @@
                   <fo:table-row height="2cm">
                        
                     <fo:table-cell border-bottom-style="solid" border-bottom-color="#FFEA96" border-before-width="1" padding-top="2" padding-left="2">
-                      <fo:block><xsl:value-of select="artist"/></fo:block>
+                      <fo:block>
+                        <xsl:for-each select="artists/artist"><xsl:value-of select="name"/></xsl:for-each>
+                      </fo:block>
                     </fo:table-cell>
                        
                     <fo:table-cell border-bottom-style="solid" border-bottom-color="#FFEA96" border-before-width="1" padding-top="2" padding-left="2">

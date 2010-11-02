@@ -128,12 +128,16 @@ public abstract class ItemBean extends DcBean {
         }
         
         try {
+        	
+        	dco.setUpdateGUI(false);
+        	
             if (wo.isNew()) {
                 dco.setIDs();
                 dco.saveNew(false);
             } else { 
                 dco.saveUpdate(false);
             }
+            
         } catch (ValidationException ve) {
             FacesContext fc = FacesContext.getCurrentInstance();
             fc.addMessage("saveError", new FacesMessage(ve.getMessage()));

@@ -77,7 +77,17 @@ New System Requirements:
 - Discogs.com; images were no longer imported.
 - MCU.es was beyond repair and has been removed.
 - First visible field in item form is now selected / focused.
-
+- Child items are not added to reports if running in other language then English.
+- Report PDF "audiocd listing desert" doesn't display Artist
+- Report HTML "software listing desert" had publishers instead of categories.
+- Directory usage section of the file importer had a strange looking border.
+- History on loans not directly updated, only after reopening the item form.
+- Right-click 
+- Help on item form mentioned "attach file info" while it should read 
+  "read file information"
+- File > Locate File options were available even when the item does not have 
+  a hash or file size set.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: production]

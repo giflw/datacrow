@@ -162,7 +162,7 @@ public class DeleteQuery extends Query {
         
         handleRequest(null, success);
         
-        if (DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) {
+        if (dco.isUpdateGUI() && DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) {
             dco.getModule().getSearchView().remove(ID);
         	for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
         		if (module.getSearchView() != null)

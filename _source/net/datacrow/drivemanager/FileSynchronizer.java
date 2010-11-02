@@ -158,6 +158,7 @@ public class FileSynchronizer {
                             dco.setValue(DcObject._SYS_FILEHASH, fi.getHash());
                             
                             try {
+                            	dco.setUpdateGUI(false);
                                 dco.saveUpdate(true);
                                 
                                 message = DcResources.getText("msgSynchronizedFile", 

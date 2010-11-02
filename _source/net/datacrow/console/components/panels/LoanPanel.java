@@ -234,14 +234,16 @@ public class LoanPanel extends JPanel implements ActionListener {
                             
                             dco.setLoanInformation(currentLoan);
 
-                            currentLoan.saveUpdate(true);
+                            currentLoan.saveUpdate(false, false);
                             i++;
                         }
                         
                         try {
-                            wait(100);
+                            wait(10);
                         } catch (Exception ignore) {}                        
-                    }        
+                    }   
+                    
+                    setLendModus();
                 } catch (ValidationException e) {
                     logger.error("Error while saving the loan", e);
 
@@ -249,8 +251,6 @@ public class LoanPanel extends JPanel implements ActionListener {
              }}
         );
         thread.start();
-        
-        setLendModus();
     }
     
     private void setLendModus() {
@@ -342,6 +342,8 @@ public class LoanPanel extends JPanel implements ActionListener {
     private void buildPanel(boolean isAvailable) {
         setLayout(Layout.getGBL());
 
+        tableLoans.activate();
+        
         //**********************************************************
         //Description panel
         //**********************************************************

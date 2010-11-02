@@ -106,7 +106,7 @@ public abstract class DcObjectListElement extends DcListElement {
             	dco = DataManager.getItem(getModule(), key, getFields());
             	this.module = dco.getModule().getIndex();
 	        	if (module.isAbstract()) {
-	        		dco.reload(dco.getModule().getMinimalFields(getFields(this.module)));
+	        		dco.reload();
 	        	}
             }
 	        	

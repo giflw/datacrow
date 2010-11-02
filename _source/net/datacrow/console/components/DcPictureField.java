@@ -46,7 +46,6 @@ import java.awt.image.ColorConvertOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.ImageObserver;
 import java.awt.image.Kernel;
-import java.awt.image.RescaleOp;
 import java.io.File;
 import java.net.URL;
 
@@ -361,12 +360,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
         update(op, src);
     }
     
-    private void brighten() {
-        img = picture.getImage();
-        BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
-        update(new RescaleOp(1.25f, 0, null), src);
-    }
-    
     private void blur() {
         img = picture.getImage();
         BufferedImage src = Utilities.toBufferedImage(new DcImageIcon(img));
@@ -477,8 +470,6 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             sharpen();
         } else if (action.equals("blur")) {
             blur();
-        } else if (action.equals("brighten")) {
-            brighten();
         } else if (action.equals("open_from_clipboard")) {
             paste();
         }

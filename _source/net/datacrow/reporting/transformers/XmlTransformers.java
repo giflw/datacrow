@@ -39,7 +39,7 @@ public abstract class XmlTransformers {
     static {
         transformers.add(new Xml2HtmlTransformer());
         transformers.add(new Xml2PdfTransformer());
-        transformers.add(new Xml2RtfTransformer());
+        //transformers.add(new Xml2RtfTransformer());
     }
     
     public static Collection<XmlTransformer> getTransformers() {
