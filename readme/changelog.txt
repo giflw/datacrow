@@ -87,6 +87,9 @@ New System Requirements:
   "read file information"
 - File > Locate File options were available even when the item does not have 
   a hash or file size set.
+- Item updates done by external processes no longer cause focus loss on the client
+  (File Synchronizer & web application).
+- Removed defective 'brighten' function for pictures.
   
 
 -----------------------------------------------------------------------------------------
