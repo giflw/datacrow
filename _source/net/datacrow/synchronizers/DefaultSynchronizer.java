@@ -72,7 +72,9 @@ public abstract class DefaultSynchronizer extends Synchronizer {
     }
     
     protected boolean matches(DcObject result, String searchString, int fieldIdx) {
-        return StringUtils.equals(searchString, result.getDisplayString(fieldIdx));
+    	String s = result.getDisplayString(fieldIdx);
+    	s = Utilities.isEmpty(s) ? result.toString() : s;
+        return StringUtils.equals(searchString, s);
     }
     
     @Override
@@ -91,6 +93,8 @@ public abstract class DefaultSynchronizer extends Synchronizer {
             boolean updated = false;
             int fieldIdx = getSearchFieldIdx(client.getSearchMode());
             String searchString = getSearchString(fieldIdx, client.getServer());
+            searchString = Utilities.isEmpty(searchString) ? item : searchString;
+            
             if (Utilities.isEmpty(searchString)) return updated;
             
             OnlineSearchHelper osh = new OnlineSearchHelper(dco.getModule().getIndex(), SearchTask._ITEM_MODE_SIMPLE);
