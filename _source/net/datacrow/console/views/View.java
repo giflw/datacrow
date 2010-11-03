@@ -522,6 +522,8 @@ public class View extends DcPanel implements ListSelectionListener {
     public void applySettings() {
         setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
         
+        vc.applySettings();
+        
         if (quickView != null) {
         	quickView.refresh();
             quickView.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
@@ -539,11 +541,8 @@ public class View extends DcPanel implements ListSelectionListener {
             	groupingPane.updateView();
             
             groupingPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
-        } else {
-	        if (type == _TYPE_SEARCH)
-	            vc.clear();
-	        
-	        vc.applySettings();
+        } else if (type == _TYPE_SEARCH) {
+            vc.clear();
         }
     }
 

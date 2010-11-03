@@ -163,6 +163,7 @@ public class TableViewSettingsDialog extends DcDialog implements ActionListener 
             
             if (DcModules.getCurrent().getChild() != null)
                 save(DcModules.getCurrent().getChild(), fspChild.getSelectedFields());
+            
             close();
         } else if (e.getActionCommand().equals("close")) {
             close();

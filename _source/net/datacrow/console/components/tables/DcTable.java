@@ -681,8 +681,10 @@ public class DcTable extends JTable implements IViewComponent {
     @Override
     public void update(String ID, DcObject dco) {
         int index = getIndex(ID);
-        if (index > -1)
+        if (index > -1) {
             updateItemAt(index, dco);
+            setSelected(index);
+        }
     }
 
     public void updateItemAt(int row, DcObject dco) {
@@ -936,6 +938,7 @@ public class DcTable extends JTable implements IViewComponent {
     @Override
     public void applySettings() {
         if (!ignoreSettings) {
+        	loadedRows.clear();
             int[] fields = module.getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder);
             setVisibleColumns(fields);
         }
@@ -1048,7 +1051,7 @@ public class DcTable extends JTable implements IViewComponent {
         
         if (!loaded) {
         	
-            int selectedRow = getSelectedRow();
+            //int selectedRow = getSelectedRow();
         	
             loadedRows.add(Integer.valueOf(row));
             
@@ -1061,8 +1064,6 @@ public class DcTable extends JTable implements IViewComponent {
             Collection<Integer> fields = new ArrayList<Integer>();
             for (int field : settings.getIntArray(DcRepository.ModuleSettings.stTableColumnOrder))
                 fields.add(Integer.valueOf(field));
-            
-            
             
             DcObject dco = DataManager.getItem(getModuleForRow(row).getIndex(), ID, module.getMinimalFields(fields));
 
@@ -1096,7 +1097,7 @@ public class DcTable extends JTable implements IViewComponent {
             }
 
             applyHeaders();
-            setSelected(selectedRow);
+            //setSelected(selectedRow);
 
             setListeningForChanges(listenForChanges);
             
