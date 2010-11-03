@@ -41,6 +41,7 @@ import javax.swing.UIManager;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.MainFrame;
+import net.datacrow.console.windows.DonateDialog;
 import net.datacrow.console.windows.SelectExpienceLevelDialog;
 import net.datacrow.console.windows.SelectLanguageDialog;
 import net.datacrow.console.windows.SplashScreen;
@@ -123,7 +124,7 @@ public class DataCrow {
             String password = null;
             String username = null;
     
-            // legacy stuff: still works (!)
+            // legacy stuff but it still works..
             installationDir = System.getenv("DATACROW_HOME");
             
             if (installationDir == null || installationDir.length() == 0)
@@ -197,7 +198,8 @@ public class DataCrow {
             installationDir = dir != null ? dir : installationDir;
             
             if (installationDir == null || installationDir.trim().length() == 0) {
-                NativeMessageBox dialog = new NativeMessageBox("Warning", "The installation directory could not be determined. " +
+                NativeMessageBox dialog = new NativeMessageBox("Warning", 
+                        "The installation directory could not be determined. " +
                         "Please set the DATACROW_HOME environment variable or supply the -dir:<installation directory> parameter. " +
                         "The DATACROW_HOME variable value should point to the Data Crow intallation directory.");
                 DcSwingUtilities.openDialogNativeModal(dialog);
@@ -230,6 +232,8 @@ public class DataCrow {
                 totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;                
                 
                 installLafs();
+                
+                logger.info(new Date() + " Starting Data Crow. ");
                 
                 logger.info("Using installation directory: " + installationDir);
                 logger.info("Using data directory: " + dataDir);
@@ -442,6 +446,14 @@ public class DataCrow {
                 long end = new Date().getTime();
                 logger.debug("Total startup time was " + (end - totalstart) + "ms");
             }
+            
+            int usage = DcSettings.getInt(DcRepository.Settings.stUsage) + 1;
+            DcSettings.set(DcRepository.Settings.stUsage, Long.valueOf(usage));
+            
+            boolean itsTime = usage == 15 || usage == 150 || usage == 1000 || usage == 1500 || usage == 500 || usage == 50;
+            if (itsTime && DcSettings.getBoolean(DcRepository.Settings.stAskForDonation))
+                new DonateDialog().setVisible(true);
+            
         } catch (Throwable e) {
             System.out.println("Data Crow could not be started: " + e);
             e.printStackTrace();
@@ -817,7 +829,8 @@ public class DataCrow {
         
         boolean alreadyChecked = DcSettings.getBoolean(DcRepository.Settings.stCheckedForJavaVersion);
         if (!getPlatform().isJavaSun() && !alreadyChecked && !getPlatform().isJava16()) {
-            new NativeMessageBox("Warning", "Data Crow has only been tested on Java from Sun (version 1.6 or higher). " +
+            new NativeMessageBox("Warning", 
+                    "Data Crow has only been tested on Java from Sun (version 1.6 or higher). " +
             		"Make sure the latest Java version from Sun has been installed. You are currently using the Java version from " + System.getProperty("java.vendor") + " " +
             		"Data Crow will now continue and will not display this message again. Upgrade your Java version in case Data Crow does not continue (hangs) or " +
             		"if you experience any other kind of malfunction.");
@@ -838,23 +851,6 @@ public class DataCrow {
         UIManager.installLookAndFeel("JTattoo - Mint", "com.jtattoo.plaf.mint.MintLookAndFeel");
         UIManager.installLookAndFeel("JTattoo - Noire", "com.jtattoo.plaf.mint.MintLookAndFeel");
         UIManager.installLookAndFeel("JTattoo - Luna", "com.jtattoo.plaf.luna.LunaLookAndFeel");
-    }
-    
-    @SuppressWarnings("unused")
-    private static void resetSettings() throws Exception {
-        Version old = DatabaseManager.getVersion();
-        if (old.getMajor() > 0 && old.isOlder(version) && old.isOlder(new Version(3, 5, 0, 0))) {
-            
-            loadSettings = !DcSwingUtilities.displayQuestion(
-                      "Please be aware that with this new version changes have been made to several modules. These "
-                    + "changes combined with the old settings can impact the movie IMDB search. It is therefor recommended to load the new default "
-                    + "settings. If you do not wish to do this make sure to check all the settings as available in the online search form. "
-                    + "Loading the default settings also improves the default layout of the item form, which migth look cluttered otherwise "
-                    + "with the old settings. Do you want to use the new default settings?");
-            
-            if (!loadSettings)
-                DcSettings.reset();
-        }
     }
     
     private static class ShutdownThread extends Thread {

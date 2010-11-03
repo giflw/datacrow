@@ -50,6 +50,7 @@ import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -63,6 +64,7 @@ import net.datacrow.settings.definitions.QuickViewFieldDefinitions;
 
 public class QuickViewSettingsDialog extends DcDialog implements ActionListener {
 
+    private JCheckBox cbShowPicturesInTabs = ComponentFactory.getCheckBox(DcResources.getText("lblShowPicturesInTabs"));
     private DefinitionPanel panelDefinitionsParent = null;
     private DefinitionPanel panelDefinitionsChild = null;
 
@@ -101,11 +103,10 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
             panelDefinitionsChild.save();
         
         DcModule module = DcModules.getCurrent();
-        if (module.getSearchView() != null)
-            module.getSearchView().applySettings();
+        module.getSettings().set(DcRepository.ModuleSettings.stShowPicturesInSeparateTabs, 
+                                 Boolean.valueOf(cbShowPicturesInTabs.isSelected()));
+        module.getSearchView().refreshQuickView();
 
-        if (module.getInsertView() != null)
-            module.getInsertView().applySettings();
     }
 
     private void buildDialog() {
@@ -138,18 +139,28 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
         
         JTabbedPane tp = ComponentFactory.getTabbedPane();
         
+        JPanel panelGeneral = new JPanel();
+        panelGeneral.setLayout(Layout.getGBL());
+        panelGeneral.add(cbShowPicturesInTabs, Layout.getGBC(0, 0, 1, 4, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(5, 5, 5, 5), 0, 0));
+        
+        cbShowPicturesInTabs.setSelected(DcModules.getCurrent().getSettings().getBoolean(DcRepository.ModuleSettings.stShowPicturesInSeparateTabs));
+        
+        tp.addTab(DcResources.getText("lblGroupGeneral"), IconLibrary._icoSettings16, panelGeneral);
+        
         DcModule module = DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule));
         panelDefinitionsParent = new DefinitionPanel(module);
-        tp.addTab(DcResources.getText("lblXFields", module.getLabel()), panelDefinitionsParent);
+        tp.addTab(DcResources.getText("lblXFields", module.getLabel()), IconLibrary._icoSettings16, panelDefinitionsParent);
 
         if (module.getChild() != null) {
             panelDefinitionsChild = new DefinitionPanel(module.getChild());
-            tp.addTab(DcResources.getText("lblXFields", module.getChild().getLabel()), panelDefinitionsChild);
+            tp.addTab(DcResources.getText("lblXFields", module.getChild().getLabel()), IconLibrary._icoSettings16, panelDefinitionsChild);
         }
         
         DcColorSelector cs = ComponentFactory.getColorSelector(DcRepository.Settings.stQuickViewBackgroundColor);
         cs.setValue(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor));
-        tp.addTab(DcResources.getText("lblBackgroundColor"), cs);        
+        tp.addTab(DcResources.getText("lblBackgroundColor"), IconLibrary._icoColor16, cs);        
         
         getContentPane().add(tp, Layout.getGBC(0, 1, 1, 1, 10.0, 10.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

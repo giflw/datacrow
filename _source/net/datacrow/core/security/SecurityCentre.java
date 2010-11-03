@@ -172,8 +172,7 @@ public class SecurityCentre {
             return su;
             
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e, e);
+            logger.info(e, e);
             throw new SecurityException(DcResources.getText("msgUserOrPasswordIncorrect"));
         }
     }   
@@ -298,15 +297,21 @@ public class SecurityCentre {
     
     private void createTables() {
         try {
-            new CreateQuery(DcModules._USER).run();
+            CreateQuery query = new CreateQuery(DcModules._USER);
+            query.setLog(false);
+            query.run();
         } catch (Exception se) {}
 
         try {
-            new CreateQuery(DcModules._PICTURE).run();
+            CreateQuery query = new CreateQuery(DcModules._PICTURE);
+            query.setLog(false);
+            query.run();
         } catch (SQLException se) {}
 
         try {
-            new CreateQuery(DcModules._PERMISSION).run();
+            CreateQuery query = new CreateQuery(DcModules._PERMISSION);
+            query.setLog(false);
+            query.run();
         } catch (SQLException se) {}
     }
 }

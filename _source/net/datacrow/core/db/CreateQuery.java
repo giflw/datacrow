@@ -73,7 +73,8 @@ public class CreateQuery extends Query {
             stmt = conn.createStatement();
             stmt.execute(sql);
         } catch (SQLException se) {
-            logger.error(se, se);
+            if (isLog())
+                logger.error(se, se);
         }
         
         if (module.getIndex() == DcModules._PICTURE) {
@@ -82,7 +83,8 @@ public class CreateQuery extends Query {
                         module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
                         module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
             } catch (SQLException se) {
-                logger.error(se, se);
+                if (isLog())
+                    logger.error(se, se);
             }
         } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
             try { 
@@ -90,7 +92,8 @@ public class CreateQuery extends Query {
                         module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                         module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
             } catch (SQLException se) {
-                logger.error(se, se);
+                if (isLog())
+                    logger.error(se, se);
             }
         } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
             try { 
@@ -98,7 +101,8 @@ public class CreateQuery extends Query {
                         module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                         module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
             } catch (SQLException se) {
-                logger.error(se, se);
+                if (isLog())
+                    logger.error(se, se);
             }
         }
         
@@ -106,7 +110,8 @@ public class CreateQuery extends Query {
             if (stmt != null) stmt.close();
             if (conn != null) conn.close();
         } catch (SQLException e) {
-            logger.error("Error while closing connection", e);
+            if (isLog())
+                logger.error("Error while closing connection", e);
         }
 
         clear();

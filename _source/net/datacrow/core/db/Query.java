@@ -64,6 +64,8 @@ public abstract class Query {
     private final int module;
 
     private Requests requests;
+    
+    private boolean log = true;
 
     /**
      * Constructs a new Query object. 
@@ -83,6 +85,14 @@ public abstract class Query {
         requests = null;
     }
     
+    public boolean isLog() {
+        return log;
+    }
+
+    public void setLog(boolean log) {
+        this.log = log;
+    }
+
     public abstract List<DcObject> run();
     
     protected void handleRequest(Collection<DcObject> items, boolean success) {

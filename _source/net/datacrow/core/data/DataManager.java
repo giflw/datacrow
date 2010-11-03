@@ -176,14 +176,14 @@ public class DataManager {
 	    		concat = false;
 	    	}
     	} catch (Exception e) {
-    		e.printStackTrace();
+    	    logger.error("An error occurred while building the String result set", e);
     	}
         
     	if (rs != null) {
     		try {
 				rs.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+	            logger.error("An error occurred while closing the result set", e);
 			}
     	}  
     	

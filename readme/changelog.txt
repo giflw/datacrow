@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9 BETA III [Release on November 2, 2010] [testing: high] [target: BETA/TEST]
+Data Crow 3.9 BETA IV [Release on November 3, 2010] [testing: high] [target: BETA/TEST]
 -----------------------------------------------------------------------------------------
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
@@ -58,6 +58,8 @@ New System Requirements:
 - Improved performance for the chart panel.
 - Using JFreeChart libraries instead of OpenChart2, allowing for better graphical 
   chart presentations and printable charts.
+- An option has been added to the quick view settings to show or hide the picture tabs.
+  This is a 'per module' setting.
 
 [Fixed]
 - Image not shown (or flickering) in the card view
@@ -91,7 +93,11 @@ New System Requirements:
   (File Synchronizer & web application).
 - Removed defective 'brighten' function for pictures.
 - Item Synchronizer does not update all items.
-
+- Duplication of records for multiple references fields; duplicates are removed and 
+  a unique index is set on these tables to prevent this is in the future. 
+- Duplication of records in the picture tables; duplicates are removed here as well
+  and a unique index is created here as well.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: production]

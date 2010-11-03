@@ -123,19 +123,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             DcPictureField picField;
             JPanel panel;
 
-//            QuickViewFieldDefinitions definitions = (QuickViewFieldDefinitions) 
-//            dco.getModule().getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
-        
-            // TODO: rethink this
-            Collection<Integer> pictureDescFields = new ArrayList<Integer>();
-//            for (QuickViewFieldDefinition def : definitions.getDefinitions())
-//            	if (dco.getField(def.getField()).getValueType() == DcRepository.ValueTypes._PICTURE && def.isEnabled())
-//            		pictureDescFields.add(def.getField());
-            
             for (DcFieldDefinition definition : dco.getModule().getFieldDefinitions().getDefinitions()) {
-                if (    dco.isEnabled(definition.getIndex()) && 
-                        dco.getField(definition.getIndex()).getValueType() == DcRepository.ValueTypes._PICTURE &&
-                        !pictureDescFields.contains(definition.getIndex())) {
+                if (dco.isEnabled(definition.getIndex()) && 
+                    dco.getField(definition.getIndex()).getValueType() == DcRepository.ValueTypes._PICTURE) {
                     
                     picture = (Picture) dco.getValue(definition.getIndex());
 
@@ -217,7 +207,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 descriptionPane.setCaretPosition(0);
             } catch (Exception exp) {}
 
-            createImageTabs(dco);
+            if (dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stShowPicturesInSeparateTabs))
+                createImageTabs(dco);
             
             boolean error = true;
             tab += 1;
@@ -306,10 +297,19 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         StringBuffer description;
         String value;
         
+        if (!module.isAbstract()) {
+            
+            Collection<Integer> additional = new ArrayList<Integer>();
+            for (QuickViewFieldDefinition definition : definitions.getDefinitions())
+                additional.add(definition.getField());
+            
+            dco.loadChildren(module.getMinimalFields(additional));
+        }
+            
         for (DcObject child : children) {
-        	
-        	if (dco.getModule().getIndex() == DcModules._CONTAINER)
-        		child.load(child.getModule().getMinimalFields(null));
+            
+            if (module.isAbstract())
+                child.load(new int[] {DcObject._ID, child.getModule().getDisplayFieldIdx()});
             
             table += "<tr><td>";
 

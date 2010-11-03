@@ -157,6 +157,15 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             false));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.ModuleSettings.stShowPicturesInSeparateTabs,
+                            Boolean.TRUE,
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));        
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings,
                             Boolean.FALSE,
                             -1,

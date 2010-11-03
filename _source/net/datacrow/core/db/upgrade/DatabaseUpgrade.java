@@ -26,6 +26,7 @@
 package net.datacrow.core.db.upgrade;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -37,7 +38,10 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 
@@ -84,7 +88,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         }            
     }
     
-    private boolean createIndexes() {
+    private boolean createIndexes() throws Exception {
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = null;
 
@@ -97,29 +101,83 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         for (DcModule module : DcModules.getAllModules()) {
             if (module.getIndex() == DcModules._PICTURE) {
                 try { 
-                    stmt.execute("delete from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)");
+                	String sql = "select distinct * from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
+                	ResultSet rs = stmt.executeQuery(sql);
+                	DcModule m = DcModules.get(DcModules._PICTURE);
+                	
+                	String filename;
+                	
+                	while (rs.next()) {
+                	    filename = rs.getString(m.getField(Picture._C_FILENAME).getDatabaseFieldName());
+                	    
+                	    logger.info("found a duplicate record in the picture table ( " + filename + ") - removing duplicates");
+
+                	    DcObject picture = m.getItem();
+                		picture.setValue(Picture._A_OBJECTID, rs.getObject(m.getField(Picture._A_OBJECTID).getDatabaseFieldName()));
+                		picture.setValue(Picture._B_FIELD, rs.getObject(m.getField(Picture._B_FIELD).getDatabaseFieldName()));
+                		picture.setValue(Picture._C_FILENAME, filename);
+                		picture.setValue(Picture._E_HEIGHT, rs.getObject(m.getField(Picture._E_HEIGHT).getDatabaseFieldName()));
+                		picture.setValue(Picture._F_WIDTH, rs.getObject(m.getField(Picture._F_WIDTH).getDatabaseFieldName()));
+                		
+                		stmt.execute("delete from picture where filename = '" + picture.getValue(Picture._C_FILENAME) + 
+                					 "' and objectid = " + picture.getValue(Picture._A_OBJECTID));
+                		try {
+                			
+                			if (WorkFlow.checkUniqueness(picture, false))
+                				picture.saveNew(false);
+						} catch (ValidationException e) {}
+                	}
+                	
+                	rs.close();
+                	
+                	logger.info("Creating unique index on " + module.getTableName());
+                	
                     stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                             module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
                             module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
+                
                 } catch (SQLException se) {
-                    logger.error(se, se);
+                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
             } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                 try { 
-                    stmt.execute("delete from " + module.getTableName() + " where objectid in (select objectid from " + module.getTableName() + " group by objectid having count(distinct referencedid) > 1)");
-                    stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                	String sql = "select distinct objectid from " + module.getTableName() + " where objectid in " +
+                			     "(select objectid from " + module.getTableName() + " group by objectid having count(distinct referencedid) > 1)";
+                	ResultSet rs = stmt.executeQuery(sql);
+                	
+                	while (rs.next()) {
+                	    
+                	    logger.info("Duplicate records found in " + module.getTableName() + ". Going to rebuild the table and remove the duplicates.");
+                	    
+                	    rs.close();
+                	    stmt.execute("alter table " + module.getTableName() + " rename to " + module.getTableName() + "_tmp");
+                	    sql = "select distinct " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
+                	           module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + 
+                	           " into " +  module.getTableName() + 
+                	           " from " + module.getTableName() + "_tmp";
+                	    stmt.execute(sql);
+                	    stmt.execute("drop table " + module.getTableName() + "_tmp");
+                	    
+                	    logger.info("Duplicates were successfully removed from " + module.getTableName() + ".");
+                	    
+                	    break;
+                	}
+                	
+                	logger.info("Creating unique index on " + module.getTableName());
+                	stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                             module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                             module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
                 } catch (SQLException se) {
-                    logger.error(se, se);
+                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
             } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
                 try { 
+                    logger.info("Creating unique index on " + module.getTableName());
                     stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                             module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                             module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
                 } catch (SQLException se) {
-                    logger.error(se, se);
+                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
             }
         }
@@ -140,11 +198,15 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                 
                 try {
-                    stmt = conn.createStatement();
-                    stmt.execute("DELETE FROM " + module.getTableName() + " where " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() +
-                                 " NOT IN (SELECT ID FROM " + DcModules.get(module.getField(DcMapping._A_PARENT_ID).getSourceModuleIdx()).getTableName() + ") OR " +
-                                 module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " NOT IN (SELECT ID FROM " + 
+                	stmt = conn.createStatement();
+                    stmt.execute("DELETE FROM " + module.getTableName() + 
+                    		     " WHERE " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() +
+                                 " NOT IN (SELECT ID FROM " + 
+                                 DcModules.get(module.getField(DcMapping._A_PARENT_ID).getSourceModuleIdx()).getTableName() + ") " +
+                                 " OR " + module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + 
+                                 " NOT IN (SELECT ID FROM " + 
                                  DcModules.get(module.getField(DcMapping._B_REFERENCED_ID).getSourceModuleIdx()).getTableName() + ")"); 
+                
                 } catch (SQLException se) {
                     logger.error("Could not remove references", se);
                 }

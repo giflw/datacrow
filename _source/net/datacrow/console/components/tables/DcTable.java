@@ -1050,9 +1050,6 @@ public class DcTable extends JTable implements IViewComponent {
         boolean loaded = loadedRows.contains(Integer.valueOf(row));
         
         if (!loaded) {
-        	
-            //int selectedRow = getSelectedRow();
-        	
             loadedRows.add(Integer.valueOf(row));
             
             boolean listenForChanges = isListeningForChanges();
@@ -1087,7 +1084,7 @@ public class DcTable extends JTable implements IViewComponent {
                 }
                 
                 // clears the selection as well..
-                ((DcTableModel) getModel()).fireTableDataChanged();
+                //((DcTableModel) getModel()).fireTableDataChanged();
             }
 
             if (module.isAbstract()) {
@@ -1097,8 +1094,6 @@ public class DcTable extends JTable implements IViewComponent {
             }
 
             applyHeaders();
-            //setSelected(selectedRow);
-
             setListeningForChanges(listenForChanges);
             
             return true;

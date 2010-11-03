@@ -48,8 +48,6 @@ import net.datacrow.core.objects.DcObject;
 public class DcChildModule extends DcModule implements IChildModule {
 
     private static final long serialVersionUID = 1388069555942936534L;
-
-    private int[] minimalFields = null;
     
     /**
      * Creates a new instances of this module based on a XML definition.
@@ -96,28 +94,28 @@ public class DcChildModule extends DcModule implements IChildModule {
     public int[] getSupportedViews() {
         return new int[] {MasterView._TABLE_VIEW};
     }
-
     
     @Override
     public int[] getMinimalFields(Collection<Integer> include) {
-        if (minimalFields == null) {
-            Collection<Integer> fields = new ArrayList<Integer>();
-            
-            int valueType;
-            for (DcField field : getFields()) {
-                valueType = field.getValueType();
-                if (valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
-                    valueType != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
-                    valueType != DcRepository.ValueTypes._PICTURE) {
-                    fields.add(Integer.valueOf(field.getIndex()));
-                }
-            }
-            minimalFields = new int[fields.size()];
-            int idx = 0;
-            for (Integer index : fields) {
-                minimalFields[idx++] = index.intValue();
+        Collection<Integer> fields = new ArrayList<Integer>();
+        
+        int valueType;
+        for (DcField field : getFields()) {
+            valueType = field.getValueType();
+            if (valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                valueType != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
+                valueType != DcRepository.ValueTypes._PICTURE) {
+                fields.add(Integer.valueOf(field.getIndex()));
             }
         }
+        
+        if (include != null) fields.addAll(include);
+        
+        int[] minimalFields = new int[fields.size()];
+        int idx = 0;
+        for (Integer index : fields)
+            minimalFields[idx++] = index.intValue();
+
         return minimalFields;
     }
 

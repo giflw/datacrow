@@ -192,10 +192,10 @@ public class DcSwingUtilities {
             else if (renderingValue == 4)
                 g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_VBGR);
                 
-        } catch (Exception ignore) {
-            logger.debug(ignore, ignore);
-        } catch (Error ignore) {
-            logger.debug(ignore, ignore);
+        } catch (Exception e) {
+            logger.error(e, e);
+        } catch (Error e) {
+            logger.error(e, e);
         }
         
         return g;

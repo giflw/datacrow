@@ -40,6 +40,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class ModuleSettings {
+        public static final String stShowPicturesInSeparateTabs = "show_pictures_in_separate_tabs";
         public static final String stMassUpdateServer = "mass_update_server";
         public static final String stMassUpdateMode = "mass_update_mode";
         public static final String stMassUpdateRegion = "mass_update_region";
@@ -107,6 +108,8 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
+        public static final String stUsage = "usage_data_crow_starts";
+        public static final String stAskForDonation = "allow_me_to_ask_for_a_donation";
     	public static final String stHighRenderingQuality = "high_rendering_quality";
         public static final String stLogFormSize = "log_form_size";
         public static final String stToolSelectWizard = "tool_select_wizard_form_size";

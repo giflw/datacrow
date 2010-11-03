@@ -109,7 +109,25 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             "lblRunOnStartup",
                             false,
-                            false));   
+                            false));  
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._LONG,
+                            DcRepository.Settings.stUsage,
+                            Long.valueOf(0),
+                            ComponentFactory._NUMBERFIELD,
+                            "",
+                            "",
+                            false,
+                            false));     
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stAskForDonation,
+                            Boolean.TRUE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "",
+                            false,
+                            false));     
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stShowToolSelectorOnStartup,

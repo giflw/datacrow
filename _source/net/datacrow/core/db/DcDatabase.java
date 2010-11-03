@@ -259,7 +259,7 @@ public class DcDatabase {
                     stmt.setMaxRows(1);
                     ResultSet result = stmt.executeQuery(testQuery);
                     initializeColumns(connection, result.getMetaData(), module);
-                    logger.info(DcResources.getText("msgTableFound", module.getTableName()));
+                    logger.debug(DcResources.getText("msgTableFound", module.getTableName()));
                     result.close();
                 } catch (SQLException e) {
                     logger.info((DcResources.getText("msgTableNotFound", module.getTableName())));
