@@ -377,7 +377,7 @@ public class DcModule implements Comparable<DcModule> {
     }
     
     public int[] getSupportedViews() {
-        return new int[] {MasterView._LIST_VIEW, MasterView._TABLE_VIEW};
+        return isAbstract() ? new int[] {MasterView._LIST_VIEW} : new int[] {MasterView._LIST_VIEW, MasterView._TABLE_VIEW};
     }
     
     /**
@@ -1417,11 +1417,14 @@ public class DcModule implements Comparable<DcModule> {
             insertView = new MasterView(getIndex());
 
             // table view
-            DcTable table = new DcTable(this, false, true);
-            View tableView = new View(insertView, View._TYPE_INSERT, table, 
-                    DcResources.getText("lblNewItem", getObjectNamePlural()), 
-                    IconLibrary._icoItemsNew, MasterView._TABLE_VIEW);
-            table.setView(tableView);
+            if (!isAbstract()) {
+	            DcTable table = new DcTable(this, false, true);
+	            View tableView = new View(insertView, View._TYPE_INSERT, table, 
+	                    DcResources.getText("lblNewItem", getObjectNamePlural()), 
+	                    IconLibrary._icoItemsNew, MasterView._TABLE_VIEW);
+	            table.setView(tableView);
+	            insertView.addView(MasterView._TABLE_VIEW, tableView);
+            }
             
             // list view
             DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
@@ -1430,7 +1433,6 @@ public class DcModule implements Comparable<DcModule> {
                     IconLibrary._icoItemsNew, MasterView._LIST_VIEW);
             list.setView(listView);
             
-            insertView.addView(MasterView._TABLE_VIEW, tableView);
             insertView.addView(MasterView._LIST_VIEW, listView);
         }
         
@@ -1439,16 +1441,19 @@ public class DcModule implements Comparable<DcModule> {
             searchView.setTreePanel(this);
             
             // table view
-            DcTable table = new DcTable(this, false, true);
-            View tableView = new View(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
-            table.setView(tableView);
+            if (!isAbstract()) {
+	            DcTable table = new DcTable(this, false, true);
+	            View tableView = new View(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
+	            table.setView(tableView);
+	            
+	            searchView.addView(MasterView._TABLE_VIEW, tableView);
+            }
             
             // list view
             DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
             View listView = new View(searchView, View._TYPE_SEARCH, list, getObjectNamePlural(), getIcon16(), MasterView._LIST_VIEW);
             list.setView(listView);
-
-            searchView.addView(MasterView._TABLE_VIEW, tableView);
+            
             searchView.addView(MasterView._LIST_VIEW, listView);            
         }
     }

@@ -1062,7 +1062,9 @@ public class DcTable extends JTable implements IViewComponent {
             for (int field : settings.getIntArray(DcRepository.ModuleSettings.stTableColumnOrder))
                 fields.add(Integer.valueOf(field));
             
-            DcObject dco = DataManager.getItem(module.getIndex(), ID, module.getMinimalFields(fields));
+            
+            
+            DcObject dco = DataManager.getItem(getModuleForRow(row).getIndex(), ID, module.getMinimalFields(fields));
 
             TableModel model = getModel();
             int col;
@@ -1275,7 +1277,7 @@ public class DcTable extends JTable implements IViewComponent {
     public void add(Map<String, Integer> keys) {
         for (String key : keys.keySet()) {
             int row = add(key);
-            getModel().setValueAt(keys.get(key), row, getColumnIndexForField(Media._SYS_MODULE));
+            getModel().setValueAt(DcModules.get(keys.get(key)), row, getColumnIndexForField(Media._SYS_MODULE));
         }
     }
 }
