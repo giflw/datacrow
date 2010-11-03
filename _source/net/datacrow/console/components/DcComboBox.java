@@ -26,6 +26,7 @@
 package net.datacrow.console.components;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.DefaultComboBoxModel;
@@ -104,6 +105,11 @@ public class DcComboBox extends JComboBox implements IComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     } 
+    
+    @Override
+    public void setFont(Font arg0) {
+        super.setFont(ComponentFactory.getStandardFont());
+    }
     
     @Override
     public void refresh() {}

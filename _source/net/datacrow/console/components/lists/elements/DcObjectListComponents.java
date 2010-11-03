@@ -40,7 +40,9 @@ public abstract class DcObjectListComponents {
     private static List<DcPictureField> pictureFields = new ArrayList<DcPictureField>();
     
     public static DcTextPane getTextPane() {
-        return textPanes.size() > 0 ? textPanes.remove(0) : ComponentFactory.getTextPane();
+        DcTextPane tp = textPanes.size() > 0 ? textPanes.remove(0) : ComponentFactory.getTextPane();
+        tp.setFont(ComponentFactory.getStandardFont());
+        return tp;
     }
 
     public static DcPictureField getPictureField() {

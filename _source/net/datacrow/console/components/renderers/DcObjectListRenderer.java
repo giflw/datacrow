@@ -31,11 +31,10 @@ import java.awt.Rectangle;
 
 import javax.swing.JList;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
 import net.datacrow.console.views.IViewComponent;
-import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.settings.DcSettings;
 
 public class DcObjectListRenderer extends DcListRenderer  {
 
@@ -57,7 +56,7 @@ public class DcObjectListRenderer extends DcListRenderer  {
         
         if (render && !vc.isIgnoringPaintRequests()) {
             
-            c.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal));
+            c.setFont(ComponentFactory.getStandardFont());
             c.load();
             
             if (c.getDcObject() != null) {

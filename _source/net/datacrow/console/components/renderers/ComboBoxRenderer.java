@@ -89,7 +89,6 @@ public class ComboBoxRenderer extends DcLabel implements ListCellRenderer {
             setIcon(null);
             setText("");
         }
-        //revalidate();
         
         return this;
     }

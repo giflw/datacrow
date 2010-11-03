@@ -36,6 +36,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.DcEditorMouseListener;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.data.DataManager;
@@ -56,6 +57,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
     private final HTMLDocument document = new HTMLDocument();
     
     public DcHtmlEditorPane() {
+        setFont(ComponentFactory.getStandardFont());
         setEditorKit(kit);
         setDocument(document);
         setEditable(false);

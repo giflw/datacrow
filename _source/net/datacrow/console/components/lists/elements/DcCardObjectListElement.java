@@ -30,7 +30,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.DcTextPane;
 import net.datacrow.core.DcRepository;
@@ -156,7 +155,6 @@ public class DcCardObjectListElement extends DcObjectListElement {
       
         addPicture(getPictures());
       
-        fldTitle.setFont(ComponentFactory.getStandardFont());
         fldTitle.setText(getDescription());
         fldTitle.setPreferredSize(dimTxt);
         fldTitle.setMinimumSize(dimTxt);
