@@ -49,8 +49,6 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
 
     private static final long serialVersionUID = 8257159881800394661L;
 
-    private int[] minimalFields = null;
-    
     /**
      * Creates a new instance based on a XML definition.
      * @param xmlModule
@@ -86,33 +84,30 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
     
     @Override
     public int[] getMinimalFields(Collection<Integer> include) {
-        if (minimalFields == null || include != null) {
-            Collection<Integer> fields = new ArrayList<Integer>();
-            
-            int valueType;
-            for (DcField field : getFields()) {
-                valueType = field.getValueType();
-                if (!field.isUiOnly() &&
-                    valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
-                    valueType != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
-                    valueType != DcRepository.ValueTypes._PICTURE) {
-                    fields.add(Integer.valueOf(field.getIndex()));
-                }
-            }
-            minimalFields = new int[fields.size() + (include != null ? include.size() : 0)];
-            int idx = 0;
-            
-            if (include != null) {
-                for (Integer index : include)
-                    minimalFields[idx++] = index.intValue();
-            }
-            
-            for (Integer index : fields) {
-                minimalFields[idx++] = index.intValue();
+        Collection<Integer> fields = new ArrayList<Integer>();
+        
+        int valueType;
+        for (DcField field : getFields()) {
+            valueType = field.getValueType();
+            if (valueType != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                valueType != DcRepository.ValueTypes._DCOBJECTREFERENCE &&
+                valueType != DcRepository.ValueTypes._PICTURE) {
+                fields.add(Integer.valueOf(field.getIndex()));
             }
         }
+        
+        if (include != null) 
+            for (Integer i : include)
+                if (!fields.contains(include))
+                    fields.add(i);
+        
+        int[] minimalFields = new int[fields.size()];
+        int idx = 0;
+        for (Integer index : fields)
+            minimalFields[idx++] = index.intValue();
+
         return minimalFields;
-    }    
+    }   
     
     /**
      * Creates a new item view.

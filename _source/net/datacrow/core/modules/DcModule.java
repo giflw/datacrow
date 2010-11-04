@@ -671,7 +671,7 @@ public class DcModule implements Comparable<DcModule> {
     public int[] getMinimalFields(Collection<Integer> include) {
         Collection<Integer> fields = new ArrayList<Integer>();
         for (DcFieldDefinition definition : getFieldDefinitions().getDefinitions())
-            if (definition.isDescriptive()) 
+            if (definition.isDescriptive() && definition.isEnabled()) 
                 fields.add(Integer.valueOf(definition.getIndex()));
             
         if (!fields.contains(Integer.valueOf(getSystemDisplayFieldIdx())))

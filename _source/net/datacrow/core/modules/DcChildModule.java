@@ -109,7 +109,10 @@ public class DcChildModule extends DcModule implements IChildModule {
             }
         }
         
-        if (include != null) fields.addAll(include);
+        if (include != null) 
+            for (Integer i : include)
+                if (!fields.contains(include))
+                    fields.add(i);
         
         int[] minimalFields = new int[fields.size()];
         int idx = 0;

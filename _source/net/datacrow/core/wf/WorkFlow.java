@@ -155,7 +155,6 @@ public class WorkFlow {
                 objects.add(dco);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("An error occurred while converting result set to items", e);
         }
         
@@ -202,15 +201,18 @@ public class WorkFlow {
                         		item.getField(field).getValueType() == DcRepository.ValueTypes._PICTURE)
                             images |= true;
                         else if (item.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
-                        	item.initializeReferences(field);
+                            item.initializeReferences(field);
                     }
-                } else {
-                	item.initializeReferences();
                 }
                         
-                if (loan) item.setLoanInformation();
-                if (images && item.getModule().isHasImages()) item.initializeImages();
-                if (references && item.getModule().isHasReferences()) item.initializeReferences();
+                if (loan) 
+                    item.setLoanInformation();
+                
+                if (images && item.getModule().isHasImages()) 
+                    item.initializeImages();
+                
+                if (references && item.getModule().isHasReferences()) 
+                    item.initializeReferences();
             }
 
             item.setNew(false);

@@ -228,7 +228,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public String getName() {
         String name = "";
         for (DcFieldDefinition definition :  DcModules.get(module).getFieldDefinitions().getDefinitions()) {
-            if (definition.isDescriptive()) {
+            if (definition.isDescriptive() && definition.isEnabled()) {
                 int idx = definition.getIndex();
                 String disp = getDisplayString(idx);
                 if (disp.length() > 0)

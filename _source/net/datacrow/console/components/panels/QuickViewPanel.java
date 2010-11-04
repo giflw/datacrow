@@ -176,7 +176,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 (QuickViewFieldDefinitions) DcModules.get(module).getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
             
             for (QuickViewFieldDefinition def : definitions.getDefinitions())
-                fields.add(def.getField());
+                if (def.isEnabled())
+                    fields.add(def.getField());
             
             setObject(DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields)));
         }
@@ -301,7 +302,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             
             Collection<Integer> additional = new ArrayList<Integer>();
             for (QuickViewFieldDefinition definition : definitions.getDefinitions())
-                additional.add(definition.getField());
+                if (definition.isEnabled())
+                    additional.add(definition.getField());
             
             dco.loadChildren(module.getMinimalFields(additional));
         }
