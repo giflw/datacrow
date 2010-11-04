@@ -282,6 +282,21 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     private String getChildTable(DcObject dco) {
         DcModule module = dco.getModule().getChild();
+        
+        QuickViewFieldDefinitions definitions = 
+            (QuickViewFieldDefinitions) module.getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
+        
+        if (!module.isAbstract()) {
+            Collection<Integer> additional = new ArrayList<Integer>();
+            for (QuickViewFieldDefinition definition : definitions.getDefinitions())
+                if (definition.isEnabled())
+                    additional.add(definition.getField());
+            
+            dco.loadChildren(module.getMinimalFields(additional));
+        } else {
+            dco.loadChildren(new int[] {DcObject._ID});
+        }
+        
         Collection<DcObject> children = dco.getChildren();
         
         if (children == null || children.size() == 0)
@@ -290,24 +305,11 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         String table = "<br><h3>" + module.getObjectNamePlural() + "</h3>";
         
         table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
-
-        QuickViewFieldDefinitions definitions = 
-            (QuickViewFieldDefinitions) module.getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
         
         boolean first;
         StringBuffer description;
         String value;
-        
-        if (!module.isAbstract()) {
-            
-            Collection<Integer> additional = new ArrayList<Integer>();
-            for (QuickViewFieldDefinition definition : definitions.getDefinitions())
-                if (definition.isEnabled())
-                    additional.add(definition.getField());
-            
-            dco.loadChildren(module.getMinimalFields(additional));
-        }
-            
+
         for (DcObject child : children) {
             
             if (module.isAbstract())

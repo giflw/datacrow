@@ -201,7 +201,7 @@ public class WorkFlow {
                         		item.getField(field).getValueType() == DcRepository.ValueTypes._PICTURE)
                             images |= true;
                         else if (item.getField(field).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
-                            item.initializeReferences(field);
+                            item.initializeReferences(field, false);
                     }
                 }
                         

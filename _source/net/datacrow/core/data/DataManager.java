@@ -539,10 +539,10 @@ public class DataManager {
      * @param module
      * @param parentId
      */
-    public static Collection<DcObject> getReferences(int modIdx, String parentID) {
+    public static Collection<DcObject> getReferences(int modIdx, String parentID, boolean full) {
         DataFilter df = new DataFilter(modIdx);
         df.addEntry(new DataFilterEntry(modIdx, DcMapping._A_PARENT_ID, Operator.EQUAL_TO, parentID));
-        return get(df);
+        return get(df, full ? null : DcModules.get(modIdx).getMinimalFields(null));
     }
 
     /**

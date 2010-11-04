@@ -391,12 +391,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
     }
     
-    public void initializeReferences(int index) {
+    public void initializeReferences(int index, boolean full) {
         DcField field = getField(index);
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
             int mappingModIdx = DcModules.getMappingModIdx(getModule().getIndex(), field.getReferenceIdx(), field.getIndex());
-            Collection<DcObject> mo = DataManager.getReferences(mappingModIdx, getID());
+            Collection<DcObject> mo = DataManager.getReferences(mappingModIdx, getID(), full);
             setValue(index, mo);
         } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE &&
                 getValue(field.getIndex()) != null) {
@@ -416,7 +416,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             DcField field = getField(fields[i]);
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
                 field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                initializeReferences(fields[i]);
+                initializeReferences(fields[i], true);
             }
         }
     }
@@ -491,7 +491,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @return The children or null of none.
      */
     public List<DcObject> getChildren() {
-    	if (getModule().getChild() != null)
+    	if ((children == null || children.size() == 0) && getModule().getChild() != null)
     		loadChildren(getModule().getChild().getMinimalFields(null));
     	
         return getCurrentChildren();
