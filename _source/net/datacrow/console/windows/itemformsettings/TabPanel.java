@@ -127,6 +127,8 @@ public class TabPanel extends JPanel implements ActionListener {
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         NavigationPanel panelNav = new NavigationPanel(tblTabs);
+        tblTabs.setDynamicLoading(false);
+        tblTabs.activate();
         
         panelTable.add(sp,  Layout.getGBC( 0, 0, 1, 1, 20.0, 20.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

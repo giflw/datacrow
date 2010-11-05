@@ -495,7 +495,12 @@ public class DcTable extends JTable implements IViewComponent {
             return cache.get(id);
         } else {
             cancelEdit();
-            DcObject dco = DataManager.getItem(getModuleForRow(row).getIndex(), id);
+            
+            DcObject dco;
+            if (loadable)
+                dco = DataManager.getItem(getModuleForRow(row).getIndex(), id);
+            else 
+                dco = getModule().getItem();
             
             if (dco == null) return null;
             
@@ -509,10 +514,6 @@ public class DcTable extends JTable implements IViewComponent {
                     logger.error("Could not set value for field " + field.getLabel(), e);
                 }
             }
-
-            if (view != null && view.getType() != View._TYPE_INSERT)
-                dco.markAsUnchanged();
-
             return dco;
         }
     }
@@ -743,17 +744,21 @@ public class DcTable extends JTable implements IViewComponent {
                 if (id != null) {
                     DcObject dco;
                     if (!cache.containsKey(id)) {
-                        dco = getItemAt(row);
-
+                        
+                        Collection<Integer> fields = new ArrayList<Integer>();
+                        for (int field : module.getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder))
+                            fields.add(Integer.valueOf(field));
+                        
+                        dco = DataManager.getItem(module.getIndex(), id, module.getMinimalFields(fields));
+                        dco = dco == null ? getItemAt(row) : dco;
+                        
                         if (view.getType() != View._TYPE_INSERT)
                             dco.markAsUnchanged();
-
-                        DcObject o = DataManager.getItem(module.getIndex(), id);
-                        if (o != null) {
+                        
+                        if (dco != null) {
                             int field = getFieldForColumnIndex(column);
-                            Object valueOld = o.getValue(field);
-                            Object valueNew = getDcModel().getValueAt(row,
-                                    column);
+                            Object valueOld = dco.getValue(field);
+                            Object valueNew = getDcModel().getValueAt(row, column);
 
                             valueOld = valueOld == null ? "" : valueOld;
                             valueNew = valueNew == null ? "" : valueNew;
@@ -1154,8 +1159,8 @@ public class DcTable extends JTable implements IViewComponent {
     private class TableValueChangedAction implements TableModelListener {
         @Override
         public void tableChanged(TableModelEvent e) {
-            if (!ignoreEdit
-                    && (e.getType() == TableModelEvent.INSERT || e.getType() == TableModelEvent.UPDATE)) {
+            if (    !ignoreEdit && 
+                    (e.getType() == TableModelEvent.INSERT || e.getType() == TableModelEvent.UPDATE)) {
 
                 int row = getSelectedRow();
 
@@ -1163,8 +1168,7 @@ public class DcTable extends JTable implements IViewComponent {
 
                 try {
                     component = getEditorComponent();
-                } catch (Exception exp) {
-                }
+                } catch (Exception ignore) {}
 
                 if (component == null) {
                     addRowToCache(row, e.getColumn());
@@ -1233,6 +1237,7 @@ public class DcTable extends JTable implements IViewComponent {
     public boolean remove(String[] keys) {
         boolean removed = false;
         for (String key : keys) {
+            cache.remove(key);
             int idx = getIndex(key);
             if (idx > -1) {
                 removeRow(idx);
@@ -1258,7 +1263,9 @@ public class DcTable extends JTable implements IViewComponent {
     	try {
     		super.paintComponent(DcSwingUtilities.setRenderingHint(g));
     	} catch(Exception e) {
-    		super.paintComponent(g);
+    	    try {
+    	        super.paintComponent(g);
+    	    } catch(Exception e2) {}
     	}
     }
 

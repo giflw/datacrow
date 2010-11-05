@@ -66,7 +66,7 @@ public class ContactPerson extends DcObject {
         loan.setValue(Loan._C_CONTACTPERSONID, getID());
         
         DataFilter filter = new DataFilter(loan);
-        List<DcObject> loans = DataManager.get(filter);
+        List<String> loans = DataManager.getKeyList(filter);
         
         if (loans.size() == 0) {
             try {

@@ -154,7 +154,8 @@ public class DcWebField extends DcSecured {
             for (int rating = -1; rating < 11; rating++)
                 references.add(new DcReference(Rating.getLabel(rating), String.valueOf(rating)));
         } else {
-            for (DcObject dco : DataManager.get(DcModules.getReferencedModule(getDcField()).getIndex(), null))
+            for (DcObject dco : DataManager.get(DcModules.getReferencedModule(getDcField()).getIndex(), 
+                                    DcModules.getReferencedModule(getDcField()).getMinimalFields(null)))
                 references.add(new DcReference(dco.toString(), dco.getID()));
         }
         

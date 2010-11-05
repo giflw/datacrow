@@ -474,6 +474,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     @Override
     public void valueChanged(TreeSelectionEvent e) {
         
+        if (gp.getCurrent() != this) {
+            return;
+        }
+        
         if (!isListeningForSelection())
             return;
         

@@ -58,7 +58,7 @@ public class DcWebUser {
     
     public String getUsername() {
         if (username == null || username.length() == 0) {
-            List<DcObject> users = DataManager.get(DcModules._USER, null);
+            List<DcObject> users = DataManager.get(DcModules._USER, new int[] {DcObject._ID, User._A_LOGINNAME});
             if (users.size() == 1)
                 username = (String) users.get(0).getValue(User._A_LOGINNAME);
         }

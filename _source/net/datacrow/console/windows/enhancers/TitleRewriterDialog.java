@@ -51,7 +51,6 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.enhancers.TitleRewriter;
@@ -303,19 +302,18 @@ public class TitleRewriterDialog extends DcDialog implements ActionListener {
                         " WHERE " + field.getDatabaseFieldName() + " IS NOT NULL AND " + 
                         field.getDatabaseFieldName() + " != ''");
                 
+                String ID;
+                String title;
+                String newTitle;
                 while (rs.next() &&  !canceled) {
-                    String ID = rs.getString("ID");
-                    String title = rs.getString(field.getDatabaseFieldName());
-                    String newTitle = (String) rewriter.apply(field, title);
+                    ID = rs.getString("ID");
+                    title = rs.getString(field.getDatabaseFieldName());
+                    newTitle = (String) rewriter.apply(field, title);
                     
                     if (!title.equals(newTitle)) {
                         DatabaseManager.executeSQL(
                                 "UPDATE " + module.getTableName() + " SET " + field.getDatabaseFieldName() + 
                                 " = '" + newTitle + "' WHERE ID = '" + ID + "'");
-                        
-                        DcObject dco = DataManager.getItem(module.getIndex(), ID);
-                        dco.setValue(field.getIndex(), newTitle);
-                        dco.markAsUnchanged();
                     }
                     updateProgressBar();
                 }

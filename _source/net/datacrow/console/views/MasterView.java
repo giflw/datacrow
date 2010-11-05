@@ -128,10 +128,12 @@ public class MasterView {
     }
     
     public void add(DcObject dco) {
-    	getCurrent().add(dco);
-        
-        if (groupingPane != null && groupingPane.isEnabled())
+        if (groupingPane != null && groupingPane.isEnabled()) {
+            getCurrent().add(dco);
             groupingPane.add(dco);
+        } else {
+            getCurrent().add(dco);
+        }
     }
     
     public void remove(String key) {

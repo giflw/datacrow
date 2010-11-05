@@ -181,8 +181,9 @@ public class AdvancedFilter extends DcSecured {
     }
     
     public List<DcReference> getReferences() {
+        DcModule module = DcModules.get(selectedModuleIdx);
         List<DcReference> references = new ArrayList<DcReference>();
-        for (DcObject dco : DataManager.get(DcModules.get(selectedModuleIdx).getField(selectedFieldIdx).getReferenceIdx(), null)) {
+        for (DcObject dco : DataManager.get(module.getField(selectedFieldIdx).getReferenceIdx(), module.getMinimalFields(null))) {
             references.add(new DcReference(dco.toString(), dco.getID()));
         }
         return references;

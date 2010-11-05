@@ -131,6 +131,11 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Used to create each and every component for the Data Crow GUI.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public final class ComponentFactory {
 
     private static Logger logger = Logger.getLogger(ComponentFactory.class.getName());

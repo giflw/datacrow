@@ -185,12 +185,12 @@ public class ChartPanel extends DcPanel implements ActionListener {
 	        while (rs.next()) {
 	        	count = rs.getInt(2);
 	        	total += count;
-	        	dataMap.put(rs.getString(1), Integer.valueOf(count));
+	        	dataMap.put(rs.getString(1) + " (" + String.valueOf(count) + ")", Integer.valueOf(count));
 	        }
 	        
 	        count = DataManager.getCount(module, -1, null);
 	        if (total < count) 
-	        	dataMap.put(DcResources.getText("lblEmpty"), Integer.valueOf(count - total));
+	        	dataMap.put(DcResources.getText("lblEmpty") + " (" + String.valueOf(count - total) + ")", Integer.valueOf(count - total));
 	        
         } catch (SQLException se) {
         	DcSwingUtilities.displayErrorMessage("msgChartCreationError");
@@ -306,7 +306,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
             
             int all = DataManager.getCount(module, -1, null);
             if (total < all)
-            	dataset.setValue(DcResources.getText("lblEmpty"), Integer.valueOf(all - total));
+            	dataset.setValue(DcResources.getText("lblEmpty") + " (" + String.valueOf(all - total) + ")" , Integer.valueOf(all - total));
             
             if (!isCanceled()) {
             	JFreeChart chart = ChartFactory.createPieChart(null, dataset, true, true, false);

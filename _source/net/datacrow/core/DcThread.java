@@ -25,6 +25,12 @@
 
 package net.datacrow.core;
 
+/**
+ * Extended Thread class. Allows for easy cancellation and offers the ability
+ * to cancel all other threads part of the same thread group.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DcThread extends Thread {
     
     private boolean canceled = false;

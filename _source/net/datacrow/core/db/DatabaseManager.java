@@ -325,11 +325,11 @@ public class DatabaseManager {
                 
             if (hasUniqueFields) {
                 DataFilter df = new DataFilter(dco);
-                List<DcObject> items = DataManager.get(df);
+                List<String> keys = DataManager.getKeyList(df);
                 
                 int count = 0;
-                for (DcObject item : items)
-                	count = !isExisting || !item.getID().equals(o.getID()) ? count + 1 : count;
+                for (String key : keys)
+                	count = !isExisting || !key.equals(o.getID()) ? count + 1 : count;
 
                 if (count > 0) return false;
             }

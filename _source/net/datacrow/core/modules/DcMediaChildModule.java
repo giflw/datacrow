@@ -131,6 +131,7 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
             if (hasInsertView()) {
                 insertView = new MasterView(getIndex());
                 DcTable table = new DcTable(this, false, true);
+                table.setDynamicLoading(false);
                 View view = new CachedChildView(insertView, View._TYPE_INSERT, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
                 table.setView(view);
                 

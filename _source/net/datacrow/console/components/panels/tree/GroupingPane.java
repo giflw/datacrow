@@ -118,7 +118,7 @@ public class GroupingPane extends JPanel implements ChangeListener {
         }
     }
     
-    private TreePanel getCurrent() {
+    public TreePanel getCurrent() {
     	return panels.get(current);
     }
     
@@ -174,7 +174,7 @@ public class GroupingPane extends JPanel implements ChangeListener {
         
         setLayout(Layout.getGBL());
         
-        add(tp, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        add(tp, Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0,0,0,0), 0, 0));
     }

@@ -52,7 +52,6 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.enhancers.AutoIncrementer;
 import net.datacrow.enhancers.IValueEnhancer;
@@ -352,19 +351,25 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
                 rs = DatabaseManager.executeSQL(qry);
                 
                 int counter = 0;
+                String ID;
+                int current;
+                boolean allow = false;
+                boolean currentfound = false;
+                int x;
+                String updateQuery;
                 while (rs.next() && !canceled) {
-                    String ID = rs.getString("ID");
-                    int current = rs.getInt(field.getDatabaseFieldName());
+                    ID = rs.getString("ID");
+                    current = rs.getInt(field.getDatabaseFieldName());
                     
-                    boolean allow = false;
+                    allow = false;
                     if (modus == 1 && current == 0) {
 
                         counter = counter + incrementer.getStep();
                         
                         if (currentValues.contains(counter)) {
-                            boolean currentfound = false;
+                            currentfound = false;
                             for (Integer val : currentValues) {
-                                int x = val.intValue();
+                                x = val.intValue();
                                 while (!currentfound && x == counter) {
                                     counter += incrementer.getStep();
                                 }
@@ -379,15 +384,10 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
                     }
                     
                     if (allow) {
-                        String updateQuery = "UPDATE " + module.getTableName() + 
+                        updateQuery = "UPDATE " + module.getTableName() + 
                                              " SET " + field.getDatabaseFieldName() + " = " + counter  + 
                                              " WHERE ID = '" + ID + "'";
-                        
                         DatabaseManager.executeSQL(updateQuery);
-
-                        DcObject dco = DataManager.getItem(module.getIndex(), ID);
-                        dco.setValue(field.getIndex(), Long.valueOf(counter));
-                        dco.markAsUnchanged();
                     }
                     
                     updateProgressBar();

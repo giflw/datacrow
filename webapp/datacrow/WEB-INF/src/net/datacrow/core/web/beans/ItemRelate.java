@@ -147,7 +147,7 @@ public class ItemRelate extends DcBean {
     
     private void setListItems(DcWebObject wod, DcReferences references, int fieldIdx) {
         int refIdx = DcModules.get(wod.getModule()).getField(fieldIdx).getReferenceIdx();
-        List<DcObject> refs = DataManager.get(refIdx, null);
+        List<DcObject> refs = DataManager.get(refIdx, DcModules.get(refIdx).getMinimalFields(null));
         
         List<SelectItem> values = new ArrayList<SelectItem>();
         for (DcObject reference : refs) {

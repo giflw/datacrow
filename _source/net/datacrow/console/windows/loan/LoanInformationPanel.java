@@ -124,6 +124,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     
     private void build() {
         table.addMouseListener(this);
+        table.setDynamicLoading(false);
         
         JScrollPane sp = new JScrollPane(table);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

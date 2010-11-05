@@ -211,7 +211,7 @@ public abstract class FileImporter implements ISynchronizerClient {
         
         DataFilter df = new DataFilter(getClient().getModule().getIndex());
         df.addEntry(new DataFilterEntry(module, DcObject._SYS_FILENAME, Operator.EQUAL_TO, filename));
-        List<DcObject> items = DataManager.get(df);
+        List<String> items = DataManager.getKeyList(df);
         
         if (items.size() > 0) {
             getClient().addMessage(DcResources.getText("msgSkippingAlreadyImportedFile", 

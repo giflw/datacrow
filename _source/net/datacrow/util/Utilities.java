@@ -300,18 +300,7 @@ public class Utilities {
     }
 
     public static Long getSize(File file) {
-        long fileSize = 0;
-        if (file.isDirectory()) {
-            Collection<String> files = Directory.read(file.toString(), true, false, null);
-            for (String filename : files) {
-                File folderFile = new File(filename);
-                fileSize += folderFile.length();
-            }
-        } else {
-            fileSize = file.length();
-        }
-        
-        return fileSize;  
+        return Long.valueOf(file.length());  
     }
     
     /**

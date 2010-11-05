@@ -47,6 +47,11 @@ import net.datacrow.util.launcher.URLLauncher;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Donation dialog which can be used to ask the user for a donation.
+ * 
+ * @author Robert Jan van der Waals
+ */
 public class DonateDialog extends DcDialog implements ActionListener {
 
     private static Logger logger = Logger.getLogger(DonateDialog.class.getName());

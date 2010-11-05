@@ -32,6 +32,13 @@ import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
+/**
+ * The system monitor checks the available resources and logs information about the 
+ * available memory. It is also capable to run a scheduled garbage collection task
+ * based on the settings.
+ * 
+ * @author Robert Jan van der Waals 
+ */
 public class SystemMonitor extends Thread {
 
     private static Logger logger = Logger.getLogger(MainFrame.class.getName());
@@ -50,7 +57,7 @@ public class SystemMonitor extends Thread {
             try {
             	
             	long interval = DcSettings.getLong(DcRepository.Settings.stGarbageCollectionIntervalMs);
-            	interval = interval > 0 ? interval : 60000;
+            	interval = interval > 0 ? interval : 480000;
             	
                 sleep(interval);
 
@@ -71,7 +78,7 @@ public class SystemMonitor extends Thread {
         
         long available = max - used;
 
-        logger.debug("Memory usage (max " + max + " MB) (used " + used + " MB) (available " + available + " MB)");
+        logger.info("Memory usage (max " + max + " MB) (used " + used + " MB) (available " + available + " MB)");
 
         if (max <= 65) {
             DcSwingUtilities.displayWarningMessage(DcResources.getText("msgMemory64MB", String.valueOf(max)));

@@ -1419,6 +1419,7 @@ public class DcModule implements Comparable<DcModule> {
             // table view
             if (!isAbstract()) {
 	            DcTable table = new DcTable(this, false, true);
+	            table.setDynamicLoading(false);
 	            View tableView = new View(insertView, View._TYPE_INSERT, table, 
 	                    DcResources.getText("lblNewItem", getObjectNamePlural()), 
 	                    IconLibrary._icoItemsNew, MasterView._TABLE_VIEW);

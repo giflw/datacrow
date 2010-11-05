@@ -29,6 +29,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+/**
+ * Holds static references to the GridBagConstraints and the GridBagLayout.
+ * These should always be used when adding components.
+ * 
+ * @see GridBagConstraints
+ * @see GridBagLayout
+ * 
+ * @author Robert Jan van der Waals
+ */
 public final class Layout {
     
     private static final GridBagConstraints gbc = new GridBagConstraints();

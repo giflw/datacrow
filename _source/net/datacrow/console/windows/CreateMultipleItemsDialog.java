@@ -123,6 +123,9 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         
+        table.setDynamicLoading(false);
+        table.activate();
+        
         if (DcModules.get(moduleIdx) instanceof DcPropertyModule) {
         	table.setIgnoreSettings(true);
         	table.setVisibleColumns(new int[] {DcProperty._A_NAME});

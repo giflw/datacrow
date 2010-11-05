@@ -61,6 +61,7 @@ import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.IDefinitions;
 import net.datacrow.settings.definitions.QuickViewFieldDefinition;
 import net.datacrow.settings.definitions.QuickViewFieldDefinitions;
+import net.datacrow.util.Utilities;
 
 public class QuickViewSettingsDialog extends DcDialog implements ActionListener {
 
@@ -289,8 +290,8 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
                 boolean enabled = ((Boolean) table.getValueAt(row, 1, true)).booleanValue();
                 String direction = (String) table.getValueAt(row, 2, true);
                 DcField field = (DcField) table.getValueAt(row, 3, true);
-                int length = table.getValueAt(row, 4, true) != null ? 
-                             Integer.valueOf(table.getValueAt(row, 4, true).toString()) : 0;
+                int length = !Utilities.isEmpty(table.getValueAt(row, 4, true)) ? 
+                              Integer.valueOf(table.getValueAt(row, 4, true).toString()) : 0;
                 qvDefs.add(new QuickViewFieldDefinition(field.getIndex(), enabled, direction, length));
             }
             return qvDefs;
