@@ -46,7 +46,7 @@ Features:
 * Platform independent and completely portable (run from an USB stick).
 * Loan administration. Keep track of your loans.
 * Optional internal web server and web GUI.
-* Create your own modules and/or modify existing modules.
+* Create your own collection modules and/or modify existing collection modules.
 * Advanced user configuration (access rights + module and field access).
 * Rename your files based on the information of Data Crow.
 * Highly customizable; add your own fields, alter existing modules or create a new
