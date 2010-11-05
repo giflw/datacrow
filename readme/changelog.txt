@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9 BETA V [Release on November 4, 2010] [testing: high] [target: BETA/TEST]
+Data Crow 3.9 BETA IV [Release on November 3, 2010] [testing: high] [target: BETA/TEST]
 -----------------------------------------------------------------------------------------
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
