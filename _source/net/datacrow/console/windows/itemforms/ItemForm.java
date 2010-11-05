@@ -408,111 +408,108 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     @SuppressWarnings("unchecked")
+    private boolean isChanged(int fieldIdx) {
+        boolean changed = false;
+        
+        DcField field = dcoOrig.getField(fieldIdx);
+        JComponent component = fields.get(field);
+        Object o = ComponentFactory.getValue(component);
+
+        if (field.getValueType() == DcRepository.ValueTypes._ICON) {
+            byte[] newValue = o == null ? new byte[0] : ((DcImageIcon) o).getBytes();
+            
+            Object oOld = dcoOrig.getValue(fieldIdx);
+            byte[] oldValue;
+            if (oOld instanceof String)
+                oldValue = Base64.decode(((String) oOld).toCharArray());
+            else 
+                oldValue = (byte[]) oOld;
+
+            oldValue = oldValue == null ? new byte[0] : oldValue;
+            if (!Utilities.sameImage(newValue, oldValue)) {
+                dcoOrig.setChanged(DcObject._ID, true);
+                logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
+                changed = true;
+            }
+        } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+            List<DcMapping> oldList = dcoOrig.getValue(fieldIdx) instanceof List ? (List<DcMapping>) dcoOrig.getValue(fieldIdx) : null;
+            List<DcMapping> newList = (List<DcMapping>) o;
+            
+            oldList = oldList == null ? new ArrayList<DcMapping>() : oldList;
+            newList = newList == null ? new ArrayList<DcMapping>() : newList;
+            
+            if (oldList.size() == newList.size()) {
+                for (DcMapping newMapping : newList) {
+                    boolean found = false;
+                    for (DcMapping oldMapping : oldList) {
+                        if (newMapping.getReferencedID().equals(oldMapping.getReferencedID()))
+                            found = true;
+                    }
+                    changed = !found;
+                    if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldList + ". New: " + newList);
+                }
+            } else {
+                changed = true;
+                logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldList + ". New: " + newList);
+            }
+        } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION || 
+                  (!field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._PICTURE)) {
+            
+            if (field.getValueType() == DcRepository.ValueTypes._DATE) {
+                Date dateOld = (Date) dcoOrig.getValue(fieldIdx);
+                Date dateNew = (Date) o;
+                
+                if (   (dateOld == null && dateNew != null) || (dateNew == null && dateOld != null) ||
+                       (dateOld != null && dateNew != null && dateOld.compareTo(dateNew) != 0)) {
+                    changed = true;
+                    logger.debug("Field " + field.getLabel() + " is changed. Old: " + dateOld + ". New: " + dateNew);
+                }
+            } else if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
+                String newValue = Utilities.getComparableString(o);
+                String oldValue = Utilities.getComparableString(dcoOrig.getValue(fieldIdx));
+                changed = !oldValue.equals(newValue);
+                if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
+            } else {
+                String newValue = Utilities.getComparableString(o);
+                String oldValue = Utilities.getComparableString(dcoOrig.getValue(fieldIdx));
+                changed = !oldValue.equals(newValue);
+                if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
+            } 
+        } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+            Picture picture = (Picture) dcoOrig.getValue(fieldIdx);
+            changed = (picture != null && (picture.isEdited() || picture.isNew() || picture.isDeleted())) ||
+                      ((DcPictureField) component).isChanged();
+
+            // Tricky: mark the item as changed when a new picture has been set.
+            // this is all handled correctly in case of a manual update. When using the online service
+            // to only retrieve images this failed miserably. Therefore the following check has been added.
+            // Simply check if the image has been set (removal is not allowed by services) and if the current
+            // bytes (needed for saving so these should be available) are present.
+            changed = !changed && o instanceof DcImageIcon ? ((DcImageIcon) o).getCurrentBytes() != null : changed;
+            
+            if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
+        }
+        
+        return changed;
+    }
+    
     protected boolean isChanged() {
         
         if (dcoOrig.isDestroyed()) 
             return false;
         
         boolean changed = dcoOrig.isChanged();
-        
-        if (childView != null && dcoOrig.getCurrentChildren().size() == 0)
-            dcoOrig.loadChildren(null);
-        
-        if (childView != null &&
-            dcoOrig.getCurrentChildren().size() != childView.getItems().size())
-            return true;
 
         int[] indices = dcoOrig.getFieldIndices();
         for (int i = 0; i < indices.length && !changed; i++) {
             int index = indices[i];
             
-            if (index == DcObject._ID)
+            if (index == DcObject._ID || index == DcObject._SYS_CREATED || index == DcObject._SYS_MODIFIED)
                 continue;
             
-            DcField field = dcoOrig.getField(index);
-            JComponent component = fields.get(field);
-            Object o = ComponentFactory.getValue(component);
+            changed = isChanged(index);
             
-            if (index == DcObject._SYS_CREATED || index == DcObject._SYS_MODIFIED)
-            	continue;
-
-            if (field.getValueType() == DcRepository.ValueTypes._ICON) {
-                byte[] newValue = o == null ? new byte[0] : ((DcImageIcon) o).getBytes();
-                
-                Object oOld = dcoOrig.getValue(index);
-                byte[] oldValue;
-                if (oOld instanceof String)
-                    oldValue = Base64.decode(((String) oOld).toCharArray());
-                else 
-                    oldValue = (byte[]) oOld;
-
-                oldValue = oldValue == null ? new byte[0] : oldValue;
-                if (!Utilities.sameImage(newValue, oldValue)) {
-                    dcoOrig.setChanged(DcObject._ID, true);
-                    logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
-                    changed = true;
-                }
-            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                List<DcMapping> oldList = dcoOrig.getValue(index) instanceof List ? (List<DcMapping>) dcoOrig.getValue(index) : null;
-                List<DcMapping> newList = (List<DcMapping>) o;
-                
-                oldList = oldList == null ? new ArrayList<DcMapping>() : oldList;
-                newList = newList == null ? new ArrayList<DcMapping>() : newList;
-                
-                if (oldList.size() == newList.size()) {
-                    for (DcMapping newMapping : newList) {
-                        boolean found = false;
-                        for (DcMapping oldMapping : oldList) {
-                            if (newMapping.getReferencedID().equals(oldMapping.getReferencedID()))
-                                found = true;
-                        }
-                        changed = !found;
-                        if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldList + ". New: " + newList);
-                    }
-                } else {
-                    changed = true;
-                    logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldList + ". New: " + newList);
-                }
-            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION || 
-                      (!field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._PICTURE)) {
-                
-                if (field.getValueType() == DcRepository.ValueTypes._DATE) {
-                    Date dateOld = (Date) dcoOrig.getValue(index);
-                    Date dateNew = (Date) o;
-                    
-                    if (   (dateOld == null && dateNew != null) || (dateNew == null && dateOld != null) ||
-                           (dateOld != null && dateNew != null && dateOld.compareTo(dateNew) != 0)) {
-                        changed = true;
-                        logger.debug("Field " + field.getLabel() + " is changed. Old: " + dateOld + ". New: " + dateNew);
-                    }
-                } else if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
-                    String newValue = Utilities.getComparableString(o);
-                    String oldValue = Utilities.getComparableString(dcoOrig.getValue(index));
-                    changed = !oldValue.equals(newValue);
-                    if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
-                } else {
-                    String newValue = Utilities.getComparableString(o);
-                    String oldValue = Utilities.getComparableString(dcoOrig.getValue(index));
-                    changed = !oldValue.equals(newValue);
-                    if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
-                } 
-            } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                Picture picture = (Picture) dcoOrig.getValue(index);
-                changed = (picture != null && (picture.isEdited() || picture.isNew() || picture.isDeleted())) ||
-                          ((DcPictureField) component).isChanged();
-
-                // Tricky: mark the item as changed when a new picture has been set.
-                // this is all handled correctly in case of a manual update. When using the online service
-                // to only retrieve images this failed miserably. Therefore the following check has been added.
-                // Simply check if the image has been set (removal is not allowed by services) and if the current
-                // bytes (needed for saving so these should be available) are present.
-                changed = !changed && o instanceof DcImageIcon ? ((DcImageIcon) o).getCurrentBytes() != null : changed;
-                
-                if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
-            }
-            
-            if (changed)
-                break;
+            if (changed) break;
         }
 
         return changed;
@@ -528,33 +525,29 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     public void apply() {
-        // do not remove requests (!)
-        // dco.removeRequests();
         
         dco.removeChildren();
+        
         if (DcModules.get(moduleIdx).getChild() != null && childView != null) {
             for (DcObject child : childView.getItems())
                 dco.addChild(child);
         }
 
-        if (update) dco.markAsUnchanged();
+        if (update) 
+            dco.markAsUnchanged();
         
         for (DcField field : fields.keySet()) {
+            
             JComponent component = fields.get(field);
             Object value = ComponentFactory.getValue(component);
             value = value == null ? "" : value;
 
-            if (update) {
-                Object oldValue = dcoOrig.getValue(field.getIndex()) == null ? "" : dcoOrig.getValue(field.getIndex());
-                if (dcoOrig.isChanged(field.getIndex())) {
-                    dco.setValue(field.getIndex(), value);
-                    if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
-                        dco.setChanged(DcObject._ID, true);
-                } else if (oldValue == null || !oldValue.equals(value)) {
-                    dco.setValue(field.getIndex(), value);
-                    if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
-                        dco.setChanged(DcObject._ID, true);
-                }
+            if (update && isChanged(field.getIndex())) {
+                dco.setValue(field.getIndex(), value);
+            
+                if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+                    dco.setChanged(DcObject._ID, true);
+
             } else if (isChanged()) {
                 
                 // check if the value has been cleared manually 

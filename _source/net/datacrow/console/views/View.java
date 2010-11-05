@@ -542,9 +542,6 @@ public class View extends DcPanel implements ListSelectionListener {
             
             groupingPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
         }
-//        } else if (type == _TYPE_SEARCH) {
-//            vc.clear();
-//        }
     }
 
     public int getItemCount() {

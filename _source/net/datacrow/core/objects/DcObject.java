@@ -492,7 +492,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public List<DcObject> getChildren() {
     	if ((children == null || children.size() == 0) && getModule().getChild() != null)
-    		loadChildren(getModule().getChild().getMinimalFields(null));
+    		loadChildren(null);
     	
         return getCurrentChildren();
     }
@@ -845,32 +845,21 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * The item is unusable after this operation (!).
      */
     public void release() {
-        if (isDestroyed()) return;
-
-        clearValues();
-        setValueLowLevel(DcObject._ID, null);
-        
-        if (requests != null)
-            requests.clear();
-        
-        if (children != null) {
-        	for (DcObject child : children)
-        		child.release();
-        	
-            children.clear();
-        }
         getModule().release(this);
     }
     
     public void destroy() {
         try {
-            if (values != null) {
-                clearValues();
-                values.clear();
-            }
             
-            values = null;
-
+            if (requests != null)
+                requests.clear();
+            
+            if (children != null)
+                children.clear();
+            
+            if (values != null)
+                values.clear();
+            
             if (children != null)
             	children.clear();
             
@@ -880,6 +869,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             requests = null;
             children = null;
             loaded = false;
+            values = null;
+
         } catch (Exception e) {
             logger.error(e, e);
         }

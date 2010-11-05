@@ -87,11 +87,12 @@ public class ItemExporterTaskPanel extends ItemExporterWizardPanel implements II
     
     @Override
     public void notifyMessage(String message) {
-        tp.addMessage(message);
+        if (tp != null) tp.addMessage(message);
     }
 
     @Override
     public void notifyStarted(int count) {
+        if (tp == null) return; 
         tp.clear();
         tp.initializeTask(count);
     }
@@ -101,6 +102,6 @@ public class ItemExporterTaskPanel extends ItemExporterWizardPanel implements II
 
     @Override
     public void notifyProcessed() {
-        tp.updateProgressTask();       
+        if (tp != null) tp.updateProgressTask();       
     }
 }

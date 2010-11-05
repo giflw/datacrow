@@ -1045,7 +1045,7 @@ public class DcTable extends JTable implements IViewComponent {
     @SuppressWarnings("unchecked")
     public boolean load(int row) {
         
-        if (!loadable) return false;
+        if (!loadable || view.getType() == View._TYPE_INSERT) return false;
         
         boolean loaded = loadedRows.contains(Integer.valueOf(row));
         

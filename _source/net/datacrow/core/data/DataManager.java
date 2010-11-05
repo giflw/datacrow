@@ -531,7 +531,9 @@ public class DataManager {
         DataFilter df = new DataFilter(module);
         df.addEntry(new DataFilterEntry(module, DcObject._ID, Operator.EQUAL_TO, ID));
         List<DcObject> items = get(df, fields);
-        return items != null && items.size() > 0 ? items.get(0) : null;
+        DcObject item = items != null && items.size() > 0 ? items.get(0) : null;
+        if (item != null) item.markAsUnchanged();
+        return item;
     }    
   
     /**

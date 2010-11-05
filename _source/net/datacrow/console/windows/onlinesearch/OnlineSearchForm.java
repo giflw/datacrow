@@ -624,7 +624,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
         panelActions.add(buttonDetails);
         
-        if (ID != null && advanced)
+        if (itemForm != null && advanced)
             panelActions.add(buttonUpdate);
 
         if (advanced)
@@ -739,7 +739,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getClickCount() == 2) {
-            if (ID != null)
+            if (itemForm != null)
                 update();
             else 
                 addNew();

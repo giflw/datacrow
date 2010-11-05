@@ -135,7 +135,8 @@ public class DcObjectList extends DcList implements IViewComponent {
 
     @Override
     public void clear(int idx) {
-        getElement(idx).clear();
+        DcObjectListElement element = getElement(idx);
+        if (element != null) element.clear();
     }
 
     @Override
@@ -270,7 +271,11 @@ public class DcObjectList extends DcList implements IViewComponent {
     }      
 
     private DcObjectListElement getElement(int idx) {
-        return (DcObjectListElement) getDcModel().getElementAt(idx);
+        try {
+            return (DcObjectListElement) getDcModel().getElementAt(idx);
+        } catch (ArrayIndexOutOfBoundsException aio) {
+            return null;
+        }
     }      
     
     @Override

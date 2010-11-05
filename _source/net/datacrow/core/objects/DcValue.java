@@ -350,4 +350,12 @@ public class DcValue implements Serializable {
         }
         return sb.toString();
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        clear();
+        super.finalize();
+    }
+    
+    
 }

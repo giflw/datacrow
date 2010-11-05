@@ -14,6 +14,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Converter;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -67,9 +68,10 @@ public class XmlImporter extends ItemImporter {
         private DcObject parseItem(DcModule module, Element eItem) throws Exception {
             DcObject dco = module.getItem();
             dco.setIDs();
+            String value;
             // get the object
             for (DcField field : module.getFields()) {
-
+                
                 if ((field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION && field.getValueType() != DcRepository.ValueTypes._PICTURE) ||  
                      field.getIndex() == DcObject._ID) continue;
                 
@@ -99,8 +101,19 @@ public class XmlImporter extends ItemImporter {
                     }
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                     setValue(dco, field.getIndex(), eField.getTextContent(), listener);
+                    
+                } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                    value = eField.getTextContent();
+                    
+                    if (value.startsWith("file:")) {
+                        DcImageIcon icon = new DcImageIcon(value.substring(8));
+                        dco.setValue(field.getIndex(), icon);
+                    } else {
+                        setValue(dco, field.getIndex(), eField.getTextContent(), listener);
+                    }
+                    
                 } else {
-                    String value = eField.getTextContent();
+                    value = eField.getTextContent();
                     if (!Utilities.isEmpty(value))
                         setValue(dco, field.getIndex(), value, listener);
                 }

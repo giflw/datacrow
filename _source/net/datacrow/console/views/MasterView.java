@@ -162,7 +162,7 @@ public class MasterView {
     }
     
     public void sort() {
-    	if (getGroupingPane() == null || !getGroupingPane().isEnabled()) {
+    	if (getGroupingPane() == null && getGroupingPane().isEnabled()) {
     		getCurrent().sort();
     	} else {
     		groupingPane.sort();
