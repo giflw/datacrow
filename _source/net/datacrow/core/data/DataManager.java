@@ -196,11 +196,11 @@ public class DataManager {
      * @param childIdx The child module index.
      * @return The children or an empty collection.
      */
-    public static Map<String, Integer> getChildrendKeys(String parentID, int childIdx) {
+    public static List<DcObject> getChildren(String parentID, int childIdx, int[] fields) {
         DataFilter df = new DataFilter(childIdx);
         DcModule module = DcModules.get(childIdx);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, module.getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentID));
-        return getKeys(df);
+        return new SelectQuery(df, null, fields).run();
     }
     
     /**
@@ -209,12 +209,13 @@ public class DataManager {
      * @param childIdx The child module index.
      * @return The children or an empty collection.
      */
-    public static List<DcObject> getChildren(String parentID, int childIdx, int[] fields) {
+    public static Map<String, Integer> getChildrenKeys(String parentID, int childIdx) {
         DataFilter df = new DataFilter(childIdx);
         DcModule module = DcModules.get(childIdx);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, childIdx, module.getParentReferenceFieldIndex(), Operator.EQUAL_TO, parentID));
-        return new SelectQuery(df, null, fields).run();
+        return getKeys(df);
     }
+    
     
     /**
      * Creates a reference to the specified object. The provided value can either

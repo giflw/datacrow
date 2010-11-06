@@ -715,7 +715,8 @@ public class View extends DcPanel implements ListSelectionListener {
         if (isParent())
             childView.loadChildren();
         else if (isChild() && parentID != null) {
-            add(DataManager.getItem(getModule().getParent().getIndex(), parentID).getChildren());
+            clear();
+            add(DataManager.getChildrenKeys(parentID, getModule().getIndex()));
         }
     }
     

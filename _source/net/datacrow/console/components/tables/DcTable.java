@@ -1088,9 +1088,6 @@ public class DcTable extends JTable implements IViewComponent {
                 } else {
                     model.setValueAt(value, row, col);    
                 }
-                
-                // clears the selection as well..
-                //((DcTableModel) getModel()).fireTableDataChanged();
             }
 
             if (module.isAbstract()) {

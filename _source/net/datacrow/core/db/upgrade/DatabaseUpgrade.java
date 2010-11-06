@@ -126,7 +126,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
             } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                 try { 
                 	String sql = "select distinct objectid from " + module.getTableName() + " where objectid in " +
-                			     "(select objectid from " + module.getTableName() + " group by objectid having count(distinct referencedid) > 1)";
+                			     "(select objectid from " + module.getTableName() + " group by objectid having count(referencedid) > 1)";
                 	ResultSet rs = stmt.executeQuery(sql);
                 	
                 	while (rs.next()) {
