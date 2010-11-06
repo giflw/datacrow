@@ -113,6 +113,11 @@ public class Picture extends DcObject {
         return image != null ? image.getBytes() : null;
     }
     
+    public byte[] getCurrentBytes() {
+        DcImageIcon image = (DcImageIcon) getValue(_D_IMAGE);
+        return image != null ? image.getCurrentBytes() : null;
+    }
+    
     @Override
     public void destroy() {
         unload();

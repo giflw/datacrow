@@ -294,7 +294,7 @@ public class DcTable extends JTable implements IViewComponent {
             if (view != null && view.getType() == View._TYPE_INSERT &&  value instanceof Picture) {
                 // keep images save
                 picture = (Picture) value;
-                bytes = picture.getBytes();
+                bytes = picture.getCurrentBytes();
                 
                 if (bytes != null) {
                     p = (Picture) DcModules.get(DcModules._PICTURE).getItem();
@@ -794,8 +794,7 @@ public class DcTable extends JTable implements IViewComponent {
             for (int i = 0; i < getColumnCount(); i++)
                 try {
                     getCellEditor(selectedRow, i).stopCellEditing();
-                } catch (Exception e) {
-                }
+                } catch (Exception e) {}
         }
     }
     
@@ -1048,7 +1047,6 @@ public class DcTable extends JTable implements IViewComponent {
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
     
-    @SuppressWarnings("unchecked")
     public boolean load(int row) {
         
         if (!loadable || view.getType() == View._TYPE_INSERT) return false;
@@ -1058,46 +1056,45 @@ public class DcTable extends JTable implements IViewComponent {
         if (!loaded) {
             loadedRows.add(Integer.valueOf(row));
             
-            boolean listenForChanges = isListeningForChanges();
-            setListeningForChanges(false);
-            
-            String ID = (String) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
-            
-            Settings settings = module.getSettings();
-            Collection<Integer> fields = new ArrayList<Integer>();
-            for (int field : settings.getIntArray(DcRepository.ModuleSettings.stTableColumnOrder))
-                fields.add(Integer.valueOf(field));
-            
-            DcObject dco = DataManager.getItem(getModuleForRow(row).getIndex(), ID, module.getMinimalFields(fields));
-
-            TableModel model = getModel();
-            int col;
-            Object value;
-            for (int field : dco.getFieldIndices()) {
-                col = getColumnIndexForField(field);
-                value = dco.getValue(field);
+            try {
+                ignoreEdit = true;
+                view.setActionsAllowed(false);
                 
-                if (value instanceof Collection) {
-                    Collection<DcObject> copy = new ArrayList<DcObject>();
-                    for (DcObject reference : (Collection<DcObject>) value) {
-                        copy.add(reference.clone());
-                    }
-                    model.setValueAt(copy, row, col);  
-                } else if (value instanceof DcObject) {
-                    model.setValueAt(((DcObject) value).clone(), row, col);  
-                } else {
-                    model.setValueAt(value, row, col);    
+                boolean listenForChanges = isListeningForChanges();
+                setListeningForChanges(false);
+                
+                String ID = (String) getModel().getValueAt(row, getColumnIndexForField(DcObject._ID));
+                
+                Settings settings = module.getSettings();
+                Collection<Integer> fields = new ArrayList<Integer>();
+                for (int field : settings.getIntArray(DcRepository.ModuleSettings.stTableColumnOrder))
+                    fields.add(Integer.valueOf(field));
+                
+                DcObject dco = DataManager.getItem(getModuleForRow(row).getIndex(), ID, module.getMinimalFields(fields));
+    
+                TableModel model = getModel();
+                int col;
+                Object value;
+                for (int field : dco.getFieldIndices()) {
+                    col = getColumnIndexForField(field);
+                    value = dco.getValue(field);
+                    model.setValueAt(value, row, col);
                 }
-            }
+    
+                if (module.isAbstract()) {
+                    col = getColumnIndexForField(Media._SYS_MODULE);
+                    value = dco.getModule();
+                    model.setValueAt(value, row, col);
+                }
+    
+                applyHeaders();
+                setListeningForChanges(listenForChanges);
 
-            if (module.isAbstract()) {
-                col = getColumnIndexForField(Media._SYS_MODULE);
-                value = dco.getModule();
-                model.setValueAt(value, row, col);
+                revalidate();
+            } finally {
+                view.setActionsAllowed(true);
+                ignoreEdit = false; 
             }
-
-            applyHeaders();
-            setListeningForChanges(listenForChanges);
             
             return true;
         }

@@ -30,6 +30,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
@@ -65,10 +67,11 @@ public class DeleteQuery extends Query {
     	boolean success = false;
         Connection conn = null;
         Statement stmt = null;
-        
-        String ID = dco.getID();
+
+        final String ID = dco.getID();
 
         try { 
+            
             conn = DatabaseManager.getAdminConnection();
             stmt = conn.createStatement();
             
@@ -163,19 +166,38 @@ public class DeleteQuery extends Query {
         handleRequest(null, success);
         
         if (dco.isUpdateGUI() && DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) {
-            dco.getModule().getSearchView().remove(ID);
-        	for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-        		if (module.getSearchView() != null)
-        			module.getSearchView().refreshQuickView();
-        	}
-            
-        	for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
-        		if (module.isSearchViewInitialized())
-        			module.getSearchView().remove(ID);
-        	}
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeLater(
+                        new Thread(new Runnable() { 
+                            @Override
+                            public void run() {
+                                updateUI(ID);
+                            }
+                        }));
+            } else {
+                updateUI(ID);
+            }
         }
 
-        clear();
         return null;
+    }
+    
+    private void updateUI(String ID) {
+        dco.getModule().getSearchView().remove(ID);
+        for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
+            if (module.getSearchView() != null)
+                module.getSearchView().refreshQuickView();
+        }
+        
+        for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
+            if (module.isSearchViewInitialized())
+                module.getSearchView().remove(ID);
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        clear();
+        super.finalize();
     }
 }

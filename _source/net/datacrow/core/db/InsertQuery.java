@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -75,8 +76,6 @@ public class InsertQuery extends Query {
         // create non existing references
         createReferences(dco);
 	       
-        String ID = dco.getID();
-        
         Collection<DcMapping> references = new ArrayList<DcMapping>();
         Collection<Picture> pictures = new ArrayList<Picture>();
 
@@ -164,16 +163,37 @@ public class InsertQuery extends Query {
         handleRequest(null, success);
 
         if (dco.isUpdateGUI() && DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) { 
-            dco.getModule().getSearchView().add(dco);
-            if (dco.getModule().getInsertView() != null)
-                dco.getModule().getInsertView().remove(ID);
-            
-        	for (DcModule module : DcModules.getAbstractModules(dco.getModule()))
-        		if (module.isSearchViewInitialized() && !module.isChildModule())
-        			module.getSearchView().add(dco);
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeLater(
+                        new Thread(new Runnable() { 
+                            @Override
+                            public void run() {
+                                updateUI(dco);
+                            }
+                        }));
+            } else {
+                updateUI(dco);
+            }
         }
-        
-        clear();
+
         return null;
+    }
+    
+    private void updateUI(DcObject dco) {
+        String ID = dco.getID();
+        
+        dco.getModule().getSearchView().add(dco);
+        if (dco.getModule().getInsertView() != null)
+            dco.getModule().getInsertView().remove(ID);
+        
+        for (DcModule module : DcModules.getAbstractModules(dco.getModule()))
+            if (module.isSearchViewInitialized() && !module.isChildModule())
+                module.getSearchView().add(dco);
+    }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        clear();
+        super.finalize();
     }
 }

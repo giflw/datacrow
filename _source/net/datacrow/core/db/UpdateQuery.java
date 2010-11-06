@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -197,8 +198,20 @@ public class UpdateQuery extends Query {
 
         handleRequest(null, success);
         
-        if (dco.isUpdateGUI() && success && DataCrow.isInitialized()) 
-        	updateUI(dco);
+        if (dco.isUpdateGUI() && success && DataCrow.isInitialized()) {
+            
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeLater(
+                        new Thread(new Runnable() { 
+                            @Override
+                            public void run() {
+                                updateUI(dco);
+                            }
+                        }));
+            } else {
+                updateUI(dco);
+            }
+        }
         
         return null;
     }
@@ -216,5 +229,11 @@ public class UpdateQuery extends Query {
     		if (module.isSearchViewInitialized())
     			module.getSearchView().update(dco);
     	}
+    }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        clear();
+        super.finalize();
     }
 }

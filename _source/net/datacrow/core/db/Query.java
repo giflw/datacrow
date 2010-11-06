@@ -269,4 +269,10 @@ public abstract class Query {
             logger.error("Could not save [" + imageFile + "]", e);
         }
     }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        clear();
+        super.finalize();
+    }
  }

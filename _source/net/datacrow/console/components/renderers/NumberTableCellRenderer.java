@@ -30,6 +30,7 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
+import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.util.Utilities;
 
 public class NumberTableCellRenderer extends DcTableCellRenderer {
@@ -45,7 +46,12 @@ public class NumberTableCellRenderer extends DcTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        
         Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        
+        if (((DcTable) table).isIgnoringPaintRequests())
+            return renderer;
+        
         setHorizontalAlignment(JLabel.RIGHT); // Reset right justify again
         
         if (value instanceof Double) {
