@@ -122,6 +122,7 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
             wizard.getModule().isSelectableInUI() && 
             wizard.getModule().getCurrentInsertView() != null) {
             
+            created++;
             wizard.getModule().getCurrentInsertView().add(item);
         } else {
             DcObject other = DataManager.getObjectForString(item.getModule().getIndex(), item.toString());
