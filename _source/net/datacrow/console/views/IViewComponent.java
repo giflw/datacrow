@@ -36,7 +36,7 @@ public interface IViewComponent extends ISortableComponent {
     int getViewportBufferSize();
     
     int add(String key);
-    void add(DcObject item);
+    int add(DcObject item);
     void add(List<? extends DcObject> items);
     void add(Map<String, Integer> keys);
     

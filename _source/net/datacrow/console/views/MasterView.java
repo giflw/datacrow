@@ -132,7 +132,9 @@ public class MasterView {
             getCurrent().add(dco);
             groupingPane.add(dco);
         } else {
-            getCurrent().add(dco);
+            for (View view : getViews())
+                if (view.isLoaded() || view == getCurrent())
+                    view.add(dco);
         }
     }
     

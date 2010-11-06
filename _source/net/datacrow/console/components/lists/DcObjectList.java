@@ -371,7 +371,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         DcObjectListElement element = getDisplayElement(getModule().getIndex());
         element.setKey(key);
         getDcModel().addElement(element);
-        return 0;
+        return getDcModel().getSize() -1;
     }
 
     public void add(Map<String, Integer> keys) {
@@ -394,7 +394,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     }
     
     @Override
-    public void add(DcObject dco) {
+    public int add(DcObject dco) {
         if (dco.getID() == null || dco.getID().equals("")) 
             dco.setIDs();        
         
@@ -404,7 +404,10 @@ public class DcObjectList extends DcList implements IViewComponent {
         DcObjectListElement element = getDisplayElement(dco.getModule().getIndex());
         element.setDcObject(dco);
         getDcModel().addElement(element);
-        ensureIndexIsVisible(getModel().getSize());
+        
+        int index = getModel().getSize() - 1;
+        ensureIndexIsVisible(index);
+        return index;
     }
     
     @Override

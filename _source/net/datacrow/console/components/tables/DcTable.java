@@ -260,12 +260,12 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     @Override
-    public void add(DcObject dco) {
-        add(dco, false);
+    public int add(DcObject dco) {
+        return add(dco, false);
     }
 
-    public void add(DcObject dco, boolean setSelected) {
-        setValues(getModel(), dco, setSelected, -1);
+    public int add(DcObject dco, boolean setSelected) {
+        return setValues(getModel(), dco, setSelected, -1);
     }
     
     /**
@@ -275,7 +275,7 @@ public class DcTable extends JTable implements IViewComponent {
      * @param setSelected
      * @param position
      */
-    public void setValues(TableModel model, DcObject dco, boolean setSelected, int position) {
+    public int setValues(TableModel model, DcObject dco, boolean setSelected, int position) {
         setListeningForChanges(false);
         int[] fields = dco.getFieldIndices();
 
@@ -330,6 +330,7 @@ public class DcTable extends JTable implements IViewComponent {
             setSelected(getRowCount() - 1);
 
         setListeningForChanges(true);
+        return row;
     }
 
     @Override
@@ -359,7 +360,7 @@ public class DcTable extends JTable implements IViewComponent {
         ignoreEdit = b;
     }
 
-    public void applyColumnWidths() {
+    private void applyColumnWidths() {
         TableColumn column;
         for (Enumeration<TableColumn> e = getColumnModel().getColumns(); e.hasMoreElements();) {
             column = e.nextElement();
@@ -847,7 +848,7 @@ public class DcTable extends JTable implements IViewComponent {
                 columnNew.setCellRenderer(renderer);
             } else if (field.getFieldType() == ComponentFactory._REFERENCESFIELD) {
                 columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
-                columnNew.setMaxWidth(100);
+                //columnNew.setMaxWidth(100);
                 columnNew.setCellRenderer(ReferencesTableCellRenderer.getInstance());
             } else if (field.getIndex() == DcObject._SYS_MODULE) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
@@ -874,13 +875,13 @@ public class DcTable extends JTable implements IViewComponent {
                     break;
                 case ComponentFactory._FILESIZEFIELD:
                     columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
-                    columnNew.setMaxWidth(100);
+                    //columnNew.setMaxWidth(100);
                     columnNew.setCellRenderer(FileSizeTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._NUMBERFIELD:
                 case ComponentFactory._DECIMALFIELD:
                     columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
-                    columnNew.setMaxWidth(100);
+                    //columnNew.setMaxWidth(100);
                     columnNew.setCellRenderer(NumberTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._LONGTEXTFIELD:

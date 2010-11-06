@@ -273,10 +273,9 @@ public class View extends DcPanel implements ListSelectionListener {
     }    
     
     public void add(final String key, final boolean select) {
-        vc.add(key);
-        
+        int index = vc.add(key);
         if (select)
-            setSelected();
+            setSelected(index);
     }
     
     public void add(final DcObject dco, final boolean select) {
@@ -285,10 +284,9 @@ public class View extends DcPanel implements ListSelectionListener {
         if (getType() == View._TYPE_INSERT)
             dco.setIDs();
         
-        vc.add(dco);
-
+        int index = vc.add(dco);
         if (select)
-            setSelected();
+            setSelected(index);
     }    
 
     public void cancelCurrentTask() {

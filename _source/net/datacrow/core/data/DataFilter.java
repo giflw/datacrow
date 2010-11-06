@@ -586,7 +586,9 @@ public class DataFilter {
             
             field = entryModule.getField(entry.getField());
             
-            if (field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) 
+            if (    field.isUiOnly() && 
+                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                    field.getValueType() != DcRepository.ValueTypes._PICTURE) 
                 continue;
             
             hasConditions = true;
@@ -617,16 +619,27 @@ public class DataFilter {
                 if (useUpper) sql.append("UPPER(");
                 sql.append(field.getDatabaseFieldName());
                 if (useUpper) sql.append(")");
-            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                       field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                 sql.append("ID");
             } else {
                 sql.append(field.getDatabaseFieldName());
             }
             
-            if (    operator == Operator.CONTAINS.getIndex() || 
-                    operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
-                   (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
-                   (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
+            if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                
+                if (operator == Operator.IS_EMPTY.getIndex()) 
+                    sql.append(" NOT");
+                
+                DcModule picModule = DcModules.get(DcModules._PICTURE);
+                sql.append(" IN (SELECT OBJECTID FROM " + picModule.getTableName() + 
+                           " WHERE " + picModule.getField(Picture._B_FIELD).getDatabaseFieldName() + 
+                           " = '" + field.getDatabaseFieldName() + "')");
+                
+            } else if ( operator == Operator.CONTAINS.getIndex() || 
+                        operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                       (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
+                       (operator == Operator.NOT_EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
 
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
