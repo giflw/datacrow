@@ -32,6 +32,7 @@ import javax.swing.JTable;
 import javax.swing.ToolTipManager;
 
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.objects.Picture;
 
 public class PictureTableCellRenderer extends DcTableCellRenderer {
 
@@ -51,20 +52,23 @@ public class PictureTableCellRenderer extends DcTableCellRenderer {
     @Override
     public void setText(String str) {
         super.setText(str);
-        if (str != null && str.length() > 1) {
-            setIcon(IconLibrary._icoPicture);
-            setForeground(this.getBackground());
-        } else {
-        	setIcon(null);
-        }
+
     }
     
     @Override
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-        JComponent c = (JComponent) super.getTableCellRendererComponent(
-                table, value, isSelected, hasFocus, row, column);
+        JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        
+        if (value instanceof Picture && ((Picture) value).hasImage()) {
+            setIcon(IconLibrary._icoPicture);
+            setForeground(this.getBackground());
+        } else {
+            setIcon(null);
+        }
+        
+        
         ToolTipManager.sharedInstance().setDismissDelay(0);
         setForeground(this.getBackground());
         return c;

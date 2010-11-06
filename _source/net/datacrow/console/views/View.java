@@ -102,7 +102,7 @@ public class View extends DcPanel implements ListSelectionListener {
 
     protected JPanel panelResult = new JPanel();
     
-    private JScrollPane spChildView;
+    private ViewScrollPane spChildView;
     private View childView;
     private View parentView;
 
@@ -793,7 +793,7 @@ public class View extends DcPanel implements ListSelectionListener {
                         new Insets(5, 5, 5, 5), 0, 0));
         
         if (isParent()) {
-            spChildView = new JScrollPane((Component) childView.getViewComponent());
+            spChildView = new ViewScrollPane(childView);
             spChildView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             
             addChildView();

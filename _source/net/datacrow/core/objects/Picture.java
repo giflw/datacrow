@@ -82,7 +82,7 @@ public class Picture extends DcObject {
      */
     public boolean hasImage() {
         return isFilled(_D_IMAGE) || 
-               isFilled(_C_FILENAME) && new File(DataCrow.imageDir, getDisplayString(_C_FILENAME)).exists();
+              (isFilled(_C_FILENAME) && new File(DataCrow.imageDir, getDisplayString(_C_FILENAME)).exists());
     }
 
     public void loadImage(boolean external) {
