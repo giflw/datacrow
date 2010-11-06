@@ -14,7 +14,6 @@ import net.datacrow.core.migration.ItemMigrater;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
@@ -160,14 +159,9 @@ public abstract class ItemImporter extends ItemMigrater {
                          dco.setValue(field.getIndex(), Long.valueOf(sValue));
                 }
             } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                try {
-                    byte[] image = Base64.decode(value.toCharArray());
-                    dco.setValue(field.getIndex(), new DcImageIcon(image));
-                } catch (Exception e) {
-                    File file = getImagePath(value);
-                    if (file.exists())
-                        dco.setValue(field.getIndex(), new DcImageIcon(Utilities.readFile(file)));
-                }
+                File file = getImagePath(value);
+                if (file.exists())
+                    dco.setValue(field.getIndex(), new DcImageIcon(file));
             } else if (field.getValueType() == DcRepository.ValueTypes._ICON) {
                 File file = getImagePath(value);
                 if (file.exists()) {

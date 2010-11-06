@@ -14,7 +14,6 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.Converter;
-import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -103,15 +102,7 @@ public class XmlImporter extends ItemImporter {
                     setValue(dco, field.getIndex(), eField.getTextContent(), listener);
                     
                 } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                    value = eField.getTextContent();
-                    
-                    if (value.startsWith("file:")) {
-                        DcImageIcon icon = new DcImageIcon(value.substring(8));
-                        dco.setValue(field.getIndex(), icon);
-                    } else {
-                        setValue(dco, field.getIndex(), eField.getTextContent(), listener);
-                    }
-                    
+                    setValue(dco, field.getIndex(), eField.getTextContent(), listener);
                 } else {
                     value = eField.getTextContent();
                     if (!Utilities.isEmpty(value))

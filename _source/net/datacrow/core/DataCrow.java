@@ -509,9 +509,8 @@ public class DataCrow {
         
         module.setDefaultDataLoaded(true);
         
-        Collection<DcObject> items;
         try {
-            items = module.getDefaultData();
+            Collection<DcObject> items = module.getDefaultData();
             if (items != null) {
                 for (DcObject item : items) {
                     item.saveNew(false);
