@@ -1181,8 +1181,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         String s = "";
         for (DcField field : getFields()) {
             if (field.isRequired()) {
-                Object value = getValue(field.getIndex());
-                if (value == null || value.toString().equals("")) {
+                if (!isFilled(field.getIndex())) {
                     if (s.length() > 0) s += ",";
                     s += getLabel(field.getIndex());
                 }

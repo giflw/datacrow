@@ -36,6 +36,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+import net.datacrow.console.views.MasterView;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
@@ -189,6 +190,13 @@ public class InsertQuery extends Query {
         for (DcModule module : DcModules.getAbstractModules(dco.getModule()))
             if (module.isSearchViewInitialized() && !module.isChildModule())
                 module.getSearchView().add(dco);
+        
+        if (dco.getModule().isChildModule()) {
+            String parentID = dco.getParentID();
+            MasterView parentVw = dco.getModule().getParent().getSearchView();
+            if (parentVw.getCurrent().getSelectedItemKeys().contains(parentID))
+                parentVw.getCurrent().refreshQuickView();
+        }
     }
     
     @Override

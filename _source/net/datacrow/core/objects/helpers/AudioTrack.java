@@ -42,7 +42,4 @@ public class AudioTrack extends DcMediaObject {
     public AudioTrack() {
         super(DcModules._AUDIOTRACK);
     }
-
-    @Override
-    public void checkIntegrity()  {}
 }

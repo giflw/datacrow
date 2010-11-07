@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9 BETA VI [Release on November 5, 2010] [testing: high] [target: BETA/TEST]
+Data Crow 3.9 BETA VII [Release on November 7, 2010] [testing: high] [target: BETA/TEST]
 -----------------------------------------------------------------------------------------
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
@@ -24,7 +24,7 @@ The following has a direct impact on the performance of the system:
 
 New System Requirements:
 - Minimum amount of memory: 64MB 
-  (Data Crow will operate sluggishly and use a lot of processor power)
+  (Data Crow will operate sluggishly and use 'a lot of' processor power)
 - Recommended amount of memory 256MB.
 - Sun Java 1.6 or higher.
 
@@ -99,7 +99,8 @@ New System Requirements:
   and a unique index is created here as well.
 - Item is only removed and re-added to the tree if the value has changed of the field
   that is part of the tree structure (performance gain).
-  
+- Column widths for the child table (tracks for example) are not remembered.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.8.16  [Release on June 19 2010] [testing: high] [target: production]

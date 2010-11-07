@@ -520,6 +520,9 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public void saveSettings() {
         vc.saveSettings();
+        
+        if (childView != null)
+            childView.saveSettings();
     }
     
     public void applySettings() {
@@ -545,6 +548,9 @@ public class View extends DcPanel implements ListSelectionListener {
             
             groupingPane.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
         }
+        
+        if (childView != null)
+            childView.applySettings();
     }
 
     public int getItemCount() {
