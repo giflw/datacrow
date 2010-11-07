@@ -133,14 +133,14 @@ public class SaveTask extends DataTask {
                             view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             view.setActionsAllowed(true);
                             view.checkForChanges(true);
-                            view.setDefaultSelection();
+                            //view.setDefaultSelection();
                         }
                     });
                 } else {
                     view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     view.setActionsAllowed(true);
                     view.checkForChanges(true);
-                    view.setDefaultSelection();
+                    //view.setDefaultSelection();
                 }
             } catch (Exception e) {
                 logger.error(e, e);
