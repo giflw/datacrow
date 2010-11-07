@@ -123,8 +123,12 @@ public class MasterView {
         if (groupingPane != null && groupingPane.isEnabled())
             groupingPane.update(dco);
         
-        for (View view : getViews())
-            view.update(dco.getID());
+        for (View view : getViews()) {
+            int index = view.update(dco.getID());
+            if (    view == getCurrent() && 
+                    !getCurrent().getSelectedItemKeys().contains(dco.getID()))
+                view.setSelected(index);
+        }
     }
     
     public void add(DcObject dco) {

@@ -91,6 +91,7 @@ import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -643,9 +644,11 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     @Override
-    public void update(String ID) {
-        loadedRows.remove(Integer.valueOf(getRowNumberWithID(ID)));
+    public int update(String ID) {
+        int row = getRowNumberWithID(ID);
+        loadedRows.remove(Integer.valueOf(row));
         removeFromCache(ID);
+        return row;
     }
     
 	@Override
@@ -681,12 +684,12 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     @Override
-    public void update(String ID, DcObject dco) {
+    public int update(String ID, DcObject dco) {
         int index = getIndex(ID);
         if (index > -1) {
             updateItemAt(index, dco);
-            setSelected(index);
         }
+        return index;
     }
 
     public void updateItemAt(int row, DcObject dco) {
@@ -761,8 +764,8 @@ public class DcTable extends JTable implements IViewComponent {
                             Object valueOld = dco.getValue(field);
                             Object valueNew = getDcModel().getValueAt(row, column);
 
-                            valueOld = valueOld == null ? "" : valueOld;
-                            valueNew = valueNew == null ? "" : valueNew;
+                            valueOld = Utilities.isEmpty(valueOld) ? "" : valueOld;
+                            valueNew = Utilities.isEmpty(valueNew) ? "" : valueNew;
 
                             if (valueOld.equals(valueNew))
                                 return;

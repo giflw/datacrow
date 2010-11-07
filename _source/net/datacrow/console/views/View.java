@@ -447,12 +447,13 @@ public class View extends DcPanel implements ListSelectionListener {
         }
     }
     
-    public void update(String ID) {
-        vc.update(ID);
-
-        if (quickView != null)
-            quickView.refresh();
+    public int update(String ID) {
+        return vc.update(ID);
     }  
+    
+    public int updateItem(String ID, DcObject dco) {
+        return vc.update(ID, dco);
+    }
     
     public void repaintQuickViewImage() {
         if (quickView != null)
@@ -602,7 +603,7 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void setSelected(int index) {
-    	if (vc.getItemCount() > 0) { 
+    	if (vc.getItemCount() > 0 && index > -1) { 
 	        vc.setSelected(index);
 	        afterSelect(index);
     	}
@@ -684,12 +685,6 @@ public class View extends DcPanel implements ListSelectionListener {
             logger.warn("No element found at index " + index);
     }
 
-    public void updateItem(String ID, DcObject dco) {
-        vc.update(ID, dco);
-        if (quickView != null && index > -1)
-            quickView.setObject(ID, dco.getModule().getIndex());
-    }
-    
     protected Collection<DcObject> getChangedItems() {
         Collection<DcObject> objects = new ArrayList<DcObject>();
         for (int idx : vc.getChangedIndices()) 

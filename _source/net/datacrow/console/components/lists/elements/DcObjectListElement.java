@@ -83,6 +83,7 @@ public abstract class DcObjectListElement extends DcListElement {
 
     public DcObject getDcObject() {
         dco = dco == null ? DataManager.getItem(module, key) : dco;
+        if (dco != null) dco.markAsUnchanged();
         return dco;
     }
     

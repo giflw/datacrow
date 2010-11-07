@@ -260,6 +260,14 @@ public class DcObjectList extends DcList implements IViewComponent {
         return element != null ? element.getDcObject() : null;
     }    
 
+    private int getIndex(String ID) {
+        for (int i = 0 ; i < getDcModel().getSize(); i++) {
+            if (((DcObjectListElement) getDcModel().getElementAt(i)).getKey().equals(ID))
+                return i;
+        }
+        return -1;
+    }
+    
     private DcObjectListElement getElement(String ID) {
         DcObjectListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
@@ -315,16 +323,25 @@ public class DcObjectList extends DcList implements IViewComponent {
     public void applySettings() {}
     
     @Override
-    public void update(String ID) {
-        DcObjectListElement element = getElement(ID);
-        if (element != null) {
-            element.update();
+    public int update(String ID) {
+        int index = getIndex(ID);
+        if (index >= 0) {
+            DcObjectListElement element = getElement(index);
+            if (element != null)
+                element.update();
         }
+        return index;
     }       
 
     @Override
-    public void update(String ID, DcObject dco) {
-        updateElement(getElement(ID), dco);
+    public int update(String ID, DcObject dco) {
+        int index = getIndex(ID);
+        if (index >= 0) {
+            DcObjectListElement element = getElement(index);
+            if (element != null)
+                updateElement(getElement(index), dco);
+        }
+        return index;
     }    
 
     private void updateElement(DcObjectListElement element, DcObject dco) {
