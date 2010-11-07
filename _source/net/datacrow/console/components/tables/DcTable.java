@@ -537,7 +537,7 @@ public class DcTable extends JTable implements IViewComponent {
             Object value = getValueAt(row, col, true);
             if (value instanceof DcModule) {
                 result = (DcModule) value;
-            } else {
+            } else if (value != null) {
                 String s = value.toString();
                 for (DcModule mod : DcModules.getModules()) {
                     if (mod.getName().equals(s))

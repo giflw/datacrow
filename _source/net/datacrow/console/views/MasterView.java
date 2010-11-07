@@ -125,8 +125,7 @@ public class MasterView {
         
         for (View view : getViews()) {
             int index = view.update(dco.getID());
-            if (    view == getCurrent() && 
-                    !getCurrent().getSelectedItemKeys().contains(dco.getID()))
+            if (view == getCurrent())
                 view.setSelected(index);
         }
     }

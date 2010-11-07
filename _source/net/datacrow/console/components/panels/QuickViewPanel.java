@@ -156,8 +156,13 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     public void refresh() {
         int caret = descriptionPane.getCaretPosition();
-        dco = null;
+        
+        String key = this.key;
+        this.dco = null;
+        this.key = null;
+        
         setObject(key, module);
+        
         try {
             descriptionPane.setCaretPosition(caret);
         } catch (Exception e) {
@@ -167,20 +172,17 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     public void setObject(String key, int module) {
     	
-    	if (dco != null && dco.getID().equals(key))
-    		return;
+    	if (key == null || key.equals(this.key)) return;
     	
-        if (key != null) {
-            Collection<Integer> fields = new ArrayList<Integer>();
-            QuickViewFieldDefinitions definitions = 
-                (QuickViewFieldDefinitions) DcModules.get(module).getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
-            
-            for (QuickViewFieldDefinition def : definitions.getDefinitions())
-                if (def.isEnabled())
-                    fields.add(def.getField());
-            
-            setObject(DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields)));
-        }
+        Collection<Integer> fields = new ArrayList<Integer>();
+        QuickViewFieldDefinitions definitions = 
+            (QuickViewFieldDefinitions) DcModules.get(module).getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
+        
+        for (QuickViewFieldDefinition def : definitions.getDefinitions())
+            if (def.isEnabled())
+                fields.add(def.getField());
+        
+        setObject(DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(fields)));
     }   
     
     protected void setObject(DcObject dco) {

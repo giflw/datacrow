@@ -603,7 +603,10 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void setSelected(int index) {
-    	if (vc.getItemCount() > 0 && index > -1) { 
+        if (vc.getSelectedIndex() == index) {
+            if (quickView != null) 
+                quickView.refresh();
+        } else if (vc.getItemCount() > 0 && index > -1) { 
 	        vc.setSelected(index);
 	        afterSelect(index);
     	}
@@ -737,11 +740,7 @@ public class View extends DcPanel implements ListSelectionListener {
         }
 
         if (!isChild() && quickView != null && quickView.isVisible() && isActionsAllowed()) {
-            try {
-                quickView.setObject(key, module);
-            } catch (Exception e) {
-                logger.error(e, e);
-            }
+            quickView.setObject(key, module); 
         }
     }
     
