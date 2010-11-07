@@ -496,9 +496,13 @@ public class View extends DcPanel implements ListSelectionListener {
             Collection<DcObject> objects = new ArrayList<DcObject>();
             
             if (getType() == _TYPE_SEARCH) {
-                objects.addAll(getSelectedItems());
+                
                 if (getChildView() != null)
                     objects.addAll(getChildView().getChangedItems());
+                
+                // reversed order; make sure that GUI is updated after the children have been saved
+                // for correct representation in the quick view (for example).
+                objects.addAll(getSelectedItems());
             } else {
                 objects.addAll(getSelectedItems());
             } 
@@ -735,8 +739,10 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public void afterSelect(int idx) {
         String key = vc.getItemKey(idx);
-        int module = vc.getModule(idx);
         
+        if (key == null) return;
+        
+        int module = vc.getModule(idx);
         if (isParent() && actionsAllowed) {
             childView.setParentID(key, true);
             if (!(childView instanceof CachedChildView))
@@ -763,12 +769,6 @@ public class View extends DcPanel implements ListSelectionListener {
         return components;
     }    
 
-    @Override
-    public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting() && actionsAllowed)
-            afterSelect(vc.getSelectedIndex());
-    }
-    
     private void addChildView() {
         if (childView != null) {
             childView.setVisible(true);
@@ -824,5 +824,14 @@ public class View extends DcPanel implements ListSelectionListener {
                     new Insets(0, 5, 0, 5), 0, 0));
 
         ToolTipManager.sharedInstance().registerComponent((JComponent) vc);
+    }
+    
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        
+        if (vc.getSelectedIndex() == -1) return;
+        
+        if (actionsAllowed)
+            afterSelect(vc.getSelectedIndex());
     }
 }

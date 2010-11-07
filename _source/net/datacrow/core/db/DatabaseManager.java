@@ -298,7 +298,7 @@ public class DatabaseManager {
         }            
     }
 
-    public static  void delete(DcObject dco) {
+    public static void delete(DcObject dco) {
         try {
             db.queue(new DeleteQuery(dco));
         } catch (SQLException e) {

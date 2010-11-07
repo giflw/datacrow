@@ -233,6 +233,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     public void clear() {
         dco = null;
+        key = null;
         tabbedPane.setSelectedIndex(0);
         descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
     	clearImages();

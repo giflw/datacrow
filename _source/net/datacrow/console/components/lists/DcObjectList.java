@@ -115,7 +115,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     @Override
     public String getItemKey(int idx) {
-        return getElement(idx).getKey();
+        return getElement(idx) != null ? getElement(idx).getKey() : null;
     }
 
     @Override
