@@ -412,7 +412,7 @@ public class View extends DcPanel implements ListSelectionListener {
             if (isTaskRunning())
                 return;
                 
-            Collection<? extends DcObject> objects = vc.getSelectedItems();
+            Collection<? extends DcObject> objects = getSelectedItems();
             if (objects.size() > 0) {
                 task = new DeleteTask(this, objects);
                 task.start();
@@ -496,11 +496,11 @@ public class View extends DcPanel implements ListSelectionListener {
             Collection<DcObject> objects = new ArrayList<DcObject>();
             
             if (getType() == _TYPE_SEARCH) {
-                objects.addAll(vc.getSelectedItems());
+                objects.addAll(getSelectedItems());
                 if (getChildView() != null)
                     objects.addAll(getChildView().getChangedItems());
             } else {
-                objects.addAll( vc.getSelectedItems());
+                objects.addAll(getSelectedItems());
             } 
             
             task = new SaveTask(this, objects);
@@ -613,7 +613,11 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public List<? extends DcObject> getSelectedItems() {
-        return vc.getSelectedItems();
+        List<DcObject> items = new ArrayList<DcObject>();
+        for (int row : getSelectedRows())
+            items.add(getItemAt(row));
+        
+        return items;
     }
     
     public List<String> getSelectedItemKeys() {

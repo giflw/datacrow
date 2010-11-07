@@ -229,16 +229,6 @@ public class DcTable extends JTable implements IViewComponent {
         }
         return columnIndex;
     }
-
-    @Override
-    public List<DcObject> getSelectedItems() {
-        List<DcObject> c = new ArrayList<DcObject>();
-        int[] rows = getSelectedRows();
-        for (int i = 0; i < rows.length; i++)
-            c.add(getItemAt(rows[i]));
-
-        return c;
-    }
     
     @Override
     public List<String> getSelectedItemKeys() {

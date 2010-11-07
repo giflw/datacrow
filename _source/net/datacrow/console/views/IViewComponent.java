@@ -51,7 +51,6 @@ public interface IViewComponent extends ISortableComponent {
     
     void ignoreEdit(boolean b);
 
-    List<? extends DcObject> getSelectedItems();    
     List<String> getSelectedItemKeys();
     int[] getSelectedIndices();
     int getSelectedIndex();

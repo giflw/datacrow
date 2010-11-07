@@ -224,7 +224,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         return keys;
 	}
 
-    @Override
+
     public List<DcObject> getSelectedItems() {
         int[] indices = getSelectedIndices();
         List<DcObject> objects = new ArrayList<DcObject>();
