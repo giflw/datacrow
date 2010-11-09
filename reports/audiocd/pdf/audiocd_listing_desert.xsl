@@ -34,7 +34,7 @@
                 <fo:table-row height="1cm">
 
                 <fo:table-cell background-color="#FFFFCC" border-bottom-style="solid" border-bottom-color="#FFEA96" border-before-width="1" padding-top="2" padding-left="2">
-                  <fo:block font-weight="bold">Artist</fo:block>
+                  <fo:block font-weight="bold">Artists</fo:block>
                 </fo:table-cell>
                         
                 <fo:table-cell background-color="#FFFFCC" border-bottom-style="solid" border-bottom-color="#FFEA96" border-before-width="1" padding-top="2" padding-left="2">
@@ -62,7 +62,12 @@
                        
                     <fo:table-cell border-bottom-style="solid" border-bottom-color="#FFEA96" border-before-width="1" padding-top="2" padding-left="2">
                       <fo:block>
-                        <xsl:for-each select="artists/artist"><xsl:value-of select="name"/></xsl:for-each>
+                        <xsl:for-each select="artists/artist">
+                            <xsl:value-of select="name"/>
+                            <xsl:if test="position()!=last()">
+                                <xsl:text>,&#160;</xsl:text> 
+                            </xsl:if>                          
+                        </xsl:for-each>
                       </fo:block>
                     </fo:table-cell>
                        
@@ -72,7 +77,12 @@
                        
                     <fo:table-cell border-bottom-style="solid" border-bottom-color="#FFEA96" border-before-width="1" padding-top="2" padding-left="2">
                       <fo:block>
-                        <xsl:for-each select="genres/music-genre"><xsl:value-of select="name"/></xsl:for-each>
+                        <xsl:for-each select="genres/music-genre">
+                            <xsl:value-of select="name"/>
+                            <xsl:if test="position()!=last()">
+                                <xsl:text>,&#160;</xsl:text> 
+                            </xsl:if>                              
+                        </xsl:for-each>
                       </fo:block>
                     </fo:table-cell>
 

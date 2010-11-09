@@ -51,22 +51,28 @@
                   <fo:table-body>
                     
                     <fo:table-row height="{$rowHeight}">
-                      <fo:table-cell><fo:block font-weight="bold">Artist</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block font-weight="bold">Artists</fo:block></fo:table-cell>
                       <fo:table-cell>
                         <fo:block>
                           <xsl:for-each select="artists/artist">
-                            <xsl:value-of select="name"/>&#160;
+                            <xsl:value-of select="name"/>
+                            <xsl:if test="position()!=last()">
+                                <xsl:text>,&#160;</xsl:text> 
+                            </xsl:if>
                           </xsl:for-each>
                         </fo:block>
                       </fo:table-cell>
                     </fo:table-row>
                     
                     <fo:table-row height="{$rowHeight}">
-                      <fo:table-cell><fo:block font-weight="bold">Genre</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block font-weight="bold">Genres</fo:block></fo:table-cell>
                       <fo:table-cell>
                         <fo:block>
                           <xsl:for-each select="genres/music-genre">
-                            <xsl:value-of select="name"/>&#160;
+                            <xsl:value-of select="name"/>
+                            <xsl:if test="position()!=last()">
+                                <xsl:text>,&#160;</xsl:text> 
+                            </xsl:if>
                           </xsl:for-each>
                         </fo:block>
                       </fo:table-cell>

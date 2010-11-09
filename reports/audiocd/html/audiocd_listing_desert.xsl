@@ -23,7 +23,7 @@
 
       <tr>
         <th>Title</th>
-        <th>Artist</th>
+        <th>Artists</th>
         <th>Year</th>
         <th>Genres</th>
         <th>Cover</th>
@@ -34,14 +34,22 @@
           <td class="listing"><xsl:value-of select="title"/></td>
           
           <td class="listing"><xsl:for-each select="artists/artist">
-                <xsl:value-of select="name"/>&#160;
-              </xsl:for-each>&#x00A0;</td>
+                <xsl:value-of select="name"/>
+                <xsl:if test="position()!=last()">
+                    <xsl:text>, </xsl:text> 
+                </xsl:if>                  
+              </xsl:for-each></td>
               
           <td class="listing"><xsl:value-of select="year"/>&#x00A0;</td>
           
           <td class="listing">
              <xsl:if test="genres">&#160;</xsl:if>
-             <xsl:for-each select="genres/music-genre"><xsl:value-of select="name"/>&#160;</xsl:for-each>
+             <xsl:for-each select="genres/music-genre">
+                <xsl:value-of select="name"/>
+                <xsl:if test="position()!=last()">
+                    <xsl:text>, </xsl:text> 
+                </xsl:if>                    
+              </xsl:for-each>
           </td>
 
           <td class="listing">
