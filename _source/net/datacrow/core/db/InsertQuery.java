@@ -181,6 +181,10 @@ public class InsertQuery extends Query {
     }
     
     private void updateUI(DcObject dco) {
+        
+        // Note that in the item form (close(boolean b)) the potential parent module's
+        // quick view is already updated. No need to do that here.
+        
         String ID = dco.getID();
         
         dco.getModule().getSearchView().add(dco);

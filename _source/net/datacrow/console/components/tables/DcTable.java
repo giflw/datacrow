@@ -146,7 +146,11 @@ public class DcTable extends JTable implements IViewComponent {
     
     @Override
     public void activate() {
-        buildTable();
+        
+        setListeningForChanges(false);
+        
+        if (columns.isEmpty())
+            buildTable();
 
         setProperties();
         applySettings();
@@ -840,7 +844,6 @@ public class DcTable extends JTable implements IViewComponent {
                 columnNew.setCellRenderer(renderer);
             } else if (field.getFieldType() == ComponentFactory._REFERENCESFIELD) {
                 columnNew.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
-                //columnNew.setMaxWidth(100);
                 columnNew.setCellRenderer(ReferencesTableCellRenderer.getInstance());
             } else if (field.getIndex() == DcObject._SYS_MODULE) {
                 DcShortTextField text = ComponentFactory.getTextFieldDisabled();
@@ -867,13 +870,11 @@ public class DcTable extends JTable implements IViewComponent {
                     break;
                 case ComponentFactory._FILESIZEFIELD:
                     columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
-                    //columnNew.setMaxWidth(100);
                     columnNew.setCellRenderer(FileSizeTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._NUMBERFIELD:
                 case ComponentFactory._DECIMALFIELD:
                     columnNew.setCellEditor(new DefaultCellEditor((JTextField) getEditor(field)));
-                    //columnNew.setMaxWidth(100);
                     columnNew.setCellRenderer(NumberTableCellRenderer.getInstance());
                     break;
                 case ComponentFactory._LONGTEXTFIELD:
@@ -903,7 +904,6 @@ public class DcTable extends JTable implements IViewComponent {
                     columnNew.setCellEditor(new DefaultCellEditor((JComboBox) getEditor(field)));
                     break;
                 case ComponentFactory._RATINGCOMBOBOX:
-                    columnNew.setMinWidth(70);
                     columnNew.setCellRenderer(RatingTableCellRenderer.getInstance());
                     columnNew.setCellEditor(new DefaultCellEditor((DcRatingComboBox) getEditor(field)));
                     break;
@@ -939,6 +939,9 @@ public class DcTable extends JTable implements IViewComponent {
         	loadedRows.clear();
             int[] fields = module.getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder);
             setVisibleColumns(fields);
+            
+            applyHeaders();
+            applyColumnWidths();
         }
     }
 
@@ -988,15 +991,12 @@ public class DcTable extends JTable implements IViewComponent {
                         + definition.getLabel());
             }
         }
-        
-        applyColumnWidths();
-        applyHeaders();
     }
     
     private int getPreferredWidth(int fieldIdx) {
         DcTableSettings settings = (DcTableSettings) module.getSetting(DcRepository.ModuleSettings.stTableSettings);
         // 75 is defined as the default width by Swing
-        return settings == null ? 75 : settings.getWidth(fieldIdx);
+        return settings == null ? 10 : settings.getWidth(fieldIdx);
     }    
 
     private void removeColumns() {
@@ -1022,7 +1022,7 @@ public class DcTable extends JTable implements IViewComponent {
         setRowSelectionAllowed(true);
         setColumnSelectionAllowed(false);
         setRequestFocusEnabled(true);
-        setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        //setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         setAlignmentY(JTable.TOP_ALIGNMENT);
         getTableHeader().setReorderingAllowed(false);
 

@@ -61,6 +61,7 @@ import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.panels.LoanPanel;
 import net.datacrow.console.components.panels.RelatedItemsPanel;
+import net.datacrow.console.views.MasterView;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.ItemTypeDialog;
 import net.datacrow.console.windows.loan.LoanInformationPanel;
@@ -302,7 +303,15 @@ public class ItemForm extends DcFrame implements ActionListener {
                 return;
             }
         }
-
+        
+        if (DcModules.get(moduleIdx).isChildModule()) {
+            // After a child has been edited from within the item form the quick view
+            // of the parent module should be updated to reflect this.
+            // Bit of foul play to do it here but it works..
+            MasterView mv = DcModules.get(moduleIdx).getParent().getSearchView();
+            if (mv != null) mv.getCurrent().refreshQuickView();
+        }
+        
     	saveSettings();
     	
     	if (labels != null)
@@ -317,8 +326,6 @@ public class ItemForm extends DcFrame implements ActionListener {
     	listener = null;
         childView = null;
         template = null;  
-        
-        //if (dcoOrig != null) dcoOrig.release();
         
         ComponentFactory.clean(getJMenuBar());
         setJMenuBar(null);

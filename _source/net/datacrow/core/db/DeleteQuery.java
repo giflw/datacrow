@@ -189,6 +189,11 @@ public class DeleteQuery extends Query {
                 module.getSearchView().refreshQuickView();
         }
         
+        if (dco.getModule().isChildModule()) {
+            if (dco.getModule().getParent().getSearchView() != null)
+                dco.getModule().getParent().getSearchView().refreshQuickView();
+        }
+        
         for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
             if (module.isSearchViewInitialized())
                 module.getSearchView().remove(ID);
