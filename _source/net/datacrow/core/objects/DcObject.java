@@ -1122,7 +1122,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             for (DcFieldDefinition definition : getModule().getFieldDefinitions().getDefinitions()) {
                 if (definition.isUnique()) {
                     fields += fields.length() > 0 ? ", " : "";
-                    fields += definition.getLabel();
+                    fields += getField(definition.getIndex()).getLabel();
                 }
             }
                 
