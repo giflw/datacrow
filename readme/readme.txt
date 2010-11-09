@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.9 BETA VII
-Created on November 7, 2010
+Version 3.9
+Created on November xx, 2010
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -61,6 +61,11 @@ Features:
   RIFF, MOV, IFO, VOB and Mpeg video).
 * Internal HSQL database + SQL query tool for expert users.
 
+Data Crow dows not write information to the registry or any other platform specific 
+folder or structure. All the information is kept withing the Data Crow installation 
+folder. It does not obey platform specific rules and can run on any platform 
+(Windows, Linux and others) having Java 1.6 (from Sun) or higher installed. 
+
 
 ----------------------------------------------------------------------------------------
 2.0 Requirements
@@ -94,40 +99,21 @@ datacrow.exe -db:<database name>
 ----------------------------------------------------------------------------------------
 4.0 Upgrading
 
-Upgrading is as simple as installing the latest version on top of an older version.
-Always make a backup of your data first by using the "Backup & Restore" functionality
-situated in the "tools" menu.
+1) Create a backup ("Backup & Restore" functionality situated in the "tools" menu) from 
+   within the old version. 
+2) Uninstall the old version (or simply delete the Data Crow installation folder).
+3) Install the new version.
+4) Restore the backup created in step 1 on top of this latest version.
 
-Upgrade paths:
-  
-  [Version 2.8.4 and Older]
-  From versions below the 2.8.6 to the latest: Install the 2.8.6 first. 
-  Start Data Crow and start the conversion (answer "yes" on the upgrade question)
-  After a successful upgrade install & run the 2.9.5 version. After this the latest
-  version of Data Crow can be installed.
-  
-  [Versions between 2.8.6 and 2.9.4]  
-  To upgrade 2.8.6 and later versions, but below the 2.9.5 version:
-  first install and run the 2.9.5 version prior to upgrading to the latest version.
-  
-  [Versions between 2.9.5 and 3.0]  
-  First install and run the 3.0 version prior to upgrading to the latest version. 
-
-  [Version 3.4.12 and lower]  
-  Install and run version 3.4.13 prior to installing the 3.4.14 version.
-
-  [Version 3.4.12 and higher]  
-  Install and run the latest version.
+Note that you first have to upgrade to 3.8.16 version before you can upgrade to version
+3.9.0 of Data Crow.
 
 
 ----------------------------------------------------------------------------------------
 5.0 Building the project
 
-In the main directory (\Project) a batch file can be found; build.bat. This
-batch file calls Apache Ant (see http://jakarta.apache.org/) and uses the build.xml
-file. Packages which have been build can be found in the "lib" Directory.
-
-Of course you can also just call Ant within the main directory.
+Use Apache Ant (see http://jakarta.apache.org/) to build this project. Ant will you use
+the build.xml file to compile the full Data Crow project.
 
 
 ----------------------------------------------------------------------------------------
@@ -170,14 +156,7 @@ Additional parameters:
     -datadir:<path>
      Specifies an alternative location for the data folder. Spaces need to be substituted 
      by %20.
-
-   
-Fixing installation / upgrade issues:
-
-When experiencing problems it can be useful to start Data Crow with both the -clearsettings 
-and the -nocache parameters: java -Xmx256m -jar datacrow.jar -nocache - clearsettings
-Note that all your settings will be discarded when you start Data Crow with these parameters!
-
+     
 
 ----------------------------------------------------------------------------------------
 7.0 Credits
@@ -207,16 +186,13 @@ This application would not have succeeded (or even existed) without the help of:
 ----------------------------------------------------------------------------------------
 8.0 License
 
-    Data Crow is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+This program is free software: you can redistribute it and/or modify it under the terms 
+of the GNU General Public License as published by the Free Software Foundation, 
+either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU General Public License for more details. 
 
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see http://www.gnu.org/licenses.
-    
+You should have received a copy of the GNU General Public License along with this program. 
+If not, see http://www.gnu.org/licenses.
