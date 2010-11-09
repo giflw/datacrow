@@ -121,12 +121,17 @@
 														<fo:table-row height="{$rowHeight}">
 															<fo:table-cell background-color="{$labelColor}"
 																padding-top="{$paddingTop}" padding-left="{$paddingLeft}">
-																<fo:block font-weight="bold">Container</fo:block>
+																<fo:block font-weight="bold">Containers</fo:block>
 															</fo:table-cell>
 															<fo:table-cell padding-top="{$paddingTop}"
 																padding-left="{$paddingLeft}">
 																<fo:block>
-																	<xsl:value-of select="container" />
+                                                                    <xsl:for-each select="container/container">
+                                                                        <xsl:value-of select="name" />
+                                                                        <xsl:if test="position()!=last()">
+                                                                            <xsl:text>,&#160;</xsl:text>
+                                                                        </xsl:if>
+                                                                    </xsl:for-each>
 																</fo:block>
 															</fo:table-cell>
 														</fo:table-row>

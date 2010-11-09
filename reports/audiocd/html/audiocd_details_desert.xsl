@@ -52,8 +52,13 @@
                             <tr><th>State</th>
                                 <td><xsl:value-of select="state"/></td></tr>
         
-                            <tr><th>Container</th>
-                                <td><xsl:value-of select="container"/></td></tr>
+                            <tr><th>Containers</th>
+                                <td><xsl:for-each select="container/container">
+                                        <xsl:value-of select="name"/>
+                                        <xsl:if test="position()!=last()">
+                                            <xsl:text>, </xsl:text> 
+                                        </xsl:if>                                          
+                                    </xsl:for-each></td></tr>
         
                             <tr><th>Rating</th>
                                 <td><xsl:value-of select="rating"/></td></tr>

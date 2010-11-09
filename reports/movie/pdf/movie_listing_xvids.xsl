@@ -458,8 +458,13 @@
 						<xsl:value-of select="height" />
 					</fo:block>
 					<fo:block>
-						<xsl:text>Store: </xsl:text>
-						<xsl:value-of select="container" />
+						<xsl:text>Stores: </xsl:text>
+                        <xsl:for-each select="container/container">
+                            <xsl:value-of select="name" />
+                            <xsl:if test="position()!=last()">
+                                <xsl:text>,&#160;</xsl:text>
+                            </xsl:if>
+                        </xsl:for-each>
 					</fo:block>
 					<xsl:apply-templates select="webpage" />
 					<fo:block>

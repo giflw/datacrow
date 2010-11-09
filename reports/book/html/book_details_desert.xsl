@@ -76,9 +76,14 @@
 							</td>
 						</tr>
 						<tr>
-							<th>Container</th>
+							<th>Containers</th>
 							<td>
-								<xsl:value-of select="container" />
+	                            <xsl:for-each select="container/container">
+	                                <xsl:value-of select="name"/>
+	                                <xsl:if test="position()!=last()">
+	                                    <xsl:text>, </xsl:text> 
+	                                </xsl:if>                                          
+	                            </xsl:for-each>
 							</td>
 						</tr>
 						<tr>

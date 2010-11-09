@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9 BETA VII [Release on November 7, 2010] [testing: high] [target: BETA/TEST]
+Data Crow 3.9 [Release on November xx, 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
@@ -100,6 +100,9 @@ New System Requirements:
 - Item is only removed and re-added to the tree if the value has changed of the field
   that is part of the tree structure (performance gain).
 - Column widths for the child table (tracks for example) are not remembered.
+- Reports does not a comma between listings of categories, genres, etc.
+- Containers were not added correctly to the reports. The reporting dictionary did not
+  correctly describe this multiple reference field. 
 
 
 -----------------------------------------------------------------------------------------
