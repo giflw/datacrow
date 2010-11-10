@@ -1,6 +1,9 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9 Beta VIII [Release on November 9, 2010] [testing: high] [target: BETA]
+Data Crow 3.9 Beta VII [Release on November 9, 2010] [testing: high] [target: BETA]
 -----------------------------------------------------------------------------------------
+
+TODO: update modules and make sure the License field is correct
+
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
 Items were always loaded (all of them) on startup, causing a long startup time and 
