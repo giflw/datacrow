@@ -123,6 +123,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     }
     
     private void build() {
+        table.activate();
         table.addMouseListener(this);
         table.setDynamicLoading(false);
         

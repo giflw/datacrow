@@ -29,6 +29,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -40,6 +42,7 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
@@ -54,7 +57,20 @@ public class GroupByDialog extends DcDialog implements ActionListener {
         setTitle(DcResources.getText("lblGrouping"));
         
         this.module = module;
-        this.panelSorting = new FieldSelectionPanel(DcModules.get(module), false, true);
+        
+        Collection<DcField> fields = new ArrayList<DcField>();
+        for (DcField field : DcModules.get(module).getFields()) {
+            
+            if (field.isUiOnly() &&
+                field.getIndex() != DcObject._SYS_MODULE &&
+                field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                field.getFieldType() != ComponentFactory._REFERENCEFIELD) 
+                continue;
+            
+            fields.add(field);
+        }
+        
+        this.panelSorting = new FieldSelectionPanel(DcModules.get(module), fields);
         
         int[] groupBy = DcModules.get(module).getSettings().getIntArray(DcRepository.ModuleSettings.stGroupedBy);
         if (groupBy != null)

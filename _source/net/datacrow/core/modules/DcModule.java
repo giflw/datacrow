@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
@@ -80,6 +79,7 @@ import net.datacrow.settings.definitions.QuickViewFieldDefinitions;
 import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinitions;
 import net.datacrow.synchronizers.Synchronizer;
+import net.datacrow.util.DcImageIcon;
 
 import org.apache.log4j.Logger;
 
@@ -161,8 +161,8 @@ public class DcModule implements Comparable<DcModule> {
     
     private boolean isServingMultipleModules = false;
     
-    private ImageIcon icon16;
-    private ImageIcon icon32;
+    private DcImageIcon icon16;
+    private DcImageIcon icon32;
     
     private String icon16filename;
     private String icon32filename;
@@ -311,8 +311,8 @@ public class DcModule implements Comparable<DcModule> {
         
         icon16filename = module.getIcon16Filename();
         icon32filename = module.getIcon32Filename();
-        icon16 = new ImageIcon(module.getIcon16());
-        icon32 = new ImageIcon(module.getIcon32());
+        icon16 = new DcImageIcon(module.getIcon16());
+        icon32 = new DcImageIcon(module.getIcon32());
         
         nameFieldIdx = module.getNameFieldIdx();
         canBeLended = module.canBeLend();
@@ -454,14 +454,14 @@ public class DcModule implements Comparable<DcModule> {
     /**
      * The small icon used to represent the module.
      */
-    public ImageIcon getIcon16() {
+    public DcImageIcon getIcon16() {
         return icon16;
     }
     
     /**
      * The large icon used to represent the module.
      */
-    public ImageIcon getIcon32() {
+    public DcImageIcon getIcon32() {
         return icon32;
     }
 
@@ -525,7 +525,7 @@ public class DcModule implements Comparable<DcModule> {
      * Sets the small icon used to represent this module.
      * @param icon16
      */
-    public void setIcon16(ImageIcon icon16) {
+    public void setIcon16(DcImageIcon icon16) {
         this.icon16 = icon16;
     }
 
@@ -533,7 +533,7 @@ public class DcModule implements Comparable<DcModule> {
      * Sets the large icon used to represent this module.
      * @param icon16
      */
-    public void setIcon32(ImageIcon icon32) {
+    public void setIcon32(DcImageIcon icon32) {
         this.icon32 = icon32;
     }
     

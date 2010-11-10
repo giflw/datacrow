@@ -107,7 +107,6 @@ public class FileTreePanel extends TreePanel {
     	
         if (treeHugger != null) {
             treeHugger.cancel();
-            while (treeHugger.isAlive()) {} // allow it to hang until the thread ends..
         }
 
         activated = true;

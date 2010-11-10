@@ -751,7 +751,7 @@ public class DataFilter {
             sql.append(")");
         }
         
-        addLoanConditions(getEntries(), sql, hasConditions);
+        addLoanConditions(getEntries(), module, sql, hasConditions);
     }
     
     private void addOrderByClause(StringBuffer sql) {
@@ -805,7 +805,7 @@ public class DataFilter {
         }
     }
     
-    private void addLoanConditions(Collection<DataFilterEntry> entries, StringBuffer sql, boolean hasConditions) {
+    private void addLoanConditions(Collection<DataFilterEntry> entries, DcModule module, StringBuffer sql, boolean hasConditions) {
         
         Object person = null;
         Object duration = null;
@@ -827,16 +827,19 @@ public class DataFilter {
             return;
         
         sql.append(hasConditions ? " AND " : " WHERE ");
+        
+        String maintable = module.getTableName();
 
         String current = formatter.format(new Date());
         String daysCondition = duration != null ? " AND DATEDIFF('dd', startDate , '" + current + "') >= " + duration : "";
         String personCondition = person != null ? " AND PersonID = '" + person + "'" : "";
 
         if (available != null && Boolean.valueOf(available.toString()))
-            sql.append(" ID NOT IN (select objectID from Loans where objectID = ID AND enddate IS NULL AND startDate <= '" + current +  "')");
+            sql.append(" ID NOT IN (select objectID from Loans where objectID = " +  maintable
+                       + ".ID AND enddate IS NULL AND startDate <= '" + current +  "')");
         else
-            sql.append(" ID IN (select objectID from Loans where objectID = ID " + daysCondition + 
-                       " AND enddate IS NULL AND startDate <= '" + current +  "'" + personCondition + ")");
+            sql.append(" ID IN (select objectID from Loans where objectID = " +  maintable
+                       + ".ID "  + daysCondition + " AND enddate IS NULL AND startDate <= '" + current +  "'" + personCondition + ")");
     }   
 
     @Override

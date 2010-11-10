@@ -29,11 +29,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.FieldTreePanelMenuBar;
@@ -111,6 +111,13 @@ public class FieldTreePanel extends TreePanel {
     } 
     
     @Override
+    public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
+        DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode("top");
+        add(dco, 0, node);
+        return node;
+    }
+    
+    @Override
 	public boolean isChanged(DcObject dco) {
     	boolean changed = false;
     	if (fields != null) {
@@ -128,7 +135,6 @@ public class FieldTreePanel extends TreePanel {
     protected void createTree() {
         if (treeHugger != null) {
             treeHugger.cancel();
-            while (treeHugger.isAlive()) {} // allow it to hang until the thread ends..
         }
         
         activated = true;
@@ -214,9 +220,15 @@ public class FieldTreePanel extends TreePanel {
 
             	columns = new StringBuffer("select ");
                 joins = new StringBuffer("from ");
-            	
+                joins.append(module.getTableName());
+                
             	if (moduleCounter > 0)
             		sql.append(" UNION ");
+            	
+                columns.append(module.getTableName());
+                columns.append(".ID, ");
+                columns.append(module.getIndex());
+                columns.append(" AS MODULEIDX");      
             	
 	            for (int idx : fields) {
 	                field = module.getField(idx);
@@ -224,16 +236,7 @@ public class FieldTreePanel extends TreePanel {
 	                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
 	                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
 	                
-	                
-	                if (fieldCounter == 0) {
-	                    columns.append(module.getTableName());
-	                    columns.append(".ID,");
-	                    columns.append(module.getIndex());
-	                    columns.append(" AS MODULEIDX,");	                    
-	                    
-	                } else {
-	                    columns.append(",");
-	                }
+                    columns.append(",");
 	                
 	                joinOn.add(module.getTableName() + fieldCounter + ".ID");
 	                
@@ -242,29 +245,33 @@ public class FieldTreePanel extends TreePanel {
 	
 	                    reference = DcModules.get(field.getReferenceIdx());
 	                    main = field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ? module : 
-	                    DcModules.get(DcModules.getMappingModIdx(getModule(), reference.getIndex(), field.getIndex()));
+	                           DcModules.get(DcModules.getMappingModIdx(module.getIndex(), reference.getIndex(), field.getIndex()));
 	
-	                    if (fieldCounter == 0) {
-	                        joins.append(module.getTableName());
-	                        joins.append(" left outer join ");
-	                    } else {
-	                        joins.append(" left outer join ");
-	                    }
-	                        
 	                    if (    field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
 	                            field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
 	                        
 	                        columns.append("subselect");
 	                        columns.append(fieldCounter);
-	                        columns.append(".ID,");
+	                        columns.append(".ID AS ");
+	                        columns.append("ID");
+	                        columns.append(fieldCounter);
+	                        columns.append(", ");
+	                        
 	                        columns.append("subselect");
 	                        columns.append(fieldCounter);
-	                        columns.append(".name,");
+	                        columns.append(".name AS ");
+	                        columns.append("NAME");
+	                        columns.append(fieldCounter);
+	                        columns.append(", ");
+	                        
 	                        columns.append("subselect");
 	                        columns.append(fieldCounter);                            
-	                        columns.append(".icon");
-	
+	                        columns.append(".icon AS ");
+	                        columns.append("ICON");
+	                        columns.append(fieldCounter);
+	                            
 	                        if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+	                            joins.append(" left outer join ");
 	                            joins.append("(select ");
 	                            joins.append(reference.getTableName());
 	                            joins.append(".ID as ID,");
@@ -306,6 +313,7 @@ public class FieldTreePanel extends TreePanel {
 	                            joins.append(".ID ");
 	
 	                        } else {
+	                            joins.append(" left outer join ");
 	                            joins.append(reference.getTableName());
 	                            joins.append(" ");
 	                            joins.append(" subselect");
@@ -328,20 +336,12 @@ public class FieldTreePanel extends TreePanel {
 	                    columns.append(module.getTableName());
 	                    columns.append(".");
 	                    columns.append(field.getDatabaseFieldName() + " as df");
+	                    columns.append(fieldCounter);
 	                    columns.append(",NULL");
 	                    
 	                    joinOn.add(module.getTableName() + ".ID");
-	                    
-	                    if (fieldCounter == 0) {
-	                        joins.append(module.getTableName());
-	                    } 
 	                }
 	                fieldCounter++;
-	            }
-	            
-	            if (fields == null || fields.length == 0) {
-	            	columns.append("*");
-	            	joins.append(module.getTableName());	
 	            }
 	            
 	            sql.append(columns.toString() + " " + joins.toString());
@@ -356,20 +356,27 @@ public class FieldTreePanel extends TreePanel {
 
             // index based order by
             int level = 0;
+            boolean ordered = false;
             for (int idx : fields) { 
             	field = DcModules.get(getModule()).getField(idx);
                 if (field.isUiOnly() &&
+                    field.getIndex() != DcObject._SYS_MODULE &&
                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
 
-                if (level == 0)
+                if (!ordered) {
                 	 sql.append(" order by ");
-                
-            	if (level > 0)
+                	 ordered = true;
+                } else {
             		sql.append(",");
+                }
             		
-            	sql.append(String.valueOf((level * 3) + 4));
-            	level++;
+            	if (field.getIndex() == DcObject._SYS_MODULE) {
+            	    sql.append("2");
+            	} else {
+            	    sql.append(String.valueOf((level * 3) + 4));
+            	    level++;
+            	}
             }
             createTree(sql.toString());
         }
@@ -395,19 +402,22 @@ public class FieldTreePanel extends TreePanel {
                 String id = null;
                 String value = null;
                 Object key = null;
-                String icon = null;
+                DcImageIcon icon = null;
+                String iconBase64 = null;
                 DcField field = null;
                 int module;
 
-                DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-                
                 DefaultMutableTreeNode current;
                 DefaultMutableTreeNode parent;
                 DefaultMutableTreeNode previous;
                 boolean exists = false;
                 
-                Collection<String> keys = DataFilters.isFilterActive(getModule()) ? 
-						DataManager.getKeyList(DataFilters.getCurrent(getModule())) : null;
+                Map<String, Integer> items = DataManager.getKeys(DataFilters.getCurrent(getModule()));
+                
+                Collection<String> keys = null;
+                if (DataFilters.isFilterActive(getModule())) {
+                    keys = new ArrayList<String>(items.keySet());
+                }
                 
                 while (rs.next() && !stop) {
                     int level = 0;
@@ -417,6 +427,7 @@ public class FieldTreePanel extends TreePanel {
                     	
                     	field = DcModules.get(getModule()).getField(fields[idx]);
                     	if (field.isUiOnly() &&
+                    	    field.getIndex() != DcObject._SYS_MODULE &&
                     	    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
 	                        field.getFieldType() != ComponentFactory._REFERENCEFIELD) 
                     		continue;
@@ -427,9 +438,13 @@ public class FieldTreePanel extends TreePanel {
                         // for each level the field index is shifted to the end.
                         id = rs.getString(1);
                         module = rs.getInt(2);
-                        key = rs.getObject((level * 3) + 3);
-                        value = rs.getString((level * 3) + 4);
-                        icon = rs.getString((level * 3) + 5);
+                        key = field.getIndex() == DcObject._SYS_MODULE ? DcModules.get(module).getLabel() : rs.getObject((level * 3) + 3);
+                        value =  field.getIndex() == DcObject._SYS_MODULE ? DcModules.get(module).getLabel() : rs.getString((level * 3) + 4);
+                        iconBase64 = field.getIndex() != DcObject._SYS_MODULE ? rs.getString((level * 3) + 5) : null;
+                        
+                        icon = field.getIndex() == DcObject._SYS_MODULE ? 
+                                new DcImageIcon(DcModules.get(module).getIcon16().getBytes()) : 
+                                iconBase64 != null ? new DcImageIcon(Base64.decode(iconBase64).getBytes(), false) : null;
                         
                         if (keys != null && !keys.contains(id)) continue;
                         
@@ -442,12 +457,15 @@ public class FieldTreePanel extends TreePanel {
                             if (key == null) {
                                 ne = new NodeElement(null, empty, null);
                             } else {
-                                ne = new NodeElement(key, value, (icon == null ? null : new DcImageIcon(Base64.decode(icon.toCharArray()), false)));
+                                ne = new NodeElement(key, value, icon);
                             }
                             
                             ne.addItem(id, module);
                             current = new DcDefaultMutableTreeNode(ne);
-                            model.insertNodeInto(current, parent, parent.getChildCount());
+                            
+                            parent.add(current);
+                            
+                            //model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
                         } else { // exists
@@ -455,17 +473,20 @@ public class FieldTreePanel extends TreePanel {
                             existingNe.addItem(id, module);
                             parent = previous;    
                         }
-                        level++;
+                        
+                        if (field.getIndex() != DcObject._SYS_MODULE)
+                            level++;
                     }
                 }
                 
                 rs.close();
                 
+                NodeElement topElem = (NodeElement) top.getUserObject();
+                topElem.setItems(items);
+                
             } catch (Exception e) {
                 logger.error(e, e);
             }
-            
-            sort();
         }
     }
     
@@ -484,13 +505,6 @@ public class FieldTreePanel extends TreePanel {
         top.setUserObject(new NodeElement(null, label, null));
     }
 
-    @Override
-    public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
-        DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode("top");
-        add(dco, 0, node);
-        return node;
-    }
-    
     private void add(DcObject dco, int level, DcDefaultMutableTreeNode node) {
         
         int index = level;

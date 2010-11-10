@@ -1,7 +1,5 @@
 package net.datacrow.core.modules.security;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.MasterView;
@@ -16,6 +14,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Permission;
 import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.security.SecurityCentre;
+import net.datacrow.util.DcImageIcon;
 
 /**
  * The permission module holds all permissions as part of the security functionality.
@@ -67,7 +66,7 @@ public class PermissionModule extends DcChildModule {
      * The small icon.
      */
     @Override
-    public ImageIcon getIcon16() {
+    public DcImageIcon getIcon16() {
         return IconLibrary._icoPermission16;
     }
 
@@ -75,7 +74,7 @@ public class PermissionModule extends DcChildModule {
      * The large icon.
      */
     @Override
-    public ImageIcon getIcon32() {
+    public DcImageIcon getIcon32() {
         return IconLibrary._icoPermission32;
     }
 

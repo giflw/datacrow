@@ -1,6 +1,9 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.9 [Release on November xx, 2010] [testing: high] [target: production]
 -----------------------------------------------------------------------------------------
+
+TODO: update modules and make sure the License field is correct
+
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
 Items were always loaded (all of them) on startup, causing a long startup time and 
@@ -60,6 +63,10 @@ New System Requirements:
   chart presentations and printable charts.
 - An option has been added to the quick view settings to show or hide the picture tabs.
   This is a 'per module' setting.
+- Expand All and Collapse All for the grouping pane have been made simpler and quicker.
+  The old method could take minutes on a large tree. Down side of the new method is that
+  only the top nodes are expanded / collapsed. Sadly there is no good performing Java
+  solution for expand all and collapse all on deeply nested trees. 
 
 [Fixed]
 - Image not shown (or flickering) in the card view
@@ -103,6 +110,11 @@ New System Requirements:
 - Reports does not a comma between listings of categories, genres, etc.
 - Containers were not added correctly to the reports. The reporting dictionary did not
   correctly describe this multiple reference field. 
+- The message 'This item is not unique, it already exists.. ' (etc) did not correctly
+  tell you why the item is / was not unique.
+- Bol.com did not retrieve any results as of November 8th, 2010. Fixed.
+  (incorrect HTML syntax on Bol.com: href=""/nl/s)
+- License information for software not save (incorrect column name).
 
 
 -----------------------------------------------------------------------------------------

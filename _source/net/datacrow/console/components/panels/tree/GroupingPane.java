@@ -123,8 +123,12 @@ public class GroupingPane extends JPanel implements ChangeListener {
     }
     
     public void load() {
-    	TreePanel tp = getCurrent();
-		tp.groupBy();
+        for (TreePanel tp : panels) {
+            // the current always must be updated and the activate panels need to be kept in synch
+            // as well to make sure it reflects the current filter
+            if (tp.isActivated() || tp == getCurrent())
+                tp.groupBy();
+        }
     }
     
     public void updateView() {
@@ -149,7 +153,9 @@ public class GroupingPane extends JPanel implements ChangeListener {
         for (TreePanel tp : panels) {
         	if (tp.isEnabled() && tp.isLoaded()) {
 	            tp.sort();
-	            tp.refreshView();
+	            
+	            if (tp == getCurrent())
+	                tp.refreshView();
         	}
         }
     }

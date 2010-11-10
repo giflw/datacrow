@@ -88,6 +88,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         build();
     }
     
+    public boolean isActivated() {
+        return activated;
+    }
+
     public void activate() {
     	if (isShowing() && isEnabled() && !activated) {
     		activated = true;
@@ -240,9 +244,13 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public void collapseAll() {
         if (top == null) return;
-        
-        collapseChildren(top);
-        tree.collapsePath(new TreePath(top.getPath()));
+        try {
+            setSelected(top);
+            tree.collapsePath(new TreePath(top.getPath()));
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+
     }   
     
     public void expandAll() {
@@ -250,19 +258,12 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     }   
     
     private void expandAll(DefaultMutableTreeNode node) {
+        if (top == null) return;
+        
         try {
-            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-            int count = node.getChildCount();
-            tree.expandPath(new TreePath(model.getPathToRoot(node)));
-            
-            DefaultMutableTreeNode current;
-            for (int i = 0; i < count; i++) {
-                current = (DefaultMutableTreeNode) node.getChildAt(i);
-                tree.expandPath(new TreePath(model.getPathToRoot(current)));
-                expandAll(current);
-            }
+            tree.expandPath(new TreePath(top.getPath()));
         } catch (Exception e) {
-            logger.warn("Failed to expand all nodes", e);
+            logger.error(e, e);
         }
     }
     
@@ -284,21 +285,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             }
         } catch (Exception e) {
             logger.error(e, e);
-        }
-    }
-    
-    private void collapseChildren(DefaultMutableTreeNode parent) {
-        int size = parent.getChildCount();
-        
-        DefaultMutableTreeNode child;
-        for (int i = 0; i < size; i++) {
-            try {
-                child = (DefaultMutableTreeNode) parent.getChildAt(i);
-                collapseChildren(child);
-                tree.collapsePath(new TreePath(child.getPath()));
-            } catch (Exception e) {
-                logger.error("An error occurred while collapsing leafs of " + parent, e);
-            }
         }
     }
 
@@ -343,7 +329,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         
         scroller = new JScrollPane(tree);
         
-        add(scroller,  Layout.getGBC( 0, 1, 1, 1, 50.0, 50.0
+        add(scroller,  Layout.getGBC( 0, 1, 1, 1, 50.0, 100.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets(0, 5, 5, 5), 0, 0));
     }     
@@ -426,6 +412,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected abstract void createTree();
     
     public void refreshView() {
+        
+        if (tree == null) 
+            build();
+        
     	DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tree.getLastSelectedPathComponent();
     	if (node != null) {
     		getView().getCurrent().clear();

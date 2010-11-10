@@ -93,7 +93,7 @@
             <field>
                 <index>21</index>
                 <name>License</name>
-                <database-column-name>Categories</database-column-name>
+                <database-column-name>License</database-column-name>
                 <ui-only>false</ui-only>
                 <enabled>true</enabled>
                 <readonly>false</readonly>

@@ -64,16 +64,105 @@ public class HtmlUtils {
     }
     
     public static Document getDocument(URL url, String charset) throws Exception {
+        return getDocument(getHtmlCleaned(url, charset));
+    }
+    
+    public static Document getDocument(String html) throws Exception { 
         
-        HttpConnection connection = HttpConnectionUtil.getConnection(url);
+        ByteArrayInputStream in = new ByteArrayInputStream(html.getBytes());
         
-        String s = connection.getString(charset);
-        connection.close();        
+        Reader reader = new InputStreamReader(in);
+        Document document = builder.newDocument();
+        
+        try {
+            HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
+            parser.parse(reader);
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
 
-        Document document = getDocument(s);
+        in.close();
+        
         return document;
+    }    
+    
+    public static String getHtmlCleaned(URL url, String charset) throws Exception { 
+        HttpConnection connection = HttpConnectionUtil.getConnection(url);
+        String html = connection.getString(charset);
+        connection.close();        
+        
+        if (html.contains("<html") || html.contains("<HTML")) {
+            String title = StringUtils.getValueBetween("<title>", "</title>", html);
+            html = StringUtils.getValueBetween("<body", "</body>", html);
+            html = html.substring(html.indexOf(">") + 1);
+    
+            // start the document
+            StringBuffer sb = new StringBuffer();
+            sb.append("<html>\n");
+            
+            // create the title part
+            if (!Utilities.isEmpty(title)) {
+                sb.append("<head>\n");
+                sb.append("<title>");
+                sb.append(title);
+                sb.append("</title>\n");
+                sb.append("</head>\n");
+            }
+            
+            // create the body
+            sb.append("<body>\n");
+            sb.append(html);
+            sb.append("</body>\n");
+            sb.append("</html>\n");
+            
+            String[][] removeSections = {{"<script", "</script>"},
+                                         {"<style", "</style>"},   
+                                         {"onclick=\"", "\""},
+                                         {"rel=\"", "\""},
+                                         {"<!--", "-->"}};
+            
+            int idx;
+            String part1;
+            String part2;
+            for (String[] sections : removeSections) {
+                while((idx = sb.indexOf(sections[0])) > 0) {
+                    part1 = sb.substring(0, idx);
+                    part2 = sb.substring(sb.indexOf(sections[1], idx + sections[0].length()) + sections[1].length());
+                    
+                    sb.setLength(0);
+                    sb.append(part1);
+                    sb.append(part2);
+                }
+            }
+            
+            String[] removeWords = {"&nbsp;", " href=\"#\""};
+            for (String word : removeWords) {
+                while((idx = sb.indexOf(word)) > 0) {
+                    part1 = sb.substring(0, idx);
+                    part2 = sb.substring(idx + word.length());
+                    
+                    sb.setLength(0);
+                    sb.append(part1);
+                    sb.append(part2);
+                }
+            }
+            
+            html = sb.toString();
+            
+            //perform specific fixes
+            while (html.indexOf("width\"") != -1) {
+                html = html.replace("width\"", "width=\"");
+            }
+            
+            while (html.indexOf("=\"\"/") != -1) {
+                html = html.replace("=\"\"/", "=\"/");
+            }
+        }
+
+        return html;
     }
 
+    
     public static String toPlainText(String html) {
         return toPlainText(html, "ISO-8859-1");
     }
@@ -112,89 +201,5 @@ public class HtmlUtils {
         }
 
         return html;
-    }   
-    
-    protected static Document getDocument(String html) throws Exception { 
-        String s = html;
-        ByteArrayInputStream in;
-        if (s.contains("<html") || s.contains("<HTML")) {
-            String title = StringUtils.getValueBetween("<title>", "</title>", s);
-            s = StringUtils.getValueBetween("<body", "</body>", s);
-            s = s.substring(s.indexOf(">") + 1);
-    
-            // start the document
-            StringBuffer sb = new StringBuffer();
-            sb.append("<html>\n");
-            
-            // create the title part
-            if (!Utilities.isEmpty(title)) {
-                sb.append("<head>\n");
-                sb.append("<title>");
-                sb.append(title);
-                sb.append("</title>\n");
-                sb.append("</head>\n");
-            }
-            
-            // create the body
-            sb.append("<body>\n");
-            sb.append(s);
-            sb.append("</body>\n");
-            sb.append("</html>\n");
-            
-            String[][] removeSections = {{"<script", "</script>"},
-                                         {"<style", "</style>"},   
-                                         {"onclick=\"", "\""},
-                                         {"rel=\"", "\""},
-                                         {"<!--", "-->"}};
-            
-            int idx;
-            for (String[] sections : removeSections) {
-                while((idx = sb.indexOf(sections[0])) > 0) {
-                    String part1 = sb.substring(0, idx);
-                    String part2 = sb.substring(sb.indexOf(sections[1], idx + sections[0].length()) + sections[1].length());
-                    
-                    sb.setLength(0);
-                    sb.append(part1);
-                    sb.append(part2);
-                }
-            }
-            
-            String[] removeWords = {"&nbsp;", " href=\"#\""};
-            for (String word : removeWords) {
-                while((idx = sb.indexOf(word)) > 0) {
-                    String part1 = sb.substring(0, idx);
-                    String part2 = sb.substring(idx + word.length());
-                    
-                    sb.setLength(0);
-                    sb.append(part1);
-                    sb.append(part2);
-                }
-            }
-            
-            s = sb.toString();
-            
-            //perform specific fixes
-            s = s.replace("width\"", "width=\"");
-            
-            in = new ByteArrayInputStream(s.getBytes());
-            
-        } else {
-            in = new ByteArrayInputStream(s.getBytes());
-        }
-
-        // construct all and create a parser
-        Reader reader = new InputStreamReader(in);
-        Document document = builder.newDocument();
-        
-        try {
-            HtmlParser parser = new HtmlParser(new SimpleUserAgentContext(), document);
-            parser.parse(reader);
-        } catch (Exception e) {
-            logger.error(e, e);
-        }
-
-        in.close();
-        
-        return document;
     }    
 }

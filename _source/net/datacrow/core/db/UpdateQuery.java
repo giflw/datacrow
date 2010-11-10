@@ -45,6 +45,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -93,6 +94,10 @@ public class UpdateQuery extends Query {
                 if (!dco.isChanged(field.getIndex()))
                     continue;
                 
+                
+                if (field.getIndex() == Software._Z_LICENSE)
+                    System.out.println();
+                    
                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                     Picture picture = (Picture) dco.getValue(field.getIndex());
                     if (picture != null && (picture.isNew() || picture.isEdited() || picture.isDeleted())) {
@@ -225,8 +230,15 @@ public class UpdateQuery extends Query {
             dco.getModule().getSearchView().update(dco);
         
     	for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-    		if (module.isSearchViewInitialized())
+    		if (module.isSearchViewInitialized()) {
     			module.getSearchView().refreshQuickView();
+    			
+    			// TODO: add update tree statements + update drop down fields here..
+    			// - register combo boxes? (make sure they are released at some point)
+    			// - or, better, register very specific components, so not generic function 
+    			//   (quick filter, etc)
+    			// - or, forget about this.. ??
+    		}
     	}
 
     	for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {

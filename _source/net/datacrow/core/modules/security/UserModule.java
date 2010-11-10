@@ -1,7 +1,5 @@
 package net.datacrow.core.modules.security;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.tables.DcTable;
@@ -17,6 +15,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.security.SecurityCentre;
+import net.datacrow.util.DcImageIcon;
 
 /**
  * The user module represents users.
@@ -47,7 +46,7 @@ public class UserModule extends DcParentModule {
      * The small icon.
      */
     @Override
-    public ImageIcon getIcon16() {
+    public DcImageIcon getIcon16() {
         return IconLibrary._icoUser16;
     }
 
@@ -55,7 +54,7 @@ public class UserModule extends DcParentModule {
      * The large icon.
      */
     @Override
-    public ImageIcon getIcon32() {
+    public DcImageIcon getIcon32() {
         return IconLibrary._icoUser32;
     }
 

@@ -31,6 +31,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -56,6 +57,18 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
     private DcFieldList listLeft;
     
     private DcModule module;
+    
+    public FieldSelectionPanel(DcModule module, Collection<DcField> fields) {
+        this.module = module;
+
+        build();
+
+        for (DcField field : fields)
+            listLeft.add(field);
+
+        elements = new Vector<DcListElement>();
+        elements.addAll(listLeft.getElements());
+    }
     
     public FieldSelectionPanel(DcModule module, boolean allowPictureFields, boolean allowUiFields) {
         this.module = module;
@@ -149,9 +162,6 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         listRight.addMouseListener(new ListMouseListener(ListMouseListener._LEFT));
 
         NavigationPanel panelNav = new NavigationPanel(listRight);
-
-        
-        
         JScrollPane scrollerLeft = new JScrollPane(listLeft);
         scrollerLeft.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollerLeft.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

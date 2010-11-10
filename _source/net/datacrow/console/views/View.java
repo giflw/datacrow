@@ -438,7 +438,6 @@ public class View extends DcPanel implements ListSelectionListener {
         DcObject dco = getSelectedItem();
         
         if (dco != null) {
-            // create a fresh instance
             ItemForm form = new ItemForm(false, getType() == View._TYPE_SEARCH, 
                                          dco, getType() != View._TYPE_SEARCH);
             form.setVisible(true);

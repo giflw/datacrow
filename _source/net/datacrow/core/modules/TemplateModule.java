@@ -25,8 +25,6 @@
 
 package net.datacrow.core.modules;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
 import net.datacrow.console.windows.itemforms.TemplateForm;
@@ -37,6 +35,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
+import net.datacrow.util.DcImageIcon;
 
 /**
  * The template module represents templates. Templates can be applied when creating new
@@ -84,12 +83,12 @@ public class TemplateModule extends DcModule {
     }
 
     @Override
-    public ImageIcon getIcon16() {
+    public DcImageIcon getIcon16() {
         return IconLibrary._icoTemplate;
     }
 
     @Override
-    public ImageIcon getIcon32() {
+    public DcImageIcon getIcon32() {
         return IconLibrary._icoTemplate;
     }        
     

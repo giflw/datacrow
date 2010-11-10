@@ -38,6 +38,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,7 +120,15 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             poller.start();
             
             DataFilters.setCurrent(module.getIndex(), df);
-            Map<String, Integer> keys = DataManager.getKeys(df == null ? DataFilters.getCurrent(module.getIndex()) : df);
+            
+            // do not query here if the grouping pane is enabled; the grouping pane will 
+            // execute the query by itself..
+            Map<String, Integer> keys = 
+                module.getSearchView().getGroupingPane() != null &&
+                module.getSearchView().getGroupingPane().isEnabled() ?
+                        new HashMap<String, Integer>() :
+                        DataManager.getKeys(df == null ? DataFilters.getCurrent(module.getIndex()) : df);
+                        
             DcModules.getCurrent().getSearchView().add(keys);
             
             try {

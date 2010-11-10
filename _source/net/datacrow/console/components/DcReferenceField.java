@@ -108,7 +108,7 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
 
     @Override
     public void notifyItemSaved(DcObject dco) {
-        cb.setSelectedItem(dco);
+        setValue(dco);
     }
 
     private void create() {

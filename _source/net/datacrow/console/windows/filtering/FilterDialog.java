@@ -32,6 +32,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -355,7 +356,13 @@ public class FilterDialog extends DcFrame implements ActionListener {
             DataFilter df = getDataFilter(); 
             DataFilters.setCurrent(module.getIndex(), df);
             
-            Map<String, Integer> keys = DataManager.getKeys(df);
+            // do not query here if the grouping pane is enabled; the grouping pane will 
+            // execute the query by itself..
+            Map<String, Integer> keys = 
+                module.getSearchView().getGroupingPane() != null &&
+                module.getSearchView().getGroupingPane().isEnabled() ?
+                        new HashMap<String, Integer>() : DataManager.getKeys(df);
+            
             parent.setStatus(DcResources.getText("msgSearchHasBeenExecuted"));
             parent.add(keys);
 

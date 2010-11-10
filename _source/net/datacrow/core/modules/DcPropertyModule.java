@@ -27,8 +27,6 @@ package net.datacrow.core.modules;
 
 import java.util.Collection;
 
-import javax.swing.ImageIcon;
-
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcReferencesField;
@@ -39,6 +37,7 @@ import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
+import net.datacrow.util.DcImageIcon;
 
 /**
  * A property module is the simplest module type. <br>
@@ -182,12 +181,12 @@ public class DcPropertyModule extends DcModule {
     }  
     
     @Override
-    public ImageIcon getIcon16() {
+    public DcImageIcon getIcon16() {
         return  super.getIcon16() == null ? IconLibrary._icoModuleTypeProperty16 : super.getIcon16();
     }
 
     @Override
-    public ImageIcon getIcon32() {
+    public DcImageIcon getIcon32() {
         return  super.getIcon32() == null ? IconLibrary._icoModuleTypeProperty32 : super.getIcon32();
     }
 

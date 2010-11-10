@@ -60,7 +60,7 @@ public class DcCardObjectListElement extends DcObjectListElement {
 
     @Override
     public void update(DcObject dco) {
-        if (this.dco.isNew()) {
+        if (this.dco == null || this.dco.isNew()) {
             this.dco = dco;
             clear();
         } else {
