@@ -59,12 +59,16 @@ public class HtmlUtils {
         }
     }
 
-    public static Document getDocument(URL url) throws Exception {
+    public static Document getDocument(URL url, boolean cleanup) throws Exception {
         return getDocument(url, "ISO-8859-1");
     }
     
     public static Document getDocument(URL url, String charset) throws Exception {
-        return getDocument(getHtmlCleaned(url, charset));
+        return getDocument(getHtmlCleaned(url, charset, false));
+    }
+    
+    public static Document getDocument(URL url, String charset, boolean cleanup) throws Exception {
+        return getDocument(getHtmlCleaned(url, charset, cleanup));
     }
     
     public static Document getDocument(String html) throws Exception { 
@@ -86,7 +90,7 @@ public class HtmlUtils {
         return document;
     }    
     
-    public static String getHtmlCleaned(URL url, String charset) throws Exception { 
+    public static String getHtmlCleaned(URL url, String charset, boolean cleanup) throws Exception { 
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         String html = connection.getString(charset);
         connection.close();        
@@ -154,8 +158,11 @@ public class HtmlUtils {
                 html = html.replace("width\"", "width=\"");
             }
             
-            while (html.indexOf("=\"\"/") != -1) {
-                html = html.replace("=\"\"/", "=\"/");
+            if (cleanup) {
+                // only needed for Bol.com
+                while (html.indexOf("=\"\"/") != -1) {
+                    html = html.replace("=\"\"/", "=\"/");
+                }
             }
         }
 
