@@ -45,7 +45,6 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.core.objects.helpers.Software;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -94,10 +93,6 @@ public class UpdateQuery extends Query {
                 if (!dco.isChanged(field.getIndex()))
                     continue;
                 
-                
-                if (field.getIndex() == Software._Z_LICENSE)
-                    System.out.println();
-                    
                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
                     Picture picture = (Picture) dco.getValue(field.getIndex());
                     if (picture != null && (picture.isNew() || picture.isEdited() || picture.isDeleted())) {
