@@ -374,7 +374,7 @@ public class Utilities {
 
     public static DcImageIcon base64ToImage(String base64) {
         byte[] bytes = Base64.decode(base64.toCharArray());
-        return new DcImageIcon(bytes);
+        return new DcImageIcon(bytes, false);
     }
     
     public static byte[] getBytes(DcImageIcon icon) {

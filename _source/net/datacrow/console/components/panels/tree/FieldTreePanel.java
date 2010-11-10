@@ -48,7 +48,6 @@ import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.Base64;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.PollerTask;
 import net.datacrow.util.Utilities;
@@ -444,7 +443,7 @@ public class FieldTreePanel extends TreePanel {
                         
                         icon = field.getIndex() == DcObject._SYS_MODULE ? 
                                 new DcImageIcon(DcModules.get(module).getIcon16().getBytes()) : 
-                                iconBase64 != null ? new DcImageIcon(Base64.decode(iconBase64).getBytes(), false) : null;
+                                iconBase64 != null ? Utilities.base64ToImage(iconBase64) : null;
                         
                         if (keys != null && !keys.contains(id)) continue;
                         
