@@ -1042,7 +1042,7 @@ public class DcTable extends JTable implements IViewComponent {
     
     public boolean load(int row) {
         
-        if (!loadable || view.getType() == View._TYPE_INSERT) return false;
+        if (!loadable || view == null || view.getType() == View._TYPE_INSERT) return false;
         
         boolean loaded = loadedRows.contains(Integer.valueOf(row));
         
