@@ -25,41 +25,66 @@
 
 package net.datacrow.console.menu;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcMenu;
+import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.panels.tree.TreePanel;
-import net.datacrow.console.windows.GroupByDialog;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.DcSwingUtilities;
 
-public class FieldTreePanelMenuBar extends TreePanelMenuBar {
+public class TreePanelMenuBar extends DcMenuBar implements ActionListener {
+    
+    protected final int modIdx;
+    protected final TreePanel treePanel;
+    
+    public TreePanelMenuBar(int modIdx, TreePanel treePanel) {
+        this.modIdx = modIdx;
+        this.treePanel = treePanel;
 
-    public FieldTreePanelMenuBar(int modIdx, TreePanel treePanel) {
-        super(modIdx, treePanel);
+        DcMenu menuEdit = ComponentFactory.getMenu(DcResources.getText("lblEdit"));
+        DcMenuItem menuExpandAll = ComponentFactory.getMenuItem(DcResources.getText("lblExpandAll"));
+        DcMenuItem menuCollapseAll = ComponentFactory.getMenuItem(DcResources.getText("lblCollapseAll"));
         
-        DcMenu menuFields = ComponentFactory.getMenu(DcResources.getText("lblGroupBy"));
+        menuCollapseAll.addActionListener(this);
+        menuCollapseAll.setActionCommand("collapseAll");
         
-        DcMenuItem miGroupBy = ComponentFactory.getMenuItem(DcResources.getText("msgSelectFields"));
-        miGroupBy.setActionCommand("groupBy");
-        miGroupBy.addActionListener(this);
-        menuFields.add(miGroupBy);
+        menuExpandAll.addActionListener(this);
+        menuExpandAll.setActionCommand("expandAll");
         
-        add(menuFields);
+        menuEdit.add(menuCollapseAll);
+        menuEdit.add(menuExpandAll);
+        
+        
+
+        
+        setPreferredSize(new Dimension(100, 22));
+        setMaximumSize(new Dimension(100, 22));
+        setMinimumSize(new Dimension(50, 22));
+        
+        
+        add(menuEdit);
     }
     
-    private void groupBy(String s) {
-        GroupByDialog dlg = new GroupByDialog(modIdx);
-        dlg.setVisible(true);
-    }
-
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("groupBy")) {
-            groupBy(ae.getActionCommand());
+        if (ae.getActionCommand().equals("collapseAll")) {
+            treePanel.collapseChildren(treePanel.getTopNode());
+        } else if (ae.getActionCommand().equals("expandAll")) {
+            treePanel.expandChildren(treePanel.getTopNode());
         } else {
-            super.actionPerformed(ae);
+            
         }
     }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(DcSwingUtilities.setRenderingHint(g));
+    }
 }
+

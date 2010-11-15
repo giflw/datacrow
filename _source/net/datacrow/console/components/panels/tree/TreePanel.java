@@ -257,6 +257,55 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         expandAll(top);
     }   
     
+    public void collapseChildren(DefaultMutableTreeNode parent) {
+        
+        if (parent == null || tree == null) return;
+        
+        int size = parent.getChildCount();
+        
+        setSelected(top);
+        
+        tree.removeTreeSelectionListener(this);
+        
+        DefaultMutableTreeNode child;
+        for (int i = 0; i < size; i++) {
+            try {
+                child = (DefaultMutableTreeNode) parent.getChildAt(i);
+                collapseChildren(child);
+                tree.collapsePath(new TreePath(child.getPath()));
+            } catch (Exception e) {
+                logger.error("An error occurred while collapsing leafs of " + parent, e);
+            }
+            
+            tree.addTreeSelectionListener(this);
+        }
+    }
+    
+    public void expandChildren(DefaultMutableTreeNode parent) {
+        
+        if (parent == null || tree == null) return;
+        
+        int size = parent.getChildCount();
+        
+        setSelected(top);
+        
+        tree.removeTreeSelectionListener(this);
+        
+        DefaultMutableTreeNode child;
+        for (int i = 0; i < size; i++) {
+            try {
+                child = (DefaultMutableTreeNode) parent.getChildAt(i);
+                expandChildren(child);
+                tree.expandPath(new TreePath(child.getPath()));
+            } catch (Exception e) {
+                logger.error("An error occurred while expanding leafs of " + parent, e);
+            }
+        }
+        
+        tree.addTreeSelectionListener(this);
+    }    
+    
+    
     private void expandAll(DefaultMutableTreeNode node) {
         if (top == null) return;
         

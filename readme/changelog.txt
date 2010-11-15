@@ -1,9 +1,6 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9 Beta VII [Release on November 9, 2010] [testing: high] [target: BETA]
+Data Crow 3.9.0  [Released on November 15, 2010]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
-
-TODO: update modules and make sure the License field is correct
-
 This release delivers a significant, mostly technical, change. The data layer, which 
 is the way for Data Crow to load and display items, has been rewritten.
 Items were always loaded (all of them) on startup, causing a long startup time and 
@@ -26,8 +23,7 @@ The following has a direct impact on the performance of the system:
 - Available memory for Data Crow (Java -Xmx256m is recommended).
 
 New System Requirements:
-- Minimum amount of memory: 64MB 
-  (Data Crow will operate sluggishly and use 'a lot of' processor power)
+- Minimum amount of memory: 128MB
 - Recommended amount of memory 256MB.
 - Sun Java 1.6 or higher.
 
@@ -63,10 +59,9 @@ New System Requirements:
   chart presentations and printable charts.
 - An option has been added to the quick view settings to show or hide the picture tabs.
   This is a 'per module' setting.
-- Expand All and Collapse All for the grouping pane have been made simpler and quicker.
-  The old method could take minutes on a large tree. Down side of the new method is that
-  only the top nodes are expanded / collapsed. Sadly there is no good performing Java
-  solution for expand all and collapse all on deeply nested trees. 
+- Default full expansion of the grouping pane tree nodes has been disabled.
+- Removed the table view from the user module.
+- Added expandAll and collapseAll to the file tree panel.
 
 [Fixed]
 - Image not shown (or flickering) in the card view
@@ -113,8 +108,14 @@ New System Requirements:
 - The message 'This item is not unique, it already exists.. ' (etc) did not correctly
   tell you why the item is / was not unique.
 - Bol.com did not retrieve any results as of November 8th, 2010. Fixed.
-  (incorrect HTML syntax on Bol.com: href=""/nl/s)
+  (Incorrect HTML syntax on Bol.com: href=""/nl/s)
 - License information for software not save (incorrect column name).
+- User information could not be changed, message appears 'login name cannot be changed'
+  while the login name has in fact not been changed.
+- MobyGames.com; &#x27; in titles instead of '
+- Discogs online search no longer retrieved the titles for tracks correctly 
+  (HTML change on Discogs site).
+- Imdb person search appends "- IMDb" to each name.
 
 
 -----------------------------------------------------------------------------------------

@@ -570,7 +570,7 @@ public final class ComponentFactory {
         comboBox.setFont(getStandardFont());
         comboBox.setRenderer(AvailabilityComboBoxRenderer.getInstance());
 
-        comboBox.addItem(null);
+        //comboBox.addItem(null);
         comboBox.addItem(Boolean.TRUE);
         comboBox.addItem(Boolean.FALSE);
 

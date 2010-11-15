@@ -36,7 +36,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.Settings;
 
-public class ContainerTreePanelMenuBar extends FieldTreePanelMenuBar {
+public class ContainerTreePanelMenuBar extends TreePanelMenuBar {
 
     public ContainerTreePanelMenuBar(int modIdx, TreePanel treePanel) {
         super(modIdx, treePanel);
@@ -63,8 +63,6 @@ public class ContainerTreePanelMenuBar extends FieldTreePanelMenuBar {
         menuViewHierarchy.addActionListener(this);
         menuViewContainers.addActionListener(this);
         menuViewItems.addActionListener(this);
-        
-        hideGroupBy();
         
         add(menuView);
     }

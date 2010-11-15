@@ -2,7 +2,6 @@ package net.datacrow.core.modules.security;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.lists.DcObjectList;
-import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.UserView;
 import net.datacrow.console.views.View;
@@ -157,19 +156,18 @@ public class UserModule extends DcParentModule {
             searchView = new MasterView(getIndex());
             searchView.setTreePanel(this);
             
-            // table view
-            DcTable table = new DcTable(this, false, true);
-            View tableView = new UserView(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
-            table.setView(tableView);
-            
             // list view
             DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
             View listView = new UserView(searchView, View._TYPE_SEARCH, list, getObjectNamePlural(), getIcon16(), MasterView._LIST_VIEW);
             list.setView(listView);
 
-            searchView.addView(MasterView._TABLE_VIEW, tableView);
             searchView.addView(MasterView._LIST_VIEW, listView);            
         }
+    }
+    
+    @Override
+    public int[] getSupportedViews() {
+        return new int[] {MasterView._LIST_VIEW};
     }
     
     /**

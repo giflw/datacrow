@@ -87,8 +87,7 @@ public class Hash {
                 Long currentFilesize = (Long) dco.getValue(DcObject._SYS_FILESIZE);
                 
                 // check if the file size should be set
-                if (currentFilesize == null || (dco.isChanged(DcObject._SYS_FILENAME) && 
-                                               !dco.isChanged(DcObject._SYS_FILESIZE))) {
+                if (currentFilesize == null || dco.isChanged(DcObject._SYS_FILENAME)) {
                     fileSize = Utilities.getSize(new File(filename));
                 } else {
                     fileSize = currentFilesize;

@@ -36,6 +36,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import net.datacrow.console.menu.TreePanelMenuBar;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
@@ -73,6 +74,11 @@ public class FileTreePanel extends TreePanel {
     @Override
     public String getName() {
         return DcResources.getText("lblFileStructure");
+    }
+    
+    @Override
+    protected JMenuBar getMenu() {
+        return new TreePanelMenuBar(getModule(), this);
     }
     
     @Override
@@ -267,10 +273,5 @@ public class FileTreePanel extends TreePanel {
             
             sort();
         }
-    }
-
-    @Override
-    protected JMenuBar getMenu() {
-        return null;
     }
 }

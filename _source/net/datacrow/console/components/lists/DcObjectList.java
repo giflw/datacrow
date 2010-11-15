@@ -71,6 +71,8 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     private DcObjectListRenderer renderer = new DcObjectListRenderer();
     
+    private boolean autoScroll = true;
+    
     private ViewUpdater vu;
     
     private boolean ignorePaintRequests = false;
@@ -423,7 +425,10 @@ public class DcObjectList extends DcList implements IViewComponent {
         getDcModel().addElement(element);
         
         int index = getModel().getSize() - 1;
-        ensureIndexIsVisible(index);
+        
+        if (autoScroll)
+            ensureIndexIsVisible(index);
+        
         return index;
     }
     

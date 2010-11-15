@@ -648,7 +648,7 @@ public class DcTable extends JTable implements IViewComponent {
 	@Override
     public void setSelected(int row) {
 		
-		if (row + 1 > getRowCount())
+		if (row + 1 > getRowCount() || getColumnCount() == 0)
 			return;
 		
         try {

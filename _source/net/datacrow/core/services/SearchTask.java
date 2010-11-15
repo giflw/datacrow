@@ -68,7 +68,7 @@ public abstract class SearchTask extends Thread {
     
     protected IOnlineSearchClient listener;
     
-    private int maximum = 20;
+    private int maximum = 200;
     
     private String input;
     private String query;

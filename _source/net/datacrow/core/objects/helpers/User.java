@@ -71,10 +71,13 @@ public class User extends DcObject {
     	super.checkIntegrity();
     	
     	if (!isNew() & isChanged(User._A_LOGINNAME)) {
-    		DcObject original = DataManager.getItem(DcModules._USER, getID());
-    		setValue(User._A_LOGINNAME, original.getValue(User._A_LOGINNAME));
-    		getValueDef(User._A_LOGINNAME).setChanged(false);
-    		throw new ValidationException(DcResources.getText("msgLoginnameIsNotAllowedToChange"));
+    		DcObject original = DataManager.getItem(DcModules._USER, getID(), new int[] {User._A_LOGINNAME, DcObject._ID});
+    		
+    		if (!original.getValue(User._A_LOGINNAME).equals(getValue(User._A_LOGINNAME))) {
+        		setValue(User._A_LOGINNAME, original.getValue(User._A_LOGINNAME));
+        		getValueDef(User._A_LOGINNAME).setChanged(false);
+        		throw new ValidationException(DcResources.getText("msgLoginnameIsNotAllowedToChange"));
+    		}
     	}
     }
 

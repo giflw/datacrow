@@ -79,9 +79,9 @@ public class UserForm extends ItemForm {
     public void close(boolean afterSave) {
         super.close(afterSave);
         
-        modulePermissionPanel.clear();
+        if (modulePermissionPanel != null) modulePermissionPanel.clear();
         modulePermissionPanel = null;
-        pluginPermissionPanel.clear();
+        if (pluginPermissionPanel != null) pluginPermissionPanel.clear();
         pluginPermissionPanel = null;
     }
 
