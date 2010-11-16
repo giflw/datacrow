@@ -1,0 +1,113 @@
+[General]
+MASTER_PAD_VERSION_INFO/MASTER_PAD_EDITOR_URL=http://robosoft.rudenko.com
+RoboSoft/Product_UIN=APP-00A504F5A86
+RoboSoft/Publish_on_CD=FALSE
+Company_Info/Contact_Info/Author_First_Name=Robert Jan
+Company_Info/Contact_Info/Author_Last_Name=van der Waals
+Company_Info/Contact_Info/Author_Email=info@datacrow.net
+NewsFeed/NewsFeed_FORM=Y
+NewsFeed/NewsFeed_VERSION=1.0
+NewsFeed/NewsFeed_URL=http://Submit-Everywhere.com/extensions/NewsFeed.htm
+NewsFeed/NewsFeed_DESCRIPTION=This PAD extension allows you to add your RSS and Atom news feeds info into your PAD file. This info can be used by RSS feed submission software or by feed directories themselves.
+NewsFeed/NewsFeed_Type=RSS 0.90
+NewsFeed/NewsFeed_Language=English
+NewsFeed/NewsFeed_Purpose=News
+NewsFeed/NewsFeed_Author_Email=info@datacrow.net
+NewsFeed/NewsFeed_Author_First_Name=Robert Jan
+NewsFeed/NewsFeed_Author_Last_Name=van der Waals
+Program_Info/Program_Name=Data Crow
+Program_Info/Program_Version=3.9
+Program_Info/Program_Release_Month=11
+Program_Info/Program_Release_Day=15
+Program_Info/Program_Release_Year=2010
+Program_Info/Program_Cost_Dollars=0
+Program_Info/Program_Type=Freeware
+Program_Info/Program_Release_Status=Major Update
+Program_Info/Program_Install_Support=Install and Uninstall
+Program_Info/Program_OS_Support=WinXP,WinVista,WinVista x64,Win2000,WinOther,Other,Mac OS X,Mac Other,WinServer,Win98,Linux,Java,Linux Gnome,Linux GPL,Linux Open Source
+Program_Info/Program_Language=English,Dutch,French,German,Italian,Spanish
+Program_Info/Program_Change_Info=This release contains many small improvements.
+Program_Info/Program_System_Requirements=512MB of memory / P3 800MHZ
+Program_Info/Program_Category_Class=Home & Hobby::Cataloging
+Program_Info/File_Info/File_Size_Bytes=45278134
+Program_Info/File_Info/File_Size_K=44216
+Program_Info/File_Info/File_Size_MB=43.18
+Program_Info/Expire_Info/Has_Expire_Info=N
+Program_Info/Expire_Info/Expire_Based_On=Days
+Program_Info/Program_Categories=Home & Hobby :: Home Inventory,MP3 & Audio :: Organizers,Education :: Collecting,Multimedia and Design :: Cataloging
+Web_Info/Application_URLs/Application_Info_URL=http://www.datacrow.net
+Web_Info/Application_URLs/Application_Order_URL=http://www.datacrow.net
+Web_Info/Application_URLs/Application_Screenshot_URL=http://www.datacrow.net/pics/screenshots/software.png
+Web_Info/Application_URLs/Application_Icon_URL=http://www.datacrow.net/datacrow.gif
+Web_Info/Application_URLs/Application_XML_File_URL=http://www.datacrow.net/data_crow.xml
+Web_Info/Download_URLs/Primary_Download_URL=http://downloads.sourceforge.net/project/datacrow/Production%2520versions/3.9.0/datacrow_3_9_0_installer.zip
+Permissions/Distribution_Permissions=This product can be freely distributed through the Internet. To put it onto a CD, contact rwaals@datacrow.net.
+Permissions/EULA=Data Crow: The Ultimate Cataloger%0D%0ACopyright (C) 2010 Robert Jan van der Waals%0D%0A%0D%0AThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.%0D%0A%0D%0AThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses.
+Program_Descriptions/English/Keywords=Cataloging, Software, Audio,Books, Movies,Music, Games, Images
+Program_Descriptions/English/Char_Desc_45=The Ultimate Cataloger for anything
+Program_Descriptions/English/Char_Desc_80=The Ultimate Cataloger for anything. Highly customizable.
+Program_Descriptions/English/Char_Desc_250=Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here!
+Program_Descriptions/English/Char_Desc_450=Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself.
+Program_Descriptions/English/Char_Desc_2000=Data Crow is the ultimate cataloger. Always wanted to manage all your collections in one product? You want a product you can customize to your needs? Your search ends here! Using Data Crow allows you to create a huge database containing all your collected items. You can use the excellent online services to retrieve the information instead of typing all the information yourself. Don't strain yourself in organizing your items and trying to keep track of their location, start using the best cataloging software today. Start using Data Crow.%0D%0A%0D%0A- Out of the box experience.%0D%0A- Audio, image, software, book, movie and photo collections organizer.%0D%0A- Customizable UI: select a skin, change the fonts, customize views and much more.%0D%0A- Build and share your own modules by using the advanced module wizards.%0D%0A- An internal web server and a web GUI.%0D%0A- Import file information (parse mp3, divx and other files).%0D%0A- Everything in Data Crow can be modified to your own needs! Design your own forms, add your own categories, genres, states, ..%0D%0A- Rename your files based on the item information in Data Crow.%0D%0A- Advanced user management.%0D%0A- Keep track of loaned items using the simple loan management system.%0D%0A- Use online services like Amazon.com, Imdb.com, Musicbrainz.org, and many others, to retrieve information%0D%0A- Create pdf and html reports. Create your own reports by supplying new XSLT documents.%0D%0A- Use templates to fill your default values.%0D%0A- Mass update your items.%0D%0A- Auto number your items using the auto numbering functionality.%0D%0A- Create a backup of your items and settings by using the "backup & restore" functionality.%0D%0A- Easily upgrade to newer versions of Data Crow.
+RoboSoft/Company_UIN=CMP-00A504CD49A
+Delphi/FORM=Y
+Delphi/D1=FALSE
+Delphi/D2=FALSE
+Delphi/D3=FALSE
+Delphi/D4=FALSE
+Delphi/D5=FALSE
+Delphi/D6=FALSE
+Delphi/D7=FALSE
+Delphi/BCB1=FALSE
+Delphi/BCB3=FALSE
+Delphi/BCB4=FALSE
+Delphi/BCB5=FALSE
+Delphi/BCB6=FALSE
+Delphi/K1=FALSE
+Delphi/K2=FALSE
+Delphi/K3=FALSE
+Delphi/Type=Freeware
+Delphi/Source=Included
+Delphi/File_Location=Uploaded or will be soon
+Affiliates/Affiliates_FORM=Y
+Affiliates/Affiliates_FORM_VER=1.4
+Affiliates/Affiliates_VERSION=1.4
+Affiliates/Affiliates_URL=http://www.asp-shareware.org/pad/extensions/Affiliates.htm
+Site/Site_FORM=Y
+Site/Site_VERSION=1.0
+Site/Site_URL=http://Submit-Everywhere.com/extensions/Site.htm
+Site/Site_DESCRIPTION=This PAD extension allows you to add your site info into your PAD file. This info can be used by site submission software or by web directories themselves.
+Site/Site_Contact_Email=info@datacrow.net
+Site/Site_Contact_First_Name=Robert Jan
+Site/Site_Contact_Last_Name=van der Waals
+
+[Site Login]
+
+[Site Password]
+
+[Comments]
+
+[Version Listed]
+
+[Version Submitted]
+
+[Version Autofound]
+
+[Date Submitted]
+
+[Search Results Short]
+
+[Search Flag]
+
+[Program Category]
+
+[StatusOverride]
+
+[Product Listings]
+
+[Dynamic_PAD]
+
+[Autosearch Info]
+
+[ASBM Info]
+
