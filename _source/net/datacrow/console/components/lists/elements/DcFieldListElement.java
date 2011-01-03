@@ -35,6 +35,7 @@ import net.datacrow.core.objects.DcField;
 
 public class DcFieldListElement extends DcListElement {
     
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private static final Dimension dim = new Dimension(360, 30);
     
     private DcField field;
@@ -58,7 +59,7 @@ public class DcFieldListElement extends DcListElement {
         if (field == null)
             return;
         
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
         JLabel labelField = ComponentFactory.getLabel(field.getLabel());
         labelField.setPreferredSize(new Dimension(360, 30));
         add(labelField);

@@ -293,10 +293,10 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             // other settings depend on the global definitions settings
             definitions.checkDependencies();
 
-            if (module.getSearchView() != null)
+            if (module.hasSearchView())
                 module.getSearchView().applySettings();
 
-            if (module.getInsertView() != null)
+            if (module.hasInsertView())
                 module.getInsertView().applySettings();
 
             for (DcFieldDefinition def : definitions.getDefinitions()) {

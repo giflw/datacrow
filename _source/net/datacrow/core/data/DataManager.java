@@ -32,6 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
+import net.datacrow.core.objects.DcSimpleValue;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.Tab;
@@ -56,6 +58,7 @@ import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
@@ -67,6 +70,79 @@ import org.apache.log4j.Logger;
 public class DataManager {
 
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
+    
+    private static Map<String, DcImageIcon> icons = new HashMap<String, DcImageIcon>();
+    
+    static {
+        for (String file : new File(DataCrow.iconsDir).list()) {
+            icons.put(file.substring(0, file.length() - 4), new DcImageIcon(DataCrow.iconsDir + file));
+        }
+    }
+    
+    public static DcImageIcon addIcon(String ID, String base64) {
+        if (icons.containsKey(ID)) {
+            return icons.get(ID);
+        } else { 
+            DcImageIcon icon = null;
+            if (base64 != null) {
+                icon = Utilities.base64ToImage(base64);
+                icon.setFlushable(false);
+                String filename = DataCrow.iconsDir + ID + ".png";
+                icon.setFilename(filename);
+                try {
+                    Utilities.writeToFile(icon, filename);
+                } catch (Exception e) {
+                    logger.error(e, e);
+                    icon = null;
+                }
+            }
+            icons.put(ID, icon);
+            return icon;
+        }
+    }
+
+    public static DcImageIcon getIcon(DcObject dco) {
+        DcImageIcon icon;
+        if (icons.containsKey(dco.getID())) {
+            icon = icons.get(dco.getID());
+        } else {
+            icon = dco.createIcon();
+            if (icon != null) {
+                try {
+                    icon.setFlushable(false);
+                    String filename = DataCrow.iconsDir + dco.getID() + ".png";
+                    icon.setFilename(filename);
+                    Utilities.writeToFile(icon, filename);
+                } catch (Exception e) {
+                    logger.error(e, e);
+                    icon = null;
+                }
+            }
+            icons.put(dco.getID(), icon);
+        }
+        
+        return icon;
+    }
+    
+    public static void removeIcon(String ID) {
+        updateIcon(ID);
+    }
+
+    public static void updateIcon(String ID) {
+        DcImageIcon icon = icons.remove(ID);
+        if (icon != null) { 
+            new File(icon.getFilename()).delete();
+            icon.setFlushable(true);
+            icon.flush();
+        }
+    }
+    
+    public static void deleteIcons() {
+        for (DcImageIcon icon : icons.values()) {
+            if (icon != null)
+                new File(icon.getFilename()).delete();
+        }
+    }
     
     public static int getCount(int module, int field, Object value) {
         int count = 0;
@@ -467,7 +543,6 @@ public class DataManager {
         
             ps.close();
             rs.close();
-            conn.close();
         } catch (SQLException se) {
             logger.error(se, se);
         }
@@ -566,6 +641,45 @@ public class DataManager {
     
     public static Map<String, Integer> getKeys(DataFilter filter) {
         return DatabaseManager.getKeys(filter);
+    }
+
+    /**
+     * Retrieve items using the specified data filter.
+     * @see DataFilter
+     * @param filter
+     * @param fields 
+     */
+    public static List<DcSimpleValue> getSimpleValues(int module, boolean icons) {
+        DcModule m = DcModules.get(module);
+        boolean useIcons = icons && m.getIconField() != null;
+        String sql = "select ID, " + m.getField(m.getDisplayFieldIdx()).getDatabaseFieldName() + 
+                      (useIcons ? ", " + m.getIconField().getDatabaseFieldName() : " ") +  
+                     " from " + m.getTableName() +
+                     " order by 2";
+
+        List<DcSimpleValue> values = new ArrayList<DcSimpleValue>();
+        try {
+            ResultSet rs = DatabaseManager.executeSQL(sql);
+            DcImageIcon icon; 
+            DcSimpleValue sv;
+            String s;
+            while (rs.next()) {
+                sv = new DcSimpleValue(rs.getString(1), rs.getString(2));
+                if (useIcons) {
+                    s = rs.getString(3);
+                    if (!Utilities.isEmpty(s)) {
+                        icon = Utilities.base64ToImage(s);
+                        sv.setIcon(icon);
+                    }
+                }
+                values.add(sv);
+            }
+                
+        } catch (SQLException se) {
+            DcSwingUtilities.displayErrorMessage(se.getMessage());
+            logger.error(se, se);
+        }
+        return values;
     }
     
     /**

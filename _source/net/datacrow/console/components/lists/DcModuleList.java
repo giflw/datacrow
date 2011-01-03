@@ -59,6 +59,7 @@ import org.apache.log4j.Logger;
 
 public class DcModuleList extends DcList implements ListSelectionListener {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private static Logger logger = Logger.getLogger(DcModuleList.class.getName());
     
     protected int currentIndex = -1;
@@ -190,7 +191,7 @@ public class DcModuleList extends DcList implements ListSelectionListener {
         public static final int _ICON32 = 1;
         
         public ModulePanel(DcModule module, int icon) {
-            super(new FlowLayout(FlowLayout.LEFT));
+            super(layout);
             this.module = module.getIndex();
 
             if (icon == _ICON16) {

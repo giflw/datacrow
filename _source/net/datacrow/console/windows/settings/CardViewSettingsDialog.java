@@ -79,10 +79,10 @@ public class CardViewSettingsDialog extends DcDialog implements ActionListener {
         module.setSetting(DcRepository.ModuleSettings.stCardViewItemDescription, fields);
         cisp.save();
         
-        if (module.getSearchView() != null)
+        if (module.hasSearchView())
             module.getSearchView().applySettings();
 
-        if (module.getInsertView() != null)
+        if (module.hasInsertView())
             module.getInsertView().applySettings();
         
         close();

@@ -99,7 +99,7 @@ public class XmlModuleWriter {
     }
 
     private String getString(String s) {
-        return s == null ? "" : s;
+        return s == null ? "" : s.replaceAll("&", "&#38;");
     }
     
     private void writeFields(XmlModule module, int level) {

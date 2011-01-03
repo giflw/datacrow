@@ -1,9 +1,6 @@
 package net.datacrow.core.wf.requests;
 
-import java.util.Collection;
-
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.User;
 
 /**
@@ -21,7 +18,7 @@ public class CreateUserRequest implements IRequest {
     }
 
     @Override
-    public void execute(Collection<DcObject> objects) {
+    public void execute() {
         DatabaseManager.createUser(user, "");
     }
     

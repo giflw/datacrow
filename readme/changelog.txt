@@ -1,4 +1,47 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.1  [Released on January 3, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+The "Happy New Year!" additions.. ;-)
+
+Building upon the changes made in Data Crow 3.9 this release offers more performance
+improvements and fixes.
+
+[Changed]
+- Within the Amazon Server Configuration you can now enter your AWS Access Key ID and 
+  the Secret Key. By default a shared access key is used which can cause timeouts when
+  multiple users are trying to query the server. Registering to the AWS site will provide
+  you with your very own access key. Accounts can be registered here:
+  http://aws.amazon.com/
+- Icons are now shown in both the Quick View and the Item Form.
+
+[Fixed]
+- Values removed after saving an item using 'save all' from the tool bar.
+- Any '&' character used in the module wizard caused Data Crow to crash when restarting.
+- Data Crow slows down when switching between modules or filter fields;
+  when the quick filter was build the list of possible items was retrieved. In case of
+  10.000 or more actors (for example) this would take about 30 seconds to be filled. 
+  Now, this only takes a couple of seconds.
+- Very slow working "Advanced Filter" editing. Basically the same issue as mentioned 
+  above; when the select box is filled with for example 10.000 actors Data Crow would
+  crawl to a halt.
+- Very slow working "Web Server". Same issue as mentioned above, related to retrieval
+  of values for the quick and advanced filters.
+- Added re-use of database connections for better performance.
+- Extremely slow module importer.
+- Items not removed from the table view when saving new items.
+- Improved the speed for deleting massive numbers of items.
+- Improved the speed for saving massive numbers of new items.
+- Fixed issues where view would loose focus when saving updates.
+- Icons are now cached. On first startup you might experience a slow down when starting
+  the system. Second startup will eliminate this slow down.
+- The character "'" in a field definition would break the reporting module
+- The character "&" in a field definition would break the XML module, causing Data Crow
+  to crash
+- IMDB added a trailing space behind the title of a movie
+- Not all genres of a movie were imported from IMDB
+- Cannot launch files from the quick view panel
+  
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.0  [Released on November 15, 2010]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 This release delivers a significant, mostly technical, change. The data layer, which 

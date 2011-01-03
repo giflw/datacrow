@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.9.0
-Created on November 15, 2010
+Version 3.9.1
+Created on January 3, 2011
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -173,7 +173,7 @@ This application would not have succeeded (or even existed) without the help of:
 * http://musicbrainz.org for allowing me to retrieve Music Albums.
 * Amazon.com for allowing me to retrieve data from their web servers.
   http://www.amazon.com
-* Imdb.com for allowing me to extract data from their database .
+* Imdb.com for allowing me to extract data from their database.
   http://www.imdb.com
 * JAudioTagger which I use to parse audio file information.
   http://www.jthink.net/jaudiotagger

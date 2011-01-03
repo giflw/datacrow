@@ -25,8 +25,6 @@
 
 package net.datacrow.core.wf.requests;
 
-import java.util.Collection;
-
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.MainFrame;
@@ -35,7 +33,6 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.TemplateModule;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
 public class StatusUpdateRequest implements IRequest {
@@ -54,7 +51,7 @@ public class StatusUpdateRequest implements IRequest {
     }
 
     @Override
-    public void execute(Collection<DcObject> objects) {
+    public void execute() {
         SwingUtilities.invokeLater(new Updater(module, msgID, tab));
         end();
     }

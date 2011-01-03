@@ -66,6 +66,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
+import net.datacrow.core.objects.DcSimpleValue;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.PollerTask;
@@ -151,6 +152,8 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         Object value = comboCriteria.getSelectedItem();
         if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX)
             value = value != null && value.equals(Long.valueOf(-1)) ? null : value;
+        if (value instanceof DcSimpleValue)
+            value = ((DcSimpleValue) value).getID();
         
         value = value != null && value instanceof String ? ((String) value).trim() : value;
         
@@ -201,20 +204,23 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
         comboCriteria.addItem(" ");
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-            
-            int[] fields;
-            if (DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE) {
-                fields = new int[] {DcObject._ID, DcProperty._A_NAME, DcProperty._B_ICON};
+            if (DataManager.getCount(field.getReferenceIdx(), -1, null) > 1000) {
+                for (DcSimpleValue value : DataManager.getSimpleValues(field.getReferenceIdx(), false))
+                    comboCriteria.addItem(value);
             } else {
-                fields = new int[] {DcObject._ID, DcModules.get(field.getReferenceIdx()).getDisplayFieldIdx()};
+                int[] fields;
+                if (DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE)
+                    fields = new int[] {DcObject._ID, DcProperty._A_NAME, DcProperty._B_ICON};
+                else
+                    fields = new int[] {DcObject._ID, DcModules.get(field.getReferenceIdx()).getDisplayFieldIdx()};
+                
+                List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);
+                for (Object o : objects)
+                    comboCriteria.addItem(o);
+                
+                comboCriteria.setRenderer(ComboBoxRenderer.getInstance());
+                comboCriteria.setEditable(false);
             }
-            
-            List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);
-            for (Object o : objects)
-                comboCriteria.addItem(o);
-            
-            comboCriteria.setRenderer(ComboBoxRenderer.getInstance());
-            comboCriteria.setEditable(false);
             
         } else if (c instanceof JComboBox) {
             JComboBox combo = (JComboBox) c;

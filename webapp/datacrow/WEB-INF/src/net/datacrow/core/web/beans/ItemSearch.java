@@ -188,10 +188,12 @@ public class ItemSearch extends DcBean {
                         Operator.CONTAINS, value);
                 
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                    dfe.setValue(DataManager.getItem(field.getReferenceIdx(), s));
+                    dfe.setValue(DataManager.getItem(field.getReferenceIdx(), s,
+                            new int[] {DcObject._ID, DcModules.getReferencedModule(field).getSystemDisplayFieldIdx()}));
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     Collection<DcObject> references = new ArrayList<DcObject>();
-                    references.add(DataManager.getItem(field.getReferenceIdx(), s));
+                    references.add(DataManager.getItem(field.getReferenceIdx(), s, 
+                            new int[] {DcObject._ID, DcModules.getReferencedModule(field).getSystemDisplayFieldIdx()}));
                     dfe.setValue(references);
                 }
                 

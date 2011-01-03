@@ -31,6 +31,10 @@ public class Converter {
     public static String getValidXmlTag(String s) {
         String tag = s == null ? "" : s;
         tag = tag.replaceAll(" ", "-");
+        tag = tag.replaceAll("'", "_");
+        tag = tag.replaceAll(":", "_");
+        tag = tag.replaceAll(";", "_");
+        tag = tag.replaceAll(";", "_");
         tag = tag.replaceAll("[()]", "");
         tag = tag.replaceAll("[?]", "");
         tag = tag.toLowerCase();

@@ -108,6 +108,9 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
+        public static final String stAwsSecretKey = "aws_secret_key";
+        public static final String stAmazonFirstStartChecked = "amazon_first_start_check";
+        public static final String stAwsAccessKeyId = "aws_access_key_id";
         public static final String stUsage = "usage_data_crow_starts";
         public static final String stAskForDonation = "allow_me_to_ask_for_a_donation";
     	public static final String stHighRenderingQuality = "high_rendering_quality";

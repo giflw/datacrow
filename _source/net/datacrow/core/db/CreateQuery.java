@@ -108,7 +108,6 @@ public class CreateQuery extends Query {
         
         try {
             if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
         } catch (SQLException e) {
             if (isLog())
                 logger.error("Error while closing connection", e);

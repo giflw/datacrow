@@ -401,7 +401,6 @@ public class Utilities {
             bos.flush();
             bytes = baos.toByteArray();
             bi.flush();
-            image.flush();
         } catch (IOException e) {
             logger.error(e, e);
         } 
@@ -650,7 +649,7 @@ public class Utilities {
         g.dispose();
         
         bi.flush();
-        image.flush();
+//        image.flush();
         
         return bi;
     }

@@ -53,6 +53,7 @@ import org.apache.log4j.Logger;
 
 public class FieldSelectorDialog extends DcDialog implements ActionListener { 
     
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.RIGHT);
     private static Logger logger = Logger.getLogger(FieldSelectorDialog.class.getName());    
     
     private final int modIdx;
@@ -108,7 +109,7 @@ public class FieldSelectorDialog extends DcDialog implements ActionListener {
                              new Insets(5, 5, 5, 5), 0, 0));        
         
         JPanel panelActions = new JPanel();
-        panelActions.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        panelActions.setLayout(layout);
 
         JButton buttonApply = ComponentFactory.getButton(DcResources.getText("lblApply"));
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));

@@ -97,7 +97,7 @@ public abstract class Query {
 
     public abstract List<DcObject> run();
     
-    protected void handleRequest(Collection<DcObject> items, boolean success) {
+    protected void handleRequest(boolean success) {
         if (requests != null)  {
             Requests uiRequests = new Requests();
 
@@ -106,11 +106,11 @@ public abstract class Query {
                 if (request instanceof IUpdateUIRequest)
                     uiRequests.add(request);
                 else 
-                    request.execute(items);
+                    request.execute();
             }
 
             if (uiRequests.size() > 0)
-            	WorkFlow.handleRequests(items, uiRequests, success);
+            	WorkFlow.handleRequests(uiRequests, success);
         }
         
     }

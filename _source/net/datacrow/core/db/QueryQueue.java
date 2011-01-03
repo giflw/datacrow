@@ -71,7 +71,7 @@ public class QueryQueue extends Thread {
                         query.run();
                     } else {
                         isLazy = true;
-                        sleep(1000);
+                        sleep(10);
                     }
                 } catch (Exception e) {
                     logger.error(e, e);

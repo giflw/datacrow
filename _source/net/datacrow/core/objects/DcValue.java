@@ -237,7 +237,12 @@ public class DcValue implements Serializable {
                             Date date = !o.equals("") ? formatter.parse((String) o) : null;
                             setValueNative(date, field);
                         } catch (java.text.ParseException e) {
-                            logger.error("Could not parse date for field " + field.getLabel(), e);
+                            try {
+                                Date date = new SimpleDateFormat().parse((String) o);
+                                setValueNative(date, field);
+                            } catch (java.text.ParseException e2) {
+                                logger.debug("Could not parse date for field " + field.getLabel(), e2);
+                            }
                         }
                     }
                 } else {

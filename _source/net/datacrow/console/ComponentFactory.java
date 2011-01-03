@@ -27,6 +27,7 @@ package net.datacrow.console;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -71,6 +72,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import jonelo.jacksum.JacksumAPI;
+import net.datacrow.console.components.AwsKeyRequestDialog;
 import net.datacrow.console.components.DcButton;
 import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcColorSelector;
@@ -138,6 +140,7 @@ import org.apache.log4j.Logger;
  */
 public final class ComponentFactory {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private static Logger logger = Logger.getLogger(ComponentFactory.class.getName());
     
     public static final int _YESNOCOMBO = 1;
@@ -183,6 +186,9 @@ public final class ComponentFactory {
     private static final Color colorDisabled = new Color(240,240,240);
     private static final Color colorRequired = new Color(120, 0, 0);
 
+    public static final Cursor _CURSOR_NORMAL = new Cursor(Cursor.DEFAULT_CURSOR);
+    public static final Cursor _CURSOR_WAIT = new Cursor(Cursor.WAIT_CURSOR);    
+    
     private static LookAndFeel defaultLaf;
 
     /**
@@ -432,7 +438,6 @@ public final class ComponentFactory {
                 return getFontRenderingCombo();
             case _SIMPLEREFERENCESFIELD:
                 return getSimpleReferencesField(DcModules.getMappingModIdx(majormodule, minormodule, fieldIdx));
-
             default:
                 return getShortTextField(maxTextLength);
         }
@@ -449,6 +454,10 @@ public final class ComponentFactory {
         textHelp.setMargin(new Insets(5,5,5,5));
 
         return textHelp;
+    }
+    
+    public static final AwsKeyRequestDialog getAwsKeyRequestField() {
+        return new AwsKeyRequestDialog();
     }
     
     public static final DcColorSelector getColorSelector(String settingsKey) {
@@ -485,6 +494,7 @@ public final class ComponentFactory {
     public static final DcPasswordField getPasswordField() {
         DcPasswordField passwordField = new DcPasswordField();
         passwordField.setPreferredSize(new Dimension(100, getPreferredFieldHeight()));
+        passwordField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         return passwordField;
     }
 
@@ -619,6 +629,7 @@ public final class ComponentFactory {
         DcDateField dateField = new DcDateField();
         dateField.setFont(getStandardFont());
         dateField.setPreferredSize(new Dimension(dateField.getWidth(), ComponentFactory.getPreferredFieldHeight()));
+        dateField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         return dateField;
     }
 
@@ -642,6 +653,7 @@ public final class ComponentFactory {
     public static final DcNumberField getNumberField() {
         DcNumberField numberField = new DcNumberField();
         numberField.setPreferredSize(new Dimension(numberField.getWidth(), getPreferredFieldHeight()));
+        numberField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         numberField.setFont(getStandardFont());
         return numberField;
     }
@@ -649,6 +661,7 @@ public final class ComponentFactory {
     public static final DcDecimalField getDecimalField() {
         DcDecimalField decimalField = new DcDecimalField();
         decimalField.setPreferredSize(new Dimension(decimalField.getWidth(), getPreferredFieldHeight()));
+        decimalField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         decimalField.setFont(getStandardFont());
         return decimalField;
     }    
@@ -708,14 +721,14 @@ public final class ComponentFactory {
     public static final DcMenuItem getMenuItem(String text) {
         DcMenuItem menuItem = new DcMenuItem(text);
         menuItem.setFont(getSystemFont());
-        menuItem.setLayout(new FlowLayout(FlowLayout.LEFT));
+        menuItem.setLayout(layout);
         return menuItem;
     }
     
     public static final DcMenuItem getMenuItem(AbstractAction action) {
         DcMenuItem menuItem = new DcMenuItem(action);
         menuItem.setFont(getSystemFont());
-        menuItem.setLayout(new FlowLayout(FlowLayout.LEFT));
+        menuItem.setLayout(layout);
         return menuItem;
     }    
     
@@ -737,7 +750,7 @@ public final class ComponentFactory {
     public static DcToolBarButton getToolBarButton(Plugin plugin) {
         DcToolBarButton button = new DcToolBarButton(plugin);        
         button.setFont(getSystemFont());
-        button.setLayout(new FlowLayout(FlowLayout.LEFT));
+        button.setLayout(layout);
         return button;
     }
     
@@ -878,15 +891,16 @@ public final class ComponentFactory {
         return label;
     }
 
-    public static final JLabel getLabel(String labelText, ImageIcon icon) {
-        JLabel label = getLabel(labelText);
-        label.setIcon(icon);
+    public static final DcLabel getLabel(String labelText, ImageIcon icon) {
+        DcLabel label = getLabel(labelText);
+        if (icon != null) label.setIcon(icon);
         return label;
     }
 
     public static final  JLabel getLabel(String labelText, int length) {
         JLabel label = getLabel(labelText);
         label.setPreferredSize(new Dimension(length, ComponentFactory.getPreferredFieldHeight()));
+        label.setMinimumSize(new Dimension(20, getPreferredFieldHeight()));
         label.setText(labelText);
         return label;
     }
@@ -905,6 +919,7 @@ public final class ComponentFactory {
         DcFilePatternTextField fptf = new DcFilePatternTextField();
         fptf.setFont(getStandardFont());
         fptf.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));
+        fptf.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         return fptf;
     }
 
@@ -912,6 +927,7 @@ public final class ComponentFactory {
         DcShortTextField textField = new DcShortTextField(maxTextLength);
         textField.setFont(getStandardFont());
         textField.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));
+        textField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         return textField;
     }
 
@@ -919,12 +935,14 @@ public final class ComponentFactory {
         DcShortTextField textField = new DcShortTextField(maxTextLength);
         textField.setFont(getStandardFont());
         textField.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));
+        textField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         return textField;
     }
     
     public static final DcShortTextField getTextFieldDisabled() {
         DcShortTextField textField = new DcShortTextField(4000);
         textField.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));
+        textField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         textField.setEnabled(false);
         textField.setEditable(false);
         textField.setFont(ComponentFactory.getStandardFont());
@@ -940,6 +958,7 @@ public final class ComponentFactory {
     public static final DcShortTextField getIdFieldDisabled() {
         DcShortTextField textField = new DcShortTextField(50);
         textField.setPreferredSize(new Dimension(50, getPreferredFieldHeight()));
+        textField.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         textField.setEnabled(false);
         textField.setEditable(false);
         textField.setFont(ComponentFactory.getStandardFont());

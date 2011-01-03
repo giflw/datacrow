@@ -34,13 +34,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
 
-import net.datacrow.console.views.MasterView;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
@@ -65,7 +60,7 @@ public class InsertQuery extends Query {
         super.clear();
         dco = null;
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public List<DcObject> run() {
@@ -156,51 +151,12 @@ public class InsertQuery extends Query {
         try {
             if (ps != null) ps.close();
             if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
         } catch (SQLException e) {
             logger.error("Error while closing connection", e);
         }
         
-        handleRequest(null, success);
-
-        if (dco.isUpdateGUI() && DataCrow.isInitialized() && success && dco.getModule().getSearchView() != null) { 
-            if (!SwingUtilities.isEventDispatchThread()) {
-                SwingUtilities.invokeLater(
-                        new Thread(new Runnable() { 
-                            @Override
-                            public void run() {
-                                updateUI(dco);
-                            }
-                        }));
-            } else {
-                updateUI(dco);
-            }
-        }
-
+        handleRequest(success);
         return null;
-    }
-    
-    private void updateUI(DcObject dco) {
-        
-        // Note that in the item form (close(boolean b)) the potential parent module's
-        // quick view is already updated. No need to do that here.
-        
-        String ID = dco.getID();
-        
-        dco.getModule().getSearchView().add(dco);
-        if (dco.getModule().getInsertView() != null)
-            dco.getModule().getInsertView().remove(ID);
-        
-        for (DcModule module : DcModules.getAbstractModules(dco.getModule()))
-            if (module.isSearchViewInitialized() && !module.isChildModule())
-                module.getSearchView().add(dco);
-        
-        if (dco.getModule().isChildModule()) {
-            String parentID = dco.getParentID();
-            MasterView parentVw = dco.getModule().getParent().getSearchView();
-            if (parentVw.getCurrent().getSelectedItemKeys().contains(parentID))
-                parentVw.getCurrent().refreshQuickView();
-        }
     }
     
     @Override

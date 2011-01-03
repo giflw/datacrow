@@ -240,10 +240,10 @@ public class WebFieldDefinitionsDialog extends DcDialog implements ActionListene
         private void save() {
             module.setSetting(DcRepository.ModuleSettings.stWebFieldDefinitions, getDefinitions());
 
-            if (module.getSearchView() != null)
+            if (module.hasSearchView())
                 module.getSearchView().applySettings();
 
-            if (module.getInsertView() != null)
+            if (module.hasInsertView())
                 module.getInsertView().applySettings();
         }
 

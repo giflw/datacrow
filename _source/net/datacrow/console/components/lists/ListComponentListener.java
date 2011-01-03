@@ -42,7 +42,8 @@ public class ListComponentListener implements ComponentListener {
     public void componentResized(ComponentEvent e) {
         DcObjectList list = (DcObjectList) e.getSource();
         if (list.getItemCount() > 0 && 
-            list.getModule() != null &&  list.getModule().getType() != DcModule._TYPE_PROPERTY_MODULE) {
+            list.getModule() != null &&  
+            list.getModule().getType() != DcModule._TYPE_PROPERTY_MODULE) {
             
             DcObjectListElement elem = (DcObjectListElement) list.getDcModel().getElementAt(0);
             Dimension elemSize = elem.getPreferredSize();

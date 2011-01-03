@@ -58,6 +58,16 @@ public class LoanModule extends DcModule {
               "lo");
     }
     
+    @Override
+    public boolean hasInsertView() {
+        return false;
+    }
+
+    @Override
+    public boolean hasSearchView() {
+        return false;
+    }
+
     /**
      * Indicates if this module is enabled.
      */

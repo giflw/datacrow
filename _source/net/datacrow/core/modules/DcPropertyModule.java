@@ -109,6 +109,16 @@ public class DcPropertyModule extends DcModule {
     }    
     
     @Override
+    public boolean hasInsertView() {
+        return false;
+    }
+
+    @Override
+    public boolean hasSearchView() {
+        return false;
+    }    
+    
+    @Override
     public boolean hasDependingModules() {
         return true;
     }

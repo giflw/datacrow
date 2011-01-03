@@ -36,6 +36,7 @@ import java.util.zip.ZipFile;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.Version;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
@@ -127,6 +128,8 @@ public class Restore extends Thread {
             SecurityCentre.getInstance().initialize();
             
             DcSwingUtilities.displayWarningMessage("msgRestoreFinishedRestarting");
+            
+            DataManager.deleteIcons();
             
             DataCrow.mainFrame.setOnExitCheckForChanges(false);
             DataCrow.mainFrame.setOnExitSaveSettings(false);

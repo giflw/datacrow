@@ -26,10 +26,8 @@
 package net.datacrow.core.wf.requests;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import net.datacrow.core.db.Query;
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.wf.UIUpdater;
 
 /**
@@ -49,7 +47,7 @@ public interface IRequest extends Serializable {
      * Executes this request. 
      * @param items The items retrieved by the query (if any).
      */
-    public void execute(Collection<DcObject> items);
+    public void execute();
 
     /**
      * Indicates if the request is allowed to be executed even when the query 

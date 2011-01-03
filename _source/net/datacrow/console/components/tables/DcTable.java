@@ -120,7 +120,7 @@ public class DcTable extends JTable implements IViewComponent {
     private boolean loadable = false;
     
     public DcTable(boolean readonly, boolean caching) {
-        super(new DcTableModel());
+        super(new DcTableModel(readonly));
 
         this.readonly = readonly;
 
@@ -132,7 +132,7 @@ public class DcTable extends JTable implements IViewComponent {
     }
     
     public DcTable(DcModule module, boolean readonly, boolean caching) {
-        super(new DcTableModel());
+        super(new DcTableModel(readonly));
 
         this.loadable = true;
         this.caching = caching;
@@ -199,7 +199,7 @@ public class DcTable extends JTable implements IViewComponent {
 
     public DcTableModel getDcModel() {
         if (!(getModel() instanceof DcTableModel))
-            setModel(new DcTableModel());
+            setModel(new DcTableModel(true));
 
         DcTableModel model = (DcTableModel) getModel();
         return model;
@@ -260,6 +260,7 @@ public class DcTable extends JTable implements IViewComponent {
     }
 
     public int add(DcObject dco, boolean setSelected) {
+        dco.setIDs();
         return setValues(getModel(), dco, setSelected, -1);
     }
     
@@ -501,13 +502,15 @@ public class DcTable extends JTable implements IViewComponent {
             if (dco == null) return null;
             
             Object value;
-            for (DcField field : dco.getFields()) {
+            for (int field : (view.getType() == View._TYPE_SEARCH ? 
+                                        module.getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder) : 
+                                        module.getFieldIndices())) {
                 try {
-                    col = getColumnIndexForField(field.getIndex());
+                    col = getColumnIndexForField(field);
                     value = getValueAt(row, col, true);
-                    dco.setValue(field.getIndex(), value);
+                    dco.setValue(field, value);
                 } catch (Exception e) {
-                    logger.error("Could not set value for field " + field.getLabel(), e);
+                    logger.error("Could not set value for field " + module.getField(field), e);
                 }
             }
             return dco;
@@ -626,6 +629,7 @@ public class DcTable extends JTable implements IViewComponent {
 
     public void removeRow(int row) {
         getDcModel().removeRow(row);
+        loadedRows.remove(Integer.valueOf(row));
     }
 
     public void setRowCount(int count) {
@@ -1227,6 +1231,7 @@ public class DcTable extends JTable implements IViewComponent {
         for (String key : keys) {
             cache.remove(key);
             int idx = getIndex(key);
+            
             if (idx > -1) {
                 removeRow(idx);
                 removed = true;

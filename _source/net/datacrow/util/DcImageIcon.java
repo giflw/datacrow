@@ -44,6 +44,8 @@ public class DcImageIcon extends ImageIcon {
     
 	private byte[] bytes;
 	private String filename;
+	
+	private boolean flushable = true;
 
     public DcImageIcon() {
         super();
@@ -51,7 +53,7 @@ public class DcImageIcon extends ImageIcon {
     
     public DcImageIcon(File file) {
         this(file.toString());
-    }    
+    }
     
     public DcImageIcon(String filename) {
         super(filename);
@@ -77,10 +79,20 @@ public class DcImageIcon extends ImageIcon {
         super(location);
     }
     
+    public boolean isFlushable() {
+        return flushable;
+    }
+
+    public void setFlushable(boolean flushable) {
+        this.flushable = flushable;
+    }
+
     public void flush() {
-    	bytes = null;
-    	filename = null;
-    	getImage().flush();
+        if (isFlushable()) {
+            bytes = null;
+            filename = null;
+//        	getImage().flush();
+        }
     }
     
     public String getFilename() {

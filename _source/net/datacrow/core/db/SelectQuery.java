@@ -62,7 +62,7 @@ public class SelectQuery extends Query {
         this.fields = fields;
         this.df = df;
     }
-
+    
     @Override
     public List<DcObject> run()  {
         boolean success = false;
@@ -91,12 +91,11 @@ public class SelectQuery extends Query {
         try {
             if (rs != null) rs.close();
             if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
         } catch (SQLException e) {
             logger.error("Error while closing connection", e);
         }
         
-        handleRequest(items, success);
+        handleRequest(success);
         clear();
         
         return items;

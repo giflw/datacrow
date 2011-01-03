@@ -53,6 +53,9 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.Requests;
+import net.datacrow.core.wf.requests.UpdateUIAfterDeleteRequest;
+import net.datacrow.core.wf.requests.UpdateUIAfterInsertRequest;
+import net.datacrow.core.wf.requests.UpdateUIAfterUpdateRequest;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.settings.DcSettings;
@@ -127,6 +130,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     
     private boolean isNew = true;
     
+    private boolean lastInLine = true;
+    
     /**
      * Creates a new instance.
      * @param module
@@ -141,11 +146,35 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         }
         markAsUnchanged();
     } 
-    
+
+    /**
+     * Indicates the item is last in line of a save or delete action. 
+     * Items last in line (of a batch) will cause additional GUI updates to be performed.
+     */
+    public boolean isLastInLine() {
+        return lastInLine;
+    }
+
+    /**
+     * Indicates the item is last in line of a save or delete action. 
+     * Items last in line (of a batch) will cause additional GUI updates to be performed.
+     */
+    public void setLastInLine(boolean lastInLine) {
+        this.lastInLine = lastInLine;
+    }
+
+    /**
+     * Indicates whether ANY interface updates should be performed.
+     */
     public boolean isUpdateGUI() {
 		return updateGUI;
 	}
 
+    /**
+     * Indicate whether ANY interface updates should be performed.
+     * Setting this to false will only cause the database to be updated but will no push the update
+     * to the GUI. By default this value is set to true.
+     */
 	public void setUpdateGUI(boolean updateGUI) {
 		this.updateGUI = updateGUI;
 	}
@@ -524,19 +553,26 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         return getModule().getParentReferenceFieldIndex();
     }
 
+    public DcImageIcon getIcon() {
+        return DataManager.getIcon(this);
+    }
+    
     /**
      * The icon used to represent this item.
      */
-    public DcImageIcon getIcon() {
-        for (DcField field : getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._ICON) {
-                String value = (String) getValue(field.getIndex());
-                DcImageIcon icon = null;
-                if (value != null && value.length() > 1) 
-                    icon = Utilities.base64ToImage(value);
-                return icon;
-            }
+    public DcImageIcon createIcon() {
+        DcField field = getModule().getIconField();
+        
+        if (field != null) {
+            String value = (String) getValue(field.getIndex());
+            DcImageIcon icon = null;
+            
+            if (value != null && value.length() > 1) 
+                icon = Utilities.base64ToImage(value);
+            
+            return icon;
         }
+
         return null;
     }
 
@@ -1009,6 +1045,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             setValue(_SYS_CREATED, getCurrentDate());
             setIDs();
             
+            addRequest(new UpdateUIAfterInsertRequest(this, isLastInLine()));
+            
             if (queued) {
             	WorkFlow.insert(this);
             } else {
@@ -1053,6 +1091,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             beforeSave();
             setValue(_SYS_MODIFIED, getCurrentDate());
             
+            addRequest(new UpdateUIAfterUpdateRequest(this, isLastInLine()));
             if (queued) {
             	WorkFlow.update(this);
             } else {
@@ -1070,7 +1109,12 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Permanently deletes the item.
      */
     public void delete(boolean validate) throws ValidationException {
-        if (validate) beforeDelete();
+        
+        if (validate) 
+            beforeDelete();
+        
+        addRequest(new UpdateUIAfterDeleteRequest(this, isLastInLine()));
+        
         WorkFlow.delete(this);
     }
     
@@ -1167,7 +1211,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             for (int i = 0; i < requestArray.length; i++) {
                 IRequest request = requestArray[i];
                 if (saveSuccessful || request.getExecuteOnFail())
-                    request.execute(new ArrayList<DcObject>());
+                    request.execute();
                 else 
                     request.end();
             }

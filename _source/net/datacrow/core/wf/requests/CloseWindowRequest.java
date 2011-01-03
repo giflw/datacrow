@@ -26,14 +26,12 @@
 package net.datacrow.core.wf.requests;
 
 import java.awt.Window;
-import java.util.Collection;
 
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.windows.DcDialog;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.core.objects.DcObject;
 
 /**
  * Request to close a form.
@@ -55,7 +53,7 @@ public class CloseWindowRequest implements IRequest {
     }    
     
     @Override
-    public void execute(Collection<DcObject> objects) {
+    public void execute() {
         SwingUtilities.invokeLater(new WindowCloser(window));
         end();
     }

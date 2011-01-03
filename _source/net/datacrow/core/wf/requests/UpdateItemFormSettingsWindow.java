@@ -25,10 +25,7 @@
 
 package net.datacrow.core.wf.requests;
 
-import java.util.Collection;
-
 import net.datacrow.console.windows.itemformsettings.ItemFormSettingsDialog;
-import net.datacrow.core.objects.DcObject;
 
 /**
  * Request to close a form.
@@ -49,7 +46,7 @@ public class UpdateItemFormSettingsWindow implements IUpdateUIRequest {
     }
 
     @Override
-    public void execute(Collection<DcObject> objects) {
+    public void execute() {
         wdw.refresh(tabDeleted);
     }
 

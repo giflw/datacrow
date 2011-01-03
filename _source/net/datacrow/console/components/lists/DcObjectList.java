@@ -414,8 +414,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     @Override
     public int add(DcObject dco) {
-        if (dco.getID() == null || dco.getID().equals("")) 
-            dco.setIDs();        
+        dco.setIDs();        
         
         if (getView() != null && getView().getType() == View._TYPE_SEARCH)
             dco.markAsUnchanged();
@@ -447,6 +446,20 @@ public class DcObjectList extends DcList implements IViewComponent {
         
         setModel(model);
         revalidate();
+    }
+    
+    
+    @Override
+    public void clear() {
+        for (int idx = getDcModel().getSize(); idx > 0; idx--) {
+            try {
+                if (getElement(idx) != null) 
+                    getElement(idx).clear();
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
+        }
+        super.clear();
     }
     
     public DcObjectListElement getDisplayElement(int module) {

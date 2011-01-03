@@ -47,9 +47,6 @@ public class NodeElement {
     	
     	Map<String, Integer> items = getItems();
     	
-    	if (allOrderedItems.size() == items.size()) 
-    		return items;
-    	
     	Map<String, Integer> result = new LinkedHashMap<String, Integer>();
     	for (String orderedItem : allOrderedItems) {
     		for (String item : items.keySet()) {
@@ -97,6 +94,9 @@ public class NodeElement {
 
     @Override
     public boolean equals(Object o) {
+        if (o instanceof String && o.equals(getComparableKey()))
+            return true;
+        
         if (o == null || !(o instanceof NodeElement))
             return false;
         else 

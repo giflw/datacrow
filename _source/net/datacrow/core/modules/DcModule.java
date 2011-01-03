@@ -365,6 +365,14 @@ public class DcModule implements Comparable<DcModule> {
         return hasReferences;
     }
 
+    public DcField getIconField() {
+        for (DcField field : getFields()) {
+            if (field.getValueType() == DcRepository.ValueTypes._ICON)
+                return field;
+        }
+        return null;
+    }
+    
     /**
      * Indicates if the module is abstract. An abstract module represents items belonging
      * to other modules; it represents items from multiple modules. An abstract module does

@@ -21,6 +21,8 @@ import net.datacrow.settings.DcSettings;
 
 public class ViewActionPanel extends JPanel implements ActionListener {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
+    
     protected JPanel panelActionsLeft = new JPanel();
     protected JPanel panelActionsRight = new JPanel();
     
@@ -55,8 +57,8 @@ public class ViewActionPanel extends JPanel implements ActionListener {
     }
     
     private void build() {
-        panelActionsLeft.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panelActionsRight.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelActionsLeft.setLayout(layout);
+        panelActionsRight.setLayout(layout);
     
         // Create the components
         buttonAdd = ComponentFactory.getButton(DcResources.getText("lblAdd"));

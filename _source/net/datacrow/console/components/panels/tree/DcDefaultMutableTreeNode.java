@@ -1,6 +1,7 @@
 package net.datacrow.console.components.panels.tree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,8 @@ public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
     }
     
     public Map<String, Integer> getItems() {
-        return ((NodeElement) getUserObject()).getItems();
+        Object o = getUserObject();
+        return o instanceof String ? new HashMap<String, Integer>() : ((NodeElement) getUserObject()).getItems();
     }
 
     public List<String> getItemList() {
@@ -35,7 +37,8 @@ public class DcDefaultMutableTreeNode extends DefaultMutableTreeNode {
     }
     
     public Map<String, Integer> getItemsSorted(List<String> allSortedItems) {
-        return ((NodeElement) getUserObject()).getItemsSorted(allSortedItems);
+        Object uo = getUserObject();
+        return uo instanceof String ? getItems() : ((NodeElement) uo).getItemsSorted(allSortedItems);
     }
     
     public boolean contains(String item) {

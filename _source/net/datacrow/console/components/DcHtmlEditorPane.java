@@ -43,8 +43,10 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
+import net.datacrow.util.launcher.FileLauncher;
 import net.datacrow.util.launcher.URLLauncher;
 
 import org.apache.log4j.Logger;
@@ -77,6 +79,8 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
     }
     
     public String createLink(DcObject dco, String description) {
+        DcImageIcon icon = DataManager.getIcon(dco);
+            
         StringBuffer sb = new StringBuffer();
         sb.append("<a ");
         sb.append(Utilities.getHtmlStyle());
@@ -90,6 +94,13 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             sb.append(dco.getModule().getIndex());
         
         sb.append("\">");
+        if (icon != null) {
+            sb.append("<img border=\"0\" src=\"");
+            sb.append("file://" + icon.getFilename());
+            sb.append("\">");
+            sb.append("&nbsp;");
+        }
+        
         sb.append(description); 
         sb.append("</a>");
         
@@ -103,7 +114,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             sb.append(createLink(dco, dco.toString()));
             
             if (i < items.size() - 1)
-                sb.append("&nbsp;/&nbsp;");
+                sb.append("&nbsp;&nbsp;");
             
             i++;
         }
@@ -118,7 +129,12 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             String ID = url.getAuthority();
             String query = url.getQuery();
             
-            if (query == null || !query.contains("module=")) {
+            if (url.getProtocol().equals("file")) {
+                String file = url.getFile();
+                file = file.replaceAll("%20", " ");
+                //file = file.substring(1);
+                new FileLauncher(file).launch();
+            } else if (query == null || !query.contains("module=")) {
                 try {
                 	URLLauncher launcher = new URLLauncher(url);
                 	launcher.launch();

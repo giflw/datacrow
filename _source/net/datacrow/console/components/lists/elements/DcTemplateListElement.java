@@ -42,6 +42,7 @@ import net.datacrow.settings.DcSettings;
 
 public class DcTemplateListElement extends DcObjectListElement {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private JPanel panelInfo;
     
     public DcTemplateListElement(int module) {
@@ -62,7 +63,7 @@ public class DcTemplateListElement extends DcObjectListElement {
 
     @Override
     public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
         
         DcTemplate template = (DcTemplate) dco;
         

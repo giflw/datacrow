@@ -105,7 +105,6 @@ public class VersionChecker extends Thread {
                 checked = true;
 
                 properties.clear();
-                conn.close();
                 is.close();
                 
                 address = null;

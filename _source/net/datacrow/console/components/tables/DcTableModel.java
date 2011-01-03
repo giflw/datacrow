@@ -31,8 +31,15 @@ import javax.swing.table.DefaultTableModel;
 
 public class DcTableModel extends DefaultTableModel {
     
-    public DcTableModel() {
+    private boolean readonly = false;
+    
+    public DcTableModel(boolean readonly) {
         super();
+        this.readonly = readonly;
+    }
+    
+    public boolean isCellEditable(int rowIndex, int colIndex) {
+        return !readonly;
     }
     
     @Override

@@ -35,6 +35,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.tree.GroupingPane;
 import net.datacrow.core.DataCrow;
@@ -97,6 +98,14 @@ public class MasterView {
         }
     }
     
+    public void setBusy(boolean b) {
+        for (View view : views.values()) {
+            view.setCursor(b ? ComponentFactory._CURSOR_WAIT : ComponentFactory._CURSOR_NORMAL );
+            view.setActionsAllowed(!b);
+            view.checkForChanges(!b);
+        }
+    }
+    
     private DcModule getModule() {
     	return DcModules.get(module);
     }
@@ -129,10 +138,14 @@ public class MasterView {
                 view.setSelected(index);
         }
     }
-    
+
     public void add(DcObject dco) {
+        add(dco, true);
+    }
+    
+    public void add(DcObject dco, boolean select) {
         if (groupingPane != null && groupingPane.isEnabled()) {
-            getCurrent().add(dco);
+            getCurrent().add(dco, select);
             groupingPane.add(dco);
         } else {
             for (View view : getViews())
@@ -140,6 +153,7 @@ public class MasterView {
                     view.add(dco);
         }
     }
+    
     
     public void remove(String key) {
         

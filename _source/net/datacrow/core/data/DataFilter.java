@@ -504,6 +504,25 @@ public class DataFilter {
 					columnCounter++;
 				}
 			}
+        	
+        	columnCounter = 0;
+        	for (DcField fld : this.order) {
+        	    if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+        	        DcModule referencedMod = DcModules.getReferencedModule(fld);
+        	        DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
+        	        
+        	        String subselect = "(select top 1 " + referencedMod.getTableName() + "." + referencedMod.getField(m.getDisplayFieldIdx()).getDatabaseFieldName() +  
+        	               " from " + referencedMod.getTableName() + ", " + mappingMod.getTableName() + 
+        	               " where " + mappingMod.getTableName() + "." +  mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = " + m.getTableName() + ".ID " + 
+        	               " and " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + 
+        	               " = " +  referencedMod.getTableName() + ".ID) as multiref" + columnCounter;
+        	        
+        	        columnCounter++;
+        	        sql.append(", ");
+        	        sql.append(subselect);
+        	    }
+        	}
+        	
         	sql.append(" FROM (");
         }
         
@@ -537,6 +556,27 @@ public class DataFilter {
 						columnCounter++;
 					}
 				}
+					
+	            int columnCounter2 = 0;
+	            if (this.order != null) {
+		            for (DcField fld : this.order) {
+		                if (fld != null && fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+		                    DcModule referencedMod = DcModules.getReferencedModule(fld);
+		                    DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
+		                    
+		                    String subselect = "(select top 1 " + referencedMod.getTableName() + "." + referencedMod.getField(m.getDisplayFieldIdx()).getDatabaseFieldName() +  
+		                           " from " + referencedMod.getTableName() + ", " + mappingMod.getTableName() + 
+		                           " where " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + 
+		                           " = " + m.getTableName()  + ".ID " + 
+		                           " and " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() +  
+		                           " = " +  referencedMod.getTableName() + ".ID) as multiref" + columnCounter2;
+		                    
+		                    columnCounter2++;
+		                    sql.append(", ");
+		                    sql.append(subselect);
+		                }
+		            }
+	            }
 			}
 			
 			sql.append(" FROM ");
@@ -657,17 +697,24 @@ public class DataFilter {
                     sql.append(mapping.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName());
 	
                     sql.append(" IN (");
-                    if (value instanceof String) {
+                    if (!(value instanceof Collection)) {
                         sql.append("'");
                         sql.append(value);
-                        sql.append("')");
+                        sql.append("'");
+                        sql.append(")");
                     } else {
                         counter2 = 0;
-                        for (DcObject dco : (Collection<DcObject>) value) {
+                        for (Object o : (Collection<DcObject>) value) {
+                            
                             if (counter2 > 0)  sql.append(",");
+
                             sql.append("'");
-                            sql.append(dco.getID());
+                            if (o instanceof DcObject)
+                                sql.append(((DcObject) o).getID());
+                            else
+                                sql.append(o.toString());
                             sql.append("'");
+                            
                             counter2++;
                         }
                         sql.append(")");
@@ -770,7 +817,7 @@ public class DataFilter {
                     sql.append(".ID = ");
                     sql.append(orderOn.getDatabaseFieldName());
                     counter++;
-                }
+                } 
             }
         }
     }
@@ -793,6 +840,16 @@ public class DataFilter {
 	                    sql.append(orderOn.getDatabaseFieldName());
                 	}
                 	counter++;
+                }
+            }
+            
+            int counter2 = 0;
+            for (DcField orderOn : order) {
+                if (orderOn != null && orderOn.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    sql.append(counter == 0 ? " ORDER BY " : ", ");
+                    sql.append("multiref" + counter2);
+                    counter2++;
+                    counter++;
                 }
             }
             

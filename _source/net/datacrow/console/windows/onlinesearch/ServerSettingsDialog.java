@@ -58,9 +58,9 @@ public class ServerSettingsDialog extends DcDialog implements ActionListener {
 
         setTitle(DcResources.getText("lblServerSettings"));
 
-        setCenteredLocation();
-        
         setSize(DcSettings.getDimension(DcRepository.Settings.stServerSettingsDialogSize));
+
+        setCenteredLocation();
     }
     
     private void saveSettings() {
@@ -109,7 +109,7 @@ public class ServerSettingsDialog extends DcDialog implements ActionListener {
         //Main panel
         //**********************************************************
         getContentPane().setLayout(Layout.getGBL());
-        getContentPane().add(panelSettings, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
+        getContentPane().add(panelSettings, Layout.getGBC(0, 0, 1, 1, 20.0, 20.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(5, 5, 5, 5), 0, 0));
         getContentPane().add(panelActions, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,

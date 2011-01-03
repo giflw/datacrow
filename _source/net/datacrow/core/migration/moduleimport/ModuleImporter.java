@@ -273,6 +273,8 @@ public class ModuleImporter {
                 
                 client.notifyStartedSubProcess(items.size());
                 
+                
+                int counter = 1;
                 for (DcObject item : items) {
                     DcObject other = DataManager.getObjectForString(item.getModule().getIndex(), item.toString());
                     // Check if the item exists and if so, update the item with the found values. Else just create a new item.
@@ -281,15 +283,22 @@ public class ModuleImporter {
                     try {
                         if (other != null) {
                             client.notifyMessage(DcResources.getText("msgItemExistsMerged", other.toString()));
+                            other.setLastInLine(counter == items.size());
                             other.merge(item);
+                            other.setChanged(DcObject._SYS_CREATED, false);
+                            other.setChanged(DcObject._SYS_MODIFIED, false);
+                            other.setValidate(false);
                             other.saveUpdate(true, false);
                         } else {
                             client.notifyMessage(DcResources.getText("msgItemNoExistsCreated", item.toString()));
+                            item.setLastInLine(counter == items.size());
                             item.setValidate(false);
                             item.saveNew(true);
                         }
+                        
                     } catch (ValidationException ignore) {} // cannot occur (for real!)
-                    
+
+                    counter++;
                     client.notifySubProcessed();
                 }
 		    } catch (Exception e) {

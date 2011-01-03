@@ -443,7 +443,7 @@ public class FieldTreePanel extends TreePanel {
                         
                         icon = field.getIndex() == DcObject._SYS_MODULE ? 
                                 new DcImageIcon(DcModules.get(module).getIcon16().getBytes()) : 
-                                iconBase64 != null ? Utilities.base64ToImage(iconBase64) : null;
+                                iconBase64 != null ? DataManager.addIcon(String.valueOf(key), iconBase64) : null;
                         
                         if (keys != null && !keys.contains(id)) continue;
                         
@@ -461,10 +461,7 @@ public class FieldTreePanel extends TreePanel {
                             
                             ne.addItem(id, module);
                             current = new DcDefaultMutableTreeNode(ne);
-                            
                             parent.add(current);
-                            
-                            //model.insertNodeInto(current, parent, parent.getChildCount());
                             parent = current;
                            
                         } else { // exists

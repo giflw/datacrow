@@ -28,6 +28,7 @@ package net.datacrow.console.components.renderers;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -59,8 +60,10 @@ public class DcTreeRenderer extends DefaultTreeCellRenderer {
             if (value instanceof DefaultMutableTreeNode) {
                 Object o = ((DefaultMutableTreeNode) value).getUserObject();
         
-                if (o instanceof NodeElement)
-                    setIcon(((NodeElement) o).getIcon());
+                if (o instanceof NodeElement) {
+                    ImageIcon icon = ((NodeElement) o).getIcon();
+                    setIcon(icon);
+                }
             }
         } catch (NullPointerException npe) {
             logger.error(npe, npe);

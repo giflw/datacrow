@@ -190,6 +190,12 @@ public class SecurityCentre {
             user.setValue(User._B_ENABLED, Boolean.TRUE);
             user.setValue(User._L_ADMIN, Boolean.TRUE);
             DatabaseManager.createUser(user, "UK*soccer*96");
+        } else {
+            try {
+                connection.close();
+            } catch (SQLException se) {
+                logger.error(se, se);
+            }
         }
         
         User user = new User();

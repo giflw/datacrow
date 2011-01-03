@@ -35,9 +35,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
 
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -191,57 +189,15 @@ public class UpdateQuery extends Query {
         
         try {
             if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
         } catch (SQLException e) {
             logger.error("Error while closing connection", e);
         }
 
-        handleRequest(null, success);
-        
-        if (dco.isUpdateGUI() && success && DataCrow.isInitialized()) {
-            
-            if (!SwingUtilities.isEventDispatchThread()) {
-                SwingUtilities.invokeLater(
-                        new Thread(new Runnable() { 
-                            @Override
-                            public void run() {
-                                updateUI(dco);
-                            }
-                        }));
-            } else {
-                updateUI(dco);
-            }
-        }
-        
+        handleRequest(success);
         return null;
     }
     
-    private void updateUI(DcObject dco) {
         
-        // Note that in the item form (close(boolean b)) the potential parent module's
-        // quick view is already updated. No need to do that here.
-        
-        if (dco.getModule().getSearchView() != null) 
-            dco.getModule().getSearchView().update(dco);
-        
-    	for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-    		if (module.isSearchViewInitialized()) {
-    			module.getSearchView().refreshQuickView();
-    			
-    			// TODO: add update tree statements + update drop down fields here..
-    			// - register combo boxes? (make sure they are released at some point)
-    			// - or, better, register very specific components, so not generic function 
-    			//   (quick filter, etc)
-    			// - or, forget about this.. ??
-    		}
-    	}
-
-    	for (DcModule module : DcModules.getAbstractModules(dco.getModule())) {
-    		if (module.isSearchViewInitialized())
-    			module.getSearchView().update(dco);
-    	}
-    }
-    
     @Override
     protected void finalize() throws Throwable {
         clear();

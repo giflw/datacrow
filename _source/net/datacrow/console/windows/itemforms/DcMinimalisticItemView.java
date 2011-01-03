@@ -70,6 +70,8 @@ import net.datacrow.util.DcSwingUtilities;
 
 public class DcMinimalisticItemView extends DcFrame implements ActionListener, MouseListener, ISimpleItemView {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
+    
     protected DataTask task;
     
     private final boolean readonly;
@@ -252,7 +254,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         //**********************************************************
         //Action panel
         //**********************************************************
-        panelActions.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelActions.setLayout(layout);
         
         buttonCreateMultiple.addActionListener(this);
         buttonCreateMultiple.setActionCommand("createMultiple");
@@ -318,30 +320,30 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     protected class DeletingThread extends DataTask {
 
         public DeletingThread(Collection<DcObject> objects) {
-            super(objects);
+            super(null, objects);
         }
         
         @Override
         public void run() {
             try {
                 updateProgressBar(0);
-                initProgressBar(objects.length);   
+                initProgressBar(items.size());   
                 list.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 
-                setStatus("Deleting " + objects.length + " items from to the database");
-                startRunning();
-                denyActions();
+                setStatus("Deleting " + items.size() + " items from to the database");
                 
                 if (!DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-                    stopRunning();
+                    return;
                 } else {
+                    startTask();
+                    denyActions();
                     int counter = 1;
-                    for (DcObject dco : objects) {
+                    for (DcObject dco : items) {
                         updateProgressBar(counter);
                         
                         dco.markAsUnchanged();
                         
-                        if (counter == objects.length) {
+                        if (counter == items.size()) {
                             Requests requests = getAfterDeleteRequests();
                             for (int j = 0; j < requests.get().length; j++) {
                                 dco.addRequest(requests.get()[j]);
@@ -365,9 +367,21 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 }
             } finally {
                 list.setSelectedIndex(0);
-                stopRunning();
+                endTask();
                 allowActions();
             }
+        }
+
+        @Override
+        public void startTask() {
+            denyActions();
+            super.startTask();
+        }
+
+        @Override
+        public void endTask() {
+            allowActions();
+            super.endTask();
         }
     }     
     

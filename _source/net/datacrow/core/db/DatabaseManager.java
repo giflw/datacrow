@@ -67,6 +67,9 @@ public class DatabaseManager {
     private static boolean isServerClientMode = false;
     
     public static boolean initialized = false;
+    
+    private static Connection connection;
+    private static Connection adminConnection;
    
     /**
      * Initializes the database. A connection with the HSQL database engine is established
@@ -187,20 +190,40 @@ public class DatabaseManager {
         }
     }
 
+    private static boolean isClosed(Connection connection) {
+        boolean closed = false;
+        try {
+            closed = connection == null || connection.isClosed();
+        } catch (SQLException se) {
+            logger.error(se, se);
+            closed = true;
+        }
+        return closed;
+    }
+    
     /**
      * Returns a new connection to the database based on the logged on user.
      */
     public static Connection getConnection() {
-        SecuredUser su = SecurityCentre.getInstance().getUser();
-        if (su == null)
-            return getConnection("sa", "");
-        else {
-            return getConnection(su.getUsername(), su.getPassword());
+        if (isClosed(connection)) {
+        
+            SecuredUser su = SecurityCentre.getInstance().getUser();
+            if (su == null)
+                connection = getConnection("sa", "");
+            else
+                connection = getConnection(su.getUsername(), su.getPassword());
+            
+            logger.debug("Created a new, normal, database connection");
         }
+
+        return connection;
     }
     
     /**
      * Returns a connection for the given user credentials.
+     * Note that this connection always needs to be closed manually.
+     * For re-use use {@link #getConnection()} or {@link #getAdminConnection()}.
+     * 
      * @param username
      * @param password
      * @return
@@ -343,9 +366,16 @@ public class DatabaseManager {
 
     /**
      * Creates an admin connection to the database.
+     * 
+     * TODO: do not close; re-use.
      */
     public static Connection getAdminConnection() {
-    	return DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
+        if (isClosed(adminConnection)) {
+            adminConnection = DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
+            logger.debug("Created a new, admin, database connection");
+        }
+
+        return adminConnection;
     }
     
     /**

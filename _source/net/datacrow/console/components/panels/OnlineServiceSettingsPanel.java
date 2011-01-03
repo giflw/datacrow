@@ -48,6 +48,8 @@ import net.datacrow.settings.Settings;
 
 public class OnlineServiceSettingsPanel extends JPanel implements ActionListener {
     
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
+    
     private JButton buttonSettings = ComponentFactory.getButton(IconLibrary._icoSettings16);
     private JCheckBox checkOverwrite;
     private JCheckBox checkAutoAdd;
@@ -152,7 +154,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     
     private void build(boolean updateMode) {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panel.setLayout(layout);
 
         setLayout(Layout.getGBL());
 

@@ -25,9 +25,6 @@
 
 package net.datacrow.core.wf;
 
-import java.util.Collection;
-
-import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.IUpdateUIRequest;
 import net.datacrow.core.wf.requests.Requests;
@@ -40,7 +37,6 @@ import net.datacrow.core.wf.requests.Requests;
  */
 public class UIUpdater implements Runnable {
 
-    private Collection<DcObject> objects;
     private Requests requests;
     private boolean qryWasSuccess;
 
@@ -50,12 +46,10 @@ public class UIUpdater implements Runnable {
      * @param requests The requests to be executed.
      * @param qryWasSuccess Indicates if the task requesting the UI update was successful.
      */
-    public UIUpdater(Collection<DcObject> objects,
-                     Requests requests,
+    public UIUpdater(Requests requests,
                      boolean qryWasSuccess) {
         
         this.qryWasSuccess = qryWasSuccess;
-        this.objects = objects;
         this.requests = requests;
     }
 
@@ -63,8 +57,6 @@ public class UIUpdater implements Runnable {
      * Free all resources.
      */
     public void close() {
-        objects = null;
-
         if (requests != null)
             requests.clear();
         
@@ -84,7 +76,7 @@ public class UIUpdater implements Runnable {
                 
                 if (request instanceof IUpdateUIRequest) { 
                     if (qryWasSuccess || request.getExecuteOnFail())
-                        request.execute(objects);
+                        request.execute();
                     else 
                         request.end();
                 }

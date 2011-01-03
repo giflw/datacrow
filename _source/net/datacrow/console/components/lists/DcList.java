@@ -33,6 +33,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JList;
@@ -271,12 +272,16 @@ public class DcList extends JList implements ComponentListener {
     public void setSelectionMode(int selectionMode) {
         getSelectionModel().setSelectionMode(selectionMode);        
     }
-    
+
     @Override
     public void setListData(Vector v) {
+        addElements(v);
+    }
+    
+    public void addElements(List elements) {
         getDcModel().setSize(0);
-        for (Object o : v)
-            getDcModel().addElement(o);
+        for (Object element : elements)
+            getDcModel().addElement(element);
     }
     
     public DcListModel getDcModel() {

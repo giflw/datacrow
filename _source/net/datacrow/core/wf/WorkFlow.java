@@ -28,7 +28,6 @@ package net.datacrow.core.wf;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
@@ -97,8 +96,8 @@ public class WorkFlow {
      * @param requests
      * @param qryWasSuccess
      */
-    public static void handleRequests(Collection<DcObject> objects, Requests requests, boolean qryWasSuccess) {
-        SwingUtilities.invokeLater(new UIUpdater(objects, requests, qryWasSuccess));
+    public static void handleRequests(Requests requests, boolean qryWasSuccess) {
+        SwingUtilities.invokeLater(new UIUpdater(requests, qryWasSuccess));
     }
 
     /**
@@ -169,7 +168,7 @@ public class WorkFlow {
     
     public static void setValues(ResultSet rs, DcObject item, int[] fields, int[] requestedFields) {
         try {
-            Object value;
+            Object value = null;
             String column;
             for (int i = 0; i < fields.length; i++) {
                 DcField field = item.getField(fields[i]);
@@ -177,9 +176,13 @@ public class WorkFlow {
 
                 if (field.isUiOnly()) continue;
                 
-                value = rs.getObject(column);
-                value = Utilities.isEmpty(value) ? null : value;
-                item.setValue(fields[i], value);
+                try {
+                    value = rs.getObject(column);
+                    value = Utilities.isEmpty(value) ? null : value;
+                    item.setValue(fields[i], value);
+                } catch (Exception e) {
+                    logger.error("Could not retrieve and/or set value for field " + field, e);
+                }
             }
             
             item.setValue(Media._SYS_MODULE, item.getModule().getObjectName());

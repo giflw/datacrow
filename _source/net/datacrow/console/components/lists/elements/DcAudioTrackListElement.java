@@ -38,6 +38,8 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.AudioTrack;
 
 public class DcAudioTrackListElement extends DcObjectListElement {
+    
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
 
     private JPanel panelInfo;
     
@@ -59,7 +61,7 @@ public class DcAudioTrackListElement extends DcObjectListElement {
 
     @Override
     public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
 
         panelInfo = getPanel();
         JLabel labelNr = getLabel(AudioTrack._F_TRACKNUMBER, false, 30);

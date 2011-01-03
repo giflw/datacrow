@@ -25,7 +25,6 @@
 
 package net.datacrow.core.wf.requests;
 
-import java.util.Collection;
 import java.util.List;
 
 import net.datacrow.core.data.DataManager;
@@ -49,7 +48,7 @@ public class UpdateDefaultTemplate implements IRequest {
     }
 
     @Override
-    public void execute(Collection<DcObject> objects) {
+    public void execute() {
         List<DcObject> templates = DataManager.get(module, null);
         for (DcObject dco : templates) {
             if (!dco.getValue(DcTemplate._SYS_TEMPLATENAME).equals(templateName)) {

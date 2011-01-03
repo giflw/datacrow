@@ -81,10 +81,10 @@ public class TableViewSettingsDialog extends DcDialog implements ActionListener 
 
         module.setSetting(DcRepository.ModuleSettings.stTableColumnOrder, fields);
         
-        if (module.getSearchView() != null)
+        if (module.hasSearchView())
             module.getSearchView().applySettings();
 
-        if (module.getInsertView() != null)
+        if (module.hasInsertView())
             module.getInsertView().applySettings();
     }
     

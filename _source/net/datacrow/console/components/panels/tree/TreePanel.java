@@ -150,6 +150,22 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	NodeElement topElem = (NodeElement) top.getUserObject();
     	topElem.setItems(DataManager.getKeys(DataFilters.getCurrent(getModule())));
 	}
+	
+	public void setSelected(DcObject dco) {
+	    
+	    DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+        NodeElement elem = node != null ? (NodeElement) node.getUserObject() : null;
+	    
+	    // check whether the currently selected node already contains the key (in which case selection does
+	    // not need to be changed.
+	    if (elem == null ||  !elem.getItems().containsKey(dco.getID())) {
+	        DcDefaultMutableTreeNode newNode = findNode((DcDefaultMutableTreeNode) getFullPath(dco).getLastChild(), top, true);
+	        if (newNode != null) 
+	            setSelected(newNode);
+	        else 
+	            logger.error("Cannot find created node in tree. Selected node has not been changed.", new Exception("Cannot find created node"));
+	    }
+	}
     
     public void add(DcObject dco) {
         DcDefaultMutableTreeNode path = getFullPath(dco);
@@ -179,13 +195,11 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	    
     	    if (existingChild == null) {
     	    	// will be removed from the node as well: 
-    	    	
     	        child.addItem(item, Integer.valueOf(module));
     	        insertNode(child, parent);
     	        existingChild = child;
     	    } else {
     	        existingChild.addItem(item, Integer.valueOf(module));
-    	        setSelected(existingChild);
     	    }
     	    add(item, module, child, existingChild);
     	}
@@ -420,7 +434,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         model.insertNodeInto(node, parent, parent.getChildCount() == 0 ? 0 : idx);
         
         tree.expandPath(new TreePath(model.getPathToRoot(node)));
-        setSelected(node);
         tree.revalidate();
     }
 
@@ -500,11 +513,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     		     parent = null;
     		 }
     	 }
-    	 
     	 tree.revalidate();
     }
-    
-    
     
     /************************************************************************
      * Selection listener
@@ -531,17 +541,18 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             return;
         }
 
-        Object o = node.getUserObject();
-        
         View currentView = getView().getCurrent();
         if (currentView != null) {
         	try {
         		currentView.clear(isSaveChanges());
         	} catch (Exception ee) {}
         		
-            NodeElement currentNode = (NodeElement) o;
-            setSelected(node);
-            updateView(currentNode.getItemsSorted(top.getItemList()));
+        	setSelected(node);
+
+        	if (node.getUserObject() instanceof String)
+        	    updateView(top.getItems());
+        	else
+        	    updateView(node.getItemsSorted(top.getItemList()));
         }
     }
 }

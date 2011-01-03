@@ -25,8 +25,6 @@
 
 package net.datacrow.core.wf.requests;
 
-import java.util.Collection;
-
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.views.MasterView;
@@ -51,7 +49,7 @@ public class RefreshChildView implements IUpdateUIRequest {
     }
     
     @Override
-    public void execute(Collection<DcObject> c) {
+    public void execute() {
         SwingUtilities.invokeLater(new Updater(form));
         end();
     }

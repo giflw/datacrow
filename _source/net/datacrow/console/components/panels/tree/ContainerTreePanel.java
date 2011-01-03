@@ -217,7 +217,6 @@ public class ContainerTreePanel extends TreePanel {
 	    	try {
 	    		if (rs != null) rs.close();
 	    		if (stmt != null) stmt.close();
-	    		if (conn != null) conn.close();
 			} catch (Exception e) {
 				logger.error("Error while closing connection (statement, resultset and/or connection)", e);
 			}

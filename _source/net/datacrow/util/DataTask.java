@@ -27,42 +27,73 @@ package net.datacrow.util;
 
 import java.util.Collection;
 
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 
 public class DataTask extends Thread {
-
-    protected DcObject[] objects;
-    protected int[] uiRows;
+    
+    private DcModule module;
 
     private boolean isRunning = false;
     private boolean keepOnRunning = true;
 
-    public DataTask(Collection<? extends DcObject> objects) {
-        this.objects = objects.toArray(new DcObject[0]);
-    }
+    protected Collection<? extends DcObject> items;
 
     public DataTask() {
         setPriority(Thread.NORM_PRIORITY);
     }
     
-    public DataTask(int[] rows) {
-        this.uiRows = rows;
+    public DataTask(DcModule module, Collection<? extends DcObject> items) {
+        this.items = items;
+        this.module = module;
     }
     
-    public void cancel() {
-    	keepOnRunning = false;
+    public void setItems(Collection<? extends DcObject> items) {
+        this.items = items;
+    }
+    
+    public void setModule(DcModule module) {
+        this.module = module;
     }
 
-    public void stopRunning() {
-        keepOnRunning = false;
-    	isRunning = false;
-        objects = null;
-        uiRows = null;
-    }
-
-    public void startRunning() {
+    public void startTask() {
         isRunning = true;
         keepOnRunning = true;
+        if (module != null && module.hasSearchView()) {
+            module.getSearchView().setBusy(true);
+            
+            // make sure that quick view is not updated will referenced items are saved
+            for (DcModule referencedModule : DcModules.getReferencedModules(module.getIndex())) {
+                if (referencedModule.hasSearchView())
+                    module.getSearchView().setBusy(true);
+            }
+        }
+    }
+    
+    public void endTask() {
+        if (module != null && module.hasSearchView()) {
+            module.getSearchView().setBusy(false);
+            
+            for (DcModule referencedModule : DcModules.getReferencedModules(module.getIndex())) {
+                if (referencedModule.hasSearchView())
+                    module.getSearchView().setBusy(false);
+            }
+        }
+        
+        keepOnRunning = false;
+        isRunning = false;
+        
+        if (items != null) {
+            items.clear();
+            items = null;
+        }
+        
+        module = null;
+    }
+
+    public void cancel() {
+    	keepOnRunning = false;
     }
 
     public boolean isRunning() {

@@ -39,6 +39,7 @@ import net.datacrow.core.objects.Picture;
 
 public class DcChildObjectListElement extends DcObjectListElement {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private JPanel panelInfo;
     
     public DcChildObjectListElement(int module) {
@@ -59,7 +60,7 @@ public class DcChildObjectListElement extends DcObjectListElement {
 
     @Override
     public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
 
         panelInfo = getPanel();
         

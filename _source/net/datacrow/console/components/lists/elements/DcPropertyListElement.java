@@ -37,10 +37,10 @@ import javax.swing.JPanel;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Picture;
-import net.datacrow.util.Utilities;
 
 public class DcPropertyListElement extends DcObjectListElement {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private JPanel panelInfo;
 
     public DcPropertyListElement(int module) {
@@ -71,13 +71,13 @@ public class DcPropertyListElement extends DcObjectListElement {
 
     @Override
     public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
         panelInfo = getPanel();
         JLabel label = getLabel(DcProperty._A_NAME, false, 800);
 
         if (    dco.getValue(DcProperty._B_ICON) != null &&
                 dco.getValue(DcProperty._B_ICON).toString().length() > 10)
-            label.setIcon(Utilities.base64ToImage((String) dco.getValue(DcProperty._B_ICON)));
+            label.setIcon(dco.getIcon());
         
         panelInfo.add(label);
         panelInfo.setPreferredSize(new Dimension(800, fieldHeight));

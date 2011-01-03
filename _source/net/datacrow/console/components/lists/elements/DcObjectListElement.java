@@ -51,6 +51,7 @@ import net.datacrow.settings.Settings;
  */
 public abstract class DcObjectListElement extends DcListElement {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
     protected static final int fieldHeight = 21;
     protected String key;
     protected int module;
@@ -144,7 +145,7 @@ public abstract class DcObjectListElement extends DcListElement {
     
     public JPanel getPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        panel.setLayout(layout);
         return panel;
     }
     

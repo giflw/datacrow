@@ -39,6 +39,7 @@ import net.datacrow.core.objects.helpers.MusicTrack;
 
 public class DcMusicTrackListElement extends DcObjectListElement {
 
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private JPanel panelInfo;
     
     public DcMusicTrackListElement(int module) {
@@ -59,7 +60,7 @@ public class DcMusicTrackListElement extends DcObjectListElement {
 
     @Override
     public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
 
         panelInfo = getPanel();
         JLabel labelTrack = getLabel(MusicTrack._F_TRACKNUMBER, false, 30);

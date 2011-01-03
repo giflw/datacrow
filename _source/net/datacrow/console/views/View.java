@@ -291,7 +291,7 @@ public class View extends DcPanel implements ListSelectionListener {
 
     public void cancelCurrentTask() {
         if (task != null && task.isAlive())
-            task.stopRunning();
+            task.endTask();
     }
     
     /**
@@ -412,9 +412,9 @@ public class View extends DcPanel implements ListSelectionListener {
             if (isTaskRunning())
                 return;
                 
-            Collection<? extends DcObject> objects = getSelectedItems();
-            if (objects.size() > 0) {
-                task = new DeleteTask(this, objects);
+            List<String> keys = getSelectedItemKeys();
+            if (keys.size() > 0) {
+                task = new DeleteTask(this, keys);
                 task.start();
             } else {
                 DcSwingUtilities.displayWarningMessage(DcResources.getText("msgSelectItemToDel"));
@@ -478,7 +478,7 @@ public class View extends DcPanel implements ListSelectionListener {
         	
         	if (objects.size() > 0) {
         		task = new SaveTask(this, objects);
-        		task.startRunning();
+        		task.startTask();
         		
         		if (threaded)
         		    task.start();
@@ -507,7 +507,7 @@ public class View extends DcPanel implements ListSelectionListener {
             } 
             
             task = new SaveTask(this, objects);
-            task.startRunning();
+            task.startTask();
             task.start();
         }        
     }
@@ -658,9 +658,12 @@ public class View extends DcPanel implements ListSelectionListener {
     public void remove(String[] keys) {
         // remove it from the view
         if (vc.remove(keys)) {
-            // at this point actions should be enabled to allow the quick view to be populated
-            setActionsAllowed(true);                
-            setDefaultSelection();
+            
+            if (actionsAllowed) {
+                setDefaultSelection();
+            } else if (quickView != null) {
+                quickView.clear();
+            }
             
             if (isParent() && childView instanceof CachedChildView) {
                 for (String ID : keys)

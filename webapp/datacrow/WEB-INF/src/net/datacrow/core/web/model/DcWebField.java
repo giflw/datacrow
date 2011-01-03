@@ -34,7 +34,7 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcSimpleValue;
 import net.datacrow.core.web.DcSecured;
 import net.datacrow.util.Rating;
 
@@ -154,11 +154,10 @@ public class DcWebField extends DcSecured {
             for (int rating = -1; rating < 11; rating++)
                 references.add(new DcReference(Rating.getLabel(rating), String.valueOf(rating)));
         } else {
-            for (DcObject dco : DataManager.get(DcModules.getReferencedModule(getDcField()).getIndex(), 
-                                    DcModules.getReferencedModule(getDcField()).getMinimalFields(null)))
-                references.add(new DcReference(dco.toString(), dco.getID()));
+            DcModule module = DcModules.getReferencedModule(getDcField());
+            for (DcSimpleValue value : DataManager.getSimpleValues(module.getIndex(), false))
+                references.add(new DcReference(value.getName(), value.getID()));
         }
-        
         return references; 
     }
     

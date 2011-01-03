@@ -23,64 +23,44 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.views.tasks;
+package net.datacrow.console.components.renderers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.awt.Component;
 
-import net.datacrow.console.views.View;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.ValidationException;
-import net.datacrow.util.DataTask;
-import net.datacrow.util.DcSwingUtilities;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 
-public class DeleteTask extends DataTask {
+import net.datacrow.console.components.tables.DcTable;
+import net.datacrow.core.objects.DcSimpleValue;
+
+public class SimpleValueTableCellRenderer extends DcTableCellRenderer {
     
-    public DeleteTask(View view, List<String> keys) {
-        super();
-        
-        setName("Delete-Items-Task");
-        
-        Collection<DcObject> items = new ArrayList<DcObject>();
-        DcObject dco;
-        for (String key : keys) {
-            dco = view.getModule().getItem();
-            dco.setValueLowLevel(DcObject._ID, key);
-            items.add(dco);
-        }
-        
-        super.setItems(items);
-        super.setModule(view.getModule());
+    private static final SimpleValueTableCellRenderer instance = new SimpleValueTableCellRenderer();
+    
+    private SimpleValueTableCellRenderer() {}   
+    
+    public static SimpleValueTableCellRenderer getInstance() {
+        return instance;
     }
-
+    
     @Override
-    public void run() {
-        try {
-            if (!DcSwingUtilities.displayQuestion("msgDeleteQuestion"))
-                return;
-
-            startTask();
-            
-            if (isRunning()) {
-                int counter = 1;
-                
-                for (DcObject dco : items) {
-                    try {
-                        dco.delete(true);
-                    } catch (ValidationException e) {
-                        DcSwingUtilities.displayWarningMessage(e.getMessage());
-                    }
-                    
-                    try {
-                        sleep(10);
-                    } catch (Exception ignore) {}
-                    
-                    counter++;
-                }
-            }
-        } finally {
-            endTask();
+    public Component getTableCellRendererComponent(
+            JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        
+        Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        
+        if (((DcTable) table).isIgnoringPaintRequests())
+            return renderer;
+        
+        setHorizontalAlignment(JLabel.LEFT);
+        
+        if (value instanceof DcSimpleValue) {
+            DcSimpleValue sv = (DcSimpleValue) value;
+            setText(sv.getName());
+            setToolTipText(sv.getName());
+            setIcon(sv.getIcon());
         }
+        
+        return renderer;
     }
 }

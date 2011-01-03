@@ -40,6 +40,7 @@ import net.datacrow.core.objects.DcField;
 
 public class DcFilterEntryListElement extends DcListElement {
     
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     private static final Dimension dim = new Dimension(600, 30);
     
     private DataFilterEntry entry;
@@ -59,7 +60,7 @@ public class DcFilterEntryListElement extends DcListElement {
     
     @Override
     public void build() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
   
         DcModule module = DcModules.get(entry.getModule());
         DcField field = module.getField(entry.getField());

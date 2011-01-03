@@ -58,6 +58,8 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
+import net.datacrow.core.objects.DcSimpleValue;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
@@ -117,7 +119,6 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         Operator operator = (Operator) comboOperators.getSelectedItem();
         
         Object value = ComponentFactory.getValue(c);
-        
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
         	Collection<Object> c = new ArrayList<Object>();
         	c.add(value);
@@ -182,6 +183,9 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
             comboFields.setSelectedIndex(0);
     }      
     
+    /**
+     * @param field
+     */
     public void applyField(DcField field) {
         if (field == null) return;
         if (c != null) panelInput.remove(c);
@@ -189,13 +193,27 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         Dimension size = c != null ? c.getSize() : null; 
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-            List<DcObject> objects = DataManager.get(field.getReferenceIdx(), null);
-            c = ComponentFactory.getComboBox();
-            ((JComboBox) c).addItem(" ");
-            for (DcObject dco : objects)
-            	((JComboBox) c).addItem(dco);
+            DcComboBox combo = (DcComboBox) c;
+            combo.addItem(" ");
+
+            if (DataManager.getCount(field.getReferenceIdx(), -1, null) > 1000) {
+                for (DcSimpleValue value : DataManager.getSimpleValues(field.getReferenceIdx(), false))
+                    combo.addItem(value);
+            } else {
+                int[] fields;
+                if (DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE) {
+                    fields = new int[] {DcObject._ID, DcProperty._A_NAME, DcProperty._B_ICON};
+                } else {
+                    fields = new int[] {DcObject._ID, DcModules.get(field.getReferenceIdx()).getDisplayFieldIdx()};
+                }
+                
+                List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);
+                c = ComponentFactory.getComboBox();
+                for (DcObject dco : objects)
+                	combo.addItem(dco);
+            }
             
-            ((DcComboBox) c).setUneditable();
+            combo.setUneditable();
         } else if (field.getFieldType() == ComponentFactory._FILEFIELD || 
         		   field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
         	c = ComponentFactory.getShortTextField(255);

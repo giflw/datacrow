@@ -95,10 +95,11 @@ public class DataCrow {
     private static Logger logger;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 9, 0, 0);
+    private static Version version = new Version(3, 9, 1, 0);
     
     public static String installationDir;
     public static String imageDir;
+    public static String iconsDir;
     public static String moduleDir;
     public static String reportDir;
     public static String pluginsDir;
@@ -718,6 +719,7 @@ public class DataCrow {
         
         webDir = DataCrow.installationDir + "webapp/datacrow/";
         imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/";
+        iconsDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/icons/";
         reportDir = DataCrow.installationDir + "reports/";
         moduleDir = DataCrow.installationDir + "modules/";
         pluginsDir = DataCrow.installationDir + "plugins/";
@@ -728,6 +730,7 @@ public class DataCrow {
         DataCrow.createDirectory(new File(dataDir), "data");
         DataCrow.createDirectory(new File(dataDir, "temp"), "temp");
         DataCrow.createDirectory(new File(imageDir), "images");
+        DataCrow.createDirectory(new File(iconsDir), "icons");
         DataCrow.createDirectory(new File(reportDir), "reports");
         DataCrow.createDirectory(new File(servicesDir), "services");
     }

@@ -51,6 +51,8 @@ import net.datacrow.settings.DcSettings;
 
 public abstract class DcObjectListHwElement extends DcObjectListElement {
     
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
+    
     protected static final int label1Length = 80;
     protected static final int label2Length = 100;
     protected static final int field1Length = 300;
@@ -58,7 +60,7 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
     
     public DcObjectListHwElement(int module) {
         super(module);
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(layout);
     }
     
     @Override
@@ -89,7 +91,7 @@ public abstract class DcObjectListHwElement extends DcObjectListElement {
     @Override
     public JPanel getPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        panel.setLayout(layout);
         return panel;
     }
     

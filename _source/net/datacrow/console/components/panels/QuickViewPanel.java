@@ -187,6 +187,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     
     protected void setObject(DcObject dco) {
         try {
+            
+            if (dco == null) return;
+            
             int tab = tabbedPane.getSelectedIndex();
             module = dco.getModule().getIndex();
             clear();
@@ -374,7 +377,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 
                     String filename = dco.getDisplayString(index);
                     filename = filename.replaceAll(" ", "%20");
-                    value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(dco.getDisplayString(index) ).getName() + "</a>";
+                    value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(dco.getDisplayString(index)).getName() + "</a>";                        
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._PICTUREFIELD) {
                 	Picture p = (Picture) dco.getValue(index);
                 	value = "<p><img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\"></p><br>";
@@ -386,8 +389,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     if (dco.getField(index).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                         int i = 0;
                         for (DcObject reference : (Collection<DcObject>) dco.getValue(index)) {
-                            if (i > 0)
-                                value += "&nbsp;/&nbsp;";
+                            if (i > 0 && horizontal)
+                                value += "&nbsp;&nbsp;";
                             
                             if (reference instanceof DcMapping) 
                                 reference = ((DcMapping) reference).getReferencedObject();
@@ -396,6 +399,10 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                                 continue;
                             
                             value += descriptionPane.createLink(reference, reference.toString());
+                            
+                            if (!horizontal)
+                                value += "<br>";
+                                
                             i++;
                         }
                     } else {

@@ -98,7 +98,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         for (DcModule module : DcModules.getAllModules()) {
             if (module.getIndex() == DcModules._PICTURE) {
                 try { 
-                	String sql = "select distinct * from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
+                	String sql = "select distinct filename from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
                 	ResultSet rs = stmt.executeQuery(sql);
                 	
                 	while (rs.next()) {
@@ -121,7 +121,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
                             module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
                 
                 } catch (SQLException se) {
-                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
+                    // throw new Exception("Unable to create unique index on " + module.getTableName(), se);
+                    // there is no solution for this... yet.
+                    logger.debug(se, se);
                 }
             } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                 try { 
@@ -170,7 +172,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         try {
             if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
         } catch (SQLException ignore) {}
         
         return true;
@@ -201,7 +202,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName())
         
         try {
             if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
         } catch (SQLException ignore) {}
    }
 }

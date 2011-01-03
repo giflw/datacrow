@@ -79,10 +79,10 @@ public class AutoIncrementSettingsPanel extends JPanel {
                 }
             }
             
-            if (module.getSearchView() != null)
+            if (module.hasSearchView())
                 module.getSearchView().applySettings();
 
-            if (module.getInsertView() != null)
+            if (module.hasInsertView())
                 module.getInsertView().applySettings();
             
             ValueEnhancers.registerEnhancer(module.getField(incrementer.getField()), incrementer);

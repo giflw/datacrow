@@ -75,6 +75,16 @@ public class PictureModule extends DcModule {
         return new int[] {};
     }
     
+    @Override
+    public boolean hasInsertView() {
+        return false;
+    }
+
+    @Override
+    public boolean hasSearchView() {
+        return false;
+    }    
+    
     /**
      * Initializes the default fields.
      */
