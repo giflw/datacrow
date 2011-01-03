@@ -508,18 +508,10 @@ public class DataFilter {
         	columnCounter = 0;
         	for (DcField fld : this.order) {
         	    if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-        	        DcModule referencedMod = DcModules.getReferencedModule(fld);
-        	        DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
-        	        
-        	        String subselect = "(select top 1 " + referencedMod.getTableName() + "." + referencedMod.getField(m.getDisplayFieldIdx()).getDatabaseFieldName() +  
-        	               " from " + referencedMod.getTableName() + ", " + mappingMod.getTableName() + 
-        	               " where " + mappingMod.getTableName() + "." +  mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = " + m.getTableName() + ".ID " + 
-        	               " and " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + 
-        	               " = " +  referencedMod.getTableName() + ".ID) as multiref" + columnCounter;
-        	        
-        	        columnCounter++;
         	        sql.append(", ");
-        	        sql.append(subselect);
+                    sql.append(createMultiRefOrderBy(m, fld));
+                    sql.append(columnCounter);
+                    columnCounter++;
         	    }
         	}
         	
@@ -561,19 +553,10 @@ public class DataFilter {
 	            if (this.order != null) {
 		            for (DcField fld : this.order) {
 		                if (fld != null && fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-		                    DcModule referencedMod = DcModules.getReferencedModule(fld);
-		                    DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
-		                    
-		                    String subselect = "(select top 1 " + referencedMod.getTableName() + "." + referencedMod.getField(m.getDisplayFieldIdx()).getDatabaseFieldName() +  
-		                           " from " + referencedMod.getTableName() + ", " + mappingMod.getTableName() + 
-		                           " where " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + 
-		                           " = " + m.getTableName()  + ".ID " + 
-		                           " and " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() +  
-		                           " = " +  referencedMod.getTableName() + ".ID) as multiref" + columnCounter2;
-		                    
-		                    columnCounter2++;
 		                    sql.append(", ");
-		                    sql.append(subselect);
+		                    sql.append(createMultiRefOrderBy(m, fld));
+		                    sql.append(columnCounter2);
+		                    columnCounter2++;
 		                }
 		            }
 	            }
@@ -594,6 +577,28 @@ public class DataFilter {
         // add a join to the reference table part of the sort
         if (order) addOrderBy(sql);
         return sql.toString();
+    }
+    
+    /**
+     * Adds an additional column on which can be sorted. It is however painfully slow.
+     * Should be replaced with a permanent column storing the first value of the referenced table. 
+     * 
+     * @param m main module
+     * @param fld field, multiple-reference
+     * @return
+     */
+    private String createMultiRefOrderBy(DcModule m, DcField fld) {
+        DcModule referencedMod = DcModules.getReferencedModule(fld);
+        DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
+        
+        String subselect = "(select top 1 " + referencedMod.getTableName() + "." + referencedMod.getField(referencedMod.getSystemDisplayFieldIdx()).getDatabaseFieldName() +  
+        " from " + referencedMod.getTableName() + ", " + mappingMod.getTableName() + 
+        " where " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + 
+        " = " + m.getTableName()  + ".ID " + 
+        " and " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() +  
+        " = " +  referencedMod.getTableName() + ".ID) as multiref";
+        
+        return subselect;
     }
     
     @SuppressWarnings("unchecked")
