@@ -68,7 +68,7 @@
             This page should cover most of the commonly asked questions about Data Crow cataloger software.
 
             <br><br><br>
-            <span class="content_main_bold">Windows Vista / Windows 7 installation issues</span><br><br>
+            <span class="content_main_bold">Windows Vista / Windows 7 issues</span><br><br>
             To overcome permission issues on Windows Vista and Windows 7 make sure to run the installer as
             an administrator user (if you do not know how to do this google 'run as administrator').
             This is sufficient for the installer to complete successfully.
@@ -78,6 +78,18 @@
             and data files) to its very own installation folder.
             <br><br>
             Oh, and don't forget: the installer and Data Crow need Java (1.6 or higher) to be installed on the system.
+
+            <br><br><br>
+            <span class="content_main_bold">Ubuntu 10 (and higher versions) issues</span><br><br>
+            Firstly install Sun from Java:
+            <br>
+            <li>sun-java6-jre<br>
+            <li>sun-java6-plugin (the plugin to make mozilla programs work).<br>
+            The EULA needs to be accepted for the install to complete.  
+            <br>
+            Then make this Java version the default Java version by running the following command in the terminal<br>
+            <i>sudo update-java-alternatives -s java-6-sun</i><br>
+            (Thanks to Thane for providing details).
 
             <br><br><br>
             <span class="content_main_bold">I downloaded the installation and now I got myself a jar file .. ?</span><br><br>
