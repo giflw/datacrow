@@ -4,6 +4,7 @@ rd __data /S /Q
 md ..\..\release
 md ..\..\release\datacrow
 del webapp\datacrow\mediaimages\*.* /Q
+del webapp\datacrow\mediaimages\icons\*.* /Q
 del data\*.* /Q
 del data\cache\*.* /Q
 del data\temp\*.* /Q

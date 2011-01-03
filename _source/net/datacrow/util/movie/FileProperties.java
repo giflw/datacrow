@@ -420,6 +420,8 @@ abstract class FileProperties {
                 }
             }
         }
+        
+        reader.close();
         return "";
     }
 }
