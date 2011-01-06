@@ -257,8 +257,9 @@ public class FileTreePanel extends TreePanel {
                             parent = current;
                            
                         } else { // exists
-                            existingNe =(NodeElement) previous.getUserObject();
+                            existingNe =( NodeElement) previous.getUserObject();
                             existingNe.addItem(id, module);
+                            model.nodeChanged(previous);
                             parent = previous;    
                         }
                         level++;

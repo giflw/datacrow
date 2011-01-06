@@ -129,12 +129,9 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
         QuickViewFieldDefinitions qvDefinitions = new QuickViewFieldDefinitions();
         
         for (DcField field : module.getFields()) {
-            fldDefinitions.add(new DcFieldDefinition(field.getIndex(), null, true, false, false, false, null));
-            boolean enabled = field.getValueType() == DcRepository.ValueTypes._STRING ||
-                              field.getValueType() == DcRepository.ValueTypes._LONG;
-            
-            qvDefinitions.add(new QuickViewFieldDefinition(field.getIndex(), enabled, DcResources.getText("lblHorizontal"), 0));
-            webDefinitions.add(new WebFieldDefinition(field.getIndex(), 100, 0, enabled, field.getIndex() == DcMediaObject._A_TITLE, field.getIndex() == DcMediaObject._A_TITLE));
+            fldDefinitions.add(new DcFieldDefinition(field.getIndex(), null, field.isEnabled(), false, false, false, null));
+            qvDefinitions.add(new QuickViewFieldDefinition(field.getIndex(), field.isEnabled(), DcResources.getText("lblHorizontal"), 0));
+            webDefinitions.add(new WebFieldDefinition(field.getIndex(), 100, 0, field.isEnabled(), field.getIndex() == DcMediaObject._A_TITLE, field.getIndex() == DcMediaObject._A_TITLE));
         }
         
         getSettings().addSetting(_General,

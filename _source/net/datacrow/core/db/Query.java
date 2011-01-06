@@ -257,12 +257,12 @@ public abstract class Query {
                     if (fos != null) fos.close();
                 }
 
-                Utilities.writeScaledImageToFile(icon, picture.getScaledFilename(imageFile));
+                Utilities.writeScaledImageToFile(icon, new File(picture.getScaledFilename(imageFile)));
                 
             } else if (bytes != null && bytes.length > 10) {
                 Utilities.writeToFile(bytes, file);
                 icon = new DcImageIcon(bytes);
-                Utilities.writeScaledImageToFile(icon, picture.getScaledFilename(imageFile));
+                Utilities.writeScaledImageToFile(icon, new File(picture.getScaledFilename(imageFile)));
                 icon.flush();
             }
         } catch (Exception e) {

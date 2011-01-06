@@ -94,8 +94,12 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             sb.append(dco.getModule().getIndex());
         
         sb.append("\">");
-        if (icon != null) {
+        if (icon != null && icon.exists()) {
             sb.append("<img border=\"0\" src=\"");
+            
+            String filename = icon.getFilename();
+            filename = filename.startsWith("/") ? filename.substring(1) : filename;
+            
             sb.append("file://" + icon.getFilename());
             sb.append("\">");
             sb.append("&nbsp;");

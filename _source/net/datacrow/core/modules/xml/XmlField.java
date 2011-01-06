@@ -80,12 +80,7 @@ public class XmlField extends XmlObject {
         searchable = template.isSearchable();
         techinfo = template.isTechinfo();
         overwritable = template.isOverwritable();
-        
-//        if (fieldType == ComponentFactory._REFERENCEFIELD) {
-//            valueType = DcRepository.ValueTypes._STRING;
-//            maximumLength = 36;
-//        }
-        
+
         if (template.getModuleReference() != template.getModule())
             moduleReference = template.getModuleReference();
     }

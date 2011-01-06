@@ -505,16 +505,6 @@ public class DataFilter {
 				}
 			}
         	
-        	columnCounter = 0;
-        	for (DcField fld : this.order) {
-        	    if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-        	        sql.append(", ");
-                    sql.append(createMultiRefOrderBy(m, fld));
-                    sql.append(columnCounter);
-                    columnCounter++;
-        	    }
-        	}
-        	
         	sql.append(" FROM (");
         }
         
@@ -548,18 +538,6 @@ public class DataFilter {
 						columnCounter++;
 					}
 				}
-					
-	            int columnCounter2 = 0;
-	            if (this.order != null) {
-		            for (DcField fld : this.order) {
-		                if (fld != null && fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-		                    sql.append(", ");
-		                    sql.append(createMultiRefOrderBy(m, fld));
-		                    sql.append(columnCounter2);
-		                    columnCounter2++;
-		                }
-		            }
-	            }
 			}
 			
 			sql.append(" FROM ");
@@ -577,28 +555,6 @@ public class DataFilter {
         // add a join to the reference table part of the sort
         if (order) addOrderBy(sql);
         return sql.toString();
-    }
-    
-    /**
-     * Adds an additional column on which can be sorted. It is however painfully slow.
-     * Should be replaced with a permanent column storing the first value of the referenced table. 
-     * 
-     * @param m main module
-     * @param fld field, multiple-reference
-     * @return
-     */
-    private String createMultiRefOrderBy(DcModule m, DcField fld) {
-        DcModule referencedMod = DcModules.getReferencedModule(fld);
-        DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
-        
-        String subselect = "(select top 1 " + referencedMod.getTableName() + "." + referencedMod.getField(referencedMod.getSystemDisplayFieldIdx()).getDatabaseFieldName() +  
-        " from " + referencedMod.getTableName() + ", " + mappingMod.getTableName() + 
-        " where " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + 
-        " = " + m.getTableName()  + ".ID " + 
-        " and " + mappingMod.getTableName() + "." + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() +  
-        " = " +  referencedMod.getTableName() + ".ID) as multiref";
-        
-        return subselect;
     }
     
     @SuppressWarnings("unchecked")
@@ -810,17 +766,24 @@ public class DataFilter {
         int counter = 0;
         if (order != null && order.length > 0) {
             for (DcField orderOn : order) {
+
+                // can happen; old configurations
+                if (orderOn == null) continue;
             	
-            	if (orderOn == null) continue;
-            	
-                if (orderOn.getFieldType() == ComponentFactory._REFERENCEFIELD) {
+                if (orderOn.getFieldType() == ComponentFactory._REFERENCEFIELD ||
+                    orderOn.getFieldType() == ComponentFactory._REFERENCESFIELD) {
+                    
+                    String column = orderOn.getFieldType() == ComponentFactory._REFERENCESFIELD ?
+                            DcModules.get(orderOn.getModule()).getPersistentField(orderOn.getIndex()).getDatabaseFieldName() :
+                            orderOn.getDatabaseFieldName();
+                    
                 	String referenceTableName = DcModules.get(orderOn.getReferenceIdx()).getTableName();
                     sql.append(" LEFT OUTER JOIN ");
                     sql.append(referenceTableName);
                     sql.append(" ON ");
                     sql.append(referenceTableName);
                     sql.append(".ID = ");
-                    sql.append(orderOn.getDatabaseFieldName());
+                    sql.append(column);
                     counter++;
                 } 
             }
@@ -834,27 +797,19 @@ public class DataFilter {
         DcField field = module.getField(module.getDefaultSortFieldIdx());
         if (order != null && order.length > 0) {
             for (DcField orderOn : order) {
-                if (orderOn != null && !orderOn.isUiOnly()) {
+                if (orderOn != null) {
                 	sql.append(counter == 0 ? " ORDER BY " : ", ");
-                	if (orderOn.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                		referenceMod = DcModules.get(orderOn.getReferenceIdx());
+                	if (orderOn.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
+                	    orderOn.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+
+                	    referenceMod = DcModules.get(orderOn.getReferenceIdx());
                         sql.append(referenceMod.getTableName());
                         sql.append(".");
                         sql.append(referenceMod.getField(referenceMod.getSystemDisplayFieldIdx()).getDatabaseFieldName());
-                	} else if (orderOn.getDatabaseFieldName() != null) {
+                	} else if (!orderOn.isUiOnly() && orderOn.getDatabaseFieldName() != null) {
 	                    sql.append(orderOn.getDatabaseFieldName());
                 	}
                 	counter++;
-                }
-            }
-            
-            int counter2 = 0;
-            for (DcField orderOn : order) {
-                if (orderOn != null && orderOn.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                    sql.append(counter == 0 ? " ORDER BY " : ", ");
-                    sql.append("multiref" + counter2);
-                    counter2++;
-                    counter++;
                 }
             }
             

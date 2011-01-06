@@ -657,6 +657,22 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                                  getDisplayString(getSystemDisplayFieldIdx()));
         }
         
+        DcField fld;
+        for (DcField field : getFields()) {
+            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                if (isChanged(field.getIndex())) {
+                    fld = getModule().getPersistentField(field.getIndex());
+                    @SuppressWarnings("unchecked")
+                    List<DcObject> references = (List<DcObject>) getValue(field.getIndex());
+                    if (references == null || references.size() == 0) {
+                        setValue(fld.getIndex(), null);
+                    } else {
+                        setValue(fld.getIndex(), references.get(0).getValue(DcMapping._B_REFERENCED_ID));
+                    }
+                }
+            }
+        }
+        
         saveIcon();
     }
     
@@ -1045,7 +1061,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             setValue(_SYS_CREATED, getCurrentDate());
             setIDs();
             
-            addRequest(new UpdateUIAfterInsertRequest(this, isLastInLine()));
+            if (updateGUI)
+                addRequest(new UpdateUIAfterInsertRequest(this, isLastInLine()));
             
             if (queued) {
             	WorkFlow.insert(this);
@@ -1091,7 +1108,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             beforeSave();
             setValue(_SYS_MODIFIED, getCurrentDate());
             
-            addRequest(new UpdateUIAfterUpdateRequest(this, isLastInLine()));
+            if (updateGUI)
+                addRequest(new UpdateUIAfterUpdateRequest(this, isLastInLine()));
+            
             if (queued) {
             	WorkFlow.update(this);
             } else {
@@ -1113,7 +1132,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (validate) 
             beforeDelete();
         
-        addRequest(new UpdateUIAfterDeleteRequest(this, isLastInLine()));
+        if (updateGUI)
+            addRequest(new UpdateUIAfterDeleteRequest(this, isLastInLine()));
         
         WorkFlow.delete(this);
     }

@@ -36,7 +36,7 @@ public class UpdateUIAfterInsertRequest implements IUpdateUIRequest {
         String ID = dco.getID();
 
         if (dco.getModule().isTopModule()) {
-            if (dco.getModule().hasSearchView() && dco.getModule().getSearchView().isLoaded()) {
+            if (dco.getModule().hasSearchView()) {
                 dco.getModule().getSearchView().add(dco, dco.isLastInLine());
                 if (dco.getModule().getInsertView() != null)
                     dco.getModule().getInsertView().remove(ID);

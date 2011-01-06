@@ -173,6 +173,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         if (top != null) {
             NodeElement ne = (NodeElement) top.getUserObject();
             ne.addItem(item, dco.getModule().getIndex());
+            
+            
+            
             add(item, dco.getModule().getIndex(), path, top);
         }
     }
@@ -185,21 +188,28 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     private void add(String item, int module, DcDefaultMutableTreeNode node, DcDefaultMutableTreeNode parent) {
     	DcDefaultMutableTreeNode existingChild;
 
+    	DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+    	
     	// need to add to a collection as nodes will be removed once placed in the actual tree (!)
     	Collection<DcDefaultMutableTreeNode> nodes = new ArrayList<DcDefaultMutableTreeNode>();
     	for (int i = 0; i < node.getChildCount(); i++)
     		nodes.add((DcDefaultMutableTreeNode) node.getChildAt(i));
     	
+    	DcDefaultMutableTreeNode actualParent;
     	for (DcDefaultMutableTreeNode child : nodes) {
     	    existingChild = findNode(child, parent, false);
     	    
+    	    actualParent = findNode((DcDefaultMutableTreeNode) child.getParent(), getTopNode(), true);
+    	    actualParent = actualParent == null ? parent : actualParent;
     	    if (existingChild == null) {
     	    	// will be removed from the node as well: 
     	        child.addItem(item, Integer.valueOf(module));
-    	        insertNode(child, parent);
+    	        insertNode(child, actualParent);
     	        existingChild = child;
     	    } else {
     	        existingChild.addItem(item, Integer.valueOf(module));
+    	        model.nodeChanged(existingChild);
+    	        
     	    }
     	    add(item, module, child, existingChild);
     	}
@@ -357,18 +367,41 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
 
         if (top != null) {
             tree.removeTreeSelectionListener(this);
+            
+            DefaultMutableTreeNode pn;
+            DefaultMutableTreeNode cn;
+            DefaultMutableTreeNode cn2;
+            for (int i = 0; i < top.getChildCount(); i++) {
+                pn = (DefaultMutableTreeNode) top.getChildAt(i);
+                
+                if (pn.getUserObject() != null)
+                    ((NodeElement) pn.getUserObject()).clear();
+                
+                for (int j = 0; j < pn.getChildCount(); j++) {
+                    cn = (DefaultMutableTreeNode) pn.getChildAt(j);
+                    if (cn.getUserObject() != null)
+                        ((NodeElement) cn.getUserObject()).clear();
+                    
+                    for (int k = 0; k < pn.getChildCount(); k++) {
+                        cn2 = (DefaultMutableTreeNode) cn.getChildAt(k);
+                        if (cn2.getUserObject() != null)
+                            ((NodeElement) cn2.getUserObject()).clear();
+                        cn2.removeAllChildren();
+                    }
+                    cn.removeAllChildren();
+                }
+                pn.removeAllChildren();
+            }
+            
             top.removeAllChildren();
-
             ComponentFactory.clean(tree);
-            tree = null;
-            top = null;
-
         }
         
-        if (scroller != null)
-            remove(scroller);
-        
+        tree = null;
+        top = null;
         currentUserObject = null;
+        
+        if (scroller != null) remove(scroller);
     }
     
     @Override

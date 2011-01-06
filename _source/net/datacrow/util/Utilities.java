@@ -415,8 +415,8 @@ public class Utilities {
         return bytes;
     }
     
-    public static void writeToFile(DcImageIcon icon, String filename) throws Exception {
-        writeScaledImageToFile(icon, filename, DcImageIcon._TYPE_PNG, -1, -1);
+    public static void writeToFile(DcImageIcon icon, File file) throws Exception {
+        writeScaledImageToFile(icon, file, DcImageIcon._TYPE_PNG, -1, -1);
     }   
 
     public static void writeToFile(byte[] b, String filename) throws Exception {
@@ -448,13 +448,13 @@ public class Utilities {
         return toBufferedImage(icon, width, height);
     }    
     
-    public static void writeScaledImageToFile(DcImageIcon icon, String filename) throws Exception {
-    	writeScaledImageToFile(icon, filename, DcImageIcon._TYPE_PNG, 190, 145);
+    public static void writeScaledImageToFile(DcImageIcon icon, File file) throws Exception {
+    	writeScaledImageToFile(icon, file, DcImageIcon._TYPE_PNG, 190, 145);
     }
 
-    public static void writeScaledImageToFile(DcImageIcon icon, String filename, int type, int w, int h) throws Exception {
+    public static void writeScaledImageToFile(DcImageIcon icon, File file, int type, int w, int h) throws Exception {
         BufferedImage bufferedImage = toBufferedImage(icon, w, h);
-        ImageIO.write(bufferedImage, (type == DcImageIcon._TYPE_JPEG ? "JPG" : "PNG"), new File(filename));
+        ImageIO.write(bufferedImage, (type == DcImageIcon._TYPE_JPEG ? "JPG" : "PNG"), file);
         bufferedImage.flush();
     }       
     

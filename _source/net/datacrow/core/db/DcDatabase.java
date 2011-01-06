@@ -36,7 +36,8 @@ import java.sql.Types;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
-import net.datacrow.core.db.upgrade.DatabaseUpgrade;
+import net.datacrow.core.db.upgrade.DatabaseUpgradeAfterInitialization;
+import net.datacrow.core.db.upgrade.DatabaseUpgradeBeforeInitialization;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
@@ -129,13 +130,16 @@ public class DcDatabase {
         Connection connection = DatabaseManager.getAdminConnection();
         
         if (!isNew())
-        	new DatabaseUpgrade().start();
+        	new DatabaseUpgradeBeforeInitialization().start();
         
         startQueryQueue();
         initialize(connection);
         setDbProperies(connection);
-        originalVersion = getVersion(connection);
         
+        if (!isNew())
+            new DatabaseUpgradeAfterInitialization().start();
+        
+        originalVersion = getVersion(connection);
         updateVersion(connection);
 
         // Set the database privileges for the current user. This avoids errors for upgraded modules and such. 
@@ -288,28 +292,31 @@ public class DcDatabase {
             
             boolean found = false;
             boolean convert = false;
-            for (int i = 1; i < metaData.getColumnCount() + 1; i++) {
-                if (metaData.getColumnName(i).equalsIgnoreCase(column)) {
-                    found = true;
-                    int dbSize = metaData.getColumnDisplaySize(i);
-                    int dbType = metaData.getColumnType(i);
-                    
-                    convert = false;
-                    if (    dbType == Types.BIGINT && 
-                           (field.getValueType() == DcRepository.ValueTypes._DCPARENTREFERENCE ||
-                            field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
-                            field.getIndex() == DcObject._ID))
-                        convert = true;
-                    else if (dbSize < field.getMaximumLength() && 
-                           (field.getValueType() == DcRepository.ValueTypes._STRING))
-                        convert = true;
-                    
-                    if (convert) {
-                        logger.info(DcResources.getText("msgTableUpgradeIncorrectColumn", new String[] {tablename, field.getLabel()}));
-                        executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
+            
+            if (!field.isUiOnly()) {
+                for (int i = 1; i < metaData.getColumnCount() + 1; i++) {
+                    if (metaData.getColumnName(i).equalsIgnoreCase(column)) {
+                        found = true;
+                        int dbSize = metaData.getColumnDisplaySize(i);
+                        int dbType = metaData.getColumnType(i);
+                        
+                        convert = false;
+                        if (    dbType == Types.BIGINT && 
+                               (field.getValueType() == DcRepository.ValueTypes._DCPARENTREFERENCE ||
+                                field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
+                                field.getIndex() == DcObject._ID))
+                            convert = true;
+                        else if (dbSize < field.getMaximumLength() && 
+                               (field.getValueType() == DcRepository.ValueTypes._STRING))
+                            convert = true;
+                        
+                        if (convert) {
+                            logger.info(DcResources.getText("msgTableUpgradeIncorrectColumn", new String[] {tablename, field.getLabel()}));
+                            executeQuery(connection, "alter table " + tablename + " alter column " + column + " " + type);
+                        }
                     }
                 }
-            }
+            } 
             
             if (!field.isUiOnly() && !found) {
                 logger.info(DcResources.getText("msgTableUpgradeMissingColumn", new String[] {tablename, field.getLabel()}));

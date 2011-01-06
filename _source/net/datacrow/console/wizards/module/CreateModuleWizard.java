@@ -33,6 +33,7 @@ import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcAssociateModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
@@ -81,6 +82,9 @@ public class CreateModuleWizard extends Wizard {
 
         try {
             if (module.getModuleClass().equals(DcPropertyModule.class))
+                module.setServingMultipleModules(true);
+            
+            if (module.getModuleClass().equals(DcAssociateModule.class))
                 module.setServingMultipleModules(true);
             
             new ModuleJar(module).save();

@@ -27,9 +27,6 @@ package net.datacrow.core.objects;
 
 import java.util.StringTokenizer;
 
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
 /**
@@ -115,38 +112,9 @@ public class DcAssociate extends DcObject {
         return DcAssociate._A_NAME;
     }
     
-    /**
-     * Retrieves the field on which associates are sorted. 
-     * This depends on the {@link DcRepository.Settings#stPersonOrder} setting.
-     */
-    @Override
-    public int getDefaultSortFieldIdx() {
-    	String order = DcSettings.getString(DcRepository.Settings.stPersonOrder);
-    	if (order.equals(DcResources.getText("lblPersonOrginalOrder")))
-    		return DcAssociate._ID;
-    	else if (order.equals(DcResources.getText("lblPersonOrderByLastname")))
-    		return DcAssociate._F_LASTTNAME;
-    	else if (order.equals(DcResources.getText("lblPersonOrderByFirstname")))
-    		return DcAssociate._E_FIRSTNAME;
-    	else 
-    		return DcAssociate._A_NAME;
-    }    
-    
     @Override
     public String toString() {
-    	String format = DcSettings.getString(DcRepository.Settings.stPersonDisplayFormat);
-    	
-    	if (format.equals(DcResources.getText("lblPersonLastNameFirstname"))) {
-        	String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
-        	String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
-        	
-        	if (Utilities.isEmpty(firstname) || Utilities.isEmpty(lastname))
-        		return getValue(DcAssociate._A_NAME) != null  ? (String) getValue(DcAssociate._A_NAME) : "";
-    		
-    		return  lastname + ", " + firstname;
-    	} else { 
-    		return getValue(DcAssociate._A_NAME) != null  ? (String) getValue(DcAssociate._A_NAME) : "";
-    	}
+		return getValue(DcAssociate._A_NAME) != null  ? (String) getValue(DcAssociate._A_NAME) : "";
     }  
 
     @Override

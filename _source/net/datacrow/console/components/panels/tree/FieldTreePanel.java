@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.FieldTreePanelMenuBar;
@@ -90,16 +91,6 @@ public class FieldTreePanel extends TreePanel {
     @Override
     protected JMenuBar getMenu() {
         return new FieldTreePanelMenuBar(getModule(), this);
-    }
-    
-    @Override
-    public boolean isEnabled() {
-    	boolean enabled = super.isEnabled() && fields != null && fields.length > 0;
-        if (enabled) {
-            for (int i = 0; i < fields.length; i++)
-            	enabled &= fields[i] != -1;
-        }
-        return enabled;
     }
     
     @Override
@@ -406,6 +397,8 @@ public class FieldTreePanel extends TreePanel {
                 DcField field = null;
                 int module;
 
+                DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+                
                 DefaultMutableTreeNode current;
                 DefaultMutableTreeNode parent;
                 DefaultMutableTreeNode previous;
@@ -467,6 +460,7 @@ public class FieldTreePanel extends TreePanel {
                         } else { // exists
                             existingNe =(NodeElement) previous.getUserObject();
                             existingNe.addItem(id, module);
+                            model.nodeChanged(previous);
                             parent = previous;    
                         }
                         
@@ -479,6 +473,7 @@ public class FieldTreePanel extends TreePanel {
                 
                 NodeElement topElem = (NodeElement) top.getUserObject();
                 topElem.setItems(items);
+                model.nodeChanged(top);
                 
             } catch (Exception e) {
                 logger.error(e, e);
@@ -491,7 +486,7 @@ public class FieldTreePanel extends TreePanel {
         DcModule mod = DcModules.get(getModule());
         String label = mod.getObjectNamePlural();
         
-        if (isEnabled()) {
+        if (isEnabled() && fields != null && fields.length > 0) {
             label += " by ";
             for (int i = 0; i < fields.length; i++)
                 label += (i > 0 ? " & " : "") + mod.getField(fields[i]).getLabel();

@@ -335,7 +335,7 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                 if (file != null) {
                     String filename = file.toString();
                     filename += filename.toLowerCase().endsWith("jpg") || filename.toLowerCase().endsWith("jpeg") ? "" : ".jpg";
-                    Utilities.writeToFile(picture, filename);
+                    picture.save();
                 }
             } catch (Exception e) {
                 DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());

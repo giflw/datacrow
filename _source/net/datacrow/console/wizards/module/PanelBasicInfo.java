@@ -43,6 +43,7 @@ import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.modules.DcAssociateModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.xml.XmlModule;
@@ -94,13 +95,14 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         if (module.getIcon32() != null)
             pic32.setIcon(new DcImageIcon(module.getIcon32()));
         
-        boolean propertyModule = getModule().getModuleClass().equals(DcPropertyModule.class);
+        boolean simpleMod = getModule().getModuleClass().equals(DcPropertyModule.class) ||     
+                                 getModule().getModuleClass().equals(DcAssociateModule.class);
         
-        checkFileBacked.setVisible(!propertyModule);
-        checkCanBeLended.setVisible(!propertyModule);
-        checkContainerManaged.setVisible(!propertyModule);
+        checkFileBacked.setVisible(!simpleMod);
+        checkCanBeLended.setVisible(!simpleMod);
+        checkContainerManaged.setVisible(!simpleMod);
         
-        if (propertyModule) {
+        if (simpleMod) {
             checkFileBacked.setSelected(false);
             checkCanBeLended.setSelected(false);
             checkContainerManaged.setSelected(false);
@@ -217,7 +219,8 @@ public class PanelBasicInfo extends ModuleWizardPanel {
     @Override
     public void onActivation() {
         if (getModule() != null && getModule().getModuleClass() != null) {
-            if (getModule().getModuleClass().equals(DcPropertyModule.class)) {
+            if (    getModule().getModuleClass().equals(DcPropertyModule.class) ||
+                    getModule().getModuleClass().equals(DcAssociateModule.class)) {
                 checkCanBeLended.setSelected(false);
                 checkCanBeLended.setVisible(false);
                 checkContainerManaged.setSelected(false);

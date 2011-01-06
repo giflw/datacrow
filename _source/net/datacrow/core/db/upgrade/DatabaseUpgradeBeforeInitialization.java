@@ -55,9 +55,9 @@ import org.apache.log4j.Logger;
  * 
  * @author Robert Jan van der Waals
  */
-public class DatabaseUpgrade {
+public class DatabaseUpgradeBeforeInitialization {
     
-private static Logger logger = Logger.getLogger(DatabaseUpgrade.class.getName());
+private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitialization.class.getName());
     
     public void start() {
         try {

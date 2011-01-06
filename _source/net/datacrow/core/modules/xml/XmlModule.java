@@ -33,6 +33,7 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.datacrow.core.modules.DcAssociateModule;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -41,6 +42,7 @@ import net.datacrow.core.modules.InvalidModuleXmlException;
 import net.datacrow.core.modules.InvalidValueException;
 import net.datacrow.core.modules.upgrade.ModuleUpgrade;
 import net.datacrow.core.modules.upgrade.ModuleUpgradeException;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
@@ -120,13 +122,17 @@ public class XmlModule extends XmlObject {
         // synchronizer = template.getSynchronizer();
         // importer = template.getImporter();
         
-        object = template.getObject();
+        object = template.getObjectClass();
         moduleClass = template.getModuleClass();
         
         // make sure we are using a transparent module class:
         if (DcModules.get(template.getIndex()) != null) {
             DcModule module = DcModules.get(template.getIndex());
-            if (module.getType() == DcModule._TYPE_MEDIA_MODULE) {
+
+            if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+                object = DcAssociate.class;
+                moduleClass = DcAssociateModule.class;
+            } else if (module.getType() == DcModule._TYPE_MEDIA_MODULE) {
                 object = DcMediaObject.class;
                 moduleClass = DcMediaModule.class;
             } else if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
@@ -221,6 +227,8 @@ public class XmlModule extends XmlObject {
         
         moduleClass = getClass(module, "module-class", true);
         object = getClass(module, "object-class", true);
+        moduleClass = object.equals(DcAssociate.class) ? DcAssociateModule.class : moduleClass;
+        
         index = XMLParser.getInt(module, "index");
         
         if (XMLParser.getString(element, "display-index") != null)
@@ -370,7 +378,7 @@ public class XmlModule extends XmlObject {
     /**
      * Returns the items object class.
      */
-    public Class getObject() {
+    public Class getObjectClass() {
         return object;
     }
 

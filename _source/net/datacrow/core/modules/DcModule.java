@@ -80,6 +80,7 @@ import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinitions;
 import net.datacrow.synchronizers.Synchronizer;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.StringUtils;
 
 import org.apache.log4j.Logger;
 
@@ -243,7 +244,7 @@ public class DcModule implements Comparable<DcModule> {
         this.itemResourceKey = moduleResourceKey + "Item";
         this.itemPluralResourceKey = moduleResourceKey + "ItemPlural";
         
-        // lowel level determination of the type of module.
+        // lower level determination of the type of module; avoiding instanceof calls in the future
         this.type = 
             objectClass != null && objectClass.equals(DcAssociate.class) ? _TYPE_ASSOCIATE_MODULE :
             this instanceof MappingModule ? _TYPE_MAPPING_MODULE :
@@ -280,6 +281,7 @@ public class DcModule implements Comparable<DcModule> {
         
         initializeSystemFields();
         initializeFields();
+        initializeMultiReferenceFields();
         initializeSettings();
         initializeProperties();
     }
@@ -304,7 +306,7 @@ public class DcModule implements Comparable<DcModule> {
         hasInsertView = module.hasInsertView();
         hasSearchView = module.hasSearchView();
         keyStroke = module.getKeyStroke();
-        objectClass = module.getObject();
+        objectClass = module.getObjectClass();
         synchronizerClass = module.getSynchronizer();
         importerClass = module.getImporter();
         hasDependingModules = module.hasDependingModules();
@@ -329,6 +331,7 @@ public class DcModule implements Comparable<DcModule> {
             addField(new DcField(xmlField, getIndex()));
         
         initializeFields();
+        initializeMultiReferenceFields();
         initializeSettings();
         initializeProperties();
 
@@ -691,7 +694,7 @@ public class DcModule implements Comparable<DcModule> {
                     fields.add(field);
         }
         
-        if (getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+        if (getType() == _TYPE_ASSOCIATE_MODULE) {
             if (!fields.contains(Integer.valueOf(DcAssociate._A_NAME)))
                 fields.add(Integer.valueOf(DcAssociate._A_NAME));
             if (!fields.contains(Integer.valueOf(DcAssociate._E_FIRSTNAME)))
@@ -699,6 +702,7 @@ public class DcModule implements Comparable<DcModule> {
             if (!fields.contains(Integer.valueOf(DcAssociate._F_LASTTNAME)))
                 fields.add(Integer.valueOf(DcAssociate._F_LASTTNAME));
         }
+
         
         if (getField(DcObject._ID) != null && !fields.contains(Integer.valueOf(DcObject._ID))) 
             fields.add(Integer.valueOf(DcObject._ID));
@@ -1181,6 +1185,45 @@ public class DcModule implements Comparable<DcModule> {
      */
     public boolean isContainerManaged() {
         return isContainerManaged;
+    }
+    
+    public DcField getPersistentField(int fieldIdx) {
+        return getField(fieldIdx + 100000000);
+    }
+    
+    /**
+     * Creates a simple reference field for each multiple references field for ordering purposes.
+     * It does need to have all modules registered before this method can be called.
+     */
+    public void initializeMultiReferenceFields() {
+        
+        if (    getType() == DcModule._TYPE_TEMPLATE_MODULE ||
+                getType() == DcModule._TYPE_MAPPING_MODULE ||
+                getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE)
+            return;
+        
+        for (DcField field : getFields()) {
+            
+            if (field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) 
+                continue;
+            
+            DcField fld = new DcField(
+                    field.getIndex() + 100000000, 
+                    field.getModule(), 
+                    field.getSystemName() + "_persist", 
+                    false, 
+                    false, 
+                    true, 
+                    false, 
+                    true, 
+                    256, 
+                    ComponentFactory._SHORTTEXTFIELD, 
+                    field.getModule(), 
+                    DcRepository.ValueTypes._STRING,
+                    StringUtils.normalize(field.getSystemName()).replaceAll(" ", "").replaceAll("[\\-]", "") + "_persist");
+            
+            addField(fld);
+        }
     }
     
     /**

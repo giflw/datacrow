@@ -63,7 +63,7 @@ public class ItemExporterUtilities {
         String imageFilename = (String) p.getValue(Picture._C_FILENAME); 
         if (!Utilities.isEmpty(imageFilename)) {
             if (settings.getBoolean(ItemExporterSettings._COPY_IMAGES)) {
-                copyImage(p,  new File(getImageDir(), imageFilename).toString());
+                copyImage(p,  new File(getImageDir(), imageFilename));
                 
                 if (settings.getBoolean(ItemExporterSettings._ALLOWRELATIVEIMAGEPATHS))
                     url = "./" + exportName + "_images/" + imageFilename;
@@ -76,7 +76,7 @@ public class ItemExporterUtilities {
         return url;
     }
     
-    private void copyImage(Picture picture, String target) {
+    private void copyImage(Picture picture, File target) {
         try {
             picture.loadImage(false);
             DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);

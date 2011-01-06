@@ -80,25 +80,28 @@ public class DataManager {
     }
     
     public static DcImageIcon addIcon(String ID, String base64) {
+        DcImageIcon icon = null;
         if (icons.containsKey(ID)) {
-            return icons.get(ID);
+            icon = icons.get(ID);
         } else { 
-            DcImageIcon icon = null;
             if (base64 != null) {
                 icon = Utilities.base64ToImage(base64);
                 icon.setFlushable(false);
                 String filename = DataCrow.iconsDir + ID + ".png";
                 icon.setFilename(filename);
-                try {
-                    Utilities.writeToFile(icon, filename);
-                } catch (Exception e) {
-                    logger.error(e, e);
-                    icon = null;
-                }
+                icon.save();
             }
             icons.put(ID, icon);
-            return icon;
         }
+        
+        if (icon != null && !icon.exists())
+            icon.save();
+        
+        // re-load image if necessary
+        if (icon != null)
+            icon.setImage(icon.getImage());
+        
+        return icon;
     }
 
     public static DcImageIcon getIcon(DcObject dco) {
@@ -108,18 +111,19 @@ public class DataManager {
         } else {
             icon = dco.createIcon();
             if (icon != null) {
-                try {
-                    icon.setFlushable(false);
-                    String filename = DataCrow.iconsDir + dco.getID() + ".png";
-                    icon.setFilename(filename);
-                    Utilities.writeToFile(icon, filename);
-                } catch (Exception e) {
-                    logger.error(e, e);
-                    icon = null;
-                }
+                icon.setFlushable(false);
+                String filename = DataCrow.iconsDir + dco.getID() + ".png";
+                icon.setFilename(filename);
+                icon.save();
             }
             icons.put(dco.getID(), icon);
         }
+        
+        if (icon != null && !icon.exists())
+            icon.save();
+        
+        if (icon != null)
+            icon.setImage(icon.getImage());
         
         return icon;
     }
@@ -617,7 +621,7 @@ public class DataManager {
      * @param module
      * @param parentId
      */
-    public static Collection<DcObject> getReferences(int modIdx, String parentID, boolean full) {
+    public static List<DcObject> getReferences(int modIdx, String parentID, boolean full) {
         DataFilter df = new DataFilter(modIdx);
         df.addEntry(new DataFilterEntry(modIdx, DcMapping._A_PARENT_ID, Operator.EQUAL_TO, parentID));
         return get(df, full ? null : DcModules.get(modIdx).getMinimalFields(null));

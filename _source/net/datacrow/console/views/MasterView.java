@@ -65,6 +65,8 @@ public class MasterView {
     public void setTreePanel(DcModule module) {
         if (!module.isChildModule())
             this.groupingPane = new GroupingPane(module.getIndex(), this);
+        else if (module.getIndex() == DcModules._ITEM)
+            this.groupingPane = DcModules.get(DcModules._CONTAINER).getSearchView().getGroupingPane();
     }
     
     public GroupingPane getGroupingPane() {
@@ -183,7 +185,7 @@ public class MasterView {
     }
     
     public void sort() {
-    	if (getGroupingPane() == null && getGroupingPane().isEnabled()) {
+    	if (getGroupingPane() == null || !getGroupingPane().isEnabled()) {
     		getCurrent().sort();
     	} else {
     		groupingPane.sort();

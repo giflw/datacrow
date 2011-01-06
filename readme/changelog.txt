@@ -1,4 +1,33 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.2  [Released on January 6, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Could not sort on actors, authors, artists and other multiple-references fields.
+  Note that the items are sorted based on the first entry of the multiple references
+  field. So if you have assigned two actors to a movie, Jan Jansen and Richard Howard,
+  the first entry will be used to sort the item (in this case Jan Jansen). 
+  Technically this has been accomplished by store the first string representation in 
+  a separate field which is used to base the sort on. This field is kept in synch with 
+  changes made (cleared in case no entries, updated with first entry in all other cases).
+- Countries and properties could not be edited.
+- Items not removed from the card view after saving them.
+- Container tree does not get updated correctly with parent - child relationships.
+- Unconfirmed fix; memory leak when importing movies file information.
+- Settings were only taken into account (import > online search) after the dialog
+  was closed and re-opened.
+- File import, search for additional information on sub items, did not work for
+  actors and directors when working with imdb.com.
+- Filter dialog could not be opened from within the Book module.
+- After updating an item the node in the tree becomes unreadable (appended with .. and
+  not showing the whole text) 
+
+[Changed]
+- Associates are now part of a specialized associates module. The create module wizard
+  now allows you to select the 'person' module type.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.1  [Released on January 3, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 The "Happy New Year!" additions.. ;-)

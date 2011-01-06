@@ -193,7 +193,9 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         Dimension size = c != null ? c.getSize() : null; 
         
         if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-            DcComboBox combo = (DcComboBox) c;
+            
+            DcComboBox combo = ComponentFactory.getComboBox();
+            c = combo;
             combo.addItem(" ");
 
             if (DataManager.getCount(field.getReferenceIdx(), -1, null) > 1000) {
@@ -208,7 +210,6 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
                 }
                 
                 List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);
-                c = ComponentFactory.getComboBox();
                 for (DcObject dco : objects)
                 	combo.addItem(dco);
             }

@@ -48,6 +48,7 @@ import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.renderers.CheckBoxTableCellRenderer;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.wizards.Wizard;
+import net.datacrow.core.modules.DcAssociateModule;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -189,6 +190,8 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
                 module = new DcMediaModule(10, false, "", "", "", "", "", "");
             else if (xmlModule.getModuleClass().equals(DcPropertyModule.class))
                 module = new DcPropertyModule(10, "", "", "", "", "");
+            else if (xmlModule.getModuleClass().equals(DcAssociateModule.class))
+                module = new DcAssociateModule(10, "", "", "", "", "", "");
         }
         
         return module != null ? module.getFields() : new ArrayList<DcField>();

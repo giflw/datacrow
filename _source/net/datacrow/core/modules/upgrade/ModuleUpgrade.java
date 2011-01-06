@@ -60,7 +60,7 @@ public class ModuleUpgrade extends XmlObject {
     private File remove;
     
     /**
-     * Upgrades the module based on a xml upgrade definition.
+     * Upgrades the module based on a XML upgrade definition.
      * 
      * @param xml
      * @return
@@ -72,7 +72,6 @@ public class ModuleUpgrade extends XmlObject {
     
     public void upgrade() throws ModuleUpgradeException {
         removeDuplicates();
-        
         add = new File(DataCrow.installationDir + "upgrade/add.xml");
         alter = new File(DataCrow.installationDir + "upgrade/alter.xml");
         remove = new File(DataCrow.installationDir + "upgrade/remove.xml");

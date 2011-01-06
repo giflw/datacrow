@@ -51,6 +51,7 @@ public abstract class IconLibrary {
     public static final DcImageIcon _icoModuleTypeProperty32 = new DcImageIcon(picPath + "property32.png");
     public static final DcImageIcon _icoModuleTypePlain = new DcImageIcon(picPath + "moduletype_other.png");
     public static final DcImageIcon _icoModuleTypeMedia = new DcImageIcon(picPath + "moduletype_media.png");
+    public static final DcImageIcon _icoModuleTypeAssociate = new DcImageIcon(picPath + "moduletype_associate.png");
     public static final DcImageIcon _icoTreeLeaf = new DcImageIcon(picPath + "tree_leaf.png");
     public static final DcImageIcon _icoTreeOpen = new DcImageIcon(picPath + "tree_open.png");
     public static final DcImageIcon _icoTreeClosed = new DcImageIcon(picPath + "tree_closed.png");

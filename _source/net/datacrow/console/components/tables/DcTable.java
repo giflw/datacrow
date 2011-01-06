@@ -453,11 +453,13 @@ public class DcTable extends JTable implements IViewComponent {
 
     @Override
     public void undoChanges() {
-        cache.clear();
+        if (cache != null)
+            cache.clear();
     }
 
     public void removeFromCache(String ID) {
-        cache.remove(ID);
+        if (cache != null && ID != null)
+            cache.remove(ID);
     }
 
     @Override

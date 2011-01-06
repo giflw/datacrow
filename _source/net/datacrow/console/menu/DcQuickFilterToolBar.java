@@ -263,7 +263,7 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
                 allFields.add(new Field(field));
         }
         
-        if (module.getChild() != null) {
+        if (module.getChild() != null && module.getChild().getIndex() != DcModules._ITEM) {
             for (DcField field : module.getChild().getFields()) {
                 if (field.isSearchable() && field.isEnabled())
                     allFields.add(new Field(field));

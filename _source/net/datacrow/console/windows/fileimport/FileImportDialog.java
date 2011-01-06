@@ -248,6 +248,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                     settings.set(DcRepository.ModuleSettings.stFileImportOnlineServiceRegion, panelServer.getRegion().getCode());
             }
         }
+        
+        panelServerSettings.save();
     }
     
     public void denyActions() {

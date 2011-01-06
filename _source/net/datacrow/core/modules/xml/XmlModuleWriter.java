@@ -66,7 +66,7 @@ public class XmlModuleWriter {
         writeLine("<icon-16>" + getString(module.getIcon16Filename()) + "</icon-16>" , level);
         writeLine("<icon-32>" + getString(module.getIcon32Filename()) + "</icon-32>" , level);
         writeLine("<object-name>" + getString(module.getObjectName()) + "</object-name>" , level);
-        writeLine("<object-class>" + getString(module.getObject()) + "</object-class>" , level);
+        writeLine("<object-class>" + getString(module.getObjectClass()) + "</object-class>" , level);
         writeLine("<object-name-plural>" + getString(module.getObjectNamePlural()) + "</object-name-plural>" , level);
         writeLine("<table-name>" + getString(module.getTableName()) + "</table-name>" , level);
         writeLine("<table-name-short>" + getString(module.getTableNameShort()) + "</table-name-short>" , level);

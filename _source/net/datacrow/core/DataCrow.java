@@ -95,7 +95,7 @@ public class DataCrow {
     private static Logger logger;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 9, 1, 0);
+    private static Version version = new Version(3, 9, 2, 0);
     
     public static String installationDir;
     public static String imageDir;

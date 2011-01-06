@@ -44,6 +44,7 @@ public class DcImageIcon extends ImageIcon {
     
 	private byte[] bytes;
 	private String filename;
+	private File file;
 	
 	private boolean flushable = true;
 
@@ -58,6 +59,7 @@ public class DcImageIcon extends ImageIcon {
     public DcImageIcon(String filename) {
         super(filename);
         this.filename = filename;
+        this.file = new File(filename);
     }  
     
     public DcImageIcon(byte[] bytes, boolean storeBytes) {
@@ -87,11 +89,26 @@ public class DcImageIcon extends ImageIcon {
         this.flushable = flushable;
     }
 
+    public void save() {
+        
+        if (file == null) return;
+        
+        try {
+            Utilities.writeToFile(this, file);
+        } catch (Exception e) {
+            logger.error("Could not save icon to file " + filename, e);
+        }
+    }
+    
+    public boolean exists() {
+        return file == null ? false : file.exists();
+    }
+    
     public void flush() {
         if (isFlushable()) {
             bytes = null;
             filename = null;
-//        	getImage().flush();
+            file = null;
         }
     }
     
@@ -99,8 +116,17 @@ public class DcImageIcon extends ImageIcon {
         return filename;
     }
     
+    public File getFile() {
+        return file;
+    }
+    
     public void setFilename(String filename) {
     	this.filename = filename;
+    	
+    	if (filename != null)
+    	    this.file = new File(filename);
+    	else
+    	    this.file = null;
     }
     
     public byte[] getCurrentBytes() {
@@ -113,7 +139,7 @@ public class DcImageIcon extends ImageIcon {
     		
     	try {
     		this.bytes = bytes != null ? bytes :  
-    		             filename != null ? Utilities.readFile(new File(filename)) : Utilities.getBytes(this);
+    		             filename != null ? Utilities.readFile(file) : Utilities.getBytes(this);
     	} catch (Exception ie) {
     		logger.error("Could not retrieve bytes from " + filename, ie);
     	}
@@ -125,6 +151,7 @@ public class DcImageIcon extends ImageIcon {
     protected void finalize() throws Throwable {
         try {
             flush();
+            getImage().flush();
         } catch (Exception e) {
             logger.error(e, e);
         }

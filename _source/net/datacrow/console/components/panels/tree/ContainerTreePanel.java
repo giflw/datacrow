@@ -91,8 +91,15 @@ public class ContainerTreePanel extends TreePanel {
     
     @Override
     public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
-    	DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode(DcModules.get(DcModules._CONTAINER).getLabel());
-    	node.add(new DcDefaultMutableTreeNode(new ContainerNodeElement(dco.getID(), dco.toString(), dco.getIcon())));
+        DcDefaultMutableTreeNode node;
+        DcObject parent = (DcObject) dco.getValue(Container._F_PARENT);
+        node = parent != null ? 
+                findNode(new DcDefaultMutableTreeNode(new ContainerNodeElement(parent.getID(), parent.toString(), null)), top, true) :
+                new DcDefaultMutableTreeNode(DcModules.get(DcModules._CONTAINER).getLabel());
+            
+        node = node == null ? new DcDefaultMutableTreeNode(DcModules.get(DcModules._CONTAINER).getLabel()) : node;
+        node.removeAllChildren();
+        node.add(new DcDefaultMutableTreeNode(new ContainerNodeElement(dco.getID(), dco.toString(), dco.getIcon())));
         return node;
     }  
 
@@ -240,11 +247,14 @@ public class ContainerTreePanel extends TreePanel {
 	    	
 	    	if (relations.containsKey(parentKey)) {
 	    		int counter = 0;
+	    		ContainerNodeElement ne;
+	    		DcDefaultMutableTreeNode node;
 	    		for (String childKey : relations.get(parentKey)) {
-		    		ContainerNodeElement ne = new ContainerNodeElement(childKey, all.get(childKey), icons.get(childKey));
-		    		DcDefaultMutableTreeNode node = new DcDefaultMutableTreeNode(ne);
+		    		ne = new ContainerNodeElement(childKey, all.get(childKey), icons.get(childKey));
+		    		node = new DcDefaultMutableTreeNode(ne);
 		    		model.insertNodeInto(node, parentNode, counter++);
 		    		top.addItem(childKey, Integer.valueOf(DcModules._CONTAINER));
+		    		model.nodeChanged(top);
 		    		createChildren(model, childKey, node, relations, all, icons);
 	    		}
 	    	}

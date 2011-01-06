@@ -38,10 +38,12 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.modules.DcAssociateModule;
 import net.datacrow.core.modules.DcMediaModule;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.xml.XmlModule;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
@@ -53,6 +55,7 @@ public class PanelModuleType extends ModuleWizardPanel {
     private static final int _OTHERMODULE = 0;
     private static final int _MEDIAMODULE = 1;
     private static final int _PROPERTYMODULE = 2;
+    private static final int _ASSOCIATEMODULE = 3;
     
     private int type = -1;
     
@@ -95,6 +98,12 @@ public class PanelModuleType extends ModuleWizardPanel {
             module.setCanBeLend(false);
             module.setDefaultSortFieldIdx(DcProperty._A_NAME);
             module.setNameFieldIdx(DcProperty._A_NAME);
+        } else if (type == _ASSOCIATEMODULE) {
+            module.setModuleClass(DcAssociateModule.class);
+            module.setObject(DcAssociate.class);
+            module.setCanBeLend(false);
+            module.setDefaultSortFieldIdx(DcAssociate._A_NAME);
+            module.setNameFieldIdx(DcAssociate._A_NAME);
         }
 
         return module;
@@ -133,14 +142,18 @@ public class PanelModuleType extends ModuleWizardPanel {
                 DcResources.getText("lblMediaModule"),  IconLibrary._icoModuleTypeMedia, "" + _MEDIAMODULE);
         JRadioButton rbPropertyMod = ComponentFactory.getRadioButton(
                 DcResources.getText("lblPropertyModule"), IconLibrary._icoModuleTypeProperty32, "" + _PROPERTYMODULE);
+        JRadioButton rbAssociateMod = ComponentFactory.getRadioButton(
+                DcResources.getText("lblAssociateModule"), IconLibrary._icoModuleTypeAssociate, "" + _ASSOCIATEMODULE);
         
         rbPlainMod.addMouseListener(new ModuleTypeSelectionListener());
         rbMediaMod.addMouseListener(new ModuleTypeSelectionListener());
         rbPropertyMod.addMouseListener(new ModuleTypeSelectionListener());
+        rbAssociateMod.addMouseListener(new ModuleTypeSelectionListener());
         
         buttonGroup.add(rbPlainMod);
         buttonGroup.add(rbMediaMod);
         buttonGroup.add(rbPropertyMod);
+        buttonGroup.add(rbAssociateMod);
 
         add(rbPropertyMod,Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
@@ -150,6 +163,9 @@ public class PanelModuleType extends ModuleWizardPanel {
                  new Insets( 0, 5, 5, 5), 0, 0));        
         add(rbPlainMod, Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 5, 5, 5), 0, 0));        
+                 new Insets( 0, 5, 5, 5), 0, 0));     
+        add(rbAssociateMod, Layout.getGBC(0, 3, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 5, 5, 5), 0, 0)); 
     }
 }
