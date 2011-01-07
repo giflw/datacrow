@@ -25,8 +25,13 @@
 
 package net.datacrow.console.components;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,23 +39,28 @@ import java.util.Map;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
+import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 
-public class DcFieldSelectorField extends JComponent implements IComponent {
+public class DcFieldSelectorField extends JComponent implements IComponent, ActionListener {
 
     private Map<DcField, JCheckBox> componentMap = new HashMap<DcField, JCheckBox>();
     private final int module;
 
-    public DcFieldSelectorField(int module) {
+    public DcFieldSelectorField(int module, boolean allFields, boolean showMenu) {
         this.module = module;
-        buildComponent();
+        buildComponent(allFields, showMenu);
     }
 
     @Override
@@ -133,7 +143,7 @@ public class DcFieldSelectorField extends JComponent implements IComponent {
         return new DcMultiLineToolTip();
     }
     
-    private void buildComponent() {
+    private void buildComponent(boolean allFields, boolean showMenu) {
         setLayout(Layout.getGBL());
 
         JPanel panel = new JPanel();
@@ -143,7 +153,7 @@ public class DcFieldSelectorField extends JComponent implements IComponent {
         int y = 0;
 
         for (DcField field : DcModules.get(module).getFields()) {
-            if (field.getIndex() != DcObject._ID && field.getIndex() != DcObject._SYS_EXTERNAL_REFERENCES) {
+            if (allFields || (field.getIndex() != DcObject._ID && field.getIndex() != DcObject._SYS_EXTERNAL_REFERENCES)) {
                 JCheckBox checkBox = ComponentFactory.getCheckBox(field.getLabel());
                 componentMap.put(field, checkBox);
     
@@ -158,11 +168,60 @@ public class DcFieldSelectorField extends JComponent implements IComponent {
             }
         }
 
-        add(panel, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+        if (showMenu) {
+            JMenu editMenu = createMenu();
+            JMenuBar mb = ComponentFactory.getMenuBar();
+            mb.add(editMenu);
+            
+            mb.setMinimumSize(new Dimension(100, 23));
+            mb.setPreferredSize(new Dimension(100, 23));
+            
+            add(mb, Layout.getGBC(0, 0, 1, 1, 10.0, 10.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets( 0, 0, 0, 0), 0, 0));
+        }
+        
+        add(panel, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                    new Insets( 0, 0, 0, 0), 0, 0));
     }
     
+    private JMenu createMenu() {
+        JMenu menu = ComponentFactory.getMenu("Edit");
+        
+        JMenuItem menuSelectAll = ComponentFactory.getMenuItem(DcResources.getText("lblSelectAll"));
+        JMenuItem menuUnselectAll = ComponentFactory.getMenuItem(DcResources.getText("lblUnselectAll"));
+        JMenuItem menuInvertSelection = ComponentFactory.getMenuItem(DcResources.getText("lblInvertSelection"));
+
+        menuSelectAll.addActionListener(this);
+        menuSelectAll.setActionCommand("selectAll");
+        menuUnselectAll.addActionListener(this);
+        menuUnselectAll.setActionCommand("unselectAll");
+        menuInvertSelection.addActionListener(this);
+        menuInvertSelection.setActionCommand("invertSelection");
+        
+        menuSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+        menuUnselectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_MASK));
+        menuInvertSelection.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK));
+        
+        menu.add(menuSelectAll);
+        menu.add(menuUnselectAll);
+        menu.addSeparator();
+        menu.add(menuInvertSelection);
+        
+        return menu;
+    }    
+    
     @Override
     public void refresh() {}
+    
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getActionCommand().equals("unselectAll"))
+            unselectAll();
+        else if (ae.getActionCommand().equals("selectAll"))
+            selectAll();
+        else if (ae.getActionCommand().equals("invertSelection"))
+            invertSelection();
+    }
 }

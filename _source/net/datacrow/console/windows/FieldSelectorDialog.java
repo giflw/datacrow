@@ -30,16 +30,10 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -102,10 +96,10 @@ public class FieldSelectorDialog extends DcDialog implements ActionListener {
     private void build() {
         getContentPane().setLayout(Layout.getGBL());
         
-        fs = new DcFieldSelectorField(modIdx);
+        fs = new DcFieldSelectorField(modIdx, false, true);
         
         getContentPane().add(fs, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                              new Insets(5, 5, 5, 5), 0, 0));        
         
         JPanel panelActions = new JPanel();
@@ -125,50 +119,13 @@ public class FieldSelectorDialog extends DcDialog implements ActionListener {
         getContentPane().add(panelActions, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
                             ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                              new Insets(0, 0, 5, 5), 0, 0));
-        
-        JMenu editMenu = createMenu();
-        JMenuBar mb = ComponentFactory.getMenuBar();
-        mb.add(editMenu);
-        setJMenuBar(mb);
-        
+
         pack();
     }
     
-    private JMenu createMenu() {
-        JMenu menu = ComponentFactory.getMenu("Edit");
-        
-        JMenuItem menuSelectAll = ComponentFactory.getMenuItem(DcResources.getText("lblSelectAll"));
-        JMenuItem menuUnselectAll = ComponentFactory.getMenuItem(DcResources.getText("lblUnselectAll"));
-        JMenuItem menuInvertSelection = ComponentFactory.getMenuItem(DcResources.getText("lblInvertSelection"));
-
-        menuSelectAll.addActionListener(this);
-        menuSelectAll.setActionCommand("selectAll");
-        menuUnselectAll.addActionListener(this);
-        menuUnselectAll.setActionCommand("unselectAll");
-        menuInvertSelection.addActionListener(this);
-        menuInvertSelection.setActionCommand("invertSelection");
-        
-        menuSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-        menuUnselectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_MASK));
-        menuInvertSelection.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK));
-        
-        menu.add(menuSelectAll);
-        menu.add(menuUnselectAll);
-        menu.addSeparator();
-        menu.add(menuInvertSelection);
-        
-        return menu;
-    }    
-
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("unselectAll"))
-            fs.unselectAll();
-        else if (ae.getActionCommand().equals("selectAll"))
-            fs.selectAll();
-        else if (ae.getActionCommand().equals("invertSelection"))
-            fs.invertSelection();
-        else if (ae.getActionCommand().equals("close"))
+        if (ae.getActionCommand().equals("close"))
             close();
         else if (ae.getActionCommand().equals("apply"))
             apply();

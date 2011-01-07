@@ -127,7 +127,16 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "tpAwsSecretKey",
                             "lblAwsSecretKey",
                             true,
-                            false));     
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._LONG,
+                            DcRepository.Settings.stImdbMaxActors,
+                            Long.valueOf(0),
+                            ComponentFactory._NUMBERFIELD,
+                            "",
+                            "lblImdbMaxActors",
+                            true,
+                            false));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stAwsAccessKeyId,

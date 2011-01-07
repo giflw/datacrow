@@ -382,7 +382,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
                     if (cn.getUserObject() != null)
                         ((NodeElement) cn.getUserObject()).clear();
                     
-                    for (int k = 0; k < pn.getChildCount(); k++) {
+                    for (int k = 0; k < cn.getChildCount(); k++) {
                         cn2 = (DefaultMutableTreeNode) cn.getChildAt(k);
                         if (cn2.getUserObject() != null)
                             ((NodeElement) cn2.getUserObject()).clear();

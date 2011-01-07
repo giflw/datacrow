@@ -27,6 +27,7 @@ package net.datacrow.core.data;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +67,7 @@ public class DataFilter {
     private DcField[] order;
     private Collection<DataFilterEntry> entries = new ArrayList<DataFilterEntry>();
     
+    private final static Calendar cal = Calendar.getInstance();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
    
     /**
@@ -737,7 +739,35 @@ public class DataFilter {
                     sql.append(queryValue);
                 
                 if (useUpper) sql.append(")");
+            } else if (operator == Operator.TODAY.getIndex()) {
+                sql.append(" = TODAY");
+            } else if (operator == Operator.DAYS_BEFORE.getIndex()) {
+                cal.setTime(new Date());
+                Long days = (Long) entry.getValue();
+                cal.add(Calendar.DATE, -1 * days.intValue());
+                sql.append(" = '" + formatter.format(cal.getTime()) + "'");
+            } else if (operator == Operator.DAYS_AFTER.getIndex()) {
+                Long days = (Long) entry.getValue();
+                cal.add(Calendar.DATE, days.intValue());
+                sql.append(" = '" + formatter.format(cal.getTime()) + "'");
+            } else if (operator == Operator.MONTHS_AGO.getIndex()) {
+                Long days = (Long) entry.getValue();
+                cal.add(Calendar.MONTH, -1 * days.intValue());
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                sql.append(" BETWEEN '" + formatter.format(cal.getTime()) + "'");
+                cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+                sql.append(" AND '" + formatter.format(cal.getTime()) + "'");
+            } else if (operator == Operator.YEARS_AGO.getIndex()) {
+                Long days = (Long) entry.getValue();
+                cal.add(Calendar.YEAR, -1 * days.intValue());
+                cal.set(Calendar.MONTH, 1);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                sql.append(" BETWEEN '" + formatter.format(cal.getTime()) + "'");
+                cal.set(Calendar.MONTH, 12);
+                cal.set(Calendar.DAY_OF_MONTH, 31);
+                sql.append(" AND '" + formatter.format(cal.getTime()) + "'");
             }
+            
             counter++;
         }
         

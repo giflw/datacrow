@@ -62,6 +62,7 @@ public class ItemExporterWizard extends Wizard {
         List<IWizardPanel> panels = new ArrayList<IWizardPanel>();
     	panels.add(new ItemExporterSelectionPanel(this));
     	panels.add(new ItemExporterSettingsPanel(this));
+    	panels.add(new ItemExporterSelectFieldsPanel(this));
     	panels.add(new ItemExporterTaskPanel(this));
     	return panels;
     }

@@ -1,560 +1,607 @@
-Module              [Actors]
+Module              [Acteurs]
 xsl reference name  [actor]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Created                 = created
-  Description             = description
-  External References     = external-references
-  Firstname               = firstname
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Lastname                = lastname
-  Modified                = modified
-  Name                    = name
-  Photo                   = photo
-  Service                 = service
-  Service URL             = service-url
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Externe Referenties          = external-references
+  External References_persist  = external-references_persist
+  Voornaam                     = firstname
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Achternaam                   = lastname
+  Aangepast op                 = modified
+  Naam                         = name
+  Foto                         = photo
+  Service                      = service
+  Service URL                  = service-url
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
+  Webpagina                    = webpage
 
 
-Module              [Artist]
+Module              [Afbeeldingen]
+xsl reference name  [image]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Beschikbaar                           = available
+  Camera                                = camera
+  Categorie                             = category
+  Compressie (Bits)                     = compression-bits
+  Container                             = container
+  Container_persist                     = container_persist
+  Countries                             = countries
+  Countries_persist                     = countries_persist
+  Aangemaakt op                         = created
+  Datum                                 = date
+  Dagen uitgeleend                      = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Uiterste retourdatum                  = due-date
+  Externe Referenties                   = external-references
+  External References_persist           = external-references_persist
+  Bestandshash                          = filehash
+  Bestandshash Type                     = filehash-type
+  Bestandsnaam                          = filename
+  Bestandsgrootte                       = filesize
+  Hoogte                                = height
+  ID                                    = id
+  Afbeelding                            = image
+  Item                                  = item
+  Item Value                            = item-value
+  Label                                 = label
+  Geleend door                          = lend-by
+  Aangepast op                          = modified
+  Lokatie                               = place
+  Beoordeling                           = rating
+  Status                                = state
+  Opslagmedium                          = storage-medium
+  Titel                                 = title
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
+  Breedte                               = width
+  Jaar                                  = year
+
+
+Module              [Artiesten]
 xsl reference name  [artist]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Created                 = created
-  Description             = description
-  External References     = external-references
-  Firstname               = firstname
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Lastname                = lastname
-  Modified                = modified
-  Name                    = name
-  Photo                   = photo
-  Service                 = service
-  Service URL             = service-url
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Externe Referenties          = external-references
+  External References_persist  = external-references_persist
+  Voornaam                     = firstname
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Achternaam                   = lastname
+  Aangepast op                 = modified
+  Naam                         = name
+  Foto                         = photo
+  Service                      = service
+  Service URL                  = service-url
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
+  Webpagina                    = webpage
 
 
 Module              [Audio CDs]
 xsl reference name  [audio-cd]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Artists                 = artists
-  Available               = available
-  Container               = container
-  Countries               = countries
-  Created                 = created
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Due Date                = due-date
-  EAN                     = ean
-  External References     = external-references
-  Genres                  = genres
-  ID                      = id
-  Item                    = item
-  Item Value              = item-value
-  Label                   = label
-  Languages               = languages
-  Lend By                 = lend-by
-  Modified                = modified
-  Picture Back            = picture-back
-  Picture CD              = picture-cd
-  Picture Front           = picture-front
-  Rating                  = rating
-  Service                 = service
-  Service URL             = service-url
-  State                   = state
-  Title                   = title
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
-  Year                    = year
+  Artiesten                             = artists
+  Artists_persist                       = artists_persist
+  Beschikbaar                           = available
+  Container                             = container
+  Container_persist                     = container_persist
+  Countries                             = countries
+  Countries_persist                     = countries_persist
+  Aangemaakt op                         = created
+  Dagen uitgeleend                      = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Uiterste retourdatum                  = due-date
+  EAN                                   = ean
+  Externe Referenties                   = external-references
+  External References_persist           = external-references_persist
+  Genres                                = genres
+  Genres_persist                        = genres_persist
+  ID                                    = id
+  Item                                  = item
+  Item Value                            = item-value
+  Label                                 = label
+  Talen                                 = languages
+  Languages_persist                     = languages_persist
+  Geleend door                          = lend-by
+  Aangepast op                          = modified
+  Afbeelding Achterkant                 = picture-back
+  Afbeelding CD                         = picture-cd
+  Afbeelding voorkant                   = picture-front
+  Beoordeling                           = rating
+  Service                               = service
+  Service URL                           = service-url
+  Status                                = state
+  Titel                                 = title
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
+  Webpage                               = webpage
+  Jaar                                  = year
 
 
-Module              [Authors]
+Module              [Auteurs]
 xsl reference name  [author]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Created                 = created
-  Description             = description
-  External References     = external-references
-  Firstname               = firstname
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Lastname                = lastname
-  Modified                = modified
-  Name                    = name
-  Photo                   = photo
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Externe Referenties          = external-references
+  External References_persist  = external-references_persist
+  Voornaam                     = firstname
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Achternaam                   = lastname
+  Aangepast op                 = modified
+  Naam                         = name
+  Foto                         = photo
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
+  Webpagina                    = webpage
 
 
-Module              [Books]
+Module              [Boeken]
 xsl reference name  [book]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Authors                 = authors
-  Available               = available
-  Binding                 = binding
-  Category                = category
-  Container               = container
-  Countries               = countries
-  Created                 = created
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Due Date                = due-date
-  Edition Comment         = edition-comment
-  Edition Type            = edition-type
-  External References     = external-references
-  Filehash                = filehash
-  Filehash Type           = filehash-type
-  Filename                = filename
-  Filesize                = filesize
-  ID                      = id
-  Isbn 10                 = isbn-10
-  Isbn 13                 = isbn-13
-  Item                    = item
-  Item Value              = item-value
-  Label                   = label
-  Languages               = languages
-  Lend By                 = lend-by
-  Modified                = modified
-  Pages                   = pages
-  Picture Front           = picture-front
-  Publishers              = publishers
-  Rating                  = rating
-  Series                  = series
-  Service                 = service
-  Service URL             = service-url
-  State                   = state
-  Storage Medium          = storage-medium
-  Title                   = title
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Volume (nr)             = volume-nr
-  Volume name             = volume-name
-  Webpage                 = webpage
-  Year                    = year
+  Auteurs                               = authors
+  Authors_persist                       = authors_persist
+  Beschikbaar                           = available
+  Kafttype                              = binding
+  Categorie                             = category
+  Container                             = container
+  Container_persist                     = container_persist
+  Landen                                = countries
+  Countries_persist                     = countries_persist
+  Aangemaakt op                         = created
+  Dagen uitgeleend                      = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Uiterste retourdatum                  = due-date
+  Editie Opmerking                      = edition-comment
+  Editie Type                           = edition-type
+  Externe Referenties                   = external-references
+  External References_persist           = external-references_persist
+  Bestandshash                          = filehash
+  Bestandshash Type                     = filehash-type
+  Bestandsnaam                          = filename
+  Bestandsgrootte                       = filesize
+  ID                                    = id
+  Isbn 10                               = isbn-10
+  Isbn 13                               = isbn-13
+  Item                                  = item
+  Waarde                                = item-value
+  Label                                 = label
+  Talen                                 = languages
+  Languages_persist                     = languages_persist
+  Geleend door                          = lend-by
+  Aangepast op                          = modified
+  Pagina's                              = pages
+  Afbeelding voorkant                   = picture-front
+  Uitgevers                             = publishers
+  Publishers_persist                    = publishers_persist
+  Beoordeling                           = rating
+  Serie                                 = series
+  Service                               = service
+  Service URL                           = service-url
+  Status                                = state
+  Storage Medium                        = storage-medium
+  Titel                                 = title
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
+  Volume (nr)                           = volume-nr
+  Volume name                           = volume-name
+  Webpage                               = webpage
+  Jaar                                  = year
 
 
-Module              [Contact Person]
+Module              [Contact Personen]
 xsl reference name  [contact-person]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Address                 = address
-  Category                = category
-  City                    = city
-  Country                 = country
-  Created                 = created
-  Description             = description
-  Email                   = email
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Modified                = modified
-  Name                    = name
-  Phone (Home)            = phone-home
-  Phone (Work)            = phone-work
-  Photo                   = photo
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
+  Adres                        = address
+  Categorie                    = category
+  Stad                         = city
+  Land                         = country
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Email                        = email
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Aangepast op                 = modified
+  Naam                         = name
+  Telefoonnummer (thuis)       = phone-home
+  Telefoonnummer (Werk)        = phone-work
+  Foto                         = photo
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
 
 
-Module              [Containers]
+Module              [Container]
 xsl reference name  [container]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Available               = available
-  Container Type          = container-type
-  Created                 = created
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Due Date                = due-date
-  Filehash                = filehash
-  Filehash Type           = filehash-type
-  Filename                = filename
-  Filesize                = filesize
-  ID                      = id
-  Icon                    = icon
-  Item                    = item
-  Label                   = label
-  Lend By                 = lend-by
-  Modified                = modified
-  Name                    = name
-  Parent                  = parent
-  Picture Front           = picture-front
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
+  Beschikbaar                           = available
+  Container Type                        = container-type
+  Aangemaakt op                         = created
+  Dagen uitgeleend                      = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Uiterste retourdatum                  = due-date
+  Bestandshash                          = filehash
+  Bestandshash Type                     = filehash-type
+  Bestandsnaam                          = filename
+  Bestandsgrootte                       = filesize
+  ID                                    = id
+  Icoon                                 = icon
+  Item                                  = item
+  Label                                 = label
+  Geleend door                          = lend-by
+  Aangepast op                          = modified
+  Naam                                  = name
+  Parent                                = parent
+  Afbeelding voorkant                   = picture-front
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
 
 
-Module              [Developers]
-xsl reference name  [developer]
+Module              [Film]
+xsl reference name  [movie]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Created                 = created
-  Description             = description
-  External References     = external-references
-  Firstname               = firstname
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Lastname                = lastname
-  Modified                = modified
-  Name                    = name
-  Photo                   = photo
-  Service                 = service
-  Service URL             = service-url
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
+  Acteurs                               = actors
+  Actors_persist                        = actors_persist
+  Aspect Ratio                          = aspect-ratio
+  Audio Bit ratio                       = audio-bitrate
+  Audio Kanalen                         = audio-channels
+  Audio Codec                           = audio-codec
+  Gesproken Taal                        = audio-languages
+  Audio Languages_persist               = audio-languages_persist
+  Audio Sample Ratio                    = audio-sample-rate
+  Beschikbaar                           = available
+  Leeftijdscategorie                    = certification
+  Color                                 = color
+  Container                             = container
+  Container_persist                     = container_persist
+  Landen                                = countries
+  Countries_persist                     = countries_persist
+  Aangemaakt op                         = created
+  Dagen uitgeleend                      = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Regiseurs                             = directors
+  Directors_persist                     = directors_persist
+  Uiterste retourdatum                  = due-date
+  EAN                                   = ean
+  Aflevering (nr)                       = episode-nr
+  Naam Aflevering                       = episode-name
+  Externe Referenties                   = external-references
+  External References_persist           = external-references_persist
+  Bestandshash                          = filehash
+  Bestandshash Type                     = filehash-type
+  Bestandsnaam                          = filename
+  Bestandsgrootte                       = filesize
+  Fps                                   = fps
+  Frames                                = frames
+  Genres                                = genres
+  Genres_persist                        = genres_persist
+  Hoogte                                = height
+  ID                                    = id
+  Item                                  = item
+  Waarde                                = item-value
+  Label                                 = label
+  Talen                                 = languages
+  Languages_persist                     = languages_persist
+  Geleend door                          = lend-by
+  Aangepast op                          = modified
+  Afbeelding Achterkant                 = picture-back
+  Afbeelding CD                         = picture-cd
+  Afbeelding voorkant                   = picture-front
+  Duur                                  = playlength
+  Beoordeling                           = rating
+  Seizoen                               = season
+  Serie                                 = series
+  Service                               = service
+  Service URL                           = service-url
+  Status                                = state
+  Opslag Medium                         = storage-medium
+  Taal Ondertitel                       = subtitle-languages
+  Subtitle Languages_persist            = subtitle-languages_persist
+  Titel                                 = title
+  Titel (lokaal)                        = title-local
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
+  Video Bitratio                        = video-bitrate
+  Video Codec                           = video-codec
+  Webpagina                             = webpage
+  Breedte                               = width
+  Jaar                                  = year
 
 
-Module              [Directors]
-xsl reference name  [director]
+Module              [Gebruikers]
+xsl reference name  [user]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Created                 = created
-  Description             = description
-  External References     = external-references
-  Firstname               = firstname
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Lastname                = lastname
-  Modified                = modified
-  Name                    = name
-  Photo                   = photo
-  Service                 = service
-  Service URL             = service-url
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
-
-
-Module              [Images]
-xsl reference name  [image]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Available               = available
-  Camera                  = camera
-  Category                = category
-  Compression (Bits)      = compression-bits
-  Container               = container
-  Countries               = countries
-  Created                 = created
-  Date                    = date
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Due Date                = due-date
-  External References     = external-references
-  Filehash                = filehash
-  Filehash Type           = filehash-type
-  Filename                = filename
-  Filesize                = filesize
-  Height                  = height
-  ID                      = id
-  Image                   = image
-  Item                    = item
-  Item Value              = item-value
-  Label                   = label
-  Lend By                 = lend-by
-  Modified                = modified
-  Place                   = place
-  Rating                  = rating
-  State                   = state
-  Storage Medium          = storage-medium
-  Title                   = title
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Width                   = width
-  Year                    = year
+  Adres                  = address
+  Beheerder              = admin
+  Stad                   = city
+  Land                   = country
+  Aangemaakt op          = created
+  Omschrijving           = description
+  Email                  = email
+  Actief                 = enabled
+  ID                     = id
+  Item                   = item
+  Waarde                 = item-value
+  Label                  = label
+  Gebruikersnaam         = login-name
+  Aangepast op           = modified
+  Naam                   = name
+  Telefoonnummer (thuis) = phone-home
+  Telefoon (werk)        = phone-work
+  Foto                   = photo
 
 
 Module              [Media]
 xsl reference name  [media-item]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Available               = available
-  Container               = container
-  Countries               = countries
-  Created                 = created
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Due Date                = due-date
-  ID                      = id
-  Item                    = item
-  Item Value              = item-value
-  Label                   = label
-  Lend By                 = lend-by
-  Modified                = modified
-  Rating                  = rating
-  Title                   = title
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Year                    = year
+  Beschikbaar                           = available
+  Container                             = container
+  Container_persist                     = container_persist
+  Landen                                = countries
+  Countries_persist                     = countries_persist
+  Aangemaakt op                         = created
+  Dagen geleend                         = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Uiterste retourdatum                  = due-date
+  ID                                    = id
+  Item                                  = item
+  Waarde                                = item-value
+  Label                                 = label
+  Geleend door                          = lend-by
+  Aangepast op                          = modified
+  Beoordeling                           = rating
+  Titel                                 = title
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
+  Jaar                                  = year
 
 
-Module              [Movie]
-xsl reference name  [movie]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Actors                  = actors
-  Aspect Ratio            = aspect-ratio
-  Audio Bitrate           = audio-bitrate
-  Audio Channels          = audio-channels
-  Audio Codec             = audio-codec
-  Audio Languages         = audio-languages
-  Audio Sample Rate       = audio-sample-rate
-  Available               = available
-  Certification           = certification
-  Color                   = color
-  Container               = container
-  Countries               = countries
-  Created                 = created
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Directors               = directors
-  Due Date                = due-date
-  EAN                     = ean
-  Episode (nr)            = episode-nr
-  Episode name            = episode-name
-  External References     = external-references
-  Filehash                = filehash
-  Filehash Type           = filehash-type
-  Filename                = filename
-  Filesize                = filesize
-  Fps                     = fps
-  Frames                  = frames
-  Genres                  = genres
-  Height                  = height
-  ID                      = id
-  Item                    = item
-  Item Value              = item-value
-  Label                   = label
-  Languages               = languages
-  Lend By                 = lend-by
-  Modified                = modified
-  Picture Back            = picture-back
-  Picture CD              = picture-cd
-  Picture Front           = picture-front
-  Playlength              = playlength
-  Rating                  = rating
-  Season                  = season
-  Series                  = series
-  Service                 = service
-  Service URL             = service-url
-  State                   = state
-  Storage Medium          = storage-medium
-  Subtitle Languages      = subtitle-languages
-  Title                   = title
-  Title (local)           = title-local
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Video Bitrate           = video-bitrate
-  Video Codec             = video-codec
-  Webpage                 = webpage
-  Width                   = width
-  Year                    = year
-
-
-Module              [Music Albums]
+Module              [Muziek Albums]
 xsl reference name  [music-album]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Artists                 = artists
-  Available               = available
-  Container               = container
-  Countries               = countries
-  Created                 = created
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Due Date                = due-date
-  EAN                     = ean
-  External References     = external-references
-  Genres                  = genres
-  ID                      = id
-  Item                    = item
-  Item Value              = item-value
-  Label                   = label
-  Languages               = languages
-  Lend By                 = lend-by
-  Modified                = modified
-  Picture Back            = picture-back
-  Picture CD              = picture-cd
-  Picture Front           = picture-front
-  Rating                  = rating
-  Service                 = service
-  Service URL             = service-url
-  State                   = state
-  Storage Medium          = storage-medium
-  Title                   = title
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
-  Year                    = year
+  Artiesten                             = artists
+  Artists_persist                       = artists_persist
+  Beschikbaar                           = available
+  Container                             = container
+  Container_persist                     = container_persist
+  Landen                                = countries
+  Countries_persist                     = countries_persist
+  Aangemaakt op                         = created
+  Dagen uitgeleend                      = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Uiterste retourdatum                  = due-date
+  EAN                                   = ean
+  Externe Referenties                   = external-references
+  External References_persist           = external-references_persist
+  Genres                                = genres
+  Genres_persist                        = genres_persist
+  ID                                    = id
+  Item                                  = item
+  Waarde                                = item-value
+  Label                                 = label
+  Talen                                 = languages
+  Languages_persist                     = languages_persist
+  Geleend aan                           = lend-by
+  Aangepast op                          = modified
+  Afbeelding Achterkant                 = picture-back
+  Afbeelding CD                         = picture-cd
+  Afbeelding voorkant                   = picture-front
+  Beoordeling                           = rating
+  Service                               = service
+  Service URL                           = service-url
+  Status                                = state
+  Opslagmedium                          = storage-medium
+  Titel                                 = title
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
+  Webpagina                             = webpage
+  Jaar                                  = year
 
 
-Module              [Publishers]
-xsl reference name  [publisher]
+Module              [Ontwikkelaars]
+xsl reference name  [developer]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Created                 = created
-  Description             = description
-  External References     = external-references
-  Firstname               = firstname
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Lastname                = lastname
-  Modified                = modified
-  Name                    = name
-  Photo                   = photo
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Externe Referenties          = external-references
+  External References_persist  = external-references_persist
+  Voornaam                     = firstname
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Achternaam                   = lastname
+  Aangepast op                 = modified
+  Naam                         = name
+  Foto                         = photo
+  Service                      = service
+  Service URL                  = service-url
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
+  Webpagina                    = webpage
 
 
-Module              [Publishers]
-xsl reference name  [publisher]
+Module              [Regisseurs]
+xsl reference name  [director]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Created                 = created
-  Description             = description
-  External References     = external-references
-  Firstname               = firstname
-  ID                      = id
-  Item                    = item
-  Label                   = label
-  Lastname                = lastname
-  Modified                = modified
-  Name                    = name
-  Photo                   = photo
-  Service                 = service
-  Service URL             = service-url
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Webpage                 = webpage
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Externe Referenties          = external-references
+  External References_persist  = external-references_persist
+  Voornaam                     = firstname
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Achternaam                   = lastname
+  Aangepast op                 = modified
+  Naam                         = name
+  Foto                         = photo
+  Service                      = service
+  Service URL                  = service-url
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
+  Webpagina                    = webpage
 
 
 Module              [Software]
 xsl reference name  [software-item]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Available               = available
-  Categories              = categories
-  Container               = container
-  Countries               = countries
-  Created                 = created
-  Days Loaned             = days-loaned
-  Days till overdue       = days-till-overdue
-  Description             = description
-  Developers              = developers
-  Due Date                = due-date
-  EAN                     = ean
-  External References     = external-references
-  Filehash                = filehash
-  Filehash Type           = filehash-type
-  Filename                = filename
-  Filesize                = filesize
-  ID                      = id
-  Item                    = item
-  Item Value              = item-value
-  Label                   = label
-  Languages               = languages
-  Lend By                 = lend-by
-  License                 = license
-  Modified                = modified
-  Multiplayer ?           = multiplayer-
-  Picture Back            = picture-back
-  Picture CD              = picture-cd
-  Picture Front           = picture-front
-  Platform                = platform
-  Publishers              = publishers
-  Rating                  = rating
-  Screenshot One          = screenshot-one
-  Screenshot Three        = screenshot-three
-  Screenshot Two          = screenshot-two
-  Serial Key              = serial-key
-  Service                 = service
-  Service URL             = service-url
-  State                   = state
-  Storage Medium          = storage-medium
-  Title                   = title
-  User Long Text Field    = user-long-text-field
-  User Numeric Field 1    = user-numeric-field-1
-  User Numeric Field 2    = user-numeric-field-2
-  User Short Text Field 1 = user-short-text-field-1
-  User Short Text Field 2 = user-short-text-field-2
-  Version                 = version
-  Webpage                 = webpage
-  Year                    = year
+  Beschikbaar                           = available
+  Categories                            = categories
+  Categories_persist                    = categories_persist
+  Container                             = container
+  Container_persist                     = container_persist
+  Landen                                = countries
+  Countries_persist                     = countries_persist
+  Aangemaakt op                         = created
+  Dagen uitgeleend                      = days-loaned
+  Aantal dagen tot uiterste retourdatum = days-till-overdue
+  Omschrijving                          = description
+  Ontwikkelaars                         = developers
+  Developers_persist                    = developers_persist
+  Uiterste retourdatum                  = due-date
+  EAN                                   = ean
+  Externe Referenties                   = external-references
+  External References_persist           = external-references_persist
+  Bestandshash                          = filehash
+  Bestandshash Type                     = filehash-type
+  Bestandsnaam                          = filename
+  Bestandsgrootte                       = filesize
+  ID                                    = id
+  Item                                  = item
+  Waarde                                = item-value
+  Label                                 = label
+  Talen                                 = languages
+  Languages_persist                     = languages_persist
+  Geleend door                          = lend-by
+  License                               = license
+  Aangepast op                          = modified
+  Multiplayer?                          = multiplayer-
+  Afbeelding Achterkant                 = picture-back
+  Afbeelding CD                         = picture-cd
+  Afbeelding voorkant                   = picture-front
+  Platform                              = platform
+  Uitgevers                             = publishers
+  Publishers_persist                    = publishers_persist
+  Beoordeling                           = rating
+  Schermafbeelding 1                    = screenshot-one
+  Schermafbeelding 3                    = screenshot-three
+  Schermafbeelding 2                    = screenshot-two
+  Serial Key                            = serial-key
+  Service                               = service
+  Service URL                           = service-url
+  State                                 = state
+  State_persist                         = state_persist
+  Opslagmedium                          = storage-medium
+  Titel                                 = title
+  Gebruikersveld - Text lang            = user-long-text-field
+  Gebruikersveld - Numeriek 1           = user-numeric-field-1
+  Gebruikersveld - Numeriek 2           = user-numeric-field-2
+  Gebruikersveld - Text kort 1          = user-short-text-field-1
+  Gebruikersveld - Text kort 2          = user-short-text-field-2
+  Version                               = version
+  Webpagina                             = webpage
+  Jaar                                  = year
 
 
-Module              [User]
-xsl reference name  [user]
+Module              [Uitgevers]
+xsl reference name  [publisher]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Address      = address
-  Admin        = admin
-  City         = city
-  Country      = country
-  Created      = created
-  Description  = description
-  Email        = email
-  Enabled      = enabled
-  ID           = id
-  Item         = item
-  Item Value   = item-value
-  Label        = label
-  Login Name   = login-name
-  Modified     = modified
-  Name         = name
-  Phone (Home) = phone-home
-  Phone (Work) = phone-work
-  Photo        = photo
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Externe Referenties          = external-references
+  External References_persist  = external-references_persist
+  Voornaam                     = firstname
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Achternaam                   = lastname
+  Aangepast op                 = modified
+  Naam                         = name
+  Foto                         = photo
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
+  Webpagina                    = webpage
+
+
+Module              [Uitgevers]
+xsl reference name  [publisher]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Aangemaakt op                = created
+  Omschrijving                 = description
+  Externe Referenties          = external-references
+  External References_persist  = external-references_persist
+  Voornaam                     = firstname
+  ID                           = id
+  Item                         = item
+  Label                        = label
+  Achternaam                   = lastname
+  Aangepast op                 = modified
+  Naam                         = name
+  Foto                         = photo
+  Service                      = service
+  Service URL                  = service-url
+  Gebruikersveld - Text lang   = user-long-text-field
+  Gebruikersveld - Numeriek 1  = user-numeric-field-1
+  Gebruikersveld - Numeriek 2  = user-numeric-field-2
+  Gebruikersveld - Text kort 1 = user-short-text-field-1
+  Gebruikersveld - Text kort 2 = user-short-text-field-2
+  Webpagina                    = webpage
 
 

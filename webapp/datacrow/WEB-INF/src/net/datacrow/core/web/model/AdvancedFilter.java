@@ -178,7 +178,7 @@ public class AdvancedFilter extends DcSecured {
         setModule(moduleIdx);
         
         operators.clear();
-        operators.addAll(Operator.get(DcModules.get(moduleIdx).getField(fieldIdx)));
+        operators.addAll(Operator.get(DcModules.get(moduleIdx).getField(fieldIdx), true));
     }
     
     public List<DcReference> getReferences() {

@@ -59,14 +59,12 @@ public class ItemExporterTaskPanel extends ItemExporterWizardPanel implements II
 
     private void start() {
         exporter.setClient(this);
-    	
     	try { 
-    	    //if (exporter.getFile() == null)
 	        exporter.setFile(wizard.getDefinition().getFile());
     	    exporter.setSettings(definition.getSettings());
     	    exporter.setItems(wizard.getItems());
+    	    exporter.setFields(definition.getFields());
     	    exporter.start();
-    	    
     	} catch (Exception e ) {
     	    notifyMessage(e.getMessage());
     	    logger.error(e, e);

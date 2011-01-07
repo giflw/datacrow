@@ -83,6 +83,12 @@ public class DcDateField extends JComponent implements IComponent, ActionListene
         button.setEnabled(b);
     }
     
+    @Override 
+    public void setEnabled(boolean b) {
+        button.setEnabled(b);
+        text.setEnabled(b);
+    }
+    
     @Override
     public void clear() {
         text = null;

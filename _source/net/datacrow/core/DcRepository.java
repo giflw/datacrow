@@ -40,6 +40,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class ModuleSettings {
+        public static final String stExportFields = "export_fields";
         public static final String stShowPicturesInSeparateTabs = "show_pictures_in_separate_tabs";
         public static final String stMassUpdateServer = "mass_update_server";
         public static final String stMassUpdateMode = "mass_update_mode";
@@ -111,6 +112,7 @@ public abstract class DcRepository {
         public static final String stAwsSecretKey = "aws_secret_key";
         public static final String stAmazonFirstStartChecked = "amazon_first_start_check";
         public static final String stAwsAccessKeyId = "aws_access_key_id";
+        public static final String stImdbMaxActors = "imdb_max_actors";
         public static final String stUsage = "usage_data_crow_starts";
         public static final String stAskForDonation = "allow_me_to_ask_for_a_donation";
     	public static final String stHighRenderingQuality = "high_rendering_quality";

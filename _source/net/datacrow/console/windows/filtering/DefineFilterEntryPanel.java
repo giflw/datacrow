@@ -48,6 +48,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcLongTextField;
+import net.datacrow.console.components.DcNumberField;
 import net.datacrow.console.components.lists.DcFilterEntryList;
 import net.datacrow.console.components.lists.elements.DcFilterEntryListElement;
 import net.datacrow.core.DcRepository;
@@ -181,7 +182,39 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         
         if (comboFields.getItemCount() > 0)
             comboFields.setSelectedIndex(0);
-    }      
+    }   
+    
+    
+    public void applyOperator(Operator operator) {
+        
+        DcField field = (DcField) comboFields.getSelectedItem();
+        
+        if (field != null && field.getValueType() == DcRepository.ValueTypes._DATE) {
+        
+            boolean changed = false;
+            if (    (operator == Operator.DAYS_AFTER ||
+                     operator == Operator.DAYS_BEFORE || 
+                     operator == Operator.MONTHS_AGO ||
+                     operator == Operator.YEARS_AGO)) {
+             
+                if (c != null) panelInput.remove(c);
+                c = ComponentFactory.getNumberField();
+                changed = true;
+            } else if (c instanceof DcNumberField) {
+                if (c != null) panelInput.remove(c);
+                c = ComponentFactory.getDateField();
+                changed = true;
+            }
+            
+            if (changed) {
+                panelInput.add(c, Layout.getGBC( 4, 1, 1, 1, 50.0, 50.0
+                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                         new Insets( 0,0,0,0), 0, 0));
+                revalidate();
+            }
+        }
+    }
+    
     
     /**
      * @param field
@@ -251,7 +284,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         if (field == null)
             return;
         
-        for (Operator operator : Operator.get(field))
+        for (Operator operator : Operator.get(field, false))
             comboOperators.addItem(operator);
         
         comboOperators.addActionListener(this);
@@ -353,11 +386,12 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
             setFields((DcModule) comboModules.getSelectedItem());
         } else if (ae.getActionCommand().equals("fieldSelected")) {
             DcField field = (DcField) comboFields.getSelectedItem();
-            setOperators(field);
             applyField(field);
+            setOperators(field);
         } else if (ae.getActionCommand().equals("operatorSelected")) {
             Operator operator = (Operator) comboOperators.getSelectedItem();
             if (c != null && operator != null) {
+                applyOperator(operator);
                 c.setEnabled(operator.needsValue());
                 Color color = operator.needsValue() ? Color.WHITE : ComponentFactory.getDisabledColor();
                 c.setBackground(color);

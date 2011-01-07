@@ -31,6 +31,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,7 +58,7 @@ import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.comparators.DcObjectComparator;
 
-public class DcReferencesField extends JComponent implements IComponent, ActionListener, IItemFormListener {
+public class DcReferencesField extends JComponent implements IComponent, ActionListener, IItemFormListener, MouseListener {
 
     private DcHtmlEditorPane fld = ComponentFactory.getHtmlEditorPane();
 
@@ -68,6 +70,8 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     
     public DcReferencesField(int mappingModIdx) {
         super();
+        
+        fld.addMouseListener(this);
         
         this.mappingModIdx = mappingModIdx;
         
@@ -203,5 +207,19 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     @Override
     public void refresh() {
         setDescription();
-    }    
+    }  
+    
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (e.getClickCount() == 2)
+            openDialog();
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseClicked(MouseEvent e) {}
 }

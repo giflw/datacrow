@@ -45,6 +45,8 @@ public class XmlSchemaWriter extends XmlBaseWriter {
     
     private Collection<XmlReference> references = new ArrayList<XmlReference>();
     
+    private int[] fields;
+    
     public XmlSchemaWriter(String filename) throws IOException {
         super(filename);
     }
@@ -71,9 +73,18 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         endDocument();
     }
     
+    public int[] getFields() {
+        return fields;
+    }
+
+    public void setFields(int[] fields) {
+        this.fields = fields;
+    }
+
     private void handle(DcObject dco, Collection<String> handled) throws IOException {
-        for (DcField field : dco.getFields()) {
-            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+        for (int fieldIdx : fields) {
+            DcField field = dco.getField(fieldIdx);
+            if (field != null && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 DcModule sm = DcModules.get(field.getReferenceIdx());
                 DcObject so = sm.getItem();
 
@@ -148,11 +159,11 @@ public class XmlSchemaWriter extends XmlBaseWriter {
             String label = getValidTag(dco.getField(field).getSystemName());
             writeLine("<xsd:element name=\"" + label + "\" type=\"xsd:string\"/>", 3);
         } else if (dco instanceof DcMediaObject) {
-            
             writeField(dco.getField(DcObject._SYS_MODULE));
-            
-            for (DcField field : dco.getFields())
-                writeField(field);
+            for (int fieldIdx : fields) {
+                DcField field = dco.getField(fieldIdx);
+                if (field != null) writeField(field);
+            }
         }
         
         if (dco.getModule().getChild() != null) {

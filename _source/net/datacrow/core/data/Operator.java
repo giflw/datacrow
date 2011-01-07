@@ -76,11 +76,21 @@ public enum Operator {
     BEFORE(11, DcResources.getText("lblBefore"), true),
     
     /** The date is after a certain value */
-    AFTER(12, DcResources.getText("lblAfter"), true);
+    AFTER(12, DcResources.getText("lblAfter"), true),
+
+    DAYS_BEFORE(13, DcResources.getText("lblDaysBefore"), true),
+    
+    DAYS_AFTER(14, DcResources.getText("lblDaysAfter"), true),
+    
+    TODAY(15, DcResources.getText("lblToday"), false),
+    
+    MONTHS_AGO(16, DcResources.getText("lblMonthsAgo"), true),
+    
+    YEARS_AGO(17, DcResources.getText("lblYearsAgo"), true);
     
     private final int index;  
     private final String name; 
-    private final boolean needsValue;
+    private boolean needsValue;
     
     Operator(int index, String name, boolean needsValue) {
         this.index = index;
@@ -113,7 +123,7 @@ public enum Operator {
      * Get all operators which can be applied on the specific field.
      * @param field
      */
-    public static Collection<Operator> get(DcField field) {
+    public static Collection<Operator> get(DcField field, boolean simple) {
         ArrayList<Operator> operators = new ArrayList<Operator>();
 
         if (field.getValueType() != DcRepository.ValueTypes._PICTURE) {
@@ -132,6 +142,15 @@ public enum Operator {
         } else if (field.getValueType() == DcRepository.ValueTypes._DATE) {
         	operators.add(BEFORE);
             operators.add(AFTER);
+            
+            if (!simple) {
+                operators.add(TODAY);
+                operators.add(DAYS_BEFORE);
+                operators.add(DAYS_AFTER);
+                operators.add(MONTHS_AGO);
+                operators.add(YEARS_AGO);
+            }
+            
     	} else if (field.getValueType() == DcRepository.ValueTypes._LONG) {
             operators.add(LESS_THEN);
             operators.add(GREATER_THEN);

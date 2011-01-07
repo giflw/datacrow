@@ -114,6 +114,7 @@ public class XmlExporter extends ItemExporter {
          */
         private void generateXsd(String schemaFile) throws Exception {
             XmlSchemaWriter schema = new XmlSchemaWriter(schemaFile);
+            schema.setFields(getFields());
             DcObject dco = DcModules.getCurrent().getItem();
             schema.create(dco);
         }
@@ -136,14 +137,14 @@ public class XmlExporter extends ItemExporter {
 
                 writer.writeAttribute(dco, DcObject._SYS_MODULE);
                 
-                for (DcField field : dco.getFields()) {
-                    writer.writeAttribute(dco, field.getIndex());
+                for (int fieldIdx : getFields()) {
+                    DcField field = dco.getField(fieldIdx);
+                    if (field != null) writer.writeAttribute(dco, field.getIndex());
                 }
 
                 dco.loadChildren(null);
                 
                 if (dco.getModule().getChild() != null) {
-                    
                     writer.startRelations(dco.getModule().getChild());
                     writer.setIdent(2);
 

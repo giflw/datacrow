@@ -366,8 +366,6 @@ public class DatabaseManager {
 
     /**
      * Creates an admin connection to the database.
-     * 
-     * TODO: do not close; re-use.
      */
     public static Connection getAdminConnection() {
         if (isClosed(adminConnection)) {

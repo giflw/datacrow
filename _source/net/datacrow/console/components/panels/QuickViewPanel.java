@@ -360,7 +360,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
 
             if (!Utilities.isEmpty(dco.getValue(index))) {
                 table += "<tr><td>\n";
-                table += "<b>" + dco.getLabel(index) + "</b>";
+                
+                if (dco.getField(index).getFieldType() != ComponentFactory._PICTUREFIELD)
+                    table += "<b>" + dco.getLabel(index) + "</b>";
                 
                 if (!horizontal) {
                     table += "</td></tr>";
@@ -380,7 +382,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(dco.getDisplayString(index)).getName() + "</a>";                        
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._PICTUREFIELD) {
                 	Picture p = (Picture) dco.getValue(index);
-                	value = "<p><img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\"></p><br>";
+                	value = "<p><img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\" alt=\"" + dco.getLabel(index) + "\"><p>";
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
                 	value = "<a " + Utilities.getHtmlStyle() + "  href=\"" +  dco.getValue(index) + "\">" + DcResources.getText("lblLink") + "</a>";
                 } else if (dco.getField(index).getReferenceIdx() > 0 && 

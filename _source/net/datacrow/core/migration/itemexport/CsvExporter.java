@@ -33,6 +33,7 @@ import java.util.List;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcThread;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -111,10 +112,12 @@ public class CsvExporter extends ItemExporter {
             
             // create the table and the header
             int counter = 0;
-            for (DcField field : getModule().getFields()) {
+            
+            for (int fieldIdx : getFields()) {
                if (isCanceled()) break;
 
-               if (field.isEnabled()) {
+               DcField field = DcModules.get(moduleIdx).getField(fieldIdx);
+               if (field != null) {
                     writeBytes(field.getSystemName(), counter != 0);
                     counter++;
                 }                
@@ -133,10 +136,14 @@ public class CsvExporter extends ItemExporter {
                 client.notifyMessage(DcResources.getText("msgExportingX", dco.toString()));
                 int fieldCounter = 0;
                 
-                for (DcField field : dco.getFields()) {
+                for (int fieldIdx : getFields()) {
                     if (isCanceled()) break;
 
-                    if (field.isEnabled()) { 
+                    DcField field = DcModules.get(moduleIdx).getField(fieldIdx);
+                    
+                    if (isCanceled()) break;
+
+                    if (field != null) { 
                         String s = "";
                         if (field.getFieldType() == ComponentFactory._PICTUREFIELD) {
                             if (	dco.getValue(field.getIndex()) != null && 
