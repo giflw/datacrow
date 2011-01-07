@@ -258,7 +258,7 @@ public class AdvancedFilter extends DcSecured {
     }
     
     public boolean isNeedsValue() {
-        return entry.getOperator() != null ? entry.getOperator().needsValue() : false;
+        return entry.getOperator() != null ? entry.getOperator().needsValue() : true;
     }
     
     @SuppressWarnings("unchecked")

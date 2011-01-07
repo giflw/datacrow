@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.2  [Released on January 6, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.2  [Released on January 7, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -21,6 +21,8 @@ Data Crow 3.9.2  [Released on January 6, 2011]  [testing: high]  [target: produc
 - Filter dialog could not be opened from within the Book module.
 - After updating an item the node in the tree becomes unreadable (appended with .. and
   not showing the whole text) 
+- Web client advanced filter did not handle advanced filter correctly where no value is 
+  required.
 
 [Changed]
 - Associates are now part of a specialized associates module. The create module wizard

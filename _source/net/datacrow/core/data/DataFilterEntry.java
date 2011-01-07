@@ -150,6 +150,6 @@ public class DataFilterEntry {
     @Override
     public String toString() {
         return getAndOr() + " " + DcModules.get(module).getField(field).getLabel() + " " +
-               getOperator().getName() + " " + getValue();
+               getOperator().getName() +  (getOperator().needsValue() ? " " + getValue() : "");
     }
 }

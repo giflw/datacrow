@@ -91,16 +91,16 @@
             </t:column>        
 
             <t:column>    
-                 <t:selectOneMenu value="#{advancedFilter.operator}" styleClass="filterfield">
+                 <t:selectOneMenu value="#{advancedFilter.operator}" styleClass="filterfield" onchange="submit()" immediate="true">
                      <t:selectItems value="#{advancedFilter.operators}" var="operator" itemLabel="#{operator.name}" itemValue="#{operator.index}" />
                  </t:selectOneMenu>
             </t:column>        
         
-            <t:column>    
+            <t:column rendered="#{advancedFilter.needsValue}">    
                 <t:inputText value="#{advancedFilter.value}" rendered="#{advancedFilter.field.textfield}" styleClass="searchtextfield" />
                 <t:selectBooleanCheckbox value="#{advancedFilter.value}" rendered="#{advancedFilter.field.checkbox}" immediate="true" styleClass="checkbox" />
                   <t:inputCalendar rendered="#{advancedFilter.field.date}" 
-                                      monthYearRowClass="yearMonthHeader" 
+                                    monthYearRowClass="yearMonthHeader" 
                                     weekRowClass="weekHeader" 
                                     popupButtonStyleClass="datebutton"
                                     currentDayCellClass="currentDayCell" value="#{advancedFilter.value}" 

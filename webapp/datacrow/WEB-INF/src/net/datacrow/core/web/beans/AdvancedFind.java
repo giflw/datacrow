@@ -37,6 +37,7 @@ import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.web.model.AdvancedFilter;
 import net.datacrow.core.web.model.DcWebObjects;
+import net.datacrow.util.Utilities;
 
 import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 
@@ -90,11 +91,14 @@ public class AdvancedFind extends DcBean {
         AdvancedFilter af = (AdvancedFilter) vr.resolveVariable(fc, "advancedFilter");
         
         DataFilterEntry entry = af.getEntry();
-        if (entry.getValue() == null || entry.getValue().equals("")) {
+        if (entry.getOperator() == null) {
+            fc.addMessage("msg", new FacesMessage("Operator is not filled!"));
+        } else if (entry.getOperator().needsValue() && Utilities.isEmpty(entry.getValue())) {
             fc.addMessage("msg", new FacesMessage("Value is not filled!"));
         } else {
             af.addCurrentEntry();
         }
+        
         return current();
     }
 
