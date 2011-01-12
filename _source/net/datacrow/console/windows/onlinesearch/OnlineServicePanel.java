@@ -135,6 +135,8 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
 
     protected void setFocus() {
         fldQuery.requestFocusInWindow();
+        fldQuery.setSelectionStart(0);
+        fldQuery.setSelectionEnd(fldQuery.getText().length());
     }    
     
     protected void save() {

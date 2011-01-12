@@ -426,6 +426,8 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         if (task != null)
             task.cancel();
 
+        panelService.setFocus();
+        
         addMessage(DcResources.getText("msgStoppedSearch"));
         stopped();
     }
@@ -462,8 +464,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
 
     @Override
     public void stopped() {
-        if (panelService != null)
+        if (panelService != null) {
             panelService.busy(false);
+            panelService.setFocus();
+        }
     }    
     
     @Override

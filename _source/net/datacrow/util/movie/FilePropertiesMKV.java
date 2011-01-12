@@ -56,9 +56,11 @@ class FilePropertiesMKV extends FileProperties {
     		        setVideoCodec(track.CodecID);
     		        setName(track.Name);
     		        
-    		        String language = Utilities.getLanguage(track.Language);
-    		        language = language == null || language.length() == 0 ? track.Language : language;
-    		        setLanguage(language);
+    		        if (track.Language != null) {
+        		        String language = Utilities.getLanguage(track.Language);
+        		        language = language == null || language.length() == 0 ? track.Language : language;
+        		        setLanguage(language);
+    		        }
     		    } else if (track.TrackType ==  MatroskaDocType.track_subtitle) {
     		        String subtitles = getSubtitles();
     		        subtitles += subtitles.length() > 0 ? ", " : "";

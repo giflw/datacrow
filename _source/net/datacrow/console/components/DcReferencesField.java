@@ -54,6 +54,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.comparators.DcObjectComparator;
@@ -67,6 +68,9 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     private JButton btCreate = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
     
     private final int mappingModIdx;
+    private final int referenceIdx;
+    
+    private boolean allowCreate;
     
     public DcReferencesField(int mappingModIdx) {
         super();
@@ -74,6 +78,9 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         fld.addMouseListener(this);
         
         this.mappingModIdx = mappingModIdx;
+        this.referenceIdx = ((MappingModule) DcModules.get(mappingModIdx)).getReferencedModIdx();
+        
+        allowCreate = SecurityCentre.getInstance().getUser().isEditingAllowed(DcModules.get(referenceIdx));
         
         setLayout(Layout.getGBL());
         
@@ -98,11 +105,15 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
 
         btCreate.addActionListener(this);
         btCreate.setActionCommand("create");
+        btCreate.setEnabled(allowCreate);
     }
     
     @Override
     public void setEditable(boolean b) {
+        btCreate.setVisible(b);
+        btOpen.setVisible(b);
         btOpen.setEnabled(b);
+        btCreate.setEnabled(b && allowCreate);
     }
     
     @Override
@@ -133,8 +144,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     }
     
     private void create() {
-        MappingModule mm = (MappingModule) DcModules.get(mappingModIdx);
-        DcObject dco = DcModules.get(mm.getReferencedModIdx()).getItem();
+        DcObject dco = DcModules.get(referenceIdx).getItem();
         ItemForm itemForm = new ItemForm(false, false, dco, true);
         itemForm.setListener(this);
         itemForm.setVisible(true);
@@ -211,7 +221,7 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (e.getClickCount() == 2)
+        if (btOpen.isEnabled() && e.getClickCount() == 2)
             openDialog();
     }
     @Override

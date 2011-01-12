@@ -739,9 +739,11 @@ public final class ComponentFactory {
     }
 
     public static final DcMenuItem getMenuItem(Plugin plugin) {
-        DcMenuItem menuItem = getMenuItem(plugin.getLabel());
+        DcMenuItem menuItem = new DcMenuItem(plugin);//getMenuItem(plugin.getLabel());
+        menuItem.setFont(getSystemFont());
+        menuItem.setLayout(layout);
+        menuItem.setText(plugin.getLabel());
         menuItem.setIcon(plugin.getIcon());
-        menuItem.addActionListener(plugin);
         menuItem.setAccelerator(plugin.getKeyStroke());
         menuItem.setToolTipText(plugin.getHelpText() == null ? menuItem.getText() : plugin.getHelpText());
         return menuItem;

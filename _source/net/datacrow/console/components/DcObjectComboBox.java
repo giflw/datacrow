@@ -46,7 +46,7 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
     public void setValue(Object value) {
         setSelectedItem(value);
         
-        if (getSelectedIndex() <= 0) { // 0 == empty value
+        if (getSelectedItem() != value) { // 0 == empty value
             if (value != null) {
             	boolean existing = false;
             	

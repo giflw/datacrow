@@ -101,7 +101,6 @@ public final class SecuredUser {
      */
     public boolean isAuthorized(DcField field) {
         if (isAdmin()) return true;
-        
         ModulePermission mp = modulePermissions.get(Integer.valueOf(field.getModule()));
         return mp == null ? false : mp.isAuthorized(field);
     }

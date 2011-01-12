@@ -48,6 +48,11 @@ public class ExternalReferenceModule extends DcPropertyModule {
     }
     
     @Override
+    public int getType() {
+        return DcModule._TYPE_EXTERNALREFERENCE_MODULE;
+    }
+
+    @Override
     public boolean hasDependingModules() {
         return true;    
     }

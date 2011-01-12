@@ -110,6 +110,7 @@ public class DcModuleList extends DcList implements ListSelectionListener {
                         if (    referencedMod.isEnabled() &&
                         		referencedMod.getIndex() != module.getIndex() && 
                                 referencedMod.getType() != DcModule._TYPE_PROPERTY_MODULE &&
+                                referencedMod.getType() != DcModule._TYPE_EXTERNALREFERENCE_MODULE &&
                                 referencedMod.getIndex() != DcModules._CONTACTPERSON &&
                                 referencedMod.getIndex() != DcModules._CONTAINER) {
                             

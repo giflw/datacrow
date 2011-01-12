@@ -81,16 +81,18 @@ public class MovieImporter extends FileImporter {
             
             DataManager.createReference(movie, Movie._D_LANGUAGE, fpm.getLanguage());
             
+            
+            long frames = (long) (fpm.getDuration() * fpm.getVideoRate());
             movie.setValue(Movie._L_PLAYLENGTH, playlength);
             movie.setValue(Movie._N_VIDEOCODEC, fpm.getVideoCodec());
             movie.setValue(Movie._O_AUDIOCODEC, fpm.getAudioCodec());
-            movie.setValue(Movie._P_WIDTH, Long.valueOf(fpm.getVideoWidth()));
-            movie.setValue(Movie._Q_HEIGHT, Long.valueOf(fpm.getVideoHeight()));
-            movie.setValue(Movie._R_FPS, Double.valueOf(fpm.getVideoRate()));
-            movie.setValue(Movie._S_FRAMES, (long) (fpm.getDuration() * fpm.getVideoRate()));
-            movie.setValue(Movie._T_AUDIOBITRATE, Long.valueOf(fpm.getAudioBitRate()));
-            movie.setValue(Movie._U_AUDIOSAMPLINGRATE, Long.valueOf(fpm.getAudioRate()));
-            movie.setValue(Movie._V_AUDIOCHANNEL, Long.valueOf(fpm.getAudioChannels()));
+            movie.setValue(Movie._P_WIDTH, fpm.getVideoWidth() <= 0 ? null : Long.valueOf(fpm.getVideoWidth()));
+            movie.setValue(Movie._Q_HEIGHT, fpm.getVideoHeight() <= 0 ? null : Long.valueOf(fpm.getVideoHeight()));
+            movie.setValue(Movie._R_FPS, fpm.getVideoRate() <= 0 ? null : Double.valueOf(fpm.getVideoRate()));
+            movie.setValue(Movie._S_FRAMES, frames <= 0 ? null : frames);
+            movie.setValue(Movie._T_AUDIOBITRATE, fpm.getAudioBitRate() <= 0 ? null : Long.valueOf(fpm.getAudioBitRate()));
+            movie.setValue(Movie._U_AUDIOSAMPLINGRATE, fpm.getAudioRate() <= 0 ? null : Long.valueOf(fpm.getAudioRate()));
+            movie.setValue(Movie._V_AUDIOCHANNEL, fpm.getAudioChannels() <= 0 ? null : Long.valueOf(fpm.getAudioChannels()));
             
             DataManager.createReference(movie, Movie._2_SUBTITLELANGUAGE, fpm.getSubtitles());
             
@@ -102,7 +104,7 @@ public class MovieImporter extends FileImporter {
                 bitrate = (int) mf.getVideoBitrate();
             }
 
-            movie.setValue(Movie._W_VIDEOBITRATE, Long.valueOf(bitrate));
+            movie.setValue(Movie._W_VIDEOBITRATE, bitrate <= 0 ? null :  Long.valueOf(bitrate));
 
         } catch (Exception exp) {
             getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));

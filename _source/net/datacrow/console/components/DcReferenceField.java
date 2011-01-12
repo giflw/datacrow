@@ -51,6 +51,7 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
     private JButton btCreate = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
     
     private final int referenceModIdx;
+    private boolean allowCreate;
     
     public DcReferenceField(int referenceModIdx) {
         super();
@@ -58,6 +59,8 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         setFont(ComponentFactory.getStandardFont());
         
         this.referenceModIdx = referenceModIdx;
+        this.allowCreate = SecurityCentre.getInstance().getUser().isEditingAllowed(DcModules.get(referenceModIdx));
+        
         cb = ComponentFactory.getObjectCombo(referenceModIdx);
         
         setLayout(Layout.getGBL());
@@ -72,11 +75,14 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
         
         btCreate.addActionListener(this);
         btCreate.setActionCommand("create");
+        btCreate.setEnabled(allowCreate);
     }
 
     @Override
     public void setEditable(boolean b) {
-        btCreate.setEnabled(b);
+        btCreate.setVisible(true);
+        btCreate.setEnabled(b && allowCreate);
+        cb.setEditable(b);
     }
     
     @Override

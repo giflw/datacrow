@@ -42,7 +42,6 @@ import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.User;
 import net.datacrow.core.security.SecuredUser;
@@ -532,14 +531,14 @@ public class DatabaseManager {
                 sql = "GRANT SELECT ON " + tablename + " TO " + user;
                 stmt.execute(sql);
                 
-                if (module.isEditingAllowd()) {
+                if (module.isEditingAllowed()) {
                     sql = "GRANT UPDATE ON " + tablename + " TO " + user;
                     stmt.execute(sql);
                     sql = "GRANT INSERT ON " + tablename + " TO " + user;
                     stmt.execute(sql);
                 }
                 
-                if (admin || module instanceof MappingModule) {
+                if (admin || module.getIndex() == DcModules._PICTURE || module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                     sql = "GRANT DELETE ON " + tablename + " TO " + user;
                     stmt.execute(sql);
                 }

@@ -25,6 +25,7 @@
 
 package net.datacrow.console.windows;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -89,6 +90,14 @@ public class DcFrame extends JFrame implements WindowFocusListener {
         DcSwingUtilities.setRootFrame(DataCrow.mainFrame);
     }
     
+    @Override
+    public void setSize(Dimension d) {
+        if (d == null || d.height == 20 || d.width < 20)
+            return;
+        
+        super.setSize(d);
+    }
+
     protected void addKeyListener(KeyStroke keyStroke, Action action, String name) {
         rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);
         rootPane.getActionMap().put(name, action);

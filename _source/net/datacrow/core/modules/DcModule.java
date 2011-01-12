@@ -246,7 +246,7 @@ public class DcModule implements Comparable<DcModule> {
         
         // lower level determination of the type of module; avoiding instanceof calls in the future
         this.type = 
-            objectClass != null && objectClass.equals(DcAssociate.class) ? _TYPE_ASSOCIATE_MODULE :
+            this instanceof DcAssociateModule ? _TYPE_ASSOCIATE_MODULE :
             this instanceof MappingModule ? _TYPE_MAPPING_MODULE :
             this instanceof DcPropertyModule ? _TYPE_PROPERTY_MODULE :
             this instanceof DcMediaModule ? _TYPE_MEDIA_MODULE :
@@ -437,7 +437,7 @@ public class DcModule implements Comparable<DcModule> {
     /**
      * Indicates if the user is allowed to edit items belonging to this module.
      */
-    public boolean isEditingAllowd() {
+    public boolean isEditingAllowed() {
         return SecurityCentre.getInstance().getUser().isEditingAllowed(this);
     }
 

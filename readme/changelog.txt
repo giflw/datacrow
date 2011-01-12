@@ -1,4 +1,23 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.3  [Released on January xx, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- In some cases the new item wizard window was not shown. 
+- Security: users were able to select a value from a list while not having permission 
+  to do so (item form; drop downs).
+- Newly created items for a reference field (from within the item form) were not added
+  and selected.
+- Create buttons active while not having permission to create items.
+
+[Changed]
+- Focus is set to the "Search for" field after items have been found or the search has
+  been canceled (online search form / new items wizard).
+- Correct representation of what is enabled in the menu (toggle quick view, etc). 
+- Permissions can now be set on any module, including the property modules.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.2  [Released on January 7, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

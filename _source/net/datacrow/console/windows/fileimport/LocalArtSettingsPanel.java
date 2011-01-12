@@ -58,6 +58,15 @@ public class LocalArtSettingsPanel extends JPanel {
         build();
     }
 
+    public void save() {
+        Settings settings = DcModules.get(module).getSettings();
+        settings.set(DcRepository.ModuleSettings.stImportLocalArt, cbEnabled.isSelected());
+        settings.set(DcRepository.ModuleSettings.stImportLocalArtRecurse, cbRecurse.isSelected());
+        settings.set(DcRepository.ModuleSettings.stImportLocalArtFrontKeywords, txtFront.getText());
+        settings.set(DcRepository.ModuleSettings.stImportLocalArtBackKeywords, txtBack.getText());
+        settings.set(DcRepository.ModuleSettings.stImportLocalArtMediaKeywords, txtMedia.getText());        
+    }
+    
     public void clear() {
         if (txtMedia.getText().length() == 0 ||
             txtFront.getText().length() == 0 ||
@@ -66,12 +75,7 @@ public class LocalArtSettingsPanel extends JPanel {
             DcSwingUtilities.displayWarningMessage("msgPleaseEnterKeywords");
             return;
         } else {
-            Settings settings = DcModules.get(module).getSettings();
-            settings.set(DcRepository.ModuleSettings.stImportLocalArt, cbEnabled.isSelected());
-            settings.set(DcRepository.ModuleSettings.stImportLocalArtRecurse, cbRecurse.isSelected());
-            settings.set(DcRepository.ModuleSettings.stImportLocalArtFrontKeywords, txtFront.getText());
-            settings.set(DcRepository.ModuleSettings.stImportLocalArtBackKeywords, txtBack.getText());
-            settings.set(DcRepository.ModuleSettings.stImportLocalArtMediaKeywords, txtMedia.getText());
+            save();
         }
         
         cbRecurse = null;

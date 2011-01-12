@@ -106,7 +106,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     protected Map<DcField, JComponent> fields = new HashMap<DcField, JComponent>();
 
     protected final boolean update;
-    protected final boolean readonly;
+    protected boolean readonly;
 
     private boolean applyTemplate = true;
 
@@ -143,7 +143,6 @@ public class ItemForm extends DcFrame implements ActionListener {
         setHelpIndex("dc.items.itemform");
         
         this.template = template;
-        this.readonly = readonly;
         this.update = update;
         this.dcoOrig = o;
 
@@ -179,6 +178,8 @@ public class ItemForm extends DcFrame implements ActionListener {
             for (IRequest request : o.getRequests().get())
                 dco.addRequest(request);
         }
+        
+        this.readonly = this.readonly || !SecurityCentre.getInstance().getUser().isEditingAllowed(dco.getModule());
         
         setTitle(!update && !readonly ?
                   DcResources.getText("lblNewItem", dco.getModule().getObjectName()) :

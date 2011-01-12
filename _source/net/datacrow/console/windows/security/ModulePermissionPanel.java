@@ -34,6 +34,7 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -59,7 +60,7 @@ public class ModulePermissionPanel extends JPanel {
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setBorder(BorderFactory.createEtchedBorder());
     	
-        add(sml,  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, 
+        add(new JScrollPane(sml),  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, 
             GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL,
             new Insets(0, 0, 0, 0), 0, 0));
     	

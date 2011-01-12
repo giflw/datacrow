@@ -152,6 +152,7 @@ public abstract class IconLibrary {
     public static final DcImageIcon _icoBinding16 = new DcImageIcon(picPath + "binding16.png");
     public static final DcImageIcon _icoBinding32 = new DcImageIcon(picPath + "binding32.png");    
     public static final DcImageIcon _icoStorageMedium16 = new DcImageIcon(picPath + "storagemedium16.png");
-    public static final DcImageIcon _icoStorageMedium32 = new DcImageIcon(picPath + "storagemedium32.png");    
+    public static final DcImageIcon _icoStorageMedium32 = new DcImageIcon(picPath + "storagemedium32.png");
+    public static final DcImageIcon _icoOK = new DcImageIcon(picPath + "ok.png");
 
 }

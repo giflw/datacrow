@@ -159,6 +159,7 @@ public abstract class DcRepository {
         public static final String stDecimalSeparatorSymbol = "decimal_seperator_symbol";
         public static final String stModuleSettings = "module_settings";
         public static final String stShowGroupingPanel = "show_grouping_panel";
+        public static final String stShowToolbar = "show_toolbar";
         public static final String stReportFile = "report_file";
     	public static final String stShowQuickFilterBar = "show_quick_filter_bar";
         public static final String stHsqlCacheScale = "hsql_cache_scale";

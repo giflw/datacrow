@@ -74,16 +74,26 @@ public class SecurityModuleList extends DcModuleList {
         if (listenForChanges) setSelected();
     }
     
+	@Override
+    public void setSelectedModule(int module) {
+        if ( ((DcModules.get(module).isTopModule() || DcModules.get(module).isChildModule())  && 
+              !DcModules.get(module).hasDependingModules()))
+            setModules(module);
+    }
+
+	
     @Override
 	public void addModules() {
         if (elements != null) elements.clear();
         
         DcModule referencedMod;
+        DcModule referencedMod2;
         Collection<DcModule> managedModules = SecurityCentre.getInstance().getManagedModules();
         for (DcModule module : managedModules) {
             try {
-            	if (module.isSelectableInUI()) {
-            		List<ModulePanel> c = new ArrayList<ModulePanel>();
+            	if (module.isSelectableInUI() || module.isChildModule()) {
+
+            	    List<ModulePanel> c = new ArrayList<ModulePanel>();
 	                c.add(new ModulePanel(module, ModulePanel._ICON32));
 	                
 	                for (DcField field : module.getFields()) {
@@ -91,11 +101,23 @@ public class SecurityModuleList extends DcModuleList {
                     	if (    managedModules.contains(referencedMod) &&
                     			referencedMod.isEnabled() &&
                         		referencedMod.getIndex() != module.getIndex() && 
-                                referencedMod.getType() != DcModule._TYPE_PROPERTY_MODULE &&
                                 referencedMod.getIndex() != DcModules._CONTACTPERSON &&
                                 referencedMod.getIndex() != DcModules._CONTAINER) {
 	                    	
 	                        c.add(new ModulePanel(referencedMod, ModulePanel._ICON16));
+	                        
+	                        // elegant? no.. 
+	                        for (DcField field2 : referencedMod.getFields()) {
+	                            referencedMod2 = DcModules.getReferencedModule(field2);
+	                            if (    managedModules.contains(referencedMod2) &&
+	                                    referencedMod2.isEnabled() &&
+	                                    referencedMod2.getIndex() != referencedMod.getIndex() && 
+	                                    referencedMod2.getIndex() != DcModules._CONTACTPERSON &&
+	                                    referencedMod2.getIndex() != DcModules._CONTAINER) {
+	                                
+	                                c.add(new ModulePanel(referencedMod2, ModulePanel._ICON16));
+	                            }
+	                        }
                     	}
 	                }
 	                

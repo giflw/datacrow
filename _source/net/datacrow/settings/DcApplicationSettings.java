@@ -427,6 +427,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false));   
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stShowToolbar,
+                            Boolean.TRUE,
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));           
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stShowQuickFilterBar,
                             Boolean.TRUE,
                             -1,

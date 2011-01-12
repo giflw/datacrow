@@ -249,6 +249,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             }
         }
         
+        panelLocalArt.save();
         panelServerSettings.save();
     }
     

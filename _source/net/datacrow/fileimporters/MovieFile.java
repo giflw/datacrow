@@ -137,8 +137,12 @@ public class MovieFile {
             }
 
             int ABITRATE0 = read_2int(ahstart + (AudioHeaderSize / 4) + 4, 0);
-            audioBitRate = ABITRATE0 * 8;
-            videoBitRate = ((movieSize / playLength) - ABITRATE0) * 8;
+            
+            if (ABITRATE0 > 0) {
+                audioBitRate = ABITRATE0 * 8;
+                videoBitRate = ((movieSize / playLength) - ABITRATE0) * 8;
+            }
+                
             audioSamplingRate = read_2int(ahstart + (AudioHeaderSize / 4) + 3, 0);
             int ACHAN0 = read_2int(ahstart + (AudioHeaderSize / 4) + 2, 2);
             if (ACHAN0 == 1) {

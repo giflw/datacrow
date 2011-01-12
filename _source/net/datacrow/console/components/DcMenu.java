@@ -27,6 +27,8 @@ package net.datacrow.console.components;
 
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -34,13 +36,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToolTip;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.core.plugin.Plugin;
 import net.datacrow.util.DcSwingUtilities;
 
-public class DcMenu extends JMenu {
+public class DcMenu extends JMenu implements ItemListener {
     
     public DcMenu(String text) {
         super(text);
         setFont(ComponentFactory.getSystemFont());
+        addItemListener(this);
     }
     
     @Override
@@ -69,5 +73,21 @@ public class DcMenu extends JMenu {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(DcSwingUtilities.setRenderingHint(g));
-    }      
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            for (Component c : getMenuComponents()) {
+                if (c instanceof DcMenuItem && ((DcMenuItem) c).getAction() instanceof Plugin) {
+                    DcMenuItem mi = (DcMenuItem) c;
+                    Plugin plugin = (Plugin) mi.getAction();
+                    mi.setIcon(plugin.getIcon());
+                    mi.setEnabled(plugin.isEnabled());
+                    mi.setText(plugin.getLabel());
+                }
+            }
+        }
+    }
 }

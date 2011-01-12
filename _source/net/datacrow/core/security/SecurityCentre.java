@@ -39,7 +39,6 @@ import net.datacrow.core.db.CreateQuery;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.helpers.Permission;
@@ -123,15 +122,13 @@ public class SecurityCentre {
         if (connection == null) 
             throw new SecurityException(DcResources.getText("msgUserOrPasswordIncorrect"));
            
-        try {
-            connection.close();
-        } catch (SQLException se) {}
-        
+        ResultSet rs = null;
+        Statement stmt = null;
         try {
             connection = DatabaseManager.getAdminConnection();
             String sql = "select * from user where lower(loginname) = '" + username.toLowerCase() + "'";
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(sql);
             
             List<DcObject> users = WorkFlow.getInstance().convert(rs, new int[] {User._ID, User._A_LOGINNAME, User._B_ENABLED, User._C_NAME, User._L_ADMIN});
 
@@ -152,7 +149,6 @@ public class SecurityCentre {
                     user.addChild(permission);
                 
                 stmt.close();
-                connection.close();
             } else {
                 stmt.close();
                 connection.close();
@@ -174,6 +170,13 @@ public class SecurityCentre {
         } catch (Exception e) {
             logger.info(e, e);
             throw new SecurityException(DcResources.getText("msgUserOrPasswordIncorrect"));
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+                logger.info(e, e);
+            }
         }
     }   
     
@@ -249,12 +252,12 @@ public class SecurityCentre {
     public Collection<DcModule> getManagedModules() {
         Collection<DcModule> modules = new ArrayList<DcModule>();
         for (DcModule module : DcModules.getAllModules()) {
-            if (  !(module instanceof DcPropertyModule) &&
-                   (module.isTopModule() || 
-                    module.isChildModule()) &&
-                    module.getIndex() != DcModules._CONTAINER &&
+            if (    module.getIndex() != DcModules._CONTAINER &&
                     module.getIndex() != DcModules._USER &&
-                    module.getIndex() != DcModules._PERMISSION)
+                    module.getIndex() != DcModules._PERMISSION &&
+                    module.getType()  != DcModule._TYPE_EXTERNALREFERENCE_MODULE &&
+                    module.getType()  != DcModule._TYPE_MAPPING_MODULE &&
+                    module.getType()  != DcModule._TYPE_TEMPLATE_MODULE)
                 modules.add(module);
         }
         return modules;
