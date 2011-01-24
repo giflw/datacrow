@@ -511,4 +511,10 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
     
     @Override
     public void refresh() {}
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        clear();
+    }
 }

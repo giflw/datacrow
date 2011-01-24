@@ -73,6 +73,8 @@ import net.datacrow.core.services.plugin.IServer;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.cuecat.CueCatCode;
+import net.datacrow.util.cuecat.CueCatDecoder;
 
 import org.apache.log4j.Logger;
 
@@ -446,6 +448,14 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         String query = panelService.getQuery();
         SearchMode mode = panelService.getMode();
         
+        if (!mode.keywordSearch()) {
+            CueCatCode ccc = CueCatDecoder.decodeLine(query);
+            if (ccc.barType != CueCatCode.BARCODE_UNKNOWN) {
+                query = ccc.barCode;
+                panelService.setQuery(query);
+            }
+        }
+        
         task = panelService.getServer().getSearchTask(this, mode, panelService.getRegion(), query, client);
         task.setPriority(Thread.NORM_PRIORITY);
         task.setItemMode(panelSettings.isQueryFullDetails() ? SearchTask._ITEM_MODE_FULL : SearchTask._ITEM_MODE_SIMPLE);
@@ -699,21 +709,23 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         ID = null;
         
         // result is a direct clone; other items can safely be removed
-        for (DcObject dco : items)
-            dco.destroy();
+        if (items != null) {
+            for (DcObject dco : items)
+                dco.destroy();
+            
+            items.clear();
+            items = null;
+        }
         
-        loadedItems.clear();
+        if (loadedItems != null) loadedItems.clear();
         loadedItems = null;
-        
-        items.clear();
-        items = null;
         
         textLog = null;
         progressBar = null;
-        panelService.clear();
+        if (panelService != null) panelService.clear();
         panelService = null;
         
-        panelSettings.clear();
+        if (panelSettings != null) panelSettings.clear();
         panelSettings = null;
         task = null;
         

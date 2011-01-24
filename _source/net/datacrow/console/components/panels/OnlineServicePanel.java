@@ -129,6 +129,8 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
         comboServers = null;
         comboRegions = null;
         comboModes = null;
+        checkUseOnlineService = null;
+        removeAll();
     }
     
     public void setUseOnlineService(boolean b) {
@@ -184,5 +186,10 @@ public class OnlineServicePanel extends JPanel implements ActionListener {
         else if (e.getActionCommand().equals("applyServer"))
             applyServer();
     }
-     
+    
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        clear();
+    }
 }   

@@ -170,12 +170,12 @@ public class MusicAlbumImporter extends FileImporter {
             int track = musicFile.getTrack();
             track = track == 0 ? ma.getChildren() != null ?  ma.getChildren().size() + 1 : 1  : track;
             
-            mt.setValue(MusicTrack._K_QUALITY, Long.valueOf(musicFile.getBitrate()));
-            mt.setValue(MusicTrack._J_PLAYLENGTH, Long.valueOf(musicFile.getLength()));
+            mt.setValue(MusicTrack._K_QUALITY, musicFile.getBitrate() <= 0 ? null : Long.valueOf(musicFile.getBitrate()));
+            mt.setValue(MusicTrack._J_PLAYLENGTH, musicFile.getLength() <= 0 ? null : Long.valueOf(musicFile.getLength()));
             mt.setValue(MusicTrack._L_ENCODING, musicFile.getEncodingType());
             mt.setValue(MusicTrack._A_TITLE, musicFile.getTitle());
             mt.setValue(MusicTrack._C_YEAR, year);
-            mt.setValue(MusicTrack._F_TRACKNUMBER, Long.valueOf(track));
+            mt.setValue(MusicTrack._F_TRACKNUMBER, track <= 0 ? null : Long.valueOf(track));
             
             if (genre != null)
                 DataManager.createReference(mt, MusicTrack._H_GENRES, genre);

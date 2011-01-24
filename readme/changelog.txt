@@ -9,13 +9,22 @@ Data Crow 3.9.3  [Released on January xx, 2011]  [testing: high]  [target: produ
 - Newly created items for a reference field (from within the item form) were not added
   and selected.
 - Create buttons active while not having permission to create items.
+- File import (movie/music albums): zeroes are set as values while these fields should 
+  actually be empty.
+- MKV file import: incorrect video bit rate (8bits, always)
+- Keeps CD/DVD mounted after failed data fetching (MKV).
+- Softpedia did not recover screenshots anymore
 
 [Changed]
 - Focus is set to the "Search for" field after items have been found or the search has
   been canceled (online search form / new items wizard).
 - Correct representation of what is enabled in the menu (toggle quick view, etc). 
 - Permissions can now be set on any module, including the property modules.
+- Updated jTattoo library to the latest version (December, 2010).
+- Updated jAudioTagger to version 2.0.3 (from 1.0.9)
 
+[New]
+- Find and replace tool
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.2  [Released on January 7, 2011]  [testing: high]  [target: production]

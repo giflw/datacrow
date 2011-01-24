@@ -143,7 +143,7 @@ public class DataManager {
     
     public static void deleteIcons() {
         for (DcImageIcon icon : icons.values()) {
-            if (icon != null)
+            if (icon != null && icon.getFilename() != null)
                 new File(icon.getFilename()).delete();
         }
     }

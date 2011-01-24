@@ -60,6 +60,7 @@
     <mapID target="dc.tools.massupdate" url="tools/mass_update.html"/>
     <mapID target="dc.tools.expertuser" url="tools/expert_user.html"/>
     <mapID target="dc.tools.updateall" url="tools/update_all.html"/>
+    <mapID target="dc.tools.findreplace" url="tools/findreplace.html"/>
     <mapID target="dc.tools.backup_restore" url="tools/backup_restore.html"/>
     <mapID target="dc.tools.titlerewriter" url="tools/title_rewriter.html"/>
     <mapID target="dc.tools.autonumbering" url="tools/auto_numbering.html"/>

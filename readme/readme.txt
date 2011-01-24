@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.9.2
-Created on January 7, 2011
+Version 3.9.3
+Created on January 20, 2011
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net

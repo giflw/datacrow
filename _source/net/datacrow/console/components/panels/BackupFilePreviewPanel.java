@@ -98,4 +98,11 @@ public class BackupFilePreviewPanel extends JPanel implements PropertyChangeList
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 5, 0, 5), 0, 0));
     }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        preview = null;
+        removeAll();
+    }
 }

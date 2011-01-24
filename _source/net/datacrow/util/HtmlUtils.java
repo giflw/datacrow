@@ -129,32 +129,34 @@ public class HtmlUtils {
                                          {"rel=\"", "\""},
                                          {"<!--", "-->"}};
             
-            int idx;
-            String part1;
-            String part2;
-            for (String[] sections : removeSections) {
-                while((idx = sb.indexOf(sections[0])) > 0) {
-                    part1 = sb.substring(0, idx);
-                    part2 = sb.substring(sb.indexOf(sections[1], idx + sections[0].length()) + sections[1].length());
-                    
-                    sb.setLength(0);
-                    sb.append(part1);
-                    sb.append(part2);
+            if (cleanup) {
+                int idx;
+                String part1;
+                String part2;
+                for (String[] sections : removeSections) {
+                    while((idx = sb.indexOf(sections[0])) > 0) {
+                        part1 = sb.substring(0, idx);
+                        part2 = sb.substring(sb.indexOf(sections[1], idx + sections[0].length()) + sections[1].length());
+                        
+                        sb.setLength(0);
+                        sb.append(part1);
+                        sb.append(part2);
+                    }
+                }
+            
+                String[] removeWords = {"&nbsp;", " href=\"#\""};
+                for (String word : removeWords) {
+                    while((idx = sb.indexOf(word)) > 0) {
+                        part1 = sb.substring(0, idx);
+                        part2 = sb.substring(idx + word.length());
+                        
+                        sb.setLength(0);
+                        sb.append(part1);
+                        sb.append(part2);
+                    }
                 }
             }
-            
-            String[] removeWords = {"&nbsp;", " href=\"#\""};
-            for (String word : removeWords) {
-                while((idx = sb.indexOf(word)) > 0) {
-                    part1 = sb.substring(0, idx);
-                    part2 = sb.substring(idx + word.length());
-                    
-                    sb.setLength(0);
-                    sb.append(part1);
-                    sb.append(part2);
-                }
-            }
-            
+                
             html = sb.toString();
             
             //perform specific fixes

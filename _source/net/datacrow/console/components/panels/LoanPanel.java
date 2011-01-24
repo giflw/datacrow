@@ -412,6 +412,12 @@ public class LoanPanel extends JPanel implements ActionListener {
             setReturnModus();
     }
     
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        close();
+    }
+
     public void close() {
         this.descriptionPane = null;
         this.dco = null;
@@ -422,7 +428,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         
         if (owner instanceof LoanForm) { 
             ((LoanForm) owner).close();
-        } else {
+        } else if (owner != null) {
             owner.dispose();
             owner.setVisible(false);
         }

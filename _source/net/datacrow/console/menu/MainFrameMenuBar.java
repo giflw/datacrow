@@ -203,7 +203,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         
         if (!module.isAbstract()) {
             menuTools.addSeparator();
-            PluginHelper.add(menuTools, "UpdateAll");            
+            PluginHelper.add(menuTools, "UpdateAll");
+            PluginHelper.add(menuTools, "FindReplace");
             PluginHelper.add(menuTools, "AutoIncrementer");
             PluginHelper.add(menuTools, "TitleRewriter");
         }

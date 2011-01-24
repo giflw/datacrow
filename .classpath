@@ -38,7 +38,6 @@
 	<classpathentry kind="lib" path="lib/jacksum.jar"/>
 	<classpathentry kind="lib" path="lib/html/js.jar"/>
 	<classpathentry kind="lib" path="lib/html/cobra.jar"/>
-	<classpathentry kind="lib" path="lib/jaudiotagger_1.0.9.jar"/>
 	<classpathentry kind="lib" path="lib/PDFRenderer.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/bcmail-jdk14-132.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/bcprov-jdk14-132.jar"/>
@@ -62,5 +61,6 @@
 	<classpathentry kind="lib" path="lib/chart/jfreechart-1.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/chart/servlet.jar"/>
 	<classpathentry kind="lib" path="lib/chart/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="lib/jaudiotagger-2.0.3.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

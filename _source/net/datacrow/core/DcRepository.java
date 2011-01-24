@@ -213,6 +213,8 @@ public abstract class DcRepository {
         public static final String stHelpFormSize = "help_form_size";
         public static final String stExpertFormSize = "expert_form_size";
         public static final String stUpdateAllDialogSize = "update_all_dialog_size";
+        public static final String stFindReplaceDialogSize = "find_replace_dialog_size";
+        public static final String stFindReplaceTaskDialogSize = "find_replace_task_dialog_size";
         public static final String stShowTableTooltip = "show_table_tooltip";
         public static final String stBrowserPath = "browser_path";
         public static final String stProxyPassword = "proxy_password";

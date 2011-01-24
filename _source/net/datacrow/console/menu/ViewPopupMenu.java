@@ -224,8 +224,10 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
         
         addSeparator();
         
-        if (current.getIndex() != DcModules._ITEM)
+        if (current.getIndex() != DcModules._ITEM) {
             PluginHelper.add(this, "UpdateAll", module.getIndex());
+            PluginHelper.add(this, "FindReplace", module.getIndex());
+        }
         
         PluginHelper.add(this, "FileLauncher", module.getIndex());
         

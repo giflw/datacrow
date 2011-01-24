@@ -271,4 +271,11 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
             listLeft.setListData(newElements);
         }
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        clear();
+        removeAll();
+    }
 }

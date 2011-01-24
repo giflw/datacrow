@@ -56,6 +56,7 @@ import net.datacrow.console.components.panels.QuickViewPanel;
 import net.datacrow.console.components.panels.tree.GroupingPane;
 import net.datacrow.console.views.tasks.DeleteTask;
 import net.datacrow.console.views.tasks.SaveTask;
+import net.datacrow.console.windows.FindReplaceDialog;
 import net.datacrow.console.windows.UpdateAllDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.console.windows.reporting.ReportingDialog;
@@ -259,6 +260,11 @@ public class View extends DcPanel implements ListSelectionListener {
         UpdateAllDialog dialog = new UpdateAllDialog(this);
         dialog.setVisible(true);
     }     
+    
+    public void openFindReplaceDialog() {
+        FindReplaceDialog dialog = new FindReplaceDialog(this);
+        dialog.setVisible(true);
+    }        
 
     public DcModule getModule() {
         return vc.getModule();
@@ -441,6 +447,7 @@ public class View extends DcPanel implements ListSelectionListener {
             ItemForm form = new ItemForm(false, getType() == View._TYPE_SEARCH, 
                                          dco, getType() != View._TYPE_SEARCH);
             form.setVisible(true);
+            form = null;
         } else {
             DcSwingUtilities.displayWarningMessage(DcResources.getText("msgSelectRowToOpen"));
         }

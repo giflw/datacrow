@@ -93,9 +93,11 @@ import org.apache.log4j.PropertyConfigurator;
 public class DataCrow {
 
     private static Logger logger;
+
+    private static SplashScreen splashScreen;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 9, 2, 0);
+    private static Version version = new Version(3, 9, 3, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -114,9 +116,8 @@ public class DataCrow {
     private static boolean isWebModuleInstalled = false;
     
     public static boolean loadSettings = true;
-    
     public static MainFrame mainFrame;
-    private static SplashScreen splashScreen;
+    
 
     public static void main(String[] args) {
         try {
@@ -746,8 +747,8 @@ public class DataCrow {
                 "and all if its sub directories.";
 
             if (platform.isVista()) {
-                message += " For Windows Vista it is best to install Data Crow to another directory " +
-                		"then the Program Files folder.";
+                message += " For Windows Vista it is best to install Data Crow to another directory" +
+                		   " then the Program Files folder.";
             }
 
             System.out.println(message);

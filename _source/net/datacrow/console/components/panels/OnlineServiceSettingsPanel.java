@@ -241,4 +241,10 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
                 buttonSettings.setEnabled(true);            
         }
     }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        clear();
+    }
 }

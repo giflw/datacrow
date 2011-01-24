@@ -40,6 +40,7 @@ import net.datacrow.util.StringUtils;
 import org.apache.log4j.Logger;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 
@@ -74,21 +75,21 @@ public class MusicFile implements IOnlineSearchClient {
         
             Tag tag = audioFile.getTag();
             if (tag != null) {
-                album = tag.getFirstAlbum();
-                artist = tag.getFirstArtist();
-                genre = getGenre(tag.getFirstGenre());
-                year = tag.getFirstYear();
-                title = tag.getFirstTitle();
+                album = tag.getFirst(FieldKey.ALBUM);
+                artist = tag.getFirst(FieldKey.ARTIST);
+                genre = getGenre(tag.getFirst(FieldKey.GENRE));
+                year = tag.getFirst(FieldKey.YEAR);
+                title = tag.getFirst(FieldKey.TITLE);
                 
                 for (Artwork aw : tag.getArtworkList())
                     image = new DcImageIcon(aw.getBinaryData());
                 
-                bitrate = (int)audioFile.getAudioHeader().getBitRateAsNumber();
+                bitrate = (int) audioFile.getAudioHeader().getBitRateAsNumber();
                 length = audioFile.getAudioHeader().getTrackLength();
                 encodingType = audioFile.getAudioHeader().getEncodingType();
                 
                 try {
-                    String s = tag.getFirstTrack();
+                    String s = tag.getFirst(FieldKey.TRACK);
                     if (s != null && s.length() > 0) {
                         if (s.indexOf("/") > 0)
                             s = s.substring(0, s.indexOf("/"));
@@ -97,7 +98,7 @@ public class MusicFile implements IOnlineSearchClient {
                     }
                         
                 } catch (Exception e) {
-                    logger.debug("Could not parse track [" + tag.getTrack() + "]", e);
+                    logger.debug("Could not parse track [" + tag.getFirst(FieldKey.TRACK) + "]", e);
                 }
             }
         } catch (Exception e) {

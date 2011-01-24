@@ -29,55 +29,65 @@ import java.io.RandomAccessFile;
 
 import net.datacrow.util.Utilities;
 
+import org.apache.log4j.Logger;
 import org.ebml.io.FileDataSource;
 import org.ebml.matroska.MatroskaDocType;
 import org.ebml.matroska.MatroskaFile;
 import org.ebml.matroska.MatroskaFileTrack;
 
 class FilePropertiesMKV extends FileProperties {
+    
+    private static Logger logger = Logger.getLogger(FilePropertiesMKV.class.getName());
 
     @Override
 	protected void process(RandomAccessFile raf, String filename) throws Exception {
         raf.seek(0);
         
         FileDataSource fds = new FileDataSource(filename);
-        MatroskaFile mkf = new MatroskaFile(fds);
-		mkf.readFile();
-
-		double duration = mkf.getDuration();
-		duration = duration > 0 ? duration / 1000 : duration;
-		setDuration((int) duration);
-		
-		if (mkf.getTrackList() != null) {
-		    
-    		for (MatroskaFileTrack track : mkf.getTrackList()) {
-    		    if (track.TrackType ==  MatroskaDocType.track_video) {
-    		        setVideoResolution(track.Video_PixelWidth + "x" + track.Video_PixelHeight);
-    		        setVideoCodec(track.CodecID);
-    		        setName(track.Name);
-    		        
-    		        if (track.Language != null) {
-        		        String language = Utilities.getLanguage(track.Language);
-        		        language = language == null || language.length() == 0 ? track.Language : language;
-        		        setLanguage(language);
-    		        }
-    		    } else if (track.TrackType ==  MatroskaDocType.track_subtitle) {
-    		        String subtitles = getSubtitles();
-    		        subtitles += subtitles.length() > 0 ? ", " : "";
-    		        
-                    String language = Utilities.getLanguage(track.Name);
-                    language = language == null || language.length() == 0 ? track.Name : track.Name;
-    		        subtitles += language;
-    		        setSubtitles(subtitles);
-    		        
-    		    } else if (track.TrackType ==  MatroskaDocType.track_audio) {
-    		        setAudioChannels(track.Audio_Channels);
-    		        setAudioCodec(track.CodecID);
-    		    }
+        
+        try {
+            MatroskaFile mkf = new MatroskaFile(fds);
+    		mkf.readFile();
+    
+    		double duration = mkf.getDuration();
+    		duration = duration > 0 ? duration / 1000 : duration;
+    		setDuration((int) duration);
+    		
+    		if (mkf.getTrackList() != null) {
+    		    
+        		for (MatroskaFileTrack track : mkf.getTrackList()) {
+        		    if (track.TrackType ==  MatroskaDocType.track_video) {
+        		        setVideoResolution(track.Video_PixelWidth + "x" + track.Video_PixelHeight);
+        		        setVideoCodec(track.CodecID);
+        		        setName(track.Name);
+        		        
+        		        if (track.Language != null) {
+            		        String language = Utilities.getLanguage(track.Language);
+            		        language = language == null || language.length() == 0 ? track.Language : language;
+            		        setLanguage(language);
+        		        }
+        		    } else if (track.TrackType ==  MatroskaDocType.track_subtitle) {
+        		        String subtitles = getSubtitles();
+        		        subtitles += subtitles.length() > 0 ? ", " : "";
+        		        
+                        String language = Utilities.getLanguage(track.Name);
+                        language = language == null || language.length() == 0 ? track.Name : track.Name;
+        		        subtitles += language;
+        		        setSubtitles(subtitles);
+        		        
+        		    } else if (track.TrackType ==  MatroskaDocType.track_audio) {
+        		        setAudioChannels(track.Audio_Channels);
+        		        setAudioCodec(track.CodecID);
+        		    }
+        		}
     		}
-		}
-		
-		fds.close();
-		setContainer("MKV (Matroska)");
+
+    		setContainer("MKV (Matroska)");
+
+        } catch (Exception e) {
+            logger.error("Failed to parse MKV file " + filename, e);
+        } finally {
+            fds.close();
+        }
 	}
 }

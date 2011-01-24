@@ -909,8 +909,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (children != null)
                 children.clear();
             
-            if (values != null)
+            if (values != null) {
+                clearValues();
                 values.clear();
+            }
             
             if (children != null)
             	children.clear();
@@ -922,7 +924,6 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             children = null;
             loaded = false;
             values = null;
-
         } catch (Exception e) {
             logger.error(e, e);
         }

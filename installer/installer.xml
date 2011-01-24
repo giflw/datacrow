@@ -4,7 +4,7 @@
 
     <info>
         <appname>Data Crow</appname>
-        <appversion>3.9.2</appversion>
+        <appversion>3.9.3</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
@@ -59,7 +59,7 @@
             <file src="lib/PDFRenderer.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/hsqldb.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jacksum.jar" targetdir="$INSTALL_PATH/lib"/>
-            <file src="lib/jaudiotagger_1.0.9.jar" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/jaudiotagger-2.0.3.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jebml.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/jhall.jar" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/log4j-1.2.14.jar" targetdir="$INSTALL_PATH/lib"/>

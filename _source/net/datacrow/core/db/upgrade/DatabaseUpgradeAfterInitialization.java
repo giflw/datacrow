@@ -90,7 +90,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
         ResultSet rs2;
         
         DcField fldPersist;
-//        DcObject reference;
         String referenceID;
         
         String ID;
@@ -119,8 +118,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                                 dco.clearValues();
                                 
                                 referenceID = rs2.getString(1);
-//                                reference = DataManager.getItem(fld.getReferenceIdx(), referenceID);
-                                
                                 dco.setValueLowLevel(DcObject._ID, ID);
                                 fldPersist = module.getPersistentField(fld.getIndex());
                                 dco.setValue(fldPersist.getIndex(), referenceID);

@@ -265,7 +265,10 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         cancel();
         saveSettings();
         
-        panelLocalArt.clear();
+        if (panelLocalArt != null) {
+            panelLocalArt.clear();
+            panelLocalArt = null;
+        }
         
         if (panelServer != null) {
             panelServer.clear();
@@ -273,7 +276,6 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         }
         
         if (panelServerSettings != null) {
-            panelServerSettings.save();
             panelServerSettings.clear();
             panelServerSettings = null;
         }
