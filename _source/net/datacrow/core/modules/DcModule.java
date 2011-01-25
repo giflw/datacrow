@@ -1605,10 +1605,22 @@ public class DcModule implements Comparable<DcModule> {
         
         if (this instanceof DcPropertyModule && getXmlModule() != null && !getXmlModule().isServingMultipleModules()) {
             // We are (or might be) working on a property base module with a calculated tablename
-            DcModule module = DcModules.get(getName()); 
-            DatabaseManager.executeSQL("DROP TABLE " + module.getTableName());
+            DcModule module = DcModules.get(getName());
+            
+            try {
+                DatabaseManager.executeSQL("DROP TABLE " + module.getTableName());
+            } catch (Exception e) {
+                // happens for property base modules
+                logger.debug("Table does not exist, no need to drop " + module.getTableName(), e);
+            }
         } else {
-            DatabaseManager.executeSQL("DROP TABLE " + getTableName());
+            try {
+                DatabaseManager.executeSQL("DROP TABLE " + getTableName());
+            } catch (Exception e) {
+                // happens for property base modules
+                logger.debug("Table does not exist, no need to drop " + getTableName(), e);
+            }
+                
             if (getTemplateModule() != null)
                 getTemplateModule().delete();
         }

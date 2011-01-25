@@ -22,9 +22,11 @@ Data Crow 3.9.3  [Released on January xx, 2011]  [testing: high]  [target: produ
 - Permissions can now be set on any module, including the property modules.
 - Updated jTattoo library to the latest version (December, 2010).
 - Updated jAudioTagger to version 2.0.3 (from 1.0.9)
+- Any custom made module can now be exported and imported, including property modules.
 
 [New]
 - Find and replace tool
+- Support for CueCat Barcode scanners in the online search form.
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.2  [Released on January 7, 2011]  [testing: high]  [target: production]

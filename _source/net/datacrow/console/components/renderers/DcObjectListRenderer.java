@@ -57,9 +57,9 @@ public class DcObjectListRenderer extends DcListRenderer  {
         if (render && !vc.isIgnoringPaintRequests()) {
             
             c.setFont(ComponentFactory.getStandardFont());
-            c.load();
             
-            if (c.getDcObject() != null) {
+            
+            if (!c.load() && c.getDcObject() != null) {
                 
                 if (c.getDcObject().getModule().canBeLend()) {
                     Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);

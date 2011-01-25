@@ -585,12 +585,15 @@ public class DcModules {
     
     public static Collection<DcModule> getReferencedModules(int moduleIdx) {
         Collection<DcModule> references = new ArrayList<DcModule>();
-        for (DcField field : DcModules.get(moduleIdx).getFields()) {
+        DcModule module = DcModules.get(moduleIdx);
+        module = module == null ? DcModules.getPropertyBaseModule(moduleIdx) : module;
+        
+        for (DcField field : module.getFields()) {
             int referenceIdx = field.getReferenceIdx();
             if (referenceIdx != moduleIdx && referenceIdx > 0) {
-                DcModule module = DcModules.get(referenceIdx);
-                if (!references.contains(module))
-                    references.add(module);
+                DcModule m = DcModules.get(referenceIdx);
+                if (!references.contains(m))
+                    references.add(m);
             }
         }
         return references;

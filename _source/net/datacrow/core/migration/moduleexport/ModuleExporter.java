@@ -121,6 +121,7 @@ public class ModuleExporter {
 		    
 			Collection<DcModule> modules = new ArrayList<DcModule>();
 			DcModule main = DcModules.get(module); 
+			main = main == null ? DcModules.getPropertyBaseModule(module) : main;
 			modules.add(main);
 
 			for (DcModule reference : DcModules.getReferencedModules(module))
@@ -140,7 +141,7 @@ public class ModuleExporter {
 			client.notifyStarted(modules.size());
 			
 			try {
-				ZipFile zf = new ZipFile(new File(parent.getPath(), DcModules.get(module).getName().toLowerCase() + "_export.zip"));
+				ZipFile zf = new ZipFile(new File(parent.getPath(), main.getName().toLowerCase() + "_export.zip"));
 			
 				for (DcModule module : modules) {
 					

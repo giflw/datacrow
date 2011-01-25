@@ -25,6 +25,8 @@
 
 package net.datacrow.console.wizards.moduleexport;
 
+import java.util.Collection;
+
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.module.PanelSelectModule;
 import net.datacrow.core.modules.DcModule;
@@ -48,9 +50,15 @@ public class PanelSelectModuleToExport extends PanelSelectModule {
             return null;
         }
         
-        return DcModules.get(getSelectedModule());
+        DcModule module = DcModules.get(getSelectedModule());
+        return module == null ? DcModules.getPropertyBaseModule(getSelectedModule()) : module;
     }
 
+    @Override
+    protected Collection<DcModule> getModules() {
+        return DcModules.getCustomModules();
+    }
+    
     @Override
     public String getHelpText() {
         return DcResources.getText("msgSelectModuleToExport");
@@ -58,6 +66,6 @@ public class PanelSelectModuleToExport extends PanelSelectModule {
     
     @Override
     protected boolean isModuleAllowed(DcModule module) {
-        return module.isCustomModule() && module.getXmlModule() != null && module.isTopModule();
+        return module.isCustomModule() && module.getXmlModule() != null;
     }
 }
