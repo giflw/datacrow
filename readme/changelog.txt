@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.3  [Released on January xx, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.3  [Released on January 25, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -27,6 +27,7 @@ Data Crow 3.9.3  [Released on January xx, 2011]  [testing: high]  [target: produ
 [New]
 - Find and replace tool
 - Support for CueCat Barcode scanners in the online search form.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.2  [Released on January 7, 2011]  [testing: high]  [target: production]
