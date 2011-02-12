@@ -111,6 +111,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false,
                             false));  
         getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stMovieMeterGetReviews,
+                            Boolean.FALSE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblMovieMeterRetrieveReviews",
+                            false,
+                            false));  
+        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.Settings.stUsage,
                             Long.valueOf(0),

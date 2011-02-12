@@ -27,7 +27,6 @@ package net.datacrow.fileimporters;
 
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
@@ -106,7 +105,7 @@ public interface IFileImportClient {
      * The storage medium to apply on the resulted items.
      * @return A storage medium or null.
      */
-    public DcProperty getStorageMedium();
+    public DcObject getStorageMedium();
     
     /**
      * The directory usage implementation (free form).

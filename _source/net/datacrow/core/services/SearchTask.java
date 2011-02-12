@@ -125,6 +125,10 @@ public abstract class SearchTask extends Thread {
         this.itemMode = mode;
     }
 
+    public boolean isItemModeSupported() {
+        return true;
+    }
+    
     /**
      * Returns the retrieval mode: {@link #_ITEM_MODE_FULL} or {@link #_ITEM_MODE_SIMPLE}.
      */

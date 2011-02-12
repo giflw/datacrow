@@ -67,6 +67,9 @@ public class BackupFilePreviewPanel extends JPanel implements PropertyChangeList
             File selection = (File)e.getNewValue();
             
             try {
+                
+                if (!selection.isFile()) return;
+                
                 ZipFile zf = new ZipFile(selection);
                 ZipEntry ze = zf.getEntry("version.txt");
                 

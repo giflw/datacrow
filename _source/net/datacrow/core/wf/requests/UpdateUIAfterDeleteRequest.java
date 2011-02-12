@@ -1,5 +1,6 @@
 package net.datacrow.core.wf.requests;
 
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -30,6 +31,9 @@ public class UpdateUIAfterDeleteRequest implements IUpdateUIRequest {
     
     @Override
     public void execute() {
+        
+        if (!DataCrow.isInitialized()) return;
+        
         String ID = dco.getID();
         
         if (dco.getModule().hasSearchView())

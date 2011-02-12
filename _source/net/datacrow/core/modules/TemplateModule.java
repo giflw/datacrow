@@ -75,6 +75,16 @@ public class TemplateModule extends DcModule {
         }
     }
 
+    @Override
+    public boolean hasInsertView() {
+        return false;
+    }
+
+    @Override
+    public boolean hasSearchView() {
+        return false;
+    }
+
     /**
      * Retrieves the module this template module has been created for.
      */
@@ -143,6 +153,10 @@ public class TemplateModule extends DcModule {
                              255, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                              "DefaultTemplate"));        
     }
+    
+    public boolean isHasReferences() {
+        return true;
+    }    
 
     /**
      * Creates (of need be) the template form.

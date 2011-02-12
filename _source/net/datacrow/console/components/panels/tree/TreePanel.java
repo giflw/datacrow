@@ -153,6 +153,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
 	
 	public void setSelected(DcObject dco) {
 	    
+	    if (top == null || top.getChildCount() == 0)
+	        return;
+	    
 	    DcDefaultMutableTreeNode node = (DcDefaultMutableTreeNode) tree.getLastSelectedPathComponent();
         NodeElement elem = node != null ? (NodeElement) node.getUserObject() : null;
 	    
@@ -163,7 +166,7 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
 	        if (newNode != null) 
 	            setSelected(newNode);
 	        else 
-	            logger.error("Cannot find created node in tree. Selected node has not been changed.", new Exception("Cannot find created node"));
+	            logger.debug("Cannot find created node in tree. Selected node has not been changed.", new Exception("Cannot find created node"));
 	    }
 	}
     
@@ -173,9 +176,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
         if (top != null) {
             NodeElement ne = (NodeElement) top.getUserObject();
             ne.addItem(item, dco.getModule().getIndex());
-            
-            
-            
             add(item, dco.getModule().getIndex(), path, top);
         }
     }

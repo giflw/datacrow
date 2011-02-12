@@ -504,7 +504,7 @@ public class DcTable extends JTable implements IViewComponent {
             if (dco == null) return null;
             
             Object value;
-            for (int field : (view.getType() == View._TYPE_SEARCH ? 
+            for (int field : (view != null && view.getType() == View._TYPE_SEARCH ? 
                                         module.getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder) : 
                                         module.getFieldIndices())) {
                 try {

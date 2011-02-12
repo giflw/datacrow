@@ -1,4 +1,31 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.4  [Released on February 6, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Can't close the image file import dialog.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.9.4  [Released on February 6, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- IMDB service not working
+- File import for images no longer working
+- Upgrade error (due to extensive logging)
+- Incorrect Look and Feel for software module (only on first startup of a fresh install)
+- File import dialog > settings; added "create" button for storage medium and fixed 
+  create new button for container
+- AWS Access Key cannot be changed after performing a search (restart was required)
+- Create multiple did no longer for property modules (NPE)
+- Templates do not load references (references are not applied on the new item)
+
+[New]
+- MovieMeter.nl online service!
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.3  [Released on January 25, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

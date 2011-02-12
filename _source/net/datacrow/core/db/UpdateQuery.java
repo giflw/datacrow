@@ -147,9 +147,6 @@ public class UpdateQuery extends Query {
                 
                 counter = 0;
                 for (DcMapping mapping : c) {
-                    
-                    
-                    
                     stmt.execute("INSERT INTO " + mapping.getTableName() + 
                                  " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
                                  mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 

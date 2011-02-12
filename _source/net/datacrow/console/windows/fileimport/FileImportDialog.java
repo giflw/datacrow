@@ -34,7 +34,6 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -44,17 +43,16 @@ import javax.swing.JTextArea;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcReferenceField;
 import net.datacrow.console.components.panels.OnlineServicePanel;
 import net.datacrow.console.components.panels.OnlineServiceSettingsPanel;
 import net.datacrow.console.windows.DcFrame;
-import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
@@ -78,8 +76,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
 
     protected JCheckBox checkDirNameAsTitle = ComponentFactory.getCheckBox(DcResources.getText("lblUseDirNameAsTitle"));
     protected JCheckBox checkSaveDirectly = ComponentFactory.getCheckBox(DcResources.getText("lblSaveDirectly"));
-    protected JComboBox fldContainer;
-    protected JComboBox fldStorageMedium;
+    protected DcReferenceField fldContainer;
+    protected DcReferenceField fldStorageMedium;
     
     protected JButton buttonRun = ComponentFactory.getButton(DcResources.getText("lblRun"));
     protected JButton buttonStop = ComponentFactory.getButton(DcResources.getText("lblStop"));
@@ -124,13 +122,13 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     }
 
     @Override
-    public DcProperty getStorageMedium() {
+    public DcObject getStorageMedium() {
         DcModule module = DcModules.get(importer.getModule());
         
-        DcProperty medium = null;
+        DcObject medium = null;
         if (module.getPropertyModule(DcModules._STORAGEMEDIA) != null) {
             try {
-                medium = (DcProperty) fldStorageMedium.getSelectedItem();
+                medium = (DcObject) fldStorageMedium.getValue();
             } catch (Exception exp) {}
         }
             
@@ -178,7 +176,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     
     @Override
     public DcObject getDcContainer() {
-        return fldContainer != null && fldContainer.getSelectedIndex() > 0 ? (DcObject) fldContainer.getSelectedItem() : null;
+        return (DcObject) fldContainer.getValue();
     }
 
     @Override
@@ -249,8 +247,11 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             }
         }
         
-        panelLocalArt.save();
-        panelServerSettings.save();
+        if (panelLocalArt != null)
+            panelLocalArt.save();
+        
+        if (panelServerSettings != null)
+            panelServerSettings.save();
     }
     
     public void denyActions() {
@@ -362,21 +363,21 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         panelMediaInfo.setLayout(Layout.getGBL());
         
         JLabel lblContainer = ComponentFactory.getLabel(DcResources.getText("lblContainer"));
-        fldContainer = ComponentFactory.getObjectCombo(DcModules._CONTAINER);
+        fldContainer = ComponentFactory.getReferenceField(DcModules._CONTAINER);
         
         String ID = settings.getString(DcRepository.ModuleSettings.stImportCDContainer);
         DcObject item = DataManager.getItem(DcModules._CONTAINER, ID);
         if (item != null)
-            fldContainer.setSelectedItem(item);
+            fldContainer.setValue(item);
         
         int idx = DcModules.get(importer.getModule()).getPropertyModule(DcModules._STORAGEMEDIA).getIndex();
         JLabel labelMedium = ComponentFactory.getLabel(DcResources.getText("lblStorageMedium"));
-        fldStorageMedium = ComponentFactory.getObjectCombo(idx);
+        fldStorageMedium = ComponentFactory.getReferenceField(idx);
         
         ID = settings.getString(DcRepository.ModuleSettings.stImportCDStorageMedium);
         item = DataManager.getItem(idx, ID);
         if (item != null)
-            fldStorageMedium.setSelectedItem(item);
+            fldStorageMedium.setValue(item);
         
         panelMediaInfo.add(lblContainer,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
@@ -385,15 +386,6 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 5, 5, 5), 0, 0));
 
-        JButton btnCreateContainer = ComponentFactory.getIconButton(IconLibrary._icoOpenNew);
-        btnCreateContainer.setActionCommand("createContainer");
-        btnCreateContainer.addActionListener(this);
-                
-        panelMediaInfo.add(btnCreateContainer, Layout.getGBC( 2, 0, 2, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                 new Insets(0, 5, 5, 5), 0, 0));
-        
-        
         if (module.getPropertyModule(DcModules._STORAGEMEDIA) != null) {
             panelMediaInfo.add(labelMedium,    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
@@ -436,12 +428,6 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return panel;
     }
 
-    private void createContainer() {
-        DcObject dco = DcModules.get(DcModules._CONTAINER).getItem();
-        ItemForm itemForm = new ItemForm(null, false, false, dco, true);
-        itemForm.setVisible(true);
-    }
-    
     protected void build() {
         //**********************************************************
         //Online search panel
@@ -584,7 +570,5 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             cancel();
         else if (ae.getActionCommand().equals("import"))
             startImport();
-        else if (ae.getActionCommand().equals("createContainer"))
-            createContainer();
     }    
 }

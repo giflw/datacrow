@@ -1,6 +1,7 @@
 package net.datacrow.core.wf.requests;
 
 import net.datacrow.console.views.MasterView;
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
@@ -31,6 +32,9 @@ public class UpdateUIAfterInsertRequest implements IUpdateUIRequest {
     
     @Override
     public void execute() {
+        
+        if (!DataCrow.isInitialized()) return;
+        
         // Note that in the item form (close(boolean b)) the potential parent module's
         // quick view is already updated. No need to do that here.
         String ID = dco.getID();

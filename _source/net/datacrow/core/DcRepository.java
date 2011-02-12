@@ -113,6 +113,7 @@ public abstract class DcRepository {
         public static final String stAmazonFirstStartChecked = "amazon_first_start_check";
         public static final String stAwsAccessKeyId = "aws_access_key_id";
         public static final String stImdbMaxActors = "imdb_max_actors";
+        public static final String stMovieMeterGetReviews = "moviemeter_get_reviews";
         public static final String stUsage = "usage_data_crow_starts";
         public static final String stAskForDonation = "allow_me_to_ask_for_a_donation";
     	public static final String stHighRenderingQuality = "high_rendering_quality";
@@ -247,6 +248,7 @@ public abstract class DcRepository {
         public static final String _FREEBOOKSPOT = "FBS";
         public static final String _SOURCEFORGE = "SF";
         public static final String _SOFTPEDIA = "SP";
+        public static final String _MOVIEMETER = "MOVIEMETER";
         
         static {
             types.add(_ASIN);
@@ -264,6 +266,8 @@ public abstract class DcRepository {
             types.add(_FREEBOOKSPOT);
             types.add(_SOURCEFORGE);
             types.add(_ISBNDB);
+            types.add(_SOFTPEDIA);
+            types.add(_MOVIEMETER);
         }
     }
     

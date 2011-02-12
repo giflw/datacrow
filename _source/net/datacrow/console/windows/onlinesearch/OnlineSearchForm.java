@@ -164,7 +164,10 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             list.add(dco);
             table.add(dco);
             items.add(dco);
-            loadedItems.put(items.indexOf(dco), Boolean.valueOf(panelSettings.isQueryFullDetails()));
+            
+            boolean full = panelService.getServer().isFullModeOnly();
+            
+            loadedItems.put(items.indexOf(dco), full || Boolean.valueOf(panelSettings.isQueryFullDetails()));
             
             resultCount++;
             
@@ -448,7 +451,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         String query = panelService.getQuery();
         SearchMode mode = panelService.getMode();
         
-        if (!mode.keywordSearch()) {
+        if (mode != null && !mode.keywordSearch()) {
             try {
                 CueCatCode ccc = CueCatDecoder.decodeLine(query);
                 if (ccc.barType != CueCatCode.BARCODE_UNKNOWN) {

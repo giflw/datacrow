@@ -147,19 +147,6 @@ public class HttpConnection {
     }
 
     /**
-     * Creates a SOAP request.
-     * @param soapAction
-     * @throws Exception
-     */
-    public void setToSoapRequest(String soapAction) throws Exception {
-        uc.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
-        uc.setRequestProperty("SOAPAction", soapAction);
-        uc.setRequestMethod("POST");
-        uc.setDoOutput(true);
-        uc.setDoInput(true);
-    }
-
-    /**
      * Create an output stream for uploading purposes.
      * @throws IOException
      */

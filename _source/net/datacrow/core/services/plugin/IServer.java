@@ -76,6 +76,8 @@ public interface IServer {
      */
     Collection<Setting> getSettings();
     
+    boolean isFullModeOnly();
+    
     /**
      * The URL of the main server.
      */

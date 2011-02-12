@@ -103,6 +103,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             
             DcObject dco = module.getItem();
             for (DcField fld : module.getFields()) {
+                
+              logger.info("Creating persistant field for module: " + module + "/" + module.getTableName() + ": " + fld);
+                
                 if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     try {
                         DcModule mm = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
@@ -123,7 +126,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                                 dco.setValue(fldPersist.getIndex(), referenceID);
                                 dco.setUpdateGUI(false);
                                 try {
-                                    logger.info("Module: " + module + "/" + module.getTableName() + ": setting value '" + referenceID + "' for field " + fldPersist);
                                     dco.saveUpdate(false, false);
                                 } catch (Exception e) {
                                     logger.error(e, e);
