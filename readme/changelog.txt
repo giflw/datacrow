@@ -1,9 +1,10 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.4  [Released on February 6, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.5  [Released on February 12, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - Can't close the image file import dialog.
+- Importer fails with 'NullpointerException'
 
 
 -----------------------------------------------------------------------------------------

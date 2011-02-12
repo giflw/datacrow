@@ -124,12 +124,10 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     @Override
     public DcObject getStorageMedium() {
         DcModule module = DcModules.get(importer.getModule());
-        
         DcObject medium = null;
         if (module.getPropertyModule(DcModules._STORAGEMEDIA) != null) {
-            try {
-                medium = (DcObject) fldStorageMedium.getValue();
-            } catch (Exception exp) {}
+            Object sm =  fldStorageMedium.getValue();
+            medium = sm instanceof DcObject ? (DcObject) sm : null;
         }
             
         return medium;
@@ -176,7 +174,8 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
     
     @Override
     public DcObject getDcContainer() {
-        return (DcObject) fldContainer.getValue();
+        Object container =  fldContainer.getValue();
+        return container instanceof DcObject ? (DcObject) container : null;
     }
 
     @Override
