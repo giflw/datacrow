@@ -1,10 +1,12 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.5  [Released on February 12, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.5  [Released on February 13, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - Can't close the image file import dialog.
 - Importer fails with 'NullpointerException'
+- Mobygames.com site change; pictures no longer retrieved.
+- New user folder created on initial installation (not used).
 
 
 -----------------------------------------------------------------------------------------
