@@ -68,9 +68,9 @@
   </NewsFeed>
   <Program_Info>
     <Program_Name>Data Crow</Program_Name>
-    <Program_Version>3.9.4</Program_Version>
+    <Program_Version>3.9.5</Program_Version>
     <Program_Release_Month>02</Program_Release_Month>
-    <Program_Release_Day>06</Program_Release_Day>
+    <Program_Release_Day>13</Program_Release_Day>
     <Program_Release_Year>2011</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
     <Program_Type>Freeware</Program_Type>
@@ -78,13 +78,13 @@
     <Program_Install_Support>Install and Uninstall</Program_Install_Support>
     <Program_OS_Support>WinXP,WinVista,WinVista x64,Win2000,WinOther,Other,Mac OS X,Mac Other,WinServer,Win98,Linux,Java,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
     <Program_Language>English,Dutch,French,German,Italian,Spanish</Program_Language>
-    <Program_Change_Info>Important bug fixes. MovieMeter.nl has been added to the online services for movies (dutch).</Program_Change_Info>
+    <Program_Change_Info>Important bug fixes.</Program_Change_Info>
     <Program_System_Requirements>512MB of memory / P3 800MHZ</Program_System_Requirements>
     <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
     <File_Info>
-      <File_Size_Bytes>45413091</File_Size_Bytes>
-      <File_Size_K>44348</File_Size_K>
-      <File_Size_MB>43.31</File_Size_MB>
+      <File_Size_Bytes>45665116</File_Size_Bytes>
+      <File_Size_K>44594</File_Size_K>
+      <File_Size_MB>43.55</File_Size_MB>
       <Filename_Versioned></Filename_Versioned>
       <Filename_Previous></Filename_Previous>
       <Filename_Generic></Filename_Generic>
@@ -118,7 +118,7 @@
       <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.9.4/datacrow_3_9_4_installer.zip</Primary_Download_URL>
+      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.9.5/datacrow_3_9_5_installer.zip</Primary_Download_URL>
       <Secondary_Download_URL></Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>
