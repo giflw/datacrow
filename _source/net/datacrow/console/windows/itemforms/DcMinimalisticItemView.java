@@ -219,6 +219,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     }
 
     public void allowActions() {
+        list.removeMouseListener(this);
         list.addMouseListener(this);
     }    
     

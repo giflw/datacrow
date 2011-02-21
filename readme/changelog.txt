@@ -1,4 +1,12 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.6  [Released on February xx, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Item form is opened twice from property views when another item was removed first.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.5  [Released on February 13, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
