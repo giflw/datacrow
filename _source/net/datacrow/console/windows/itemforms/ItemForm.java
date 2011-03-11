@@ -493,7 +493,9 @@ public class ItemForm extends DcFrame implements ActionListener {
             // to only retrieve images this failed miserably. Therefore the following check has been added.
             // Simply check if the image has been set (removal is not allowed by services) and if the current
             // bytes (needed for saving so these should be available) are present.
-            changed = !changed && o instanceof DcImageIcon ? ((DcImageIcon) o).getCurrentBytes() != null : changed;
+
+            // TODO: check this:
+            // changed = !changed && o instanceof DcImageIcon ? ((DcImageIcon) o).getCurrentBytes() != null : changed;
             
             if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
         }

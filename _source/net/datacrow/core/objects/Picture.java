@@ -25,6 +25,7 @@
 
 package net.datacrow.core.objects;
 
+import java.awt.Image;
 import java.io.File;
 
 import net.datacrow.core.DataCrow;
@@ -98,7 +99,7 @@ public class Picture extends DcObject {
             } catch (Exception e) {
                 logger.error("Could not load image " + DataCrow.imageDir + filename, e);
             }
-        } else if (image != null && isEdited() && image.getCurrentBytes() == null) {
+        } else if (image != null && isEdited()) {
             image.flush();
             image = new DcImageIcon(image.getImage());
             scaledImage = null;
@@ -108,14 +109,9 @@ public class Picture extends DcObject {
         markAsUnchanged();
     }
     
-    public byte[] getBytes() {
-    	DcImageIcon image = (DcImageIcon) getValue(_D_IMAGE);
-        return image != null ? image.getBytes() : null;
-    }
-    
-    public byte[] getCurrentBytes() {
+    public Image getImage() {
         DcImageIcon image = (DcImageIcon) getValue(_D_IMAGE);
-        return image != null ? image.getCurrentBytes() : null;
+        return image != null ? image.getImage() : null;
     }
     
     @Override

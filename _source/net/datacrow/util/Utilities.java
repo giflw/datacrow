@@ -619,7 +619,8 @@ public class Utilities {
     
     public static BufferedImage toBufferedImage(ImageIcon icon, int width, int height) {
         // make sure the image is loaded
-        Image image = new DcImageIcon(icon.getImage()).getImage();
+        icon.setImage(icon.getImage());
+        Image image = icon.getImage();
         
         int imgW = image.getWidth(null);
         int imgH = image.getHeight(null);

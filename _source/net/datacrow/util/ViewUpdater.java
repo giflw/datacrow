@@ -75,4 +75,10 @@ public class ViewUpdater extends Thread {
             vc.clear(idx);
         }
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        vc = null;
+        super.finalize();
+    }
 }

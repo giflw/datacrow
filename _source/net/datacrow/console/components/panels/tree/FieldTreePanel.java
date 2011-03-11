@@ -435,7 +435,7 @@ public class FieldTreePanel extends TreePanel {
                         iconBase64 = field.getIndex() != DcObject._SYS_MODULE ? rs.getString((level * 3) + 5) : null;
                         
                         icon = field.getIndex() == DcObject._SYS_MODULE ? 
-                                new DcImageIcon(DcModules.get(module).getIcon16().getBytes()) : 
+                                new DcImageIcon(DcModules.get(module).getIcon16().getImage()) : 
                                 iconBase64 != null ? DataManager.addIcon(String.valueOf(key), iconBase64) : null;
                         
                         if (keys != null && !keys.contains(id)) continue;

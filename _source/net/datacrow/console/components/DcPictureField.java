@@ -27,9 +27,11 @@ package net.datacrow.console.components;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
@@ -141,12 +143,8 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
                             picture = new DcImageIcon(Base64.decode(base64.toCharArray()));
                     }
                 } else if (o instanceof DcImageIcon) {
-                	
-                	if (((DcImageIcon) o).getCurrentBytes() != null)
-                		picture = new DcImageIcon(((DcImageIcon) o).getBytes());
-                    else
-                		picture = (DcImageIcon) o;
-                		
+                    picture = (DcImageIcon) o;
+                    picture.setImage(picture.getImage());
                 }
             }
         } catch (Exception e) {
@@ -234,14 +232,14 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
             
             if (g == null || picture == null || img == null) return;
             
-            // Optional: part of settings ??
-//            Graphics2D g2d = (Graphics2D) g;
-//
-//            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-//            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-//            g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-//            g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            // TODO: Optional: part of settings ??
+            Graphics2D g2d = (Graphics2D) g;
+
+            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 
             int width = imageWidth;
             int height = imageHeight;

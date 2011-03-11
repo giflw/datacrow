@@ -280,7 +280,7 @@ public class DcTable extends JTable implements IViewComponent {
         int col;
         Picture picture;
         Object value;
-        byte[] bytes;
+        DcImageIcon old_image;
         Picture p;
         for (int i = 0; i < fields.length; i++) {
             field = fields[i];
@@ -288,18 +288,21 @@ public class DcTable extends JTable implements IViewComponent {
             value = dco.getValue(fields[i]);
             
             if (view != null && view.getType() == View._TYPE_INSERT &&  value instanceof Picture) {
+                
+                // TODO: test this, worked with bytes..
+                
                 // keep images save
                 picture = (Picture) value;
-                bytes = picture.getCurrentBytes();
+                old_image = (DcImageIcon) picture.getValue(Picture._D_IMAGE);;
                 
-                if (bytes != null) {
+                if (old_image != null) {
                     p = (Picture) DcModules.get(DcModules._PICTURE).getItem();
                     p.setValue(Picture._A_OBJECTID, picture.getValue(Picture._A_OBJECTID));
                     p.setValue(Picture._B_FIELD, picture.getValue(Picture._B_FIELD));
                     p.setValue(Picture._C_FILENAME, picture.getValue(Picture._C_FILENAME));
                     p.setValue(Picture._E_HEIGHT, picture.getValue(Picture._E_HEIGHT));
                     p.setValue(Picture._F_WIDTH, picture.getValue(Picture._F_WIDTH));
-                    p.setValue(Picture._D_IMAGE, new DcImageIcon(bytes));
+                    p.setValue(Picture._D_IMAGE, new DcImageIcon(old_image.getImage()));
                     picture = p;
                 }
                 model.setValueAt(picture, row, col);

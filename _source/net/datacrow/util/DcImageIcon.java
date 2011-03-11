@@ -64,13 +64,10 @@ public class DcImageIcon extends ImageIcon {
     
     public DcImageIcon(byte[] bytes, boolean storeBytes) {
         super(bytes);
-        if (storeBytes)
-            this.bytes = bytes;
     }
     
     public DcImageIcon(byte[] bytes) {
         super(bytes);
-        this.bytes = bytes;
     }
 
     public DcImageIcon(Image image) {

@@ -137,7 +137,7 @@ public abstract class Synchronizer {
                         }
                     }
                 } else if (value instanceof Picture) {
-                    dco.setValue(field, new DcImageIcon(((Picture) value).getBytes()));
+                    dco.setValue(field, new DcImageIcon(((Picture) value).getImage()));
                 } else {
                     dco.setValue(field, value);    
                 }                

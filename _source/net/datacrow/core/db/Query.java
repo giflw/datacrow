@@ -33,6 +33,8 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
@@ -237,11 +239,8 @@ public abstract class Query {
                 file.delete();
             
             DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
-            byte[] bytes = icon.getCurrentBytes();
-            File realImgFile = bytes == null && icon.getFilename() != null ? new File(icon.getFilename()) : null;
-            bytes = realImgFile == null && bytes == null ? icon.getBytes() : bytes;
-            
-            if (bytes == null && realImgFile != null && realImgFile.exists()) {
+            File realImgFile = icon.getFilename() != null ? new File(icon.getFilename()) : null;
+            if (realImgFile != null && realImgFile.exists()) {
                 FileInputStream fis  = new FileInputStream(realImgFile);
                 FileOutputStream fos = new FileOutputStream(file);
                 try {
@@ -256,12 +255,9 @@ public abstract class Query {
                     if (fis != null) fis.close();
                     if (fos != null) fos.close();
                 }
-
                 Utilities.writeScaledImageToFile(icon, new File(picture.getScaledFilename(imageFile)));
-                
-            } else if (bytes != null && bytes.length > 10) {
-                Utilities.writeToFile(bytes, file);
-                icon = new DcImageIcon(bytes);
+            } else {
+                ImageIO.write(Utilities.toBufferedImage(icon), "PNG", file);
                 Utilities.writeScaledImageToFile(icon, new File(picture.getScaledFilename(imageFile)));
                 icon.flush();
             }

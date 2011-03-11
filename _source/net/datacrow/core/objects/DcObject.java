@@ -1291,15 +1291,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             	Object o = dco.getValue(field);
             	if (o instanceof DcImageIcon) {
             		DcImageIcon oldIcon = (DcImageIcon) o;
-            		
-            		DcImageIcon icon;
-            		if (oldIcon.getCurrentBytes() != null)
-            			icon = new DcImageIcon(oldIcon.getCurrentBytes());
-            		else
-            			icon = new DcImageIcon(oldIcon.getImage());
-            		
+            		DcImageIcon icon = new DcImageIcon(oldIcon.getImage());
             		icon.setFilename(oldIcon.getFilename());
-            	
             		setValue(field, icon);
             	} else if (o != null && getField(field).getValueType() == DcRepository.ValueTypes._PICTURE) {
                     Picture curPic = (Picture) dco.getValue(field);
@@ -1378,8 +1371,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public void copyImage(Picture picture, int field) {
         if (picture != null) {
             DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
-            if (icon != null && icon.getCurrentBytes() != null)
-                setValue(field, new DcImageIcon(icon.getCurrentBytes()));
+            if (icon != null)
+                setValue(field, new DcImageIcon(icon.getImage()));
         }
     }
     

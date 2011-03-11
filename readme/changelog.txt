@@ -4,6 +4,8 @@ Data Crow 3.9.6  [Released on February xx, 2011]  [testing: high]  [target: prod
 
 [Fixed]
 - Item form is opened twice from property views when another item was removed first.
+- Memory usage when importing images from web or file information has been reduced.
+- Pictures are sometimes not drawn in both the new and current items tabs.
 
 
 -----------------------------------------------------------------------------------------

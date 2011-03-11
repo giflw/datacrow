@@ -130,9 +130,11 @@ public class DcObjectList extends DcList implements IViewComponent {
 
     @Override
     public void paintRegionChanged() {
-        if (vu != null) vu.cancel();
-        vu = new ViewUpdater(this);
-        vu.start();
+        //if (view.getType() != View._TYPE_INSERT) {
+            if (vu != null) vu.cancel();
+            vu = new ViewUpdater(this);
+            vu.start();
+       // }
     }
 
     @Override
