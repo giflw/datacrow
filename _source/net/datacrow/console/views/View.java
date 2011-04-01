@@ -211,6 +211,10 @@ public class View extends DcPanel implements ListSelectionListener {
         return index;
     }
     
+    public int getIndex(String ID) {
+        return vc.getIndex(ID);
+    }
+    
     public int getType() {
         return type;
     }

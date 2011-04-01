@@ -1,12 +1,20 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.6  [Released on February xx, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.6  [Released on March 30, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - Item form is opened twice from property views when another item was removed first.
 - Memory usage when importing images from web or file information has been reduced.
+- Memory leak for image saving and loading has been fixed.
 - Pictures are sometimes not drawn in both the new and current items tabs.
-
+- When checking whether an item already exists in the database (such as a language or
+  country) Data Crow will now take trailing spaces into account. An update is performed 
+  during the upgrade to remove all trailing spaces from existing items (related to the
+  IMDB.com movie search update)
+- Cannot remove contact person when the person has lend items.
+- An error is logged in the log file when updating or adding an item after opening 
+  the container module 
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.5  [Released on February 13, 2011]  [testing: high]  [target: production]

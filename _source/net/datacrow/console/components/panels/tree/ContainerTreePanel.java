@@ -90,6 +90,14 @@ public class ContainerTreePanel extends TreePanel {
 	public void sort() {}
     
     @Override
+    public void setSelected(DcObject dco) {
+        if (dco.getModule().getIndex() != DcModules._CONTAINER)
+            return;
+        
+        super.setSelected(dco);
+    }
+    
+    @Override
     public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
         DcDefaultMutableTreeNode node;
         DcObject parent = (DcObject) dco.getValue(Container._F_PARENT);

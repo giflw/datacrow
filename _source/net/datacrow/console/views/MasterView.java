@@ -147,13 +147,12 @@ public class MasterView {
     
     public void add(DcObject dco, boolean select) {
         if (groupingPane != null && groupingPane.isEnabled()) {
-            // TODO: ugly work around for item part of currently selected tree node.
-            // should only add or refresh view when dco is last in line
-            getCurrent().add(dco, select);
             groupingPane.add(dco);
-            
-            if (select)
+            if (select) {
                 groupingPane.getCurrent().setSelected(dco);
+                groupingPane.getCurrent().refreshView();
+                groupingPane.getView().getCurrent().setSelected(groupingPane.getView().getCurrent().getIndex(dco.getID()));
+            }
             
         } else {
             for (View view : getViews())

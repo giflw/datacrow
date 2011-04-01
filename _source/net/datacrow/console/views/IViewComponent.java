@@ -56,6 +56,8 @@ public interface IViewComponent extends ISortableComponent {
     int getSelectedIndex();
     DcObject getSelectedItem();
 
+    int getIndex(String ID);
+    
     void deselect();
     
     int update(String ID);

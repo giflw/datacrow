@@ -37,6 +37,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
@@ -67,6 +68,12 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             	upgraded = fillUIPersistFields();
             }
 
+            if (v.isOlder(new Version(3, 9, 6, 0))) {
+                lf = new LogForm();
+                DcSwingUtilities.displayMessage("Data Crow will perform a non critical upgrade to clear unwanted characters from languages, countries and other items.");
+                upgraded = cleanupNames();
+            }
+            
             if (upgraded) {
                 lf.close();
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
@@ -81,6 +88,29 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private boolean cleanupNames() {
+        
+        boolean upgraded = false;
+        String field;
+        String sql;
+        
+        for (DcModule module : DcModules.getAllModules()) {
+            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+                field = module.getField(DcProperty._A_NAME).getDatabaseFieldName();
+                sql = "UPDATE " + module.getTableName() + " SET " + field + " = LTRIM(RTRIM(" + field + "))";
+                
+                try {
+                    DatabaseManager.executeSQL(sql);
+                    upgraded = true;
+                } catch (SQLException se) {
+                    logger.error("Could not update " + module, se);
+                }
+            }
+        }
+        
+        return upgraded;
     }
     
     private boolean fillUIPersistFields() {

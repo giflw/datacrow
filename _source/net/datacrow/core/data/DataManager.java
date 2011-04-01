@@ -86,7 +86,6 @@ public class DataManager {
         } else { 
             if (base64 != null) {
                 icon = Utilities.base64ToImage(base64);
-                icon.setFlushable(false);
                 String filename = DataCrow.iconsDir + ID + ".png";
                 icon.setFilename(filename);
                 icon.save();
@@ -111,7 +110,6 @@ public class DataManager {
         } else {
             icon = dco.createIcon();
             if (icon != null) {
-                icon.setFlushable(false);
                 String filename = DataCrow.iconsDir + dco.getID() + ".png";
                 icon.setFilename(filename);
                 icon.save();
@@ -136,7 +134,6 @@ public class DataManager {
         DcImageIcon icon = icons.remove(ID);
         if (icon != null) { 
             new File(icon.getFilename()).delete();
-            icon.setFlushable(true);
             icon.flush();
         }
     }
@@ -576,16 +573,16 @@ public class DataManager {
         	}
         	
             String query = "SELECT " + columns + " FROM " + module.getTableName() + " WHERE " + 
-                "UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + ") =  UPPER(?)";
+                "RTRIM(LTRIM(UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + "))) =  UPPER(?)";
             
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
-                query += " OR UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + ") LIKE ?"; 
+                query += " OR RTRIM(LTRIM(UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + "))) LIKE ?"; 
             
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
 
             ps.setString(1, s);
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
-                ps.setString(2,  ";%" + s.toUpperCase() + "%;");
+                ps.setString(2,  ";%" + s.toUpperCase().trim() + "%;");
             
             List<DcObject> items = WorkFlow.getInstance().convert(ps.executeQuery(), new int[] {DcObject._ID});
             return items.size() > 0 ? items.get(0) : null;

@@ -264,7 +264,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         return element != null ? element.getDcObject() : null;
     }    
 
-    private int getIndex(String ID) {
+    public int getIndex(String ID) {
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             if (((DcObjectListElement) getDcModel().getElementAt(i)).getKey().equals(ID))
                 return i;

@@ -89,6 +89,9 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
                 PluginHelper.add(this, "EditAsNew", null, dco, null, -1, module.getIndex());
         }
         
+        String filename = dco.getFilename();
+        File file = !Utilities.isEmpty(filename) ? new File(filename) : null;
+        
         if (viewType == View._TYPE_SEARCH) { 
             if (dco.getModule().getParent() != null) {
                 // in case a child is selected, make sure its the child which is going to be deleted
@@ -102,9 +105,6 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
                 // is deleted.
                 PluginHelper.add(this, "Delete", DcModules.getCurrent().getIndex());
             }
-            
-            String filename = dco.getFilename();
-            File file = !Utilities.isEmpty(filename) ? new File(filename) : null;
             
             if (file != null && SecurityCentre.getInstance().getUser().isAdmin() && dco.getModule().isFileBacked()) {
                 
@@ -229,7 +229,8 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
             PluginHelper.add(this, "FindReplace", module.getIndex());
         }
         
-        PluginHelper.add(this, "FileLauncher", module.getIndex());
+        if (file != null && dco.getModule().isFileBacked())
+            PluginHelper.add(this, "FileLauncher", module.getIndex());
         
         Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(dco, viewType, module.getIndex());
         for (Plugin plugin : plugins) {

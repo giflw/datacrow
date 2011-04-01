@@ -181,7 +181,7 @@ public abstract class FileImporter implements ISynchronizerClient {
                         if  (getClient().cancelled()) break;
                         
                         try {
-                            parse(filename);
+                            parse(filename, counter == sources.size());
                         } catch (Throwable e) {
                             getClient().addError(e);
                             logger.error("An unhandled error occured during the import of " + filename, e);
@@ -204,7 +204,7 @@ public abstract class FileImporter implements ISynchronizerClient {
      * @param listener
      * @param filename
      */
-    protected void parse(String filename) {
+    protected void parse(String filename, boolean last) {
         int module = getClient().getModule().getIndex();
         
         module = module == DcModules._MUSICALBUM ? DcModules._MUSICTRACK : module;
@@ -231,6 +231,7 @@ public abstract class FileImporter implements ISynchronizerClient {
             if (getClient().getDcContainer() != null && dco.getModule().isContainerManaged())
                 DataManager.createReference(dco, DcObject._SYS_CONTAINER, getClient().getDcContainer());
             
+            dco.setLastInLine(last);
             dco.applyTemplate();
             dco.setIDs();
             afterParse(dco);

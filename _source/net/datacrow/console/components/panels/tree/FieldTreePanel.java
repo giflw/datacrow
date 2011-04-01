@@ -528,6 +528,5 @@ public class FieldTreePanel extends TreePanel {
                 add(dco, index, child);
             }
         }
-
     }
 }

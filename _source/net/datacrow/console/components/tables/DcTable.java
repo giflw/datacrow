@@ -620,19 +620,16 @@ public class DcTable extends JTable implements IViewComponent {
     @Override
     public void remove(int[] rows) {
         cancelEdit();
-        int row;
-        int col;
-        for (int i = rows.length - 1; i > -1; i--) {
-            if (caching) {
-                row = rows[i];
-                col = getColumnIndexForField(DcObject._ID);
-                removeFromCache((String) getValueAt(row, col, true));
-            }
-            getDcModel().removeRow(rows[i]);
-        }
+        for (int i = rows.length - 1; i > -1; i--)
+            removeRow(rows[i]);
     }
 
     public void removeRow(int row) {
+        if (caching) {
+            int col = getColumnIndexForField(DcObject._ID);
+            removeFromCache((String) getValueAt(row, col, true));
+        }
+        
         getDcModel().removeRow(row);
         loadedRows.remove(Integer.valueOf(row));
     }
@@ -1192,7 +1189,7 @@ public class DcTable extends JTable implements IViewComponent {
         return index >= 0 ? getItemAt(index) : null;
     }
 
-    private int getIndex(String ID) {
+    public int getIndex(String ID) {
         for (int i = 0; i < getItemCount(); i++) {
             if (ID.equals(getItemKey(i)))
                 return i;

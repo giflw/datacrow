@@ -52,6 +52,7 @@ import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
 
@@ -243,6 +244,10 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     public abstract boolean isChanged(DcObject dco);
     
     public void update(DcObject dco) {
+        
+        if (dco.getModule().getIndex() != DcModules._CONTAINER)
+            return;
+        
     	if (isChanged(dco)) {
     		remove(dco.getID());
     		add(dco);

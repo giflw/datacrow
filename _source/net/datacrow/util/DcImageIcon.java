@@ -46,8 +46,6 @@ public class DcImageIcon extends ImageIcon {
 	private String filename;
 	private File file;
 	
-	private boolean flushable = true;
-
     public DcImageIcon() {
         super();
     }
@@ -78,14 +76,6 @@ public class DcImageIcon extends ImageIcon {
         super(location);
     }
     
-    public boolean isFlushable() {
-        return flushable;
-    }
-
-    public void setFlushable(boolean flushable) {
-        this.flushable = flushable;
-    }
-
     public void save() {
         
         if (file == null && filename == null) {
@@ -111,11 +101,9 @@ public class DcImageIcon extends ImageIcon {
     }
     
     public void flush() {
-        if (isFlushable()) {
-            bytes = null;
-            filename = null;
-            file = null;
-        }
+        bytes = null;
+        filename = null;
+        file = null;
     }
     
     public String getFilename() {
