@@ -2,6 +2,9 @@
 Data Crow 3.9.6  [Released on March 30, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
+[Changed]
+- Portuguese and english translation have been redone by Uruan. Thanks!!!!
+
 [Fixed]
 - Item form is opened twice from property views when another item was removed first.
 - Memory usage when importing images from web or file information has been reduced.
@@ -14,7 +17,7 @@ Data Crow 3.9.6  [Released on March 30, 2011]  [testing: high]  [target: product
 - Cannot remove contact person when the person has lend items.
 - An error is logged in the log file when updating or adding an item after opening 
   the container module 
-  
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.5  [Released on February 13, 2011]  [testing: high]  [target: production]
