@@ -43,6 +43,10 @@ public class FileNameFilter implements FilenameFilter {
         extensions[0] = extension;
     }
     
+    public String[] getExtensions() {
+        return extensions;
+    }
+
     @Override
     public boolean accept(File dir, String name) {
         boolean isDir = new File(dir, name).isDirectory();

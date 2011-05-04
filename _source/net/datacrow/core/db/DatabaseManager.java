@@ -484,8 +484,7 @@ public class DatabaseManager {
     }
     
     protected static void setPriviliges(DcModule module, User user) {
-        if (user == null)
-            return;
+        if (user == null) return;
         
         setPriviliges(module, (String) user.getValue(User._A_LOGINNAME), user.isAdmin());
     } 

@@ -97,7 +97,7 @@ public class DataCrow {
     private static SplashScreen splashScreen;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 9, 6, 0);
+    private static Version version = new Version(3, 9, 7, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -117,7 +117,6 @@ public class DataCrow {
     
     public static boolean loadSettings = true;
     public static MainFrame mainFrame;
-    
 
     public static void main(String[] args) {
         try {

@@ -33,7 +33,12 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
+import net.datacrow.core.plugin.InvalidPluginException;
+import net.datacrow.core.plugin.Plugins;
+import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.settings.Settings;
+
+import org.apache.log4j.Logger;
 
 /**
  * Represents loan items.
@@ -42,6 +47,8 @@ import net.datacrow.settings.Settings;
  */
 public class LoanModule extends DcModule {
 
+    private static Logger logger = Logger.getLogger(DcModule.class.getName());
+    
     private static final long serialVersionUID = -1777037389578494831L;
 
     /**
@@ -66,6 +73,16 @@ public class LoanModule extends DcModule {
     @Override
     public boolean hasSearchView() {
         return false;
+    }
+    
+    @Override
+    public boolean isEditingAllowed() {
+        try {
+            return SecurityCentre.getInstance().getUser().isAuthorized(Plugins.getInstance().get("Loan"));
+        } catch (InvalidPluginException ipe) {
+            logger.error(ipe, ipe);
+            return false;
+        }
     }
 
     /**

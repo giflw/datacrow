@@ -75,8 +75,6 @@ public class Xml2PdfTransformer extends XmlTransformer implements ErrorListener 
         properties.set(ItemExporterSettings._ALLOWRELATIVEIMAGEPATHS, Boolean.FALSE);
     }
 
-
-
     @Override
     public int getType() {
         return XmlTransformers._PDF;

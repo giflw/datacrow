@@ -94,7 +94,9 @@ public abstract class XmlTransformer {
     public abstract void transform() throws Exception ;
     public abstract String getFileType();
     
-    protected void setSettings(ItemExporterSettings properties) {}
+    protected void setSettings(ItemExporterSettings properties) {
+        properties.set(ItemExporterSettings._ALLOWRELATIVEIMAGEPATHS, Boolean.TRUE);
+    }
     
     private class Transformer extends Thread {
         

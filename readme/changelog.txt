@@ -1,4 +1,17 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.7  [Released on May 5, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Image paths for reports are not relative, even not when setting "copy images" to true. 
+- Error occurs when a default template is active in combination with the new item wizard. 
+- None administrator users cannot loan items (error). Users having permissions to use
+  the loan plugin are now always allowed to make updates and inserts into the 
+  loan table.
+- Saving a picture to disk doesn't work.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.6  [Released on March 30, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

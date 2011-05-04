@@ -357,7 +357,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             }
         }
         
-        if (!set && !Utilities.isEmpty(type)) {
+        if (!set && !Utilities.isEmpty(type)) { 
             DcObject er = DcModules.get(module + DcModules._EXTERNALREFERENCE).getItem();
             er.setValue(ExternalReference._EXTERNAL_ID, key);
             er.setValue(ExternalReference._EXTERNAL_ID_TYPE, type);
@@ -1343,6 +1343,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             Object templateVal = template.getValue(idx); 
             
             if (    idx != _ID && 
+                    idx != _SYS_EXTERNAL_REFERENCES &&
                     field.getValueType() != DcRepository.ValueTypes._PICTURE && 
                     templateVal != null) {
                 

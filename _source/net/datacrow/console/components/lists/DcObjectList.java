@@ -197,7 +197,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     
     @Override
     public DcObject getItemAt(int idx) {
-        return getElement(idx).getDcObject();
+        return getElement(idx) != null ?  getElement(idx).getDcObject() : null;
     }
 
     @Override
@@ -276,18 +276,21 @@ public class DcObjectList extends DcList implements IViewComponent {
         DcObjectListElement element;
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             element = (DcObjectListElement) getDcModel().getElementAt(i);
-            if (element.getKey().equals(ID)) 
+            if (element.getKey().equals(ID))  {
                 return element;
+            }
         }
         return null;
     }      
 
     private DcObjectListElement getElement(int idx) {
+        DcObjectListElement element = null;
+        
         try {
-            return (DcObjectListElement) getDcModel().getElementAt(idx);
-        } catch (ArrayIndexOutOfBoundsException aio) {
-            return null;
-        }
+             element = (DcObjectListElement) getDcModel().getElementAt(idx);
+        } catch (ArrayIndexOutOfBoundsException aio) {}
+        
+        return element;
     }      
     
     @Override
@@ -369,7 +372,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         for (String key : keys) {
             element = getElement(key);
             if (element != null) {
-            	getDcModel().removeElement(element);
+                getDcModel().removeElement(element);
                 removed = true;
             }
         }
