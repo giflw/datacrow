@@ -39,7 +39,9 @@ public class Plugins {
         String check = File.separator + "plugins" + File.separator;
         Object[] params = new Object[] {null, null, -1, -1};
         PluginClassLoader cl = new PluginClassLoader(DataCrow.pluginsDir);
-        for (String filename : Directory.read(DataCrow.pluginsDir, true, false, new String[] { "class" })) {
+        
+        Directory dir = new Directory(DataCrow.pluginsDir, true, new String[] {"class"});
+        for (String filename : dir.read()) {
             try {
                 String classname = filename.substring(filename.indexOf(check) + 1, filename.lastIndexOf('.'));
                 classname = pattern.matcher(classname).replaceAll(".");

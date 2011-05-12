@@ -91,7 +91,12 @@ public class Conversions {
     }
 
     public void load() {
-        List<String> filenames = Directory.read(DataCrow.installationDir + "upgrade", false, false, new String[] {"properties"});
+        Directory directory = new Directory(
+                DataCrow.installationDir + "upgrade", 
+                false, 
+                new String[] {"properties"});
+        
+        List<String> filenames = directory.read();
         
         // sort them in their natural order
         Collections.sort(filenames);

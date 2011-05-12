@@ -70,30 +70,30 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
 
     private static Logger logger = Logger.getLogger(FileImportDialog.class.getName());
     
-    protected boolean cancelled = false;
+    private boolean cancelled = false;
     
     protected JProgressBar progressBar = new JProgressBar();
 
-    protected JCheckBox checkDirNameAsTitle = ComponentFactory.getCheckBox(DcResources.getText("lblUseDirNameAsTitle"));
-    protected JCheckBox checkSaveDirectly = ComponentFactory.getCheckBox(DcResources.getText("lblSaveDirectly"));
-    protected DcReferenceField fldContainer;
-    protected DcReferenceField fldStorageMedium;
+    private JCheckBox checkDirNameAsTitle = ComponentFactory.getCheckBox(DcResources.getText("lblUseDirNameAsTitle"));
+    private JCheckBox checkSaveDirectly = ComponentFactory.getCheckBox(DcResources.getText("lblSaveDirectly"));
+    private DcReferenceField fldContainer;
+    private DcReferenceField fldStorageMedium;
     
-    protected JButton buttonRun = ComponentFactory.getButton(DcResources.getText("lblRun"));
-    protected JButton buttonStop = ComponentFactory.getButton(DcResources.getText("lblStop"));
-    protected JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
+    private JButton buttonRun = ComponentFactory.getButton(DcResources.getText("lblRun"));
+    private JButton buttonStop = ComponentFactory.getButton(DcResources.getText("lblStop"));
+    private JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
     
-    protected JTextArea textLog = ComponentFactory.getTextArea();
-    protected JTextArea textTitleCleanup = ComponentFactory.getTextArea();
-    protected JTextArea textTitleCleanupRegex = ComponentFactory.getTextArea();
+    private JTextArea textLog = ComponentFactory.getTextArea();
+    private JTextArea textTitleCleanup = ComponentFactory.getTextArea();
+    private JTextArea textTitleCleanupRegex = ComponentFactory.getTextArea();
     
     private OnlineServicePanel panelServer;
     private OnlineServiceSettingsPanel panelServerSettings;
     private LocalArtSettingsPanel panelLocalArt;
-    private FileImportFileSelectPanel panelFs;
+    private FileImportFileSelectPanelSimple panelFs;
     
     protected Settings settings;
-    protected FileImporter importer;
+    private FileImporter importer;
     
     public FileImportDialog(FileImporter importer) {
         
@@ -218,7 +218,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         try {
             cancelled = false;
             importer.setClient(this);
-            importer.parse(panelFs.getFiles(false));
+            importer.parse(panelFs.getFiles());
         } catch (Exception e) {
             DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
             finish();
@@ -244,6 +244,10 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
                 if (panelServer.getRegion() != null) 
                     settings.set(DcRepository.ModuleSettings.stFileImportOnlineServiceRegion, panelServer.getRegion().getCode());
             }
+        }
+        
+        if (panelFs != null) {
+            panelFs.save();
         }
         
         if (panelLocalArt != null)
@@ -295,8 +299,13 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         super.close();
     }
 
+    public boolean isCancelled() {
+        return cancelled;
+    }
+    
     protected void cancel() {
         cancelled = true;
+        panelFs.cancel();
     }
     
     protected JPanel getDirectoryUsagePanel() {
@@ -517,7 +526,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         //**********************************************************
         //Files / Directories
         //**********************************************************            
-        panelFs = new FileImportFileSelectPanel(filter, module.getIndex());
+        panelFs = new FileImportFileSelectPanelSimple(this, filter, module.getIndex());
         
         //**********************************************************
         //Tabs Panel

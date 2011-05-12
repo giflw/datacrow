@@ -82,20 +82,22 @@ public class Backup extends Thread {
                 files.add(fl.toString());
         }
 
-        Collection<String> resources = Directory.read(DataCrow.resourcesDir, true, false, null);
+        Directory dir = new Directory(DataCrow.resourcesDir, true, null);
+        Collection<String> resources = dir.read();
         for (String resource : resources) {
             if (resource.toLowerCase().endsWith(DcLanguageResource.suffix))
                 files.add(resource);
         }
         
-        files.addAll(
-            Directory.read(DataCrow.moduleDir, true, false, null));
-        
-        files.addAll(
-            Directory.read(DataCrow.imageDir, true, false, new String[] {"jpg", "jpeg"}));        
-        
-        for (String reportDir : new ReportTemplates(true).getFolders())
-            files.addAll(Directory.read(reportDir, true, false, new String[] {"xsl", "xslt"}));
+        Directory directory = new Directory(DataCrow.moduleDir, true, null);
+        files.addAll(directory.read());
+        directory = new Directory(DataCrow.imageDir, true, new String[] {"jpg", "jpeg"});
+        files.addAll(directory.read());        
+
+        for (String reportDir : new ReportTemplates(true).getFolders()) {
+            directory = new Directory(reportDir, true, new String[] {"xsl", "xslt"});
+            files.addAll(directory.read());
+        }
         
         return files;
     }

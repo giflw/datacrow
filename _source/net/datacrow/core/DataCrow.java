@@ -297,7 +297,8 @@ public class DataCrow {
                 ValueEnhancers.initialize();
     
                 // delete lock file
-                for (String file : Directory.read(dataDir, false, false, new String[] {"lck"}))
+                Directory directory = new Directory(dataDir, false, new String[] {"lck"});
+                for (String file : directory.read())
                 	new File(file).delete();
                 
                 // set the database name
@@ -386,7 +387,7 @@ public class DataCrow {
     
                 Thread splashCloser = new Thread(new SplashScreenCloser());
                 splashCloser.start();
-                
+
                 if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
                     new VersionChecker().start();
                 

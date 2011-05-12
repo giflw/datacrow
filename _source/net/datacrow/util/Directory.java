@@ -41,28 +41,48 @@ public class Directory {
 
     private static Logger logger = Logger.getLogger(Directory.class.getName());
     
+    private ITaskListener listener;
+    
+    private String path; 
+    private boolean recurse; 
+    private String[] extensions;
+    
+    public Directory(String path, 
+                     boolean recurse, 
+                     String[] extensions) {
+
+        this.path = path;
+        this.recurse = recurse;
+        this.extensions = extensions;
+    }
+   
+    public void setListener(ITaskListener listener) {
+        this.listener = listener;
+    }
+    
+    private void sendMessageToListener(String msg) {
+        if (listener != null) listener.notify(msg);
+    }
+    
     /**
      * Retrieves all files and directories from the given locations
      *
      * @param installationDir starting location for reading data
      * @param confirm ask for confirmation for each directory
      * @param recurse read sub directories
-     * @param includeDirs allow directory names in the result
+     * @param dirs allow directory names in the result
      * @param vExtensions extensions to filter on
      * @param logInformation write messages to the screen and the log
      */
-    public static List<String> read(String dir,
-                                          boolean recurse,
-                                          boolean includeDirs,
-                                          String[] extensions) {
+    public List<String> read() {
 
-        String baseDir = dir;
         List<String> result = new ArrayList<String>();
-        File directory = new File(baseDir);
-        baseDir = directory.toString();
+        File directory = new File(path);
+        path = directory.toString();
 
         if (!directory.exists()) {
-            return null;
+            sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
+            return result;
         }
 
         boolean useFilter = false;
@@ -76,47 +96,52 @@ public class Directory {
         File tempFile = null;
 
         while (unhandled.size() > 0) {
-            String s = unhandled.get(0);
-            String current = s.startsWith(baseDir) ? s : baseDir + (baseDir.endsWith(File.separator) ? "" : File.separator) + s;
+            String current = unhandled.get(0);
             tempFile = new File(current);
+
+            if (listener != null && listener.isStopped()) {
+                result.clear();
+                sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
+                return result;
+            }
+            
             if (tempFile.isDirectory()) {
-                        
                 logger.debug(DcResources.getText("msgReadingFrom", current));
+                sendMessageToListener(DcResources.getText("msgReadingFrom", current));
 
                 String[] list = tempFile.list();
                 if (list != null) {
+                    
                     for (int j = 0; j < list.length; j++) {
+                        
+                        if (listener != null) listener.notifyProcessed();
+
                         String sTempCurrent = current + (current.endsWith(File.separator) ? "" : File.separator) + list[j];
+                        
                         if (!unhandled.contains(sTempCurrent)) {
                             tempFile = new File(sTempCurrent);
-                            if (tempFile.isDirectory()) {
-                                String part = sTempCurrent.substring(baseDir.length());
-                                part = part.startsWith(File.separator) ? part.substring(1) : part;
-                                unhandled.add(part);
-                            } else {
-                                if (useFilter && isValid(sTempCurrent, extensions)) {
-                                    result.add(sTempCurrent);
-                                } else if (!useFilter) {
-                                    result.add(sTempCurrent);
-                                }
-                            }
+                            if (tempFile.isDirectory() && recurse)
+                                unhandled.add(sTempCurrent);
+                            else if (!tempFile.isDirectory() && (!useFilter || (useFilter && isValid(sTempCurrent, extensions))))
+                                result.add(sTempCurrent);
                         }
                     }
                 }
             } else {
-                if (useFilter && isValid(current, extensions)) {
+                if (useFilter && isValid(current, extensions))
                     result.add(current);
-                } else if (!useFilter) {
+                else if (!useFilter)
                     result.add(current);
-                }
             }
 
             unhandled.remove(0);
 
-            if (!recurse)
+            if (!recurse) {
+                sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
                 return result;
+            }
         }
-
+        sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
         return result;
     }
 

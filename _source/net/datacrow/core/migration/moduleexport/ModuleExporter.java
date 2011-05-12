@@ -168,7 +168,8 @@ public class ModuleExporter {
 					if (module.hasReports()) {
 					    String reportDir = DataCrow.reportDir + module.getName().toLowerCase().replaceAll("[/\\*%., ]", "");
 					    
-					    for (String filename : Directory.read(reportDir, true, false, new String[] {"xsl"})) {
+				        Directory dir = new Directory(reportDir, true, new String[] {"xsl, xslt"});
+					    for (String filename : dir.read()) {
 					        byte[] content = Utilities.readFile(new File(filename));
 					        String name = filename.substring(filename.indexOf(File.separator + "reports" + File.separator) + 9);
 		                    zf.addEntry(name, content);

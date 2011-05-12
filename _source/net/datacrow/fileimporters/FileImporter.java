@@ -353,8 +353,9 @@ public abstract class FileImporter implements ISynchronizerClient {
         
         String directory = new File(filename).getParent();
         boolean recurse = settings.getBoolean(DcRepository.ModuleSettings.stImportLocalArtRecurse);
-        Collection<String> files = Directory.read(directory, recurse, 
-                                                  false, new String[] {"jpg", "jpeg", "png", "gif"});
+        
+        Directory dir = new Directory(directory, recurse, new String[] {"jpg", "jpeg", "png", "gif"});
+        Collection<String> files = dir.read();
         boolean frontSet = false;
         boolean backSet = false;
         boolean cdSet = false;

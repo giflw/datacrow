@@ -144,6 +144,15 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             false,
                             false));
         getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.ModuleSettings.stFileImportRecursive,
+                            Boolean.FALSE,
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false));        
+        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._TABLESETTINGS,
                             DcRepository.ModuleSettings.stTableSettings,
                             new DcTableSettings(module.getIndex()),

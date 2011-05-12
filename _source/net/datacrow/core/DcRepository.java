@@ -40,6 +40,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class ModuleSettings {
+        public static final String stFileImportRecursive = "file_import_recursive";
         public static final String stExportFields = "export_fields";
         public static final String stShowPicturesInSeparateTabs = "show_pictures_in_separate_tabs";
         public static final String stMassUpdateServer = "mass_update_server";

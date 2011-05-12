@@ -36,6 +36,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.helpers.ExternalReference;
 
 import org.apache.log4j.Logger;
 
@@ -98,8 +99,8 @@ public class CreateQuery extends Query {
         } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
             try { 
                 stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
-                        module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
-                        module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+                        module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + ", " +
+                        module.getField(ExternalReference._EXTERNAL_ID_TYPE).getDatabaseFieldName() + ")");
             } catch (SQLException se) {
                 if (isLog())
                     logger.error(se, se);

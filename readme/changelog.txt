@@ -1,15 +1,22 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.7  [Released on May 5, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.7  [Released on May 12, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - Image paths for reports are not relative, even not when setting "copy images" to true. 
 - Error occurs when a default template is active in combination with the new item wizard. 
 - None administrator users cannot loan items (error). Users having permissions to use
-  the loan plugin are now always allowed to make updates and inserts into the 
+  the loan plugin is now always allowed to make updates and inserts into the 
   loan table.
 - Saving a picture to disk doesn't work.
+- IMDB service does not retrieve the full description.
+- Enormous lag before importing.
+- Error on the initial database creation script (harmless).
 
+[Changed]
+- The file selection for the various file importers has been changed to make it work
+  faster and simpler to exclude and include single files.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.6  [Released on March 30, 2011]  [testing: high]  [target: production]

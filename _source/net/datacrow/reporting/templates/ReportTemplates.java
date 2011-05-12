@@ -65,7 +65,8 @@ public class ReportTemplates {
         String folder = folders.get(module);
         if (folder != null) {
             String[] extensions = {"xsl", "xslt"};
-            Collection<String> files = Directory.read(folder, true, false, extensions);
+            Directory dir = new Directory(folder, true, extensions);
+            Collection<String> files = dir.read();
             if (files.size() > 0) return true;
         }
         return false;
@@ -81,7 +82,8 @@ public class ReportTemplates {
         Collection<ReportTemplate> reports = new ArrayList<ReportTemplate>();
         if (folder != null) {
             String[] extensions = {"xsl", "xslt"};
-            Collection<String> files = Directory.read(folder, true, false, extensions);
+            Directory directory = new Directory(folder, true, extensions);
+            Collection<String> files = directory.read();
             for (String filename : files) {
                 ReportTemplate rf = new ReportTemplate(filename);
                 if (rf.supports(transformer))

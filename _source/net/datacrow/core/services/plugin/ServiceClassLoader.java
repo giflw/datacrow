@@ -68,7 +68,8 @@ public class ServiceClassLoader extends ClassLoader {
     }
 
     private void init(String path) {
-        for (String filename :  Directory.read(DataCrow.servicesDir, true, false, new String[] {"jar"}))
+        Directory dir = new Directory(DataCrow.servicesDir, true, new String[] {"jar"});
+        for (String filename :  dir.read())
             jarFiles.add(new File(filename));
     }
 
