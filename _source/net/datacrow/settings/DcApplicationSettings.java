@@ -355,15 +355,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false));         
 //        getSettings().addSetting(_General,
 //                new Setting(DcRepository.ValueTypes._STRING,
-//                            DcRepository.Settings.stPersonOrder,
-//                            "lblPersonOrderByLastname",
-//                            ComponentFactory._PERSONORDERCOMBO,
-//                            "",
-//                            "lblPersonOrder",
-//                            true,
-//                            true));   
-//        getSettings().addSetting(_General,
-//                new Setting(DcRepository.ValueTypes._STRING,
 //                            DcRepository.Settings.stPersonDisplayFormat,
 //                            "lblPersonFirstnameLastName",
 //                            ComponentFactory._PERSONDISPLAYFORMATCOMBO,

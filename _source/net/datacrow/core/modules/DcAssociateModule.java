@@ -99,6 +99,10 @@ public class DcAssociateModule extends DcModule {
                 false, true, false, true, false,
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Lastname"));
+        addField(new DcField(DcAssociate._G_IS_COMPANY, getIndex(), "Company / Organization", 
+                false, true, false, true, false,
+                0, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
+                "company"));
         
         getField(DcObject._ID).setEnabled(false);
     }

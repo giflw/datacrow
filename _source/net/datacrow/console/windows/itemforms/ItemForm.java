@@ -472,11 +472,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     changed = true;
                     logger.debug("Field " + field.getLabel() + " is changed. Old: " + dateOld + ". New: " + dateNew);
                 }
-            } else if (field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
-                String newValue = Utilities.getComparableString(o);
-                String oldValue = Utilities.getComparableString(dcoOrig.getValue(fieldIdx));
-                changed = !oldValue.equals(newValue);
-                if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
+
             } else {
                 String newValue = Utilities.getComparableString(o);
                 String oldValue = Utilities.getComparableString(dcoOrig.getValue(fieldIdx));
@@ -488,13 +484,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             changed = (picture != null && (picture.isEdited() || picture.isNew() || picture.isDeleted())) ||
                       ((DcPictureField) component).isChanged();
 
-            // Tricky: mark the item as changed when a new picture has been set.
-            // this is all handled correctly in case of a manual update. When using the online service
-            // to only retrieve images this failed miserably. Therefore the following check has been added.
-            // Simply check if the image has been set (removal is not allowed by services) and if the current
-            // bytes (needed for saving so these should be available) are present.
-
-            // TODO: check this:
+            // obsolete:
             // changed = !changed && o instanceof DcImageIcon ? ((DcImageIcon) o).getCurrentBytes() != null : changed;
             
             if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");

@@ -261,6 +261,8 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 Layout.getGBC(1, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
+        
+        // TODO: remove and check the enable settings ??
         panel.add(ComponentFactory.getLabel(DcResources.getText("lblHoldsTechnicalInfo")),
                 Layout.getGBC(0, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
@@ -269,6 +271,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 Layout.getGBC(1, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
+        
         panel.add(ComponentFactory.getLabel(DcResources.getText("lblMaxTextLength")),
                 Layout.getGBC(0, 4, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

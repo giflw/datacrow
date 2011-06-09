@@ -183,7 +183,10 @@ public class Backup extends Thread {
         DcSettings.set(DcRepository.Settings.stBackupLocation, directory.toString());
         
         listener.sendMessage(DcResources.getText("msgRestartingDb"));
+        
+        // TODO: bug; database gets locked out after creating the backup.
         DatabaseManager.initialize();
+
         listener.sendMessage(DcResources.getText("msgBackupFinished"));
         listener.notifyStopped();
         

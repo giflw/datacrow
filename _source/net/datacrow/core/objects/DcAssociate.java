@@ -44,6 +44,7 @@ public class DcAssociate extends DcObject {
     public static final int _D_PHOTO = 4;
     public static final int _E_FIRSTNAME = 5;
     public static final int _F_LASTTNAME = 6;
+    public static final int _G_IS_COMPANY = 7;
     
     /**
      * Creates a new instance.
@@ -66,19 +67,29 @@ public class DcAssociate extends DcObject {
      * full name is available. If only the last and first name are available the full name
      * is created out of these parts.
      */
-    public void setName()  throws ValidationException {
+    public void setName() throws ValidationException {
         String name = (String) getValue(DcAssociate._A_NAME);
         String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
         String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
-
+        boolean company = (Boolean)  getValue(DcAssociate._G_IS_COMPANY);
+        
         boolean isNameSet = !Utilities.isEmpty(name);
         boolean isFirstNameSet = !Utilities.isEmpty(firstname);
         boolean isLastNameSet = !Utilities.isEmpty(lastname);
         if (!isNameSet && (isLastNameSet || isFirstNameSet)) {
             firstname = firstname == null ? "" : firstname.trim();
             lastname = lastname == null ? "" : lastname.trim();
-            setValue(DcAssociate._A_NAME, firstname + " " + lastname);
-        } else if (isNameSet && (!isLastNameSet || !isFirstNameSet)) {
+            
+            if (company) {
+                name = (firstname + " " + lastname).trim();
+            } else {
+                name = firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
+                       firstname.length() == 0 ? lastname : firstname;
+            }
+            
+            setValue(DcAssociate._A_NAME, name);
+            
+        } else if (isNameSet && !company && (!isLastNameSet || !isFirstNameSet)) {
             name = name.indexOf("(") > 0 ? name.substring(0, name.indexOf("(")).trim() : name;
             StringTokenizer st = new StringTokenizer(name);
             int i = 0;
@@ -103,6 +114,17 @@ public class DcAssociate extends DcObject {
                     }
                 }
             }
+
+            if (name.indexOf("(") > 0) {
+                firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
+                firstname += " " + name.substring(name.indexOf("("));
+                setValue(DcAssociate._E_FIRSTNAME, firstname);
+            }
+
+            // Recalculate name based on the settings (last name, first name(s)):
+            name = firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
+                   firstname.length() == 0 ? lastname : firstname;
+            setValue(DcAssociate._A_NAME, name);
         }
         super.beforeSave();
     }
