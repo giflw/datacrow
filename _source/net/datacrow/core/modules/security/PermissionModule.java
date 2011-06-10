@@ -174,27 +174,27 @@ public class PermissionModule extends DcChildModule {
     protected void initializeFields() {
         super.initializeFields();
         addField(new DcField(Permission._A_PLUGIN, getIndex(), "Plugin",
-                false, true, false, false, false,
+                false, true, false, false, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Plugin"));
         addField(new DcField(Permission._B_FIELD, getIndex(), "Field",
-                false, true, false, false, false,
+                false, true, false, false, 
                 4000, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                 "Field"));
         addField(new DcField(Permission._C_MODULE, getIndex(), "Module",
-                false, true, false, false, false,
+                false, true, false, false, 
                 10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                 "Module"));
         addField(new DcField(Permission._D_VIEW, getIndex(), "View",
-                false, true, false, false, false,
+                false, true, false, false, 
                 1, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                 "View"));
         addField(new DcField(Permission._E_EDIT, getIndex(), "Edit",
-                false, true, false, false, false,
+                false, true, false, false, 
                 1, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                 "Edit"));
         addField(new DcField(Permission._F_USER, DcModules._USER, "User",
-                false, true, false, false, false,
+                false, true, false, false, 
                 36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._DCPARENTREFERENCE,
                 "User"));
     }

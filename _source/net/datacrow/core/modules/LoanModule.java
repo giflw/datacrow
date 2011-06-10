@@ -152,23 +152,23 @@ public class LoanModule extends DcModule {
         super.initializeFields();
 
         addField(new DcField(Loan._A_STARTDATE, getIndex(), "Start date",
-                false, true, false, false, false,
+                false, true, false, false, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                 "StartDate"));
         addField(new DcField(Loan._B_ENDDATE, getIndex(), "End date",
-                false, true, false, false, false,
+                false, true, false, false, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                 "EndDate"));
         addField(new DcField(Loan._C_CONTACTPERSONID, getIndex(), "Contact Person",
-                false, true, false, false, false,
+                false, true, false, false, 
                 36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "PersonID"));
         addField(new DcField(Loan._D_OBJECTID, getIndex(), "Object",
-                false, true, false, false, false,
+                false, true, false, false, 
                 36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "ObjectID"));
         addField(new DcField(Loan._E_DUEDATE, getIndex(), "Due Date",
-                false, true, false, false, false,
+                false, true, false, false, 
                 50, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                 "DueDate"));        
     }

@@ -171,7 +171,6 @@ public class ModuleUpgrade extends XmlObject {
                 fieldOrg.setOverwritable(fieldNew.isOverwritable());
                 fieldOrg.setReadonly(fieldNew.isReadonly());
                 fieldOrg.setSearchable(fieldNew.isSearchable());
-                fieldOrg.setTechinfo(fieldNew.isTechinfo());
                 fieldOrg.setUiOnly(fieldNew.isUiOnly());
                 fieldOrg.setValueType(fieldNew.getValueType());
                 

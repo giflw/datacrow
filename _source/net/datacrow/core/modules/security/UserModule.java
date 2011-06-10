@@ -177,51 +177,51 @@ public class UserModule extends DcParentModule {
     protected void initializeFields() {
         super.initializeFields();
         addField(new DcField(User._A_LOGINNAME, getIndex(), "Login Name",
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._LOGINNAMEFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "LoginName"));
         addField(new DcField(User._B_ENABLED, getIndex(), "Enabled",
-                false, true, false, true, false,
+                false, true, false, true, 
                 4, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                 "Enabled"));
         addField(new DcField(User._C_NAME, getIndex(), "Name",
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Name"));
         addField(new DcField(User._D_DESCRIPTION, getIndex(), "Description",
-                false, true, false, true, false,
+                false, true, false, true, 
                 4000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Description"));
         addField(new DcField(User._E_PHOTO, getIndex(), "Photo",
-                true, true, false, false, false,
+                true, true, false, false, 
                 255, ComponentFactory._PICTUREFIELD, getIndex(), DcRepository.ValueTypes._PICTURE,
                 "Photo"));        
         addField(new DcField(User._F_EMAIL, getIndex(), "Email",
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Email"));        
         addField(new DcField(User._G_ADDRESS, getIndex(), "Address",
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Address"));     
         addField(new DcField(User._H_PHONE_HOME, getIndex(), "Phone (Home)",
-                false, true, false, false, false,
+                false, true, false, false, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "PhoneHome"));     
         addField(new DcField(User._I_PHONE_WORK, getIndex(), "Phone (Work)",
-                false, true, false, false, false,
+                false, true, false, false, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "PhoneWork"));        
         addField(new DcField(User._J_CITY, getIndex(), "City",
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "City"));
         addField(new DcField(User._K_COUNTRY, getIndex(), "Country",
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Country"));
         addField(new DcField(User._L_ADMIN, getIndex(), "Admin",
-                false, true, false, true, false,
+                false, true, false, true, 
                 4, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                 "Admin"));
     }

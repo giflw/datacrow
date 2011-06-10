@@ -51,6 +51,7 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -276,8 +277,17 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
                 if (field.isUiOnly() || field.getIndex() == DcObject._ID) {
                     table.setValueAt(Boolean.FALSE, row, _COL_REQUIRED);
                     table.setValueAt(Boolean.FALSE, row, _COL_UNIQUE);
+                    
+                    if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
+                        table.setValueAt(Boolean.FALSE, row, _COL_DESCRIPTIVE);
                 }
-
+                if (DcModules.get(field.getModule()).getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+                    if (field.getIndex() == DcAssociate._A_NAME)
+                        table.setValueAt(Boolean.TRUE, row, _COL_DESCRIPTIVE);
+                    else 
+                        table.setValueAt(Boolean.FALSE, row, _COL_DESCRIPTIVE);
+                }
+                
                 if (!definition.isEnabled()) {
                     table.setValueAt(Boolean.FALSE, row, _COL_DESCRIPTIVE);
                     table.setValueAt(Boolean.FALSE, row, _COL_REQUIRED);

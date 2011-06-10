@@ -427,8 +427,7 @@ public class DcModules {
             
             if (!exists) {
                 DcField field = new DcField(fld1.getIndex(), pm.getIndex(), fld1.getLabel(), fld1.isUiOnly(), 
-                                            fld1.isEnabled(), fld1.isReadOnly(), fld1.isSearchable(), 
-                                            fld1.isTechnicalInfo(), fld1.getMaximumLength(), 
+                                            fld1.isEnabled(), fld1.isReadOnly(), fld1.isSearchable(), fld1.getMaximumLength(), 
                                             fld1.getFieldType(), pm.getIndex(), fld1.getValueType(), 
                                             fld1.getDatabaseFieldName());
                 pm.addField(field);

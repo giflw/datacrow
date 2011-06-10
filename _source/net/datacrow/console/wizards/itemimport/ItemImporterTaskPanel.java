@@ -118,31 +118,23 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
 
     @Override
     public void notifyProcessed(DcObject item) {
-        if (wizard != null && 
-            wizard.getModule().isSelectableInUI() && 
-            wizard.getModule().getCurrentInsertView() != null) {
-            
-            created++;
-            wizard.getModule().getCurrentInsertView().add(item);
-        } else {
-            DcObject other = DataManager.getObjectForString(item.getModule().getIndex(), item.toString());
-            // Check if the item exists and if so, update the item with the found values. Else just create a new item.
-            // This is to make sure the order in which XML files are processed (first software, then categories)
-            // is of no importance (!).
-            try {
-                if (other != null) {
-                    updated++;
-                    other.copy(item, true, false);
-                    other.saveUpdate(true, false);
-                } else {
-                    created++;
-                    item.setValidate(false);
-                    item.saveNew(true);
-                }
-            } catch (ValidationException ve) {
-                // will not occur as validation has been disabled.
-                notifyMessage(ve.getMessage());
+        DcObject other = DataManager.getObjectForString(item.getModule().getIndex(), item.toString());
+        // Check if the item exists and if so, update the item with the found values. Else just create a new item.
+        // This is to make sure the order in which XML files are processed (first software, then categories)
+        // is of no importance (!).
+        try {
+            if (other != null) {
+                updated++;
+                other.copy(item, true, false);
+                other.saveUpdate(true, false);
+            } else {
+                created++;
+                item.setValidate(false);
+                item.saveNew(true);
             }
+        } catch (ValidationException ve) {
+            // will not occur as validation has been disabled.
+            notifyMessage(ve.getMessage());
         }
         
         tp.updateProgressTask();

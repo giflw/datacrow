@@ -76,31 +76,31 @@ public class DcAssociateModule extends DcModule {
         super.initializeFields();
         
         addField(new DcField(DcAssociate._A_NAME, getIndex(), "Name", 
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Name"));
         addField(new DcField(DcAssociate._B_DESCRIPTION, getIndex(), "Description", 
-                false, true, false, true, false,
+                false, true, false, true, 
                 4000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Description"));
         addField(new DcField(DcAssociate._C_WEBPAGE, getIndex(), "Webpage", 
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._URLFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "webpage"));
         addField(new DcField(DcAssociate._D_PHOTO, getIndex(), "Photo", 
-                true, true, false, false, false,
+                true, true, false, false, 
                 0, ComponentFactory._PICTUREFIELD, getIndex(), DcRepository.ValueTypes._PICTURE,
                 "Photo"));
         addField(new DcField(DcAssociate._E_FIRSTNAME, getIndex(), "Firstname", 
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Firstname"));
         addField(new DcField(DcAssociate._F_LASTTNAME, getIndex(), "Lastname", 
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Lastname"));
         addField(new DcField(DcAssociate._G_IS_COMPANY, getIndex(), "Company / Organization", 
-                false, true, false, true, false,
+                false, true, false, true, 
                 0, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                 "company"));
         

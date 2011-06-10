@@ -79,8 +79,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = cleanupNames();
             }
             
-            // TODO: change to correct value after testing:
-            if (v.isOlder(new Version(3, 9, 10, 0))) {
+            if (v.isOlder(new Version(3, 9, 8, 0))) {
                 lf = new LogForm();
                 DcSwingUtilities.displayMessage("The names of all persons (actors, authors, etc) will be formatted to read <Lastname, Firstname>");
                 upgraded = reverseNames();

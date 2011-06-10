@@ -93,9 +93,7 @@ public class DcFieldDefinition extends Definition {
         if (Utilities.isEmpty(tab)) {
             DcField field = DcModules.get(module).getField(index);
             
-            if (field.isTechnicalInfo()) {
-                tab = "lblTechnicalInfo"; 
-            } else if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
+            if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
                   field.isEnabled() && 
                   field.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
                   field.getValueType() != DcRepository.ValueTypes._ICON &&

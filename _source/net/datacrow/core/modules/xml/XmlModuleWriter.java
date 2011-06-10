@@ -135,7 +135,6 @@ public class XmlModuleWriter {
             writeLine("<enabled>true</enabled>" , level + 2);
             writeLine("<readonly>" + field.isReadonly() + "</readonly>" , level + 2);
             writeLine("<searchable>" + field.isSearchable() + "</searchable>" , level + 2);
-            writeLine("<techinfo>" + field.isTechinfo() + "</techinfo>" , level + 2);
             writeLine("<maximum-length>" + getString(field.getMaximumLength()) + "</maximum-length>" , level + 2);
             writeLine("<field-type>" + getString(field.getFieldType()) + "</field-type>" , level + 2);
             writeLine("<module-reference>" + reference + "</module-reference>" , level + 2);

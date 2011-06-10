@@ -218,7 +218,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
                    DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE) ||
                    field.getValueType() == DcRepository.ValueTypes._LONG ||
                    field.getValueType() == DcRepository.ValueTypes._BOOLEAN))) && 
-                   field.isEnabled() && !field.isTechnicalInfo()) {
+                   field.isEnabled()) {
                 
                 fields.add(field);
             }

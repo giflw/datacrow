@@ -99,7 +99,6 @@ public class RelateModuleWizard extends Wizard {
             field.setReadonly(true);
             field.setEnabled(false);
             field.setSearchable(false);
-            field.setTechinfo(true);
             field.setUiOnly(false);
             field.setOverwritable(false);
             field.setValueType(DcRepository.ValueTypes._DCPARENTREFERENCE);

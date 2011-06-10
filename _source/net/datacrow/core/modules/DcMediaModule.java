@@ -80,30 +80,30 @@ public class DcMediaModule extends DcModule {
     	super.initializeFields();
 
     	addField(new DcField(DcMediaObject._A_TITLE, getIndex(), "Title", 
-                false, true, false, true, false,
+                false, true, false, true, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Title"));
         addField(new DcField(DcMediaObject._B_DESCRIPTION, getIndex(), "Description", 
-                false, true, false, true, false, 
+                false, true, false, true,  
                 8000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Description"));
         addField(new DcField(DcMediaObject._C_YEAR, getIndex(), "Year", 
-                false, true, false, true, false, 
+                false, true, false, true,  
                 4, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                 "Year"));
 
         if (getIndex() != DcModules._IMAGE && !isAbstract())
             addField(new DcField(DcMediaObject._D_LANGUAGE, getIndex(), "Languages", 
-                    true, true, false, true, false, 
+                    true, true, false, true,  
                     255, ComponentFactory._REFERENCESFIELD, DcModules._LANGUAGE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                     "Languages"));
         
         addField(new DcField(DcMediaObject._E_RATING, getIndex(), "Rating", 
-                false, true, false, true, false, 
+                false, true, false, true,  
                 255, ComponentFactory._RATINGCOMBOBOX, getIndex(), DcRepository.ValueTypes._LONG,
                 "Rating"));
         addField(new DcField(DcMediaObject._F_COUNTRY, getIndex(), "Countries", 
-                true, true, false, true, false, 
+                true, true, false, true,  
                 255, ComponentFactory._REFERENCESFIELD, DcModules._COUNTRY, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                 "Countries"));           
     }  

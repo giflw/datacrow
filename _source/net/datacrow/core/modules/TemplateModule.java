@@ -69,7 +69,7 @@ public class TemplateModule extends DcModule {
         
         for (DcField field : parent.getFields()) {
             addField(new DcField(field.getIndex(), getIndex(), field.getLabel(), field.isUiOnly(),
-                                 field.isEnabled(), field.isReadOnly(), field.isSearchable(), field.isTechnicalInfo(),
+                                 field.isEnabled(), field.isReadOnly(), field.isSearchable(),
                                  field.getMaximumLength(), field.getFieldType(), field.getSourceModuleIdx(), field.getValueType(),
                                  field.getDatabaseFieldName()));
         }
@@ -145,11 +145,11 @@ public class TemplateModule extends DcModule {
     protected void initializeFields() {
         super.initializeFields();
         addField(new DcField(DcTemplate._SYS_TEMPLATENAME, getIndex(), "Template Name",
-                             false, true, false, true, false,
+                             false, true, false, true,
                              255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                              "TemplateName"));
         addField(new DcField(DcTemplate._SYS_DEFAULT, getIndex(), "Default",
-                             false, true, false, true, false,
+                             false, true, false, true, 
                              255, ComponentFactory._CHECKBOX, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                              "DefaultTemplate"));        
     }

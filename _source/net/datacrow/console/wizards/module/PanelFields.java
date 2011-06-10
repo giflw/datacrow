@@ -138,7 +138,8 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
                                                       getWizard(), 
                                                       null, 
                                                       getCurrentFieldNames(), 
-                                                      canHaveReferences);
+                                                      canHaveReferences,
+                                                      update);
         dlg.setVisible(true);
         
         XmlField field = dlg.getField();
@@ -163,7 +164,8 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
                                                           getWizard(), 
                                                           oldField,
                                                           getCurrentFieldNames(), 
-                                                          canHaveReferences);
+                                                          canHaveReferences,
+                                                          update);
             dlg.setVisible(true);
             
             XmlField newField = dlg.getField();

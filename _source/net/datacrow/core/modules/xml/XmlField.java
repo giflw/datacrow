@@ -55,7 +55,6 @@ public class XmlField extends XmlObject {
     private boolean enabled;
     private boolean readonly;
     private boolean searchable;
-    private boolean techinfo;
     private boolean overwritable;
    
     /**
@@ -78,7 +77,6 @@ public class XmlField extends XmlObject {
         enabled = true;
         readonly = template.isReadonly();
         searchable = template.isSearchable();
-        techinfo = template.isTechinfo();
         overwritable = template.isOverwritable();
 
         if (template.getModuleReference() != template.getModule())
@@ -99,7 +97,6 @@ public class XmlField extends XmlObject {
         enabled = XMLParser.getBoolean(element, "enabled");
         readonly = XMLParser.getBoolean(element, "readonly");
         searchable = XMLParser.getBoolean(element, "searchable");
-        techinfo = XMLParser.getBoolean(element, "techinfo");
         maximumLength =  XMLParser.getInt(element, "maximum-length");
         fieldType =  XMLParser.getInt(element, "field-type");
         valueType = XMLParser.getInt(element, "value-type");
@@ -231,13 +228,6 @@ public class XmlField extends XmlObject {
     }
 
     /**
-     * Indicates whether the field holds technical information.
-     */
-    public boolean isTechinfo() {
-        return techinfo;
-    }
-
-    /**
      * Indicates if the value is actually stored in the database or that the value
      * is calculated.
      */
@@ -324,14 +314,6 @@ public class XmlField extends XmlObject {
      */
     public void setSearchable(boolean searchable) {
         this.searchable = searchable;
-    }
-
-    /**
-     * Indicates if the field holds technical information.
-     * @param techinfo
-     */
-    public void setTechinfo(boolean techinfo) {
-        this.techinfo = techinfo;
     }
 
     /**

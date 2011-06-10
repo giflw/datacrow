@@ -1215,9 +1215,7 @@ public class DcModule implements Comparable<DcModule> {
                     false, 
                     false, 
                     true, 
-                    false, 
-                    true, 
-                    256, 
+                    false, 256, 
                     ComponentFactory._SHORTTEXTFIELD, 
                     field.getModule(), 
                     DcRepository.ValueTypes._STRING,
@@ -1233,44 +1231,44 @@ public class DcModule implements Comparable<DcModule> {
     protected void initializeFields() {
         try {
             addField(new DcField(DcObject._ID, getIndex(), "ID",
-                                 false, true, true, false, false,
+                                 false, true, true, false, 
                                  36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                                  "ID"));
             addField(new DcField(DcObject._SYS_CREATED, getIndex(), "Created",
-                                 false, true, true, true, true,
+                                 false, true, true, true, 
                                  10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                                  "Created"));
             addField(new DcField(DcObject._SYS_MODIFIED, getIndex(), "Modified",
-                                 false, true, true, true, true,
+                                 false, true, true, true, 
                                  10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                                  "Modified"));
             
             if ((isTopModule() || isChildModule()) && isCustomFieldsAllowed()) {
                 addField(new DcField(DcMediaObject._U1_USER_LONGTEXT, getIndex(), "User Long Text Field", 
-                        false, false, false, true, false, 
+                        false, false, false, true,  
                         4000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                         "UserLongText1"));         
                 addField(new DcField(DcMediaObject._U2_USER_SHORTTEXT1, getIndex(), "User Short Text Field 1",  
-                        false, false, false, true, false, 
+                        false, false, false, true,  
                         255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                         "UserShortText1")); 
                 addField(new DcField(DcMediaObject._U3_USER_SHORTTEXT2, getIndex(), "User Short Text Field 2",  
-                        false, false, false, true, false, 
+                        false, false, false, true,  
                         255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                         "UserShortText2")); 
                 addField(new DcField(DcMediaObject._U4_USER_NUMERIC1, getIndex(), "User Numeric Field 1",  
-                        false, false, false, true, false, 
+                        false, false, false, true,  
                         255, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                         "UserInteger1"));
                 addField(new DcField(DcMediaObject._U5_USER_NUMERIC2, getIndex(), "User Numeric Field 2",  
-                        false, false, false, true, false, 
+                        false, false, false, true,  
                         255, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                         "UserInteger2"));            
             }
             
             if (isTopModule() && !hasDependingModules()) {
                 addField(new DcField(DcMediaObject._VALUE, getIndex(), "Item Value",  
-                        false, true, false, true, false, 
+                        false, true, false, true,  
                         255, ComponentFactory._DECIMALFIELD, getIndex(), DcRepository.ValueTypes._DOUBLE,
                         "CurrencyValue"));            
             }
@@ -1282,7 +1280,7 @@ public class DcModule implements Comparable<DcModule> {
                     getIndex() != DcModules._TAB && getIndex() != DcModules._CONTACTPERSON) {
                 
                 addField(new DcField(DcObject._SYS_EXTERNAL_REFERENCES, getIndex(), "External References",  
-                        true, true, false, true, true, 
+                        true, true, false, true,  
                         4, ComponentFactory._SIMPLEREFERENCESFIELD, DcModules._EXTERNALREFERENCE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                         "externalreferences"));       
             }
@@ -1367,44 +1365,44 @@ public class DcModule implements Comparable<DcModule> {
     protected void initializeSystemFields() {
         systemFields.put(DcObject._SYS_MODULE,
                 new DcField(DcObject._SYS_MODULE, getIndex(), "Item",
-                            true, true, true, true, false,
+                            true, true, true, true, 
                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                             "Item"));
         systemFields.put(DcObject._SYS_AVAILABLE,
                 new DcField(DcObject._SYS_AVAILABLE, getIndex(), "Available",
-                            true, true, true, true, false,
+                            true, true, true, true, 
                             4, ComponentFactory._AVAILABILITYCOMBO, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                             "Available"));
         systemFields.put(DcObject._SYS_LENDBY,
                 new DcField(DcObject._SYS_LENDBY, getIndex(), "Lend By",
-                            true, true, true, true, false,
+                            true, true, true, true, 
                             255, ComponentFactory._REFERENCEFIELD, DcModules._CONTACTPERSON, DcRepository.ValueTypes._DCOBJECTREFERENCE,
                             "LendBy"));
         systemFields.put(DcObject._SYS_LOANDURATION,
                 new DcField(DcObject._SYS_LOANDURATION, getIndex(), "Days Loaned",
-                            true, true, true, true, false,
+                            true, true, true, true, 
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                             "DaysLoaned"));
         systemFields.put(DcObject._SYS_LOANDUEDATE,
                 new DcField(DcObject._SYS_LOANDUEDATE, getIndex(), "Due Date",
-                            true, true, true, true, false,
+                            true, true, true, true, 
                             10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                             "DueDate")); 
         systemFields.put(DcObject._SYS_LOANDAYSTILLOVERDUE,
                 new DcField(DcObject._SYS_LOANDAYSTILLOVERDUE, getIndex(), "Days till overdue",
-                            true, true, true, true, false,
+                            true, true, true, true, 
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                             "DaysTillOverDue"));                
         
         if (isTopModule() && deliversOnlineService()) {
             systemFields.put(Integer.valueOf(DcObject._SYS_SERVICE),
                              new DcField(DcObject._SYS_SERVICE, getIndex(), "Service",
-                                         false, true, true, false, true,
+                                         false, true, true, false, 
                                          255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                                          "service"));
             systemFields.put(Integer.valueOf(DcObject._SYS_SERVICEURL),
                              new DcField(DcObject._SYS_SERVICEURL, getIndex(), "Service URL",
-                                         false, true, true, false, true,
+                                         false, true, true, false, 
                                          255, ComponentFactory._URLFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                                          "serviceurl"));        
         }
@@ -1412,36 +1410,36 @@ public class DcModule implements Comparable<DcModule> {
         if (isContainerManaged()) {
             systemFields.put(Integer.valueOf(DcObject._SYS_CONTAINER),
                     new DcField(DcObject._SYS_CONTAINER, getIndex(), "Container",
-                                true, true, false, true, true, 
+                                true, true, false, true,  
                                 10, ComponentFactory._REFERENCESFIELD, DcModules._CONTAINER, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                                 "Container"));
         }
         
         systemFields.put(Integer.valueOf(DcObject._SYS_DISPLAYVALUE),
                 new DcField(Item._SYS_DISPLAYVALUE, getIndex(), "Label",
-                            true, true, true, false, false,
+                            true, true, true, false, 
                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                             "Label"));
         
         if (isFileBacked) {
             systemFields.put(Integer.valueOf(DcObject._SYS_FILENAME),
                     new DcField(DcObject._SYS_FILENAME, getIndex(), "Filename",
-                                false, true, false, true, false,
+                                false, true, false, true, 
                                 500, ComponentFactory._FILELAUNCHFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                                 "Filename"));
             systemFields.put(Integer.valueOf(DcObject._SYS_FILEHASH),
                     new DcField(DcObject._SYS_FILEHASH, getIndex(), "Filehash",
-                                false, false, true, false, true,
+                                false, false, true, false, 
                                 32, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                                 "Filehash"));
             systemFields.put(Integer.valueOf(DcObject._SYS_FILESIZE),
                     new DcField(DcObject._SYS_FILESIZE, getIndex(), "Filesize",
-                                false, true, true, true, true,
+                                false, true, true, true, 
                                 10, ComponentFactory._FILESIZEFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                                 "Filesize"));
             systemFields.put(Integer.valueOf(DcObject._SYS_FILEHASHTYPE),
                     new DcField(DcObject._SYS_FILEHASHTYPE, getIndex(), "Filehash Type",
-                                false, false, true, false, true,
+                                false, false, true, false, 
                                 10, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                                 "FilehashType"));
         }

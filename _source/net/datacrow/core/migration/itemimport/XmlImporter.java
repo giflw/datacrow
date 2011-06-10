@@ -80,6 +80,7 @@ public class XmlImporter extends ItemImporter {
                 if (nlField == null || nlField.getLength() == 0) continue;
                 
                 Element eField = (Element) nlField.item(0);
+                
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     // retrieve the items by their module name
                     DcModule referenceMod = DcModules.get(field.getReferenceIdx());
@@ -131,6 +132,10 @@ public class XmlImporter extends ItemImporter {
                 for (int i = 0; !isCanceled() && nlItems != null && i < nlItems.getLength(); i++) {
                     try {
                     	Element eItem = (Element) nlItems.item(i);
+                    	
+                    	if (eItem.getParentNode() != eTop)
+                    	    continue;
+                    	
                     	DcObject dco = parseItem(module, eItem);
                     	
                     	DcModule cm = module.getChild();

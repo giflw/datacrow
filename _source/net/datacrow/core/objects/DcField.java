@@ -46,7 +46,7 @@ import net.datacrow.settings.definitions.DcFieldDefinitions;
  * 
  * @author Robert Jan van der Waals
  */
-public class DcField implements Serializable{
+public class DcField implements Serializable {
 
     private static final long serialVersionUID = -3426157253979375896L;
     
@@ -56,7 +56,6 @@ public class DcField implements Serializable{
     private boolean required;
     private boolean searchable;
     private boolean readonly;
-    private boolean techinfo;
     private boolean uiOnly;
     private int maximumLength;
     private int fieldType;
@@ -76,7 +75,7 @@ public class DcField implements Serializable{
      */
     public DcField(XmlField field, int module) {
         this(field.getIndex(), module, field.getName(), field.isUiOnly(), field.isEnabled(),
-             field.isReadonly(), field.isSearchable(), field.isTechinfo(), field.getMaximumLength(),
+             field.isReadonly(), field.isSearchable(), field.getMaximumLength(),
              field.getFieldType(), field.getModuleReference(), field.getValueType(), field.getColumn());
     }
     
@@ -103,7 +102,6 @@ public class DcField implements Serializable{
                     boolean enabled,
                     boolean readonly,
                     boolean searchable,
-                    boolean techinfo,
                     int maximumLength,
                     int fieldType,
                     int modRef,
@@ -117,7 +115,6 @@ public class DcField implements Serializable{
         setSystemName(label);
         setReadOnly(readonly);
         setSearchable(searchable);
-        setTechinfo(techinfo);
         setFieldType(fieldType);
         setMaximumLength(maximumLength);
         setValueType(valueType);
@@ -180,16 +177,6 @@ public class DcField implements Serializable{
      */
     public int getModule() {
         return module;
-    }
-
-    /**
-     * Indicates if this field holds technical information.
-     * Only implication is that the field will be displayed in the technical 
-     * information tab of the item form.
-     * @param techinfo
-     */
-    public void setTechinfo(boolean techinfo) {
-        this.techinfo = techinfo;
     }
 
     /**
@@ -333,9 +320,9 @@ public class DcField implements Serializable{
      * Indicates if this field hold technical information.
      * @see #setTechinfo(boolean)
      */
-    public boolean isTechnicalInfo() {
-        return techinfo;
-    }
+//    public boolean isTechnicalInfo() {
+//        return techinfo;
+//    }
 
     /**
      * Mark the field as required.
@@ -361,7 +348,7 @@ public class DcField implements Serializable{
      * @return
      */
     public boolean isSearchable() {
-        return searchable || getValueType() == DcRepository.ValueTypes._PICTURE;
+        return searchable;
     }
 
     /**

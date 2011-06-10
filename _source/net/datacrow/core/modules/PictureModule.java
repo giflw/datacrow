@@ -91,31 +91,31 @@ public class PictureModule extends DcModule {
     @Override
     protected void initializeFields() {
         addField(new DcField(Picture._A_OBJECTID, getIndex(), "ObjectID", 
-                false, true, false, false, false,
+                false, true, false, false, 
                 36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING, 
                 "ObjectID"));
         addField(new DcField(Picture._B_FIELD, getIndex(), "Field", 
-                false, true, false, false, false,
+                false, true, false, false, 
                 100, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING, 
                 "Field"));
         addField(new DcField(Picture._C_FILENAME, getIndex(), "Filename", 
-                false, true, true, false, false, 
+                false, true, true, false,  
                 500, ComponentFactory._FILELAUNCHFIELD, getIndex(), DcRepository.ValueTypes._STRING, 
                 "Filename"));
         addField(new DcField(Picture._D_IMAGE, getIndex(), "Image", 
-                true, true, true, false, false, 
+                true, true, true, false,  
                 0, ComponentFactory._PICTUREFIELD, getIndex(), DcRepository.ValueTypes._IMAGEICON, 
                 "Image"));        
         addField(new DcField(Picture._E_HEIGHT, getIndex(), "Height", 
-                false, true, true, false, false, 
+                false, true, true, false,  
                 0, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG, 
                 "Height"));        
         addField(new DcField(Picture._F_WIDTH, getIndex(), "Width", 
-                false, true, true, false, false, 
+                false, true, true, false,  
                 0, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG, 
                 "Width"));  
         addField(new DcField(Picture._G_EXTERNAL_FILENAME, getIndex(), "External Filename", 
-                false, true, true, false, false, 
+                false, true, true, false,  
                 500, ComponentFactory._FILELAUNCHFIELD, getIndex(), DcRepository.ValueTypes._STRING, 
                 "External_Filename"));        
     }

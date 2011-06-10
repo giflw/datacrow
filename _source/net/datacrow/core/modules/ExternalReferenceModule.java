@@ -79,12 +79,12 @@ public class ExternalReferenceModule extends DcPropertyModule {
     protected void initializeFields() {
         super.initializeFields();
         addField(new DcField(ExternalReference._EXTERNAL_ID, getIndex(), "External ID", 
-                false, true, false, false, false,
+                false, true, false, false, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "externalid"));
         
         addField(new DcField(ExternalReference._EXTERNAL_ID_TYPE, getIndex(), "Type", 
-                false, true, false, false, false,
+                false, true, false, false, 
                 255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "externalidtype"));        
 

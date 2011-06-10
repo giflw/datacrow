@@ -129,11 +129,11 @@ public class MappingModule extends DcModule {
     @Override
     protected void initializeFields() {
         addField(new DcField(DcMapping._A_PARENT_ID, getIndex(), "Object ID",
-                             false, true, false, false, false,
+                             false, true, false, false, 
                              36, ComponentFactory._SHORTTEXTFIELD, parentMod.getIndex(), DcRepository.ValueTypes._STRING,
                              "ObjectID"));
         addField(new DcField(DcMapping._B_REFERENCED_ID, getIndex(), "Referenced ID",
-                             false, true, false, false, false,
+                             false, true, false, false, 
                              36, ComponentFactory._SHORTTEXTFIELD, referencedMod.getIndex(), DcRepository.ValueTypes._STRING,
                              "ReferencedId"));
     }

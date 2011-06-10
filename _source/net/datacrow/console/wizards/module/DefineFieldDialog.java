@@ -40,6 +40,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.datacrow.console.ComponentFactory;
@@ -66,8 +67,16 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     
     private DcShortTextField textName;
     private DcCheckBox checkSearchable;
-    private DcCheckBox checkTechinfo;
     private DcNumberField numberMaxLength;
+
+    private JComboBox comboTabs;
+    private DcCheckBox checkRequired;
+    private DcCheckBox checkDescriptive;
+    private DcCheckBox checkKeyField;
+    private DcCheckBox checkQuickview;
+    
+    private JLabel lblReferences = ComponentFactory.getLabel(DcResources.getText("lblReferencedModule"));
+    private JLabel lblMaxLength = ComponentFactory.getLabel(DcResources.getText("lblMaxTextLength"));
     
     private JComboBox comboReference;
     private JComboBox comboFieldType;
@@ -78,15 +87,18 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
 
     boolean canceled = false;
     boolean existingField = true;
+    boolean update;
     
     public DefineFieldDialog(int module,
                              Wizard parent,
                              XmlField oldField,
                              Collection<String> excludedNames, 
-                             boolean canHaveReferences) {
+                             boolean canHaveReferences,
+                             boolean update) {
         
         super(parent);
         
+        this.update = update;
         this.module = module;
         this.canHaveReferences = canHaveReferences;
         this.field = oldField;
@@ -101,7 +113,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         
         setResizable(false);
         pack();
-        setSize(new Dimension(400,300));
+        setSize(new Dimension(500, 400));
         setCenteredLocation();
     }
     
@@ -116,7 +128,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         textName.setText(field.getName());
         
         checkSearchable.setSelected(field.isSearchable());
-        checkTechinfo.setSelected(field.isTechinfo());
         numberMaxLength.setValue(field.getMaximumLength());
         
         for (int i = 0; i < comboFieldType.getItemCount(); i++) {
@@ -152,9 +163,11 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         
         try {
             checkValue(name, DcResources.getText("lblName"));
-            
-            if (numberMaxLength.isEnabled())
-                checkValue(name, DcResources.getText("lblMaxTextLength"));
+            if (numberMaxLength.isVisible()) {
+                Long value = (Long) numberMaxLength.getValue();
+                if (value == null || value.longValue() <= 0)
+                    checkValue(null, DcResources.getText("lblMaxTextLength"));
+            }
             
             if (!existingField) {
                 String column = StringUtils.normalize(name).replaceAll(" ", "").replaceAll("[\\-]", "");
@@ -175,10 +188,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             
             field.setName(name);
             field.setSearchable(checkSearchable.isSelected());
-            field.setTechinfo(checkTechinfo.isSelected());
-            
-            field.setMaximumLength(numberMaxLength.getValue() == null ? 255 : 
-            				       ((Long) numberMaxLength.getValue()).intValue());
             
             FieldType ft = (FieldType) comboFieldType.getSelectedItem();
             if (ft.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
@@ -206,8 +215,8 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         }
     }
     
-    private void checkValue(String s, String desc) throws WizardException { 
-        if (s == null || s.trim().length() == 0)
+    private void checkValue(Object o, String desc) throws WizardException { 
+        if (Utilities.isEmpty(o))
             throw new WizardException(DcResources.getText("msgXNotEntered", desc));
     }
     
@@ -215,10 +224,10 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     public void close() {
         textName = null;
         checkSearchable = null;
-        checkTechinfo = null;
         numberMaxLength = null;
         comboReference = null;
         comboFieldType = null;
+
         super.close();
     }
     
@@ -226,17 +235,68 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         field = null;
     }
     
+    private void applyFieldType() {
+        FieldType ft = (FieldType) comboFieldType.getSelectedItem();
+        
+        numberMaxLength.setEnabled(false);
+        if (ft.getIndex() == ComponentFactory._SHORTTEXTFIELD) {
+            lblMaxLength.setVisible(true);
+            numberMaxLength.setVisible(true);
+            numberMaxLength.setValue(255);
+        } else {
+            lblMaxLength.setVisible(false);
+            numberMaxLength.setVisible(false);
+            numberMaxLength.setValue(255);
+        }
+        
+        if (ft.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                ft.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+            lblReferences.setVisible(true);
+            comboReference.setVisible(true);
+        } else {
+            lblReferences.setVisible(false);
+            comboReference.setVisible(false);
+        }
+        
+        boolean uiOnly = ft.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                         ft.getValueType() == DcRepository.ValueTypes._PICTURE;
+        
+        checkDescriptive.setEnabled(true);
+        checkKeyField.setEnabled(true);
+        checkRequired.setEnabled(true);
+        checkDescriptive.setEnabled(true);
+
+        if (uiOnly) {
+            checkKeyField.setEnabled(false);
+            checkKeyField.setSelected(false);
+            
+            checkRequired.setEnabled(false);
+            checkRequired.setSelected(false);
+
+            if (ft.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                checkDescriptive.setEnabled(false);
+                checkDescriptive.setSelected(false);
+            }
+        }
+    }
+    
     private void build() {
         JPanel panel = new JPanel();
         panel.setLayout(Layout.getGBL());
         
         textName = ComponentFactory.getShortTextField(255);
-        checkSearchable = ComponentFactory.getCheckBox("");
-        checkTechinfo = ComponentFactory.getCheckBox("");
         numberMaxLength = ComponentFactory.getNumberField();
-        
+
+        checkSearchable = ComponentFactory.getCheckBox("");
+        checkDescriptive = ComponentFactory.getCheckBox("");
+        checkKeyField = ComponentFactory.getCheckBox("");
+        checkQuickview = ComponentFactory.getCheckBox("");
+        checkRequired = ComponentFactory.getCheckBox("");
+
+        comboTabs = ComponentFactory.getComboBox();
         comboReference = ComponentFactory.getComboBox();
         comboFieldType = ComponentFactory.getComboBox();
+
         initializeTypes();
         
         DcLongTextField textHelp = ComponentFactory.getHelpTextField();
@@ -245,57 +305,94 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         textHelp.setMinimumSize(new Dimension(100, 60));
         textHelp.setMaximumSize(new Dimension(800, 60));
 
+        int y = 0;
         panel.add(ComponentFactory.getLabel(DcResources.getText("lblName")),
-                Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
+                Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         panel.add(textName,
-                Layout.getGBC(1, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(ComponentFactory.getLabel(DcResources.getText("lblSearchable")),
-                Layout.getGBC(0, 2, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(checkSearchable,
-                Layout.getGBC(1, 2, 1, 1, 1.0, 1.0,
+                Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
         
-        // TODO: remove and check the enable settings ??
-        panel.add(ComponentFactory.getLabel(DcResources.getText("lblHoldsTechnicalInfo")),
-                Layout.getGBC(0, 3, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(checkTechinfo,
-                Layout.getGBC(1, 3, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 0), 0, 0));
-        
-        panel.add(ComponentFactory.getLabel(DcResources.getText("lblMaxTextLength")),
-                Layout.getGBC(0, 4, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        panel.add(numberMaxLength,
-                Layout.getGBC(1, 4, 1, 1, 1.0, 1.0,
-                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 0), 0, 0));
         panel.add(ComponentFactory.getLabel(DcResources.getText("lblFieldType")),
-                Layout.getGBC(0, 5, 1, 1, 1.0, 1.0,
+                Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
         panel.add(comboFieldType,
-                Layout.getGBC(1, 5, 1, 1, 1.0, 1.0,
+                Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
         
+        panel.add(ComponentFactory.getLabel(DcResources.getText("lblSearchable")),
+                Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        panel.add(checkSearchable,
+                Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 0), 0, 0));
+        if (!update) {
+            panel.add(ComponentFactory.getLabel(DcResources.getText("lblRequired")),
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(checkRequired,
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(ComponentFactory.getLabel(DcResources.getText("lblDescriptive")),
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(checkDescriptive,
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(ComponentFactory.getLabel(DcResources.getText("lblIsKey")),
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(checkKeyField,
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));        
+            panel.add(ComponentFactory.getLabel(DcResources.getText("lblShowInQuickView")),
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(checkQuickview,
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(ComponentFactory.getLabel(DcResources.getText("lblItemFormTab")),
+                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(comboTabs,
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            
+            comboTabs.addItem(DcResources.getText("lblSummary"));
+            comboTabs.addItem(DcResources.getText("lblInformation"));
+            comboTabs.addItem(DcResources.getText("lblTechnicalInfo"));
+            
+            checkQuickview.setSelected(true);
+        }
+        
+        panel.add(lblMaxLength, Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        panel.add(numberMaxLength, Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 0), 0, 0));
         if (canHaveReferences) {
-            panel.add(ComponentFactory.getLabel(DcResources.getText("lblReferencedModule")),
-                    Layout.getGBC(0, 6, 1, 1, 1.0, 1.0,
+            panel.add(lblReferences,Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(0, 0, 0, 0), 0, 0));
             panel.add(comboReference,
-                    Layout.getGBC(1, 6, 1, 1, 1.0, 1.0,
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
             
@@ -323,7 +420,8 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             for (DcModule module : modules)
                 comboReference.addItem(module);
         }
-
+        
+        checkSearchable.setSelected(true);
         
         comboFieldType.addActionListener(this);
         comboFieldType.setActionCommand("fieldTypeSelected");
@@ -437,23 +535,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("fieldTypeSelected")) {
-            FieldType type = (FieldType) comboFieldType.getSelectedItem();
-            
-            if (type.getIndex() != ComponentFactory._SHORTTEXTFIELD &&
-                type.getIndex() != ComponentFactory._NUMBERFIELD && 
-                type.getIndex() != ComponentFactory._LONGTEXTFIELD) {
-                numberMaxLength.setEnabled(false);
-            } else {
-                numberMaxLength.setEnabled(true);
-            }
-            
-            if (type.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                type.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                
-                comboReference.setEnabled(true);
-            } else {
-                comboReference.setEnabled(false);
-            }
+            applyFieldType();
         } else if (e.getActionCommand().equals("close")) {
             canceled = true;
             close();

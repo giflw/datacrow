@@ -1,4 +1,37 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Sorting of artists, authors and other persons has been fixed. 
+- Define fields in alter and create module wizard: Data Crow now correctly checks for the
+  entered maximum length for a field. 
+- Item importer states that the items are imported directly into the database. 
+  However, the items are actually imported first into the new items tab. I have changed
+  this so that the items actually are imported directly into Data Crow.
+- The XML item importer for images imports an empty item for every imported image. 
+
+[Changed]
+- For persons (such as artists and authors) the name field has been changed to read 
+  "Lastname, Firstname". On startup you will be asked to confirm the update.
+- For associates (persons and companies) it can now be indicated whether it is a person 
+  or a company. For persons, the name will read "Lastname, firstname". For companies
+  no name conversion is done.
+- Picture field can no longer be set to be a descriptive field.
+- For assocaties th descriptive field.. blahblah
+
+- Define fields in alter and create module wizard has been changed to include:
+  * Required?
+  * Descriptive?
+  * Key?
+  * Enabled?
+  * Tab (for itemforms)
+  * Show in quick view
+- Added an extra step to the module wizard to explain the additional settings that can 
+  be done for the module after Data Crow has been restarted.   
+- Added General Field Setting to indicate if the field should be available for charts.
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.7  [Released on May 12, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
