@@ -10,6 +10,8 @@ Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: producti
   However, the items are actually imported first into the new items tab. I have changed
   this so that the items actually are imported directly into Data Crow.
 - The XML item importer for images imports an empty item for every imported image. 
+- Non property modules could no longer be used as a reference for other modules (reference
+  fields).
 
 [Changed]
 - For persons (such as artists and authors) the name field has been changed to read 
@@ -18,7 +20,8 @@ Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: producti
   or a company. For persons, the name will read "Lastname, firstname". For companies
   no name conversion is done.
 - Picture field can no longer be set to be a descriptive field.
-- For assocaties th descriptive field.. blahblah
+- For assocaties the descriptive field can now no longer be set manually, it will always 
+  be the name field.
 
 - Define fields in alter and create module wizard has been changed to include:
   * Required?

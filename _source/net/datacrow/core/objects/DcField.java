@@ -357,9 +357,8 @@ public class DcField implements Serializable {
      * the maximum integer (Integer.MAX_VALUE) value (maximum field setting is thus overruled).
      */
     public int getMaximumLength() {
-        return getFieldType() == ComponentFactory._LONGTEXTFIELD ? 
-               Integer.MAX_VALUE : 
-               maximumLength;
+    	maximumLength = maximumLength == 0 && getValueType() == DcRepository.ValueTypes._STRING ? 255 : maximumLength;
+        return maximumLength;
     }
 
     /**

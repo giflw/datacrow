@@ -45,8 +45,15 @@ public class Templates {
         for (DcModule module : DcModules.getAllModules()) {
             if (module.getTemplateModule() != null) {
                 DcModule templateModule = module.getTemplateModule();
-                for (DcObject dco : DataManager.get(templateModule.getIndex(), null))
-                    templates.add((DcTemplate) dco);
+
+                try {
+                	for (DcObject dco : DataManager.get(templateModule.getIndex(), null))
+                		templates.add((DcTemplate) dco);
+                } catch (Exception e) {
+                	for (DcObject dco : DataManager.get(templateModule.getIndex(), null))
+                		templates.add((DcTemplate) dco);
+                	e.printStackTrace();
+                }
             }
         }
     }

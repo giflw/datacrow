@@ -196,6 +196,7 @@ public class XmlField extends XmlObject {
      * The maximum length for the values for this field.
      */
     public int getMaximumLength() {
+    	maximumLength = maximumLength == 0 && getValueType() == DcRepository.ValueTypes._STRING ? 255 : maximumLength;
         return maximumLength;
     }
 

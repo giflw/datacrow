@@ -73,7 +73,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     private DcCheckBox checkRequired;
     private DcCheckBox checkDescriptive;
     private DcCheckBox checkKeyField;
-    private DcCheckBox checkQuickview;
     
     private JLabel lblReferences = ComponentFactory.getLabel(DcResources.getText("lblReferencedModule"));
     private JLabel lblMaxLength = ComponentFactory.getLabel(DcResources.getText("lblMaxTextLength"));
@@ -167,6 +166,8 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 Long value = (Long) numberMaxLength.getValue();
                 if (value == null || value.longValue() <= 0)
                     checkValue(null, DcResources.getText("lblMaxTextLength"));
+                else
+                	field.setMaximumLength(value.intValue());
             }
             
             if (!existingField) {
@@ -290,7 +291,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         checkSearchable = ComponentFactory.getCheckBox("");
         checkDescriptive = ComponentFactory.getCheckBox("");
         checkKeyField = ComponentFactory.getCheckBox("");
-        checkQuickview = ComponentFactory.getCheckBox("");
         checkRequired = ComponentFactory.getCheckBox("");
 
         comboTabs = ComponentFactory.getComboBox();
@@ -323,6 +323,39 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                 Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
+        
+        if (canHaveReferences) {
+            panel.add(lblReferences,Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            panel.add(comboReference,
+                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            
+            List<DcModule> modules = new ArrayList<DcModule>();
+            modules.addAll(DcModules.getPropertyBaseModules());
+            for (DcModule module : DcModules.getModules()) {
+                
+                if (modules.contains(module))
+                    continue;
+                
+                if (module.isServingMultipleModules()) {
+                    modules.add(module);
+ 
+                } else if (  
+                    module.isTopModule() && !module.hasDependingModules() &&
+                   !module.isParentModule() && !module.isChildModule() &&
+                   !DcModules.isUsedInMapping(module.getIndex())) { 
+                    
+                    modules.add(module);
+                }
+            }
+
+            Collections.sort(modules, new ModuleComparator());
+            for (DcModule module : modules)
+                comboReference.addItem(module);
+        }
         
         panel.add(ComponentFactory.getLabel(DcResources.getText("lblSearchable")),
                 Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
@@ -357,14 +390,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
                     Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));        
-            panel.add(ComponentFactory.getLabel(DcResources.getText("lblShowInQuickView")),
-                    Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
-                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            panel.add(checkQuickview,
-                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
-                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
             panel.add(ComponentFactory.getLabel(DcResources.getText("lblItemFormTab")),
                     Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
@@ -377,8 +402,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             comboTabs.addItem(DcResources.getText("lblSummary"));
             comboTabs.addItem(DcResources.getText("lblInformation"));
             comboTabs.addItem(DcResources.getText("lblTechnicalInfo"));
-            
-            checkQuickview.setSelected(true);
         }
         
         panel.add(lblMaxLength, Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
@@ -387,39 +410,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         panel.add(numberMaxLength, Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
-        if (canHaveReferences) {
-            panel.add(lblReferences,Layout.getGBC(0, y, 1, 1, 1.0, 1.0,
-                    GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            panel.add(comboReference,
-                    Layout.getGBC(1, y++, 1, 1, 1.0, 1.0,
-                    GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            
-            List<DcModule> modules = new ArrayList<DcModule>();
-            modules.addAll(DcModules.getPropertyBaseModules());
-            for (DcModule module : DcModules.getModules()) {
-                
-                if (modules.contains(module))
-                    continue;
-                
-                if (module.isServingMultipleModules()) {
-                    modules.add(module);
- 
-                } else if (  
-                    module.isTopModule() && !module.hasDependingModules() &&
-                   !module.isParentModule() && !module.isChildModule() &&
-                   !DcModules.isUsedInMapping(module.getIndex()) && 
-                    DcModules.getReferencingModules(module.getIndex()).size() == 0) {
-                    
-                    modules.add(module);
-                }
-            }
-
-            Collections.sort(modules, new ModuleComparator());
-            for (DcModule module : modules)
-                comboReference.addItem(module);
-        }
+        
         
         checkSearchable.setSelected(true);
         
