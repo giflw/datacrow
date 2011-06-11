@@ -32,6 +32,7 @@
     <tocitem target="dc.modules" text="Modules">
       <tocitem target="dc.modules.alter" text="Altering a Module"/>
       <tocitem target="dc.modules.create" text="Creating a Module"/>
+      <tocitem target="dc.modules.fields" text="Defining Fields"/>
       <tocitem target="dc.modules.relate" text="Relating Modules"/>
       <tocitem target="dc.modules.delete" text="Deleting Custom Modules"/>
       <tocitem target="dc.modules.copy" text="Copy Module Wizard"/>

@@ -188,15 +188,19 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         load(getFieldIndices());
     }
     
+    public void load(int[] fields) {
+    	load(fields, false);
+    }
+    
     /**
      * Loads the item from the database.
      * Initializes images, references and loan information.
      */
-    public void load(int[] fields) {
+    public void load(int[] fields, boolean overruleLoadCheck) {
         
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
         
-        if (loaded || isNew) return;
+        if ((loaded && !overruleLoadCheck) || isNew) return;
         
         String ID = getID();
         

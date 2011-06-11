@@ -62,6 +62,7 @@ public class ChangePasswordDialog extends DcDialog implements ActionListener, Ke
         build();
         pack();
         setSize(new Dimension(300, 200));
+        setHelpIndex("dc.security");
         toFront();
         setCenteredLocation();
         fldCurrentPassword.requestFocusInWindow();

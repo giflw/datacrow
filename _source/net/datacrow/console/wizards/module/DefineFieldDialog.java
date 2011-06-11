@@ -106,6 +106,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         
         this.setModal(true);
         this.setTitle(DcResources.getText("lblDefineField"));
+        setHelpIndex("dc.modules.fields");
         
         build();
         applyField();
@@ -239,7 +240,6 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
     private void applyFieldType() {
         FieldType ft = (FieldType) comboFieldType.getSelectedItem();
         
-        numberMaxLength.setEnabled(false);
         if (ft.getIndex() == ComponentFactory._SHORTTEXTFIELD) {
             lblMaxLength.setVisible(true);
             numberMaxLength.setVisible(true);
@@ -437,7 +437,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         
         getContentPane().setLayout(Layout.getGBL());
         
-        if (existingField)
+        if (existingField && update)
             add(textHelp, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                 new Insets(5, 5, 5, 5), 0, 0));

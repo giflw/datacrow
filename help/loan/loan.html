@@ -5,12 +5,19 @@
   <body>
 
     <h1>Loan administration</h1>
+    <i>Right-click in item view &gt; Select Loan Administration</i><br><br>
+    
+    <img src="./images/loan.png" alt="" border="0"><br><br>
 
     Loans can be administered via the right-click menu on pressing "Loan Administration" or via the "Loan" tab of the item form. A history of loans is maintained.
     You can get an overview of your loans by using the "Loan Information" utility from the "Administration" menu. The contact person form also contains a separate tab showing his lend items.
+    
+    <br><br>
+    
+    If an item has been lend and is overdue (the contact person did not return the item in time) a warning message is displayed on startup.
 
 	<h2>Persons</h2>
-	For the loan administration to work, you need to register contacts in the contacts module. The registration of contacts works just the same as the registration of items in the other modules
+	For the loan administration to work, you need to register contacts in the <b>contacts</b> module. The registration of contacts works just the same as the registration of items in the other modules
 
 	<h2>Lending an item</h2>
     Specify the person to which the item will be lend and specify the date on which the loan starts. If the loan start date is today (or in the past) the item will be marked as unavailable. The item cannot be lend to anyone else until the item has been returned. Note that there are 3 fields available which tell you more about the loan status, "Available", "Loaned By" and "Days Loaned". These can be added by using the "field settings"  <a href="../settings/fields.html" target="main">more about this</a>
@@ -21,5 +28,21 @@
     <h2>Filtering</h2>
     As stated before there are three fields available which tell something about the loan status, "Available", "Loaned By" and "Days Loaned". These fields can be used to create a filter (<a href="../filters/filters.html" target="main">more about this</a>). Using filters you can easily keep track on your loans.
 
+    <h1>Loan overview: Loan Information</h1>
+    <i>Menu path: Administration &gt; Loan Information</i><br><br>
+    
+    The loan information gives an overview of currently lend items.
+    
+    <img src="./images/loan_information.png" alt="" border="0"><br><br>
+    
+    <ul>
+    <li> <b>Item</b> what kind of item are we talking about (software, audio CD, etc).</li>
+    <li> <b>Label</b> description of the item.</li>
+    <li> <b>Due Date</b> when should the item be returned? Displayed in red in case overdue.</li>
+    <li> <b>Days till overdue</b> How many days are left before which the item should be returned?</li>
+    </ul>
+    
+    Double clicking on an item opens the item form from where the loan information can be maintained.
+    
   </body>
 </html>

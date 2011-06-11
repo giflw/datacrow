@@ -52,6 +52,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         pack();
         
         setCenteredLocation();
+        setHelpIndex("dc.loans");
     }
     
     private void build(DcObject person) {

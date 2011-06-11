@@ -1,0 +1,62 @@
+<html>
+  <head>
+        <link href="../datacrow_help.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    
+	<h1>Defining fields</h1>
+	
+    An important part of defining a module is defining the fields belonging to it. In the screen you see two tables, one with the predifined fields
+   (from the selected module type) and one with the newly defined fields. The predefined fields cannot be changed or removed. 
+   You can however create, alter and remove fields from the New Field section (lower part of the screen). 
+	
+	<img src="./images/fieldoverview.png" />
+	
+	<table cellspacing="2" cellpadding="2" border="0">
+    	<tr><td>-</td>
+    		<td><b>Remove Field</b> Removes the selected field from the New Field section.</td></tr>
+    	<tr><td>-</td>
+    		<td><b>Add Field</b> Opens the Define Field dialog to create a new field.</td></tr>
+    	<tr><td>-</td>
+    		<td><b>Change Field</b> Can be used to alter an existing field. When altering existing modules changes you can make here are limited.
+    		In any case most changes can be achieved by using the settings, such as the <a href="../settings/fields.html">General Field Settings</a>.</td></tr>
+	</table>
+
+	
+	<h2>Creating a field</h2>
+	
+	To create a new field press the "add field" button. The following dialog will open: <br>
+	<img src="./images/dialog_definefield.jpg" />
+	
+	<h3>Name</h3>
+	The name of the field as displayed on screen.
+	
+	<h3>Can be searched?</h3>
+	Indicates if users can search / filter on this field.
+	
+	<h3>Holds technical information?</h3>
+	Does this field hold technical information. If so the field will be shown in the technical informal tab of the item form.
+	
+	<h3>Maximum field length</h3>
+	The maximum input length for this field (in characters).
+	
+	<h3>Field type</h3>
+	The field type. There is a wide range of field types available and most of them speak for themselves. However the single reference and
+	multiple reference field need some more explanation. When you select either of these field types you will notice the reference module
+	list becoming active. With these field types you can create a reference to another module. If you select a single reference field 
+	Data Crow will create a list of items from the selected module (such as is the case with categories for software). Only one 
+	of these items can be selected. If you select a multiple reference field the field can hold more then one property items 
+	(such as with the genres for audio cds). A field with an item select dialog is created.
+	
+	<br><br>
+	
+	Another note on reference fields. When you make a reference to a property module the items of this module can be managed from the "tools" menu.
+	A reference to any other type of module will make of the referenced module a sub-module of the current module. Such is the case for example with actors for the movie module. The 
+	actor module is referenced by the movie module, making the actor module a sub-module of the movie module. The sub-module is displayed in the 
+	module bar when you select the referencing module.
+	
+	<h3>Reference Module</h3>
+	Used for reference fields only. See above for further explanation.
+
+  </body>
+</html>

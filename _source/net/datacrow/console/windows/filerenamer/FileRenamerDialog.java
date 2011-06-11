@@ -34,7 +34,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -46,6 +45,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import net.datacrow.console.ComponentFactory;
@@ -56,10 +56,7 @@ import net.datacrow.console.views.View;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
@@ -112,6 +109,8 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
     
     private int module;
     
+    private boolean canceled = false;
+    
     public FileRenamerDialog(int module) {
         super(DcResources.getText("lblFileRenamer", DcModules.get(module).getObjectName()), 
               IconLibrary._icoFileRenamer);
@@ -129,52 +128,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         patternFld.setText(DcModules.get(module).getSettings().getString(DcRepository.ModuleSettings.stFileRenamerPattern));
     }
     
-    private DcObject[] getApplicableObjects(FilePattern pattern) {
-        DataFilter df = new DataFilter(module);
-        
-        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
-                    module, DcObject._SYS_FILENAME, 
-                    Operator.IS_FILLED, null));
-        
-        for (FilePatternPart part : pattern.getParts()) {
-            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, 
-                                            module, part.getField().getIndex(), 
-                                            Operator.IS_FILLED, null));
-        }
-        List<DcObject> eligibleItems = DataManager.get(df);
-        Collection<DcObject> result = new ArrayList<DcObject>();
-
-        Collection<DcObject> currentItems = new ArrayList<DcObject>(); 
-        if (DcModules.get(module).getParent() != null) {
-            View view = DcModules.get(module).getParent().getCurrentSearchView();
-            
-            Collection<DcObject> items = new ArrayList<DcObject>();
-            if (getItemPickMode() == _ALL)
-                items.addAll(view.getItems());
-            else 
-                items.addAll(view.getSelectedItems());
-            
-            for (DcObject parent : items) {
-                parent.loadChildren(null);
-                currentItems.addAll(parent.getChildren());
-            }
-        } else {
-            View view = DcModules.get(module).getCurrentSearchView();
-            
-            if (getItemPickMode() == _ALL)
-                currentItems.addAll(view.getItems());
-            else 
-                currentItems.addAll(view.getSelectedItems());
-        }
-        
-        for (DcObject eligibleItem : eligibleItems) {
-            if (currentItems.contains(eligibleItem))
-                result.add(eligibleItem);
-        }
-        
-        return result.toArray(new DcObject[] {});
-    }
-    
+   
     public int getItemPickMode() {
         return cbItemPickMode.getSelectedIndex() < 1 ? _ALL : _SELECTED;
     }
@@ -192,11 +146,12 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
     }
 
     private void start() {
-        FileRenamer task = FileRenamer.getInstance();
-        
+    	
+    	logFld.setText("");
+    	canceled = false;
         File baseDir = null;
         if (rbAlternateLoc.isSelected()) {
-            baseDir = fileField.getFile();
+        	baseDir = fileField.getFile();
             if (baseDir == null) {
                 DcSwingUtilities.displayMessage("msgSelectDirFirst");
                 return;
@@ -207,22 +162,103 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
 
         if (isValidPattern(pattern)) {   
             FilePattern fp = new FilePattern(pattern, module);
-            DcObject[] objects = getApplicableObjects(fp);
-            if (objects.length == 0) {
-                DcSwingUtilities.displayMessage("msgNoItemsToRename");
-            } else {
-                FileRenamerPreviewDialog dlg = new FileRenamerPreviewDialog(this, objects, fp, baseDir);
-                dlg.setVisible(true);
-                
-                if (dlg.isAffirmative()) {
-                    task.start(this, baseDir, fp, dlg.getObjects());
-                    dlg.clear();
-                }
-            }
+            new Task(baseDir, fp, this).start();
         }
     }
     
+    private class Task extends Thread {
+    	
+    	private File baseDir;
+    	private FilePattern pattern;
+    	private FileRenamerDialog parent;
+    	
+    	public Task(File baseDir, FilePattern pattern, FileRenamerDialog parent) {
+    		this.baseDir = baseDir;
+    		this.pattern = pattern;
+    		this.parent = parent;
+    	}
+    	
+    	public void run() {
+    		parent.notifyJobStarted();
+    		
+			final Collection<DcObject> result = new ArrayList<DcObject>(); 
+	        Collection<String> keys = new ArrayList<String>();
+	        
+	        View view = DcModules.get(module).getParent() != null ?
+	        				DcModules.get(module).getParent().getCurrentSearchView() :
+	        				DcModules.get(module).getCurrentSearchView();
+
+	        if (getItemPickMode() == _ALL)
+	        	 keys.addAll(view.getItemKeys());
+	        else 
+	        	 keys.addAll(view.getSelectedItemKeys());
+	        
+	        Collection<FilePatternPart> patternParts = pattern.getParts();
+	        Collection<Integer> addFields = new ArrayList<Integer>();
+	        for (FilePatternPart fpp : patternParts) {
+	        	addFields.add(fpp.getField().getIndex());
+	        }
+	        
+	        if (!addFields.contains(DcObject._SYS_FILENAME))
+	        	addFields.add(DcObject._SYS_FILENAME);
+	    
+	        int[] fields = DcModules.get(module).getMinimalFields(addFields);
+	        
+	        notifyTaskSize(keys.size());
+	        parent.notify(DcResources.getText("msgRetrievingItems"));
+	        for (String key : keys) {
+	        	
+	        	if (canceled) break;
+	        	
+	        	if (DcModules.get(module).getParent() != null) {
+	        		for (DcObject child : DataManager.getChildren(key, DcModules.get(module).getIndex(), fields)) {
+	            		if (child.isFilled(DcObject._SYS_FILENAME));
+	        				result.add(child);
+	        		}
+	        	} else {
+	        		DcObject dco = DataManager.getItem(module, key, fields);
+	        		if (dco.isFilled(DcObject._SYS_FILENAME));
+	        			result.add(dco);
+	        	}
+	        	        	
+	            try {
+					sleep(10);
+				} catch (InterruptedException e) {}
+				
+	            notifyProcessed();
+	        }
+	        
+	        parent.notifyJobStopped(); 
+	        
+            if (result.size() == 0) {
+                DcSwingUtilities.displayMessage("msgNoItemsToRename");
+            } else {
+            	
+            	if (!canceled) {
+            	
+	            	SwingUtilities.invokeLater(
+	                    new Thread(new Runnable() { 
+	                        @Override
+	                        public void run() {
+	                        	FileRenamerPreviewDialog dlg = new FileRenamerPreviewDialog(parent, result, pattern, baseDir);
+	    		                dlg.setVisible(true);
+	    		                
+	    		                if (dlg.isAffirmative()) {
+	    		                	FileRenamer task = FileRenamer.getInstance();
+	    		                    task.start(parent, baseDir, pattern, dlg.getObjects());
+	    		                    dlg.clear();
+	    		                } else {
+	    		                	parent.notifyJobStopped(); 
+	    		                }
+	                        }
+	                    }));
+            	}
+        	}
+    	}
+    }
+    
     private void stop() {
+    	canceled = true;
         FileRenamer.getInstance().cancel();
     }
 
@@ -373,8 +409,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         cbItemPickMode.addItem(DcResources.getText("lblAllItemsInView"));
         cbItemPickMode.addItem(DcResources.getText("lblRenameFilesSelectedItems"));
         
-        
-        //**********************************************************
+                //**********************************************************
         //Config panel
         //**********************************************************
         JPanel panelConfig = new JPanel();
@@ -479,9 +514,6 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
         buttonStart.setEnabled(true);
         buttonClose.setEnabled(true);
         buttonStop.setEnabled(false);
-        
-        notify(DcResources.getText("msgFileRenamerFinished"));
-        DcSwingUtilities.displayMessage("msgFileRenamerFinished");
     }
 
     @Override

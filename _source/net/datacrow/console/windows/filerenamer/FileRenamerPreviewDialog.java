@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -48,7 +50,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
     private boolean affirmative = false;
     
     public FileRenamerPreviewDialog(JFrame parent, 
-                                    DcObject[] objects, 
+                                    Collection<DcObject> objects, 
                                     FilePattern pattern,
                                     File baseDir) {
         super(parent);
@@ -69,11 +71,11 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         setModal(true);
     }
     
-    private void generatePreview(DcObject[] objects, FilePattern pattern, File baseDir) {
+    private void generatePreview(Collection<DcObject> items, FilePattern pattern, File baseDir) {
         if (generator != null) 
             generator.cancel();
         
-        generator = new PreviewGenerator(this, objects, pattern, baseDir);
+        generator = new PreviewGenerator(this, items, pattern, baseDir);
         generator.start();
     }
     
@@ -98,12 +100,12 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         return affirmative;
     }
     
-    public DcObject[] getObjects() {
-        DcObject[] objects = new DcObject[table.getRowCount()];
+    public Collection<DcObject> getObjects() {
+    	Collection<DcObject> items = new ArrayList<DcObject>();
         for (int row = 0; row < table.getRowCount(); row++) {
-            objects[row] = (DcObject) table.getValueAt(row, 0);
+        	items.add((DcObject) table.getValueAt(row, 0));
         }
-        return objects;
+        return items;
     }
     
     public void clear() {
@@ -241,7 +243,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
     
     private static class PreviewGenerator extends Thread {
 
-        private DcObject[] objects;
+        private Collection<DcObject> objects;
         private FilePattern pattern;
         private FileRenamerPreviewDialog dlg;
         private File baseDir;
@@ -249,7 +251,7 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         private boolean keepOnRunning = true;
         
         public PreviewGenerator(FileRenamerPreviewDialog dlg, 
-                                DcObject[] objects, 
+                                Collection<DcObject> objects, 
                                 FilePattern pattern, 
                                 File baseDir) {
             this.dlg = dlg;
@@ -264,17 +266,19 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         
         @Override
         public void run() {
-            dlg.initProgressBar(objects.length);
+            dlg.initProgressBar(objects.size());
             dlg.setBusy(true);
             
             for (DcObject dco : objects) {
 
                 if (!keepOnRunning) break;
                 
-                File oldFile = new File(dco.getFilename());
-                String newFilename = pattern.getFilename(dco, oldFile, baseDir);
-                
-                dlg.addPreviewResult(dco, oldFile.toString(), newFilename);
+                if (dco.getFilename() != null) {
+	                File oldFile = new File(dco.getFilename());
+	                String newFilename = pattern.getFilename(dco, oldFile, baseDir);
+	                
+	                dlg.addPreviewResult(dco, oldFile.toString(), newFilename);
+                }
                 dlg.updateProgressBar();
             }
 

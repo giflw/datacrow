@@ -46,6 +46,7 @@
 
     <mapID target="dc.modules.create" url="modules/createmodulewizard.html"/>
     <mapID target="dc.modules.alter" url="modules/altermodulewizard.html"/>
+    <mapID target="dc.modules.fields" url="modules/definingfields.html"/>
     <mapID target="dc.modules.relate" url="modules/relatemodulewizard.html"/>
     <mapID target="dc.modules.delete" url="modules/deletemodulewizard.html"/>
     <mapID target="dc.modules.copy" url="modules/copymodulewizard.html"/>

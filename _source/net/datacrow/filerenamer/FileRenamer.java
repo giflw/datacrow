@@ -27,6 +27,7 @@ package net.datacrow.filerenamer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
@@ -64,7 +65,7 @@ public class FileRenamer {
      * @param pattern The file pattern to use.
      * @param objects The items for which the files will be renamed.
      */
-    public void start(IFileRenamerListener listener, File baseDir, FilePattern pattern, DcObject[] objects) {
+    public void start(IFileRenamerListener listener, File baseDir, FilePattern pattern, Collection<DcObject> objects) {
         if (task == null || !task.isAlive()) {
             task = new Task(listener, baseDir, pattern, objects);
             task.start();
@@ -99,9 +100,9 @@ public class FileRenamer {
         
         private File baseDir;
         private FilePattern pattern;
-        private DcObject[] objects;
+        private Collection<DcObject> objects;
         
-        public Task(IFileRenamerListener listener, File baseDir, FilePattern pattern, DcObject[] objects) {
+        public Task(IFileRenamerListener listener, File baseDir, FilePattern pattern, Collection<DcObject> objects) {
             this.listener = listener;
             this.pattern = pattern;
             this.objects = objects;
@@ -118,7 +119,7 @@ public class FileRenamer {
         public void run() {
             
             listener.notifyJobStarted();
-            listener.notifyTaskSize(objects.length);
+            listener.notifyTaskSize(objects.size());
             
             for (DcObject dco : objects) {
                 if (!keepOnRunning) break;
@@ -154,7 +155,8 @@ public class FileRenamer {
             }
             
             listener.notifyJobStopped();
-            
+            listener.notify(DcResources.getText("msgFileRenamerFinished"));
+           
             listener = null;
             pattern = null;
             objects = null;
