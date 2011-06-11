@@ -124,7 +124,7 @@ public class DeleteQuery extends Query {
                     
                     if (m.getType() == DcModule._TYPE_MAPPING_MODULE) {
                         stmt.execute("DELETE FROM " + m.getTableName() + " WHERE " + 
-                                     m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                                m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
                     } else {
                         for (DcField field : m.getFields()) {
                             if (!field.isUiOnly() && field.getReferenceIdx() == dco.getModule().getIndex()) {
@@ -139,6 +139,11 @@ public class DeleteQuery extends Query {
             for (DcField field : dco.getFields()) {
                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE && dco.isFilled(field.getIndex()))
                     deleteImage((Picture) dco.getValue(field.getIndex()));
+                
+                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                	DcModule m = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
+                    stmt.execute("DELETE FROM " + m.getTableName() + " WHERE " + m.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                }   
             }
             
             stmt.execute("DELETE FROM " + DcModules.get(DcModules._PICTURE).getTableName() + " WHERE " +
