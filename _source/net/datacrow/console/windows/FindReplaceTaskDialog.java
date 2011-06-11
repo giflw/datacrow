@@ -247,7 +247,7 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
         //Main panel
         //**********************************************************
         this.getContentPane().setLayout(Layout.getGBL());
-        this.getContentPane().add(panelInput  ,Layout.getGBC(0, 0, 1, 1, 10.0, 10.0
+        this.getContentPane().add(panelInput  ,Layout.getGBC(0, 0, 1, 1, 20.0, 20.0
                                               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                                                new Insets(5, 5, 5, 5), 0, 0));
         this.getContentPane().add(panelActions,Layout.getGBC(0, 2, 1, 1, 1.0, 1.0

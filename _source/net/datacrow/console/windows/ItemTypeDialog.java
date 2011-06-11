@@ -117,11 +117,10 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         textHelp.setEditable(false);
         textHelp.setText(help);
-        panelModules.add(textHelp, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 0, 5, 5, 5), 0, 0));        
         
-        int y = 1;
+        int y = 0;
+        int x = 0;
+        
         for (DcModule module : modules) {
             ImageIcon icon = module.getIcon32() == null ? module.getIcon16() : module.getIcon32();
             icon = icon == null ? IconLibrary._icoModuleTypeProperty32 : icon;
@@ -130,16 +129,24 @@ public class ItemTypeDialog extends DcDialog implements ActionListener {
             radioButton.addActionListener(this);
             radioButton.addItemListener(new SelectModuleAction());
             buttonGroup.add(radioButton);
-            panelModules.add(radioButton, Layout.getGBC( 0, y++, 1, 1, 1.0, 1.0
+            panelModules.add(radioButton, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets( 0, 5, 5, 5), 0, 0));
+            
+            if (y == 6) {
+            	x++;
+            	y = 0;
+            }
         }
 
         //**********************************************************
         //Main panel
         //**********************************************************
         this.getContentPane().setLayout(Layout.getGBL());
-        this.getContentPane().add(panelModules,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+        this.getContentPane().add(textHelp,  	Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets( 5, 5, 5, 5), 0, 0));        
+        this.getContentPane().add(panelModules, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                                  ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                                   new Insets( 5, 5, 5, 5), 0, 0));
 

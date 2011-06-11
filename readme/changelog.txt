@@ -17,6 +17,10 @@ Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: producti
 - Loan information overview did not have a help page linked (pressing F1 shows an empty page).
 - In many cases the help does not clearly state where to find the functionality or option. 
 - File Renamer functionality was broken due to performance problems.
+- Possible undetected closure of the database connection.
+- Discogs.com service was broken.
+
+* Fix Sourceforge.net
 
 [Changed]
 - For persons (such as artists and authors) the name field has been changed to read 

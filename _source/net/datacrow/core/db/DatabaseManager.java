@@ -200,7 +200,7 @@ public class DatabaseManager {
             	stmt.close();
             }
         } catch (SQLException se) {
-            logger.error(se, se);
+            logger.debug(se, se);
             closed = true;
         }
         return closed;
