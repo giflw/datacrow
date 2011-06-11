@@ -13,7 +13,6 @@ import java.util.Collection;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -47,13 +46,17 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
 
     private PreviewGenerator generator;
     
+    private FileRenamerDialog parent;
+    
     private boolean affirmative = false;
     
-    public FileRenamerPreviewDialog(JFrame parent, 
+    public FileRenamerPreviewDialog(FileRenamerDialog parent, 
                                     Collection<DcObject> objects, 
                                     FilePattern pattern,
                                     File baseDir) {
         super(parent);
+        
+        this.parent = parent;
         
         JMenu menu = new FileRenamerMenu(this);
         JMenuBar menuBar = ComponentFactory.getMenuBar();
@@ -122,12 +125,15 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
         buttonStart = null;
         progressBar = null;
         
+        parent = null;
+        
         super.close();
     }
     
     @Override
     public void close() {
         setVisible(false);
+        parent.notifyJobStopped();
     }
 
     private void build(int module) {

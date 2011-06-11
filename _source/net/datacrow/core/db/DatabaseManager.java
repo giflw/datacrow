@@ -193,6 +193,12 @@ public class DatabaseManager {
         boolean closed = false;
         try {
             closed = connection == null || connection.isClosed();
+            
+            if (connection != null) {
+            	Statement stmt = connection.createStatement();
+            	stmt.execute("select * from version");
+            	stmt.close();
+            }
         } catch (SQLException se) {
             logger.error(se, se);
             closed = true;
