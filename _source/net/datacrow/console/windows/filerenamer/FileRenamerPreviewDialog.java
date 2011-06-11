@@ -134,6 +134,9 @@ public class FileRenamerPreviewDialog extends DcDialog implements ActionListener
     public void close() {
         setVisible(false);
         parent.notifyJobStopped();
+        
+        if (generator != null)
+        	generator.cancel();
     }
 
     private void build(int module) {
