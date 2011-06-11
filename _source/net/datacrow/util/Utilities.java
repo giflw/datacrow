@@ -105,6 +105,46 @@ public class Utilities {
         return tk;
     }
     
+    public static String getFirstName(String name) {
+    	if (name.indexOf(",") > -1) {
+    		return name.substring(name.indexOf(",") + 1).trim();
+    	} else if (name.indexOf(" ") > -1) {
+    		String firstname = name.substring(0, name.indexOf(" ")).trim();
+    		if (name.indexOf("(") > -1)
+    			firstname += " " + name.substring(name.indexOf("("));
+    		
+    		return firstname;
+    	} else {
+    		return "";
+    	}
+    }
+    
+    public static String getLastName(String name) {
+    	if (name.indexOf(",") > -1) {
+    		return name.substring(0, name.indexOf(",")).trim();
+    	} else if (name.indexOf(" ") > -1) {
+    		String lastname = name.substring(name.indexOf(" ") + 1).trim();
+    		if (lastname.indexOf("(") > -1)
+    			lastname = lastname.substring(0, lastname.indexOf("(")).trim();
+    		
+    		return lastname;
+    	} else {
+    		return name;
+    	}
+    }
+    
+    public static String getName(String firstname, String lastname, boolean company) {
+        firstname = firstname == null ? "" : firstname.trim();
+        lastname = lastname == null ? "" : lastname.trim();
+
+        if (company) {
+            return (firstname + " " + lastname).trim();
+        } else {
+        	return firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
+                   firstname.length() == 0 ? lastname : firstname;
+        }
+    }
+    
     public static Object getQueryValue(Object o, DcField field) {
         Object value = o;
         

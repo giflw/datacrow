@@ -25,8 +25,6 @@
 
 package net.datacrow.core.objects;
 
-import java.util.StringTokenizer;
-
 import net.datacrow.util.Utilities;
 
 /**
@@ -71,61 +69,30 @@ public class DcAssociate extends DcObject {
         String name = (String) getValue(DcAssociate._A_NAME);
         String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
         String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
-        boolean company = (Boolean)  getValue(DcAssociate._G_IS_COMPANY);
+        
+        if (!isFilled(DcAssociate._G_IS_COMPANY))
+        	setValue(DcAssociate._G_IS_COMPANY, Boolean.FALSE);
+        
+        boolean company = (Boolean) getValue(DcAssociate._G_IS_COMPANY);
         
         boolean isNameSet = !Utilities.isEmpty(name);
         boolean isFirstNameSet = !Utilities.isEmpty(firstname);
         boolean isLastNameSet = !Utilities.isEmpty(lastname);
+        
         if (!isNameSet && (isLastNameSet || isFirstNameSet)) {
-            firstname = firstname == null ? "" : firstname.trim();
-            lastname = lastname == null ? "" : lastname.trim();
-            
-            if (company) {
-                name = (firstname + " " + lastname).trim();
-            } else {
-                name = firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
-                       firstname.length() == 0 ? lastname : firstname;
-            }
-            
+        	name = Utilities.getName(firstname, lastname, company);
             setValue(DcAssociate._A_NAME, name);
-            
+
         } else if (isNameSet && !company && (!isLastNameSet || !isFirstNameSet)) {
-            name = name.indexOf("(") > 0 ? name.substring(0, name.indexOf("(")).trim() : name;
-            StringTokenizer st = new StringTokenizer(name);
-            int i = 0;
-            while (st.hasMoreElements()) {
-                if ((i + 1) != st.countTokens()) {
-                    firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
-                    String s = (String) st.nextElement();
-                    if (!isFirstNameSet) {
-                        firstname = firstname == null ? "" : firstname;
-                        firstname += firstname.length() > 0 ? " " : "";
-                        firstname += s;
-                        setValue(DcAssociate._E_FIRSTNAME, firstname);
-                    }
-                } else {
-                    lastname = (String) getValue(DcAssociate._F_LASTTNAME);
-                    String s = (String) st.nextElement();
-                    if (!isLastNameSet) {
-                        lastname = lastname == null ? "" : lastname;
-                        lastname += lastname.length() > 0 ? " " : "";
-                        lastname += s;
-                        setValue(DcAssociate._F_LASTTNAME, lastname);
-                    }
-                }
-            }
+        	firstname = Utilities.getFirstName(name);
+        	lastname = Utilities.getLastName(name);
+        	name = Utilities.getName(firstname, lastname, company);
 
-            if (name.indexOf("(") > 0) {
-                firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
-                firstname += " " + name.substring(name.indexOf("("));
-                setValue(DcAssociate._E_FIRSTNAME, firstname);
-            }
-
-            // Recalculate name based on the settings (last name, first name(s)):
-            name = firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
-                   firstname.length() == 0 ? lastname : firstname;
-            setValue(DcAssociate._A_NAME, name);
+        	setValue(DcAssociate._A_NAME, name);
+            setValue(DcAssociate._E_FIRSTNAME, firstname);
+            setValue(DcAssociate._F_LASTTNAME, lastname);
         }
+        
         super.beforeSave();
     }
 

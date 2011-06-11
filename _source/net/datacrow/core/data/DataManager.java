@@ -575,12 +575,22 @@ public class DataManager {
             String query = "SELECT " + columns + " FROM " + module.getTableName() + " WHERE " + 
                 "RTRIM(LTRIM(UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + "))) =  UPPER(?)";
             
+            if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE)
+            	query += " OR RTRIM(LTRIM(UPPER(" + module.getField(DcAssociate._A_NAME).getDatabaseFieldName() + "))) LIKE ?"; 
+            
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
                 query += " OR RTRIM(LTRIM(UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + "))) LIKE ?"; 
             
             PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
 
             ps.setString(1, s);
+            
+            if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+	        	String firstname = Utilities.getFirstName(s);
+	        	String lastname = Utilities.getLastName(s);
+	        	ps.setString(2, Utilities.getName(firstname, lastname, false));
+            }
+            
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
                 ps.setString(2,  ";%" + s.toUpperCase().trim() + "%;");
             
