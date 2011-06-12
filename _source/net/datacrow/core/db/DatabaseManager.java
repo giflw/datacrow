@@ -555,7 +555,7 @@ public class DatabaseManager {
         } finally {
             try {
                 if (stmt != null) stmt.close();
-                if (c != null) c.close();
+                //if (c != null) c.close();
             } catch (Exception e) {}
         }
     }    

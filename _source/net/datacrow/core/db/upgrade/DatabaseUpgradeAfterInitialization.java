@@ -82,7 +82,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             
             if (v.isOlder(new Version(3, 9, 8, 0))) {
                 lf = new LogForm();
-                DcSwingUtilities.displayMessage("The names of all persons (actors, authors, etc) will be formatted to read <Lastname, Firstname>");
+                DcSwingUtilities.displayMessage(
+                		"- Ghost references will be removed. \n " +
+                		"- The names of all persons (actors, authors, etc) will be formatted to read \"Lastname, Firstname\".\n" +
+                		"- The sort index for persons will be recalculated.");
                 upgraded = cleanupReferences();
                 upgraded = reverseNames();
                 upgraded = fillUIPersistFieldsPersons();
@@ -129,7 +132,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
 	    			rs.close();
 	    			
 	    			if (count > 0) {
-		    			logger.info("Cleaning " + mm.getTableName() + " of " + count + " ghost records.");
+		    			logger.info("Cleaning " + mm.getTableName() + " of " + count + " ghost record(s).");
 		    			
 		    			sql = "delete from " + mm.getTableName() + " where objectid not in " +
 		    				"(select id from " + pm.getTableName() + ") or referencedid not in " +
@@ -285,7 +288,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             
             DcObject dco = module.getItem();
             for (DcField fld : module.getFields()) {
-            	logger.info("Creating persistant field for module: " + module + "/" + module.getTableName() + ": " + fld);
+            	logger.info("Creating persistant field for module: " + module.getTableName() + ": " + fld);
                 if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 	
                 	if (DcModules.get(fld.getReferenceIdx()).getType() != DcModule._TYPE_ASSOCIATE_MODULE)
@@ -348,7 +351,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             
             DcObject dco = module.getItem();
             for (DcField fld : module.getFields()) {
-                logger.info("Creating persistant field for module: " + module + "/" + module.getTableName() + ": " + fld);
+                logger.info("Creating persistant field for module: " + module.getTableName() + ": " + fld);
                 if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     try {
                         DcModule mm = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
