@@ -82,10 +82,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             
             if (v.isOlder(new Version(3, 9, 8, 0))) {
                 lf = new LogForm();
-                DcSwingUtilities.displayMessage(
-                		"- Ghost references will be removed. \n " +
-                		"- The names of all persons (actors, authors, etc) will be formatted to read \"Lastname, Firstname\".\n" +
-                		"- The sort index for persons will be recalculated.");
+                DcSwingUtilities.displayMessage("The names of all persons (actors, authors, etc) will be formatted to read <Lastname, Firstname>");
                 upgraded = cleanupReferences();
                 upgraded = reverseNames();
                 upgraded = fillUIPersistFieldsPersons();
