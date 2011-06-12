@@ -54,7 +54,12 @@ public class DcProperty extends DcObject {
         return DcProperty._A_NAME;
     }
     
-    /**
+    @Override
+	public int getDefaultSortFieldIdx() {
+    	return DcProperty._A_NAME;
+	}
+
+	/**
      * The filename on which this item is based.
      * @return Returns always null.
      */
