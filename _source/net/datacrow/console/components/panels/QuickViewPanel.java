@@ -35,6 +35,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -390,7 +391,11 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     
                     if (dco.getField(index).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                         int i = 0;
-                        for (DcObject reference : (Collection<DcObject>) dco.getValue(index)) {
+                        
+                        List<DcObject> references = (List<DcObject>) dco.getValue(index);
+                        references = Utilities.sort(references);
+                                                
+                        for (DcObject reference : references) {
                             if (i > 0 && horizontal)
                                 value += "&nbsp;&nbsp;";
                             

@@ -39,6 +39,7 @@ import net.datacrow.core.Version;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -82,7 +83,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             if (v.isOlder(new Version(3, 9, 8, 0))) {
                 lf = new LogForm();
                 DcSwingUtilities.displayMessage("The names of all persons (actors, authors, etc) will be formatted to read <Lastname, Firstname>");
+                upgraded = cleanupReferences();
                 upgraded = reverseNames();
+                upgraded = fillUIPersistFieldsPersons();
             }
             
             if (upgraded) {
@@ -99,6 +102,50 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private boolean cleanupReferences() {
+    	MappingModule mm;
+    	DcModule pm;
+    	DcModule cm;
+    	String sql;
+    	ResultSet rs;
+    	int count;
+    	for (DcModule module : DcModules.getAllModules()) {
+    		
+    		if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+    			try {
+	    			mm = (MappingModule) module;
+	    			pm = DcModules.get(mm.getParentModIdx());
+	    			cm = DcModules.get(mm.getReferencedModIdx());
+	    			
+	    			sql = "select count(*) as INVALIDENTRIES from " + mm.getTableName() + " where objectid not in " +
+    				"(select id from " + pm.getTableName() + ") or referencedid not in " +
+    				"(select id from " + cm.getTableName() + ")";
+	    			
+	    			rs = DatabaseManager.executeSQL(sql);
+	    			rs.next();
+	    			count = rs.getInt(1);
+	    			rs.close();
+	    			
+	    			if (count > 0) {
+		    			logger.info("Cleaning " + mm.getTableName() + " of " + count + " ghost records.");
+		    			
+		    			sql = "delete from " + mm.getTableName() + " where objectid not in " +
+		    				"(select id from " + pm.getTableName() + ") or referencedid not in " +
+		    				"(select id from " + cm.getTableName() + ")";
+	    			
+		    			rs = DatabaseManager.executeSQL(sql);
+		    			
+		    			if (rs != null) rs.close();
+	    			}
+    			} catch (SQLException se) {
+    				logger.error("Error while cleaning references for module " + module, se);
+    			}
+    			
+    		}
+    	}
+    	return true;
     }
     
     private boolean reverseNames() {
@@ -222,6 +269,67 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
         return upgraded;
     }
     
+    private boolean fillUIPersistFieldsPersons() {
+        boolean upgraded = false;
+        
+        ResultSet rs;
+        DcField fldPersist;
+        
+        String ID;
+        String referencedID;
+        String sql;
+
+        for (DcModule module : DcModules.getAllModules()) {
+
+            if (module.isAbstract() || module.getType() == DcModule._TYPE_TEMPLATE_MODULE) continue;
+            
+            DcObject dco = module.getItem();
+            for (DcField fld : module.getFields()) {
+            	logger.info("Creating persistant field for module: " + module + "/" + module.getTableName() + ": " + fld);
+                if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                	
+                	if (DcModules.get(fld.getReferenceIdx()).getType() != DcModule._TYPE_ASSOCIATE_MODULE)
+                		continue;
+                	
+                	fldPersist = module.getPersistentField(fld.getIndex());
+                	
+                    try {
+                        DcModule mm = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
+
+                        sql = 
+                        	" select objectid, referencedid from " + mm.getTableName() + 
+                        	" inner join " + DcModules.get(fld.getReferenceIdx()).getTableName() + 
+                        	" on " + DcModules.get(fld.getReferenceIdx()).getTableName() + ".ID = " +  mm.getTableName() + ".referencedID " +
+                        	" order by objectid, name";
+                        
+                        rs = DatabaseManager.executeSQL(sql);
+                        
+                        String prevID = null;
+                        while (rs.next()) {
+                            ID = rs.getString(1);
+                            referencedID = rs.getString(2);
+                            if (!ID.equals(prevID)) {
+                            	sql = "update " + dco.getModule().getTableName() + " set " + 
+                            		fldPersist.getDatabaseFieldName() + " = '" + referencedID + "' " +
+                            		"where ID ='" + ID + "'";
+                            	DatabaseManager.executeSQL(sql);
+                            }
+                            
+                            prevID = ID;
+                        }
+                        rs.close();
+                    } catch (SQLException se) {
+                        logger.error("Could not remove references", se);
+                    }
+                    
+                    upgraded = true;
+                }
+            }
+        }
+        
+        return upgraded;
+    }
+    
     private boolean fillUIPersistFields() {
         boolean upgraded = false;
         
@@ -279,5 +387,5 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
         }
         
         return upgraded;
-   }
+    }
 }

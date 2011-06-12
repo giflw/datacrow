@@ -98,8 +98,6 @@ public class MappingModule extends DcModule {
         return getField(DcMapping._A_PARENT_ID).getReferenceIdx();
     } 
     
-    
-
     @Override
     public int[] getMinimalFields(Collection<Integer> include) {
         return null;

@@ -668,6 +668,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                     fld = getModule().getPersistentField(field.getIndex());
                     @SuppressWarnings("unchecked")
                     List<DcObject> references = (List<DcObject>) getValue(field.getIndex());
+                    references = Utilities.sort(references);
+                    
                     if (references == null || references.size() == 0) {
                         setValue(fld.getIndex(), null);
                     } else {

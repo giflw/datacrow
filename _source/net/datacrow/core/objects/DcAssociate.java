@@ -58,14 +58,31 @@ public class DcAssociate extends DcObject {
     @Override
     protected void beforeSave() throws ValidationException {
         setName();
+        super.beforeSave();
     }
     
-    /**
+//    @Override
+//	public void setValue(int index, Object o) {
+//		super.setValue(index, o);
+//		if (index == DcAssociate._A_NAME ||
+//		    index == DcAssociate._E_FIRSTNAME ||
+//		    index == DcAssociate._F_LASTTNAME) {
+//			
+//			setName();
+//		}
+//	}
+
+	@Override
+	public int getDefaultSortFieldIdx() {
+		return DcAssociate._A_NAME;
+	}
+
+	/**
      * Sets the various name parts. The last and first name are calculated if only the
      * full name is available. If only the last and first name are available the full name
      * is created out of these parts.
      */
-    public void setName() throws ValidationException {
+    public void setName() {
         String name = (String) getValue(DcAssociate._A_NAME);
         String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
         String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
@@ -88,12 +105,12 @@ public class DcAssociate extends DcObject {
         	lastname = Utilities.getLastName(name);
         	name = Utilities.getName(firstname, lastname, company);
 
-        	setValue(DcAssociate._A_NAME, name);
-            setValue(DcAssociate._E_FIRSTNAME, firstname);
-            setValue(DcAssociate._F_LASTTNAME, lastname);
+        	setValueLowLevel(DcAssociate._A_NAME, name);
+        	setValueLowLevel(DcAssociate._E_FIRSTNAME, firstname);
+        	setValueLowLevel(DcAssociate._F_LASTTNAME, lastname);
         }
         
-        super.beforeSave();
+        
     }
 
     @Override

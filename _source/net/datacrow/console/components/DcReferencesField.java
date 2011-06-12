@@ -35,7 +35,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -49,7 +48,6 @@ import net.datacrow.console.windows.DcReferencesDialog;
 import net.datacrow.console.windows.itemforms.IItemFormListener;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.MappingModule;
 import net.datacrow.core.objects.DcMapping;
@@ -57,7 +55,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
-import net.datacrow.util.comparators.DcObjectComparator;
 
 public class DcReferencesField extends JComponent implements IComponent, ActionListener, IItemFormListener, MouseListener {
 
@@ -170,23 +167,10 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         if (references == null)
             return;
         
-        List<DcObject> items = new ArrayList<DcObject>();
-        for (DcObject dco : references) {
-            if (dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE) {
-                DcObject ref = ((DcMapping) dco).getReferencedObject();
-                if (ref != null) items.add(ref);
-            } else {
-                items.add(dco);
-            }
-        }
-        
-        if (items.size() == 0) return;
-        
-        int index = items.size() > 0 ? items.get(0).getDefaultSortFieldIdx() : 0;
-        Collections.sort(items, new DcObjectComparator(index));
+        references = Utilities.sort(references);
 
         StringBuffer desc = new StringBuffer("<html><body><div " + Utilities.getHtmlStyle() + ">");
-        desc.append(fld.createLinks(items));
+        desc.append(fld.createLinks(references));
         desc.append("</div></body></html>");
         
         fld.setHtml(desc.toString());

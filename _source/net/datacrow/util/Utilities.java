@@ -55,6 +55,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -68,10 +70,14 @@ import javax.swing.filechooser.FileSystemView;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.comparators.DcObjectComparator;
 
 import org.apache.log4j.Logger;
 import org.hsqldb.Token;
@@ -143,6 +149,51 @@ public class Utilities {
         	return firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
                    firstname.length() == 0 ? lastname : firstname;
         }
+    }
+    
+    public static List<DcObject> sort(List<DcObject> items) {
+    	boolean mappings = false;
+    	
+    	if (items == null)
+    		return null;
+    	
+    	List<DcObject> result = new ArrayList<DcObject>(); 
+    	
+        List<DcObject> references = new ArrayList<DcObject>();
+        for (DcObject reference : items) {
+            if (reference.getModule().getType() == DcModule._TYPE_MAPPING_MODULE) {
+                DcObject ref = ((DcMapping) reference).getReferencedObject();
+                if (ref.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE)
+                	((DcAssociate )ref).setName();
+                
+                if (ref != null) references.add(ref);
+                
+                mappings = true;
+            } else {
+                if (reference.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE)
+                	((DcAssociate )reference).setName();
+            	
+            	references.add(reference);
+            }
+        }
+        
+        int sortIdx = references.size() > 0 ? references.get(0).getDefaultSortFieldIdx() : 0;
+        Collections.sort(references, new DcObjectComparator(sortIdx));
+        
+        if (mappings) {
+        	for (DcObject reference : references) {
+        		for (DcObject mapping : items) {
+        			if (mapping.getValue(DcMapping._B_REFERENCED_ID).equals(reference.getID())) {
+        				result.add(mapping);
+        				break;
+        			}
+        		}
+        	}
+        } else {
+        	result.addAll(references);
+        }
+        
+        return result;
     }
     
     public static Object getQueryValue(Object o, DcField field) {

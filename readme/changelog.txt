@@ -19,6 +19,8 @@ Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: producti
 - File Renamer functionality was broken due to performance problems.
 - Possible undetected closure of the database connection.
 - Discogs.com service was broken.
+- References not correctly cleaned after removing an item.
+- References are now always alphabetically ordered. 
 
 * Fix Sourceforge.net
 
