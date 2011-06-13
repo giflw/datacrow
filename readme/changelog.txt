@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.8  [Released on June 13, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -21,8 +21,8 @@ Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: producti
 - Discogs.com service was broken.
 - References not correctly cleaned after removing an item.
 - References are now always alphabetically ordered. 
-
-* Fix Sourceforge.net
+- Fields not visible after creating a module.
+- Database is locked after creating a backup (restarting fixes the problem).
 
 [Changed]
 - For persons (such as artists and authors) the name field has been changed to read 
@@ -31,20 +31,18 @@ Data Crow 3.9.8  [Released on June xx, 2011]  [testing: high]  [target: producti
   or a company. For persons, the name will read "Lastname, firstname". For companies
   no name conversion is done.
 - Picture field can no longer be set to be a descriptive field.
-- For assocaties the descriptive field can now no longer be set manually, it will always 
+- For associates the descriptive field can now no longer be set manually, it will always 
   be the name field.
- 
-
 - Define fields in alter and create module wizard has been changed to include:
-  * Required?
-  * Descriptive?
-  * Key?
-  * Enabled?
-  * Tab (for itemforms)
-  * Show in quick view
+  * Required = is the field mandatory
+  * Descriptive = does the value of this field describe the item
+  * Is key field = is this field use to check whether the item is unique 
+  * Tab = the tab of the item form in which the field is placed (replaces the 
+    "technical info" check box).
 - Added an extra step to the module wizard to explain the additional settings that can 
-  be done for the module after Data Crow has been restarted.   
-- Added General Field Setting to indicate if the field should be available for charts.
+  be done for the module after Data Crow has been restarted.
+- Order of the labels in the chart panel has been changed.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.7  [Released on May 12, 2011]  [testing: high]  [target: production]
