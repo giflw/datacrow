@@ -57,6 +57,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
@@ -148,6 +149,13 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             }
         }
         
+        if (field.getDefinition() != null) {
+            checkDescriptive.setSelected(field.getDefinition().isDescriptive());
+            checkKeyField.setSelected(field.getDefinition().isUnique());
+            checkRequired.setSelected(field.getDefinition().isRequired());
+            comboTabs.setSelectedItem(field.getDefinition().getTab());
+        }
+        
         if (existingField)
             textName.setEditable(false);
     }
@@ -208,6 +216,17 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             field.setValueType(ft.getValueType());
             field.setFieldType(ft.getIndex());
             field.setOverwritable(true);
+            
+            if (!update) {
+                field.setDefinition(new DcFieldDefinition(
+                        field.getIndex(), 
+                        null, 
+                        true, 
+                        checkRequired.isSelected(), 
+                        checkDescriptive.isSelected(), 
+                        checkKeyField.isSelected(), 
+                        (String) comboTabs.getSelectedItem()));
+            }
             
             close();
             

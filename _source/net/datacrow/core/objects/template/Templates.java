@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -36,6 +38,8 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
 
 public class Templates {
+    
+    private static Logger logger = Logger.getLogger(Templates.class.getName());
     
     private static final Collection<DcTemplate> templates = new ArrayList<DcTemplate>();
     
@@ -50,9 +54,8 @@ public class Templates {
                 	for (DcObject dco : DataManager.get(templateModule.getIndex(), null))
                 		templates.add((DcTemplate) dco);
                 } catch (Exception e) {
-                	for (DcObject dco : DataManager.get(templateModule.getIndex(), null))
-                		templates.add((DcTemplate) dco);
-                	e.printStackTrace();
+                    logger.error("Could not refresh the taemplate list for " + module, e);
+
                 }
             }
         }

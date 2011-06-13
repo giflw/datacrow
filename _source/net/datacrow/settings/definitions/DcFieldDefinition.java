@@ -89,6 +89,22 @@ public class DcFieldDefinition extends Definition {
         return tab;
     }
     
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setDescriptive(boolean descriptive) {
+        this.descriptive = descriptive;
+    }
+
+    public String getTab() {
+        return tab;
+    }
+    
     public String getTab(int module) {
         if (Utilities.isEmpty(tab)) {
             DcField field = DcModules.get(module).getField(index);
@@ -121,11 +137,6 @@ public class DcFieldDefinition extends Definition {
     public boolean isDescriptive() {
         return descriptive;
     }
-
-    public void isDescriptive(boolean b) {
-        this.descriptive = b;
-    }
-
     
     public String getLabel() {
         return label;

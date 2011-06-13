@@ -41,7 +41,10 @@ import net.datacrow.core.modules.ModuleJar;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcModuleSettings;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.util.DcSwingUtilities;
 
 public class CreateModuleWizard extends Wizard {
@@ -103,8 +106,30 @@ public class CreateModuleWizard extends Wizard {
             
             module.setServingMultipleModules(true);
 
-            DcModules.register(DcModules.convert(module));
-            DcModules.registerPropertyModules(DcModules.convert(module));
+            DcModule result = DcModules.convert(module);
+            DcModules.register(result);
+            DcModules.registerPropertyModules(result);
+
+            DcModuleSettings settings = new DcModuleSettings(result);
+            DcFieldDefinitions definitions = (DcFieldDefinitions) settings.getDefinitions(DcRepository.ModuleSettings.stFieldDefinitions);
+            DcFieldDefinition definition;
+            String tab;
+            for (XmlField field : module.getFields()) {
+                definition = definitions.get(field.getIndex());
+                
+                if (field.getDefinition() != null) {
+                    tab = field.getDefinition().getTab().equals(DcResources.getText("lblInformation")) ? "lblInformation" :
+                          field.getDefinition().getTab().equals(DcResources.getText("lblSummary")) ? "lblSummary" :
+                          "lblTechnicalInfo";
+                    
+                    definition.setTab(tab);
+                    definition.setUnique(field.getDefinition().isUnique());
+                    definition.setDescriptive(field.getDefinition().isDescriptive());
+                    definition.setRequired(field.getDefinition().isRequired());
+                }
+            }
+            settings.set(DcRepository.ModuleSettings.stEnabled, Boolean.TRUE);
+            settings.save();
             
             close();
         } catch (Exception e) {

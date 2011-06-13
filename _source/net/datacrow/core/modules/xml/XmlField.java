@@ -30,6 +30,7 @@ import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.InvalidValueException;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.XMLParser;
 
 import org.w3c.dom.Element;
@@ -56,7 +57,9 @@ public class XmlField extends XmlObject {
     private boolean readonly;
     private boolean searchable;
     private boolean overwritable;
-   
+
+    private DcFieldDefinition definition;
+    
     /**
      * Creates an empty instance.
      */
@@ -110,6 +113,14 @@ public class XmlField extends XmlObject {
         }
     }
     
+    public DcFieldDefinition getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(DcFieldDefinition definition) {
+        this.definition = definition;
+    }
+
     public void setModule(int module) {
         this.module = module;
     }

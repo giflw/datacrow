@@ -122,6 +122,8 @@ public class XmlModuleWriter {
             // re-use pre-existing field index or create a new one
             int index = field.getIndex() > 0 ? field.getIndex() : counter;
             
+            field.setIndex(index);
+            
             // add the index to the list (multiple occurences are okay..)
             indices.add(index);
 
