@@ -41,8 +41,8 @@ import net.datacrow.core.modules.ModuleJar;
 import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcModuleSettings;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.Settings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
 import net.datacrow.util.DcSwingUtilities;
@@ -110,20 +110,15 @@ public class CreateModuleWizard extends Wizard {
             DcModules.register(result);
             DcModules.registerPropertyModules(result);
 
-            DcModuleSettings settings = new DcModuleSettings(result);
+            Settings settings = result.getSettings();
             DcFieldDefinitions definitions = (DcFieldDefinitions) settings.getDefinitions(DcRepository.ModuleSettings.stFieldDefinitions);
             DcFieldDefinition definition;
-            String tab;
             for (XmlField field : module.getFields()) {
                 definition = definitions.get(field.getIndex());
                 
                 if (field.getDefinition() != null) {
-                    tab = field.getDefinition().getTab();//.equals(DcResources.getText("lblInformation")) ? "lblInformation" :
-                          //field.getDefinition().getTab().equals(DcResources.getText("lblSummary")) ? "lblSummary" :
-                        //  "lblTechnicalInfo";
-                    
                     definition.setEnabled(true);
-                    definition.setTab(tab);
+                    definition.setTab(field.getDefinition().getTab());
                     definition.setUnique(field.getDefinition().isUnique());
                     definition.setDescriptive(field.getDefinition().isDescriptive());
                     definition.setRequired(field.getDefinition().isRequired());

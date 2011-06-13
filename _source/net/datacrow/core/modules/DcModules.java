@@ -149,8 +149,7 @@ public class DcModules {
                 if (xmlModule != null && xmlModule.isChanged() && !module.isAbstract()) 
                     new ModuleJar(module.getXmlModule()).save();
             } catch (Exception e) {
-                logger.error("An error occurred while saving the module jar for module " +
-                             module.getLabel(), e);
+                logger.error("An error occurred while saving the module jar for module " + module.getLabel(), e);
             }
         }
     }
