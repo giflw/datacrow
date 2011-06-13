@@ -118,15 +118,16 @@ public class CreateModuleWizard extends Wizard {
                 definition = definitions.get(field.getIndex());
                 
                 if (field.getDefinition() != null) {
-                    tab = field.getDefinition().getTab().equals(DcResources.getText("lblInformation")) ? "lblInformation" :
-                          field.getDefinition().getTab().equals(DcResources.getText("lblSummary")) ? "lblSummary" :
-                          "lblTechnicalInfo";
+                    tab = field.getDefinition().getTab();//.equals(DcResources.getText("lblInformation")) ? "lblInformation" :
+                          //field.getDefinition().getTab().equals(DcResources.getText("lblSummary")) ? "lblSummary" :
+                        //  "lblTechnicalInfo";
                     
                     definition.setEnabled(true);
                     definition.setTab(tab);
                     definition.setUnique(field.getDefinition().isUnique());
                     definition.setDescriptive(field.getDefinition().isDescriptive());
                     definition.setRequired(field.getDefinition().isRequired());
+                    definition.setLabel("");
                 }
             }
             settings.set(DcRepository.ModuleSettings.stEnabled, Boolean.TRUE);

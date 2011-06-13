@@ -125,6 +125,7 @@ public class DcFieldDefinitions implements IDefinitions {
         String[] values = c.toArray(new String[0]);
         
         int field = Integer.valueOf(values[0]).intValue();
+        
         String name = values[1] == null || values[1].toLowerCase().equals("null") ? "" : values[1];
         boolean enabled = Boolean.valueOf(values[2]).booleanValue();
         boolean required = Boolean.valueOf(values[3]).booleanValue();

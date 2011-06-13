@@ -231,6 +231,10 @@ public class ItemForm extends DcFrame implements ActionListener {
                         int index = definition.getIndex();
                         DcField field = dco.getField(index);
                         JComponent component = fields.get(field);
+                        
+                        if (component == null)
+                            break;
+                        
                         if (    component.isShowing() &&
                         		(component instanceof JTextField || component instanceof DcLongTextField) && 
                                 field.isEnabled() && component.getParent() != null) {
