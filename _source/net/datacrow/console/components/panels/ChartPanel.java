@@ -34,7 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -174,7 +174,7 @@ public class ChartPanel extends DcPanel implements ActionListener {
         }
         
         // create the data map. exclude zero counts
-        Map<String, Integer> dataMap = new HashMap<String, Integer>();
+        Map<String, Integer> dataMap = new LinkedHashMap<String, Integer>();
         ResultSet rs = null;
         
         try {

@@ -42,6 +42,7 @@ Data Crow 3.9.8  [Released on June 13, 2011]  [testing: high]  [target: producti
 - Added an extra step to the module wizard to explain the additional settings that can 
   be done for the module after Data Crow has been restarted.
 - Order of the labels in the chart panel has been changed.
+- Updated the help in many places.
 
 
 -----------------------------------------------------------------------------------------

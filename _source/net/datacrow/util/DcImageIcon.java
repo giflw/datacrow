@@ -81,7 +81,8 @@ public class DcImageIcon extends ImageIcon {
         if (file == null && filename == null) {
             try {
                 filename = getDescription();
-                file = new File(filename);
+                if (filename != null)
+                    file = new File(filename);
             } catch (Exception e) {
                 logger.debug("Failed to get filename as defined in the description", e);
             }
