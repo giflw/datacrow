@@ -122,6 +122,7 @@ public class CreateModuleWizard extends Wizard {
                           field.getDefinition().getTab().equals(DcResources.getText("lblSummary")) ? "lblSummary" :
                           "lblTechnicalInfo";
                     
+                    definition.setEnabled(true);
                     definition.setTab(tab);
                     definition.setUnique(field.getDefinition().isUnique());
                     definition.setDescriptive(field.getDefinition().isDescriptive());
