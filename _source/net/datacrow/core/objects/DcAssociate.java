@@ -25,6 +25,7 @@
 
 package net.datacrow.core.objects;
 
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.Utilities;
 
 /**
@@ -57,20 +58,22 @@ public class DcAssociate extends DcObject {
      */
     @Override
     protected void beforeSave() throws ValidationException {
+        if (!isFilled(DcAssociate._G_IS_COMPANY)) {
+            if (getModule().getIndex() == DcModules._SOFTWAREPUBLISHER ||
+                getModule().getIndex() == DcModules._DEVELOPER ||
+                getModule().getIndex() == DcModules._BOOKPUBLISHER ||
+                getModule().getIndex() == DcModules._AUTHOR) {
+                
+                setValue(DcAssociate._G_IS_COMPANY, Boolean.TRUE);
+            } else {
+                setValue(DcAssociate._G_IS_COMPANY, Boolean.FALSE);
+            }
+        }
+        
         setName();
+        
         super.beforeSave();
     }
-    
-//    @Override
-//	public void setValue(int index, Object o) {
-//		super.setValue(index, o);
-//		if (index == DcAssociate._A_NAME ||
-//		    index == DcAssociate._E_FIRSTNAME ||
-//		    index == DcAssociate._F_LASTTNAME) {
-//			
-//			setName();
-//		}
-//	}
 
 	@Override
 	public int getDefaultSortFieldIdx() {

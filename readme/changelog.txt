@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.9  [Released on June xx, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Changed]
+- Default value for "Company / Organization" for associates is now set by default for
+  company modules.
+  
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.8  [Released on June 13, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
