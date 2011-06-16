@@ -130,4 +130,15 @@ public class DcAssociate extends DcObject {
     public String getName() {
         return toString();
     }    
+    
+    /**
+     * Returns the name formatted as First name, Last name.
+     */
+    public String getNameNormal() {
+        if ((Boolean) getValue(DcAssociate._G_IS_COMPANY)) {
+            return toString();
+        } else {
+            return (getDisplayString(DcAssociate._E_FIRSTNAME) + " " + getDisplayString(DcAssociate._F_LASTTNAME)).trim();
+        }
+    }     
 }

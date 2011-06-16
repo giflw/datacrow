@@ -154,15 +154,15 @@ public class Utilities {
     public static List<DcObject> sort(List<DcObject> items) {
     	boolean mappings = false;
     	
-    	if (items == null)
-    		return null;
+    	if (items == null || items.size() <= 1)
+    		return items;
     	
     	List<DcObject> result = new ArrayList<DcObject>(); 
-    	
-        List<DcObject> references = new ArrayList<DcObject>();
+    	List<DcObject> references = new ArrayList<DcObject>();
+        DcObject ref;
         for (DcObject reference : items) {
             if (reference.getModule().getType() == DcModule._TYPE_MAPPING_MODULE) {
-                DcObject ref = ((DcMapping) reference).getReferencedObject();
+                ref = ((DcMapping) reference).getReferencedObject();
                 if (ref.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE)
                 	((DcAssociate )ref).setName();
                 
@@ -171,7 +171,7 @@ public class Utilities {
                 mappings = true;
             } else {
                 if (reference.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE)
-                	((DcAssociate )reference).setName();
+                	((DcAssociate ) reference).setName();
             	
             	references.add(reference);
             }

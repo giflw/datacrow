@@ -33,8 +33,11 @@ import java.util.List;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcThread;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.resources.DcResources;
@@ -104,6 +107,7 @@ public class CsvExporter extends ItemExporter {
             items = null;
         }
         
+        @SuppressWarnings("unchecked")
         public void create() throws Exception {
             
             ItemExporterUtilities utilities = new ItemExporterUtilities(file.toString(), settings);
@@ -135,7 +139,8 @@ public class CsvExporter extends ItemExporter {
                 
                 client.notifyMessage(DcResources.getText("msgExportingX", dco.toString()));
                 int fieldCounter = 0;
-                
+                Object o;
+                String s = "";
                 for (int fieldIdx : getFields()) {
                     if (isCanceled()) break;
 
@@ -143,12 +148,27 @@ public class CsvExporter extends ItemExporter {
                     
                     if (isCanceled()) break;
 
+                    o = dco.getValue(field.getIndex());
+                    
                     if (field != null) { 
-                        String s = "";
+                        s = "";
+                        
                         if (field.getFieldType() == ComponentFactory._PICTUREFIELD) {
-                            if (	dco.getValue(field.getIndex()) != null && 
-                            		dco.getValue(field.getIndex()).toString().length() >= 10)
+                            if (o != null && o.toString().length() >= 10)
                                s = utilities.getImageURL((Picture) dco.getValue(field.getIndex()));
+                        
+                        } else if (o instanceof Collection && 
+                                   DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+                            
+                           for (DcObject subDco : (Collection<DcObject>) o) {
+                                if (subDco instanceof DcMapping)
+                                    subDco = ((DcMapping) subDco).getReferencedObject();
+
+                                if (subDco != null) { 
+                                    s += (s.length() > 0 ? ", " : "");
+                                    s += ((DcAssociate) subDco).getNameNormal(); 
+                                }
+                            }
                         } else {
                             s = dco.getDisplayString(field.getIndex());
                         }

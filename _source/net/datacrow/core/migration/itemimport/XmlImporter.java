@@ -72,7 +72,7 @@ public class XmlImporter extends ItemImporter {
             for (DcField field : module.getFields()) {
                 
                 if ((field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION && field.getValueType() != DcRepository.ValueTypes._PICTURE) ||  
-                     field.getIndex() == DcObject._ID) continue;
+                     field.getIndex() == DcObject._ID || field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES) continue;
                 
                 String fieldName = Converter.getValidXmlTag(field.getSystemName());
                 NodeList nlField = eItem.getElementsByTagName(fieldName);

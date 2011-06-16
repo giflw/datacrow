@@ -739,6 +739,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         if (value != null) {
             if (index == _SYS_EXTERNAL_REFERENCES && getValue(index) != null && o != null ) {
                 mergeReferences((Collection<DcMapping>) o);
+            } else if (getField(index).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                o = Utilities.sort((List<DcObject>) o);
+                value.setValue(o, getModule().getField(index));
             } else {
                 value.setValue(o, getModule().getField(index));
             }

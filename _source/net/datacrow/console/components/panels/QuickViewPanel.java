@@ -393,8 +393,6 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                         int i = 0;
                         
                         List<DcObject> references = (List<DcObject>) dco.getValue(index);
-                        references = Utilities.sort(references);
-                                                
                         for (DcObject reference : references) {
                             if (i > 0 && horizontal)
                                 value += "&nbsp;&nbsp;";

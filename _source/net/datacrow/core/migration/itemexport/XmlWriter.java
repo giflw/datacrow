@@ -32,9 +32,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
@@ -122,18 +122,20 @@ public class XmlWriter extends XmlBaseWriter {
         newLine();
     }
     
+    @SuppressWarnings("unchecked")
     private void writeValue(DcObject dco, int field) throws IOException {
        Object o = dco.getValue(field);
-        
-        if (o instanceof Collection) {
+       
+       if (dco.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+           write(((DcAssociate) dco).getNameNormal());
+       } else if (o instanceof Collection) {
             newLine();
 
             tagIdent += (stepSize * 2);
             valueIdent += (stepSize * 2);
-            for (Iterator iter = ((Collection) o).iterator(); iter.hasNext(); ){
-                DcObject subDco = (DcObject) iter.next();
-                
-                if (subDco instanceof DcMapping)
+            
+            for (DcObject subDco : (Collection<DcObject>) o) {
+               if (subDco instanceof DcMapping)
                     subDco = ((DcMapping) subDco).getReferencedObject();
 
                 if (subDco != null) { 

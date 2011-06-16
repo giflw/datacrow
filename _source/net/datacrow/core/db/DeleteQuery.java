@@ -25,11 +25,13 @@
 
 package net.datacrow.core.db;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -136,9 +138,23 @@ public class DeleteQuery extends Query {
                 }
             }
             
+            File file;
+            boolean deleted;
             for (DcField field : dco.getFields()) {
-                if (field.getValueType() == DcRepository.ValueTypes._PICTURE && dco.isFilled(field.getIndex()))
-                    deleteImage((Picture) dco.getValue(field.getIndex()));
+                
+                if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                    file = new File(DataCrow.imageDir, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
+                    if (file.exists()) {
+                        deleted = file.delete();
+                        logger.debug("Delete file " + file + " [success = " + deleted + "]");
+                    }
+                    
+                    file = new File(DataCrow.imageDir, dco.getID() + "_" + field.getDatabaseFieldName() + "_small.jpg");
+                    if (file.exists()) {
+                        deleted = file.delete();
+                        logger.debug("Delete file " + file + " [success = " + deleted + "]");
+                    }
+                }
                 
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                 	DcModule m = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));

@@ -2,10 +2,19 @@
 Data Crow 3.9.9  [Released on June xx, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
+[Fixed]
+- Sorting and format of person names has been corrected for reports.
+- Images were not removed from the media images folders after the item has been deleted.
+  An upgrade process will remove all images that really should have been deleted 
+  on removing the accompanying items.
+
 [Changed]
 - Default value for "Company / Organization" for associates is now set by default for
-  company modules.
-  
+  company modules. Note that this value can be overruled by using a default template.
+- The CSV importer will now import references correctly. Before it only supported single 
+  values. Now it actually supports multiple items (genres, categories). Values need to
+  be comma separated.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.8  [Released on June 13, 2011]  [testing: high]  [target: production]

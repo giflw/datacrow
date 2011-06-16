@@ -25,6 +25,7 @@
 
 package net.datacrow.core.db.upgrade;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -52,7 +53,7 @@ import org.apache.log4j.Logger;
  * If possible, perform upgrades / changes in the DataManagerConversion class!
  * 
  * Converts the current database before the actual module tables are created / updated.
- * This means that the code here defies workflow logic and is strictly to be used for
+ * This means that the code here defies work flow logic and is strictly to be used for
  * table conversions and migration out of the scope of the normal module upgrade code.
  * 
  * The automatic database correction script runs after this manual upgrade.
@@ -70,27 +71,40 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             LogForm lf = null;
             if (v.isOlder(new Version(3, 9, 2, 0))) {
                 lf = new LogForm();
-                DcSwingUtilities.displayMessage("Data Crow will perform a non critical upgrade. This process will take a couple of minutes.");
+                DcSwingUtilities.displayMessage(
+                        "Data Crow will perform a non critical upgrade. This process will take a couple of minutes.");
             	upgraded = fillUIPersistFields();
             }
 
             if (v.isOlder(new Version(3, 9, 6, 0))) {
                 lf = new LogForm();
-                DcSwingUtilities.displayMessage("Data Crow will perform a non critical upgrade to clear unwanted characters from languages, countries and other items.");
+                DcSwingUtilities.displayMessage(
+                        "Data Crow will perform a non critical upgrade to clear unwanted characters from languages, countries and other items.");
                 upgraded = cleanupNames();
             }
             
             if (v.isOlder(new Version(3, 9, 8, 0))) {
                 lf = new LogForm();
-                DcSwingUtilities.displayMessage("The names of all persons (actors, authors, etc) will be formatted to read <Lastname, Firstname>");
+                DcSwingUtilities.displayMessage(
+                		"- Ghost references will be removed. \n " +
+                		"- The names of all persons (actors, authors, etc) will be formatted to read \"Lastname, Firstname\".\n" +
+                		"- The sort index for persons will be recalculated.");
                 upgraded = cleanupReferences();
                 upgraded = reverseNames();
                 upgraded = fillUIPersistFieldsPersons();
             }
             
+            if (v.isOlder(new Version(3, 9, 9, 0))) {
+                lf = new LogForm();
+                DcSwingUtilities.displayMessage(
+                        "Pictures of previously deleted items will now be removed. This is a non crucial system task which can take a few minutes.");
+                upgraded = cleanupPictures();
+            }
+            
             if (upgraded) {
                 lf.close();
-                DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
+                DcSwingUtilities.displayMessage(
+                        "The upgrade was successful. Data Crow will now continue.");
                 DataCrow.showSplashScreen(true);
             }
             
@@ -102,6 +116,45 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private boolean cleanupPictures() {
+        
+        String sql = "SELECT DISTINCT OBJECTID FROM PICTURE";
+        boolean success = false;
+        try {
+            ResultSet rs = DatabaseManager.executeSQL(sql);
+            Collection<String> ids = new ArrayList<String>();
+            
+            while (rs.next()) {
+                ids.add(rs.getString(1).toLowerCase());
+            }
+            
+            rs.close();
+            
+            String id;
+            File f;
+            for (String file : new File(DataCrow.imageDir).list()) {
+                
+                if (file.indexOf("_") == -1) {
+                    logger.info("Skipped the following file " + file);
+                    continue;
+                }
+                    
+                id = file.substring(0, file.indexOf("_")).toLowerCase();
+                if (!ids.contains(id)) {
+                    f = new File(DataCrow.imageDir, file);
+                    f.delete();
+                    logger.info("Removed file " + f);
+                }
+            }
+            
+            success = true;
+        } catch (SQLException se) {
+            logger.error("Error while cleaning pictures. Not crucial; no loss of data!", se);
+        }            
+        
+        return success;
     }
     
     private boolean cleanupReferences() {

@@ -167,8 +167,6 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         if (references == null)
             return;
         
-        references = Utilities.sort(references);
-
         StringBuffer desc = new StringBuffer("<html><body><div " + Utilities.getHtmlStyle() + ">");
         desc.append(fld.createLinks(references));
         desc.append("</div></body></html>");
