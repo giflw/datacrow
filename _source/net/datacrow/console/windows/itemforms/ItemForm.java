@@ -487,9 +487,6 @@ public class ItemForm extends DcFrame implements ActionListener {
             Picture picture = (Picture) dcoOrig.getValue(fieldIdx);
             changed = (picture != null && (picture.isEdited() || picture.isNew() || picture.isDeleted())) ||
                       ((DcPictureField) component).isChanged();
-
-            // obsolete:
-            // changed = !changed && o instanceof DcImageIcon ? ((DcImageIcon) o).getCurrentBytes() != null : changed;
             
             if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
         }

@@ -46,7 +46,7 @@ public class SoftwareSynchronizer extends DefaultSynchronizer {
     protected String getSearchString(int field, IServer server) {
         if (field == Software._A_TITLE && server.getName().equals("MobyGames") && dco.getValue(Software._H_PLATFORM) != null) {
             String s = super.getSearchString(field, server);
-            return !s.toLowerCase().contains(" for ") ? super.getSearchString(field, server) +  " " + dco.getDisplayString(Software._H_PLATFORM) : s;
+            return !s.toLowerCase().contains(" for ") ? super.getSearchString(field, server) +  " for " + dco.getDisplayString(Software._H_PLATFORM) : s;
         } else {
             return super.getSearchString(field, server);
         }
