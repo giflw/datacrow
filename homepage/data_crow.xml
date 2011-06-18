@@ -2,7 +2,7 @@
 <XML_DIZ_INFO>
   <MASTER_PAD_VERSION_INFO>
     <MASTER_PAD_VERSION>3.11</MASTER_PAD_VERSION>
-    <MASTER_PAD_EDITOR>PADManager 2.0.68</MASTER_PAD_EDITOR>
+    <MASTER_PAD_EDITOR>PADManager 2.0.69</MASTER_PAD_EDITOR>
     <MASTER_PAD_EDITOR_URL>http://robosoft.rudenko.com</MASTER_PAD_EDITOR_URL>
     <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
   </MASTER_PAD_VERSION_INFO>
@@ -68,9 +68,9 @@
   </NewsFeed>
   <Program_Info>
     <Program_Name>Data Crow</Program_Name>
-    <Program_Version>3.9.7</Program_Version>
-    <Program_Release_Month>05</Program_Release_Month>
-    <Program_Release_Day>12</Program_Release_Day>
+    <Program_Version>3.9.8</Program_Version>
+    <Program_Release_Month>06</Program_Release_Month>
+    <Program_Release_Day>13</Program_Release_Day>
     <Program_Release_Year>2011</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
     <Program_Type>Freeware</Program_Type>
@@ -78,7 +78,7 @@
     <Program_Install_Support>Install and Uninstall</Program_Install_Support>
     <Program_OS_Support>WinXP,WinVista,WinVista x64,Win2000,WinOther,Other,Mac OS X,Mac Other,WinServer,Win98,Linux,Java,Linux Gnome,Linux GPL,Linux Open Source</Program_OS_Support>
     <Program_Language>English,Dutch,French,German,Italian,Spanish</Program_Language>
-    <Program_Change_Info>Important bug fixes.</Program_Change_Info>
+    <Program_Change_Info>Important bug fixes and minor changes.</Program_Change_Info>
     <Program_System_Requirements>512MB of memory / P3 800MHZ</Program_System_Requirements>
     <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
     <File_Info>
@@ -118,7 +118,7 @@
       <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.9.7/datacrow_3_9_7_installer.zip</Primary_Download_URL>
+      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.9.8/datacrow_3_9_8_installer.zip</Primary_Download_URL>
       <Secondary_Download_URL></Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>

@@ -58,20 +58,7 @@ public class DcAssociate extends DcObject {
      */
     @Override
     protected void beforeSave() throws ValidationException {
-        if (!isFilled(DcAssociate._G_IS_COMPANY)) {
-            if (getModule().getIndex() == DcModules._SOFTWAREPUBLISHER ||
-                getModule().getIndex() == DcModules._DEVELOPER ||
-                getModule().getIndex() == DcModules._BOOKPUBLISHER ||
-                getModule().getIndex() == DcModules._AUTHOR) {
-                
-                setValue(DcAssociate._G_IS_COMPANY, Boolean.TRUE);
-            } else {
-                setValue(DcAssociate._G_IS_COMPANY, Boolean.FALSE);
-            }
-        }
-        
         setName();
-        
         super.beforeSave();
     }
 
@@ -90,8 +77,16 @@ public class DcAssociate extends DcObject {
         String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
         String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
         
-        if (!isFilled(DcAssociate._G_IS_COMPANY))
-        	setValue(DcAssociate._G_IS_COMPANY, Boolean.FALSE);
+        if (!isFilled(DcAssociate._G_IS_COMPANY)) {
+            if (getModule().getIndex() == DcModules._SOFTWAREPUBLISHER ||
+                getModule().getIndex() == DcModules._DEVELOPER ||
+                getModule().getIndex() == DcModules._BOOKPUBLISHER) {
+                
+                setValue(DcAssociate._G_IS_COMPANY, Boolean.TRUE);
+            } else {
+                setValue(DcAssociate._G_IS_COMPANY, Boolean.FALSE);
+            }
+        }
         
         boolean company = (Boolean) getValue(DcAssociate._G_IS_COMPANY);
         
@@ -112,8 +107,6 @@ public class DcAssociate extends DcObject {
         	setValueLowLevel(DcAssociate._E_FIRSTNAME, firstname);
         	setValueLowLevel(DcAssociate._F_LASTTNAME, lastname);
         }
-        
-        
     }
 
     @Override

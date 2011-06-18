@@ -97,8 +97,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             if (v.isOlder(new Version(3, 9, 9, 0))) {
                 lf = new LogForm();
                 DcSwingUtilities.displayMessage(
-                        "Pictures of previously deleted items will now be removed. This is a non crucial system task which can take a few minutes.");
+                        "- Names of authors will be corrected. \n" +
+                        "- Pictures of previously deleted items will now be removed. This is a non crucial system task which can take a few minutes.");
                 upgraded = cleanupPictures();
+                upgraded = reverseAuthorNames();
             }
             
             if (upgraded) {
@@ -199,6 +201,77 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
     		}
     	}
     	return true;
+    }
+
+    private boolean reverseAuthorNames() {
+
+        boolean upgraded = false;
+
+        String sql;
+        String firstname;
+        String lastname;
+        String name;
+        String id;
+        
+        Connection conn = DatabaseManager.getAdminConnection();
+        PreparedStatement ps = null;
+        
+        DcModule module = DcModules.get(DcModules._AUTHOR);
+
+        String fieldFn = module.getField(DcAssociate._E_FIRSTNAME).getDatabaseFieldName();
+        String fieldLn = module.getField(DcAssociate._F_LASTTNAME).getDatabaseFieldName();
+        String fieldN  = module.getField(DcAssociate._A_NAME).getDatabaseFieldName();
+        String fieldC  = module.getField(DcAssociate._G_IS_COMPANY).getDatabaseFieldName();
+
+        try {
+            sql = "update " + module.getTableName() + " set " + fieldC + " = false where " + fieldC + " = true";
+            DatabaseManager.executeSQL(sql);
+        } catch (SQLException se) {
+            logger.error("Could not mark " + module.getObjectNamePlural() + " as non-companies for module " + module, se);
+        }          
+        try {
+            sql = "select " + fieldFn + ", " + fieldLn + ", ID from " + module.getTableName() + " where " + fieldC + " is null or " + fieldC + " = false"; 
+            ResultSet rs = DatabaseManager.executeSQL(sql);
+            while (rs.next()) {
+                firstname = rs.getString(1);
+                lastname = rs.getString(2);
+                id = rs.getString(3);
+                
+                firstname = firstname == null ? "" : firstname.trim();
+                lastname = lastname == null ? "" : lastname.trim();
+                if (lastname.startsWith("(") && firstname.indexOf(" ") > -1) {
+                    String tmp = lastname;
+                    lastname = firstname.substring(firstname.indexOf(" ") + 1);
+                    firstname = firstname.substring(0, firstname.indexOf(" ")) + " " + tmp;
+                }
+                
+                name = firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
+                       firstname.length() == 0 ? lastname : firstname;
+                
+                sql = "update " + module.getTableName() + " set " + 
+                       fieldN + " = ? , " + 
+                       fieldFn + " = ?, " +
+                       fieldLn + " = ? " +
+                       "where ID = ?";
+                
+                ps = conn.prepareStatement(sql);
+                
+                ps.setString(1, name);
+                ps.setString(2, firstname);
+                ps.setString(3, lastname);
+                ps.setString(4, id);
+                
+                ps.execute();
+                ps.close();
+            }
+            
+            rs.close();
+            upgraded = true;
+        } catch (SQLException se) {
+            logger.error("Could not update " + module, se);
+        }
+
+        return upgraded;
     }
     
     private boolean reverseNames() {
