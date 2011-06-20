@@ -8,6 +8,7 @@ Data Crow 3.9.9  [Released on June 18, 2011]  [testing: high]  [target: producti
   An upgrade process will remove all images that really should have been deleted 
   on removing the accompanying items.
 - Images not always correctly updated by the online search.
+- Incorrect text maximum length for long text fields.
 
 [Changed]
 - Default value for "Company / Organization" for associates is now set by default for

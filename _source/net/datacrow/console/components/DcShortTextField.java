@@ -96,7 +96,7 @@ public class DcShortTextField extends JTextField implements IComponent {
     protected class ShortStringDocument extends PlainDocument {
         @Override
         public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
-            if (i + 1 > MAX_TEXT_LENGTH) {
+            if (i + 1 > MAX_TEXT_LENGTH && MAX_TEXT_LENGTH != 0) {
                 toolkit.beep();
             } else {
                 super.insertString(i, s, attributeset);
