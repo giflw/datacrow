@@ -105,9 +105,10 @@ public class DeleteQuery extends Query {
                 return null;
             }
 
-            if (dco.getModule().canBeLend())
+            if (dco.getModule().canBeLend()) {
                 stmt.execute("DELETE FROM " + DcModules.get(DcModules._LOAN).getTableName() + " WHERE " +
                              DcModules.get(DcModules._LOAN).getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+            }
 
             // Delete children. Ignore any abstract module (parent and/or children)
             if (    dco.getModule().getChild() != null && 

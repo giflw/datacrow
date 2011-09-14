@@ -142,16 +142,16 @@ public class UpdateQuery extends Query {
                 ps.close();
             }
     
-            int counter = 0;
             for (Collection<DcMapping> c : references) {
-                
-                counter = 0;
                 for (DcMapping mapping : c) {
-                    stmt.execute("INSERT INTO " + mapping.getTableName() + 
-                                 " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
-                                 mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                                 ") \r\n VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "');");
-                    counter++;
+                    try {
+                        stmt.execute("INSERT INTO " + mapping.getTableName() + 
+                                     " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
+                                     mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
+                                     ") \r\n VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "');");
+                    } catch (SQLException e) {
+                        logger.error("An error occured while inserting the following reference " + mapping, e);
+                    }  
                 }
             }
             

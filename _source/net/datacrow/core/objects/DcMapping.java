@@ -145,7 +145,7 @@ public class DcMapping extends DcObject {
 
 	@Override
     public String toString() {
-        return getReferencedObject() == null ? "" : getReferencedObject().toString();//DataManager.getDisplayString(getReferencedModuleIdx(), (String) getValueDef(_B_REFERENCED_ID).getValue());
+        return getReferencedObject() == null ? "" : getReferencedObject().toString();
     }
     
     @Override

@@ -124,21 +124,33 @@ public class InsertQuery extends Query {
             ps.execute();
             
             for (DcMapping mapping : references) {
-                stmt.execute("INSERT INTO " + mapping.getTableName() + 
-                             " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
-                             mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                             ") VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "')");
+                try {
+                    stmt.execute("INSERT INTO " + mapping.getTableName() + 
+                                 " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
+                                 mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
+                                 ") VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "')");
+                } catch (SQLException e) {
+                    logger.error("An error occured while inserting the following reference " + mapping, e);
+                }                    
             }
             
             for (Picture picture : pictures) {
-                new InsertQuery(picture).run();
-                saveImage(picture);
+                try {
+                    new InsertQuery(picture).run();
+                    saveImage(picture);
+                } catch (SQLException e) {
+                    logger.error("An error occured while inserting the following picture: " + picture, e);
+                }   
             }
 
             if (dco.getCurrentChildren() != null) {
                 for (DcObject child : dco.getCurrentChildren()) {
-                    child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
-                    new InsertQuery(child).run();
+                    try {
+                        child.setValue(child.getParentReferenceFieldIndex(), dco.getID());
+                        new InsertQuery(child).run();
+                    } catch (SQLException e) {
+                        logger.error("An error occured while inserting the following child object: " + child, e);
+                    }                         
                 }
             }
             
