@@ -49,6 +49,8 @@ public class DcLongTextField extends JTextArea implements IComponent, MouseListe
         addMouseListener(this);
         undoListener = new DcUndoListenerer(this);
         addMouseListener(new DcEditorMouseListener());
+        setLineWrap(true);
+        setEditable(true);
     }
     
     public DcUndoListenerer getUndoListener() {

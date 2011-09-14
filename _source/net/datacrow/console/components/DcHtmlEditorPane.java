@@ -64,6 +64,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         setDocument(document);
         setEditable(false);
         setBounds(1,1,1,10);
+
         addHyperlinkListener(this);
         addMouseListener(new DcEditorMouseListener());
     }

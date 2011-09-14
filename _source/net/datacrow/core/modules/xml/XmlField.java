@@ -204,10 +204,14 @@ public class XmlField extends XmlObject {
     }
 
     /**
-     * The maximum length for the values for this field.
+     * Returns the maximum field length (characters positions).
+     * In case the field is of type long text field the maximum value will be
+     * the maximum integer (Integer.MAX_VALUE) value (maximum field setting is thus overruled).
      */
     public int getMaximumLength() {
-    	maximumLength = maximumLength == 0 && getValueType() == DcRepository.ValueTypes._STRING ? 255 : maximumLength;
+        if (maximumLength == 0 && getValueType() == DcRepository.ValueTypes._STRING) 
+            maximumLength = getFieldType() == ComponentFactory._LONGTEXTFIELD ? 0 : 255;
+        
         return maximumLength;
     }
 

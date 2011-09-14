@@ -760,7 +760,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             if (currentMappings != null) {
                 for (DcMapping mappingCurrent : currentMappings) {
                     DcObject referenceCurrent = mappingCurrent.getReferencedObject();
-                    exists = referenceCurrent.getValue(ExternalReference._EXTERNAL_ID_TYPE).equals(reference.getValue(ExternalReference._EXTERNAL_ID_TYPE));
+                    exists = referenceCurrent != null && referenceCurrent.getValue(ExternalReference._EXTERNAL_ID_TYPE).equals(reference.getValue(ExternalReference._EXTERNAL_ID_TYPE));
                     if (exists) {
                         mappingCurrent.setValue(DcMapping._B_REFERENCED_ID, mapping.getReferencedObject().getID());
                         getValueDef(DcObject._SYS_EXTERNAL_REFERENCES).setChanged(true);

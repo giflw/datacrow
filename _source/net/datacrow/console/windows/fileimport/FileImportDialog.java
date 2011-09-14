@@ -121,6 +121,14 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return DcModules.get(importer.getModule());
     }
 
+    /**
+     * TODO
+     * 
+     * This should not be called from the process but should be readily available.
+     * Change the implementation.
+     * 
+     * @deprecated
+     */
     @Override
     public DcObject getStorageMedium() {
         DcModule module = DcModules.get(importer.getModule());

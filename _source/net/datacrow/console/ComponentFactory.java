@@ -855,8 +855,6 @@ public final class ComponentFactory {
     public static final DcLongTextField getTextArea() {
         DcLongTextField textArea = new DcLongTextField();
         textArea.setWrapStyleWord(true);
-        textArea.setLineWrap(true);
-        textArea.setEditable(true);
         textArea.setMargin(new Insets(5,5,5,5));
         textArea.setFont(getStandardFont());
         return textArea;
