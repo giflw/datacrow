@@ -148,10 +148,14 @@ public class AssociateNameRewriterDialog extends DcDialog implements ActionListe
         panelSettings.add(checkEnabled,     Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(5, 5, 5, 5), 0, 0));
-        panelSettings.add(cbFormat,         Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
+        panelSettings.add(ComponentFactory.getLabel(DcResources.getText("lblNameDisplayFormat")),         
+                Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets(10, 5, 0, 5), 0, 0));
+        panelSettings.add(cbFormat,         Layout.getGBC(1, 1, 1, 1, 10.0, 1.0,
                 GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(10, 5, 0, 5), 0, 0));
-        panelSettings.add(buttonSave,       Layout.getGBC(0, 3, 1, 1, 1.0, 1.0,
+        panelSettings.add(buttonSave,       Layout.getGBC(1, 3, 1, 1, 1.0, 1.0,
                 GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
                 new Insets(5, 5, 5, 5), 0, 0));
         
@@ -308,7 +312,7 @@ public class AssociateNameRewriterDialog extends DcDialog implements ActionListe
                     if (!name.equals(newName)) {
                         DatabaseManager.executeSQL(
                                 "UPDATE " + module.getTableName() + " SET " + field.getDatabaseFieldName() + 
-                                " = '" + newName + "' WHERE ID = '" + ID + "'");
+                                " = '" + newName.replaceAll("'", "''") + "' WHERE ID = '" + ID + "'");
                     }
                     
                     updateProgressBar();
