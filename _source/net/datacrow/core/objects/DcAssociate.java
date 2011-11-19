@@ -25,7 +25,6 @@
 
 package net.datacrow.core.objects;
 
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.Utilities;
 
 /**
@@ -43,7 +42,6 @@ public class DcAssociate extends DcObject {
     public static final int _D_PHOTO = 4;
     public static final int _E_FIRSTNAME = 5;
     public static final int _F_LASTTNAME = 6;
-    public static final int _G_IS_COMPANY = 7;
     
     /**
      * Creates a new instance.
@@ -77,32 +75,17 @@ public class DcAssociate extends DcObject {
         String firstname = (String) getValue(DcAssociate._E_FIRSTNAME);
         String lastname = (String) getValue(DcAssociate._F_LASTTNAME);
         
-        if (!isFilled(DcAssociate._G_IS_COMPANY)) {
-            if (getModule().getIndex() == DcModules._SOFTWAREPUBLISHER ||
-                getModule().getIndex() == DcModules._DEVELOPER ||
-                getModule().getIndex() == DcModules._BOOKPUBLISHER) {
-                
-                setValue(DcAssociate._G_IS_COMPANY, Boolean.TRUE);
-            } else {
-                setValue(DcAssociate._G_IS_COMPANY, Boolean.FALSE);
-            }
-        }
-        
-        boolean company = (Boolean) getValue(DcAssociate._G_IS_COMPANY);
-        
         boolean isNameSet = !Utilities.isEmpty(name);
         boolean isFirstNameSet = !Utilities.isEmpty(firstname);
         boolean isLastNameSet = !Utilities.isEmpty(lastname);
         
         if (!isNameSet && (isLastNameSet || isFirstNameSet)) {
-        	name = Utilities.getName(firstname, lastname, company);
+        	name = Utilities.getName(firstname, lastname);
             setValue(DcAssociate._A_NAME, name);
-
-        } else if (isNameSet && !company && (!isLastNameSet || !isFirstNameSet)) {
+        } else if (isNameSet && (!isLastNameSet || !isFirstNameSet)) {
         	firstname = Utilities.getFirstName(name);
         	lastname = Utilities.getLastName(name);
-        	name = Utilities.getName(firstname, lastname, company);
-
+        	name = Utilities.getName(firstname, lastname);
         	setValueLowLevel(DcAssociate._A_NAME, name);
         	setValueLowLevel(DcAssociate._E_FIRSTNAME, firstname);
         	setValueLowLevel(DcAssociate._F_LASTTNAME, lastname);
@@ -128,10 +111,9 @@ public class DcAssociate extends DcObject {
      * Returns the name formatted as First name, Last name.
      */
     public String getNameNormal() {
-        if ((Boolean) getValue(DcAssociate._G_IS_COMPANY)) {
-            return toString();
-        } else {
+        if (isFilled(DcAssociate._E_FIRSTNAME) && isFilled(DcAssociate._F_LASTTNAME))
             return (getDisplayString(DcAssociate._E_FIRSTNAME) + " " + getDisplayString(DcAssociate._F_LASTTNAME)).trim();
-        }
+        else
+            return getName();
     }     
 }

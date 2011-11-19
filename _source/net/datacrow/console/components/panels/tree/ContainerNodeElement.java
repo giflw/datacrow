@@ -32,6 +32,7 @@ public class ContainerNodeElement extends NodeElement {
 		}
 	}
 	
+	@Override
     public Map<String, Integer> getItemsSorted(List<String> allOrderedItems) {
     	return getItems();
     }

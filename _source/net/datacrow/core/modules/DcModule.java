@@ -701,8 +701,6 @@ public class DcModule implements Comparable<DcModule> {
                 fields.add(Integer.valueOf(DcAssociate._E_FIRSTNAME));
             if (!fields.contains(Integer.valueOf(DcAssociate._F_LASTTNAME)))
                 fields.add(Integer.valueOf(DcAssociate._F_LASTTNAME));
-            if (!fields.contains(Integer.valueOf(DcAssociate._G_IS_COMPANY)))
-                fields.add(Integer.valueOf(DcAssociate._G_IS_COMPANY));
         }
         
         if (getField(DcObject._ID) != null && !fields.contains(Integer.valueOf(DcObject._ID))) 

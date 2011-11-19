@@ -159,6 +159,7 @@ public class TemplateModule extends DcModule {
                              "DefaultTemplate"));        
     }
     
+    @Override
     public boolean isHasReferences() {
         return true;
     }    

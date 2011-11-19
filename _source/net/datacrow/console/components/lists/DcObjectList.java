@@ -264,6 +264,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         return element != null ? element.getDcObject() : null;
     }    
 
+    @Override
     public int getIndex(String ID) {
         for (int i = 0 ; i < getDcModel().getSize(); i++) {
             if (((DcObjectListElement) getDcModel().getElementAt(i)).getKey().equals(ID))
@@ -398,6 +399,7 @@ public class DcObjectList extends DcList implements IViewComponent {
         return getDcModel().getSize() -1;
     }
 
+    @Override
     public void add(Map<String, Integer> keys) {
         clear();
         

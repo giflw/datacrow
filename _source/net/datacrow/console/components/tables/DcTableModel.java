@@ -38,6 +38,7 @@ public class DcTableModel extends DefaultTableModel {
         this.readonly = readonly;
     }
     
+    @Override
     public boolean isCellEditable(int rowIndex, int colIndex) {
         return !readonly;
     }

@@ -178,6 +178,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
     		this.parent = parent;
     	}
     	
+    	@Override
     	public void run() {
     		parent.notifyJobStarted();
     		

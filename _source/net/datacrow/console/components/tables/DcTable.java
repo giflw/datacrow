@@ -379,6 +379,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
+    @Override
     public void moveRowToTop() {
         int row = getSelectedRow();
 
@@ -391,6 +392,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
+    @Override
     public void moveRowToBottom() {
         int row = getSelectedRow();
 
@@ -406,6 +408,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
+    @Override
     public void moveRowDown() {
         int row = getSelectedRow();
 
@@ -421,6 +424,7 @@ public class DcTable extends JTable implements IViewComponent {
         }
     }
 
+    @Override
     public void moveRowUp() {
         int row = getSelectedRow();
 
@@ -1189,6 +1193,7 @@ public class DcTable extends JTable implements IViewComponent {
         return index >= 0 ? getItemAt(index) : null;
     }
 
+    @Override
     public int getIndex(String ID) {
         for (int i = 0; i < getItemCount(); i++) {
             if (ID.equals(getItemKey(i)))

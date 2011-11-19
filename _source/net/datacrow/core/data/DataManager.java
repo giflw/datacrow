@@ -588,7 +588,7 @@ public class DataManager {
             if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
 	        	String firstname = Utilities.getFirstName(s);
 	        	String lastname = Utilities.getLastName(s);
-	        	ps.setString(2, Utilities.getName(firstname, lastname, false).toUpperCase());
+	        	ps.setString(2, Utilities.getName(firstname, lastname).toUpperCase());
             }
             
             if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)

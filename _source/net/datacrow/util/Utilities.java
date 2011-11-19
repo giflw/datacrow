@@ -139,16 +139,10 @@ public class Utilities {
     	}
     }
     
-    public static String getName(String firstname, String lastname, boolean company) {
+    public static String getName(String firstname, String lastname) {
         firstname = firstname == null ? "" : firstname.trim();
         lastname = lastname == null ? "" : lastname.trim();
-
-        if (company) {
-            return (firstname + " " + lastname).trim();
-        } else {
-        	return firstname.length() > 0 && lastname.length() > 0 ? lastname + ", " + firstname :
-                   firstname.length() == 0 ? lastname : firstname;
-        }
+        return (firstname + " " + lastname).trim();
     }
     
     public static List<DcObject> sort(List<DcObject> items) {
