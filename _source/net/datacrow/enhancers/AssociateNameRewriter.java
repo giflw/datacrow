@@ -25,12 +25,8 @@
 
 package net.datacrow.enhancers;
 
-import java.util.StringTokenizer;
-
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcMediaObject;
 
 /**
  * Transforms a title. Based on a word list the title will be transformed as follows: <br>
@@ -38,78 +34,86 @@ import net.datacrow.core.objects.DcMediaObject;
  * 
  * @author Robert Jan van der Waals
  */
-public class TitleRewriter implements IValueEnhancer {
+public class AssociateNameRewriter implements IValueEnhancer {
 
+    public static final int _FIRSTLAST = 0;
+    public static final int _LASTFIRST = 1;
+        
     private boolean enabled = false;
-    private String wordList;
-    
+    private int order;
+ 
     /**
      * Creates a new instance.
      */
-    public TitleRewriter() {}    
+    public AssociateNameRewriter() {}    
     
     /**
      * Creates a new instances.
      * @param enabled
      * @param list The word list. Any value starting with a word in the list will be transformed.
      */
-    public TitleRewriter(boolean enabled, String list) {
+    public AssociateNameRewriter(boolean enabled, int order) {
         this.enabled = enabled;
-        this.wordList = list;
+        this.order = order;
     }
     
     /**
      * The field to transform.
-     * @return {@link DcMediaObject#_A_TITLE}
+     * @return Either {@link DcAssociate#_A_NAME}
      */
     public int getField() {
-        if (DcModules.getCurrent().getType() == DcModule._TYPE_MEDIA_MODULE) {
-            return DcMediaObject._A_TITLE;
-        } else {
-            return DcModules.getCurrent().getDisplayFieldIdx();
-        }
+        return DcAssociate._A_NAME;
     }    
-
-    public String getWordList() {
-        return wordList;
-    } 
+    
+    public int getOrder() {
+        return order;
+    }
     
     @Override
     public String toSaveString() {
-        return enabled + "/&/" + wordList;
+        return enabled + "/&/" + order;
     }
 
     @Override
     public int getIndex() {
-        return ValueEnhancers._TITLEREWRITERS;
+        return ValueEnhancers._ASSOCIATENAMEREWRITERS;
     }
     
     @Override
     public void parse(String s) {
         enabled = Boolean.valueOf(s.substring(0, s.indexOf("/&/"))).booleanValue();
-        wordList = s.substring(s.indexOf("/&/") + 3, s.length());
+        order = Integer.valueOf(s.substring(s.indexOf("/&/") + 3, s.length()));
     }
 
+    public String getName(String firstname, String lastname) {
+        firstname = firstname == null ? "" : firstname.trim();
+        lastname = lastname == null ? "" : lastname.trim();
+        if (lastname.startsWith("(") && firstname.indexOf(" ") > -1) {
+            String tmp = lastname;
+            lastname = firstname.substring(firstname.indexOf(" ") + 1);
+            firstname = firstname.substring(0, firstname.indexOf(" ")) + " " + tmp;
+        }
+        
+        String result;
+        if (order == _FIRSTLAST) {
+            result = firstname + " " + lastname;
+        } else {
+            result = lastname.length() > 0 && firstname.length() > 0 ?
+                     lastname + ", " + firstname :
+                     lastname.length() > 0 ? lastname : firstname;
+        }
+        
+        return result;
+    }
+    
     @Override
     public Object apply(DcField field, Object value) {
-        Object result = value;
+        String[] names = (String[]) value;
 
-        if (value != null && value instanceof String) {
-            String s = (String) result;
-            StringTokenizer st = new StringTokenizer(wordList, ",");
-            while (st.hasMoreElements()) {
-                String keyword = ((String) st.nextElement()) + " ";
-                
-                if (s.toLowerCase().startsWith(keyword.toLowerCase())) {
-                    int start = keyword.length();
-                    int end = s.length();
-                    
-                    if (start < end) 
-                        result = s.substring(start, end) + ", " + keyword.trim();
-                }
-            }
-        }
-        return result;
+        String firstname = names[0];
+        String lastname = names[1];
+        
+        return getName(firstname, lastname);
     }
     
     @Override

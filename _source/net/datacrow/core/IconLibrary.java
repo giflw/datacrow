@@ -59,6 +59,7 @@ public abstract class IconLibrary {
     public static final DcImageIcon _icoTemplate = new DcImageIcon(picPath + "template.png");
     public static final DcImageIcon _icoRenumber = new DcImageIcon(picPath + "renumber.png");
     public static final DcImageIcon _icoTitleRewriter = new DcImageIcon(picPath + "title_rewriter.png");
+    public static final DcImageIcon _icoAssociateNameRewriter = new DcImageIcon(picPath + "associate_name_rewriter.png");
     public static final DcImageIcon _icoMassUpdate = new DcImageIcon(picPath + "massupdate.png");
     public static final DcImageIcon _icoWebServer = new DcImageIcon(picPath + "webserver.png");
     public static final DcImageIcon _icoAccept = new DcImageIcon(picPath + "accept.png");

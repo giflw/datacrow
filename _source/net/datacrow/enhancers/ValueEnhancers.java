@@ -54,6 +54,7 @@ public class ValueEnhancers {
     
     public static final int _AUTOINCREMENT = 0;
     public static final int _TITLEREWRITERS = 1;
+    public static final int _ASSOCIATENAMEREWRITERS = 2;
     
     private static final Map<DcField, Collection<IValueEnhancer>> enhancers = 
         new HashMap<DcField, Collection<IValueEnhancer>>();
@@ -86,6 +87,7 @@ public class ValueEnhancers {
     public static void initialize() {
         load(_AUTOINCREMENT);
         load(_TITLEREWRITERS);
+        load(_ASSOCIATENAMEREWRITERS);
     }
     
     /**
@@ -138,21 +140,25 @@ public class ValueEnhancers {
      */
     public static void save() {
         Properties incrementers = new Properties();
-        Properties titlerewriters = new Properties();
+        Properties titleRewriters = new Properties();
+        Properties associateNameRewriters = new Properties();
         
         for (DcField field : enhancers.keySet()) {
             for (IValueEnhancer enhancer : enhancers.get(field)) {
                 String key = field.getModule() + "/&/" + field.getDatabaseFieldName();
                 if (enhancer.getIndex() == _AUTOINCREMENT) 
                     incrementers.put(key, enhancer.toSaveString());
+                else if (enhancer.getIndex() == _ASSOCIATENAMEREWRITERS) 
+                    associateNameRewriters.put(key, enhancer.toSaveString());
                 else
-                    titlerewriters.put(key, enhancer.toSaveString());
+                    titleRewriters.put(key, enhancer.toSaveString());
             }
         }
         
         try {
             store(incrementers, DataCrow.dataDir + "/enhancers_autoincrement.properties");
-            store(titlerewriters, DataCrow.dataDir + "/enhancers_titlerewriters.properties");
+            store(titleRewriters, DataCrow.dataDir + "/enhancers_titlerewriters.properties");
+            store(associateNameRewriters, DataCrow.dataDir + "/enhancers_associatenamerewriters.properties");
         } catch (Exception exp) {
             logger.error("Error while saving enhancer settings to file", exp);    
         }         
@@ -168,7 +174,8 @@ public class ValueEnhancers {
         Properties properties = new Properties();
         
         String filename = idx == _AUTOINCREMENT ? "enhancers_autoincrement.properties" :
-                                                  "enhancers_titlerewriters.properties";
+                          idx == _TITLEREWRITERS ? "enhancers_titlerewriters.properties" : 
+                          "enhancers_associatenamerewriters.properties";
         filename = DataCrow.dataDir + filename;
         
         if (new File(filename).exists()) {
@@ -186,8 +193,10 @@ public class ValueEnhancers {
                         IValueEnhancer enhancer;
                         if (idx == _AUTOINCREMENT)
                             enhancer = new AutoIncrementer(field.getIndex()); 
-                        else 
+                        else if (idx == _TITLEREWRITERS)
                             enhancer = new TitleRewriter();
+                        else 
+                            enhancer = new AssociateNameRewriter();
                         
                         enhancer.parse(value);
                         

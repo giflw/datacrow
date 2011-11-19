@@ -206,7 +206,11 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
             PluginHelper.add(menuTools, "UpdateAll");
             PluginHelper.add(menuTools, "FindReplace");
             PluginHelper.add(menuTools, "AutoIncrementer");
-            PluginHelper.add(menuTools, "TitleRewriter");
+            
+            if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE)
+                PluginHelper.add(menuTools, "AssociateNameRewriter");
+            else
+                PluginHelper.add(menuTools, "TitleRewriter");
         }
         
         Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(null, -1, module.getIndex());

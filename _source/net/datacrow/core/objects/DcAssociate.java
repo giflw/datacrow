@@ -25,6 +25,8 @@
 
 package net.datacrow.core.objects;
 
+import net.datacrow.enhancers.IValueEnhancer;
+import net.datacrow.enhancers.ValueEnhancers;
 import net.datacrow.util.Utilities;
 
 /**
@@ -64,6 +66,28 @@ public class DcAssociate extends DcObject {
 	public int getDefaultSortFieldIdx() {
 		return DcAssociate._A_NAME;
 	}
+	
+    /**
+     * Applies the enhancers on this item.
+     * @see ValueEnhancers 
+     * @param update Indicates if the item is new or existing.
+     */
+	@Override
+    public void applyEnhancers(boolean update) {
+        for (DcField field : getFields()) {
+
+            for (IValueEnhancer enhancer : field.getValueEnhancers()) {
+                if (enhancer.isEnabled() && 
+                    (update && enhancer.isRunOnUpdating() || !update && enhancer.isRunOnInsert())) {
+                    Object newVal = enhancer.apply(field, new String[] {getDisplayString(_E_FIRSTNAME), getDisplayString(_F_LASTTNAME)});
+                    Object oldVal = getValue(field.getIndex());
+                    
+                    if (newVal != null && (oldVal == null || !newVal.equals(oldVal)))
+                        setValue(field.getIndex(), newVal);
+                }
+            }
+        }
+    }  
 
 	/**
      * Sets the various name parts. The last and first name are calculated if only the

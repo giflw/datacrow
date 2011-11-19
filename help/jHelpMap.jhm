@@ -64,6 +64,7 @@
     <mapID target="dc.tools.findreplace" url="tools/findreplace.html"/>
     <mapID target="dc.tools.backup_restore" url="tools/backup_restore.html"/>
     <mapID target="dc.tools.titlerewriter" url="tools/title_rewriter.html"/>
+    <mapID target="dc.tools.associatenamerewriter" url="tools/associate_name_rewriter.html"/>
     <mapID target="dc.tools.autonumbering" url="tools/auto_numbering.html"/>
     <mapID target="dc.tools.drivemanager" url="tools/drivemanager.html"/>
     <mapID target="dc.tools.filerenamer" url="tools/filerenamer.html"/>
