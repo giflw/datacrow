@@ -57,7 +57,7 @@ import net.datacrow.settings.Settings;
 import net.datacrow.synchronizers.ISynchronizerClient;
 import net.datacrow.synchronizers.Synchronizer;
 
-public class ItemSynchronizerDialog extends DcDialog implements ActionListener, ISynchronizerClient {
+public class ItemSynchronizerDialog extends DcDialog implements ActionListener {
     
     private DcProgressBar progressBar = new DcProgressBar();
     private JTextArea textLog = ComponentFactory.getTextArea();
@@ -113,27 +113,23 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
     
     protected void synchronize() {
         saveSettings();
-        synchronizer.synchronize(this);
+        synchronizer.synchronize(new ItemSynchronizerMediator(this));
     }
     
-    @Override
-    public boolean isReparseFiles() {
+    protected boolean isReparseFiles() {
         return checkReparseFiles.isSelected();
     }
     
-    @Override
-    public boolean useOnlineService() {
+    protected boolean useOnlineService() {
         return panelServer.useOnlineService();
     }
     
-    @Override
-    public int getItemPickMode() {
+    protected int getItemPickMode() {
         return cbItemPickMode.getSelectedIndex() < 1 ?
                Synchronizer._ALL : Synchronizer._SELECTED;
     }
 
-    @Override
-    public void initialize() {
+    protected void initialize() {
         cancelled = false;
         initProgressBar(0);
         enableActions(false);
@@ -144,8 +140,7 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         enableActions(true);
     }
     
-    @Override
-    public boolean isCancelled() {
+    protected boolean isCancelled() {
         return cancelled;
     }
     
@@ -183,23 +178,19 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         super.close();
     }    
     
-    @Override
-    public IServer getServer() {
+    protected IServer getServer() {
         return panelServer.getServer();
     }
 
-    @Override
-    public SearchMode getSearchMode() {
+    protected SearchMode getSearchMode() {
         return panelServer.getMode();
     }
     
-    @Override
-    public Region getRegion() {
+    protected Region getRegion() {
         return panelServer.getRegion();
     }
     
-    @Override
-    public void enableActions(boolean b) {
+    protected void enableActions(boolean b) {
         if (buttonStart != null)
             buttonStart.setEnabled(b);
         
@@ -212,19 +203,16 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
         }
     }    
     
-    @Override
     public void addMessage(String message) {
         if (textLog != null) 
             textLog.insert(message + '\n', 0);
     }
 
-    @Override
     public void initProgressBar(int maxValue) {
         progressBar.setValue(0);
         progressBar.setMaximum(maxValue);
     }
 
-    @Override
     public void updateProgressBar() {
         if (progressBar != null)
             progressBar.setValue(progressBar.getValue() + 1);
@@ -362,5 +350,88 @@ public class ItemSynchronizerDialog extends DcDialog implements ActionListener, 
             cancel();
         else if (ae.getActionCommand().equals("synchronize"))
             synchronize();
+    }
+    
+    public class ItemSynchronizerMediator implements ISynchronizerClient {
+        
+        private ItemSynchronizerDialog dlg;
+        
+        private boolean reparseFiles;
+        private boolean useOnlineServices;
+        private IServer server;
+        private SearchMode searchMode;
+        private Region region;
+        private int itemPickMode;
+        
+        public ItemSynchronizerMediator(ItemSynchronizerDialog dlg) {
+            this.dlg = dlg;
+            
+            this.reparseFiles = dlg.isReparseFiles();
+            this.useOnlineServices = dlg.useOnlineService();
+            this.server = dlg.getServer();
+            this.searchMode = dlg.getSearchMode();
+            this.region = dlg.getRegion();
+            this.itemPickMode = dlg.getItemPickMode();
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return dlg.isCancelled();
+        }
+
+        @Override
+        public void initProgressBar(int max) {
+            dlg.initProgressBar(max);
+        }
+
+        @Override
+        public void updateProgressBar() {
+            dlg.updateProgressBar();
+        }
+
+        @Override
+        public void addMessage(String message) {
+            dlg.addMessage(message);
+        }
+
+        @Override
+        public boolean isReparseFiles() {
+            return reparseFiles;
+        }
+
+        @Override
+        public boolean useOnlineService() {
+            return useOnlineServices;
+        }
+
+        @Override
+        public void enableActions(boolean b) {
+            dlg.enableActions(b);
+        }
+
+        @Override
+        public void initialize() {
+            dlg.initialize();
+        }
+
+        @Override
+        public IServer getServer() {
+            return server;
+        }
+
+        @Override
+        public Region getRegion() {
+            return region;
+        }
+
+        @Override
+        public SearchMode getSearchMode() {
+            return searchMode;
+        }
+
+        @Override
+        public int getItemPickMode() {
+            return itemPickMode;
+        }
     }
 }

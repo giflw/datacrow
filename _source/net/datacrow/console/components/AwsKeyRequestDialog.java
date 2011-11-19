@@ -14,10 +14,8 @@ import javax.swing.JScrollPane;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcDialog;
-import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.launcher.URLLauncher;
@@ -50,13 +48,13 @@ public class AwsKeyRequestDialog extends DcDialog implements ActionListener {
         super.close();
         txtAccessKeyID = null;
         txtSecretKey = null;
-        DcSettings.set(DcRepository.Settings.stAmazonFirstStartChecked, Boolean.TRUE);
+//        DcSettings.set(DcRepository.Settings.stAmazonFirstStartChecked, Boolean.TRUE);
     }
     
-    private void save() {
-        DcSettings.set(DcRepository.Settings.stAwsAccessKeyId, txtAccessKeyID.getText());
-        DcSettings.set(DcRepository.Settings.stAwsSecretKey, txtSecretKey.getText());
-    }
+//    private void save() {
+//        DcSettings.set(DcRepository.Settings.stAwsAccessKeyId, txtAccessKeyID.getText());
+//        DcSettings.set(DcRepository.Settings.stAwsSecretKey, txtSecretKey.getText());
+//    }
     
     private void requestAwsKey() {
         try {
@@ -134,7 +132,7 @@ public class AwsKeyRequestDialog extends DcDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("ok")) {
-            save();
+//            save();
             close();
         } else if (ae.getActionCommand().equals("request")) {
             requestAwsKey();

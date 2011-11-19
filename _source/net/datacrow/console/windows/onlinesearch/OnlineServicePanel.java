@@ -42,7 +42,6 @@ import javax.swing.JTextField;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.AwsKeyRequestDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.objects.DcObject;
@@ -51,7 +50,6 @@ import net.datacrow.core.services.OnlineServices;
 import net.datacrow.core.services.Region;
 import net.datacrow.core.services.SearchMode;
 import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.settings.DcSettings;
 
 public class OnlineServicePanel extends JPanel implements ActionListener, KeyListener  {
     
@@ -205,13 +203,13 @@ public class OnlineServicePanel extends JPanel implements ActionListener, KeyLis
         revalidate();
         repaint();
         
-        IServer server = getServer();
-        if (    server != null && 
-                server.getName().equals("Amazon") &&
-               !DcSettings.getBoolean(DcRepository.Settings.stAmazonFirstStartChecked)) {
-            
-            new AwsKeyRequestDialog();
-        }
+//        IServer server = getServer();
+//        if (    server != null && 
+//                server.getName().equals("Amazon") &&
+//               !DcSettings.getBoolean(DcRepository.Settings.stAmazonFirstStartChecked)) {
+//            
+//            new AwsKeyRequestDialog();
+//        }
         
         listenForServerChanges = true;
     }    

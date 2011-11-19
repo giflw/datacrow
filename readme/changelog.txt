@@ -1,4 +1,18 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.10  [Released on November 19, 2011]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Amazon Search broken.
+- Field content not fully shown for large text fields.
+- Imdb.com ratings not longer retrieved.
+- Improved error handling and additional methods to prevent items from being saved.
+
+[Changes]
+- Removed AWS key configuration.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.9  [Released on June 18, 2011]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

@@ -28,52 +28,127 @@ package net.datacrow.util.isbn;
 
 
 public abstract class ISBN {
-
-    private static final int[] weight13 = {1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3};
-    private static final int[] weight10 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     
-    public static String getISBN13(String isbn10) throws InvalidBarCodeException {
-        String s = "978";
-        char[] chars = isbn10.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            if (Character.isDigit(chars[i]))
-                s += chars[i];
-        }
-        
-        if (s.length() < 13)
-            throw new InvalidBarCodeException();
+    private static String CheckDigits = new String("0123456789X0");
 
-        // remove the check digit
-        int[] digits = new int[12];
-        chars = s.toCharArray();
-        for (int i = 0; i < digits.length; i++) {
-            digits[i] = Integer.parseInt("" + chars[i]);
+    static int CharToInt(char a) {
+        switch (a) {
+        case '0':
+            return 0;
+        case '1':
+            return 1;
+        case '2':
+            return 2;
+        case '3':
+            return 3;
+        case '4':
+            return 4;
+        case '5':
+            return 5;
+        case '6':
+            return 6;
+        case '7':
+            return 7;
+        case '8':
+            return 8;
+        case '9':
+            return 9;
+        default:
+            return -1;
         }
+    }
+
+    public static String getISBN10(String ISBN) throws InvalidBarCodeException {
+        String s9;
+        int i, n, v;
+
+        s9 = ISBN.substring(3, 12);
+        n = 0;
+        for (i = 0; i < 9; i++) {
+            v = CharToInt(s9.charAt(i));
+            if (v == -1)
+                throw new InvalidBarCodeException();
+            else
+                n = n + (10 - i) * v;
+        }
+
+        n = 11 - (n % 11);
         
-        return convertToISBN13(digits);
+        return s9 + CheckDigits.substring(n, n + 1);
+    }
+
+    public static String getISBN13(String ISBN10) throws InvalidBarCodeException {
+        String s12;
+        int i, n, v;
+        boolean ErrorOccurred;
+        ErrorOccurred = false;
+        s12 = "978" + ISBN10.substring(0, 9);
+        n = 0;
+        for (i = 0; i < 12; i++) {
+            if (!ErrorOccurred) {
+                v = CharToInt(s12.charAt(i));
+                if (v == -1)
+                    throw new InvalidBarCodeException();
+                else {
+                    if ((i % 2) == 0)
+                        n = n + v;
+                    else
+                        n = n + 3 * v;
+                }
+            }
+        }
+
+        n = n % 10;
+        if (n != 0) n = 10 - n;
+        return s12 + CheckDigits.substring(n, n + 1);
     }
     
-    public static String getISBN10(String isbn13) throws InvalidBarCodeException {
-        char[] chars = isbn13.toCharArray();
-        String s = "";
-        for (int i = 0; i < chars.length; i++) {
-            if (Character.isDigit(chars[i])) 
-                s += chars[i];
-        }
-        
-        
-        if (s.length() < 10)
-            throw new InvalidBarCodeException();
 
-        int[] digits = new int[9];
-        chars = s.toCharArray();
-        int counter = 0;
-        for (int i = 3; i < chars.length - 1; i++) {
-            digits[counter++] = Integer.parseInt("" + chars[i]);
-        }
-        
-        return convertToISBN10(digits);
-    }    
+//    private static final int[] weight13 = {1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3};
+//    private static final int[] weight10 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+//    
+//    public static String getISBN13(String isbn10) throws InvalidBarCodeException {
+//        String s = "978";
+//        char[] chars = isbn10.toCharArray();
+//        for (int i = 0; i < chars.length; i++) {
+//            if (Character.isDigit(chars[i]))
+//                s += chars[i];
+//        }
+//        
+//        if (s.length() < 13)
+//            throw new InvalidBarCodeException();
+//
+//        // remove the check digit
+//        int[] digits = new int[12];
+//        chars = s.toCharArray();
+//        for (int i = 0; i < digits.length; i++) {
+//            digits[i] = Integer.parseInt("" + chars[i]);
+//        }
+//        
+//        return convertToISBN13(digits);
+//    }
+//    
+//    public static String getISBN10(String isbn13) throws InvalidBarCodeException {
+//        char[] chars = isbn13.toCharArray();
+//        String s = "";
+//        for (int i = 0; i < chars.length; i++) {
+//            if (Character.isDigit(chars[i])) 
+//                s += chars[i];
+//        }
+//        
+//        
+//        if (s.length() < 10)
+//            throw new InvalidBarCodeException();
+//
+//        int[] digits = new int[9];
+//        chars = s.toCharArray();
+//        int counter = 0;
+//        for (int i = 3; i < chars.length - 1; i++) {
+//            digits[counter++] = Integer.parseInt("" + chars[i]);
+//        }
+//        
+//        return convertToISBN10(digits);
+//    }    
     
     public static boolean isISBN13(String isbn) {
         String s = "";
@@ -95,7 +170,7 @@ public abstract class ISBN {
         if (isbn != null) {
             char[] chars = isbn.toCharArray();
             for (int i = 0; i < chars.length; i++) {
-                if ("1234567890".indexOf(chars[i]) > -1) 
+                if ("1234567890X".indexOf(chars[i]) > -1) 
                     s += chars[i];
             }
         }
@@ -103,39 +178,39 @@ public abstract class ISBN {
         return s.length() == 10;
     }
     
-    private static String convertToISBN10(int[] isbn13) {
-        String isbn10 = "";
-        
-        int sum = 0;
-        for (int i = 0; i < isbn13.length; i++)
-            sum += isbn13[i] * weight10[i];
-        
-        int checkdigit = sum % 11;
-        
-        for (int i = 0; i < isbn13.length; i++)
-            isbn10 += "" + isbn13[i];
-        
-        isbn10 += "" + checkdigit;
-        return isbn10;
-    }    
-    
-    private static String convertToISBN13(int[] isbn10) {
-        String isbn13 = "";
-        
-        int sum = 0;
-        for (int i = 0; i < isbn10.length; i++)
-            sum += isbn10[i] * weight13[i];
-        
-        int remainder = sum % 10;
-        
-        int checkdigit = 0;
-        if (remainder > 0)
-            checkdigit = 10 - remainder;
-        
-        for (int i = 0; i < isbn10.length; i++)
-            isbn13 += "" + isbn10[i];
-        
-        isbn13 += "" + checkdigit;
-        return isbn13;
-    }
+//    private static String convertToISBN10(int[] isbn13) {
+//        String isbn10 = "";
+//        
+//        int sum = 0;
+//        for (int i = 0; i < isbn13.length; i++)
+//            sum += isbn13[i] * weight10[i];
+//        
+//        int checkdigit = sum % 11;
+//        
+//        for (int i = 0; i < isbn13.length; i++)
+//            isbn10 += "" + isbn13[i];
+//        
+//        isbn10 += "" + checkdigit;
+//        return isbn10;
+//    }    
+//    
+//    private static String convertToISBN13(int[] isbn10) {
+//        String isbn13 = "";
+//        
+//        int sum = 0;
+//        for (int i = 0; i < isbn10.length; i++)
+//            sum += isbn10[i] * weight13[i];
+//        
+//        int remainder = sum % 10;
+//        
+//        int checkdigit = 0;
+//        if (remainder > 0)
+//            checkdigit = 10 - remainder;
+//        
+//        for (int i = 0; i < isbn10.length; i++)
+//            isbn13 += "" + isbn10[i];
+//        
+//        isbn13 += "" + checkdigit;
+//        return isbn13;
+//    }
 }

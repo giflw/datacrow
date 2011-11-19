@@ -71,8 +71,17 @@ public abstract class FileImporter implements ISynchronizerClient {
     private final int module;
     private IFileImportClient client;
     
+    private Region region;
+    private SearchMode sm;
+    private IServer server;
+    private DcObject container;
+    
     public void setClient(IFileImportClient client) {
         this.client = client;
+        this.region = client.getRegion();
+        this.sm = client.getSearchMode();
+        this.server = client.getServer();
+        this.container = client.getDcContainer();
     }
     
     public IFileImportClient getClient() {
@@ -228,7 +237,7 @@ public abstract class FileImporter implements ISynchronizerClient {
                 }
             }
     
-            if (getClient().getDcContainer() != null && dco.getModule().isContainerManaged())
+            if (getContainer() != null && dco.getModule().isContainerManaged())
                 DataManager.createReference(dco, DcObject._SYS_CONTAINER, getClient().getDcContainer());
             
             dco.setLastInLine(last);
@@ -407,17 +416,21 @@ public abstract class FileImporter implements ISynchronizerClient {
 
     @Override
     public Region getRegion() {
-        return getClient().getRegion();
+        return region;
     }
 
     @Override
     public SearchMode getSearchMode() {
-        return getClient().getSearchMode();
+        return sm;
+    }
+    
+    public DcObject getContainer() {
+        return container;
     }
 
     @Override
     public IServer getServer() {
-        return getClient().getServer();
+        return server;
     }
 
     @Override

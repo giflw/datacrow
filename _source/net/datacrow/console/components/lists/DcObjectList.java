@@ -251,8 +251,12 @@ public class DcObjectList extends DcList implements IViewComponent {
 
         DcObjectListElement element;
         for (int i = 0; i < indices.length; i++) {
-            element = (DcObjectListElement) getDcModel().getElementAt(indices[i]);
-            items.add(element.getKey());
+            try {
+                element = (DcObjectListElement) getDcModel().getElementAt(indices[i]);
+                items.add(element.getKey());
+            } catch (Exception e) {
+                logger.debug("Could not get item (removed?)", e);
+            }
         }
 
         return items;

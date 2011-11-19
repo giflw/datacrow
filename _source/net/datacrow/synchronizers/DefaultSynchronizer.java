@@ -168,6 +168,10 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                 objects.addAll(client.getItemPickMode() == _ALL ? view.getItems() : view.getSelectedItems());                
                 client.initProgressBar(objects.size());
                 
+                
+                // TODO create a client wrapper to hold all values?
+                
+                
                 for (DcObject dco : objects) {
                     if (client.isCancelled()) break;
                     

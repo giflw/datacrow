@@ -66,7 +66,7 @@ import net.datacrow.util.filefilters.FileNameFilter;
 
 import org.apache.log4j.Logger;
 
-public class FileImportDialog extends DcFrame implements IFileImportClient, ActionListener {
+public class FileImportDialog extends DcFrame implements ActionListener {
 
     private static Logger logger = Logger.getLogger(FileImportDialog.class.getName());
     
@@ -111,26 +111,15 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         setCenteredLocation();
     }
     
-    @Override
-    public int getDirectoryUsage() {
+    protected int getDirectoryUsage() {
         return checkDirNameAsTitle.isSelected() ? 1 : 0;
     }
     
-    @Override
-    public DcModule getModule() {
+    protected DcModule getModule() {
         return DcModules.get(importer.getModule());
     }
 
-    /**
-     * TODO
-     * 
-     * This should not be called from the process but should be readily available.
-     * Change the implementation.
-     * 
-     * @deprecated
-     */
-    @Override
-    public DcObject getStorageMedium() {
+    protected DcObject getStorageMedium() {
         DcModule module = DcModules.get(importer.getModule());
         DcObject medium = null;
         if (module.getPropertyModule(DcModules._STORAGEMEDIA) != null) {
@@ -141,63 +130,52 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         return medium;
     }
 
-    @Override
-    public void initProgressBar(int maxValue) {
+    protected void initProgressBar(int maxValue) {
         if (progressBar != null) {
             progressBar.setValue(0);
             progressBar.setMaximum(maxValue);
         }
     }
 
-    @Override
-    public void updateProgressBar(int value) {
+   protected void updateProgressBar(int value) {
         if (progressBar != null) progressBar.setValue(value);
     }
 
-    @Override
-    public void addMessage(String message) {
+    protected void addMessage(String message) {
         if (textLog != null) textLog.insert(message + '\n', 0);
     }
 
-    @Override
-    public void addError(Throwable e) {
+    protected void addError(Throwable e) {
         logger.error(e, e);
         DcSwingUtilities.displayErrorMessage(DcResources.getText("msgUnexpectedProblemDuringFileImport", Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage()));
     }
 
-    @Override
-    public void finish() {
+    protected void finish() {
         if (buttonRun != null) buttonRun.setEnabled(true);
     }
 
-    @Override
-    public boolean cancelled() {
+    protected boolean cancelled() {
         return cancelled;
     }      
     
-    @Override
-    public boolean useOnlineServices() {
+    protected boolean useOnlineServices() {
         return panelServer != null ? panelServer.useOnlineService() : false;
     }    
     
-    @Override
-    public DcObject getDcContainer() {
+    protected DcObject getDcContainer() {
         Object container =  fldContainer.getValue();
         return container instanceof DcObject ? (DcObject) container : null;
     }
 
-    @Override
-    public Region getRegion() {
+    protected Region getRegion() {
         return panelServer != null ? panelServer.getRegion() : null;
     }
 
-    @Override
-    public IServer getServer() {
+    protected IServer getServer() {
         return panelServer != null ? panelServer.getServer() : null;
     }
 
-    @Override
-    public SearchMode getSearchMode() {
+    protected SearchMode getSearchMode() {
         return panelServer != null ? panelServer.getMode() : null;
     }
     
@@ -225,7 +203,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
         saveSettings();
         try {
             cancelled = false;
-            importer.setClient(this);
+            importer.setClient(new FileImportMediator(this));
             importer.parse(panelFs.getFiles());
         } catch (Exception e) {
             DcSwingUtilities.displayErrorMessage(Utilities.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
@@ -265,7 +243,7 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             panelServerSettings.save();
     }
     
-    public void denyActions() {
+    protected void denyActions() {
         progressBar.setValue(0);
         textLog.setText("");
 
@@ -586,5 +564,109 @@ public class FileImportDialog extends DcFrame implements IFileImportClient, Acti
             cancel();
         else if (ae.getActionCommand().equals("import"))
             startImport();
-    }    
+    }  
+    
+    /**
+     * Communicates between the dialog and the process to avoid NullPointerException when asking for values
+     * directly from the drop downs and such. This object stores the values as selected by the user and is used
+     * by the process.
+     * 
+     * @author Robert Jan van der Waals
+     */
+    public class FileImportMediator implements IFileImportClient {
+        
+        private FileImportDialog dlg;
+        
+        private DcObject container;
+        private DcObject storageMedia;
+        private IServer server;
+        private SearchMode searchMode;
+        private Region region;
+        private DcModule module;
+        private int directoryUsage;
+        private boolean useOnlineServices;
+        
+        public FileImportMediator(FileImportDialog dlg) {
+            this.dlg = dlg;
+            
+            this.container = dlg.getDcContainer();
+            this.storageMedia = dlg.getStorageMedium();
+            this.server = dlg.getServer();
+            this.searchMode = dlg.getSearchMode();
+            this.region = dlg.getRegion();
+            this.module = dlg.getModule();
+            this.directoryUsage = dlg.getDirectoryUsage();
+            this.useOnlineServices = dlg.useOnlineServices();
+        }
+
+        @Override
+        public void addMessage(String message) {
+            dlg.addMessage(message);
+        }
+
+        @Override
+        public void addError(Throwable e) {
+            dlg.addError(e);
+        }
+
+        @Override
+        public void initProgressBar(int max) {
+            dlg.initProgressBar(max);
+        }
+
+        @Override
+        public void updateProgressBar(int value) {
+            dlg.updateProgressBar(value);
+        }
+
+        @Override
+        public boolean cancelled() {
+            return dlg.cancelled();
+        }
+
+        @Override
+        public boolean useOnlineServices() {
+            return useOnlineServices;
+        }
+
+        @Override
+        public void finish() {
+            dlg.finish();
+        }
+
+        @Override
+        public SearchMode getSearchMode() {
+            return searchMode;
+        }
+
+        @Override
+        public IServer getServer() {
+            return server;
+        }
+
+        @Override
+        public Region getRegion() {
+            return region;
+        }
+
+        @Override
+        public DcObject getDcContainer() {
+            return container;
+        }
+
+        @Override
+        public DcObject getStorageMedium() {
+            return storageMedia;
+        }
+
+        @Override
+        public int getDirectoryUsage() {
+            return directoryUsage;
+        }
+
+        @Override
+        public DcModule getModule() {
+            return module;
+        }
+    }
 }
