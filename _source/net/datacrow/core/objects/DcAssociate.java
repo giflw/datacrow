@@ -82,7 +82,7 @@ public class DcAssociate extends DcObject {
                     Object newVal = enhancer.apply(field, new String[] {getDisplayString(_E_FIRSTNAME), getDisplayString(_F_LASTTNAME)});
                     Object oldVal = getValue(field.getIndex());
                     
-                    if (newVal != null && (oldVal == null || !newVal.equals(oldVal)))
+                    if (!Utilities.isEmpty(newVal) && !newVal.equals(oldVal))
                         setValue(field.getIndex(), newVal);
                 }
             }
@@ -113,6 +113,8 @@ public class DcAssociate extends DcObject {
         	setValueLowLevel(DcAssociate._A_NAME, name);
         	setValueLowLevel(DcAssociate._E_FIRSTNAME, firstname);
         	setValueLowLevel(DcAssociate._F_LASTTNAME, lastname);
+        	
+        	applyEnhancers(true);
         }
     }
 
