@@ -98,8 +98,8 @@ public class FileImportDialog extends DcFrame implements ActionListener {
     public FileImportDialog(FileImporter importer) {
         
         super(DcResources.getText("lblXImport", 
-                DcModules.get(importer.getModule()).getObjectName()), 
-                IconLibrary._icoImport);
+              DcModules.get(importer.getModule()).getObjectName()), 
+              IconLibrary._icoImport);
 
         this.importer = importer;
         this.settings = DcModules.get(importer.getModule()).getSettings();
