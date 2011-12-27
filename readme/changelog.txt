@@ -3,6 +3,7 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 -----------------------------------------------------------------------------------------
 
 [Fixed]
+- Filter ascending on multiple fields did not work correctly.
 
 
 [Changed]
