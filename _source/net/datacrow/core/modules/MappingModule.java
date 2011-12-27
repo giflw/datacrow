@@ -42,7 +42,9 @@ import net.datacrow.util.StringUtils;
  */
 public class MappingModule extends DcModule {
 
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = 7229196343761371630L;
+
     private final DcModule parentMod;
     private final DcModule referencedMod;
    

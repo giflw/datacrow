@@ -125,8 +125,6 @@ public class XmlExporter extends ItemExporter {
             XmlWriter writer = new XmlWriter(bos, file.toString(), schemaFile, settings);
             writer.startDocument();
             
-            int counter = 0;
-            
             for (String item : items) {
                 if (isCanceled()) break;
                 
@@ -168,7 +166,6 @@ public class XmlExporter extends ItemExporter {
                 
                 // release the object
                 dco.destroy();
-                counter++;
             }
             
             writer.endDocument();

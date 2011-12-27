@@ -39,6 +39,7 @@ import net.datacrow.core.objects.Picture;
  */
 public class PictureModule extends DcModule {
     
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = 4278200439507269874L;
 
     /**

@@ -240,11 +240,8 @@ class FilePropertiesIFO extends FileProperties {
 			int numberOfAudioChannels = getDecimalValue(bits, 2, 0, false);
 			setAudioChannels(numberOfAudioChannels);
 
-			String languageCode = "";
 			if (languageType == 1) {
 				read = readUnsignedInt16(ifoFile, offset);
-				languageCode += fromByteToAscii(read, 2);
-
 				offset += 6;
 
 				switch (read) {

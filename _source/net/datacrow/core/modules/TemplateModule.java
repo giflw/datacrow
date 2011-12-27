@@ -45,6 +45,7 @@ import net.datacrow.util.DcImageIcon;
  */
 public class TemplateModule extends DcModule {
     
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = 5366008689695714729L;
     
     private TemplateForm form;

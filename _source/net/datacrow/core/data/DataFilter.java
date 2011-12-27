@@ -793,7 +793,6 @@ public class DataFilter {
     }
     
     private void addOrderByClause(StringBuffer sql) {
-        int counter = 0;
         if (order != null && order.length > 0) {
             for (DcField orderOn : order) {
 
@@ -814,7 +813,6 @@ public class DataFilter {
                     sql.append(referenceTableName);
                     sql.append(".ID = ");
                     sql.append(column);
-                    counter++;
                 } 
             }
         }

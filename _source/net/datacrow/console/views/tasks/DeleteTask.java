@@ -63,8 +63,6 @@ public class DeleteTask extends DataTask {
             startTask();
             
             if (isRunning()) {
-                int counter = 1;
-                
                 for (DcObject dco : items) {
                     try {
                         dco.delete(true);
@@ -75,8 +73,6 @@ public class DeleteTask extends DataTask {
                     try {
                         sleep(10);
                     } catch (Exception ignore) {}
-                    
-                    counter++;
                 }
             }
         } finally {

@@ -228,7 +228,6 @@ public class FileTreePanel extends TreePanel {
                 							DataManager.getKeyList(DataFilters.getCurrent(getModule())) : null;
                 
                 while (rs.next() && !stop) {
-                    int level = 0;
                     parent = top;
                     
                     id = rs.getString(1);
@@ -262,7 +261,6 @@ public class FileTreePanel extends TreePanel {
                             model.nodeChanged(previous);
                             parent = previous;    
                         }
-                        level++;
                 	}
                 }
                 

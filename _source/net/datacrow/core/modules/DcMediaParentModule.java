@@ -37,6 +37,7 @@ import net.datacrow.core.modules.xml.XmlModule;
  */
 public class DcMediaParentModule extends DcMediaModule  {
 
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = -8859370071966397270L;
 
     /**

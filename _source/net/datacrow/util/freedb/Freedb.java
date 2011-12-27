@@ -174,11 +174,10 @@ public class Freedb {
 		try {
 			url = new URL( "http://" + server + "/~cddb/cddb.cgi" );
 		} catch (MalformedURLException e) {
-			throw new Exception(DcResources.getText("msgInvalidURLChangeSetting", url.toString()));
+			throw new Exception(DcResources.getText("msgInvalidURLChangeSetting", "http://" + server + "/~cddb/cddb.cgi"));
 		}
         
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
-
 		try {
 			PrintWriter out = new PrintWriter(connection.getOutputStream());
             String query = "cmd=" + command + "&hello=" + userLogin + "+" + userDomain + "+" + 

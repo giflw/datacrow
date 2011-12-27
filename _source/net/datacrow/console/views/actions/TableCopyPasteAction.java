@@ -42,7 +42,7 @@ public class TableCopyPasteAction implements ActionListener {
         try {
             String text = (String) (clipboard.getContents(this).getTransferData(DataFlavor.stringFlavor));
             StringTokenizer rowTokenizer = new StringTokenizer(text, "\n");
-            for (int i = 0; rowTokenizer.hasMoreTokens(); i++) {
+            while (rowTokenizer.hasMoreTokens()) {
                 String values = rowTokenizer.nextToken();
                 DcObject dco = module.getItem();
 
