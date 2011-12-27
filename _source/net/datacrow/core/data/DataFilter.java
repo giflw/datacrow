@@ -834,15 +834,14 @@ public class DataFilter {
                         sql.append(referenceMod.getTableName());
                         sql.append(".");
                         sql.append(referenceMod.getField(referenceMod.getSystemDisplayFieldIdx()).getDatabaseFieldName());
+                        sql.append(getSortOrder() == _SORTORDER_ASCENDING ? "" : " DESC");
                 	} else if (!orderOn.isUiOnly() && orderOn.getDatabaseFieldName() != null) {
 	                    sql.append(orderOn.getDatabaseFieldName());
+	                    sql.append(getSortOrder() == _SORTORDER_ASCENDING ? "" : " DESC");
                 	}
                 	counter++;
                 }
             }
-            
-            if (counter > 0) 
-            	sql.append(getSortOrder() == _SORTORDER_ASCENDING ? "" : " DESC");
             
         } else if (field != null && !field.isUiOnly()) {
             sql.append(" ORDER BY ");
