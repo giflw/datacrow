@@ -10,7 +10,7 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - Upgraded to the latest version of jAudioTagger (2.0.4)
 - IMDB.com update for non US searches will now place the local title in the Title (local)
   field and the English title in the "Title field". This is only true if the setting 
-  "get local titles" is enabled.
+  "get local titles" is enabled. The option is off by default.
 
 
 -----------------------------------------------------------------------------------------
