@@ -98,7 +98,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                    sql = "ALTER TABLE " + module.getTableName() + " DROP COLUMN COMPANY";
                    DatabaseManager.executeSQL(sql);
                 } catch (SQLException e) {
-                    logger.error(e, e);
+                    logger.debug(e, e);
                 }
             }
         }
