@@ -1033,14 +1033,17 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * @param update Indicates if the item is new or existing.
      */
     public void applyEnhancers(boolean update) {
+        Object value;
+        Object newVal;
+        Object oldVal;
         for (DcField field : getFields()) {
-            Object value = getValue(field.getIndex());
+            value = getValue(field.getIndex());
             for (IValueEnhancer enhancer : field.getValueEnhancers()) {
                 if (enhancer.isEnabled() && 
                     (update && enhancer.isRunOnUpdating() || !update && enhancer.isRunOnInsert())) {
                     
-                    Object newVal = enhancer.apply(field, value);
-                    Object oldVal = getValue(field.getIndex());
+                    newVal = enhancer.apply(field, value);
+                    oldVal = getValue(field.getIndex());
                     
                     if (newVal != null && (oldVal == null || !newVal.equals(oldVal)))
                         setValue(field.getIndex(), newVal);

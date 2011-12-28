@@ -86,7 +86,7 @@ public class DcMediaModule extends DcModule {
                 "Title"));
         addField(new DcField(DcMediaObject._B_DESCRIPTION, getIndex(), "Description", 
                 false, true, false, true,  
-                8000, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                0, ComponentFactory._LONGTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                 "Description"));
         addField(new DcField(DcMediaObject._C_YEAR, getIndex(), "Year", 
                 false, true, false, true,  

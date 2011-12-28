@@ -11,6 +11,8 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
   persons. This column has now been removed to prevent NullPointerExceptions. 
 - ISBNDB.com: error message when retrieving the number of pages for books.
 - ISBNDB.com: error message when retrieving publishers and authors.
+- Description fields had a maximum length of 8000 characters. This size has now been 
+  changed to 2147483647 characters.
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)

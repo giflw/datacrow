@@ -73,6 +73,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.IChildModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
+import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTemplate;
 import net.datacrow.core.objects.Picture;
@@ -571,6 +572,9 @@ public class ItemForm extends DcFrame implements ActionListener {
     protected void saveValues() {
         apply();
         dco.addRequest(new CloseWindowRequest(this));
+        
+        System.out.println(dco.getValue(DcMediaObject._B_DESCRIPTION));
+        
         try {
             if (!update) {
                 dco.setIDs();
