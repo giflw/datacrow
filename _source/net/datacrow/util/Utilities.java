@@ -157,8 +157,11 @@ public class Utilities {
         for (DcObject reference : items) {
             if (reference.getModule().getType() == DcModule._TYPE_MAPPING_MODULE) {
                 ref = ((DcMapping) reference).getReferencedObject();
-                if (ref.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE)
-                	((DcAssociate )ref).setName();
+                
+                if (ref != null) {
+                    if (ref.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE)
+                    	((DcAssociate ) ref).setName();
+                }
                 
                 if (ref != null) references.add(ref);
                 

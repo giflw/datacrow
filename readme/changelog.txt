@@ -4,7 +4,13 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 
 [Fixed]
 - Filter ascending on multiple fields did not work correctly.
-
+- Filters could not be saved for multiple relationship fields. After a restart of Data
+  Crow they would appear as having a blank filter value.
+- Saving a filter will now immediately update the quick filter tool bar.
+- Errors related to an unexpected appearance of the COMPANY column in the database for
+  persons. This column has now been removed to prevent NullPointerExceptions. 
+- ISBNDB.com: error message when retrieving the number of pages for books.
+- ISBNDB.com: error message when retrieving publishers and authors.
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)

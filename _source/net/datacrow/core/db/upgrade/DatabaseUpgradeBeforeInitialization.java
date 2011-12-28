@@ -68,6 +68,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
             	DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, Long.valueOf(0));
             	upgraded |= createIndexes();
             }
+            
+            if (v.isOlder(new Version(3, 9, 11, 0))) {
+                removeCompanyFields();
+            }
 
             if (upgraded) {
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
@@ -84,6 +88,23 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
             logger.error(msg, e);
         }            
     }
+    
+    private void removeCompanyFields() {
+        String sql;
+        for (DcModule module : DcModules.getAllModules()) {
+            
+            if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+                try {
+                   sql = "ALTER TABLE " + module.getTableName() + " DROP COLUMN COMPANY";
+                   DatabaseManager.executeSQL(sql);
+                } catch (SQLException e) {
+                    logger.error(e, e);
+                }
+            }
+        }
+    }
+
+    
     
     private boolean createIndexes() throws Exception {
         Connection conn = DatabaseManager.getConnection();

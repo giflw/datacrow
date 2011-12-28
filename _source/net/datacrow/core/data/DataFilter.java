@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DcRepository;
@@ -43,6 +44,8 @@ import net.datacrow.core.objects.Picture;
 import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
+import org.apache.log4j.Logger;
+
 /**
  * Used to filter for items. 
  * A filter is created out of filter entries (see {@link DataFilterEntry}).
@@ -53,6 +56,8 @@ import net.datacrow.util.Utilities;
  */
 public class DataFilter {
 
+    private static Logger logger = Logger.getLogger(DataFilter.class.getName());
+    
     private int module;
 
     private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -259,6 +264,23 @@ public class DataFilter {
                     value = Boolean.valueOf(sValue);
                 } else if (valueType == DcRepository.ValueTypes._DATE) {
                     value = sdf.parse(sValue);
+                } else if (valueType == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    
+                    StringTokenizer st = new StringTokenizer(sValue, ",");
+                    Collection<DcObject> values = new ArrayList<DcObject>();
+                    while (st.hasMoreElements()) {
+                        DataFilter df = new DataFilter(field.getReferenceIdx());
+                        df.addEntry(new DataFilterEntry(DataFilterEntry._AND,
+                                                        field.getReferenceIdx(), 
+                                                        DcObject._ID, 
+                                                        Operator.EQUAL_TO, 
+                                                        (String) st.nextElement()));
+
+                        values.addAll(DataManager.get(df));
+                    }
+                
+                    value = values;
+
                 } else if (valueType == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                     DataFilter df = new DataFilter(field.getReferenceIdx());
                     df.addEntry(new DataFilterEntry(DataFilterEntry._AND,
@@ -317,9 +339,17 @@ public class DataFilter {
             storage += "<MODULE>" + entry.getModule() + "</MODULE>\n";
             storage += "<FIELD>" + entry.getField() + "</FIELD>\n";
             
-            Object value;
-            if (entry.getValue() == null) {
-                value = "";
+            Object value = "";
+            if (entry.getValue() instanceof Collection) {
+                String ids = "";
+                for (Object o : ((Collection) entry.getValue())) {
+                    if (o != null && o instanceof DcObject) {
+                        ids += (ids.length() > 0 ? "," : "") + ((DcObject) o).getID();
+                    } else {
+                        logger.debug("Expected an instance of DcObject for Collections for DataFilter. Unexpected value encountered " + o);
+                    }
+                }
+                value = ids;
             } else if (entry.getValue() instanceof DcObject) {
                 value = ((DcObject) entry.getValue()).getID();
             } else if (entry.getValue() instanceof Date) {

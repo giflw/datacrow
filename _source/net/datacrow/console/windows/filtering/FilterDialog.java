@@ -249,7 +249,9 @@ public class FilterDialog extends DcFrame implements ActionListener {
                 comboFilters.addItem("");
             
             for (DataFilter df : filters)
-                comboFilters.addItem(df);            
+                comboFilters.addItem(df);
+            
+            DataCrow.mainFrame.rebuildQuickFilterBar();
         }
         
         private void save() {

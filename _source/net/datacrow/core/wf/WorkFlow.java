@@ -144,7 +144,12 @@ public class WorkFlow {
 	                int fieldIdx = 0;
 	                for (int i = fieldStart; i < fields.length + fieldStart; i++) {
 	                	String column = md.getColumnName(i);
-	                    fields[fieldIdx++] = module.getField(column).getIndex();
+	                	
+	                	try {
+	                	    fields[fieldIdx++] = module.getField(column).getIndex();
+	                	} catch (Exception e) {
+	                	    logger.error("Could not find field for column " + column, e);
+	                	}
 	                }
             	}
             	

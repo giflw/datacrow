@@ -105,7 +105,11 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                         "the Name Rewriter Tool located in the Tools menu.\n");
                 upgraded = correctAssociateNames();
                 upgraded = fillUIPersistFieldsPersons();
-            }            
+            }   
+            
+            if (v.isOlder(new Version(3, 9, 11, 0))) {
+                
+            }
             
             if (upgraded) {
                 lf.close();
