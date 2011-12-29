@@ -86,7 +86,11 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         sb.append("<a ");
         sb.append(Utilities.getHtmlStyle());
         sb.append(" href=\"http://");
-        sb.append(dco.getID());
+        
+        String ID = dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE ?
+                dco.getDisplayString(DcMapping._B_REFERENCED_ID) : dco.getID();
+        
+        sb.append(ID);
         sb.append("?module=");
         
         if (dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE)

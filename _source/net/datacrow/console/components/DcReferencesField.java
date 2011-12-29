@@ -103,6 +103,8 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
         btCreate.addActionListener(this);
         btCreate.setActionCommand("create");
         btCreate.setEnabled(allowCreate);
+        
+        this.setMinimumSize(new Dimension(200,42));
     }
     
     @Override
