@@ -17,6 +17,7 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - External references not updated after updating the item from an online search. 
 - NullPointerException while importing an item from a CSV file without mapping 
   all fields.
+- NullPointerException when selecting Undo Filter from the Filter menu.
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)
