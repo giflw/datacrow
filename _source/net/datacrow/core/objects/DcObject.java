@@ -769,14 +769,17 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 }
             }
             
-            if (!exists) {
+            if (mapping.getReferencedObject() == null) {
+                logger.debug("External referenced object was empty. Exteneral reference has not been created for " + this);
+            } else if (!exists) {
                 DcMapping newMapping = (DcMapping) DcModules.get(DcModules.getMappingModIdx(
                         getModule().getIndex(), mapping.getReferencedObject().getModule().getIndex(), DcObject._SYS_EXTERNAL_REFERENCES)).getItem();
                 newMapping.setValue(DcMapping._A_PARENT_ID, getID());
                 newMapping.setValue(DcMapping._B_REFERENCED_ID, mapping.getReferencedObject().getID());
+                newMapping.setReference(mapping.getReferencedObject());
                 currentMappings.add(newMapping);
                 getValueDef(DcObject._SYS_EXTERNAL_REFERENCES).setChanged(true);
-            }
+            } 
         }
     }
 

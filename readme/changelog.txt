@@ -13,6 +13,10 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - ISBNDB.com: error message when retrieving publishers and authors.
 - Description fields had a maximum length of 8000 characters. This size has now been 
   changed to 2147483647 characters.
+- Errors while merging external references.
+- External references not updated after updating the item from an online search. 
+- NullPointerException while importing an item from a CSV file without mapping 
+  all fields.
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)

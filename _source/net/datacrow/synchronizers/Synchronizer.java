@@ -92,6 +92,11 @@ public abstract class Synchronizer {
         if (source == null) return;
         
         DcObject queried = osh != null ? osh.query(source) : source;
+        
+        // External references need to be merged manually - not part of the field settings
+        if (target.getField(DcObject._SYS_EXTERNAL_REFERENCES) != null)
+            target.setValue(DcObject._SYS_EXTERNAL_REFERENCES, queried.getValue(DcObject._SYS_EXTERNAL_REFERENCES));
+        
         for (int field : queried.getFieldIndices())
             setValue(target, field, queried.getValue(field));
     }

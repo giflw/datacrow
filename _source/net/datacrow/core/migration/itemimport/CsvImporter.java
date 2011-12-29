@@ -122,6 +122,8 @@ public class CsvImporter extends ItemImporter {
                         String value = values[fieldIdx];
                         DcField field = mappings.getTarget(fieldIdx);
                         
+                        if (field == null) continue;
+                        
                         if ((field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION && field.getValueType() != DcRepository.ValueTypes._PICTURE) ||  
                             field.getIndex() == DcObject._ID || field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES) continue;
                         
