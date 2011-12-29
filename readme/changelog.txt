@@ -18,6 +18,7 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - NullPointerException while importing an item from a CSV file without mapping 
   all fields.
 - NullPointerException when selecting Undo Filter from the Filter menu.
+- Upgrading from version 3.9.7 to 3.9.10 is now no longer an issue.
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)

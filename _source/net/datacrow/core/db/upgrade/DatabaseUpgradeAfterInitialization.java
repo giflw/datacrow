@@ -98,7 +98,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = cleanupPictures();                
             }
             
-            if (v.isOlder(new Version(3, 9, 10, 0))) {
+            if (v.equals(new Version(3, 9, 9, 0)) || v.equals(new Version(3, 9, 8, 0))) {
                 lf = new LogForm();
                 DcSwingUtilities.displayMessage(
                         "The names of authors will be corrected. The format of the names can be changed afterwards using " +
@@ -106,10 +106,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = correctAssociateNames();
                 upgraded = fillUIPersistFieldsPersons();
             }   
-            
-            if (v.isOlder(new Version(3, 9, 11, 0))) {
-                
-            }
             
             if (upgraded) {
                 lf.close();
