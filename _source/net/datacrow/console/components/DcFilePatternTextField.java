@@ -23,7 +23,7 @@ public class DcFilePatternTextField extends DcShortTextField {
         @Override
         public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
             if (i + 1 < MAX_TEXT_LENGTH)
-                super.insertString(i, StringUtils.normalize(s), attributeset);
+                super.insertString(i, s.equals("_") ? "_" : StringUtils.normalize(s), attributeset);
         }
     }
 }

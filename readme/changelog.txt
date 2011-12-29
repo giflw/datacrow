@@ -21,6 +21,7 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - Upgrading from version 3.9.7 (or older) to 3.9.10 (or newer) is now no longer an issue.
 - Incorrect size for multiple reference fields when viewing items as read only.
 - Hyperlinks to items were not working.
+- Support for underscores has been added to the file renamer.
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)
