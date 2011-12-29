@@ -66,6 +66,9 @@ public class SortingDialog extends DcDialog implements ActionListener {
         
         build();
         
+        DataFilter df = DataFilters.getCurrent(module);
+        this.panelSortOrder.setSortOrder(df.getSortOrder());
+        
         setSize(DcSettings.getDimension(DcRepository.Settings.stSortDialogSize));
         setCenteredLocation();
     }

@@ -454,7 +454,7 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         if (mode != null && !mode.keywordSearch()) {
             try {
                 CueCatCode ccc = CueCatDecoder.decodeLine(query);
-                if (ccc.barType != CueCatCode.BARCODE_UNKNOWN) {
+                if (ccc != null && ccc.barType != CueCatCode.BARCODE_UNKNOWN) {
                     query = ccc.barCode;
                     panelService.setQuery(query);
                 }

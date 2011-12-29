@@ -1313,13 +1313,12 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
                         int sortOrder = df.getSortOrder();
                         sortOrder = sortOrder == DataFilter._SORTORDER_ASCENDING ? DataFilter._SORTORDER_DESCENDING :  DataFilter._SORTORDER_ASCENDING;
                         df.setSortOrder(sortOrder);
+                    } else {
+                        df.setOrder(new DcField[] {field});
                     }
                     
-                    df.setOrder(new DcField[] {field});
                     DataFilters.setCurrent(module.getIndex(), df);
-                    
                     clear();
-                    
                     module.getSearchView().sort();
                     module.getSettings().set(DcRepository.ModuleSettings.stSearchOrder, new String[] {field.getDatabaseFieldName()});
                 }

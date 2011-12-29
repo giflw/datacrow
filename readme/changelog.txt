@@ -22,6 +22,7 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - Incorrect size for multiple reference fields when viewing items as read only.
 - Hyperlinks to items were not working.
 - Support for underscores has been added to the file renamer.
+- NullPointerException when searching for ASINs (related to CueCat scanner).
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)
