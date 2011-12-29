@@ -25,7 +25,6 @@ import net.datacrow.util.DcImageIcon;
  */
 public class UserModule extends DcParentModule {
     
-    @SuppressWarnings("unused")
     private static final long serialVersionUID = 8781289658107612773L;
 
     /**

@@ -49,7 +49,6 @@ public class LoanModule extends DcModule {
 
     private static Logger logger = Logger.getLogger(DcModule.class.getName());
     
-    @SuppressWarnings("unused")
     private static final long serialVersionUID = -1777037389578494831L;
 
     /**
