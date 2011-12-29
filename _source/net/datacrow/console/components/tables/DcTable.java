@@ -31,6 +31,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -49,7 +51,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import net.datacrow.console.ComponentFactory;
@@ -76,6 +80,8 @@ import net.datacrow.console.components.renderers.TimeFieldTableCellRenderer;
 import net.datacrow.console.views.IViewComponent;
 import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -95,7 +101,7 @@ import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
-public class DcTable extends JTable implements IViewComponent {
+public class DcTable extends JTable implements IViewComponent, MouseListener {
 
     private static Logger logger = Logger.getLogger(DcTable.class.getName());
 
@@ -138,6 +144,9 @@ public class DcTable extends JTable implements IViewComponent {
         this.caching = caching;
         this.module = module;
         this.readonly = readonly;
+        
+        JTableHeader header = getTableHeader();
+        header.addMouseListener(this);
     }
     
     public void setDynamicLoading(boolean b) {
@@ -288,9 +297,6 @@ public class DcTable extends JTable implements IViewComponent {
             value = dco.getValue(fields[i]);
             
             if (view != null && view.getType() == View._TYPE_INSERT &&  value instanceof Picture) {
-                
-                // TODO: test this, worked with bytes..
-                
                 // keep images save
                 picture = (Picture) value;
                 old_image = (DcImageIcon) picture.getValue(Picture._D_IMAGE);;
@@ -1283,4 +1289,57 @@ public class DcTable extends JTable implements IViewComponent {
             getModel().setValueAt(DcModules.get(keys.get(key)), row, getColumnIndexForField(Media._SYS_MODULE));
         }
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        
+        JTableHeader header = (JTableHeader)e.getComponent();
+        TableColumnModel tcm = header.getColumnModel();
+        int col = tcm.getColumnIndexAtX( e.getX() );
+        
+        if (col != -1) {
+            try {
+                TableColumn column = tcm.getColumn(col);
+                
+                if (column == null) return;
+                
+                DcField field = module.getField(((Integer) column.getIdentifier()).intValue());
+                DataFilter df = DataFilters.getCurrent(module.getIndex());
+                
+                if (field.isSearchable()) {
+                    DcField[] currentOrder = df.getOrder();
+                    if (currentOrder != null && currentOrder.length == 1 && currentOrder[0].equals(field)) {
+                        // reverse the order
+                        int sortOrder = df.getSortOrder();
+                        sortOrder = sortOrder == DataFilter._SORTORDER_ASCENDING ? DataFilter._SORTORDER_DESCENDING :  DataFilter._SORTORDER_ASCENDING;
+                        df.setSortOrder(sortOrder);
+                    }
+                    
+                    df.setOrder(new DcField[] {field});
+                    DataFilters.setCurrent(module.getIndex(), df);
+                    
+                    clear();
+                    
+                    module.getSearchView().sort();
+                    module.getSettings().set(DcRepository.ModuleSettings.stSearchOrder, new String[] {field.getDatabaseFieldName()});
+                }
+            } catch (Exception err) {
+                logger.error(err, err);
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }

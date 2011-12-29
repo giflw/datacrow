@@ -32,6 +32,8 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
   can be found in Settings > Settings > General Settings. Additionally you now have two
   options in the right-click menu of an item "Edit" and "Open". By default the option has
   bee set to the old functionality which is to always open items in edit mode.
+- Clicking on a column header will now ort the content of the table. Clicking again 
+  reverses the order.
 
 
 -----------------------------------------------------------------------------------------
