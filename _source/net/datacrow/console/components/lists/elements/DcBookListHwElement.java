@@ -39,7 +39,6 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMediaObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.objects.helpers.Book;
 
@@ -76,12 +75,7 @@ public class DcBookListHwElement extends DcObjectListHwElement {
         addComponent(titleLabel, 0, 0);
         addComponent(getLabel(Book._A_TITLE, false, field1Length), 1, 0);
         addComponent(getLabel(Book._I_CATEGORY, true, label2Length), 2, 0);
-        
-        JLabel label = getLabel(Book._I_CATEGORY, false, field2Length);
-        DcProperty category = (DcProperty) dco.getValue(Book._I_CATEGORY);
-        if (category != null) label.setIcon(category.getIcon());
-
-        addComponent(label, 3, 0);
+        addComponent(getLabel(Book._I_CATEGORY, false, label2Length), 3, 0);
         
         addComponent(getLabel(Book._G_AUTHOR, true, label1Length), 0, 1);
         addComponent(getLabel(Book._G_AUTHOR, false, field1Length), 1, 1);
