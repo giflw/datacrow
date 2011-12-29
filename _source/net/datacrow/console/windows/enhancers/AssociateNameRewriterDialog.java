@@ -281,7 +281,7 @@ public class AssociateNameRewriterDialog extends DcDialog implements ActionListe
             try {
                 ResultSet rs = DatabaseManager.executeSQL(
                         "SELECT COUNT(ID) AS TOTAL FROM " + module.getTableName() +
-                        " WHERE LASTNAME IS NOT NULL OR FIRSTNAME IS NOT NULL");
+                        " WHERE LASTNAME IS NOT NULL AND FIRSTNAME IS NOT NULL");
                 
                 int total = 0;
                 while (rs.next()) {
@@ -292,7 +292,7 @@ public class AssociateNameRewriterDialog extends DcDialog implements ActionListe
                 initProgressBar(total);
                 rs = DatabaseManager.executeSQL(
                         "SELECT ID, " + field.getDatabaseFieldName() + ", LASTNAME, FIRSTNAME FROM " + module.getTableName() + 
-                        " WHERE LASTNAME IS NOT NULL OR FIRSTNAME IS NOT NULL");
+                        " WHERE LASTNAME IS NOT NULL AND FIRSTNAME IS NOT NULL");
                 
                 String ID;
                 String name;

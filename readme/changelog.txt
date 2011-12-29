@@ -23,6 +23,8 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - Hyperlinks to items were not working.
 - Support for underscores has been added to the file renamer.
 - NullPointerException when searching for ASINs (related to CueCat scanner).
+- Various upgrade problems from the 3.9.10 version related to the associate names;
+  names empty after upgrade, names not shown in the table view
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)

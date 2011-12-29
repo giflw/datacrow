@@ -45,6 +45,9 @@ import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
+import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.settings.definitions.QuickViewFieldDefinition;
+import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
@@ -106,6 +109,57 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = correctAssociateNames();
                 upgraded = fillUIPersistFieldsPersons();
             }   
+            
+            if (v.isOlder(new Version(3, 9, 11, 0))) {
+
+                for (DcModule module : DcModules.getAllModules()) {
+                    Collection<DcFieldDefinition> definitions = new ArrayList<DcFieldDefinition>();
+                    if (module.getFieldDefinitions() != null) {
+                        definitions.addAll(module.getFieldDefinitions().getDefinitions());
+                        for (DcFieldDefinition def : definitions) {
+                            if (module.getField(def.getIndex()) == null)
+                                module.getFieldDefinitions().getDefinitions().remove(def);
+                        }
+                    }
+
+                    int[] tableOrder = (int[]) module.getSetting(DcRepository.ModuleSettings.stTableColumnOrder);
+                    if (tableOrder != null) {
+                        int counter = 0;
+                        for (int field : tableOrder) {
+                            if (module.getField(field) != null)
+                               counter++;
+                        }
+                        
+                        int[] newOrder = new int[counter];
+                        counter = 0;
+                        for (int field : tableOrder) {
+                            if (module.getField(field) != null)
+                                newOrder[counter++] = field;
+                        }
+                        
+                        module.setSetting(DcRepository.ModuleSettings.stTableColumnOrder, newOrder);
+                    }
+                    
+                    Collection<QuickViewFieldDefinition> qvDefinitions = new ArrayList<QuickViewFieldDefinition>();
+                    if (module.getQuickViewFieldDefinitions() != null) {
+                        qvDefinitions.addAll(module.getQuickViewFieldDefinitions().getDefinitions());
+                        for (QuickViewFieldDefinition def : qvDefinitions) {
+                            if (module.getField(def.getField()) == null)
+                                module.getQuickViewFieldDefinitions().getDefinitions().remove(def);
+                        }
+                    }
+                    
+                    Collection<WebFieldDefinition> wfDefinitions = new ArrayList<WebFieldDefinition>();
+                    if (module.getWebFieldDefinitions() != null) {
+                        wfDefinitions.addAll(module.getWebFieldDefinitions().getDefinitions());
+                        for (WebFieldDefinition def : wfDefinitions) {
+                            if (module.getField(def.getField()) == null)
+                                module.getWebFieldDefinitions().getDefinitions().remove(def);
+                        }
+                    }
+                }
+            }
+            
             
             if (upgraded) {
                 lf.close();
@@ -231,7 +285,8 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                     fieldLn = module.getField(DcAssociate._F_LASTTNAME).getDatabaseFieldName();
                     fieldN  = module.getField(DcAssociate._A_NAME).getDatabaseFieldName();
                     
-                    sql = "select " + fieldFn + ", " + fieldLn + ", ID from " + module.getTableName(); 
+                    sql = "select " + fieldFn + ", " + fieldLn + ", ID from " + module.getTableName() + 
+                          " where firstname is not null and lastname is not null"; 
                     ResultSet rs = DatabaseManager.executeSQL(sql);
                     while (rs.next()) {
                         firstname = rs.getString(1);
@@ -244,6 +299,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                             tmp = lastname;
                             lastname = firstname.substring(firstname.indexOf(" ") + 1);
                             firstname = firstname.substring(0, firstname.indexOf(" ")) + " " + tmp;
+                        }
+                        
+                        if (firstname.length() == 0 && lastname.length() == 0) {
+                            continue;
                         }
                         
                         name = (firstname + " " + lastname).trim();

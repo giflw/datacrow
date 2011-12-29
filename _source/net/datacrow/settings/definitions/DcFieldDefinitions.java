@@ -27,6 +27,7 @@ package net.datacrow.settings.definitions;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import net.datacrow.core.DcRepository;
@@ -59,7 +60,7 @@ public class DcFieldDefinitions implements IDefinitions {
     }
     
     @Override
-    public Collection<DcFieldDefinition> getDefinitions() {
+    public List<DcFieldDefinition> getDefinitions() {
         return definitions;
     }    
     
