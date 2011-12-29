@@ -110,56 +110,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = fillUIPersistFieldsPersons();
             }   
             
-            if (v.isOlder(new Version(3, 9, 11, 0))) {
-
-                for (DcModule module : DcModules.getAllModules()) {
-                    Collection<DcFieldDefinition> definitions = new ArrayList<DcFieldDefinition>();
-                    if (module.getFieldDefinitions() != null) {
-                        definitions.addAll(module.getFieldDefinitions().getDefinitions());
-                        for (DcFieldDefinition def : definitions) {
-                            if (module.getField(def.getIndex()) == null)
-                                module.getFieldDefinitions().getDefinitions().remove(def);
-                        }
-                    }
-
-                    int[] tableOrder = (int[]) module.getSetting(DcRepository.ModuleSettings.stTableColumnOrder);
-                    if (tableOrder != null) {
-                        int counter = 0;
-                        for (int field : tableOrder) {
-                            if (module.getField(field) != null)
-                               counter++;
-                        }
-                        
-                        int[] newOrder = new int[counter];
-                        counter = 0;
-                        for (int field : tableOrder) {
-                            if (module.getField(field) != null)
-                                newOrder[counter++] = field;
-                        }
-                        
-                        module.setSetting(DcRepository.ModuleSettings.stTableColumnOrder, newOrder);
-                    }
-                    
-                    Collection<QuickViewFieldDefinition> qvDefinitions = new ArrayList<QuickViewFieldDefinition>();
-                    if (module.getQuickViewFieldDefinitions() != null) {
-                        qvDefinitions.addAll(module.getQuickViewFieldDefinitions().getDefinitions());
-                        for (QuickViewFieldDefinition def : qvDefinitions) {
-                            if (module.getField(def.getField()) == null)
-                                module.getQuickViewFieldDefinitions().getDefinitions().remove(def);
-                        }
-                    }
-                    
-                    Collection<WebFieldDefinition> wfDefinitions = new ArrayList<WebFieldDefinition>();
-                    if (module.getWebFieldDefinitions() != null) {
-                        wfDefinitions.addAll(module.getWebFieldDefinitions().getDefinitions());
-                        for (WebFieldDefinition def : wfDefinitions) {
-                            if (module.getField(def.getField()) == null)
-                                module.getWebFieldDefinitions().getDefinitions().remove(def);
-                        }
-                    }
-                }
-            }
-            
+            settingsCorrections();
             
             if (upgraded) {
                 lf.close();
@@ -176,6 +127,73 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private void settingsCorrections() {
+        for (DcModule module : DcModules.getAllModules()) {
+            Collection<DcFieldDefinition> definitions = new ArrayList<DcFieldDefinition>();
+            if (module.getFieldDefinitions() != null) {
+                definitions.addAll(module.getFieldDefinitions().getDefinitions());
+                for (DcFieldDefinition def : definitions) {
+                    if (module.getField(def.getIndex()) == null)
+                        module.getFieldDefinitions().getDefinitions().remove(def);
+                }
+            }
+
+            int[] tableOrder = (int[]) module.getSetting(DcRepository.ModuleSettings.stTableColumnOrder);
+            if (tableOrder != null) {
+                int counter = 0;
+                for (int field : tableOrder) {
+                    if (module.getField(field) != null)
+                       counter++;
+                }
+                
+                int[] newOrder = new int[counter];
+                counter = 0;
+                for (int field : tableOrder) {
+                    if (module.getField(field) != null)
+                        newOrder[counter++] = field;
+                }
+                
+                module.setSetting(DcRepository.ModuleSettings.stTableColumnOrder, newOrder);
+            }
+            
+            int[] cardOrder = (int[]) module.getSetting(DcRepository.ModuleSettings.stCardViewPictureOrder);
+            if (cardOrder != null) {
+                int counter = 0;
+                for (int field : cardOrder) {
+                    if (module.getField(field) != null)
+                       counter++;
+                }
+                
+                int[] newOrder = new int[counter];
+                counter = 0;
+                for (int field : cardOrder) {
+                    if (module.getField(field) != null)
+                        newOrder[counter++] = field;
+                }
+                
+                module.setSetting(DcRepository.ModuleSettings.stCardViewPictureOrder, newOrder);
+            }
+            
+            Collection<QuickViewFieldDefinition> qvDefinitions = new ArrayList<QuickViewFieldDefinition>();
+            if (module.getQuickViewFieldDefinitions() != null) {
+                qvDefinitions.addAll(module.getQuickViewFieldDefinitions().getDefinitions());
+                for (QuickViewFieldDefinition def : qvDefinitions) {
+                    if (module.getField(def.getField()) == null)
+                        module.getQuickViewFieldDefinitions().getDefinitions().remove(def);
+                }
+            }
+            
+            Collection<WebFieldDefinition> wfDefinitions = new ArrayList<WebFieldDefinition>();
+            if (module.getWebFieldDefinitions() != null) {
+                wfDefinitions.addAll(module.getWebFieldDefinitions().getDefinitions());
+                for (WebFieldDefinition def : wfDefinitions) {
+                    if (module.getField(def.getField()) == null)
+                        module.getWebFieldDefinitions().getDefinitions().remove(def);
+                }
+            }
+        }
     }
     
     private boolean cleanupPictures() {
