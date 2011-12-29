@@ -444,11 +444,11 @@ public class View extends DcPanel implements ListSelectionListener {
         return saved;
     }
 
-    public void open() {
+    public void open(boolean readonly) {
         DcObject dco = getSelectedItem();
         
         if (dco != null) {
-            ItemForm form = new ItemForm(false, getType() == View._TYPE_SEARCH, 
+            ItemForm form = new ItemForm(readonly, getType() == View._TYPE_SEARCH, 
                                          dco, getType() != View._TYPE_SEARCH);
             form.setVisible(true);
             form = null;

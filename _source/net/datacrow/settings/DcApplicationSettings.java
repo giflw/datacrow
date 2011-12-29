@@ -109,7 +109,16 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             "lblRunOnStartup",
                             false,
-                            false));  
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stOpenItemsInEditModus,
+                            Boolean.TRUE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblOpenItemsDefaultModus",
+                            false,
+                            true));  
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stMovieMeterGetReviews,

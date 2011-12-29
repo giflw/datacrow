@@ -42,8 +42,8 @@ public class UserForm extends ItemForm {
     private PluginPermissionPanel pluginPermissionPanel;
     private ModulePermissionPanel modulePermissionPanel;
     
-    public UserForm(DcObject dco, boolean update, boolean template) {
-        super(false, update, dco, template);
+    public UserForm(boolean readonly, DcObject dco, boolean update, boolean template) {
+        super(readonly, update, dco, template);
         
         // needed for saving the permissions
         if (dco.getID() == null)

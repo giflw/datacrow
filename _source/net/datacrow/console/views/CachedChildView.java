@@ -64,7 +64,7 @@ public class CachedChildView extends View implements ActionListener {
     }
 
     @Override
-    public void open() {}    
+    public void open(boolean readonly) {}    
     
     @Override
     public void clear() {

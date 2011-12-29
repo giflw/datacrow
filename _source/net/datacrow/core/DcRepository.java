@@ -120,6 +120,7 @@ public abstract class DcRepository {
         public static final String stToolSelectWizard = "tool_select_wizard_form_size";
         public static final String stDriveScannerRunOnStartup = "drive_scanner_run_on_startup";
         public static final String stDrivePollerRunOnStartup = "drive_poller_run_on_startup";
+        public static final String stOpenItemsInEditModus = "open_items_in_edit_modus";
         public static final String stModuleExportWizardFormSize = "module_export_wizard_form_size";
         public static final String stModuleImportWizardFormSize = "module_import_wizard_form_size";
         public static final String stServerSettingsDialogSize = "server_settings_dialog_size";

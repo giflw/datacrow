@@ -7,7 +7,9 @@ import java.awt.event.MouseListener;
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.menu.ViewPopupMenu;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.settings.DcSettings;
 
 public class ViewMouseListener implements MouseListener {
     
@@ -38,7 +40,7 @@ public class ViewMouseListener implements MouseListener {
         }
 
         if (e.getClickCount() == 2 && vc.getSelectedIndex() > -1) {
-            vc.getView().open();
+            vc.getView().open(!DcSettings.getBoolean(DcRepository.Settings.stOpenItemsInEditModus));
             e.consume();
         }
     }

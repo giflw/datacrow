@@ -80,7 +80,7 @@ public class DcReferenceField extends JComponent implements IComponent, ActionLi
 
     @Override
     public void setEditable(boolean b) {
-        btCreate.setVisible(true);
+        btCreate.setVisible(b);
         btCreate.setEnabled(b && allowCreate);
         cb.setEditable(b);
     }

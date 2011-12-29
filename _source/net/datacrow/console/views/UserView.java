@@ -18,11 +18,11 @@ public class UserView extends View {
     }
 
     @Override
-    public void open() {
+    public void open(boolean readonly) {
         DcObject dco = getSelectedItem();
         
         if (dco != null) {
-            UserForm form = new UserForm(dco, getType() == View._TYPE_SEARCH, getType() != View._TYPE_SEARCH);
+            UserForm form = new UserForm(readonly, dco, getType() == View._TYPE_SEARCH, getType() != View._TYPE_SEARCH);
             form.setVisible(true);
         } else {
             DcSwingUtilities.displayWarningMessage(DcResources.getText("msgSelectRowToOpen"));

@@ -18,13 +18,19 @@ Data Crow 3.9.11  [Released on December 30, 2011]  [testing: high]  [target: pro
 - NullPointerException while importing an item from a CSV file without mapping 
   all fields.
 - NullPointerException when selecting Undo Filter from the Filter menu.
-- Upgrading from version 3.9.7 to 3.9.10 is now no longer an issue.
+- Upgrading from version 3.9.7 (or older) to 3.9.10 (or newer) is now no longer an issue.
+- Incorrect size for multiple reference fields when viewing items as read only.
+- Hyperlinks to items were not working.
 
 [Changed]
 - Upgraded to the latest version of jAudioTagger (2.0.4)
 - IMDB.com update for non US searches will now place the local title in the Title (local)
   field and the English title in the "Title field". This is only true if the setting 
   "get local titles" is enabled. The option is off by default.
+- Added an open to open items either in read only or edit mode by default. The setting
+  can be found in Settings > Settings > General Settings. Additionally you now have two
+  options in the right-click menu of an item "Edit" and "Open". By default the option has
+  bee set to the old functionality which is to always open items in edit mode.
 
 
 -----------------------------------------------------------------------------------------

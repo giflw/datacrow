@@ -487,7 +487,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             showPopupMenu(e.getX(), e.getY());
 
         if (e.getClickCount() == 2 && dco != null)
-            DcModules.get(module).getCurrentSearchView().open();
+            DcModules.get(module).getCurrentSearchView().open(!DcSettings.getBoolean(DcRepository.Settings.stOpenItemsInEditModus));
     }
 
     @Override

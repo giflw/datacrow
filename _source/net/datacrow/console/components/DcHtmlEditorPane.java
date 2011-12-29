@@ -39,10 +39,12 @@ import javax.swing.text.html.HTMLEditorKit;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.DcEditorMouseListener;
 import net.datacrow.console.windows.itemforms.ItemForm;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
@@ -156,7 +158,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
                 
                 if (dco != null) {
                     dco.markAsUnchanged();
-                    new ItemForm(false, true, dco, false).setVisible(true);
+                    new ItemForm(!DcSettings.getBoolean(DcRepository.Settings.stOpenItemsInEditModus), true, dco, false).setVisible(true);
                 }
             }
         }
