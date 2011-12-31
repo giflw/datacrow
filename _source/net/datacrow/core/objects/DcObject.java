@@ -354,8 +354,11 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             
         boolean set = false;
         for (DcObject mapping : references) {
+            
+            if (mapping == null) continue;
+            
             DcObject reference = ((DcMapping) mapping).getReferencedObject();
-            if (reference.getDisplayString(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
+            if (reference != null && reference.getDisplayString(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
                 reference.setValue(ExternalReference._EXTERNAL_ID, key);
                 set = true;
             }
