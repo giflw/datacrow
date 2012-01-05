@@ -28,7 +28,9 @@ package net.datacrow.fileimporters;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -46,6 +48,10 @@ import net.datacrow.util.Utilities;
 import net.datacrow.util.isbn.ISBN;
 
 import org.apache.log4j.Logger;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.sax.BodyContentHandler;
 import org.chabanois.isbn.extractor.FileISBNExtractor;
 import org.chabanois.isbn.extractor.ISBNCandidates;
 import org.chabanois.isbn.extractor.PDFBoxTextExtractor;
@@ -68,7 +74,23 @@ public class EbookImport extends FileImporter {
 
     @Override
     public String[] getDefaultSupportedFileTypes() {
-        return new String[] {"txt","chm", "doc", "pdf", "prc", "pdb", "kml", "html", "htm", "pdf", "prc", "lit"};
+        return new String[] {
+                "txt",  // N/A
+                "chm",  // CHM parser
+                "doc",  // Office Parse
+                "pdf",  // PDF Box
+                "epub", // EPUB Parser
+                "prc",  
+                "rtf",  // TODO
+                "pdb", 
+                "kml", 
+                "html",  // HTML Parser 
+                "htm",   // HTML Parser
+                "prc", 
+                "lit", 
+                "docx",  // Office Parser
+                "odt"    // Open Office Parser
+        }; 
     }
     
     @Override
@@ -97,8 +119,41 @@ public class EbookImport extends FileImporter {
                 book.setValue(Book._N_ISBN13, isbn13);
             }
             
-            if (filename.toLowerCase().endsWith("pdf")) {
-                
+            
+            if (!filename.toLowerCase().endsWith("pdf")) {
+                // non PDF files are handled with the Tika library
+                InputStream input = new FileInputStream(new File(filename));
+                org.xml.sax.ContentHandler textHandler = new BodyContentHandler();
+                Metadata metadata = new Metadata();
+                ParseContext context = new ParseContext();
+                Parser parser = null;
+                if (filename.toLowerCase().endsWith("chm")) {
+                    parser = new org.apache.tika.parser.chm.ChmParser();
+                    parser.parse(input, textHandler, metadata, context);
+                    input.close();
+                } else if (filename.toLowerCase().endsWith("doc") || filename.toLowerCase().endsWith("docx")) {
+                    parser = new org.apache.tika.parser.microsoft.OfficeParser();
+                    parser.parse(input, textHandler, metadata, context);
+                    input.close();
+                } else if (filename.toLowerCase().endsWith("htm") || filename.toLowerCase().endsWith("html")) {
+                    parser = new org.apache.tika.parser.html.HtmlParser();
+                    parser.parse(input, textHandler, metadata, context);
+                    input.close();
+                } else if (filename.toLowerCase().endsWith("odt")) {
+                    parser = new org.apache.tika.parser.odf.OpenDocumentMetaParser();
+                    parser.parse(input, textHandler, metadata, context);
+                    input.close();
+                } else if (filename.toLowerCase().endsWith("odt")) {
+                    parser = new org.apache.tika.parser.odf.OpenDocumentMetaParser();
+                    parser.parse(input, textHandler, metadata, context);
+                    input.close();
+                } else if (filename.toLowerCase().endsWith("epub")) {
+                    parser = new org.apache.tika.parser.epub.EpubParser();
+                    parser.parse(input, textHandler, metadata, context);
+                    input.close();
+                }
+            } else if (filename.toLowerCase().endsWith("pdf")) {
+                // PDF files are handled the old fashioned way with PDFBox
                 File file = new File(filename);
                 FileISBNExtractor fileISBNExtractor = new FileISBNExtractor();
                 fileISBNExtractor.setSearchMinBytes(30000);
@@ -112,7 +167,6 @@ public class EbookImport extends FileImporter {
                         book.setValue(Book._N_ISBN13, ISBN.isISBN10(s) ? ISBN.getISBN13(s) : 
                                                       ISBN.isISBN13(s) ? s : null);
                 }
-                
                 
                 RandomAccessFile raf = null;
                 PDFFile pdffile;
