@@ -54,7 +54,7 @@ import net.datacrow.util.DcImageIcon;
  */
 public class DcPropertyModule extends DcModule {
 
-
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = -1481435217423089270L;
 
     protected DcMinimalisticItemView form;

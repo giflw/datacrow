@@ -565,6 +565,9 @@ public class DataManager {
     private static DcObject getObjectForDisplayValue(int moduleIdx, String s) {
         DcModule module = DcModules.get(moduleIdx);
 
+        Collection<String> values = new ArrayList<String>();
+        values.add(s);
+        
         try {
         	String columns = module.getIndex() + " AS MODULEIDX";
         	for (DcField field : module.getFields()) {
@@ -575,24 +578,30 @@ public class DataManager {
             String query = "SELECT " + columns + " FROM " + module.getTableName() + " WHERE " + 
                 "RTRIM(LTRIM(UPPER(" + module.getField(module.getSystemDisplayFieldIdx()).getDatabaseFieldName() + "))) =  UPPER(?)";
             
-            if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE)
-            	query += " OR RTRIM(LTRIM(UPPER(" + module.getField(DcAssociate._A_NAME).getDatabaseFieldName() + "))) LIKE ?"; 
-            
-            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
-                query += " OR RTRIM(LTRIM(UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + "))) LIKE ?"; 
-            
-            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
-
-            ps.setString(1, s);
-            
             if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
-	        	String firstname = Utilities.getFirstName(s);
-	        	String lastname = Utilities.getLastName(s);
-	        	ps.setString(2, Utilities.getName(firstname, lastname).toUpperCase());
+            	query += " OR RTRIM(LTRIM(UPPER(" + module.getField(DcAssociate._A_NAME).getDatabaseFieldName() + "))) LIKE ?"; 
+                String firstname = Utilities.getFirstName(s);
+                String lastname = Utilities.getLastName(s);
+                values.add("%" + Utilities.getName(firstname, lastname) + "%");
+            } 
+            
+            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+                query += " OR RTRIM(LTRIM(UPPER(" + module.getField(DcProperty._C_ALTERNATIVE_NAMES).getDatabaseFieldName() + "))) LIKE ?";
+                values.add(";%" + s + "%;");
+            }
+                
+            if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
+                // external references have a display value that consist of the type and the key.
+                query += " OR (RTRIM(LTRIM(UPPER(" + module.getField(ExternalReference._EXTERNAL_ID_TYPE).getDatabaseFieldName() + "))) = ? " +
+                		"      AND   RTRIM(LTRIM(UPPER(" + module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + "))) = ?)";
+                values.add(s.indexOf(":") > -1 ?s.substring(0, s.indexOf(":")) : s);
+                values.add(s.indexOf(":") > -1 ? s.substring(s.indexOf(":") + 2) : s);
             }
             
-            if (module.getType() == DcModule._TYPE_PROPERTY_MODULE)
-                ps.setString(2,  ";%" + s.toUpperCase().trim() + "%;");
+            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(query);
+            int idx = 1;
+            for (String value : values)
+                ps.setString(idx++, value.toUpperCase());
             
             List<DcObject> items = WorkFlow.getInstance().convert(ps.executeQuery(), new int[] {DcObject._ID});
             return items.size() > 0 ? items.get(0) : null;

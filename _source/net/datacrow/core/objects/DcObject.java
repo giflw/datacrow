@@ -349,19 +349,28 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     @SuppressWarnings("unchecked")
     public void addExternalReference(String type, String key) {
-        Collection<DcObject> references = (Collection<DcObject>) getValue(_SYS_EXTERNAL_REFERENCES);
-        references = references == null ? new ArrayList<DcObject>() : references;
-            
+        Collection<DcObject> c = (Collection<DcObject>) getValue(_SYS_EXTERNAL_REFERENCES);
+        c = c == null ? new ArrayList<DcObject>() : c;
+        
+        Collection<DcObject> references = new ArrayList<DcObject>();
+        for (DcObject mapping : c) {
+            if (mapping != null) 
+                references.add(mapping);
+        }
+        
+        c.clear();
+        setValue(_SYS_EXTERNAL_REFERENCES, references);
         boolean set = false;
-        for (DcObject mapping : references) {
-            
-            if (mapping == null) continue;
-            
-            DcObject reference = ((DcMapping) mapping).getReferencedObject();
-            if (reference != null && reference.getDisplayString(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
-                reference.setValue(ExternalReference._EXTERNAL_ID, key);
-                set = true;
+        try {
+            for (DcObject mapping : references) {
+                DcObject reference = ((DcMapping) mapping).getReferencedObject();
+                if (reference != null && reference.getDisplayString(ExternalReference._EXTERNAL_ID_TYPE).equals(type)) {
+                    reference.setValue(ExternalReference._EXTERNAL_ID, key);
+                    set = true;
+                }
             }
+        } catch (Exception e) {
+            logger.error("Could not determine if external ID already exists", e);
         }
         
         if (!set && !Utilities.isEmpty(type)) { 
