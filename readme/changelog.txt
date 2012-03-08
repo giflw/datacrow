@@ -5,6 +5,7 @@ Data Crow 3.9.12  [Released on March 10, 2012]  [testing: high]  [target: produc
 [Changes]
 - Added an option for the mass update to always use the first result. Note that this
   option does not work together with the 'use original settings' option.
+- Added epub, microsoft Word documents, odt and chm support for the eBook file importer.
 
 [Fixed]
 - Fixed the check for existing external references to avoid problems when saving.

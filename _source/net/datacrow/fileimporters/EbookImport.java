@@ -119,7 +119,6 @@ public class EbookImport extends FileImporter {
                 book.setValue(Book._N_ISBN13, isbn13);
             }
             
-            
             if (!filename.toLowerCase().endsWith("pdf")) {
                 // non PDF files are handled with the Tika library
                 InputStream input = new FileInputStream(new File(filename));
@@ -137,10 +136,6 @@ public class EbookImport extends FileImporter {
                     input.close();
                 } else if (filename.toLowerCase().endsWith("htm") || filename.toLowerCase().endsWith("html")) {
                     parser = new org.apache.tika.parser.html.HtmlParser();
-                    parser.parse(input, textHandler, metadata, context);
-                    input.close();
-                } else if (filename.toLowerCase().endsWith("odt")) {
-                    parser = new org.apache.tika.parser.odf.OpenDocumentMetaParser();
                     parser.parse(input, textHandler, metadata, context);
                     input.close();
                 } else if (filename.toLowerCase().endsWith("odt")) {

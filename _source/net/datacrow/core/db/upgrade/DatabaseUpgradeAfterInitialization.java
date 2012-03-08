@@ -101,6 +101,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = cleanupPictures();                
             }
             
+            if (v.isOlder(new Version(3, 9, 12, 0))) {
+                DcModules.get(DcModules._BOOK).getSettings().set(DcRepository.ModuleSettings.stFileImportFileTypes, "txt,chm,doc,docx,pdf,prc,pdb,kml,html,htm,prc,lit,epub,odt");          
+            }
+            
             if (v.equals(new Version(3, 9, 9, 0)) || v.equals(new Version(3, 9, 8, 0))) {
                 lf = new LogForm();
                 DcSwingUtilities.displayMessage(

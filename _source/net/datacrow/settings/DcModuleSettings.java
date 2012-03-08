@@ -170,7 +170,6 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));
-        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stExportFields,
