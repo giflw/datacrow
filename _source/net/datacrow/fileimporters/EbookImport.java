@@ -152,6 +152,37 @@ public class EbookImport extends FileImporter {
                     parser.parse(input, textHandler, metadata, context);
                     input.close();
                 }
+                
+                String author = metadata.get(Metadata.AUTHOR);
+                String creator = metadata.get(Metadata.CREATOR);
+                
+                String description = metadata.get(Metadata.DESCRIPTION);
+                String publisher = metadata.get(Metadata.PUBLISHER);
+                String pagecount = metadata.get(Metadata.PAGE_COUNT);
+                String title = metadata.get(Metadata.TITLE);
+                
+                if (!Utilities.isEmpty(author))
+                    DataManager.createReference(book, Book._G_AUTHOR, author);
+                else if (!Utilities.isEmpty(creator))
+                    DataManager.createReference(book, Book._G_AUTHOR, creator);
+
+                if (!Utilities.isEmpty(title))
+                    book.setValue(Book._A_TITLE, title);
+
+                if (!Utilities.isEmpty(description))
+                    book.setValue(Book._B_DESCRIPTION, description);
+
+                if (!Utilities.isEmpty(publisher))
+                    DataManager.createReference(book, Book._F_PUBLISHER, publisher);
+                
+                if (!Utilities.isEmpty(pagecount)) {
+                    try { 
+                        book.setValue(Book._T_NROFPAGES, Long.parseLong(pagecount));
+                    } catch (NumberFormatException nfe) {
+                        logger.debug("Could not parse number of pages for " + pagecount, nfe);
+                    }
+                }
+                
             } else if (filename.toLowerCase().endsWith("pdf")) {
                 // PDF files are handled the old fashioned way with PDFBox
                 File file = new File(filename);
