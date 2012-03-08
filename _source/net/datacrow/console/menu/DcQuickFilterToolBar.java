@@ -103,6 +103,30 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
             c.setFont(font);
     }    
     
+    public void clearFilter() {
+        if (comboCriteria != null && comboCriteria.getItemCount() > 0) {
+            comboCriteria.removeActionListener(this);
+            comboCriteria.setSelectedIndex(0);
+            
+        }
+        
+        if (comboFields != null && comboFields.getItemCount() > 0) {
+            comboFields.removeActionListener(this);
+            comboFields.setSelectedIndex(0);
+        }
+        
+        if (comboFilters != null && comboFilters.getItemCount() > 0) {
+            comboFilters.removeActionListener(this);
+            comboFilters.setSelectedIndex(0);
+        }
+        
+        comboCriteria.addActionListener(this);
+        comboFields.addActionListener(this);
+        comboFilters.addActionListener(this);
+        
+        search(null);
+    }
+    
     private void search() {
         search(getDataFilter());
     }
@@ -329,16 +353,17 @@ public class DcQuickFilterToolBar extends JToolBar implements ActionListener, Mo
     
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("searchOnSelectedFilter"))
+        if (ae.getActionCommand().equals("searchOnSelectedFilter")) {
             search(comboFilters.getSelectedIndex() > 0 ? (DataFilter) comboFilters.getSelectedItem() : null);    
-        else if (ae.getActionCommand().equals("search"))
+        } else if (ae.getActionCommand().equals("search")) {
             search();
-        else if (ae.getActionCommand().equals("cancel"))
-            search(null);
-        else if (ae.getActionCommand().equals("fieldSelected"))
+        } else if (ae.getActionCommand().equals("cancel")) {
+            clearFilter();
+        } else if (ae.getActionCommand().equals("fieldSelected")) {
             applySelectedField();
-        else if (ae.getActionCommand().equals("filterSelected"))
+        } else if (ae.getActionCommand().equals("filterSelected")) {
             applySelectedFilter();
+        }
     }
     
     @Override

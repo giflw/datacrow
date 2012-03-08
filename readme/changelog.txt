@@ -1,9 +1,13 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.12  [Released on December 30, 2011]  [testing: high]  [target: production]
+Data Crow 3.9.12  [Released on March 10, 2012]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- NullPointer when saving items.
+- Fixed the check for existing external references to avoid problems when saving.
+- [3467923], [3489871], [3474523], [3477841] NullPointer when saving items.
+- [3450698] Multiple author creation (unconfirmed fix).
+- [3471896] IMDB.com; USA search doesn't work goes to default. 
+- [3484660] IMDB-Import for Actors/Directors does not import pictures.
 
 
 -----------------------------------------------------------------------------------------
