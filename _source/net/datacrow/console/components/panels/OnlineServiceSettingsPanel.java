@@ -56,6 +56,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     private JCheckBox checkOnlineSearchSubItems;
     private JCheckBox checkQueryFullDetails;
     private JCheckBox checkUseOriginalSettings;
+    private JCheckBox checkAlwaysUseFirstResult;
     
     private JFrame parent;
     
@@ -88,6 +89,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         setOnlineSearchSubItems(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchSubItems));
         setQueryFullDetails(settings.getBoolean(DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially));
         setUseOriginalSettings(settings.getBoolean(DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings));
+        setAlwaysUseFirstSettings(settings.getBoolean(DcRepository.ModuleSettings.stMassUpdateAlwaysUseFirst));
         
         if (allowAutoAddSelection)
             setAutoAdd(settings.getBoolean(DcRepository.ModuleSettings.stAutoAddPerfectMatch));
@@ -103,6 +105,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         settings.set(DcRepository.ModuleSettings.stOnlineSearchSubItems, checkOnlineSearchSubItems.isSelected());
         settings.set(DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially, checkQueryFullDetails.isSelected());
         settings.set(DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings, checkUseOriginalSettings.isSelected());
+        settings.set(DcRepository.ModuleSettings.stMassUpdateAlwaysUseFirst, checkAlwaysUseFirstResult.isSelected());
     }
     
     private void setOverwrite(boolean b) {
@@ -136,6 +139,10 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     private void setUseOriginalSettings(boolean b) {
         checkUseOriginalSettings.setSelected(b);
     }
+
+    private void setAlwaysUseFirstSettings(boolean b) {
+        checkAlwaysUseFirstResult.setSelected(b);
+    }
     
     public boolean isQueryFullDetails() {
         return checkQueryFullDetails.isSelected();
@@ -148,6 +155,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         checkAutoAdd = null;
         checkQueryFullDetails = null;
         checkUseOriginalSettings = null;
+        checkAlwaysUseFirstResult = null;
         parent = null;
         removeAll();
     }
@@ -167,6 +175,8 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         checkUseOriginalSettings = ComponentFactory.getCheckBox(DcResources.getText("lblMassUpdateUseOriginalSettings"));
         checkUseOriginalSettings.setToolTipText(DcResources.getText("tpMassUpdateUseOriginalSettings"));
         
+        checkAlwaysUseFirstResult = ComponentFactory.getCheckBox(DcResources.getText("lblMassUpdateAlwaysUseFirst"));
+        checkAlwaysUseFirstResult.setToolTipText(DcResources.getText("tpMassUpdateAlwaysUseFirst"));
         
         if (updateMode) {
             checkOverwrite.addActionListener(this);
@@ -213,10 +223,14 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 5, 0, 0), 0, 0));  
         
-        if (allowOriginalSettingsSelection)
+        if (allowOriginalSettingsSelection) {
             add(checkUseOriginalSettings, Layout.getGBC( 0, 4, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets(0, 5, 0, 0), 0, 0));            
+                     new Insets(0, 5, 0, 0), 0, 0));
+            add(checkAlwaysUseFirstResult, Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets(0, 5, 0, 0), 0, 0));
+        }
         
         setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblOnlineServiceSettings")));        
     }

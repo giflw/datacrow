@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
@@ -101,11 +102,14 @@ public abstract class DefaultSynchronizer extends Synchronizer {
             osh.setServer(client.getServer());
             osh.setRegion(client.getRegion());
             osh.setMode(client.getSearchMode());
-            osh.setMaximum(2);
+            
+            if (dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stMassUpdateAlwaysUseFirst))
+                osh.setMaximum(1);
             
             Collection<DcObject> results = osh.query(searchString, dco);
             for (DcObject result : results) {
-                if (matches(result, searchString, fieldIdx)) {
+                if (    dco.getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stMassUpdateAlwaysUseFirst) || 
+                        matches(result, searchString, fieldIdx)) {
                     merge(dco, result, osh);
                     updated = true;
                     break;
@@ -164,16 +168,14 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                 client.initialize();
                 
                 View view = DcModules.getCurrent().getCurrentSearchView();
-                Collection<DcObject> objects = new ArrayList<DcObject>();
-                objects.addAll(client.getItemPickMode() == _ALL ? view.getItems() : view.getSelectedItems());                
-                client.initProgressBar(objects.size());
+                Collection<String> keys = new ArrayList<String>();
+                keys.addAll(client.getItemPickMode() == _ALL ? view.getItemKeys() : view.getSelectedItemKeys());                
+                client.initProgressBar(keys.size());
                 
-                
-                // TODO create a client wrapper to hold all values?
-                
-                
-                for (DcObject dco : objects) {
+                for (String key : keys) {
                     if (client.isCancelled()) break;
+                    
+                    DcObject dco = DataManager.getItem(module, key, DcModules.get(module).getMinimalFields(null));
                     
                     boolean updated = false;
                     

@@ -47,6 +47,7 @@ public abstract class DcRepository {
         public static final String stMassUpdateMode = "mass_update_mode";
         public static final String stMassUpdateRegion = "mass_update_region";
         public static final String stMassUpdateUseOriginalServiceSettings = "mass_update_use_original_service_settings";
+        public static final String stMassUpdateAlwaysUseFirst = "mass_update_always_use_first";
         public static final String stDefaultView = "default_view";
         public static final String stFileImportFileTypes = "file_import_file_types";
         public static final String stFileImportUseOnlineService = "file_import_use_online_service";

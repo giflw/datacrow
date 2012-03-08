@@ -2,13 +2,18 @@
 Data Crow 3.9.12  [Released on March 10, 2012]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
+[Changes]
+- Added an option for the mass update to always use the first result. Note that this
+  option does not work together with the 'use original settings' option.
+
 [Fixed]
 - Fixed the check for existing external references to avoid problems when saving.
 - [3467923], [3489871], [3474523], [3477841], [3484681] NullPointer when saving items.
 - [3450698] Multiple author creation (unconfirmed fix).
 - [3471896] IMDB.com; USA search doesn't work goes to default. 
 - [3484660] IMDB-Import for Actors/Directors does not import pictures.
-- [3484670] Undo current filter still does not work
+- [3484670] Undo current filter still does not work.
+- Issue with the mass update where not all items are being updated (caching issue).
 
 
 -----------------------------------------------------------------------------------------
