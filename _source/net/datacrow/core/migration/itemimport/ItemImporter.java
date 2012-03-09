@@ -122,6 +122,9 @@ public abstract class ItemImporter extends ItemMigrater {
         
         DcField field = dco.getModule().getField(fieldIdx);
         
+        if (field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES)
+            return;
+        
         try {
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
                 field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {

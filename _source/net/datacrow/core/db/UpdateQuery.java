@@ -82,7 +82,7 @@ public class UpdateQuery extends Query {
         Statement stmt = null;
         
         try {
-            conn = DatabaseManager.getConnection();
+            conn = DatabaseManager.getAdminConnection();
             stmt = conn.createStatement();
 
             StringBuffer sbValues = new StringBuffer();
@@ -157,6 +157,10 @@ public class UpdateQuery extends Query {
             
             for (Picture picture : pictures) {
                 if (picture.isNew()) {
+                    // prevent primary key violations
+                    stmt.execute("DELETE FROM PICTURE WHERE OBJECTID = '" + 
+                                  picture.getValue(Picture._A_OBJECTID) + "' AND FIELD = '" + 
+                                  picture.getValue(Picture._B_FIELD) + "'");
                     new InsertQuery(picture).run();
                     saveImage(picture);
                 } else if (picture.isEdited()) {

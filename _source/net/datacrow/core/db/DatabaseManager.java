@@ -303,6 +303,19 @@ public class DatabaseManager {
         Statement stmt = connection.createStatement();
         return stmt.executeQuery(sql);
     }
+
+    /**
+     * Executes a query. 
+     * @param sql SQL statement.
+     * @param log Indicates if information on the query should be logged.
+     * @return The result set.
+     */
+    public static ResultSet executeSQLasAdmin(String sql) throws SQLException {
+        Connection connection = getAdminConnection();
+        Statement stmt = connection.createStatement();
+        return stmt.executeQuery(sql);
+    }
+    
     
     /**
      * Update the item in the database with the values from the specified item.

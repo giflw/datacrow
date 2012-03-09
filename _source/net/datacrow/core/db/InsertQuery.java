@@ -80,7 +80,7 @@ public class InsertQuery extends Query {
         PreparedStatement ps = null;
 
         try {
-            conn = DatabaseManager.getConnection();
+            conn = DatabaseManager.getAdminConnection();
             stmt = conn.createStatement();
         
             for (DcField field : dco.getFields()) {

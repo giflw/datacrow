@@ -318,9 +318,8 @@ public class DataManager {
 
         // check if we are dealing with an external reference
         if (ref == null && module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
+            ref = getObjectForDisplayValue(moduleIdx, name);
 
-            ref = getExternalReference(moduleIdx, name); 
-        
         } else if (ref == null && module.getType() != DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
             
             // method 2: simple external reference + display value comparison
@@ -498,13 +497,6 @@ public class DataManager {
         List<DcObject> items = get(df);
         return items.size() > 0 ? (Loan) items.get(0) : new Loan();
     }
-    
-    public static DcObject getExternalReference(int moduleIdx, String type) {
-        DataFilter df = new DataFilter(moduleIdx);
-        df.addEntry(new DataFilterEntry(moduleIdx, ExternalReference._EXTERNAL_ID, Operator.EQUAL_TO, type));
-        List<DcObject> items = get(df, new int[] {DcObject._ID});
-        return items.size() > 0 ? items.get(0) : null;    
-    }    
     
     public static DcObject getObjectByExternalID(int moduleIdx, String type, String externalID) {
         DcModule module =  DcModules.get(moduleIdx);
