@@ -68,10 +68,10 @@
   </NewsFeed>
   <Program_Info>
     <Program_Name>Data Crow</Program_Name>
-    <Program_Version>3.9.11</Program_Version>
-    <Program_Release_Month>12</Program_Release_Month>
-    <Program_Release_Day>29</Program_Release_Day>
-    <Program_Release_Year>2011</Program_Release_Year>
+    <Program_Version>3.9.12</Program_Version>
+    <Program_Release_Month>03</Program_Release_Month>
+    <Program_Release_Day>10</Program_Release_Day>
+    <Program_Release_Year>2012</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
     <Program_Type>Freeware</Program_Type>
     <Program_Release_Status>New Release</Program_Release_Status>
@@ -82,9 +82,9 @@
     <Program_System_Requirements>512MB of memory / P3 800MHZ</Program_System_Requirements>
     <Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
     <File_Info>
-      <File_Size_Bytes>46584797</File_Size_Bytes>
-      <File_Size_K>45492</File_Size_K>
-      <File_Size_MB>44.43</File_Size_MB>
+      <File_Size_Bytes>68023873</File_Size_Bytes>
+      <File_Size_K>66429</File_Size_K>
+      <File_Size_MB>64.87</File_Size_MB>
       <Filename_Versioned></Filename_Versioned>
       <Filename_Previous></Filename_Previous>
       <Filename_Generic></Filename_Generic>
@@ -118,7 +118,7 @@
       <Application_XML_File_URL>http://www.datacrow.net/data_crow.xml</Application_XML_File_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.9.11/datacrow_3_9_11_installer.zip</Primary_Download_URL>
+      <Primary_Download_URL>http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.9.12/datacrow_3_9_12_installer.zip</Primary_Download_URL>
       <Secondary_Download_URL></Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>

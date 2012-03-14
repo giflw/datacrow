@@ -231,6 +231,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
             
             final DcObject o = oir.getDcObject();
             
+            if (o == null)
+                return dco;
+            
             removeValues(o);
             removeValues(dco);
             
