@@ -34,7 +34,7 @@
             </fileset>
         </copy>
 
-        <manifest file="MANIFEST.MF">
+        <!-- manifest file="MANIFEST.MF">
             <attribute name="Built-By" value="Robert Jan van der Waals"/>
             <section name="common">
                 <attribute name="Specification-Title" value="Data Crow"/>
@@ -46,7 +46,7 @@
             </section>    
             <attribute name="Class-Path" value="${manifest.class.path}"/>
             <attribute name="Main-Class" value="net.datacrow.core.DataCrow"/>
-        </manifest>
+        </manifest -->
 
         <jar basedir="_classes" manifest="manifest.mf" jarfile="datacrow.jar"  />
         <mkdir dir="webapp/datacrow/WEB-INF/classes/" />
