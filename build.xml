@@ -52,8 +52,8 @@
         <mkdir dir="webapp/datacrow/WEB-INF/classes/" />
         <javac srcdir="webapp/datacrow/WEB-INF/src/" destdir="webapp/datacrow/WEB-INF/classes/" debug="true">
             <classpath>
-                <fileset dir="/">
-                    <include name="datacrow.jar"/>
+                <fileset dir=".">
+                    <include name="/*.jar"/>
                     <include name="webapp/datacrow/WEB-INF/lib/*.jar"/>
                 </fileset>          
             </classpath>
