@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
 /**
  * If possible, perform upgrades / changes in the DataManagerConversion class!
  * 
- * Converts the current database before the actual module tables are created / updated.
+ * Converts the current database after the actual module tables are created / updated.
  * This means that the code here defies work flow logic and is strictly to be used for
  * table conversions and migration out of the scope of the normal module upgrade code.
  * 
