@@ -1,1 +1,3 @@
 *.class
+android_packager.jar
+sqlite
