@@ -218,13 +218,17 @@ public class DataManager {
 	    	while(rs.next()) {
 	    		values = new ArrayList<String>();
 	    		ID = rs.getString("ID");
-
+	    		template.setValueLowLevel(DcObject._ID, ID);
+	    		
 	    		// concatenate previous result set (needed for multiple references)
 	    		if (ID.equals(previousID)) {
 	    			values = result.get(result.size() - 1);
 	    			concat = true;
+	    		} else {
+	    		    template.setLoanInformation();
 	    		}
 	    		
+	    		int columnIndex = 1;
 	    		for (int i = 0; i < fields.length; i++) {
 	    			field = module.getField(fields[i]);
 
@@ -232,10 +236,19 @@ public class DataManager {
     					field.getValueType() != DcRepository.ValueTypes._STRING &&
     					field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) {
 
-    					template.setValue(field.getIndex(), rs.getObject(i+1));
+    					template.setValue(field.getIndex(), rs.getObject(columnIndex));
     					value = template.getDisplayString(field.getIndex());
-	    			} else {
-    					value = rs.getString(i + 1);
+    					columnIndex++;
+	    			} else if ( field.getIndex() == DcObject._SYS_AVAILABLE ||
+	    			            field.getIndex() == DcObject._SYS_LENDBY ||
+	    			            field.getIndex() == DcObject._SYS_LOANDAYSTILLOVERDUE ||
+	    			            field.getIndex() == DcObject._SYS_LOANDUEDATE ||
+	    			            field.getIndex() == DcObject._SYS_LOANDURATION) { 
+	    			    value = template.getDisplayString(field.getIndex());
+	    			    //columnIndex++;
+	    		    } else {
+    					value = rs.getString(columnIndex);
+    					columnIndex++;
     				}
 
 	    			if (!concat) {

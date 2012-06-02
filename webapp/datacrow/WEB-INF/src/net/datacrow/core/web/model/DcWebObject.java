@@ -128,11 +128,7 @@ public class DcWebObject extends DcSecured {
         for (WebFieldDefinition def : definitions.getDefinitions()) {
             DcField field = DcModules.get(moduleIdx).getField(def.getField());
 
-            if (    getUser().isAuthorized(field) &&
-                    field.isEnabled() && 
-                    field.getIndex() != DcObject._SYS_AVAILABLE &&
-                    field.getIndex() != DcObject._SYS_LOANDURATION &&
-                    field.getIndex() != DcObject._SYS_LENDBY) {
+            if (    getUser().isAuthorized(field) && field.isEnabled()) {
                 
                 DcWebField wf = new DcWebField(field);
                 

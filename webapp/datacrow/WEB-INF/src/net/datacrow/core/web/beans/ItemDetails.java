@@ -31,6 +31,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.VariableResolver;
 
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.web.model.DcWebObject;
 import net.datacrow.core.web.model.DcWebObjects;
 
@@ -60,6 +61,9 @@ public class ItemDetails extends ItemBean {
     
     public String open() {
 
+        DcWebObject wod;
+        DcObject dco;
+        
         if (!isLoggedIn())
             return redirect();
         
@@ -68,8 +72,7 @@ public class ItemDetails extends ItemBean {
         DcWebObjects objects = (DcWebObjects) vr.resolveVariable(fc, "webObjects");
         List<?> data = (List) objects.getData().getRowData();
         
-        DcWebObject wod = (DcWebObject) vr.resolveVariable(fc, "webObject");
-        
+        wod = (DcWebObject) vr.resolveVariable(fc, "webObject");
         int moduleIdx = objects.getModule();
 
         if (!getUser().isAuthorized(DcModules.get(moduleIdx)))
@@ -78,9 +81,11 @@ public class ItemDetails extends ItemBean {
         wod.initialize(moduleIdx);
         wod.setRowIdx(objects.getData().getRowIndex());
         wod.setID((String) data.get(data.size() - 1));
-        wod.setName(wod.getDcObject().toString());
-        wod.load();
         
+        dco = wod.getDcObject();
+        wod.setName(dco.toString());
+        wod.load();
+
         return current();
     }
     

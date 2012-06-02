@@ -406,6 +406,13 @@ public class DataFilter {
     	for (int idx : queryFields) {
     		DcField field = module.getField(idx);
     		
+    		if (  field.getIndex() == DcObject._SYS_AVAILABLE ||
+                  field.getIndex() == DcObject._SYS_LENDBY ||
+                  field.getIndex() == DcObject._SYS_LOANDAYSTILLOVERDUE ||
+                  field.getIndex() == DcObject._SYS_LOANDUEDATE ||
+                  field.getIndex() == DcObject._SYS_LOANDURATION) 
+    		    continue;
+    		
     		if (columnCounter > 0)
     			sql.append(", ");
     		
@@ -484,16 +491,6 @@ public class DataFilter {
     			joins.append(field.getDatabaseFieldName());
     			joins.append("'");
 
-    		} else if (field.getIndex() == DcObject._SYS_AVAILABLE || 
-    				   field.getIndex() == DcObject._SYS_LOANDURATION || 
-    				   field.getIndex() == DcObject._SYS_LOANDUEDATE || 
-    				   field.getIndex() == DcObject._SYS_LOANDAYSTILLOVERDUE) {
-
-    			// TODO: implement for web site
-    			// reference = DcModules.get(DcModules._LOAN);
-    			// subTable = " SUBTABLE" + tableCounter;
-    			// joins.append(" LEFT OUTER JOIN ");
-    			
     		} else if (!field.isUiOnly()) {
     			sql.append("MAINTABLE.");
     			sql.append(field.getDatabaseFieldName());
