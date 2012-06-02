@@ -172,57 +172,44 @@ public class Setting {
         String toString = "";
         
         if (value != null) {
-            switch (dataType) {
-    	        case DcRepository.ValueTypes._DEFINITIONGROUP:
-    	        	IDefinitions definitions = (IDefinitions) value;
-    	        	for (Definition definition : definitions.getDefinitions()) {
-                        toString += "{" + definition.toSettingValue() + "}";
-    	        	}
-    	            break;
-                case DcRepository.ValueTypes._DIMENSION:
-                    int x = (int) ((Dimension) value).getWidth();
-                    int y = (int) ((Dimension) value).getHeight();
-    
-                    toString = "" + x + '/' + y;
-                    break;
-                case DcRepository.ValueTypes._FONT:
-                    toString =  toString +
-                                ((Font) value).getName() + '/' +
-                                ((Font) value).getSize() + '/' +
-                                ((Font) value).getStyle();
-                    break;
-                case DcRepository.ValueTypes._LOOKANDFEEL:
-                    toString =  toString +
-                                ((DcLookAndFeel) value).getClassName() + "%%" +
-                                ((DcLookAndFeel) value).getFileName() + "%%" +
-                                ((DcLookAndFeel) value).getName() + "%%" +
-                                ((DcLookAndFeel) value).getType();
-                    break;                
-                case DcRepository.ValueTypes._COLOR:
-                    toString =  toString +
-                                ((Color) value).getRed() + '/' +
-                                ((Color) value).getGreen() + '/' +
-                                ((Color) value).getBlue();
-                    break;
-                case DcRepository.ValueTypes._LONG:
-                    toString =  toString + value;
-                    break;
-                case DcRepository.ValueTypes._STRINGARRAY:
-                    String[] sArray = (String[]) value;
-                    for (int i = 0; i < sArray.length; i++) {
-                        toString = toString + sArray[i] + '#';
-                    }
-                    break;
-                case DcRepository.ValueTypes._INTEGERARRAY:
-                    int[] iArray = (int[]) value;
-                    if (iArray != null) {
-                        for (int i = 0; i < iArray.length; i++) {
-                            toString = toString + iArray[i] + '#';
-                        }
-                    }
-                    break;                
-                default:
-                    toString =  toString + (value != null ? value.toString() : "");
+            if (dataType == DcRepository.ValueTypes._DEFINITIONGROUP && value instanceof IDefinitions) {
+	        	IDefinitions definitions = (IDefinitions) value;
+	        	for (Definition definition : definitions.getDefinitions()) {
+                    toString += "{" + definition.toSettingValue() + "}";
+	        	}
+            } else if (dataType == DcRepository.ValueTypes._DIMENSION && value instanceof Dimension) {
+                int x = (int) ((Dimension) value).getWidth();
+                int y = (int) ((Dimension) value).getHeight();
+
+                toString = "" + x + '/' + y;
+            } else if (dataType == DcRepository.ValueTypes._FONT && value instanceof Font) {
+                toString =  toString +
+                            ((Font) value).getName() + '/' +
+                            ((Font) value).getSize() + '/' +
+                            ((Font) value).getStyle();
+            } else if (dataType == DcRepository.ValueTypes._LOOKANDFEEL && value instanceof DcLookAndFeel) {
+                toString =  toString +
+                            ((DcLookAndFeel) value).getClassName() + "%%" +
+                            ((DcLookAndFeel) value).getFileName() + "%%" +
+                            ((DcLookAndFeel) value).getName() + "%%" +
+                            ((DcLookAndFeel) value).getType();
+            } else if (dataType == DcRepository.ValueTypes._COLOR && value instanceof Color) {
+                toString =  toString +
+                            ((Color) value).getRed() + '/' +
+                            ((Color) value).getGreen() + '/' +
+                            ((Color) value).getBlue();
+            } else if (dataType == DcRepository.ValueTypes._STRINGARRAY && value instanceof String[]) {
+                String[] array = (String[]) value;
+                for (int i = 0; i < array.length; i++) {
+                    toString = toString + array[i] + '#';
+                }
+            } else if (dataType == DcRepository.ValueTypes._INTEGERARRAY && value instanceof int[]) {
+                int[] array = (int[]) value;
+                for (int i = 0; i < array.length; i++) {
+                    toString = toString + array[i] + '#';
+                }
+            } else {              
+                toString =  toString + (value != null ? value.toString() : "");
             }
         }
         return toString;
