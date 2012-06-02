@@ -1,4 +1,19 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Changes]
+- Improved German translation (thanks Maase!)
+
+[Fixed]
+- Descriptions and images as retrieved from Sourceforge.net have been improved
+- Web application does not show any items when one of the loan fields has been selected
+- [3515767] The file importers now check on the item ID (if it exists) to find the 
+  existing item
+- Amazon service will now retrieve all authors and publishers
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.12  [Released on March 10, 2012]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
