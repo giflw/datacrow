@@ -124,8 +124,10 @@ public class CsvImporter extends ItemImporter {
                         
                         if (field == null) continue;
                         
-                        if ((field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION && field.getValueType() != DcRepository.ValueTypes._PICTURE) ||  
-                            field.getIndex() == DcObject._ID || field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES) continue;
+                        if ((   field.isUiOnly() && 
+                                field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION && 
+                                field.getValueType() != DcRepository.ValueTypes._PICTURE) ||  
+                                field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES) continue;
                         
                         if (value != null && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                             StringTokenizer st = new StringTokenizer(value, ",");
