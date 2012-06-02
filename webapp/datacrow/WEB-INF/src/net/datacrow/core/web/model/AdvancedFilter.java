@@ -150,7 +150,10 @@ public class AdvancedFilter extends DcSecured {
         List<DcWebField> flds = new ArrayList<DcWebField>();
         for (DcField field : DcModules.get(moduleIdx).getFields()) {
             if (     getUser().isAuthorized(field) && 
-                     field.isEnabled() && field.isSearchable()) {
+                     field.isEnabled() && 
+                     field.isSearchable() &&
+                     field.getIndex() != DcObject._SYS_EXTERNAL_REFERENCES &&
+                     (!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
                 
                 DcWebField wf = new DcWebField(field);
 
@@ -264,11 +267,17 @@ public class AdvancedFilter extends DcSecured {
     @SuppressWarnings("unchecked")
     public Object getValue() {
         Object value = entry.getValue();
-        if (entry.getValue() instanceof List) {
-            value =  ((List<DcObject>) entry.getValue()).get(0).getID();
-        } else if (entry.getValue() instanceof DcObject) {
-            value =  ((DcObject) entry.getValue()).getID();
+        
+        try {
+            if (entry.getValue() instanceof List) {
+                value =  ((List<DcObject>) entry.getValue()).get(0).getID();
+            } else if (entry.getValue() instanceof DcObject) {
+                value =  ((DcObject) entry.getValue()).getID();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        
         return value; 
     }
 }

@@ -87,6 +87,6 @@ public class ContactPerson extends DcObject {
                 getRequests().clear();
             }
         }
-    }    
+    }   
 }
 

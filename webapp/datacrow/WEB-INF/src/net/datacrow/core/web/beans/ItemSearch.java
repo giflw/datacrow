@@ -226,7 +226,7 @@ public class ItemSearch extends DcBean {
     	for (int i = 0; i < fields.length - 1; i++)
     		fields[i] = definitions.get(i).getField();
     	
-    	 List<List<String>> result = DataManager.getValues(df, fields, definitions);
+    	 List<List<String>> result = DataManager.getWebValues(df, fields, definitions);
 
     	 wo.setObjects(result);
     }

@@ -193,7 +193,7 @@ public class DataManager {
      * @param definitions
      * @return
      */
-    public static List<List<String>> getValues(DataFilter df, int[] fields, List<WebFieldDefinition> definitions) {
+    public static List<List<String>> getWebValues(DataFilter df, int[] fields, List<WebFieldDefinition> definitions) {
     	
     	List<List<String>> result = new ArrayList<List<String>>();
     	
@@ -239,13 +239,18 @@ public class DataManager {
     					template.setValue(field.getIndex(), rs.getObject(columnIndex));
     					value = template.getDisplayString(field.getIndex());
     					columnIndex++;
+    				} else if (field.getIndex() == DcObject._SYS_AVAILABLE) {
+    				    value = ((Boolean) template.getValue(DcObject._SYS_AVAILABLE)).booleanValue() ?
+    				               DcResources.getText("lblAvailable") : DcResources.getText("lblUnavailable");
+    					
 	    			} else if ( field.getIndex() == DcObject._SYS_AVAILABLE ||
 	    			            field.getIndex() == DcObject._SYS_LENDBY ||
 	    			            field.getIndex() == DcObject._SYS_LOANDAYSTILLOVERDUE ||
 	    			            field.getIndex() == DcObject._SYS_LOANDUEDATE ||
 	    			            field.getIndex() == DcObject._SYS_LOANDURATION) { 
+	    			    
 	    			    value = template.getDisplayString(field.getIndex());
-	    			    //columnIndex++;
+	    			    
 	    		    } else {
     					value = rs.getString(columnIndex);
     					columnIndex++;
