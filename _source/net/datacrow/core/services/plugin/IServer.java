@@ -71,6 +71,12 @@ public interface IServer {
     String getName();
     
     /**
+     * Is the service available?
+     * @return
+     */
+    boolean isEnabled();
+    
+    /**
      * Specific settings for this server. 
      * Returns null of there are no settings available.
      */

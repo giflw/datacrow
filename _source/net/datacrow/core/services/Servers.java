@@ -78,10 +78,11 @@ public class Servers {
                 server = (IServer) clazz.newInstance();
             } catch (Exception ignore) {}    
             
-            if (server != null) {
+            if (server != null && server.isEnabled()) {
                 try {
                     Collection<IServer> servers = registered.get(Integer.valueOf(server.getModule()));
                     servers = servers == null ? new ArrayList<IServer>() : servers;
+                    
                     servers.add(server);
                     
                     registered.put(Integer.valueOf(server.getModule()), servers);
