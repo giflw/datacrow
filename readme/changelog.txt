@@ -4,6 +4,12 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 
 [Changes]
 - Improved German translation (thanks Maase!)
+- The Barnes & Nobles service was broken beyond repair. Unfortunately their web service
+  is not operational either and I have had to decide to either continue support lacking 
+  the web service or to discontinue this service.
+
+[New]
+- Google.com book search, allows for searching both on keywords and ISBNs
 
 [Fixed]
 - Descriptions and images as retrieved from Sourceforge.net have been improved
@@ -11,7 +17,9 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 - [3515767] The file importers now check on the item ID (if it exists) to find the 
   existing item
 - Amazon service will now retrieve all authors and publishers
-
+- Bol.com service for books was broken and now fixed
+- Discogs.com service needed to be updated to reflect site changes
+ 
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.12  [Released on March 10, 2012]  [testing: high]  [target: production]
