@@ -7,7 +7,6 @@
         <fileset dir="lib/">
             <include name="*.jar"/>
             <include name="chart/*.jar"/>
-            <include name="google/*.jar"/>
             <include name="html/*.jar"/>
             <include name="jetty/*.jar"/>
             <include name="laf/*.jar"/>
