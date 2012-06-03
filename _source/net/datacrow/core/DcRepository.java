@@ -249,6 +249,7 @@ public abstract class DcRepository {
         public static final String _SOURCEFORGE = "SF";
         public static final String _SOFTPEDIA = "SP";
         public static final String _MOVIEMETER = "MOVIEMETER";
+        public static final String _GOOGLE = "GOOGLE";
         
         static {
             types.add(_ASIN);
