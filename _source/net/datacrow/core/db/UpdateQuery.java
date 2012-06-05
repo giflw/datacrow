@@ -133,7 +133,6 @@ public class UpdateQuery extends Query {
                 ps.execute();
                 ps.close();
             } else if (!Utilities.isEmpty(values)) {
-            	
                 ps = conn.prepareStatement("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE " +
                         dco.getDatabaseFieldName(Picture._A_OBJECTID) + " = '" + dco.getValue(Picture._A_OBJECTID) + "' AND " +
                         dco.getDatabaseFieldName(Picture._B_FIELD) + " = '" + dco.getValue(Picture._B_FIELD) + "'");
@@ -143,16 +142,7 @@ public class UpdateQuery extends Query {
             }
     
             for (Collection<DcMapping> c : references) {
-                for (DcMapping mapping : c) {
-                    try {
-                        stmt.execute("INSERT INTO " + mapping.getTableName() + 
-                                     " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
-                                     mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                                     ") \r\n VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "');");
-                    } catch (SQLException e) {
-                        logger.error("An error occured while inserting the following reference " + mapping, e);
-                    }  
-                }
+                saveReferences(c, dco.getID());
             }
             
             for (Picture picture : pictures) {

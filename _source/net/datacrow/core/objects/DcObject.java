@@ -1087,6 +1087,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             
             beforeSave();
             setValue(_SYS_CREATED, getCurrentDate());
+            setValue(_SYS_MODIFIED, getCurrentDate());
             setIDs();
             
             if (updateGUI)

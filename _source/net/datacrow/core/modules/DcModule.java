@@ -1234,11 +1234,11 @@ public class DcModule implements Comparable<DcModule> {
                                  "ID"));
             addField(new DcField(DcObject._SYS_CREATED, getIndex(), "Created",
                                  false, true, true, true, 
-                                 10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
+                                 10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATETIME,
                                  "Created"));
             addField(new DcField(DcObject._SYS_MODIFIED, getIndex(), "Modified",
                                  false, true, true, true, 
-                                 10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
+                                 10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATETIME,
                                  "Modified"));
             
             if ((isTopModule() || isChildModule()) && isCustomFieldsAllowed()) {

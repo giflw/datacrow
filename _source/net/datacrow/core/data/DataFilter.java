@@ -330,7 +330,7 @@ public class DataFilter {
         
         for (DataFilterEntry entry : entries) {
             
-            if (entry == null) continue;
+            if (entry == null || entry.getValue() == null) continue;
 
             storage += "<ENTRY>\n";
             

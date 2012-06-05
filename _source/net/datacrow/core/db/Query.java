@@ -44,6 +44,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.wf.WorkFlow;
 import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.IUpdateUIRequest;
@@ -114,7 +115,17 @@ public abstract class Query {
             if (uiRequests.size() > 0)
             	WorkFlow.handleRequests(uiRequests, success);
         }
-        
+    }
+    
+    protected void saveReferences(Collection<DcMapping> references, String parentID) {
+        for (DcMapping mapping : references) {
+            try {
+                mapping.setValue(DcMapping._A_PARENT_ID, parentID);
+                mapping.saveNew(false);
+            } catch (ValidationException ve) {
+                logger.error("An error occured while inserting the following reference " + mapping, ve);
+            }                    
+        }
     }
     
     protected PreparedStatement getPreparedStament(String sql) throws SQLException {

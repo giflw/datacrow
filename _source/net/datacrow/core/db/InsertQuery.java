@@ -123,16 +123,7 @@ public class InsertQuery extends Query {
             setValues(ps, values);
             ps.execute();
             
-            for (DcMapping mapping : references) {
-                try {
-                    stmt.execute("INSERT INTO " + mapping.getTableName() + 
-                                 " (" + mapping.getDatabaseFieldName(DcMapping._A_PARENT_ID) + ", " +
-                                 mapping.getDatabaseFieldName(DcMapping._B_REFERENCED_ID) + 
-                                 ") VALUES ('" + dco.getID() + "', '" + mapping.getReferencedID() + "')");
-                } catch (SQLException e) {
-                    logger.error("An error occured while inserting the following reference " + mapping, e);
-                }                    
-            }
+            saveReferences(references, dco.getID());
             
             for (Picture picture : pictures) {
                 try {

@@ -483,8 +483,9 @@ public class DcField implements Serializable {
             s = DcRepository.Database._FIELDBOOLEAN;
         } else if (getValueType() == DcRepository.ValueTypes._DATE) {
             s = DcRepository.Database._FIELDDATE;
+        } else if (getValueType() == DcRepository.ValueTypes._DATETIME) {
+            s = DcRepository.Database._FIELDDATE;
         }
-
         return s;
     }
 }
