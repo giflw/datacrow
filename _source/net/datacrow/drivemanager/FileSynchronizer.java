@@ -108,6 +108,7 @@ public class FileSynchronizer {
             FileInfo fi;
             
             while (keepOnRunning) {
+                               
                 for (DcModule module : fs.getModules()) {
                     
                     Collection<Integer> c = new ArrayList<Integer>();
@@ -180,6 +181,12 @@ public class FileSynchronizer {
                             logger.error(e, e);
                         }
                     }
+                }
+                
+                try {
+                    sleep(60000);
+                } catch (Exception e) {
+                    logger.error(e, e);
                 }
             }
             

@@ -2,11 +2,13 @@
 Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
-[Changes]
-- Improved German translation (thanks Maase!)
+[Known issues]
 - The Barnes & Nobles service was broken beyond repair. Unfortunately their web service
   is not operational either and I have had to decide to either continue support lacking 
   the web service or to discontinue this service.
+
+[Changes]
+- Improved German translation (thanks Maase!)
 - Create Multiple for audio tracks now starts the numbering based on the highest track
   number currently in use
 
@@ -26,6 +28,7 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
   there is no value set
 - The web client suppresses information in case an item does not hold a value 
   for the selected web field
+- Longer wait time for the file synchronizer when there are no items found to synchronize
      
 
 -----------------------------------------------------------------------------------------
