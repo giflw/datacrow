@@ -19,7 +19,12 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 - Amazon service will now retrieve all authors and publishers
 - Bol.com service for books was broken and now fixed
 - Discogs.com service needed to be updated to reflect site changes
- 
+- The web client shows an item multiple times in case it has multiple references.
+- The web client shows null, null for some references instead of nothing in case
+  there is no value set
+- The web client suppresses information in case an item does not hold a value 
+  for the selected web field
+     
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.12  [Released on March 10, 2012]  [testing: high]  [target: production]

@@ -261,13 +261,18 @@ public class DataManager {
 		    			value = value == null ? "" : StringUtils.concatUserFriendly(value, maxLength);
 		    			values.add(value);
 	    			} else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-	    				value = values.get(i) + ", " + value;
-	    				values.set(i, value);
+	    				if (value != null) {
+	    				    value = values.get(i) + ", " + value;
+	    				    values.set(i, value);
+	    				}
 	    			}
 	    		}
 
+	    		if (!ID.equals(previousID))
+	    		    result.add(values);
+	    		
 	    		previousID = ID;
-	    		result.add(values);
+	    		
 	    		concat = false;
 	    	}
     	} catch (Exception e) {

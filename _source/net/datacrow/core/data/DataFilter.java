@@ -391,7 +391,7 @@ public class DataFilter {
     	StringBuffer sql = new StringBuffer();
     	StringBuffer joins = new StringBuffer();
     	
-    	sql.append("SELECT ");
+    	sql.append("SELECT DISTINCT ");
     	joins.append(" FROM ");
     	joins.append(module.getTableName());
     	joins.append(" MAINTABLE ");
@@ -432,7 +432,7 @@ public class DataFilter {
     			joins.append(" = MAINTABLE.ID");
     			
     			subTable = " SUBTABLE" + tableCounter;
-    			joins.append(" INNER JOIN ");
+    			joins.append(" LEFT OUTER JOIN ");
     			joins.append(reference.getTableName());
     			joins.append(subTable);
     			joins.append(" ON ");
@@ -490,6 +490,8 @@ public class DataFilter {
     			joins.append("='");
     			joins.append(field.getDatabaseFieldName());
     			joins.append("'");
+    			
+    			tableCounter++;
 
     		} else if (!field.isUiOnly()) {
     			sql.append("MAINTABLE.");
