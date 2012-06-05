@@ -346,6 +346,7 @@ public abstract class DcRepository {
      */
     public static final class Database {
         public static final String _FIELDDATE = "date";
+        public static final String _FIELDDATETIME = "date";
         public static final String _FIELDBIGINT = "bigint";
         public static final String _FIELDLONGSTRING = "varchar";
         public static final String _FIELDSTRING = "varchar";
