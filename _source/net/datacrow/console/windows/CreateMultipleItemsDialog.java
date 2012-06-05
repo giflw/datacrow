@@ -29,6 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -38,6 +39,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.itemforms.ItemForm;
+import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.DcPropertyModule;
@@ -45,6 +47,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.helpers.AudioTrack;
+import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
@@ -93,10 +96,35 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 			
 			dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
 			
-			if (dco.getModule().getIndex() == DcModules._AUDIOTRACK)
-				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(table.getRowCount() + 1));
-			else if (dco.getModule().getIndex() == DcModules._MUSICTRACK)
-				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(table.getRowCount() + 1));
+			// determine highest track number
+            String sql = "select (MAX(" + 
+                    dco.getDatabaseFieldName(dco.getModule().getIndex() == DcModules._AUDIOTRACK ?  AudioTrack._F_TRACKNUMBER : MusicTrack._F_TRACKNUMBER) + ") + 1) as nr from " + 
+                    dco.getTableName() + " where " +
+                    dco.getDatabaseFieldName(dco.getModule().getIndex() == DcModules._AUDIOTRACK ?  AudioTrack._I_ALBUM : MusicTrack._P_ALBUM) + " = '" + parentID + "'";
+            long tracknr = 1;
+            if (table.getRowCount() == 0) {
+                
+                try {
+                    ResultSet rs = DatabaseManager.executeSQL(sql);
+                    while (rs.next()) {
+                        tracknr = rs.getLong(1);
+                    }
+                    
+                    tracknr = tracknr == 0 ? 1 : tracknr;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                tracknr = (Long) table.getValueAt(table.getRowCount() - 1, 0, false)  + 1;
+            }
+					
+			
+			
+			if (dco.getModule().getIndex() == DcModules._AUDIOTRACK) {
+				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(tracknr));
+			} else if (dco.getModule().getIndex() == DcModules._MUSICTRACK) {
+				dco.setValue(MusicTrack._F_TRACKNUMBER, Long.valueOf(tracknr));
+			}
 		}
 		table.add(dco);
 	}

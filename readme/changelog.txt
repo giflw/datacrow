@@ -7,6 +7,8 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 - The Barnes & Nobles service was broken beyond repair. Unfortunately their web service
   is not operational either and I have had to decide to either continue support lacking 
   the web service or to discontinue this service.
+- Create Multiple for audio tracks now starts the numbering based on the highest track
+  number currently in use
 
 [New]
 - Google.com book search, allows for searching both on keywords and ISBNs
