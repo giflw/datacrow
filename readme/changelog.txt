@@ -18,7 +18,8 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 
 [New]
 - Google.com book search, allows for searching both on keywords and ISBNs
-- Greatly improved loan administration overview
+- Greatly improved loan administration overview; you can now search for loans and also
+  choose to see only current and/or historic loans.
 
 [Fixed]
 - Descriptions and images as retrieved from Sourceforge.net have been improved
