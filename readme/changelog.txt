@@ -39,6 +39,9 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 - Loan administration overview is cleared when clicking on a column header
 - The loan administration overview now refreshes after dealing with the loans      
 - Date field cannot be cleared
+- Data Crow GUI will not close until the database has successfully been closed. This 
+  to prevent situations where Data Crow started again while the database still in use
+  by the previous session.
 
 
 -----------------------------------------------------------------------------------------
