@@ -195,17 +195,20 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                 }
             }
 
-            Collections.sort(items, new DcObjectComparator(Item._SYS_LOANDUEDATE));
+            if (cbLoans.getSelectedIndex() == _CURRENT_LOANS)
+                Collections.sort(items, new DcObjectComparator(Item._SYS_LOANDUEDATE));
+            else 
+                Collections.sort(items, new DcObjectComparator(Item._SYS_LOANSTARTDATE, DcObjectComparator._SORTORDER_DESCENDING));
             
             return items;
         }
         
         private void build() {
-            DcModule module = DcModules.getCurrent();
+            DcModule module = DcModules.get(DcModules._SOFTWARE);
             
             cbModules.addItem(" ");
             for (DcModule m : DcModules.getModules()) {
-                if (m.canBeLend())
+                if (m.canBeLend() && !m.isAbstract())
                     cbModules.addItem(m);
             }
             

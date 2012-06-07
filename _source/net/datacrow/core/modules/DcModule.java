@@ -1309,8 +1309,9 @@ public class DcModule implements Comparable<DcModule> {
                 addField(getField(DcObject._SYS_LOANDUEDATE));
                 addField(getField(DcObject._SYS_LOANSTATUS));
                 addField(getField(DcObject._SYS_LOANSTATUSDAYS));
+                addField(getField(DcObject._SYS_LOANSTARTDATE));
+                addField(getField(DcObject._SYS_LOANENDDATE));
             }
-    
             addField(getField(DcObject._SYS_MODULE));
         } catch (Exception e) {
             logger.error(e, e);
@@ -1383,20 +1384,30 @@ public class DcModule implements Comparable<DcModule> {
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                             "DaysLoaned"));
         systemFields.put(DcObject._SYS_LOANDUEDATE,
-                new DcField(DcObject._SYS_LOANDUEDATE, getIndex(), "Due Date",
-                            true, true, true, true, 
+                new DcField(DcObject._SYS_LOANDUEDATE, getIndex(), "Due date",
+                            true, true, true, false, 
                             10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                             "DueDate")); 
         systemFields.put(DcObject._SYS_LOANSTATUS,
-                new DcField(DcObject._SYS_LOANSTATUS, getIndex(), "Status",
-                            true, true, true, true, 
-                            10, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                new DcField(DcObject._SYS_LOANSTATUS, getIndex(), "Loan status",
+                            true, true, true, false, 
+                            255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                             "LoanStatus"));      
         systemFields.put(DcObject._SYS_LOANSTATUSDAYS,
                 new DcField(DcObject._SYS_LOANSTATUSDAYS, getIndex(), "# Days",
-                            true, true, true, true, 
+                            true, true, true, false, 
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
-                            "LoanStatusDays"));          
+                            "LoanStatusDays"));   
+        systemFields.put(DcObject._SYS_LOANSTARTDATE,
+                new DcField(DcObject._SYS_LOANSTARTDATE, getIndex(), "Loan start date",
+                            true, true, true, false, 
+                            10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
+                            "LoanStartDate"));         
+        systemFields.put(DcObject._SYS_LOANENDDATE,
+                new DcField(DcObject._SYS_LOANENDDATE, getIndex(), "Loan end date",
+                            true, true, true, false, 
+                            10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
+                            "LoanEndDate"));    
         
         if (isTopModule() && deliversOnlineService()) {
             systemFields.put(Integer.valueOf(DcObject._SYS_SERVICE),

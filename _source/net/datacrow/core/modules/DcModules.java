@@ -510,7 +510,7 @@ public class DcModules {
      * @param key
      */
     public static DcModule get(int key) {
-        return  modules.get(key);
+        return modules.get(key);
     }
 
     /**

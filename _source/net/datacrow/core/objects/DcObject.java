@@ -122,6 +122,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public static final int _SYS_LOANDUEDATE = 215;
     public static final int _SYS_LOANSTATUSDAYS = 216;
     public static final int _SYS_LOANSTATUS = 219;
+    public static final int _SYS_LOANSTARTDATE = 220;
+    public static final int _SYS_LOANENDDATE = 221;
     
     public static final int _VALUE = 217;
     
@@ -664,7 +666,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             Long daysLoaned = loan.getDaysLoaned();
             daysLoaned = daysLoaned == null ? Long.valueOf(0) : daysLoaned;
             
-            
+            setValue(DcObject._SYS_LOANSTARTDATE, loan.getValue(Loan._A_STARTDATE));
+            setValue(DcObject._SYS_LOANENDDATE, loan.getValue(Loan._B_ENDDATE));
+            setValue(DcObject._SYS_LENDBY, loan.getPerson());
             setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(getID()));
             setValue(DcObject._SYS_LENDBY, loan.getPerson());
             setValue(DcObject._SYS_LOANDUEDATE, loan.getDueDate());
