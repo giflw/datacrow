@@ -129,8 +129,13 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         
         private DcObjectComboBox cbPersons = ComponentFactory.getObjectCombo(DcModules._CONTACTPERSON);
         private DcComboBox cbModules = ComponentFactory.getComboBox();
-        private DcDateField dtFrom = ComponentFactory.getDateField();
-        private DcDateField dtTo = ComponentFactory.getDateField();
+        
+        private DcDateField dtDueFrom = ComponentFactory.getDateField();
+        private DcDateField dtDueTo = ComponentFactory.getDateField();
+
+        private DcDateField dtStartFrom = ComponentFactory.getDateField();
+        private DcDateField dtStartTo = ComponentFactory.getDateField();
+
         private DcComboBox cbLoans = ComponentFactory.getComboBox(); 
                 
         public LoanFilterPanel() {
@@ -142,26 +147,46 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
             
             Calendar cal = Calendar.getInstance();
             
-            Date from = (Date) dtFrom.getValue();
-            Date to = (Date) dtTo.getValue();
+            Date dueDateFrom = (Date) dtDueFrom.getValue();
+            Date dueDateTo = (Date) dtDueTo.getValue();
             
-            if (from != null) {
-                cal.setTime(from);
+            if (dueDateFrom != null) {
+                cal.setTime(dueDateFrom);
                 cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
-                from = cal.getTime();
+                dueDateFrom = cal.getTime();
             }
 
-            if (to != null) {
-                cal.setTime(to);
+            if (dueDateTo != null) {
+                cal.setTime(dueDateTo);
                 cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
-                to = cal.getTime();
+                dueDateTo = cal.getTime();
             }
             
-            if (from != null)
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.AFTER, from));
-            if (to != null && (from == null || to.after(from)))
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.BEFORE, to));
+            if (dueDateFrom != null)
+                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.AFTER, dueDateFrom));
+            if (dueDateTo != null && (dueDateFrom == null || dueDateTo.after(dueDateFrom)))
+                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.BEFORE, dueDateTo));
 
+            Date startDateFrom = (Date) dtStartFrom.getValue();
+            Date startDateTo = (Date) dtStartTo.getValue();
+            
+            if (startDateFrom != null) {
+                cal.setTime(startDateFrom);
+                cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
+                startDateFrom = cal.getTime();
+            }
+
+            if (startDateTo != null) {
+                cal.setTime(startDateTo);
+                cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
+                startDateTo = cal.getTime();
+            }
+            
+            if (startDateFrom != null)
+                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._A_STARTDATE, Operator.AFTER, startDateFrom));
+            if (startDateTo != null && (startDateFrom == null || startDateTo.after(startDateFrom)))
+                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._A_STARTDATE, Operator.BEFORE, startDateTo));
+            
             if (cbLoans.getSelectedIndex() == _CURRENT_LOANS)
                 df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
             else if (cbLoans.getSelectedIndex() == _HISTORIC_LOANS)
@@ -219,46 +244,61 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
     
             setLayout(Layout.getGBL());
             
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LENDBY).getLabel()),  
+            add(ComponentFactory.getLabel(DcResources.getText("lblLoanType")),  
                     Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets(5, 5, 5, 5), 0, 0));
-            add(cbPersons,   
+                    new Insets(5, 5, 5, 0), 0, 0));
+            add(cbLoans,  
                     Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(5, 5, 5, 5), 0, 0));
+                    new Insets(5, 5, 5, 0), 0, 0));       
+            
+            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LENDBY).getLabel()),  
+                    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(5, 5, 5, 0), 0, 0));
+            add(cbPersons,   
+                    Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 5, 5, 0), 0, 0));
             
             add(ComponentFactory.getLabel(module.getField(DcObject._SYS_MODULE).getLabel()),  
-                    Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets(5, 5, 5, 5), 0, 0));
+                    Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(5, 5, 5, 0), 0, 0));
             add(cbModules,  
-                    Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(5, 5, 5, 5), 0, 0));             
+                    Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 5, 5, 0), 0, 0));             
             
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " - " +
+            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
                     DcResources.getText("lblBetween")),  
                     Layout.getGBC( 2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets(5, 50, 5, 5), 0, 0));
-            add(dtFrom,  
+                    new Insets(5, 20, 5, 0), 0, 0));
+            add(dtDueFrom,  
                     Layout.getGBC( 3, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(5, 5, 5, 5), 0, 0));        
+                    new Insets(5, 5, 5, 0), 0, 0));        
             add(ComponentFactory.getLabel(DcResources.getText("lblAnd")),  
                     Layout.getGBC( 2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets(5, 50, 5, 5), 0, 0));        
-            add(dtTo,  
+                    new Insets(5, 20, 5, 0), 0, 0));        
+            add(dtDueTo,  
                     Layout.getGBC( 3, 1, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(5, 5, 5, 5), 0, 0));
+                    new Insets(5, 5, 5, 0), 0, 0));
             
-            add(ComponentFactory.getLabel(DcResources.getText("lblLoanType")),  
-                    Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-                    new Insets(5, 5, 5, 5), 0, 0));
-            add(cbLoans,  
-                    Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(5, 5, 5, 5), 0, 0));             
+            
+            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANSTARTDATE).getLabel() + " " +
+                    DcResources.getText("lblBetween")),  
+                    Layout.getGBC( 2, 2, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(5, 20, 5, 0), 0, 0));
+            add(dtStartFrom,  
+                    Layout.getGBC( 3, 2, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 5, 5, 0), 0, 0));        
+            add(ComponentFactory.getLabel(DcResources.getText("lblAnd")),  
+                    Layout.getGBC( 2, 3, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(5, 20, 5, 0), 0, 0));        
+            add(dtStartTo,  
+                    Layout.getGBC( 3, 3, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 5, 5, 0), 0, 0));            
             
             DcButton btSearch = ComponentFactory.getButton(DcResources.getText("lblSearch"));
             btSearch.addActionListener(this);
             add(btSearch,  
-                    Layout.getGBC(3, 3, 1, 1, 1.0, 1.0,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                    new Insets(5, 5, 5, 5), 0, 0));             
+                    Layout.getGBC(3, 4, 1, 1, 1.0, 1.0,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                    new Insets(10, 5, 5, 5), 0, 0));             
         }
 
         @Override
@@ -267,3 +307,4 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         }
     }
 }
+
