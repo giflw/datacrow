@@ -104,7 +104,7 @@ public class Loan extends DcObject {
      * Indicates the days till the loan is overdue. A negative value indicates
      * the loan is overdue.
      */
-    public synchronized Long getDaysTillOverdue() {
+    public synchronized Long getDaysTillDueDate() {
         Long daysLoaned = getDaysLoaned();
         Date overDueDate = getDueDate();
         
@@ -131,7 +131,7 @@ public class Loan extends DcObject {
      * is overdue.
      */
     public boolean isOverdue() {
-        Long daysTillOverDue = getDaysTillOverdue();
+        Long daysTillOverDue = getDaysTillDueDate();
         return daysTillOverDue != null && daysTillOverDue.longValue() < 0;
     }
     

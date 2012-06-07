@@ -106,7 +106,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
             }
         }
 
-        Collections.sort(items, new DcObjectComparator(Item._SYS_LOANDAYSTILLOVERDUE));
+        Collections.sort(items, new DcObjectComparator(Item._SYS_LOANDUEDATE));
         
         for (DcObject dco : items)
             table.add(dco);
@@ -138,9 +138,9 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
                  new Insets(0, 0, 0, 0), 0, 0));
         
         if (person == null)
-            table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LENDBY, Item._SYS_LOANDUEDATE, Item._SYS_LOANDAYSTILLOVERDUE});
+            table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LENDBY, Item._SYS_LOANDUEDATE, Item._SYS_LOANSTATUS, Item._SYS_LOANSTATUSDAYS});
         else 
-            table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LOANDUEDATE, Item._SYS_LOANDAYSTILLOVERDUE});
+            table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LOANDUEDATE, Item._SYS_LOANSTATUS, Item._SYS_LOANSTATUSDAYS});
     }
 
     @Override

@@ -201,7 +201,8 @@ public class WorkFlow {
                     for (int field : requestedFields) {
                         if (item.getModule().canBeLend() &&
                             (field == DcObject._SYS_AVAILABLE || 
-                             field == DcObject._SYS_LOANDAYSTILLOVERDUE ||
+                             field == DcObject._SYS_LOANSTATUS ||
+                             field == DcObject._SYS_LOANSTATUSDAYS ||
                              field == DcObject._SYS_LOANDUEDATE ||
                              field == DcObject._SYS_LOANDURATION))  
                             loan |= true;

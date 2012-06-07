@@ -120,7 +120,8 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public static final int _SYS_DISPLAYVALUE = 214;
     
     public static final int _SYS_LOANDUEDATE = 215;
-    public static final int _SYS_LOANDAYSTILLOVERDUE = 216;
+    public static final int _SYS_LOANSTATUSDAYS = 216;
+    public static final int _SYS_LOANSTATUS = 219;
     
     public static final int _VALUE = 217;
     
@@ -649,11 +650,16 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      */
     public void setLoanInformation(Loan loan) {
         if (getModule().canBeLend()) {
+            
+            boolean overdue = loan.isOverdue();
+            String status =  overdue ? DcResources.getText("lblLoanOverdue") : DcResources.getText("lblLoanLent");
+            
             setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(getID()));
             setValue(DcObject._SYS_LENDBY, loan.getPerson());
             setValue(DcObject._SYS_LOANDUEDATE, loan.getDueDate());
             setValue(DcObject._SYS_LOANDURATION, loan.getDaysLoaned());
-            setValue(DcObject._SYS_LOANDAYSTILLOVERDUE, loan.getDaysTillOverdue());
+            setValue(DcObject._SYS_LOANSTATUS, status);
+            setValue(DcObject._SYS_LOANSTATUSDAYS, Long.valueOf(overdue ? loan.getDaysTillDueDate() : loan.getDaysLoaned() + 1));
         }
     }
 

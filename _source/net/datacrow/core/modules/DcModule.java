@@ -1307,7 +1307,8 @@ public class DcModule implements Comparable<DcModule> {
                 addField(getField(DcObject._SYS_LENDBY));
                 addField(getField(DcObject._SYS_LOANDURATION));
                 addField(getField(DcObject._SYS_LOANDUEDATE));
-                addField(getField(DcObject._SYS_LOANDAYSTILLOVERDUE));
+                addField(getField(DcObject._SYS_LOANSTATUS));
+                addField(getField(DcObject._SYS_LOANSTATUSDAYS));
             }
     
             addField(getField(DcObject._SYS_MODULE));
@@ -1386,11 +1387,16 @@ public class DcModule implements Comparable<DcModule> {
                             true, true, true, true, 
                             10, ComponentFactory._DATEFIELD, getIndex(), DcRepository.ValueTypes._DATE,
                             "DueDate")); 
-        systemFields.put(DcObject._SYS_LOANDAYSTILLOVERDUE,
-                new DcField(DcObject._SYS_LOANDAYSTILLOVERDUE, getIndex(), "Days till overdue",
+        systemFields.put(DcObject._SYS_LOANSTATUS,
+                new DcField(DcObject._SYS_LOANSTATUS, getIndex(), "Status",
+                            true, true, true, true, 
+                            10, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
+                            "LoanStatus"));      
+        systemFields.put(DcObject._SYS_LOANSTATUSDAYS,
+                new DcField(DcObject._SYS_LOANSTATUSDAYS, getIndex(), "# Days",
                             true, true, true, true, 
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
-                            "DaysTillOverDue"));                
+                            "LoanStatusDays"));          
         
         if (isTopModule() && deliversOnlineService()) {
             systemFields.put(Integer.valueOf(DcObject._SYS_SERVICE),

@@ -975,7 +975,9 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
                     && (field == DcObject._SYS_AVAILABLE
                      || field == DcObject._SYS_LOANDURATION
                      || field == DcObject._SYS_LENDBY
-                     || field == DcObject._SYS_LOANDAYSTILLOVERDUE || field == DcObject._SYS_LOANDUEDATE))
+                     || field == DcObject._SYS_LOANSTATUS
+                     || field == DcObject._SYS_LOANSTATUSDAYS
+                     || field == DcObject._SYS_LOANDUEDATE))
                 continue;
 
             try {

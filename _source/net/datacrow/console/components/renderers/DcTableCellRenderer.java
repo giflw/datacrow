@@ -39,6 +39,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
 public class DcTableCellRenderer extends DefaultTableCellRenderer {
@@ -96,10 +97,9 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
         boolean overdue = false;
         
         try {
-	    	int idx = ((DcTable) table).getColumnIndexForField(DcObject._SYS_LOANDAYSTILLOVERDUE);
+	    	int idx = ((DcTable) table).getColumnIndexForField(DcObject._SYS_LOANSTATUS);
 	    	if (idx != -1) {
-	    		Long days = (Long) ((DcTable) table).getValueAt(row, idx, true);
-	    		if (days != null && days.longValue() < 0)
+	    		if (DcResources.getText("lblLoanOverdue").equals(((DcTable) table).getValueAt(row, idx, true)))
 	    			overdue = true;
 	    	}
         } catch (Exception ignore) {}

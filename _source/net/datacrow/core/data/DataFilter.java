@@ -408,7 +408,8 @@ public class DataFilter {
     		
     		if (  field.getIndex() == DcObject._SYS_AVAILABLE ||
                   field.getIndex() == DcObject._SYS_LENDBY ||
-                  field.getIndex() == DcObject._SYS_LOANDAYSTILLOVERDUE ||
+                  field.getIndex() == DcObject._SYS_LOANSTATUS ||
+                  field.getIndex() == DcObject._SYS_LOANSTATUSDAYS ||
                   field.getIndex() == DcObject._SYS_LOANDUEDATE ||
                   field.getIndex() == DcObject._SYS_LOANDURATION) 
     		    continue;

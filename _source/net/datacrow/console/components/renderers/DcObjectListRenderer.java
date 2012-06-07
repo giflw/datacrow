@@ -35,6 +35,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
 import net.datacrow.console.views.IViewComponent;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.resources.DcResources;
 
 public class DcObjectListRenderer extends DcListRenderer  {
 
@@ -62,8 +63,7 @@ public class DcObjectListRenderer extends DcListRenderer  {
             if (c.getDcObject() != null) {
                 
                 if (c.getDcObject().getModule().canBeLend()) {
-                    Long daysTillOverdue = (Long) c.getDcObject().getValue(DcObject._SYS_LOANDAYSTILLOVERDUE);
-                    if (daysTillOverdue != null && daysTillOverdue.longValue() < 0)
+                    if (DcResources.getText("lblLoanOverdue").equals(c.getDcObject().getValue(DcObject._SYS_LOANSTATUS)))
                         c.setForeground(Color.RED);
                 }
                 

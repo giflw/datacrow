@@ -397,8 +397,7 @@ public class DataCrow {
                     df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
                     
                     for (DcObject loan : DataManager.get(df)) {
-                        Long overdue = ((Loan) loan).getDaysTillOverdue();
-                    	if (overdue != null && overdue.longValue() < 0) {
+                       if (((Loan) loan).isOverdue()) {
                             DcSwingUtilities.displayWarningMessage("msgThereAreOverdueItems");
                     		new LoanInformationForm().setVisible(true);
                     		break;
