@@ -40,15 +40,27 @@ import net.datacrow.core.resources.DcResources;
 
 public class LoanForm extends DcFrame {
 
+    private LoanInformationPanel listener;
+    
     public LoanForm(Collection<? extends DcObject> objects) throws Exception {
         super(DcResources.getText("lblLoan"), IconLibrary._icoLoan);
         setHelpIndex("dc.loans");
         buildForm(objects); 
     }    
     
+    public void setListener(LoanInformationPanel listener) {
+        this.listener = listener;
+    }
+    
     @Override
     public void close() {
         DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stLoanFormSize, getSize());
+        
+        if (listener != null)
+            listener.loadItems();
+        
+        listener = null;
+        
         super.close();
     }
     

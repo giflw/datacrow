@@ -653,13 +653,19 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             
             boolean overdue = loan.isOverdue();
             String status =  overdue ? DcResources.getText("lblLoanOverdue") : DcResources.getText("lblLoanLent");
+            Long daysTillOverdue = loan.getDaysTillDueDate();
+            daysTillOverdue = daysTillOverdue == null ? Long.valueOf(0) : daysTillOverdue;
+            
+            Long daysLoaned = loan.getDaysLoaned();
+            daysLoaned = daysLoaned == null ? Long.valueOf(0) : daysLoaned;
+            
             
             setValue(DcObject._SYS_AVAILABLE, loan.isAvailable(getID()));
             setValue(DcObject._SYS_LENDBY, loan.getPerson());
             setValue(DcObject._SYS_LOANDUEDATE, loan.getDueDate());
             setValue(DcObject._SYS_LOANDURATION, loan.getDaysLoaned());
             setValue(DcObject._SYS_LOANSTATUS, status);
-            setValue(DcObject._SYS_LOANSTATUSDAYS, Long.valueOf(overdue ? loan.getDaysTillDueDate() : loan.getDaysLoaned() + 1));
+            setValue(DcObject._SYS_LOANSTATUSDAYS, Long.valueOf(overdue ? daysTillOverdue * -1 :  + 1));
         }
     }
 

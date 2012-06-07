@@ -30,16 +30,18 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JScrollPane;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.ISimpleItemView;
-import net.datacrow.console.windows.itemforms.DcMinimalisticItemForm;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
@@ -55,6 +57,8 @@ import net.datacrow.util.comparators.DcObjectComparator;
 
 public class LoanInformationPanel extends DcPanel implements ISimpleItemView, MouseListener {
 	
+    private static Logger logger = Logger.getLogger(LoanInformationPanel.class.getName());
+    
     private DcTable table = new DcTable(DcModules.get(DcModules._ITEM), true, false);
     private DcObject person;
     
@@ -78,9 +82,17 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         DcObject dco = table.getSelectedItem();
         if (dco != null) {
             dco.load(null);
-            dco.markAsUnchanged();
-            DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, true, dco, this);
-            itemForm.setVisible(true);
+            
+            Collection<DcObject> items = new ArrayList<DcObject>();
+            items.add(dco);
+            
+            try {
+                LoanForm form = new LoanForm(items);
+                form.setListener(this);
+                form.setVisible(true);
+            } catch (Exception exp) {
+                logger.warn(exp, exp);
+            }
         }
     }
     
@@ -126,7 +138,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         table.activate();
         table.addMouseListener(this);
         table.setDynamicLoading(false);
-        
+
         JScrollPane sp = new JScrollPane(table);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

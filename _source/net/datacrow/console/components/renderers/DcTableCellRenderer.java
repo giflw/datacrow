@@ -93,20 +93,15 @@ public class DcTableCellRenderer extends DefaultTableCellRenderer {
         Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
         setFont(font);
         setForeground(ComponentFactory.getCurrentForegroundColor());
-
-        boolean overdue = false;
         
         try {
-	    	int idx = ((DcTable) table).getColumnIndexForField(DcObject._SYS_LOANSTATUS);
-	    	if (idx != -1) {
-	    		if (DcResources.getText("lblLoanOverdue").equals(((DcTable) table).getValueAt(row, idx, true)))
-	    			overdue = true;
-	    	}
+            int idx = ((DcTable) table).getColumnIndexForField(DcObject._SYS_LOANSTATUS);
+            if (idx != -1) {
+                if (DcResources.getText("lblLoanOverdue").equals(((DcTable) table).getValueAt(row, idx, true)))
+                    setForeground(Color.RED);
+            }
         } catch (Exception ignore) {}
-        
-    	if (overdue)
-    		setForeground(Color.RED);
-    	
+
     	if (!isSelected) {
             if ((row % 2) == 0) {
         		setBackground(colorEvenRow);

@@ -1373,7 +1373,7 @@ public class DcModule implements Comparable<DcModule> {
                             4, ComponentFactory._AVAILABILITYCOMBO, getIndex(), DcRepository.ValueTypes._BOOLEAN,
                             "Available"));
         systemFields.put(DcObject._SYS_LENDBY,
-                new DcField(DcObject._SYS_LENDBY, getIndex(), "Lend By",
+                new DcField(DcObject._SYS_LENDBY, getIndex(), "Lend by",
                             true, true, true, true, 
                             255, ComponentFactory._REFERENCEFIELD, DcModules._CONTACTPERSON, DcRepository.ValueTypes._DCOBJECTREFERENCE,
                             "LendBy"));

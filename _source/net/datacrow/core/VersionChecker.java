@@ -84,6 +84,11 @@ public class VersionChecker extends Thread {
                 String downloadUrl = (String) properties.get(_DOWNLOAD_URL);
                 String infoUrl = (String) properties.get(_INFO_URL);
                 
+                if (version == null) {
+                    checked = true;
+                    continue;
+                }
+                
                 if (DataCrow.getVersion().isOlder(new Version(version))) {
                     final String html = 
                         "<html><body " + Utilities.getHtmlStyle() + ">\n" +

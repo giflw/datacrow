@@ -25,7 +25,6 @@
 
 package net.datacrow.console.components.renderers;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Rectangle;
 
@@ -34,8 +33,6 @@ import javax.swing.JList;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
 import net.datacrow.console.views.IViewComponent;
-import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.resources.DcResources;
 
 public class DcObjectListRenderer extends DcListRenderer  {
 
@@ -60,15 +57,8 @@ public class DcObjectListRenderer extends DcListRenderer  {
             c.setFont(ComponentFactory.getStandardFont());
             c.load();
             
-            if (c.getDcObject() != null) {
-                
-                if (c.getDcObject().getModule().canBeLend()) {
-                    if (DcResources.getText("lblLoanOverdue").equals(c.getDcObject().getValue(DcObject._SYS_LOANSTATUS)))
-                        c.setForeground(Color.RED);
-                }
-                
+            if (c.getDcObject() != null)
                 setElementColor(isSelected, c, index);
-            }
         }
         
     	return c;

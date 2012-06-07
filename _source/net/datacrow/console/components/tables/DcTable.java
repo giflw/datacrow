@@ -1308,7 +1308,9 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
                 DcField field = module.getField(((Integer) column.getIdentifier()).intValue());
                 DataFilter df = DataFilters.getCurrent(module.getIndex());
                 
-                if (field.isSearchable()) {
+                if (df == null) return;
+                
+                if (field.isSearchable() && !field.isUiOnly()) {
                     DcField[] currentOrder = df.getOrder();
                     if (currentOrder != null && currentOrder.length == 1 && currentOrder[0].equals(field)) {
                         // reverse the order

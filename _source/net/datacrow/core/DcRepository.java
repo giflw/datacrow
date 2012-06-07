@@ -111,6 +111,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
+        public static final String stLoanAdminFormSize = "loan_admin_form_size";
         public static final String stImdbMaxActors = "imdb_max_actors";
         public static final String stImdbGetOriginalTitle = "imdb_original_title";
         public static final String stMovieMeterGetReviews = "moviemeter_get_reviews";

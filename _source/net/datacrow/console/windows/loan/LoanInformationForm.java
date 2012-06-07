@@ -36,9 +36,11 @@ import javax.swing.JPanel;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcFrame;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 
 public class LoanInformationForm extends DcFrame implements ActionListener {
     
@@ -51,8 +53,16 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         build(person);
         pack();
         
+        setSize(DcSettings.getDimension(DcRepository.Settings.stLoanAdminFormSize));
+        
         setCenteredLocation();
         setHelpIndex("dc.loans");
+    }
+    
+    @Override
+    public void close() {
+        DcSettings.set(DcRepository.Settings.stLoanAdminFormSize, getSize());
+        super.close();
     }
     
     private void build(DcObject person) {

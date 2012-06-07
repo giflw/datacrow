@@ -34,6 +34,7 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcSimpleValue;
 import net.datacrow.core.web.DcSecured;
 import net.datacrow.util.Rating;
@@ -68,14 +69,15 @@ public class DcWebField extends DcSecured {
     private boolean required;
 
     public DcWebField(DcField field) {
+        
         this.index = field.getIndex();
         this.label = field.getLabel();
         this.module = field.getModule();
-        this.readonly =  field.isReadOnly() || !getUser().isEditingAllowed(field);
+        this.readonly = field.isReadOnly() || field.isUiOnly() || !getUser().isEditingAllowed(field);
         this.required = field.isRequired();
         
-        if (getDcField().getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
-            getDcField().getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+        if ( getDcField().getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
+             getDcField().getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
             type = _DROPDOWN;
         } else if (getDcField().getValueType() == DcRepository.ValueTypes._PICTURE) {
             type = _IMAGE;
@@ -87,7 +89,8 @@ public class DcWebField extends DcSecured {
             type = _URLFIELD;
         } else if (getDcField().getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
             type = _MULTIRELATE;
-        } else if (getDcField().getValueType() == DcRepository.ValueTypes._DATE) {
+        } else if (getDcField().getValueType() == DcRepository.ValueTypes._DATE &&
+                   getDcField().getIndex() != DcObject._SYS_LOANDUEDATE) {
             type = _DATE;
         } else if (getDcField().getFieldType() == ComponentFactory._FILEFIELD ||
                    getDcField().getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
