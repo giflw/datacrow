@@ -83,23 +83,26 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         if (dco != null) {
             dco.load(null);
             
-            Collection<DcObject> items = new ArrayList<DcObject>();
-            items.add(dco);
-            
-            try {
-                LoanForm form = new LoanForm(items);
-                form.setListener(this);
-                form.setVisible(true);
-            } catch (Exception exp) {
-                logger.warn(exp, exp);
+            Loan loan = DataManager.getCurrentLoan(dco.getID());
+            if (loan == null || loan.isAvailable(dco.getID())) {
+                return;
+            } else {
+                Collection<DcObject> items = new ArrayList<DcObject>();
+                items.add(dco);
+                
+                try {
+                    LoanForm form = new LoanForm(items);
+                    form.setListener(this);
+                    form.setVisible(true);
+                } catch (Exception exp) {
+                    logger.warn(exp, exp);
+                }
             }
         }
     }
     
     @Override
     public void loadItems() {
-    	table.clear();
-    	
         DataFilter df = new DataFilter(DcModules._LOAN);
         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
         
@@ -112,14 +115,19 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
             for (DcModule module : DcModules.getModules()) {
                 if (module.canBeLend() && !module.isAbstract()) {
                     DcObject dco = DataManager.getItem(module.getIndex(), ID);
-                    if (dco != null && !items.contains(dco))
+                    if (dco != null && !items.contains(dco)) {
                         items.add(dco);
+                    }
                 }
             }
         }
 
         Collections.sort(items, new DcObjectComparator(Item._SYS_LOANDUEDATE));
-        
+        setItems(items);
+    }
+    
+    public void setItems(List<DcObject> items) {
+        table.clear();
         for (DcObject dco : items)
             table.add(dco);
     }

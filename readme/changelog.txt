@@ -18,6 +18,7 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 
 [New]
 - Google.com book search, allows for searching both on keywords and ISBNs
+- Greatly improved loan administration overview
 
 [Fixed]
 - Descriptions and images as retrieved from Sourceforge.net have been improved
@@ -36,6 +37,8 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
 - Loan administration Form size is not remembered.
 - Loan administration overview is cleared when clicking on a column header
 - The loan administration overview now refreshes after dealing with the loans      
+- Date field cannot be cleared
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.12  [Released on March 10, 2012]  [testing: high]  [target: production]

@@ -630,10 +630,13 @@ public class DataFilter {
             value = entry.getValue() != null ? Utilities.getQueryValue(entry.getValue(), field) : null;
             
             if (value != null) {
-                queryValue = String.valueOf(value);
-                if (field.getValueType() == DcRepository.ValueTypes._DATE ||
-                    field.getValueType() == DcRepository.ValueTypes._STRING) {
-                    queryValue = queryValue.replaceAll("\'", "''");
+                
+                if (value instanceof Date)
+                    queryValue = "'" + formatter.format((Date) value) + "'";
+                else {
+                    queryValue = String.valueOf(value);
+                    if (field.getValueType() == DcRepository.ValueTypes._STRING)
+                        queryValue = queryValue.replaceAll("\'", "''");
                 }
             }
             
@@ -742,6 +745,8 @@ public class DataFilter {
                 sql.append(queryValue);
             } else if (operator == Operator.AFTER.getIndex() ||
                        operator == Operator.GREATER_THEN.getIndex()) {
+                
+                
                 sql.append(" > ");
                 sql.append(queryValue);
             } else if (operator == Operator.IS_EMPTY.getIndex()) {

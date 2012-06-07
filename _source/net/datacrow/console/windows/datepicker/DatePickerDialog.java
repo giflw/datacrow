@@ -143,6 +143,12 @@ public class DatePickerDialog extends DcDialog implements ActionListener {
         JButton buttonCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
         buttonCancel.setActionCommand("cancel");
         buttonCancel.addActionListener(this);
+        
+        JButton buttonClear = ComponentFactory.getButton(DcResources.getText("lblClear"));
+        buttonClear.setActionCommand("clear");
+        buttonClear.addActionListener(this);
+        
+        actionsPanel.add(buttonClear);
         actionsPanel.add(buttonCancel);        
         
         /** main */
@@ -172,5 +178,11 @@ public class DatePickerDialog extends DcDialog implements ActionListener {
             calendar = original;
             close();
         }
+
+        if (e.getActionCommand().equals("clear")) {
+            calendar = null;
+            close();
+        }
+
     }
 }
