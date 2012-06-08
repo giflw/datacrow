@@ -162,6 +162,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                 cal.setTime(startDateTo);
                 cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
                 startDateTo = cal.getTime();
+                lf.setStartDateTo(cal.getTime());
             }
             
             lf.setLoanType(cbLoans.getSelectedIndex());

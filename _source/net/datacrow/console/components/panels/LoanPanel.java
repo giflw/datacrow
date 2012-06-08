@@ -228,7 +228,7 @@ public class LoanPanel extends JPanel implements ActionListener {
                         if (currentLoan.getID() != null) {
                             currentLoan.setValue(Loan._D_OBJECTID, o.getID());
                             currentLoan.setValue(Loan._B_ENDDATE, endDate);
-                            currentLoan.setValue(Loan._E_DUEDATE, null);
+                            //currentLoan.setValue(Loan._E_DUEDATE, null);
                             
                             if (owner != null && i == objects.size()  - 1) // last item
                                 currentLoan.addRequest(new CloseWindowRequest(owner));

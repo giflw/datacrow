@@ -105,9 +105,13 @@ public class Loan extends DcObject {
      * the loan is overdue.
      */
     public synchronized Long getDaysTillDueDate() {
+        
+        if (isFilled(_B_ENDDATE)) {
+            return Long.valueOf(0);
+        }
+        
         Long daysLoaned = getDaysLoaned();
         Date overDueDate = getDueDate();
-        
         Long days = null;
         if (daysLoaned != null && overDueDate != null) {
             calDaysLoaned.setTime(new java.util.Date());
@@ -131,6 +135,9 @@ public class Loan extends DcObject {
      * is overdue.
      */
     public boolean isOverdue() {
+        
+        if (isFilled(_B_ENDDATE)) return false;
+        
         Long daysTillOverDue = getDaysTillDueDate();
         return daysTillOverDue != null && daysTillOverDue.longValue() < 0;
     }
