@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcButton;
+import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcComboBox;
 import net.datacrow.console.components.DcDateField;
 import net.datacrow.console.components.DcObjectComboBox;
@@ -127,6 +128,8 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         private DcDateField dtStartTo = ComponentFactory.getDateField();
 
         private DcComboBox cbLoans = ComponentFactory.getComboBox(); 
+        
+        private DcCheckBox cbOnlyTooLate = ComponentFactory.getCheckBox(""); 
                 
         public LoanFilterPanel() {
             build();
@@ -173,6 +176,8 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
             if (cbModules.getSelectedItem() instanceof DcModule)
                 lf.setModule((DcModule) cbModules.getSelectedItem());
             
+            lf.setOnlyOverdue(cbOnlyTooLate.isSelected());
+            
             return lf;
         }
         
@@ -211,8 +216,15 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                     new Insets(5, 5, 5, 0), 0, 0));
             add(cbModules,  
                     Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                    new Insets(5, 5, 5, 0), 0, 0));             
-            
+                    new Insets(5, 5, 5, 0), 0, 0)); 
+
+            add(ComponentFactory.getLabel(DcResources.getText("lblOnlyOverdueLoans")),  
+                    Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                    new Insets(5, 5, 5, 0), 0, 0));
+            add(cbOnlyTooLate,  
+                    Layout.getGBC( 1, 3, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 5, 5, 0), 0, 0)); 
+
             add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
                     DcResources.getText("lblBetween")),  
                     Layout.getGBC( 2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

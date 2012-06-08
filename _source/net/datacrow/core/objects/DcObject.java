@@ -651,13 +651,14 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * Update the loan information based on the supplied loan object.
      */
     public void setLoanInformation(Loan loan) {
+        
         if (getModule().canBeLend()) {
-            
+
             boolean overdue = loan.isOverdue();
             boolean available = loan.isAvailable(getID());
             
             String status =  overdue ? DcResources.getText("lblLoanOverdue") : 
-                             available ? DcResources.getText("lblLoanReturned") : 
+                             available ? DcResources.getText("lblAvailable") : 
                              DcResources.getText("lblLoanLent");
             
             Long daysTillOverdue = loan.getDaysTillDueDate();

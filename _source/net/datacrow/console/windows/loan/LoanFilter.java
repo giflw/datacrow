@@ -28,6 +28,12 @@ public class LoanFilter {
     private Date dueDateFrom;
     private Date dueDateTo;
     
+    private boolean onlyOverdue = false;
+    
+    public void setOnlyOverdue(boolean onlyOverdue) {
+        this.onlyOverdue = onlyOverdue;
+    }
+
     private int loanType = _CURRENT_LOANS;
     private DcObject person;
     
@@ -95,6 +101,20 @@ public class LoanFilter {
         
         DcObject dco;
         for (DcObject loan : DataManager.get(df)) {
+            
+            if (onlyOverdue) {
+                Date endDate = (Date) loan.getValue(Loan._B_ENDDATE);
+                Date dueDate = (Date) loan.getValue(Loan._E_DUEDATE);
+                
+                if (dueDate == null)
+                    continue;
+                else if (endDate != null && !endDate.after(dueDate))
+                    continue;
+                else if (endDate == null && !((Loan) loan).isOverdue())
+                    continue;
+            }
+            
+            
             String ID = (String) loan.getValue(Loan._D_OBJECTID);
             if (selectedModule != null) {
                 dco = DataManager.getItem(selectedModule.getIndex(), ID);
