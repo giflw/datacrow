@@ -56,7 +56,7 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
         setTitle(DcResources.getText("lblRelatedItems"));
 
         build();
-        loadItems();
+        load();
     }
     
     private void build() {
@@ -83,7 +83,7 @@ public class RelatedItemsPanel extends DcPanel implements MouseListener, ISimple
     }
     
     @Override
-    public void loadItems() {
+    public void load() {
         list.clear();
         List<DcObject> items = DataManager.getReferencingItems(dco);
         list.add(items);

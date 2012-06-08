@@ -75,7 +75,7 @@ public class RefreshSimpleViewRequest implements IUpdateUIRequest {
         
         @Override
         public void run() {
-            view.loadItems();
+            view.load();
             view = null;
         }
     }

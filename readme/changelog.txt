@@ -28,16 +28,18 @@ Data Crow 3.9.13  [Released on June xx, 2012]  [testing: high]  [target: product
   existing item
 - Amazon service will now retrieve all authors and publishers
 - Bol.com service for books was broken and now fixed
-- Discogs.com service needed to be updated to reflect site changes
+- Discogs.com service needed to be updated to reflect site changes (no tracks retrieved)
 - The web client shows an item multiple times in case it has multiple references.
 - The web client shows null, null for some references instead of nothing in case
   there is no value set
 - The web client suppresses information in case an item does not hold a value 
-  for the selected web field
+  for the selected field. If categories are selected in the web field settings any item
+  not having a category will not be shown. Now, they will be included.
 - Longer wait time for the file synchronizer when there are no items found to synchronize
-- Loan administration Form size is not remembered.
+  (high CPU usage)
+- Loan administration window size is not remembered.
 - Loan administration overview is cleared when clicking on a column header
-- The loan administration overview now refreshes after dealing with the loans      
+- The loan administration overview now refreshes after returning an item      
 - Date field cannot be cleared
 - Data Crow GUI will not close until the database has successfully been closed. This 
   to prevent situations where Data Crow started again while the database still in use

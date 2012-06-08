@@ -31,29 +31,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import javax.swing.JScrollPane;
-
-import org.apache.log4j.Logger;
 
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.data.Operator;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.comparators.DcObjectComparator;
+
+import org.apache.log4j.Logger;
 
 public class LoanInformationPanel extends DcPanel implements ISimpleItemView, MouseListener {
 	
@@ -61,6 +54,8 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     
     private DcTable table = new DcTable(DcModules.get(DcModules._ITEM), true, false);
     private DcObject person;
+    
+    private LoanFilter filter;
     
     public LoanInformationPanel() {
     	this(null);
@@ -75,7 +70,11 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         this.person = person;
         
         build();
-        loadItems();
+        load();
+    }
+    
+    public void setFilter(LoanFilter filter) {
+        this.filter = filter;
     }
     
     public void open() {
@@ -102,33 +101,12 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     }
     
     @Override
-    public void loadItems() {
-        DataFilter df = new DataFilter(DcModules._LOAN);
-        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
+    public void load() {
+        if (filter == null)
+            filter = new LoanFilter(); 
         
-        if (person != null)
-            df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._C_CONTACTPERSONID, Operator.EQUAL_TO, person.getID()));
-        
-        List<DcObject> items = new ArrayList<DcObject>();
-        for (DcObject loan : DataManager.get(df)) {
-            String ID = (String) loan.getValue(Loan._D_OBJECTID);
-            for (DcModule module : DcModules.getModules()) {
-                if (module.canBeLend() && !module.isAbstract()) {
-                    DcObject dco = DataManager.getItem(module.getIndex(), ID);
-                    if (dco != null && !items.contains(dco)) {
-                        items.add(dco);
-                    }
-                }
-            }
-        }
-
-        Collections.sort(items, new DcObjectComparator(Item._SYS_LOANDUEDATE));
-        setItems(items);
-    }
-    
-    public void setItems(List<DcObject> items) {
         table.clear();
-        for (DcObject dco : items)
+        for (DcObject dco : filter.getItems())
             table.add(dco);
     }
     

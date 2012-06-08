@@ -29,11 +29,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -47,18 +44,11 @@ import net.datacrow.console.components.DcObjectComboBox;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.data.DataFilter;
-import net.datacrow.core.data.DataFilterEntry;
-import net.datacrow.core.data.DataManager;
-import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.Loan;
-import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
-import net.datacrow.util.comparators.DcObjectComparator;
 
 public class LoanInformationForm extends DcFrame implements ActionListener {
     
@@ -123,10 +113,6 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
     
     private class LoanFilterPanel extends JPanel implements ActionListener {
         
-        private static final int _CURRENT_LOANS = 0;
-        private static final int _HISTORIC_LOANS = 1;
-        private static final int _ALL_LOANS = 2;
-        
         private DcObjectComboBox cbPersons = ComponentFactory.getObjectCombo(DcModules._CONTACTPERSON);
         private DcComboBox cbModules = ComponentFactory.getComboBox();
         
@@ -142,38 +128,30 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
             build();
         }
         
-        protected List<DcObject> getItems() {
-            DataFilter df = new DataFilter(DcModules._LOAN);
-            
+        protected LoanFilter getLoanFilter() {
+            LoanFilter lf = new LoanFilter();
             Calendar cal = Calendar.getInstance();
             
             Date dueDateFrom = (Date) dtDueFrom.getValue();
-            Date dueDateTo = (Date) dtDueTo.getValue();
-            
             if (dueDateFrom != null) {
                 cal.setTime(dueDateFrom);
                 cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
-                dueDateFrom = cal.getTime();
+                lf.setDueDateFrom(cal.getTime());
             }
 
+            Date dueDateTo = (Date) dtDueTo.getValue();
             if (dueDateTo != null) {
                 cal.setTime(dueDateTo);
                 cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
-                dueDateTo = cal.getTime();
+                lf.setDueDateFrom(cal.getTime());
             }
-            
-            if (dueDateFrom != null)
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.AFTER, dueDateFrom));
-            if (dueDateTo != null && (dueDateFrom == null || dueDateTo.after(dueDateFrom)))
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.BEFORE, dueDateTo));
 
             Date startDateFrom = (Date) dtStartFrom.getValue();
             Date startDateTo = (Date) dtStartTo.getValue();
-            
             if (startDateFrom != null) {
                 cal.setTime(startDateFrom);
                 cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
-                startDateFrom = cal.getTime();
+                lf.setStartDateFrom(cal.getTime());
             }
 
             if (startDateTo != null) {
@@ -182,50 +160,15 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                 startDateTo = cal.getTime();
             }
             
-            if (startDateFrom != null)
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._A_STARTDATE, Operator.AFTER, startDateFrom));
-            if (startDateTo != null && (startDateFrom == null || startDateTo.after(startDateFrom)))
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._A_STARTDATE, Operator.BEFORE, startDateTo));
-            
-            if (cbLoans.getSelectedIndex() == _CURRENT_LOANS)
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
-            else if (cbLoans.getSelectedIndex() == _HISTORIC_LOANS)
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_FILLED, null));
+            lf.setLoanType(cbLoans.getSelectedIndex());
             
             if (cbPersons.getSelectedItem() instanceof DcObject)
-                df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._C_CONTACTPERSONID, Operator.EQUAL_TO, ((DcObject) cbPersons.getSelectedItem()).getID()));
+                lf.setPerson((DcObject) cbPersons.getSelectedItem());
             
-            List<DcObject> items = new ArrayList<DcObject>();
-            DcModule selectedModule = cbModules.getSelectedItem() instanceof DcModule ? (DcModule) cbModules.getSelectedItem() : null;
-
-            DcObject dco;
-            for (DcObject loan : DataManager.get(df)) {
-                String ID = (String) loan.getValue(Loan._D_OBJECTID);
-                if (selectedModule != null) {
-                    dco = DataManager.getItem(selectedModule.getIndex(), ID);
-                    if (dco != null) {
-                        dco.setLoanInformation((Loan) loan);
-                        items.add(dco);
-                    }
-                } else { 
-                    for (DcModule module : DcModules.getModules()) {
-                        if (module.canBeLend() && !module.isAbstract()) {
-                            dco = DataManager.getItem(module.getIndex(), ID);
-                            if (dco != null) {
-                                dco.setLoanInformation((Loan) loan);
-                                items.add(dco);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (cbLoans.getSelectedIndex() == _CURRENT_LOANS)
-                Collections.sort(items, new DcObjectComparator(Item._SYS_LOANDUEDATE));
-            else 
-                Collections.sort(items, new DcObjectComparator(Item._SYS_LOANSTARTDATE, DcObjectComparator._SORTORDER_DESCENDING));
+            if (cbModules.getSelectedItem() instanceof DcModule)
+                lf.setModule((DcModule) cbModules.getSelectedItem());
             
-            return items;
+            return lf;
         }
         
         private void build() {
@@ -303,7 +246,8 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            panelLoans.setItems(getItems());
+            panelLoans.setFilter(getLoanFilter());
+            panelLoans.load();
         }
     }
 }

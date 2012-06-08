@@ -366,7 +366,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             
             if (childView != null) {
                 if (update && !overwriteChildren)
-                    childView.loadItems();
+                    childView.load();
                 else 
                     childView.setObjects(object.getCurrentChildren());
             }

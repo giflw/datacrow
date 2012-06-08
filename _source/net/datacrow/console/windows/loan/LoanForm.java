@@ -57,7 +57,7 @@ public class LoanForm extends DcFrame {
         DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stLoanFormSize, getSize());
         
         if (listener != null)
-            listener.loadItems();
+            listener.load();
         
         listener = null;
         

@@ -80,7 +80,7 @@ public class RefreshChildView implements IUpdateUIRequest {
         @Override
         public void run() {
             if (form != null)
-                form.loadItems();
+                form.load();
             else 
                 return;
             

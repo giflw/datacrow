@@ -27,6 +27,6 @@ package net.datacrow.console.views;
 
 public interface ISimpleItemView {
 
-    public void loadItems();
+    public void load();
     
 }

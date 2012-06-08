@@ -130,7 +130,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     public void createMultiple() {
     	CreateMultipleItemsDialog dlg = new CreateMultipleItemsDialog(getModuleIdx());
     	dlg.setVisible(true);
-    	loadItems();
+    	load();
     }
     
     public void createNew() {
@@ -169,7 +169,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     public void setVisible(boolean b) {
         super.setVisible(b);
         if (b) {
-            loadItems();
+            load();
             setCenteredLocation();
         }
     }    
@@ -191,7 +191,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     }
     
     @Override
-    public void loadItems() {
+    public void load() {
         list.clear();
         DcObject dco = DcModules.get(module).getItem();
         DataFilter filter = new DataFilter(module);

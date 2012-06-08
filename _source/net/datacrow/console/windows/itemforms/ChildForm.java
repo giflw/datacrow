@@ -51,7 +51,7 @@ public class ChildForm extends DcMinimalisticItemView {
     }
 
     @Override
-    public void loadItems() {
+    public void load() {
         list.clear();
         list.add(DataManager.getChildrenKeys(parentID, getModuleIdx()));
     }

@@ -40,7 +40,7 @@ public class TemplateForm extends DcMinimalisticItemView {
     }
 
     @Override
-    public void loadItems() {
+    public void load() {
         Templates.refresh();
         list.clear();
         list.add(Templates.getTemplates(getModuleIdx()));
