@@ -28,11 +28,14 @@ package net.datacrow.util;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import net.datacrow.console.IWindow;
 import net.datacrow.console.windows.IDialog;
 import net.datacrow.console.windows.messageboxes.MessageBox;
 import net.datacrow.console.windows.messageboxes.QuestionBox;
@@ -48,9 +51,25 @@ public class DcSwingUtilities {
     private static Logger logger = Logger.getLogger(DcSwingUtilities.class.getName());
     
     private static JFrame rootFrame = null;
+    
+    private static List<IWindow> openWindows = new ArrayList<IWindow>();
 
     public static void setRootFrame(JFrame f) {
     	rootFrame = f;
+    }
+    
+    public static List<IWindow> getOpenWindows() {
+        return openWindows;
+    }
+    
+    public static void addOpenWindow(IWindow window) {
+        openWindows.add(window);
+        logger.debug("Added opened Window " + window);
+    }
+
+    public static void removeOpenWindow(IWindow window) {
+        openWindows.remove(window);
+        logger.debug("Removed registered open Window " + window);
     }
     
     public static JFrame getRootFrame() {

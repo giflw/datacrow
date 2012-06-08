@@ -25,43 +25,58 @@
 
 package net.datacrow.console.windows.loan;
 
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.util.Collection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import net.datacrow.console.Layout;
-import net.datacrow.console.components.panels.LoanPanel;
-import net.datacrow.console.windows.DcFrame;
-import net.datacrow.core.DcRepository;
+import javax.swing.JMenuItem;
+
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.DcPopupMenu;
+import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.security.SecurityCentre;
 
-public class LoanForm extends DcFrame {
+import org.apache.log4j.Logger;
 
-    public LoanForm(Collection<? extends DcObject> objects) throws Exception {
-        super(DcResources.getText("lblLoan"), IconLibrary._icoLoan);
-        setHelpIndex("dc.loans");
-        buildForm(objects); 
-    }    
+public class LoanInformationPanelPopupMenu extends DcPopupMenu implements ActionListener {
+
+    private static Logger logger = Logger.getLogger(LoanInformationPanelPopupMenu.class.getName());
     
-    @Override
-    public void close() {
-        DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stLoanFormSize, getSize());
-        super.close();
+    private DcObject dco;
+    
+    public LoanInformationPanelPopupMenu(DcObject dco) {
+        this.dco = dco;
+        JMenuItem menuOpen = ComponentFactory.getMenuItem(IconLibrary._icoOpen, DcResources.getText("lblOpenItem", dco.getModule().getObjectName()));
+        JMenuItem menuEdit = ComponentFactory.getMenuItem(IconLibrary._icoOpen, DcResources.getText("lblEditItem", dco.getModule().getObjectName()));
+         
+        menuOpen.setActionCommand("openItem");
+        menuEdit.setActionCommand("editItem");
+        
+        menuOpen.addActionListener(this);
+        menuEdit.addActionListener(this);
+        
+        this.add(menuOpen);
+
+        if (SecurityCentre.getInstance().getUser().isAuthorized(dco.getModule())) {
+            this.add(menuEdit);
+            if (SecurityCentre.getInstance().getUser().isEditingAllowed(dco.getModule()))
+                this.add(menuEdit);
+        }
     }
-    
-    private void buildForm(Collection<? extends DcObject> objects) throws Exception {
-        getContentPane().setLayout(Layout.getGBL());
 
-        LoanPanel loanPanel = new LoanPanel(objects, this);
-        getContentPane().add( loanPanel, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                              new Insets(5, 5, 5, 5), 0, 0));
-
-        pack();
-        setSize(DcModules.getCurrent().getSettings().getDimension(DcRepository.ModuleSettings.stLoanFormSize));
-        setCenteredLocation();        
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        dco.markAsUnchanged();
+        dco.getModule();
+        
+        if (e.getActionCommand().equals("openItem")) {
+            ItemForm form = new ItemForm(true, true, dco, false);
+            form.setVisible(true);
+        } else if (e.getActionCommand().equals("editItem")) {
+            ItemForm form = new ItemForm(false, true, dco, false);
+            form.setVisible(true);
+        }
     }
 }

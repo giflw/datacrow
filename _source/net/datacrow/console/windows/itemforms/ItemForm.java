@@ -179,7 +179,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 dco.addRequest(request);
         }
         
-        this.readonly = this.readonly || !SecurityCentre.getInstance().getUser().isEditingAllowed(dco.getModule());
+        this.readonly = readonly || !SecurityCentre.getInstance().getUser().isEditingAllowed(dco.getModule());
         
         setTitle(!update && !readonly ?
                   DcResources.getText("lblNewItem", dco.getModule().getObjectName()) :

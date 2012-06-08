@@ -40,14 +40,17 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.IWindow;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcDateField;
 import net.datacrow.console.components.DcHtmlEditorPane;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.loan.LoanForm;
+import net.datacrow.console.windows.loan.LoanInformationForm;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
@@ -243,7 +246,19 @@ public class LoanPanel extends JPanel implements ActionListener {
                         } catch (Exception ignore) {}                        
                     }   
                     
-                    setLendModus();
+                    
+                    if (!SwingUtilities.isEventDispatchThread()) {
+                        SwingUtilities.invokeLater(
+                                new Thread(new Runnable() { 
+                                    @Override
+                                    public void run() {
+                                        setLendModus();
+                                        updateLoanInformationForm();
+                                    }
+                                }));
+                    }
+
+                    
                 } catch (ValidationException e) {
                     logger.error("Error while saving the loan", e);
 
@@ -319,9 +334,9 @@ public class LoanPanel extends JPanel implements ActionListener {
                         o.setLoanInformation(currentLoan);
                         
                         if (currentLoan.getID() != null) 
-                        	currentLoan.saveUpdate(true);
+                        	currentLoan.saveUpdate(false);
                         else 
-                            currentLoan.saveNew(true);
+                            currentLoan.saveNew(false);
                         
                         try {
                             wait(100);
@@ -329,14 +344,33 @@ public class LoanPanel extends JPanel implements ActionListener {
                         
                         i++;
                     }  
+                    
+                    if (!SwingUtilities.isEventDispatchThread()) {
+                        SwingUtilities.invokeLater(
+                                new Thread(new Runnable() { 
+                                    @Override
+                                    public void run() {
+                                        setReturnModus();
+                                        updateLoanInformationForm();
+                                    }
+                                }));
+                    }
+                    
+                    
                 } catch (ValidationException e) {
                     logger.error("Error while saving the loan", e);
                 }
             }}
         );
         thread.start();    
-        
-        setReturnModus();
+    }
+    
+    private void updateLoanInformationForm() {
+        List<IWindow> windows = DcSwingUtilities.getOpenWindows();
+        for (IWindow window : windows) {
+            if (window instanceof LoanInformationForm)
+                ((LoanInformationForm) window).refresh();
+        }
     }
     
     private void buildPanel(boolean isAvailable) {

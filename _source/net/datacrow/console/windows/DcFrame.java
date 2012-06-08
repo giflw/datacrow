@@ -39,13 +39,14 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.IWindow;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
 
-public class DcFrame extends JFrame implements WindowFocusListener {
+public class DcFrame extends JFrame implements WindowFocusListener, IWindow {
 
     private String helpIndex = null;
 
@@ -55,6 +56,7 @@ public class DcFrame extends JFrame implements WindowFocusListener {
         setIconImage(icon == null ? IconLibrary._icoMain.getImage() : icon.getImage());
         
         DcSwingUtilities.setRootFrame(this);
+        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -67,10 +69,14 @@ public class DcFrame extends JFrame implements WindowFocusListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         PluginHelper.registerKey(getRootPane(), "Help");
         PluginHelper.registerKey(getRootPane(), "CloseWindow");
+        
+        DcSwingUtilities.addOpenWindow(this);
     }
     
     public void close() {
 
+        DcSwingUtilities.removeOpenWindow(this);
+        
         for (WindowListener wl : getWindowListeners())
             removeWindowListener(wl);
         

@@ -27,7 +27,9 @@ package net.datacrow.console.windows;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public interface IDialog {
+import net.datacrow.console.IWindow;
+
+public interface IDialog extends IWindow {
 
     public void setModal(AtomicBoolean active);
     

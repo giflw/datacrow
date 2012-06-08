@@ -67,6 +67,8 @@ public class DcDialog extends JDialog implements IDialog {
 
         PluginHelper.registerKey(getRootPane(), "Help");
         PluginHelper.registerKey(getRootPane(), "CloseWindow");
+        
+        DcSwingUtilities.addOpenWindow(this);
     }
 
     public DcDialog() {
@@ -104,6 +106,8 @@ public class DcDialog extends JDialog implements IDialog {
 
     public void close() {
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+
+        DcSwingUtilities.removeOpenWindow(this);
         
         helpIndex = null;
         

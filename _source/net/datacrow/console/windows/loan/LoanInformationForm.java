@@ -69,6 +69,10 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         setHelpIndex("dc.loans");
     }
     
+    public void refresh() {
+        panelLoans.load();
+    }
+    
     @Override
     public void close() {
         DcSettings.set(DcRepository.Settings.stLoanAdminFormSize, getSize());
