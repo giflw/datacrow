@@ -436,8 +436,12 @@ public class DcObjectList extends DcList implements IViewComponent {
         
         int index = getModel().getSize() - 1;
         
-        if (autoScroll)
-            ensureIndexIsVisible(index);
+        try {
+            if (autoScroll)
+                ensureIndexIsVisible(index);
+        } catch (Exception e) {
+            logger.debug(e, e);
+        }
         
         return index;
     }

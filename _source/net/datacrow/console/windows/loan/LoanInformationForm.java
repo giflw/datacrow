@@ -60,7 +60,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
 	}
 	
     public LoanInformationForm(DcObject person) {
-        super(DcResources.getText("lblLoanInformation"), IconLibrary._icoLoan);
+        super(DcResources.getText("lblLoanAdministration"), IconLibrary._icoLoan);
         build(person);
         pack();
         
@@ -183,12 +183,14 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         
         private void build() {
             DcModule module = DcModules.get(DcModules._SOFTWARE);
-            
             cbModules.addItem(" ");
             for (DcModule m : DcModules.getModules()) {
                 if (m.canBeLend() && !m.isAbstract())
                     cbModules.addItem(m);
             }
+            
+//            if (current != null && current.canBeLend())
+//                cbModules.setSelectedItem(current);
             
             cbLoans.addItem(DcResources.getText("lblOnlyCurrentLoans"));
             cbLoans.addItem(DcResources.getText("lblOnlyHistoricalLoans"));

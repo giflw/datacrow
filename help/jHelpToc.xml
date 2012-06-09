@@ -26,8 +26,12 @@
     <tocitem target="dc.charts" text="Charts" />
     <tocitem target="dc.filters" text="Filters" />
     <tocitem target="dc.onlinesearch" text="Online Search" />
-    <tocitem target="dc.loans" text="Lending items" />
-    <tocitem target="dc.loans" text="Loan Administration" />
+    
+    <tocitem target="dc.items" text="Loans">
+        <tocitem target="dc.loans" text="Lending items" />
+        <tocitem target="dc.loanadmin" text="Loan Administration" />
+     </tocitem>     
+        
     <tocitem target="dc.reports" text="Reports" />
 
     <tocitem target="dc.modules" text="Modules">

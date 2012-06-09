@@ -5,21 +5,42 @@
   <body>
 
     <h1>Loan Administration</h1>
-    <i>Menu path: Administration &gt; Loan Information</i><br><br>
+    <i>Menu path: Administration &gt; Loan Administraion</i><br><br>
     
-    <img src="./images/loan_information.png" alt="" border="0"><br><br>
+    <img src="./images/loan_administration.png" alt="" border="0"><br><br>
     
-        The loan information gives an overview of currently lend items.
-    
-    <img src="./images/loan_information.png" alt="" border="0"><br><br>
-    
+    The loan information gives an overview of currently lend items. You can search for specific loans 
+    using the filter fields: <br>
     <ul>
-    <li> <b>Item</b> what kind of item are we talking about (software, audio CD, etc).</li>
-    <li> <b>Label</b> description of the item.</li>
-    <li> <b>Due Date</b> when should the item be returned? Displayed in red in case overdue.</li>
-    <li> <b>Days till overdue</b> How many days are left before which the item should be returned?</li>
+    <li><b>Loan Type</b> select the type of loans you want to include in the overview. You have the option to only include current loans, historical loan or both.</li>
+    <li><b>Lend by</b> select the specific contact person to get an overview of the items borrowed by him or her.</li>
+    <li><b>Item</b> select the the types of items you want to filter on (software, movies, etc).</li>
+    <li><b>Late returns only</b> only include overdue items.</li>
+    <li><b>Due date between x and y</b> select the date range for the due date. You can leave either field, or both, blank</li>
+    <li><b>Start date between x and y</b> select the date range for the start date. You can leave either field, or both, blank</li>
     </ul>
     
+    
+    The overview shows the loans. You can double click on any of them to return an item or to look at the details. 
+    (<a href="../loan/loan.html" target="main">more about this</a>). Right-click on any of the loans to either edit or review the 
+    item: <br><br>
+    
+    <img src="./images/loan_administration_rightclick.png" alt="" border="0"><br><br>
+    
+    The following information is shown per loan:<br><br>
+    
+    <img src="./images/loan_administration_overview.png" alt="" border="0"><br><br>
+    
+    <ul>
+    <li><b>Item</b> what kind of item are we looking at (software, audio CD, etc).</li>
+    <li><b>Label</b> description of the item.</li>
+    <li><b>Lend By</b> who is borrowing the item.</li>
+    <li><b>Start date</b> the date of the start of the loan.</li>
+    <li><b>End date</b> the return date.</li>
+    <li><b>Due Date</b> when should the item be returned? Displayed in red in case overdue.</li>
+    <li><b>Loan status</b> the status of the loan such as overdue, lent and available</li>
+    <li><b># Days</b> number of days in relation to the current loan status</li>
+    </ul>
 
   </body>
 </html>
