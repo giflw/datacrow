@@ -67,7 +67,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         setSize(DcSettings.getDimension(DcRepository.Settings.stLoanAdminFormSize));
         
         setCenteredLocation();
-        setHelpIndex("dc.loans");
+        setHelpIndex("dc.loanadmin");
     }
     
     public void refresh() {

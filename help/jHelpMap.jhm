@@ -23,6 +23,7 @@
     <mapID target="dc.filters" url="filters/filters.html"/>
     <mapID target="dc.onlinesearch" url="onlinesearch/onlinesearch.html"/>
     <mapID target="dc.loans" url="loan/loan.html"/>
+    <mapID target="dc.loanadmin" url="loan/loanadmin.html"/>
     <mapID target="dc.reports" url="reports/reporting.html"/>
     <mapID target="dc.security" url="security/security.html"/>
 
