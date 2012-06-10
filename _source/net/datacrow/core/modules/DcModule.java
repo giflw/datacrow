@@ -1394,7 +1394,7 @@ public class DcModule implements Comparable<DcModule> {
                             255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
                             "LoanStatus"));      
         systemFields.put(DcObject._SYS_LOANSTATUSDAYS,
-                new DcField(DcObject._SYS_LOANSTATUSDAYS, getIndex(), "# Days",
+                new DcField(DcObject._SYS_LOANSTATUSDAYS, getIndex(), "Days",
                             true, true, true, false, 
                             10, ComponentFactory._NUMBERFIELD, getIndex(), DcRepository.ValueTypes._LONG,
                             "LoanStatusDays"));   
