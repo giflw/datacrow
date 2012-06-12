@@ -250,6 +250,9 @@ public abstract class SearchTask extends Thread {
         String link = (String) dco.getValue(DcObject._SYS_SERVICEURL); 
         if (link != null && link.length() > 0) {
             DcObject item = getItem(new URL(link));
+            
+            item = item == null ? dco : item;
+            
             setServiceInfo(item);
             return item;
         }
