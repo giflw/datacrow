@@ -1389,6 +1389,10 @@ public class DcObject implements Comparable<DcObject>, Serializable {
         for (int i = 0; i < fields.length; i++) {
             int idx = fields[i];
 
+            // 20121112 - do not allow templates to overwrite existing values
+            if (isFilled(idx) || !template.isFilled(idx))
+                continue;
+            
             DcField field = getField(idx);
             Object templateVal = template.getValue(idx); 
             
@@ -1399,7 +1403,9 @@ public class DcObject implements Comparable<DcObject>, Serializable {
                 
                 setValue(idx, template.getValue(idx));    
             } else if ( field.getValueType() == DcRepository.ValueTypes._PICTURE && 
-                        template.getValue(idx) != null) {
+                        template.getValue(idx) != null &&
+                        ((Picture) template.getValue(idx)).hasImage()            
+            ) {
                 
                 Picture templatePic = (Picture) template.getValue(idx);
                 

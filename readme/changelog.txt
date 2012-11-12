@@ -6,9 +6,16 @@ Data Crow 3.9.15  [Released on November xx, 2012]  [testing: high]  [target: pro
 - In the web client sorting for numbers was incorrect (1,12,2 instead of 1,2,12).
 - In the web client information for multi-reference fields was sometimes duplicated.
 - Multi-reference fields could not be edited in the web client.
+- Remove option in the "New items" tab did not always work
+- Defining a template disrupts the online search functionality
+
+
+-- BOL.COM --> not working at all
+-- Discogs.com --> no screenshots
 
 [Changed]
 - Charts: now also possible to create charts for fields such as author, publisher, etc.
+- Templates are no longer allowed to overwrite existing values.
 
 
 -----------------------------------------------------------------------------------------

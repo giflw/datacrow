@@ -691,9 +691,9 @@ public class View extends DcPanel implements ListSelectionListener {
     public void remove(int[] indices) {
         String[] keys = new String[indices.length];
         int i = 0;
+        
         for (int index : indices) {
-            DcObject dco = getItemAt(index);
-            keys[i++] = dco.getID();
+            keys[i++] = vc.getItemKey(index);
         }
         remove(keys);
     }
