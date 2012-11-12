@@ -73,7 +73,7 @@ public class DcWebField extends DcSecured {
         this.index = field.getIndex();
         this.label = field.getLabel();
         this.module = field.getModule();
-        this.readonly = field.isReadOnly() || field.isUiOnly() || !getUser().isEditingAllowed(field);
+        this.readonly = field.isReadOnly() || (field.isUiOnly() && !getUser().isEditingAllowed(field)) || !getUser().isEditingAllowed(field);
         this.required = field.isRequired();
         
         if ( getDcField().getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
