@@ -213,11 +213,10 @@ public class ChartPanel extends DcPanel implements ActionListener {
     private Collection<DcField> getFields() {
         Collection<DcField> fields = new ArrayList<DcField>();
         for (DcField field : DcModules.get(module).getFields()) {
-            if (((((field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
-                   (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) &&
-                   DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE) ||
+            if (  (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE ||
+                   field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
                    field.getValueType() == DcRepository.ValueTypes._LONG ||
-                   field.getValueType() == DcRepository.ValueTypes._BOOLEAN))) && 
+                   field.getValueType() == DcRepository.ValueTypes._BOOLEAN) && 
                    field.isEnabled()) {
                 
                 fields.add(field);
@@ -238,9 +237,10 @@ public class ChartPanel extends DcPanel implements ActionListener {
         panel.add(comboTypes);
         panel.add(btnAccept);
         
-        for (DcField field : getFields()) 
+        for (DcField field : getFields()) {
         	if (!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)
         		comboFields.addItem(field);
+        }
         
         comboTypes.addItem(DcResources.getText("lblPie"));
         comboTypes.addItem(DcResources.getText("lblBar"));

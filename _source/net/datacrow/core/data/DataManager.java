@@ -263,7 +263,11 @@ public class DataManager {
 		    			values.add(value);
 	    			} else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
 	    				if (value != null) {
-	    				    value = values.get(i) + ", " + value;
+	    				    if (!values.get(i).contains(value))
+	    				        value = values.get(i) + ", " + value;
+	    				    else 
+	    				        value = values.get(i);
+	    				    
 	    				    values.set(i, value);
 	    				}
 	    			}
