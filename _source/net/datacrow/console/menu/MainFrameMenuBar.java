@@ -125,6 +125,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
             PluginHelper.add(menuTools, "FileImport");
 
         // tools menu
+ //       PluginHelper.add(menuTools, "AndroidService");
         
         if (module.deliversOnlineService()) {
             menuTools.addSeparator();
