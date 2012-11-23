@@ -186,10 +186,10 @@ public class SecurityCentre {
      */
     private void createDefaultUser() {
         // default system administrator
-        Connection connection = DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
+        Connection connection = DatabaseManager.getConnection("DC_ADMIN", "UK*soccer*96");
         if (connection == null) {
             User user = new User();
-            user.setValue(User._A_LOGINNAME, "dc_admin");
+            user.setValue(User._A_LOGINNAME, "DC_ADMIN");
             user.setValue(User._B_ENABLED, Boolean.TRUE);
             user.setValue(User._L_ADMIN, Boolean.TRUE);
             DatabaseManager.createUser(user, "UK*soccer*96");
@@ -203,7 +203,7 @@ public class SecurityCentre {
         
         User user = new User();
         user.setIDs();
-        user.setValue(User._A_LOGINNAME, "sa");
+        user.setValue(User._A_LOGINNAME, "SA");
         user.setValue(User._B_ENABLED, Boolean.TRUE);
         user.setValue(User._L_ADMIN, Boolean.TRUE);
         user.setValue(User._C_NAME, "Administrator");
@@ -268,8 +268,8 @@ public class SecurityCentre {
         Statement stmt = null;
         int users = 0;
         try {
-            connection = DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
-            connection = connection == null ? DatabaseManager.getConnection("sa", "") : connection;
+            connection = DatabaseManager.getConnection("DC_ADMIN", "UK*soccer*96");
+            connection = connection == null ? DatabaseManager.getConnection("SA", "") : connection;
             
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT ID FROM user");
@@ -290,7 +290,7 @@ public class SecurityCentre {
     }
     
     public void initialize() {
-        Connection connection = DatabaseManager.getConnection("sa", "");
+        Connection connection = DatabaseManager.getConnection("SA", "");
         if (connection != null) { // default user present.
             try {
                 createTables();

@@ -82,7 +82,7 @@ import net.datacrow.settings.DcSettings;
 import net.datacrow.util.comparators.DcObjectComparator;
 
 import org.apache.log4j.Logger;
-import org.hsqldb.Token;
+import org.hsqldb.Tokens;
 
 public class Utilities {
     
@@ -256,7 +256,7 @@ public class Utilities {
 
     public static boolean isKeyword(String name) {
         String s = name.toUpperCase();
-        return Token.isKeyword(s) || s.equals("CREATE") || s.equals("ALTER") || s.equals("SELECT") ||
+        return Tokens.isKeyword(s) || s.equals("CREATE") || s.equals("ALTER") || s.equals("SELECT") ||
                s.equals("DROP") || s.equals("TRUNCATE") || s.equals("MODIFY") || s.equals("TABLE") || s.equals("COLUMN");        
     }
     

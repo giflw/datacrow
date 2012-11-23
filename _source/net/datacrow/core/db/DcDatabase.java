@@ -134,7 +134,7 @@ public class DcDatabase {
         
         startQueryQueue();
         initialize(connection);
-        setDbProperies(connection);
+        //setDbProperies(connection);
         
         if (!isNew())
             new DatabaseUpgradeAfterInitialization().start();
@@ -144,7 +144,7 @@ public class DcDatabase {
 
         // Set the database privileges for the current user. This avoids errors for upgraded modules and such. 
         DatabaseManager.setPriviliges(SecurityCentre.getInstance().getUser().getUser());
-        DatabaseManager.setPriviliges("dc_admin", true);
+        DatabaseManager.setPriviliges("DC_ADMIN", true);
     }
     
     /**
@@ -238,7 +238,7 @@ public class DcDatabase {
             stmt.execute("SET PROPERTY \"hsqldb.cache_scale\" " + cacheScale);
             stmt.execute("SET PROPERTY \"hsqldb.cache_size_scale\" " + cacheSizeScale);
             stmt.execute("SET LOGSIZE 200");
-            
+
             stmt.close();
         } catch (Exception e) {
             logger.error(DcResources.getText("msgUnableToChangeDbSettings"), e);

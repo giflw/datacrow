@@ -214,7 +214,7 @@ public class DatabaseManager {
         
             SecuredUser su = SecurityCentre.getInstance().getUser();
             if (su == null)
-                connection = getConnection("sa", "");
+                connection = getConnection("SA", "");
             else
                 connection = getConnection(su.getUsername(), su.getPassword());
             
@@ -245,7 +245,7 @@ public class DatabaseManager {
                 address = "jdbc:hsqldb:hsql:" + name;
             } else {
                 isServerClientMode = false;
-                address = "jdbc:hsqldb:" + DataCrow.dataDir + name;
+                address = "jdbc:hsqldb:file:" + DataCrow.dataDir + name;
             }
             
             Connection connection = DriverManager.getConnection(address, username, password);
@@ -387,7 +387,7 @@ public class DatabaseManager {
      */
     public static Connection getAdminConnection() {
         if (isClosed(adminConnection)) {
-            adminConnection = DatabaseManager.getConnection("dc_admin", "UK*soccer*96");
+            adminConnection = DatabaseManager.getConnection("DC_ADMIN", "UK*soccer*96");
             logger.debug("Created a new, admin, database connection");
         }
 
@@ -407,7 +407,7 @@ public class DatabaseManager {
             c = getAdminConnection();
             stmt = c.createStatement();
 
-            String sql = "ALTER USER '" + user.getValue(User._A_LOGINNAME) + "' SET PASSWORD '" + password + "'";
+            String sql = "ALTER USER " + user.getValue(User._A_LOGINNAME) + " SET PASSWORD '" + password + "'";
             stmt.execute(sql);
             
         } catch (SQLException se) {
@@ -431,6 +431,7 @@ public class DatabaseManager {
             c = DatabaseManager.getConnection();
             stmt = c.createStatement();
 
+            user.reload();
             String sql = "DROP USER " + user.getValue(User._A_LOGINNAME);
             stmt.execute(sql);
             
@@ -457,7 +458,7 @@ public class DatabaseManager {
             c = DatabaseManager.getConnection();
             stmt = c.createStatement();
 
-            String sql = "CREATE USER '" + user.getValue(User._A_LOGINNAME) + "' PASSWORD '" + password + "'";
+            String sql = "CREATE USER " + user.getDisplayString(User._A_LOGINNAME).toUpperCase() + " PASSWORD '" + password + "'";
             if (user.isAdmin()) 
                 sql += " ADMIN";
             
@@ -538,26 +539,26 @@ public class DatabaseManager {
                 return;
             }
             
-            String sql = "REVOKE ALL ON " + tablename + " FROM " + user;
+            String sql = "REVOKE ALL PRIVILEGES ON TABLE " + tablename + " FROM " + user + " RESTRICT";
             stmt.execute(sql);
             
             if (admin) {
-                sql = "GRANT ALL ON " + tablename + " TO " + user;
+                sql = "GRANT ALL ON TABLE " + tablename + " TO " + user;
                 stmt.execute(sql);
 
             } else {
-                sql = "GRANT SELECT ON " + tablename + " TO " + user;
+                sql = "GRANT SELECT ON TABLE " + tablename + " TO " + user;
                 stmt.execute(sql);
                 
                 if (module.isEditingAllowed()) {
-                    sql = "GRANT UPDATE ON " + tablename + " TO " + user;
+                    sql = "GRANT UPDATE ON TABLE " + tablename + " TO " + user;
                     stmt.execute(sql);
-                    sql = "GRANT INSERT ON " + tablename + " TO " + user;
+                    sql = "GRANT INSERT ON TABLE " + tablename + " TO " + user;
                     stmt.execute(sql);
                 }
                 
                 if (admin || module.getIndex() == DcModules._PICTURE || module.getType() == DcModule._TYPE_MAPPING_MODULE) {
-                    sql = "GRANT DELETE ON " + tablename + " TO " + user;
+                    sql = "GRANT DELETE ON TABLE " + tablename + " TO " + user;
                     stmt.execute(sql);
                 }
             }
