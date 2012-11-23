@@ -71,11 +71,13 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.helpers.Permission;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.comparators.DcObjectComparator;
 
@@ -196,7 +198,7 @@ public class Utilities {
     public static Object getQueryValue(Object o, DcField field) {
         Object value = o;
         
-        if (Utilities.isEmpty(value))
+        if (Utilities.isEmpty(value) && (field.getModule() != DcModules._PERMISSION && field.getIndex() == Permission._B_FIELD))
             value = null;
         else if (value instanceof DcObject)
             value = ((DcObject) value).getID();

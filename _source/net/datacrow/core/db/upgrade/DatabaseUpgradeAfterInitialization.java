@@ -114,6 +114,11 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = fillUIPersistFieldsPersons();
             }   
             
+            if (v.isOlder(new Version(3, 9, 15, 0))) {
+                // silent upgrade script
+                cleanupOfPermission();
+            }  
+            
             settingsCorrections();
             
             if (upgraded) {
@@ -130,6 +135,15 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
+        }            
+    }
+    
+    private void cleanupOfPermission() {
+        try {
+            DatabaseManager.executeSQLasAdmin("DELETE FROM Permission WHERE field is null and plugin is null");
+            DatabaseManager.executeSQLasAdmin("DELETE FROM Permission WHERE user is null");
+        } catch (SQLException se) {
+            logger.error("Error while cleaning up the permissions", se);
         }            
     }
     

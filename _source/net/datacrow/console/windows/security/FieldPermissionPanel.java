@@ -99,6 +99,8 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
         for (DcField field : module.getFields()) {
             DcObject permission = null;
             
+            if (field.getIndex() == DcObject._ID) continue;
+            
             for (DcObject child : user.getChildren()) {
                 Permission p = (Permission) child;
                 if (p.getFieldIdx() == field.getIndex() && p.getModuleIdx() == module.getIndex()) {
@@ -110,10 +112,11 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
             if (permission == null) {
                 permission = DcModules.get(DcModules._PERMISSION).getItem();
                 permission.setIDs();
-                permission.setValue(Permission._B_FIELD, Long.valueOf(field.getIndex()));
+                permission.setValueLowLevel(Permission._B_FIELD, Long.valueOf(field.getIndex()));
                 permission.setValue(Permission._C_MODULE, Long.valueOf(field.getModule()));
                 permission.setValue(Permission._D_VIEW, Boolean.TRUE);
                 permission.setValue(Permission._E_EDIT, Boolean.FALSE);
+                permission.setValue(Permission._F_USER, user);
                 
                 if (update) {
                     // create the missing permission
