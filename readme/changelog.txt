@@ -8,7 +8,8 @@ Data Crow 3.9.15  [Released on November xx, 2012]  [testing: high]  [target: pro
 - Multi-reference fields could not be edited in the web client.
 - Remove option in the "New items" tab did not always work.
 - Defining a template disrupts the online search functionality.
-- Permissions for users incorrectly saved.
+- Permissions for users incorrectly saved. Currently incorrect permissions will be 
+  removed from the system.
 - Login name field for persons of an incorrect height.
 
 --> BOL.COM --> not working at all
@@ -17,6 +18,11 @@ Data Crow 3.9.15  [Released on November xx, 2012]  [testing: high]  [target: pro
 [Changed]
 - Charts: now also possible to create charts for fields such as author, publisher, etc.
 - Templates are no longer allowed to overwrite existing values.
+
+[Upgrades]
+- The database has been upgraded to HSQL 2.2.9 (from 1.8). This is not an easy upgrade 
+  hence the extra prompt and restart when opening Data Crow.
+ 
 
 
 -----------------------------------------------------------------------------------------

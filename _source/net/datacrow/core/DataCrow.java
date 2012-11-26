@@ -25,10 +25,13 @@
 
 package net.datacrow.core;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -473,33 +476,35 @@ public class DataCrow {
     }
     
     private static void upgradeHSQL1_8() {
-        
-        DcSwingUtilities.displayMessage(
-                "The database version of HSQL will be upgraded. You will be asked for your username and password " +
-                "after which the upgrade will commence.");
-        
-        LoginDialog ld = new LoginDialog();
-        ld.setVisible(true);
-        
-        String password = ld.getPassword();
-        String username = ld.getLoginName();
-        String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
-        
         String v = "";
+        String format = "";
         
         try {
             File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
             if (file.exists()) {
+                FileInputStream fis = new FileInputStream(file);
                 Properties p = new Properties();
-                p.load(new FileInputStream(file));
+                p.load(fis);
                 v = (String) p.get("version");
+                format = (String) p.get("hsqldb.script_format");
+                fis.close();
             }
+            
         } catch (Exception e) {
             logger.debug(e, e);
         }
 
-        if (v != null && v.equals("1.8.1")) {
+        if (v != null && v.equals("1.8.1") && format != null && format.equals("3")) {
+            DcSwingUtilities.displayMessage(
+                    "The database version of HSQL will be upgraded. You will be asked for your username and password " +
+                    "after which the upgrade will commence.");
             
+            LoginDialog ld = new LoginDialog();
+            ld.setVisible(true);
+            
+            String password = ld.getPassword();
+            String username = ld.getLoginName();
+            String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
             
             String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + 
                 "upgradeHSQL/upgradeHSQL.jar\" " + address + " " + username + " " + password;
@@ -507,7 +512,17 @@ public class DataCrow {
             Runtime rt = Runtime.getRuntime();
             try {
                 Process p = rt.exec(cmd);
+                InputStream stderr = p.getErrorStream();
+                InputStreamReader isr = new InputStreamReader(stderr);
+                BufferedReader br = new BufferedReader(isr);
+                String line = null;
+                while ( (line = br.readLine()) != null)
+                    logger.error(line);
+                
                 p.waitFor();
+                
+                System.exit(0);
+                
             } catch (Exception exp) {
                 logger.debug("Could not launch the command [" + cmd + "]", exp);
             }
