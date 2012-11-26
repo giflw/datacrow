@@ -71,7 +71,7 @@ public class LoginDialog extends DcDialog implements ActionListener, KeyListener
     }
     
     public String getLoginName() {
-        return fldLoginName.getText().toLowerCase();
+        return fldLoginName.getText();
     }
 
     public String getPassword() {

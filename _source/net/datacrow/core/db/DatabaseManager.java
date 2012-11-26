@@ -248,7 +248,7 @@ public class DatabaseManager {
                 address = "jdbc:hsqldb:file:" + DataCrow.dataDir + name;
             }
             
-            Connection connection = DriverManager.getConnection(address, username, password);
+            Connection connection = DriverManager.getConnection(address, username.toUpperCase(), password.toUpperCase());
             connection.setAutoCommit(true);
             return connection;
             

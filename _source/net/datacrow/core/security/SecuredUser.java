@@ -64,7 +64,6 @@ public final class SecuredUser {
     protected SecuredUser(User user, String password) {
         this.user = user;
         this.password = password;
-        setPermissions();
     }
     
     /**
@@ -179,7 +178,7 @@ public final class SecuredUser {
     /**
      * Set the field and module privileges
      */
-    private void setPermissions() {
+    public void loadPermissions() {
         Collection<DcModule> managedModules = SecurityCentre.getInstance().getManagedModules();
         for (DcModule module : DcModules.getAllModules()) {
             ModulePermission mp = new ModulePermission(module.getIndex());

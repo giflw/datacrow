@@ -165,6 +165,8 @@ public class SecurityCentre {
             if (!web)
                 this.user = (User) users.get(0);
             
+            su.loadPermissions();
+            
             return su;
             
         } catch (Exception e) {

@@ -804,20 +804,19 @@ public class DataCrow {
     
     private static void initDbProperties() {
         try {
-            /*File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
+            File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
             if (file.exists()) {
                 Properties properties = new Properties();
                 properties.load(new FileInputStream(file));
                 
-                properties.setProperty("hsqldb.script_format", "3");
+                properties.setProperty("hsqldb.script_format", "0");
                 properties.setProperty("readonly", "false");
                 properties.setProperty("hsqldb.nio_data_file", "true");
-                properties.setProperty("hsqldb.default_table_type", "memory");
                 properties.setProperty("hsqldb.lock_file", "false");
-                properties.setProperty("hsqldb.log_size", "1000");
+                properties.setProperty("hsqldb.log_size", "10000");
 
                 properties.store(new FileOutputStream(file), "Default properties for the DC database of Data Crow.");
-            } */
+            }
         } catch (Exception e) {
             logger.error("Could not set the default database properties.", e);
         }

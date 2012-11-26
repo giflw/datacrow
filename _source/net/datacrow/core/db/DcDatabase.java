@@ -134,7 +134,7 @@ public class DcDatabase {
         
         startQueryQueue();
         initialize(connection);
-        //setDbProperies(connection);
+        setDbProperies(connection);
         
         if (!isNew())
             new DatabaseUpgradeAfterInitialization().start();
@@ -230,16 +230,16 @@ public class DcDatabase {
     protected void setDbProperies(Connection connection) {
         try {
             
-            Statement stmt = connection.createStatement();
-            stmt.execute("SET SCRIPTFORMAT COMPRESSED");
-            int cacheScale = DcSettings.getInt(DcRepository.Settings.stHsqlCacheScale);
-            int cacheSizeScale = DcSettings.getInt(DcRepository.Settings.stHsqlCacheSizeScale);
+            //Statement stmt = connection.createStatement();
+            //stmt.execute("SET SCRIPTFORMAT COMPRESSED");
+            //int cacheScale = DcSettings.getInt(DcRepository.Settings.stHsqlCacheScale);
+            //int cacheSizeScale = DcSettings.getInt(DcRepository.Settings.stHsqlCacheSizeScale);
 
-            stmt.execute("SET PROPERTY \"hsqldb.cache_scale\" " + cacheScale);
-            stmt.execute("SET PROPERTY \"hsqldb.cache_size_scale\" " + cacheSizeScale);
-            stmt.execute("SET LOGSIZE 200");
+            //stmt.execute("SET PROPERTY \"hsqldb.cache_scale\" " + cacheScale);
+            //stmt.execute("SET PROPERTY \"hsqldb.cache_size_scale\" " + cacheSizeScale);
+            //stmt.execute("SET LOGSIZE 200");
 
-            stmt.close();
+            //stmt.close();
         } catch (Exception e) {
             logger.error(DcResources.getText("msgUnableToChangeDbSettings"), e);
         }
