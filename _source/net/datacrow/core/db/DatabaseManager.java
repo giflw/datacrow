@@ -431,7 +431,6 @@ public class DatabaseManager {
             c = DatabaseManager.getConnection();
             stmt = c.createStatement();
 
-            user.reload();
             String sql = "DROP USER " + user.getValue(User._A_LOGINNAME);
             stmt.execute(sql);
             

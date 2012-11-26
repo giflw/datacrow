@@ -9,6 +9,7 @@ Data Crow 3.9.15  [Released on November xx, 2012]  [testing: high]  [target: pro
 - Remove option in the "New items" tab did not always work.
 - Defining a template disrupts the online search functionality.
 - Permissions for users incorrectly saved.
+- Login name field for persons of an incorrect height.
 
 --> BOL.COM --> not working at all
 --> Discogs.com --> no screenshots

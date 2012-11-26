@@ -579,11 +579,8 @@ public final class ComponentFactory {
         DcComboBox comboBox = new DcComboBox();
         comboBox.setFont(getStandardFont());
         comboBox.setRenderer(AvailabilityComboBoxRenderer.getInstance());
-
-        //comboBox.addItem(null);
         comboBox.addItem(Boolean.TRUE);
         comboBox.addItem(Boolean.FALSE);
-
         return comboBox;
     }
     
@@ -622,6 +619,7 @@ public final class ComponentFactory {
     public static final DcLoginNameField getLoginNameField() {
         DcLoginNameField fld = new DcLoginNameField();
         fld.setFont(getStandardFont());
+        fld.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
         return fld;
     }
     

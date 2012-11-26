@@ -40,7 +40,7 @@ public class UserModule extends DcParentModule {
               "user", 
               "usr");
     }
-
+    
     /**
      * The small icon.
      */

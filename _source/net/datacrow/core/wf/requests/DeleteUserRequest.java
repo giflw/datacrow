@@ -1,6 +1,8 @@
 package net.datacrow.core.wf.requests;
 
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.helpers.User;
 
 public class DeleteUserRequest implements IRequest {
@@ -9,7 +11,7 @@ public class DeleteUserRequest implements IRequest {
     private User user;
 
     public DeleteUserRequest(User user) {
-        this.user = user;
+        this.user = (User) DataManager.getItem(DcModules._USER, user.getID());
     }
 
     @Override
@@ -19,6 +21,8 @@ public class DeleteUserRequest implements IRequest {
     
     @Override
     public void end() {
+        // was explicitly retrieved for this request
+        if (user != null) user.destroy();
         user = null;
     }
     
