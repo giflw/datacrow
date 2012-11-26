@@ -306,6 +306,9 @@ public class DataCrow {
                 if (db != null && db.length() > 0)
                     DcSettings.set(DcRepository.Settings.stConnectionString, db);
                 
+
+                upgradeHSQL1_8();
+                
                 initDbProperties();
                 
                 start = logger.isDebugEnabled() ? new Date().getTime() : 0;
@@ -468,6 +471,53 @@ public class DataCrow {
             System.exit(0);
         }
     }
+    
+    private static void upgradeHSQL1_8() {
+        
+        DcSwingUtilities.displayMessage(
+                "The database version of HSQL will be upgraded. You will be asked for your username and password " +
+                "after which the upgrade will commence.");
+        
+        LoginDialog ld = new LoginDialog();
+        ld.setVisible(true);
+        
+        String password = ld.getPassword();
+        String username = ld.getLoginName();
+        String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
+        
+        String v = "";
+        
+        try {
+            File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
+            if (file.exists()) {
+                Properties p = new Properties();
+                p.load(new FileInputStream(file));
+                v = (String) p.get("version");
+            }
+        } catch (Exception e) {
+            logger.debug(e, e);
+        }
+
+        if (v != null && v.equals("1.8.1")) {
+            
+            
+            String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + 
+                "upgradeHSQL/upgradeHSQL.jar\" " + address + " " + username + " " + password;
+            
+            Runtime rt = Runtime.getRuntime();
+            try {
+                Process p = rt.exec(cmd);
+                p.waitFor();
+            } catch (Exception exp) {
+                logger.debug("Could not launch the command [" + cmd + "]", exp);
+            }
+        }
+        
+        // Upgrade HSQL from 1.8
+        //DatabaseManager.getConnection("SA", "");
+        
+    }
+    
     
     public static boolean isInitialized() {
     	return initialized;
@@ -809,7 +859,7 @@ public class DataCrow {
                 Properties properties = new Properties();
                 properties.load(new FileInputStream(file));
                 
-                properties.setProperty("hsqldb.script_format", "0");
+                //properties.setProperty("hsqldb.script_format", "0");
                 properties.setProperty("readonly", "false");
                 properties.setProperty("hsqldb.nio_data_file", "true");
                 properties.setProperty("hsqldb.lock_file", "false");
