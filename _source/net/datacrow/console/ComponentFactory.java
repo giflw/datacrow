@@ -620,6 +620,7 @@ public final class ComponentFactory {
         DcLoginNameField fld = new DcLoginNameField();
         fld.setFont(getStandardFont());
         fld.setMinimumSize(new Dimension(50, getPreferredFieldHeight()));
+        fld.setPreferredSize(new Dimension(fld.getWidth(), ComponentFactory.getPreferredFieldHeight()));
         return fld;
     }
     

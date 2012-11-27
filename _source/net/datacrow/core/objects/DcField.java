@@ -123,6 +123,18 @@ public class DcField implements Serializable {
         setSourceModuleIdx(modRef);
     }
     
+    public boolean isLoanField() {
+        return
+            getIndex() == DcObject._SYS_AVAILABLE ||
+            getIndex() == DcObject._SYS_LENDBY ||
+            getIndex() == DcObject._SYS_LOANSTATUS ||
+            getIndex() == DcObject._SYS_LOANSTATUSDAYS ||
+            getIndex() == DcObject._SYS_LOANENDDATE ||
+            getIndex() == DcObject._SYS_LOANSTARTDATE ||
+            getIndex() == DcObject._SYS_LOANDUEDATE ||
+            getIndex() == DcObject._SYS_LOANDURATION;
+    }
+    
     /**
      * Sets the source module index.
      * @param modRef The module index.

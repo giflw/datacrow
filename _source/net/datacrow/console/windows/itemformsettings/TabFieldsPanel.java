@@ -138,7 +138,8 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
         }
         
         cbTabs.addActionListener(this);
-    	cbTabs.setSelectedIndex(0);
+        
+        if (cbTabs.getItemCount() > 0) cbTabs.setSelectedIndex(0);
     }
     
     private void createTabPanel(String tab) {

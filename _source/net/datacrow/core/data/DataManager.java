@@ -214,7 +214,8 @@ public class DataManager {
 	    	
 	    	DcModule module = DcModules.get(df.getModule());
 	    	DcObject template = module.getItem();
-	    		
+	    	
+	    	boolean loanInfoSet = false;
 	    	while(rs.next()) {
 	    		values = new ArrayList<String>();
 	    		ID = rs.getString("ID");
@@ -225,7 +226,7 @@ public class DataManager {
 	    			values = result.get(result.size() - 1);
 	    			concat = true;
 	    		} else {
-	    		    template.setLoanInformation();
+	    		    loanInfoSet = false;
 	    		}
 	    		
 	    		int columnIndex = 1;
@@ -240,18 +241,20 @@ public class DataManager {
     					value = template.getDisplayString(field.getIndex());
     					columnIndex++;
     				} else if (field.getIndex() == DcObject._SYS_AVAILABLE) {
+    				    if (loanInfoSet) {
+    				        template.setLoanInformation();
+    				        loanInfoSet = true;
+    				    }
+    				    
     				    value = ((Boolean) template.getValue(DcObject._SYS_AVAILABLE)).booleanValue() ?
     				               DcResources.getText("lblAvailable") : DcResources.getText("lblUnavailable");
-    					
-	    			} else if ( field.getIndex() == DcObject._SYS_AVAILABLE ||
-	    			            field.getIndex() == DcObject._SYS_LENDBY ||
-	    			            field.getIndex() == DcObject._SYS_LOANSTATUS ||
-	    			            field.getIndex() == DcObject._SYS_LOANSTATUSDAYS ||
-	    			            field.getIndex() == DcObject._SYS_LOANDUEDATE ||
-	    			            field.getIndex() == DcObject._SYS_LOANDURATION) { 
+	    			} else if ( field.isLoanField()) { 
+                        if (loanInfoSet) {
+                            template.setLoanInformation();
+                            loanInfoSet = true;
+                        }
 	    			    
 	    			    value = template.getDisplayString(field.getIndex());
-	    			    
 	    		    } else {
     					value = rs.getString(columnIndex);
     					columnIndex++;

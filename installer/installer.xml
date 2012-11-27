@@ -78,6 +78,7 @@
             <file src="icons" targetdir="$INSTALL_PATH"/>
             <file src="help" targetdir="$INSTALL_PATH"/>
             <file src="data" targetdir="$INSTALL_PATH"/>
+            <file src="upgradeHSQL" targetdir="$INSTALL_PATH"/>
             <file src="webapp/datacrow/mediaimages" targetdir="$INSTALL_PATH/webapp/datacrow"/>
         </pack>
         

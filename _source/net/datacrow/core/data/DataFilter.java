@@ -402,16 +402,12 @@ public class DataFilter {
     	String mapTable;
     	int tableCounter = 0;
     	int columnCounter = 0;
+    	DcField field;
     	
     	for (int idx : queryFields) {
-    		DcField field = module.getField(idx);
+    		field = module.getField(idx);
     		
-    		if (  field.getIndex() == DcObject._SYS_AVAILABLE ||
-                  field.getIndex() == DcObject._SYS_LENDBY ||
-                  field.getIndex() == DcObject._SYS_LOANSTATUS ||
-                  field.getIndex() == DcObject._SYS_LOANSTATUSDAYS ||
-                  field.getIndex() == DcObject._SYS_LOANDUEDATE ||
-                  field.getIndex() == DcObject._SYS_LOANDURATION) 
+    		if (field.isLoanField()) 
     		    continue;
     		
     		if (columnCounter > 0)

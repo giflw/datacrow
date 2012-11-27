@@ -11,20 +11,23 @@ Data Crow 3.9.15  [Released on November xx, 2012]  [testing: high]  [target: pro
 - Permissions for users incorrectly saved. Currently incorrect permissions will be 
   removed from the system.
 - Login name field for persons of an incorrect height.
+- Discogs.com has been fixed; images are now retrieved again.
+- ArrayOutOfBoundsException when removing all tabs from the item form settings.
+- Slow speed for web client for searching.
 
 --> BOL.COM --> not working at all
---> Discogs.com --> no screenshots
 
 [Changed]
 - Charts: now also possible to create charts for fields such as author, publisher, etc.
 - Templates are no longer allowed to overwrite existing values.
+- Changed the layout (default settings) for the user module.
 
 [Upgrades]
 - The database has been upgraded to HSQL 2.2.9 (from 1.8). This is not an easy upgrade 
   hence the extra prompt and restart when opening Data Crow.
 - Upgraded to the latest version of JTattoo (for the Look and Feel), version from 
   August 2012.
-- PDFBox library has been updated to the latest version (from 0.7 to 1.7.1).
+- Upgraded to the latest version of IzPack for the installer.
 
 
 -----------------------------------------------------------------------------------------
