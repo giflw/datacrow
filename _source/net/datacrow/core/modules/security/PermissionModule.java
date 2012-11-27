@@ -196,7 +196,7 @@ public class PermissionModule extends DcChildModule {
         addField(new DcField(Permission._F_USER, DcModules._USER, "User",
                 false, true, false, false, 
                 36, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._DCPARENTREFERENCE,
-                "User"));
+                "UserID"));
     }
     
     @Override

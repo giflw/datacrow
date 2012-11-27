@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-import net.datacrow.console.windows.security.LoginDialog;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
@@ -75,15 +74,8 @@ public class UpgradeHsqlEngine {
                     "The database version of HSQL will be upgraded. You will be asked for your username and password " +
                     "after which the upgrade will commence.");
             
-            LoginDialog ld = new LoginDialog();
-            ld.setVisible(true);
-            
-            String password = ld.getPassword();
-            String username = ld.getLoginName();
             String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
-            
-            String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + 
-                "upgradeHSQL/upgradeHSQL.jar\" " + address + " " + username + " " + password;
+            String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + "upgradeHSQL/upgradeHSQL.jar\" " + address;
             
             Runtime rt = Runtime.getRuntime();
             try {

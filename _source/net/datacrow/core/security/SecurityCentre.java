@@ -135,7 +135,7 @@ public class SecurityCentre {
             User user;
             if (users.size() == 1) {
                 user = (User) users.get(0);
-                sql = "select * from permission where user = '" + user.getID() + "'";
+                sql = "select * from permission where userid = '" + user.getID() + "'";
                 rs = stmt.executeQuery(sql);
 
                 List<DcObject> permissions = WorkFlow.getInstance().convert(rs, new int[] {Permission._ID, 
