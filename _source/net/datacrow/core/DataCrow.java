@@ -25,13 +25,10 @@
 
 package net.datacrow.core;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,6 +59,7 @@ import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.db.upgrade.UpgradeHsqlEngine;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.modules.upgrade.ModuleUpgrade;
@@ -217,7 +215,7 @@ public class DataCrow {
             
             try {
                 
-                if (!new File("datacrow.chk").exists() && (platform.isVista() || platform.isWindows7())) {
+                if (!new File("datacrow.chk").exists() && (platform.isVista() || platform.isWindows7() || platform.isWindows8())) {
                     NativeMessageBox dlg = new NativeMessageBox(
                             "Windows 7 / Windows Vista", 
                             "For Windows Vista and Windows 7 users you have to select to run Data Crow 'as administrator'. " +
@@ -310,7 +308,7 @@ public class DataCrow {
                     DcSettings.set(DcRepository.Settings.stConnectionString, db);
                 
 
-                upgradeHSQL1_8();
+                new UpgradeHsqlEngine().run();
                 
                 initDbProperties();
                 
@@ -474,65 +472,6 @@ public class DataCrow {
             System.exit(0);
         }
     }
-    
-    private static void upgradeHSQL1_8() {
-        String v = "";
-        String format = "";
-        
-        try {
-            File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
-            if (file.exists()) {
-                FileInputStream fis = new FileInputStream(file);
-                Properties p = new Properties();
-                p.load(fis);
-                v = (String) p.get("version");
-                format = (String) p.get("hsqldb.script_format");
-                fis.close();
-            }
-            
-        } catch (Exception e) {
-            logger.debug(e, e);
-        }
-
-        if (v != null && v.equals("1.8.1") && format != null && format.equals("3")) {
-            DcSwingUtilities.displayMessage(
-                    "The database version of HSQL will be upgraded. You will be asked for your username and password " +
-                    "after which the upgrade will commence.");
-            
-            LoginDialog ld = new LoginDialog();
-            ld.setVisible(true);
-            
-            String password = ld.getPassword();
-            String username = ld.getLoginName();
-            String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
-            
-            String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + 
-                "upgradeHSQL/upgradeHSQL.jar\" " + address + " " + username + " " + password;
-            
-            Runtime rt = Runtime.getRuntime();
-            try {
-                Process p = rt.exec(cmd);
-                InputStream stderr = p.getErrorStream();
-                InputStreamReader isr = new InputStreamReader(stderr);
-                BufferedReader br = new BufferedReader(isr);
-                String line = null;
-                while ( (line = br.readLine()) != null)
-                    logger.error(line);
-                
-                p.waitFor();
-                
-                System.exit(0);
-                
-            } catch (Exception exp) {
-                logger.debug("Could not launch the command [" + cmd + "]", exp);
-            }
-        }
-        
-        // Upgrade HSQL from 1.8
-        //DatabaseManager.getConnection("SA", "");
-        
-    }
-    
     
     public static boolean isInitialized() {
     	return initialized;

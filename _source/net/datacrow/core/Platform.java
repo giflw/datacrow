@@ -36,6 +36,7 @@ public final class Platform {
 	private boolean isLinux; 
 	private boolean isVista;
 	private boolean isWindows7;
+	private boolean isWindows8;
 	
 	private boolean isJava2;
 	private boolean isJava14;
@@ -53,6 +54,7 @@ public final class Platform {
 		String version = System.getProperty("java.version").substring(0,3);
 		isJavaSun = System.getProperty("java.vendor").indexOf("Sun") > -1;
 		isWindows7 = isWin && os.startsWith("Windows 7");
+		isWindows8 = isWin && os.startsWith("Windows 8");
 		
 		isJava2  = version.compareTo("1.1") > 0;
 		isJava14 = version.compareTo("1.3") > 0;
@@ -92,6 +94,10 @@ public final class Platform {
         return isWindows7;
     }
 
+    public boolean isWindows8() {
+        return isWindows8;
+    }
+    
     /**
      * Indicates if the Data Crow is running on a Windows Vista platform.
      */
