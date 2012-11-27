@@ -24,6 +24,7 @@ Data Crow 3.9.15  [Released on November xx, 2012]  [testing: high]  [target: pro
   hence the extra prompt and restart when opening Data Crow.
 - Upgraded to the latest version of JTattoo (for the Look and Feel), version from 
   August 2012.
+- PDFBox library has been updated to the latest version (from 0.7 to 1.7.1).
 
 
 -----------------------------------------------------------------------------------------
