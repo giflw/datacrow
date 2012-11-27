@@ -22,7 +22,8 @@ Data Crow 3.9.15  [Released on November xx, 2012]  [testing: high]  [target: pro
 [Upgrades]
 - The database has been upgraded to HSQL 2.2.9 (from 1.8). This is not an easy upgrade 
   hence the extra prompt and restart when opening Data Crow.
- 
+- Upgraded to the latest version of JTattoo (for the Look and Feel), version from 
+  August 2012.
 
 
 -----------------------------------------------------------------------------------------
