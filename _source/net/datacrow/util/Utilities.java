@@ -442,8 +442,10 @@ public class Utilities {
         BufferedInputStream bis = new BufferedInputStream(is);
         
         long length = file.length();
-        if (length > Integer.MAX_VALUE) 
+        if (length > Integer.MAX_VALUE) {
+            bis.close();
             throw new IOException("File is too large to read " + file.getName());
+        }
     
         byte[] bytes = new byte[(int)length];
     
@@ -451,13 +453,14 @@ public class Utilities {
         int numRead = 0;
         while (offset < bytes.length && (numRead=bis.read(bytes, offset, bytes.length-offset)) >= 0)
             offset += numRead;
-    
-        // Ensure all the bytes have been read in
-        if (offset < bytes.length)
-            throw new IOException("Could not completely read file " + file.getName());
-    
+
         bis.close();
         is.close();
+
+        // Ensure all the bytes have been read in
+        if (offset < bytes.length) {
+            throw new IOException("Could not completely read file " + file.getName());
+        }
         
         return bytes;    
     }

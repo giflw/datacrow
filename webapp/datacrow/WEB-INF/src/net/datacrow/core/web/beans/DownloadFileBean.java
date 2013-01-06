@@ -84,6 +84,7 @@ public class DownloadFileBean extends DcBean {
             }
             os.flush();
             os.close();
+            fis.close();
             FacesContext.getCurrentInstance().responseComplete();
         } catch (Exception e) {
             e.printStackTrace();

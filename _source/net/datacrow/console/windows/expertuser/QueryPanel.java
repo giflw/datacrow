@@ -218,6 +218,9 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
                     access.writeBytes(query + '\n');
                 }
             }
+            
+            access.close();
+            
         } catch (Exception e) {
             logger.error(DcResources.getText("msgFileSaveError", queryFile.toString()), e);
         }
