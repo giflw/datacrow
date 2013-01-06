@@ -59,16 +59,16 @@ public class HtmlUtils {
         }
     }
 
-    public static Document getDocument(URL url, boolean cleanup) throws Exception {
+    public static Document getDocument(URL url, int cleanupLevel) throws Exception {
         return getDocument(url, "ISO-8859-1");
     }
     
     public static Document getDocument(URL url, String charset) throws Exception {
-        return getDocument(getHtmlCleaned(url, charset, false));
+        return getDocument(getHtmlCleaned(url, charset, 0));
     }
     
-    public static Document getDocument(URL url, String charset, boolean cleanup) throws Exception {
-        return getDocument(getHtmlCleaned(url, charset, cleanup));
+    public static Document getDocument(URL url, String charset, int cleanupLevel) throws Exception {
+        return getDocument(getHtmlCleaned(url, charset, cleanupLevel));
     }
     
     public static Document getDocument(String html) throws Exception { 
@@ -76,7 +76,7 @@ public class HtmlUtils {
         ByteArrayInputStream in = new ByteArrayInputStream(html.getBytes());
         
         if (logger.isDebugEnabled()) {
-           // Utilities.writeToFile(html.getBytes(), "online_service_document.xml");
+            Utilities.writeToFile(html.getBytes(), "c:\\online_service_document.xml");
         }
         
         Reader reader = new InputStreamReader(in);
@@ -94,80 +94,75 @@ public class HtmlUtils {
         return document;
     }    
     
-    public static String getHtmlCleaned(URL url, String charset, boolean cleanup) throws Exception { 
+    public static String getHtmlCleaned(URL url, String charset, int cleanupLevel) throws Exception { 
         HttpConnection connection = HttpConnectionUtil.getConnection(url);
         String html = connection.getString(charset);
         connection.close();        
         
-        if (html.contains("<html") || html.contains("<HTML")) {
-            String title = StringUtils.getValueBetween("<title>", "</title>", html);
-            html = StringUtils.getValueBetween("<body", "</body>", html);
-            html = html.substring(html.indexOf(">") + 1);
-    
-            // start the document
-            StringBuffer sb = new StringBuffer();
-            sb.append("<html>\n");
-            
-            // create the title part
-            if (!Utilities.isEmpty(title)) {
-                sb.append("<head>\n");
-                sb.append("<title>");
-                sb.append(title);
-                sb.append("</title>\n");
-                sb.append("</head>\n");
-            }
-            
-            // create the body
-            sb.append("<body>\n");
-            sb.append(html);
-            sb.append("</body>\n");
-            sb.append("</html>\n");
-            
-            String[][] removeSections = {{"<script", "</script>"},
-                                         {"<style", "</style>"},   
-                                         {"onclick=\"", "\""},
-                                         {"rel=\"", "\""},
-                                         {"<!--", "-->"}};
-            
-            if (cleanup) {
-                int idx;
-                String part1;
-                String part2;
-                for (String[] sections : removeSections) {
-                    while((idx = sb.indexOf(sections[0])) > 0) {
-                        part1 = sb.substring(0, idx);
-                        part2 = sb.substring(sb.indexOf(sections[1], idx + sections[0].length()) + sections[1].length());
-                        
-                        sb.setLength(0);
-                        sb.append(part1);
-                        sb.append(part2);
-                    }
-                }
-            
-                String[] removeWords = {"&nbsp;", " href=\"#\""};
-                for (String word : removeWords) {
-                    while((idx = sb.indexOf(word)) > 0) {
-                        part1 = sb.substring(0, idx);
-                        part2 = sb.substring(idx + word.length());
-                        
-                        sb.setLength(0);
-                        sb.append(part1);
-                        sb.append(part2);
-                    }
-                }
-            }
+        if (cleanupLevel >= 1) {
+            if (html.contains("<html") || html.contains("<HTML")) {
+                String title = StringUtils.getValueBetween("<title>", "</title>", html);
+                html = StringUtils.getValueBetween("<body", "</body>", html);
+                html = html.substring(html.indexOf(">") + 1);
+        
+                // start the document
+                StringBuffer sb = new StringBuffer();
+                sb.append("<html>\n");
                 
-            html = sb.toString();
-            
-            //perform specific fixes
-            while (html.indexOf("width\"") != -1) {
-                html = html.replace("width\"", "width=\"");
-            }
-            
-            if (cleanup) {
-                // only needed for Bol.com
-                while (html.indexOf("=\"\"/") != -1) {
-                    html = html.replace("=\"\"/", "=\"/");
+                // create the title part
+                if (!Utilities.isEmpty(title)) {
+                    sb.append("<head>\n");
+                    sb.append("<title>");
+                    sb.append(title);
+                    sb.append("</title>\n");
+                    sb.append("</head>\n");
+                }
+                
+                // create the body
+                sb.append("<body>\n");
+                sb.append(html);
+                sb.append("</body>\n");
+                sb.append("</html>\n");
+                
+                String[][] removeSections = {{"<script", "</script>"},
+                                             {"<style", "</style>"},   
+                                             {"onclick=\"", "\""},
+                                             {"rel=\"", "\""},
+                                             {"<!--", "-->"}};
+                
+                if (cleanupLevel >= 2) {
+                    int idx;
+                    String part1;
+                    String part2;
+                    for (String[] sections : removeSections) {
+                        while((idx = sb.indexOf(sections[0])) > 0 && (idx = sb.indexOf(sections[1])) > 0) {
+                            part1 = sb.substring(0, idx);
+                            part2 = sb.substring(sb.indexOf(sections[1], idx + sections[0].length()) + sections[1].length());
+                            
+                            sb.setLength(0);
+                            sb.append(part1);
+                            sb.append(part2);
+                        }
+                    }
+                
+                    String[] removeWords = {"&nbsp;", " href=\"#\""};
+                    for (String word : removeWords) {
+                        while((idx = sb.indexOf(word)) > 0) {
+                            part1 = sb.substring(0, idx);
+                            part2 = sb.substring(idx + word.length());
+                            
+                            sb.setLength(0);
+                            sb.append(part1);
+                            sb.append(part2);
+                        }
+                    }
+                }
+                    
+                html = sb.toString();
+                
+                //perform specific fixes
+                while (html.indexOf("width\"") != -1) {
+                    html = html.replace("width\"", "width=\"");
                 }
             }
         }

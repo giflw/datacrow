@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.15  [Released on January xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.15  [Released on January 6, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -14,8 +14,8 @@ Data Crow 3.9.15  [Released on January xx, 2013]  [testing: high]  [target: prod
 - Discogs.com has been fixed; images are now retrieved again.
 - ArrayOutOfBoundsException when removing all tabs from the item form settings.
 - Slow speed for web client for searching.
-
---> BOL.COM --> not working at all
+- Imdb.com not working fully.
+- BOL.COM not working at all
 
 [Changed]
 - Charts: now also possible to create charts for fields such as author, publisher, etc.

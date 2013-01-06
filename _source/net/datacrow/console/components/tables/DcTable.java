@@ -1203,6 +1203,8 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
 
     @Override
     public int getIndex(String ID) {
+        if (ID == null) return -1;
+        
         for (int i = 0; i < getItemCount(); i++) {
             if (ID.equals(getItemKey(i)))
                 return i;
