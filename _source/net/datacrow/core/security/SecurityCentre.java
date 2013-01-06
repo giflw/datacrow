@@ -188,13 +188,13 @@ public class SecurityCentre {
      */
     private void createDefaultUser() {
         // default system administrator
-        Connection connection = DatabaseManager.getConnection("DC_ADMIN", "UK*soccer*96");
+        Connection connection = DatabaseManager.getConnection("DC_ADMIN", "UK*SOCCER*96");
         if (connection == null) {
             User user = new User();
             user.setValue(User._A_LOGINNAME, "DC_ADMIN");
             user.setValue(User._B_ENABLED, Boolean.TRUE);
             user.setValue(User._L_ADMIN, Boolean.TRUE);
-            DatabaseManager.createUser(user, "UK*soccer*96");
+            DatabaseManager.createUser(user, "UK*SOCCER*96");
         } else {
             try {
                 connection.close();
@@ -270,7 +270,7 @@ public class SecurityCentre {
         Statement stmt = null;
         int users = 0;
         try {
-            connection = DatabaseManager.getConnection("DC_ADMIN", "UK*soccer*96");
+            connection = DatabaseManager.getConnection("DC_ADMIN", "UK*SOCCER*96");
             connection = connection == null ? DatabaseManager.getConnection("SA", "") : connection;
             
             stmt = connection.createStatement();

@@ -248,7 +248,7 @@ public class DatabaseManager {
                 address = "jdbc:hsqldb:file:" + DataCrow.dataDir + name;
             }
             
-            Connection connection = DriverManager.getConnection(address, username.toUpperCase(), password.toUpperCase());
+            Connection connection = DriverManager.getConnection(address, username.toUpperCase(), password);
             connection.setAutoCommit(true);
             return connection;
             
@@ -387,7 +387,7 @@ public class DatabaseManager {
      */
     public static Connection getAdminConnection() {
         if (isClosed(adminConnection)) {
-            adminConnection = DatabaseManager.getConnection("DC_ADMIN", "UK*soccer*96");
+            adminConnection = DatabaseManager.getConnection("DC_ADMIN", "UK*SOCCER*96");
             logger.debug("Created a new, admin, database connection");
         }
 
