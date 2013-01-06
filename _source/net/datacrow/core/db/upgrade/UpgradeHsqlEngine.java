@@ -72,7 +72,7 @@ public class UpgradeHsqlEngine {
         if (v != null && v.equals("1.8.1") && format != null && format.equals("3")) {
             DcSwingUtilities.displayMessage(
                     "The database version of HSQL will be upgraded. You will be asked for your username and password " +
-                    "after which the upgrade will commence.");
+                    "after which the upgrade will commence. IMPORTANT: after the upgrade your password has to be entered in CAPITALS!");
             
             String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
             String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + "upgradeHSQL/upgradeHSQL.jar\" " + address;
