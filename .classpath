@@ -19,13 +19,11 @@
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/xalan-2.5.1.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/antlr-2.7.2.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-digester-1.6.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-el-1.0.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-lang-2.1.jar"/>
-	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/commons-validator-1.3.1.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/jsp-2.1.jar"/>
 	<classpathentry kind="lib" path="webapp/datacrow/WEB-INF/lib/jstl-1.1.0.jar"/>
@@ -67,5 +65,15 @@
 	<classpathentry kind="lib" path="lib/pdf/FontBox-0.1.0-dev.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/ISBNExtractor-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/PDFBox-0.7.3.jar"/>
+	<classpathentry kind="lib" path="lib/bol/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/bol/fluent-hc-4.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/bol/httpclient-4.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/bol/httpclient-cache-4.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/bol/httpcore-4.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/bol/httpmime-4.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/bol/joda-time-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/xml/commons-io-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

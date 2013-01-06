@@ -307,8 +307,10 @@ public class DataCrow {
                 if (db != null && db.length() > 0)
                     DcSettings.set(DcRepository.Settings.stConnectionString, db);
                 
-
-                new UpgradeHsqlEngine().run();
+                File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script");
+                if (file.exists()) {
+                    new UpgradeHsqlEngine().run();
+                }
                 
                 initDbProperties();
                 
