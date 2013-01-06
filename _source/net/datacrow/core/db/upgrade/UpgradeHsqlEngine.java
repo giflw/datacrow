@@ -75,7 +75,9 @@ public class UpgradeHsqlEngine {
                     "after which the upgrade will commence. IMPORTANT: after the upgrade your password has to be entered in CAPITALS!");
             
             String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
-            String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + "upgradeHSQL/upgradeHSQL.jar\" " + address;
+            String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + "upgradeHSQL/upgradeHSQL.jar\" \"" + address + "\"" ;
+            
+            System.out.println(cmd);
             
             Runtime rt = Runtime.getRuntime();
             try {
