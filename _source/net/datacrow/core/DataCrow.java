@@ -236,6 +236,7 @@ public class DataCrow {
                     reportDir = DataCrow.installationDir + "reports/";
                     userDir = DataCrow.installationDir + "data/";
                     databaseDir  = DataCrow.installationDir + "data/";
+                    applicationSettingsDir = databaseDir  = DataCrow.installationDir + "data/";
                     imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages";
                     
                     new DcSettings();

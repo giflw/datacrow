@@ -232,20 +232,17 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
             File file;
             File targetDir;
             int idx;
-            Directory dir = new Directory(new File(DataCrow.installationDir, "webapp/datacrow").toString(), false, null);
+            Directory dir = new Directory(new File(DataCrow.installationDir, "webapp/datacrow").toString(), true, null);
             for (String s : dir.read()) {
                 file = new File(s);
-                idx = s.indexOf("/datacrow/") > -1 ? s.indexOf("/datacrow/") : s.indexOf("\\datacrow\\");
+                idx = s.indexOf("webapp/datacrow/") > -1 ? s.indexOf("/datacrow/") : s.indexOf("\\datacrow\\");
                 
                 if (idx == -1) continue;
                 
-                targetDir = new File(webDir, s.substring(idx + 9)).getParentFile();
+                targetDir = (new File(webDir, s.substring(idx + "webapp/datacrow/".length())).getParentFile()).getParentFile();
                 targetDir.mkdirs();
                 Utilities.copy(file, new File(targetDir, file.getName()));
             }
-            
-            
-            
             
             client.addMessage("Web root has been set up");
         }
@@ -356,7 +353,7 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
         }
         
         private void setupImagesDir() throws Exception {
-            File imagesDir = new File(userDir, "wwwroot/mediaimages");
+            File imagesDir = new File(userDir, "wwwroot/datacrow/mediaimages");
             imagesDir.mkdirs();
             
             client.addMessage("Starting moving images");
@@ -379,7 +376,7 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
         private void setupIconDir() throws Exception {
             client.addMessage("Starting moving icons");
             
-            File iconsDir = new File(userDir, "wwwroot/mediaimages/icons");
+            File iconsDir = new File(userDir, "wwwroot/datacrow/mediaimages/icons");
             iconsDir.mkdirs();
             
             Directory dir = new Directory(new File(DataCrow.imageDir, "icons").toString(), false, null);
