@@ -25,6 +25,7 @@
 
 package net.datacrow.util.movie;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -332,7 +333,7 @@ class FilePropertiesRIFF extends FileProperties {
         }
 
         String codecName = fromByteToAscii(fccHandler, 4).toUpperCase();
-        FileInputStream fis = new FileInputStream(DataCrow.installationDir + "resources/FOURCCvideo.txt");
+        FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "FOURCCvideo.txt"));
         codecName = findName(fis, codecName);
 
         setVideoCodec(codecName);

@@ -61,7 +61,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
     
     private JPanel previewPanel;
 
-    private String title = DcResources.getText("lblFileBrowser");
+    private String title = DcResources.isInitialized() ? DcResources.getText("lblFileBrowser") : "File browser";
     private File file = null;
 
     public DcFileField(FileFilter filter) {
@@ -85,14 +85,14 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
         button.addActionListener(this);
 
         if (save) {
-            this.title = DcResources.getText("lblCreateNewFile");
+            this.title = DcResources.isInitialized() ? DcResources.getText("lblCreateNewFile") : "Create new file";
             button.setActionCommand("showFileSaveDialog");
         } else {
             if (dirsOnly) {
-                this.title = DcResources.getText("lblSelectDirectory");
+                this.title = DcResources.isInitialized() ? DcResources.getText("lblSelectDirectory") : "Select directory";
                 button.setActionCommand("showDirectoryOpenDialog");
             } else {
-                this.title = DcResources.getText("lblSelectFile");
+                this.title = DcResources.isInitialized() ? DcResources.getText("lblSelectFile") : "Select a file";
                 button.setActionCommand("showFileOpenDialog");
             }
         }
@@ -144,7 +144,7 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
                 random.close();
             } catch (Exception exp) {
                 DcSwingUtilities.displayErrorMessage("msgFileCouldNotbeCreated");
-                logger.error(DcResources.getText("msgFileCouldNotbeCreated"), exp);
+                logger.error(DcResources.isInitialized() ? DcResources.getText("msgFileCouldNotbeCreated") : "File could not be created", exp);
             }
         }
         dialog.dispose();

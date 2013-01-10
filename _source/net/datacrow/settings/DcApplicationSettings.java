@@ -69,7 +69,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     public DcApplicationSettings() {
         super();
         createSettings();
-        getSettings().setSettingsFile(new File(DataCrow.dataDir, "data_crow.properties"));
+        getSettings().setSettingsFile(new File(DataCrow.applicationSettingsDir, "data_crow.properties"));
         
         if (DataCrow.loadSettings)
             load();
@@ -110,6 +110,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblRunOnStartup",
                             false,
                             false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._STRING,
+                            DcRepository.Settings.stDataDir,
+                            DataCrow.installationDir + "data",
+                            ComponentFactory._DIRECTORYFIELD,
+                            "",
+                            "lblDataDir",
+                            false,
+                            true));      
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stOpenItemsInEditModus,

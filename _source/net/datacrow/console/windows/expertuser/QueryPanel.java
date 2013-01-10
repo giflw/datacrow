@@ -168,7 +168,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
     }
 
     private void fillQueryComboBox() {
-        File queryFile = new File(DataCrow.dataDir, "data_crow_queries.txt");
+        File queryFile = new File(DataCrow.applicationSettingsDir, "data_crow_queries.txt");
 
         try {
             if (queryFile.exists()) {
@@ -199,10 +199,10 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
     }
 
     protected void saveDataToFile() {
-        File queryFile = new File(DataCrow.dataDir, "data_crow_queries.txt");
+        File queryFile = new File(DataCrow.applicationSettingsDir, "data_crow_queries.txt");
         if (queryFile.exists()) {
             queryFile.delete();
-            queryFile = new File(DataCrow.dataDir, "data_crow_queries.txt");
+            queryFile = new File(DataCrow.applicationSettingsDir, "data_crow_queries.txt");
         }
 
         try {

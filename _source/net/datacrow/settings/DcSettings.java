@@ -71,8 +71,7 @@ public class DcSettings {
      * Opens the settings view.
      */
     public static SettingsView getView() {
-        SettingsView view = new SettingsView(DcResources.getText("lblDataCrowSettings"), 
-                                             applicationSettings.getSettings());
+        SettingsView view = new SettingsView(DcResources.getText("lblDataCrowSettings"), applicationSettings.getSettings());
         
         ImageIcon icon = new DcImageIcon(DataCrow.installationDir + "icons/logo.jpg");
         view.setDisclaimer(icon);

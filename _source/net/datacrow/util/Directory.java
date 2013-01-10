@@ -81,7 +81,7 @@ public class Directory {
         path = directory.toString();
 
         if (!directory.exists()) {
-            sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
+            if (DcResources.isInitialized()) sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
             return result;
         }
 
@@ -101,13 +101,13 @@ public class Directory {
 
             if (listener != null && listener.isStopped()) {
                 result.clear();
-                sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
+                if (DcResources.isInitialized()) sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
                 return result;
             }
             
             if (tempFile.isDirectory()) {
-                logger.debug(DcResources.getText("msgReadingFrom", current));
-                sendMessageToListener(DcResources.getText("msgReadingFrom", current));
+                if (DcResources.isInitialized()) logger.debug(DcResources.getText("msgReadingFrom", current));
+                if (DcResources.isInitialized()) sendMessageToListener(DcResources.getText("msgReadingFrom", current));
 
                 String[] list = tempFile.list();
                 if (list != null) {
@@ -137,11 +137,11 @@ public class Directory {
             unhandled.remove(0);
 
             if (!recurse) {
-                sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
+                if (DcResources.isInitialized()) sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
                 return result;
             }
         }
-        sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
+        if (DcResources.isInitialized()) sendMessageToListener(DcResources.getText("msgReadingFilesHasFinished"));
         return result;
     }
 

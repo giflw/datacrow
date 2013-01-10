@@ -53,9 +53,9 @@ public class DcUndoListenerer {
         component.getDocument().addUndoableEditListener(new UndoEditListener());
         
         component.getActionMap().put("Undo", undoAction);
-        component.getInputMap().put(KeyStroke.getKeyStroke("control Z"), DcResources.getText("lblUndo"));
+        component.getInputMap().put(KeyStroke.getKeyStroke("control Z"), DcResources.isInitialized() ? DcResources.getText("lblUndo") : "Undo");
         component.getActionMap().put("Redo", redoAction);
-        component.getInputMap().put(KeyStroke.getKeyStroke("control Y"), DcResources.getText("lblRedo"));
+        component.getInputMap().put(KeyStroke.getKeyStroke("control Y"), DcResources.isInitialized() ? DcResources.getText("lblRedo") : "Redo");
     }
     
     public UndoAction getUndoAction() {
@@ -89,7 +89,7 @@ public class DcUndoListenerer {
             redoAction.putValue(Action.NAME, undo.getRedoPresentationName());
         } else {
             redoAction.setEnabled(false);
-            redoAction.putValue(Action.NAME, DcResources.getText("lblRedo"));
+            redoAction.putValue(Action.NAME, DcResources.isInitialized() ? DcResources.getText("lblRedo") : "Redo");
         }
     }
     
@@ -107,13 +107,13 @@ public class DcUndoListenerer {
             undoAction.putValue(Action.NAME, undo.getUndoPresentationName());
         } else {
             undoAction.setEnabled(false);
-            undoAction.putValue(Action.NAME, DcResources.getText("lblUndo"));
+            undoAction.putValue(Action.NAME, DcResources.isInitialized() ? DcResources.getText("lblUndo") : "Undo");
         }
     }    
     
     public class UndoAction extends AbstractAction {
         public UndoAction() {
-            super(DcResources.getText("lblUndo"));
+            super(DcResources.isInitialized() ? DcResources.getText("lblUndo") : "Undo");
             setEnabled(false);
         }
 
@@ -125,7 +125,7 @@ public class DcUndoListenerer {
 
     public class RedoAction extends AbstractAction {
         public RedoAction() {
-            super(DcResources.getText("lblRedo"));
+            super(DcResources.isInitialized() ? DcResources.getText("lblRedo") : "Redo");
             setEnabled(false);
         }
 

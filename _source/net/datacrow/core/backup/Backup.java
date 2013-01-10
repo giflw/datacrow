@@ -72,7 +72,7 @@ public class Backup extends Thread {
      * @return A collection of fully classified filenames.
      */
     private Collection<String> getFiles() {
-        File dataDir = new File(DataCrow.dataDir);
+        File dataDir = new File(DataCrow.userDir);
         String[] list = dataDir.list();
         Collection<String>  files = new ArrayList<String> ();
         for (int i = 0; i < list.length; i++) {

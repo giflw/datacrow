@@ -55,7 +55,7 @@ public class UpgradeHsqlEngine {
         String format = "";
         
         try {
-            File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
+            File file = new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
             if (file.exists()) {
                 FileInputStream fis = new FileInputStream(file);
                 Properties p = new Properties();
@@ -74,7 +74,7 @@ public class UpgradeHsqlEngine {
                     "The database version of HSQL will be upgraded. You will be asked for your username and password " +
                     "after which the upgrade will commence. IMPORTANT: after the upgrade your password has to be entered in CAPITALS!");
             
-            String address = "jdbc:hsqldb:file:" + DataCrow.dataDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
+            String address = "jdbc:hsqldb:file:" + DataCrow.databaseDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
             String cmd = "java -jar \"" + DataCrow.installationDir.substring(1) + "upgradeHSQL/upgradeHSQL.jar\" \"" + address + "\"" ;
             
             System.out.println(cmd);

@@ -806,41 +806,41 @@ public final class ComponentFactory {
         int height = getPreferredButtonHeight();
         
         if (buttonText != null) {
-            if (buttonText.equals(DcResources.getText("lblSave")))
+            if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblSave") : "Save"))
                 button.setMnemonic('S');
-            else if (buttonText.equals(DcResources.getText("lblCancel")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblCancel") : "Cancel"))
                 button.setMnemonic('C');
-            else if (buttonText.equals(DcResources.getText("lblClose")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblClose") : "Close"))
                 button.setMnemonic('C');
-            else if (buttonText.equals(DcResources.getText("lblRun")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblRun") : "Run"))
                 button.setMnemonic('R');
-            else if (buttonText.equals(DcResources.getText("lblOK")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblOK") : "OK"))
                 button.setMnemonic('O');
-            else if (buttonText.equals(DcResources.getText("lblApply")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblApply") : "Apply"))
                 button.setMnemonic('A');
-            else if (buttonText.equals(DcResources.getText("lblNew")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblNew") : "New"))
                 button.setMnemonic('N');
-            else if (buttonText.equals(DcResources.getText("lblNext")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblNext") : "Next"))
                 button.setMnemonic('N');
-            else if (buttonText.equals(DcResources.getText("lblDelete")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblDelete") : "Delete"))
                 button.setMnemonic('D');
-            else if (buttonText.equals(DcResources.getText("lblAddNew")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblAddNew") : "Add New"))
                 button.setMnemonic('A');
-            else if (buttonText.equals(DcResources.getText("lblAdd")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblAdd") : "Add"))
                 button.setMnemonic('A');
-            else if (buttonText.equals(DcResources.getText("lblClear")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblClear") : "Clear"))
                 button.setMnemonic('L');
-            else if (buttonText.equals(DcResources.getText("lblStop")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblStop") : "Stop"))
                 button.setMnemonic('T');
-            else if (buttonText.equals(DcResources.getText("lblStart")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblStart") : "Start"))
                 button.setMnemonic('S');
-            else if (buttonText.equals(DcResources.getText("lblYes")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblYes") : "Yes"))
                 button.setMnemonic('Y');
-            else if (buttonText.equals(DcResources.getText("lblNo")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblNo") : "No"))
                 button.setMnemonic('N');
-            else if (buttonText.equals(DcResources.getText("lblRemove")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblRemove") : "Remove"))
                 button.setMnemonic('R');
-            else if (buttonText.equals(DcResources.getText("lblBack")))
+            else if (buttonText.equals(DcResources.isInitialized() ? DcResources.getText("lblBack") : "Back"))
                 button.setMnemonic('B');
         }
         

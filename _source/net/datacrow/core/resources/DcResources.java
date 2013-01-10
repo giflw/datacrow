@@ -51,6 +51,8 @@ public class DcResources {
     private static Logger logger = Logger.getLogger(DcResources.class.getName());
     private static Map<String, DcLanguageResource> resources = new HashMap<String, DcLanguageResource>();
     
+    private static boolean initialized = false;
+    
     /**
      * Creates a new instance and loads all resources.
      */
@@ -58,12 +60,19 @@ public class DcResources {
         initialize();
     }
     
+    public static boolean isInitialized() {
+        return initialized;
+    }
+    
     /**
      * Loads the default language (English) and the custom languages.
      */
     private void initialize() {
-        String[] propertyFiles = {"DcLabels.properties", "DcMessages.properties", "DcTooltips.properties",
-                                  "DcAudioCodecs.properties", "DcTips.properties"}; 
+        String[] propertyFiles = {"DcLabels.properties", 
+                                  "DcMessages.properties", 
+                                  "DcTooltips.properties",
+                                  "DcAudioCodecs.properties", 
+                                  "DcTips.properties"}; 
         
         DcLanguageResource english = new DcLanguageResource("English");
         for (String propertyFile : propertyFiles) {
@@ -92,6 +101,8 @@ public class DcResources {
             resource.merge(english);
             addLanguageResource(language, resource);
         }
+        
+        initialized = true;
     }
     
     public static void addLanguageResource(String language, DcLanguageResource lr) {
@@ -114,7 +125,7 @@ public class DcResources {
      * A language file has the following name: &lt;language&gt;_resources.properties.
      */
     public static Collection<String> getLanguages() {
-        String[] files = new File(DataCrow.installationDir + "resources/").list();
+        String[] files = new File(DataCrow.resourcesDir).list();
         Collection<String> languages = new ArrayList<String>();
         if (files != null) {
             for (String file : files) {

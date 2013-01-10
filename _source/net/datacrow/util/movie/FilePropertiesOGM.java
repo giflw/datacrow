@@ -25,6 +25,7 @@
 
 package net.datacrow.util.movie;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.RandomAccessFile;
 import java.util.StringTokenizer;
@@ -106,7 +107,7 @@ class FilePropertiesOGM extends FileProperties {
                         skipBytes(dataStream, 4);
                         videoFccHandler = readUnsignedInt32(dataStream);
 
-                        FileInputStream fis = new FileInputStream(DataCrow.installationDir + "resources/FOURCCvideo.txt");
+                        FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "FOURCCvideo.txt"));
                         String videoCodec = findName(fis, fromByteToAscii(videoFccHandler, 4));
 
                         setVideoCodec(videoCodec);

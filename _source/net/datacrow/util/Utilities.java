@@ -101,7 +101,7 @@ public class Utilities {
     
     static {
         try {
-            FileInputStream fis = new FileInputStream(new File(DataCrow.installationDir, "resources/languages.properties"));
+            FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "languages.properties"));
             languages.load(fis);
             fis.close();
         } catch (Exception e) {
@@ -598,6 +598,31 @@ public class Utilities {
         return Utilities.isEmpty(o) ? "" : o instanceof String ? ((String) o) : o.toString();
     }
     
+    public static void copy(File currentFile, File newFile) throws IOException {
+        // native code failed to move the file; do it the custom way
+        FileInputStream fis = new FileInputStream(currentFile);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+    
+        FileOutputStream fos = new FileOutputStream(newFile);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        
+        int count = 0;
+        int b;
+        while ((b = bis.read()) > -1) {
+            bos.write(b);
+            count++;
+            if (count == 2000) {
+                bos.flush();
+                count = 0;
+            }
+        }
+        
+        bos.flush();
+        
+        bis.close();
+        bos.close();
+    }
+    
     public static void rename(File currentFile, File newFile) throws IOException {
 
         if (newFile.getParentFile() != null)
@@ -606,29 +631,7 @@ public class Utilities {
         boolean success = currentFile.renameTo(newFile);
         
         if (!success) {
-            // native code failed to move the file; do it the custom way
-            FileInputStream fis = new FileInputStream(currentFile);
-            BufferedInputStream bis = new BufferedInputStream(fis);
-        
-            FileOutputStream fos = new FileOutputStream(newFile);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            
-            int count = 0;
-            int b;
-            while ((b = bis.read()) > -1) {
-                bos.write(b);
-                count++;
-                if (count == 2000) {
-                    bos.flush();
-                    count = 0;
-                }
-            }
-            
-            bos.flush();
-            
-            bis.close();
-            bos.close();
-            
+            copy(currentFile, newFile);
             currentFile.delete();
         }
     }

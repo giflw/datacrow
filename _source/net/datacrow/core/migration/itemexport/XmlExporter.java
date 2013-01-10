@@ -182,7 +182,7 @@ public class XmlExporter extends ItemExporter {
             String styleSheetFilename = settings.get(ItemExporterSettings._STYLESHEET);
             
             if (styleSheetFilename != null && styleSheetFilename.trim().length() > 0) {
-                File cssFile = new File(DataCrow.installationDir, styleSheetFilename);
+                File cssFile = new File(DataCrow.reportDir, styleSheetFilename);
                 
                 if (cssFile.exists()) {
                     File target = new File(file.getParent(), cssFile.getName());

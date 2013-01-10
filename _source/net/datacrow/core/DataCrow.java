@@ -46,6 +46,7 @@ import net.datacrow.console.windows.SelectExpienceLevelDialog;
 import net.datacrow.console.windows.SelectLanguageDialog;
 import net.datacrow.console.windows.SplashScreen;
 import net.datacrow.console.windows.TipOfTheDayDialog;
+import net.datacrow.console.windows.UserDirSetupDialog;
 import net.datacrow.console.windows.drivemanager.DriveManagerDialog;
 import net.datacrow.console.windows.help.StartupHelpDialog;
 import net.datacrow.console.windows.loan.LoanInformationForm;
@@ -108,7 +109,10 @@ public class DataCrow {
     public static String pluginsDir;
     public static String servicesDir;
     public static String webDir;
-    public static String dataDir;
+    public static String databaseDir;
+    public static String moduleSettingsDir;
+    public static String applicationSettingsDir;
+    public static String userDir;
     public static String resourcesDir;
     
     private static boolean initialized = false;
@@ -156,8 +160,6 @@ public class DataCrow {
                     int index = credentials.indexOf("/");
                     username = index > -1 ? credentials.substring(0, index) : credentials;
                     password = index > -1 ? credentials.substring(index + 1) : "";
-                } else if (args[i].toLowerCase().startsWith("-datadir:")) {
-                    dataDir = args[i].substring(args[i].indexOf(":") + 1).replaceAll("%20", " ");
                 } else if (dir != null) {
                     dir += " " + args[i];
                 } else { 
@@ -182,10 +184,6 @@ public class DataCrow {
                     System.out.println("-clearsettings");
                     System.out.println("Loads the default Data Crow settings. Disgards all user settings.");
                     System.out.println("Example: java -jar datacrow.jar -clearsettings");                
-                    System.out.println("");
-                    System.out.println("-datadir:<path>");
-                    System.out.println("Specifies an alternative location for the data folder. Spaces need to be substituted by %20.");
-                    System.out.println("Example: java -jar datacrow.jar -datadir:d:\\data%20crow\\data");                
                     System.out.println("");
                     System.out.println("-credentials:username/password");
                     System.out.println("Specify the login credentials to start Data Crow without displaying the login dialog.");
@@ -214,20 +212,6 @@ public class DataCrow {
             long totalstart = 0;
             
             try {
-                
-                if (!new File("datacrow.chk").exists() && (platform.isVista() || platform.isWindows7() || platform.isWindows8())) {
-                    NativeMessageBox dlg = new NativeMessageBox(
-                            "Windows 7 / Windows Vista", 
-                            "For Windows Vista and Windows 7 users you have to select to run Data Crow 'as administrator'. " +
-                            "Right click 'datacrow.exe' and select 'run as administrator'. You can also choose to modify " +
-                            "the shortcut. Right click on the shortcut and select the 'compatibility' tab. Tick the option " +
-                            "'run as administrator'.");
-                    DcSwingUtilities.openDialogNativeModal(dlg);
-                    new File("datacrow.chk").createNewFile();
-                }
-                
-                checkCurrentDir();
-                createDirectories();
                 initLog4j();
                 
                 logger = Logger.getLogger(DataCrow.class.getName());
@@ -235,232 +219,267 @@ public class DataCrow {
                 
                 installLafs();
                 
-                logger.info(new Date() + " Starting Data Crow. ");
+                logger.info(new Date() + " Starting Data Crow.");
                 
                 logger.info("Using installation directory: " + installationDir);
-                logger.info("Using data directory: " + dataDir);
-                logger.info("Using images directory: " + imageDir);
                 
-                // load resources
-                new DcResources();
-                new DcSettings();
-                checkPlatform();
-                
-                if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
-                    DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
+                File userHome = new File(System.getProperty("user.home"), "datacrow");
+                File userDirSettings = new File(userHome, "userfolder.properties");
+                boolean dataFolderExists = false;
+                if (userDirSettings.exists()) {
+                    Properties properties = new Properties();
+                    properties.load(new FileInputStream(userDirSettings));
+                    String userDirSetting =  (String) properties.get("userfolder");
                     
-                    SelectLanguageDialog dlg = new SelectLanguageDialog();
-                    DcSwingUtilities.openDialogNativeModal(dlg);
-                }
-                
-                showSplashScreen();
-                
-                // check if the web module has been installed
-                isWebModuleInstalled = new File(DataCrow.webDir, "WEB-INF").exists();
-                
-                // initialize plugins
-                Plugins.getInstance();
-                
-                // initialize services
-                Servers.getInstance();
-        
-                // Initialize the Component factory
-                new ComponentFactory();
-                
-                Enumeration en = Logger.getRootLogger().getAllAppenders();
-                while (en.hasMoreElements()) {
-                    Appender appender = (Appender) en.nextElement();
-                    if (appender instanceof TextPaneAppender)
-                        ((TextPaneAppender) appender).addListener(LogPanel.getInstance());
-                }             
-        
-                logger.info(DcResources.getText("msgApplicationStarts"));
-        
-                // Initialize all modules
-                showSplashMsg(DcResources.getText("msgLoadingModules"));
-    
-                long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-                new ModuleUpgrade().upgrade();
-                if (logger.isDebugEnabled()) {
-                    long end = new Date().getTime();
-                    logger.debug("Upgrading the modules took " + (end - start) + "ms");
-                }  
-        
-                start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-                DcModules.load();
-                if (logger.isDebugEnabled()) {
-                    long end = new Date().getTime();
-                    logger.debug("Loading the modules took " + (end - start) + "ms");
-                }  
-                
-                logger.info(DcResources.getText("msgModulesLoaded"));
-        
-                ValueEnhancers.initialize();
-    
-                // delete lock file
-                Directory directory = new Directory(dataDir, false, new String[] {"lck"});
-                for (String file : directory.read())
-                	new File(file).delete();
-                
-                // set the database name
-                DcSettings.set(DcRepository.Settings.stConnectionString, "dc");
-                if (db != null && db.length() > 0)
-                    DcSettings.set(DcRepository.Settings.stConnectionString, db);
-                
-                File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script");
-                if (file.exists()) {
-                    new UpgradeHsqlEngine().run();
-                }
-                
-                initDbProperties();
-                
-                start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-                SecurityCentre.getInstance().initialize();
-                if (logger.isDebugEnabled()) {
-                    long end = new Date().getTime();
-                    logger.debug("Initilization of the security center took " + (end - start) + "ms");
+                    if (new File(userDirSetting).exists()) {
+                        userDir = userDirSetting;
+                        userDir += userDir.endsWith("/") || userDir.endsWith("\\") ? "" : "/";
+                        dataFolderExists = true;
+                    }
                 } 
                 
-                // log in
-                login(username, password);
                 
-                // Establish a connection to the database / server
-                showSplashMsg(DcResources.getText("msgInitializingDB"));
-    
-                DatabaseManager.initialize();
-                
-                // Start the UI
-                if (splashScreen == null)
-                    showSplashScreen();
-    
-                showSplashMsg(DcResources.getText("msgLoadingItems"));
-                DcModules.loadData();
-    
-                checkTabs();
-                
-                loadDefaultData();
-                
-                if (!webserverMode)
-                    showSplashMsg(DcResources.getText("msgLoadingUI"));
-    
-                // load the filters & patterns
-                DataFilters.load();
-                FilePatterns.load();
-                
-                ComponentFactory.setLookAndFeel();
-                
-                if (!webserverMode) {
-                    mainFrame = new MainFrame();
+                if (!dataFolderExists) {
+                    moduleDir = DataCrow.installationDir + "modules/";
+                    pluginsDir = DataCrow.installationDir + "plugins/";
+                    servicesDir = DataCrow.installationDir + "services/";
+                    resourcesDir = DataCrow.installationDir + "resources/";
+                    reportDir = DataCrow.installationDir + "reports/";
+                    userDir = DataCrow.installationDir + "data/";
+                    databaseDir  = DataCrow.installationDir + "data/";
                     
-                    SwingUtilities.invokeAndWait(new Runnable() {
-                        @Override
-                        public void run() {
-    
-                            long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
-    
-                            DataCrow.mainFrame.initialize();
-                            DataCrow.mainFrame.setVisible(true);
-                            mainFrame.setViews();
-                            
-                            if (logger.isDebugEnabled()) {
-                                long end = new Date().getTime();
-                                logger.debug("Initilization of the UI took " + (end - start) + "ms");
-                            } 
-    
-                        }
-                    });
+                    new DcSettings();
+                    
+                    UserDirSetupDialog dlg = new UserDirSetupDialog();
+                    dlg.setVisible(true);
                 } else {
+                    logger.info("Using user directory: " + userDir);
+                    logger.info("Using images directory: " + imageDir);
+                    logger.info("Using database directory: " + databaseDir);
                     
-                    if (!SecurityCentre.getInstance().getUser().isAuthorized("WebServer")) {
-                        DcSwingUtilities.displayWarningMessage("msgWebServerStartUnauthorized");
-                        new ShutdownThread().run();
-                        System.exit(0);
+                    // load resources
+                    new DcResources();
+                    
+                    checkCurrentDir();
+                    createDirectories();
+                    
+                    new DcSettings();
+                    checkPlatform();
+                    
+                    if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||
+                        DcSettings.getString(DcRepository.Settings.stLanguage).trim().equals("")) {
+                        
+                        SelectLanguageDialog dlg = new SelectLanguageDialog();
+                        DcSwingUtilities.openDialogNativeModal(dlg);
+                    }
+                    
+                    showSplashScreen();
+                    
+                    // check if the web module has been installed
+                    isWebModuleInstalled = new File(DataCrow.webDir, "WEB-INF").exists();
+                    
+                    // initialize plugins
+                    Plugins.getInstance();
+                    
+                    // initialize services
+                    Servers.getInstance();
+            
+                    // Initialize the Component factory
+                    new ComponentFactory();
+                    
+                    Enumeration en = Logger.getRootLogger().getAllAppenders();
+                    while (en.hasMoreElements()) {
+                        Appender appender = (Appender) en.nextElement();
+                        if (appender instanceof TextPaneAppender)
+                            ((TextPaneAppender) appender).addListener(LogPanel.getInstance());
+                    }             
+            
+                    logger.info(DcResources.getText("msgApplicationStarts"));
+            
+                    // Initialize all modules
+                    showSplashMsg(DcResources.getText("msgLoadingModules"));
+        
+                    long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+                    new ModuleUpgrade().upgrade();
+                    if (logger.isDebugEnabled()) {
+                        long end = new Date().getTime();
+                        logger.debug("Upgrading the modules took " + (end - start) + "ms");
+                    }  
+            
+                    start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+                    DcModules.load();
+                    if (logger.isDebugEnabled()) {
+                        long end = new Date().getTime();
+                        logger.debug("Loading the modules took " + (end - start) + "ms");
+                    }  
+                    
+                    logger.info(DcResources.getText("msgModulesLoaded"));
+            
+                    ValueEnhancers.initialize();
+        
+                    // delete lock file
+                    Directory directory = new Directory(databaseDir, false, new String[] {"lck"});
+                    for (String file : directory.read())
+                    	new File(file).delete();
+                    
+                    // set the database name
+                    DcSettings.set(DcRepository.Settings.stConnectionString, "dc");
+                    if (db != null && db.length() > 0)
+                        DcSettings.set(DcRepository.Settings.stConnectionString, db);
+                    
+                    File file = new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script");
+                    if (file.exists()) {
+                        new UpgradeHsqlEngine().run();
+                    }
+                    
+                    initDbProperties();
+                    
+                    start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+                    SecurityCentre.getInstance().initialize();
+                    if (logger.isDebugEnabled()) {
+                        long end = new Date().getTime();
+                        logger.debug("Initilization of the security center took " + (end - start) + "ms");
+                    } 
+                    
+                    // log in
+                    login(username, password);
+                    
+                    // Establish a connection to the database / server
+                    showSplashMsg(DcResources.getText("msgInitializingDB"));
+        
+                    DatabaseManager.initialize();
+                    
+                    // Start the UI
+                    if (splashScreen == null)
+                        showSplashScreen();
+        
+                    showSplashMsg(DcResources.getText("msgLoadingItems"));
+                    DcModules.loadData();
+        
+                    checkTabs();
+                    
+                    loadDefaultData();
+                    
+                    if (!webserverMode)
+                        showSplashMsg(DcResources.getText("msgLoadingUI"));
+        
+                    // load the filters & patterns
+                    DataFilters.load();
+                    FilePatterns.load();
+                    
+                    ComponentFactory.setLookAndFeel();
+                    
+                    if (!webserverMode) {
+                        mainFrame = new MainFrame();
+                        
+                        SwingUtilities.invokeAndWait(new Runnable() {
+                            @Override
+                            public void run() {
+        
+                                long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
+        
+                                DataCrow.mainFrame.initialize();
+                                DataCrow.mainFrame.setVisible(true);
+                                mainFrame.setViews();
+                                
+                                if (logger.isDebugEnabled()) {
+                                    long end = new Date().getTime();
+                                    logger.debug("Initilization of the UI took " + (end - start) + "ms");
+                                } 
+        
+                            }
+                        });
                     } else {
-                        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
                         
-                        showSplashMsg(DcResources.getText("msgStartingWebServer"));
-                        
-                        DcWebServer.getInstance().start();
-                        if (DcWebServer.getInstance().isRunning())
-                            showSplashMsg(DcResources.getText("msgWebServerStarted"));
-                        
-                        System.out.println(DcResources.getText("msgCloseWebServerConsole"));
+                        if (!SecurityCentre.getInstance().getUser().isAuthorized("WebServer")) {
+                            DcSwingUtilities.displayWarningMessage("msgWebServerStartUnauthorized");
+                            new ShutdownThread().run();
+                            System.exit(0);
+                        } else {
+                            Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+                            
+                            showSplashMsg(DcResources.getText("msgStartingWebServer"));
+                            
+                            DcWebServer.getInstance().start();
+                            if (DcWebServer.getInstance().isRunning())
+                                showSplashMsg(DcResources.getText("msgWebServerStarted"));
+                            
+                            System.out.println(DcResources.getText("msgCloseWebServerConsole"));
+                        }
                     }
-                }
-                
-                SystemMonitor monitor = new SystemMonitor();
-                monitor.start();
-    
-                Thread splashCloser = new Thread(new SplashScreenCloser());
-                splashCloser.start();
-
-                if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
-                    new VersionChecker().start();
-                
-                if (!webserverMode) {
-                    DataFilter df = new DataFilter(DcModules._LOAN);
-                    df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
-                    df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
                     
-                    for (DcObject loan : DataManager.get(df)) {
-                       if (((Loan) loan).isOverdue()) {
-                            DcSwingUtilities.displayWarningMessage("msgThereAreOverdueItems");
-                    		new LoanInformationForm().setVisible(true);
-                    		break;
-                    	}
+                    SystemMonitor monitor = new SystemMonitor();
+                    monitor.start();
+        
+                    Thread splashCloser = new Thread(new SplashScreenCloser());
+                    splashCloser.start();
+    
+                    if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
+                        new VersionChecker().start();
+                    
+                    if (!webserverMode) {
+                        DataFilter df = new DataFilter(DcModules._LOAN);
+                        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._B_ENDDATE, Operator.IS_EMPTY, null));
+                        df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._LOAN, Loan._E_DUEDATE, Operator.IS_FILLED, null));
+                        
+                        for (DcObject loan : DataManager.get(df)) {
+                           if (((Loan) loan).isOverdue()) {
+                                DcSwingUtilities.displayWarningMessage("msgThereAreOverdueItems");
+                        		new LoanInformationForm().setVisible(true);
+                        		break;
+                        	}
+                        }
                     }
-                }
-                
-                DcSettings.set(DcRepository.Settings.stGracefulShutdown, Boolean.FALSE);
-                DcSettings.save();
-                
-                if (DcSettings.getBoolean(DcRepository.Settings.stDriveScannerRunOnStartup)) {
-                    DriveManagerDialog.getInstance();
-                    DriveManager.getInstance().startScanners();
-                }
-                
-                if (DcSettings.getBoolean(DcRepository.Settings.stDrivePollerRunOnStartup)) {
-                    DriveManagerDialog.getInstance();
-                    DriveManager.getInstance().startDrivePoller();
-                }
-                
-                initialized = true;
-                
+                    
+                    DcSettings.set(DcRepository.Settings.stGracefulShutdown, Boolean.FALSE);
+                    DcSettings.save();
+                    
+                    if (DcSettings.getBoolean(DcRepository.Settings.stDriveScannerRunOnStartup)) {
+                        DriveManagerDialog.getInstance();
+                        DriveManager.getInstance().startScanners();
+                    }
+                    
+                    if (DcSettings.getBoolean(DcRepository.Settings.stDrivePollerRunOnStartup)) {
+                        DriveManagerDialog.getInstance();
+                        DriveManager.getInstance().startDrivePoller();
+                    }
+                    
+                    initialized = true;
+                    
+                    int xp = DcSettings.getInt(DcRepository.Settings.stXpMode);
+                    if (!webserverMode && xp == -1) {
+                        SelectExpienceLevelDialog dlg = new SelectExpienceLevelDialog();
+                        dlg.setVisible(true);
+                    }
+                    
+                    if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowTipsOnStartup)) {
+                        TipOfTheDayDialog dlg = new TipOfTheDayDialog();
+                        dlg.setVisible(true);
+                    }  
+            
+                    if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowToolSelectorOnStartup)) {
+                        ToolSelectWizard wizard = new ToolSelectWizard();
+                        wizard.setVisible(true);
+                    }  
+                    
+                    if (logger.isDebugEnabled()) {
+                        long end = new Date().getTime();
+                        logger.debug("Total startup time was " + (end - totalstart) + "ms");
+                    }
+                    
+                    int usage = DcSettings.getInt(DcRepository.Settings.stUsage) + 1;
+                    DcSettings.set(DcRepository.Settings.stUsage, Long.valueOf(usage));
+                    
+                    boolean itsTime = usage == 15 || usage == 150 || usage == 1000 || usage == 1500 || usage == 500 || usage == 50;
+                    if (itsTime && DcSettings.getBoolean(DcRepository.Settings.stAskForDonation))
+                        new DonateDialog().setVisible(true);
+                } 
             } catch (Exception e) {
                 if (logger != null)  logger.fatal("Severe error occurred while starting Data Crow. The application cannot continue.", e);
                 e.printStackTrace();
                 new NativeMessageBox("Error", e.toString());
                 System.exit(0);
             }
-            
-            int xp = DcSettings.getInt(DcRepository.Settings.stXpMode);
-            if (!webserverMode && xp == -1) {
-                SelectExpienceLevelDialog dlg = new SelectExpienceLevelDialog();
-                dlg.setVisible(true);
-            }
-            
-            if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowTipsOnStartup)) {
-                TipOfTheDayDialog dlg = new TipOfTheDayDialog();
-                dlg.setVisible(true);
-            }  
-    
-            if (!webserverMode && DcSettings.getBoolean(DcRepository.Settings.stShowToolSelectorOnStartup)) {
-                ToolSelectWizard wizard = new ToolSelectWizard();
-                wizard.setVisible(true);
-            }  
-            
-            if (logger.isDebugEnabled()) {
-                long end = new Date().getTime();
-                logger.debug("Total startup time was " + (end - totalstart) + "ms");
-            }
-            
-            int usage = DcSettings.getInt(DcRepository.Settings.stUsage) + 1;
-            DcSettings.set(DcRepository.Settings.stUsage, Long.valueOf(usage));
-            
-            boolean itsTime = usage == 15 || usage == 150 || usage == 1000 || usage == 1500 || usage == 500 || usage == 50;
-            if (itsTime && DcSettings.getBoolean(DcRepository.Settings.stAskForDonation))
-                new DonateDialog().setVisible(true);
-            
         } catch (Throwable e) {
             System.out.println("Data Crow could not be started: " + e);
             e.printStackTrace();
@@ -473,6 +492,7 @@ public class DataCrow {
             
             System.exit(0);
         }
+
     }
     
     public static boolean isInitialized() {
@@ -718,23 +738,23 @@ public class DataCrow {
      * Determines the current directory.
      */
     private static void createDirectories() {
-        if (dataDir == null)
-            dataDir = DataCrow.installationDir + "data/";
-        else 
-            dataDir = !dataDir.endsWith("/") && !dataDir.endsWith("\\") ? dataDir + "/" : dataDir;
+        userDir = !userDir.endsWith("/") && !userDir.endsWith("\\") ? userDir + "/" : userDir;
+        webDir = DataCrow.userDir + "wwwroot/";
+        imageDir = DataCrow.userDir + "wwwroot/mediaimages/";
+        iconsDir = DataCrow.userDir + "wwwroot/mediaimages/icons/";
+        reportDir = DataCrow.userDir + "reports/";
+        moduleDir = DataCrow.userDir + "modules/";
+        resourcesDir = DataCrow.userDir + "resources/";
+        databaseDir = DataCrow.userDir + "database/";
+        moduleSettingsDir = DataCrow.userDir + "settings/modules/";
+        applicationSettingsDir = DataCrow.userDir + "settings/application/";
         
-        webDir = DataCrow.installationDir + "webapp/datacrow/";
-        imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/";
-        iconsDir = DataCrow.installationDir + "webapp/datacrow/mediaimages/icons/";
-        reportDir = DataCrow.installationDir + "reports/";
-        moduleDir = DataCrow.installationDir + "modules/";
         pluginsDir = DataCrow.installationDir + "plugins/";
         servicesDir = DataCrow.installationDir + "services/";
-        resourcesDir = DataCrow.installationDir + "resources/";
-        
-        DataCrow.createDirectory(new File(installationDir, "modules"), "modules");
-        DataCrow.createDirectory(new File(dataDir), "data");
-        DataCrow.createDirectory(new File(dataDir, "temp"), "temp");
+                
+        DataCrow.createDirectory(new File(userDir, "modules"), "modules");
+        DataCrow.createDirectory(new File(userDir), "database");
+        DataCrow.createDirectory(new File(userDir), "temp");
         DataCrow.createDirectory(new File(imageDir), "images");
         DataCrow.createDirectory(new File(iconsDir), "icons");
         DataCrow.createDirectory(new File(reportDir), "reports");
@@ -784,33 +804,32 @@ public class DataCrow {
             System.exit(0);
             
         } finally {
-            if (!name.equals("data"))
-                file.delete();
+            file.delete();
         }
     }
     
     private static void initLog4j() {
         try {
             Properties properties = new Properties();
-            properties.load(new FileInputStream(DataCrow.installationDir + "log4j.properties"));
-            properties.setProperty("log4j.appender.logfile.File", DataCrow.dataDir + "data_crow.log");
+            properties.load(new FileInputStream(new File(DataCrow.applicationSettingsDir, "log4j.properties")));
+            properties.setProperty("log4j.appender.logfile.File", DataCrow.userDir + "data_crow.log");
             
             if (DataCrow.debug)
                 properties.setProperty("log4j.rootLogger", "debug, textpane, logfile, stdout");
             else
                 properties.setProperty("log4j.rootLogger", "info, textpane, logfile");
             
-            properties.store(new FileOutputStream(DataCrow.installationDir + "log4j.properties"), "");
+            properties.store(new FileOutputStream(DataCrow.applicationSettingsDir + "log4j.properties"), "");
         } catch (Exception e) {
             logger.error("Could not find the log4j properties file.", e);
         }
         
-        PropertyConfigurator.configure(DataCrow.installationDir + "log4j.properties");        
+        PropertyConfigurator.configure(DataCrow.applicationSettingsDir + "log4j.properties");        
     }
     
     private static void initDbProperties() {
         try {
-            File file = new File(DataCrow.dataDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
+            File file = new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
             if (file.exists()) {
                 Properties properties = new Properties();
                 properties.load(new FileInputStream(file));

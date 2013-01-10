@@ -41,7 +41,7 @@ import org.mortbay.jetty.webapp.WebAppContext;
  */
 public class DcWebServer {
     
-    private static final String context = "/datacrow";
+    private static final String context = "/";
     
 	private static DcWebServer instance = new DcWebServer();
 	
@@ -87,7 +87,7 @@ public class DcWebServer {
 	    connector.setPort(DcSettings.getInt(DcRepository.Settings.stWebServerPort)); 
 	    server.setConnectors(new Connector[]{connector});
 	    
-	    String baseDir = DataCrow.installationDir + "webapp";
+	    String baseDir = DataCrow.webDir;
 	    
 	    WebAppContext webapp = new WebAppContext();
 	    webapp.setContextPath(context);
@@ -99,22 +99,4 @@ public class DcWebServer {
 	    server.start();
 	    isRunning = true;
 	}
-	
-//    private void copyIcons() throws Exception {
-//        File dir = new File(DataCrow.webDir + "images" + File.separator + "modules");
-//        if (!dir.exists())
-//            dir.mkdirs();
-//        
-//        for (DcModule module : DcModules.getAllModules()) {
-//            XmlModule xm = module.getXmlModule();
-//            
-//            if (xm == null) continue;
-//            
-//            if (xm.getIcon16() != null)
-//                Utilities.writeToFile(module.getXmlModule().getIcon16(), new File(dir, module.getName().toLowerCase() + "16.png"));
-//            
-//            if (xm.getIcon32() != null)
-//                Utilities.writeToFile(module.getXmlModule().getIcon32(), new File(dir, module.getName().toLowerCase() + "32.png"));
-//        }
-//    }	
 }

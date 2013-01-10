@@ -72,7 +72,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
             if (v.isOlder(new Version(3, 9, 11, 0))) {
                 removeCompanyFields();
             }
-
+            
             if (upgraded) {
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
                 new LogForm();
@@ -88,7 +88,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
             logger.error(msg, e);
         }            
     }
-    
+
     private void removeCompanyFields() {
         String sql;
         for (DcModule module : DcModules.getAllModules()) {

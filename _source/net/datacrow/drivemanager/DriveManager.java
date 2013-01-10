@@ -176,7 +176,7 @@ public class DriveManager {
     }
     
     protected String getTempDir() {
-        return DataCrow.dataDir + "temp/";
+        return DataCrow.userDir + "temp/";
     }    
     
     private void initializeScanners() {

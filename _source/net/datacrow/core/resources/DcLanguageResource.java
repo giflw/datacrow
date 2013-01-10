@@ -52,7 +52,7 @@ public class DcLanguageResource {
     
     public DcLanguageResource(String language) {
         this.language = language;
-        this.file = new File(DataCrow.resourcesDir + language + "_resources.properties");
+        this.file = new File(DataCrow.resourcesDir, language + "_resources.properties");
         load();
     }
     
