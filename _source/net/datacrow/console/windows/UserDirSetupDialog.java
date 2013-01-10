@@ -63,9 +63,14 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
     private JButton buttonClose = ComponentFactory.getButton("Close");
     
     private boolean success = false;
+    private String[] args;
     
-    public UserDirSetupDialog() {
+    
+    public UserDirSetupDialog(String[] args) {
         super();
+        
+        this.args = args;
+        
         buildDialog();
         pack();
         setSize(new Dimension(400, 400));
@@ -118,82 +123,15 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
     public void setSuccess(boolean success) {
         this.success = success;
     }
+    
+    public void stop() {
+        close();
+        DataCrow.main(args);
+    }
 
     private void setupDataDir() {
         DataDirCreator ddc = new DataDirCreator(selectDir.getFile(), this);
         ddc.start();
-    }
-    
-    private void buildDialog() {
-        
-        getContentPane().setLayout(Layout.getGBL());
-
-        //**********************************************************
-        //Main panel
-        //**********************************************************
-        JPanel panelMain = new JPanel();
-        panelMain.setLayout(Layout.getGBL());
-        
-        panelMain.add(ComponentFactory.getLabel("Select the data folder"), 
-                Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets(5, 5, 5, 5), 0, 0));
-        panelMain.add(selectDir,     Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets(5, 5, 5, 5), 0, 0));
-        
-        //**********************************************************
-        //Log panel
-        //**********************************************************
-        JPanel panelLog = new JPanel();
-        panelLog.setLayout(Layout.getGBL());
-        
-        JScrollPane logScroller = new JScrollPane(textLog);
-        logScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        panelLog.setBorder(ComponentFactory.getTitleBorder("Messages"));
-        panelLog.add(logScroller, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                    new Insets(5, 5, 5, 5), 0, 0));
-
-        //**********************************************************
-        //Action panel
-        //**********************************************************
-        JPanel panelActions = new JPanel();
-        
-        buttonClose.addActionListener(this);
-        buttonClose.setActionCommand("close");
-        buttonStart.addActionListener(this);
-        buttonStart.setActionCommand("start");
-        
-        panelActions.add(buttonStart);
-        panelActions.add(buttonClose);
-        
-        //**********************************************************
-        //Main
-        //**********************************************************
-        getContentPane().add(panelMain,         Layout.getGBC(0, 0, 1, 1, 3.0, 3.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets(5, 5, 5, 5), 0, 0));
-        getContentPane().add(panelActions,      Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
-                 new Insets(0, 0, 0, 0), 0, 0));
-        getContentPane().add(panelLog,          Layout.getGBC( 0, 6, 1, 1, 5.0, 5.0
-                ,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
-                 new Insets(0, 0, 0, 0), 0, 0));  
-        getContentPane().add(progressBar,       Layout.getGBC( 0, 7, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets(0, 0, 0, 0), 0, 0));
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("close"))
-            System.exit(0);
-        else if (ae.getActionCommand().equals("cancel"))
-            cancel();
-        else if (ae.getActionCommand().equals("start"))
-            setupDataDir();
     }
     
     private class DataDirCreator extends Thread {
@@ -237,10 +175,10 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 setupIconDir();
                 setupImagesDir();
                 
-                File userHome = new File(System.getProperty("user.home"), "datacrow");
+                File userHome = new File(System.getProperty("user.home"));
                 userHome.mkdir();
                 
-                File userDirSettings = new File(userHome, "userfolder.properties");
+                File userDirSettings = new File(userHome, "datacrow.properties");
                 Properties properties = new Properties();
                 properties.setProperty("userfolder", userDir.toString());
                 FileOutputStream fos = new FileOutputStream(userDirSettings);
@@ -250,7 +188,8 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 fos.close();
                 
                 client.addMessage("The user folder has been initialized");
-                DataCrow.main(null);
+                
+                client.stop();
                 
             } catch (Exception e) {
                 client.setSuccess(false);
@@ -434,5 +373,77 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
             client.addMessage("Icons have been moved");
             new File(DataCrow.imageDir, "icons").delete();
         }
+    }
+    
+    private void buildDialog() {
+        
+        getContentPane().setLayout(Layout.getGBL());
+
+        //**********************************************************
+        //Main panel
+        //**********************************************************
+        JPanel panelMain = new JPanel();
+        panelMain.setLayout(Layout.getGBL());
+        
+        panelMain.add(ComponentFactory.getLabel("Select the data folder"), 
+                Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        panelMain.add(selectDir,     Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        
+        //**********************************************************
+        //Log panel
+        //**********************************************************
+        JPanel panelLog = new JPanel();
+        panelLog.setLayout(Layout.getGBL());
+        
+        JScrollPane logScroller = new JScrollPane(textLog);
+        logScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        panelLog.setBorder(ComponentFactory.getTitleBorder("Messages"));
+        panelLog.add(logScroller, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                    new Insets(5, 5, 5, 5), 0, 0));
+
+        //**********************************************************
+        //Action panel
+        //**********************************************************
+        JPanel panelActions = new JPanel();
+        
+        buttonClose.addActionListener(this);
+        buttonClose.setActionCommand("close");
+        buttonStart.addActionListener(this);
+        buttonStart.setActionCommand("start");
+        
+        panelActions.add(buttonStart);
+        panelActions.add(buttonClose);
+        
+        //**********************************************************
+        //Main
+        //**********************************************************
+        getContentPane().add(panelMain,         Layout.getGBC(0, 0, 1, 1, 3.0, 3.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        getContentPane().add(panelActions,      Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+                 new Insets(0, 0, 0, 0), 0, 0));
+        getContentPane().add(panelLog,          Layout.getGBC( 0, 6, 1, 1, 5.0, 5.0
+                ,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
+                 new Insets(0, 0, 0, 0), 0, 0));  
+        getContentPane().add(progressBar,       Layout.getGBC( 0, 7, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(0, 0, 0, 0), 0, 0));
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getActionCommand().equals("close"))
+            System.exit(0);
+        else if (ae.getActionCommand().equals("cancel"))
+            cancel();
+        else if (ae.getActionCommand().equals("start"))
+            setupDataDir();
     }
 }

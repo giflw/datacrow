@@ -212,8 +212,8 @@ public class DataCrow {
             long totalstart = 0;
             
             try {
-                File userHome = new File(System.getProperty("user.home"), "datacrow");
-                File userDirSettings = new File(userHome, "userfolder.properties");
+                File userHome = new File(System.getProperty("user.home"));
+                File userDirSettings = new File(userHome, "datacrow.properties");
                 boolean dataFolderExists = false;
                 if (userDirSettings.exists()) {
                     Properties properties = new Properties();
@@ -240,7 +240,7 @@ public class DataCrow {
                     
                     new DcSettings();
                     
-                    UserDirSetupDialog dlg = new UserDirSetupDialog();
+                    UserDirSetupDialog dlg = new UserDirSetupDialog(args);
                     dlg.setVisible(true);
                 } else {
                     checkCurrentDir();
@@ -752,9 +752,9 @@ public class DataCrow {
         pluginsDir = DataCrow.installationDir + "plugins/";
         servicesDir = DataCrow.installationDir + "services/";
                 
-        DataCrow.createDirectory(new File(userDir, "modules"), "modules");
-        DataCrow.createDirectory(new File(userDir), "database");
-        DataCrow.createDirectory(new File(userDir), "temp");
+        DataCrow.createDirectory(new File(moduleDir), "modules");
+        DataCrow.createDirectory(new File(databaseDir), "database");
+        DataCrow.createDirectory(new File(userDir, "temp"), "temp");
         DataCrow.createDirectory(new File(imageDir), "images");
         DataCrow.createDirectory(new File(iconsDir), "icons");
         DataCrow.createDirectory(new File(reportDir), "reports");
@@ -834,7 +834,6 @@ public class DataCrow {
                 Properties properties = new Properties();
                 properties.load(new FileInputStream(file));
                 
-                //properties.setProperty("hsqldb.script_format", "0");
                 properties.setProperty("readonly", "false");
                 properties.setProperty("hsqldb.nio_data_file", "true");
                 properties.setProperty("hsqldb.lock_file", "false");
