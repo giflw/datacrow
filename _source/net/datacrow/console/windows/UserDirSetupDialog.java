@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -208,12 +209,7 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
         }
         
         /**
-         * Creates the data folder:
-         * /database
-         * /wwwroot
-         * /modules
-         * /settings
-         * /resources
+         * Creates the user folder and moves the existing files to the user folder.
          */
         @Override
         public void run() {
@@ -238,6 +234,7 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 setupModuleSettingsDir();                
                 setupResourcesDir();
                 setupReportsDir();
+                setupIconDir();
                 setupImagesDir();
                 
                 File userHome = new File(System.getProperty("user.home"), "datacrow");
@@ -251,6 +248,10 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 
                 client.setSuccess(true);
                 fos.close();
+                
+                client.addMessage("The user folder has been initialized");
+                DataCrow.main(null);
+                
             } catch (Exception e) {
                 client.setSuccess(false);
                 client.addMessage(e.getMessage());
@@ -284,11 +285,17 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
         }
         
         private void setupWebDir() throws Exception {
+            client.addMessage("Starting to set up the web root");
+            
             File webDir = new File(userDir, "wwwroot");
             webDir.mkdir();
+            
+            client.addMessage("Web root has been set up");
         }
         
         private void setupModulesDir() throws Exception {
+            client.addMessage("Starting to set up the modules folder");
+            
             File modulesDir = new File(userDir, "modules");
             modulesDir.mkdir();
             
@@ -298,9 +305,13 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 file = new File(s);
                 Utilities.copy(file, new File(modulesDir, file.getName()));
             }
+            
+            client.addMessage("Modules folder has been set up");
         }
         
         private void setupApplicationSettingsDir() throws Exception {
+            client.addMessage("Starting to set up the application settings");
+            
             File applicationSettingsDir = new File(userDir, "settings/application");
             applicationSettingsDir.mkdirs();
             
@@ -317,7 +328,7 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 Utilities.rename(new File(DataCrow.userDir, "filters.xml"), new File(applicationSettingsDir, "filters.xml"));
             } catch (IOException e) {}
             try {
-                Utilities.copy(new File(DataCrow.installationDir, "log4j.properties.properties"), new File(applicationSettingsDir, "log4j.properties.properties"));
+                Utilities.copy(new File(DataCrow.installationDir, "log4j.properties"), new File(applicationSettingsDir, "log4j.properties"));
             } catch (IOException e) {}
             try {
                 Utilities.copy(new File(DataCrow.userDir, "enhancers_autoincrement.properties"), new File(applicationSettingsDir, "enhancers_autoincrement.properties"));
@@ -328,24 +339,29 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
             try {
                 Utilities.copy(new File(DataCrow.userDir, "enhancers_associatenamerewriters.properties"), new File(applicationSettingsDir, "enhancers_associatenamerewriters.properties"));
             } catch (IOException e) {}
+            
+            client.addMessage("Applications have been set up");
         }
         
         private void setupResourcesDir() throws Exception {
             File resourcesSettingsDir = new File(userDir, "resources");
             resourcesSettingsDir.mkdirs();
             
+            client.addMessage("Starting to move resources");
             Directory dir = new Directory(DataCrow.resourcesDir, false, null);
             File file;
             for (String s : dir.read()) {
                 file = new File(s);
                 Utilities.copy(file, new File(resourcesSettingsDir, file.getName()));
             }
+            client.addMessage("Resources have been moved");
         }
         
         private void setupReportsDir() throws Exception {
             File reportsDir = new File(userDir, "reports");
             reportsDir.mkdirs();
             
+            client.addMessage("Starting to move reports");
             Directory dir = new Directory(DataCrow.reportDir, true, null);
             File file;
             File targetDir;
@@ -364,33 +380,48 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                     Utilities.copy(file, new File(targetDir, file.getName()));
                 }
             }
+            
+            client.addMessage("Reports have been moved");
         }
         
         private void setupModuleSettingsDir() throws Exception {
             File modulesSettingsDir = new File(userDir, "settings/modules");
             modulesSettingsDir.mkdirs();
             
+            client.addMessage("Starting to move modules");
             Directory dir = new Directory(DataCrow.userDir, false, new String[] {"properties"});
             File file;
             for (String s : dir.read()) {
                 file = new File(s);
                 Utilities.rename(file, new File(modulesSettingsDir, file.getName()));
             }
+            client.addMessage("Module have been moved");
         }
         
         private void setupImagesDir() throws Exception {
             File imagesDir = new File(userDir, "wwwroot/mediaimages");
             imagesDir.mkdirs();
             
+            client.addMessage("Starting moving images");
+            
             Directory dir = new Directory(DataCrow.imageDir, false, null);
             File file;
-            for (String s : dir.read()) {
+            List<String> images = dir.read();
+            client.initProgressBar(images.size());
+            
+            for (String s : images) {
                 file = new File(s);
                 Utilities.rename(file, new File(imagesDir, file.getName()));
+                client.addMessage("Moved " + file.getName());
+                client.updateProgressBar();
             }
+            client.addMessage("Images have been moved");
+            new File(DataCrow.imageDir).delete();
         }
         
         private void setupIconDir() throws Exception {
+            client.addMessage("Starting moving icons");
+            
             File iconsDir = new File(userDir, "wwwroot/mediaimages/icons");
             iconsDir.mkdirs();
             
@@ -400,6 +431,8 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 file = new File(s);
                 Utilities.rename(file, new File(iconsDir, file.getName()));
             }
+            client.addMessage("Icons have been moved");
+            new File(DataCrow.imageDir, "icons").delete();
         }
     }
 }
