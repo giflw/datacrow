@@ -212,17 +212,6 @@ public class DataCrow {
             long totalstart = 0;
             
             try {
-                initLog4j();
-                
-                logger = Logger.getLogger(DataCrow.class.getName());
-                totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;                
-                
-                installLafs();
-                
-                logger.info(new Date() + " Starting Data Crow.");
-                
-                logger.info("Using installation directory: " + installationDir);
-                
                 File userHome = new File(System.getProperty("user.home"), "datacrow");
                 File userDirSettings = new File(userHome, "userfolder.properties");
                 boolean dataFolderExists = false;
@@ -247,23 +236,34 @@ public class DataCrow {
                     reportDir = DataCrow.installationDir + "reports/";
                     userDir = DataCrow.installationDir + "data/";
                     databaseDir  = DataCrow.installationDir + "data/";
+                    imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages";
                     
                     new DcSettings();
                     
                     UserDirSetupDialog dlg = new UserDirSetupDialog();
                     dlg.setVisible(true);
                 } else {
+                    checkCurrentDir();
+                    createDirectories();
+                    
+                    initLog4j();
+                    
+                    logger = Logger.getLogger(DataCrow.class.getName());
+                    totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;                
+                    
+                    installLafs();
+                    
+                    logger.info(new Date() + " Starting Data Crow.");
+                    
+                    logger.info("Using installation directory: " + installationDir);
                     logger.info("Using user directory: " + userDir);
                     logger.info("Using images directory: " + imageDir);
                     logger.info("Using database directory: " + databaseDir);
                     
                     // load resources
                     new DcResources();
-                    
-                    checkCurrentDir();
-                    createDirectories();
-                    
                     new DcSettings();
+                    
                     checkPlatform();
                     
                     if (DcSettings.getString(DcRepository.Settings.stLanguage) == null ||

@@ -238,13 +238,14 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 setupModuleSettingsDir();                
                 setupResourcesDir();
                 setupReportsDir();
+                setupImagesDir();
                 
                 File userHome = new File(System.getProperty("user.home"), "datacrow");
                 userHome.mkdir();
                 
-                File userDirSettings = new File(userHome, "datafolder.properties");
+                File userDirSettings = new File(userHome, "userfolder.properties");
                 Properties properties = new Properties();
-                properties.setProperty("datafolder", userDir.toString());
+                properties.setProperty("userfolder", userDir.toString());
                 FileOutputStream fos = new FileOutputStream(userDirSettings);
                 properties.store(fos, "Data Crow user directory setting file. Better to leave it right here.");
                 
@@ -374,6 +375,30 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
             for (String s : dir.read()) {
                 file = new File(s);
                 Utilities.rename(file, new File(modulesSettingsDir, file.getName()));
+            }
+        }
+        
+        private void setupImagesDir() throws Exception {
+            File imagesDir = new File(userDir, "wwwroot/mediaimages");
+            imagesDir.mkdirs();
+            
+            Directory dir = new Directory(DataCrow.imageDir, false, null);
+            File file;
+            for (String s : dir.read()) {
+                file = new File(s);
+                Utilities.rename(file, new File(imagesDir, file.getName()));
+            }
+        }
+        
+        private void setupIconDir() throws Exception {
+            File iconsDir = new File(userDir, "wwwroot/mediaimages/icons");
+            iconsDir.mkdirs();
+            
+            Directory dir = new Directory(new File(DataCrow.imageDir, "icons").toString(), false, null);
+            File file;
+            for (String s : dir.read()) {
+                file = new File(s);
+                Utilities.rename(file, new File(iconsDir, file.getName()));
             }
         }
     }
