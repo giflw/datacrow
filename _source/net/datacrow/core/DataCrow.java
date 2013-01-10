@@ -739,9 +739,9 @@ public class DataCrow {
      */
     private static void createDirectories() {
         userDir = !userDir.endsWith("/") && !userDir.endsWith("\\") ? userDir + "/" : userDir;
-        webDir = DataCrow.userDir + "wwwroot/";
-        imageDir = DataCrow.userDir + "wwwroot/mediaimages/";
-        iconsDir = DataCrow.userDir + "wwwroot/mediaimages/icons/";
+        webDir = DataCrow.userDir + "wwwroot/datacrow/";
+        imageDir = DataCrow.userDir + "wwwroot/datacrow/mediaimages/";
+        iconsDir = DataCrow.userDir + "wwwroot/datacrow/mediaimages/icons/";
         reportDir = DataCrow.userDir + "reports/";
         moduleDir = DataCrow.userDir + "modules/";
         resourcesDir = DataCrow.userDir + "resources/";

@@ -166,7 +166,6 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 } catch (IOException e) {}
                 
                 setupDatabaseDir();
-                setupWebDir();
                 setupModulesDir();
                 setupApplicationSettingsDir();
                 setupModuleSettingsDir();                
@@ -174,6 +173,7 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                 setupReportsDir();
                 setupIconDir();
                 setupImagesDir();
+                setupWebDir();
                 
                 File userHome = new File(System.getProperty("user.home"));
                 userHome.mkdir();
@@ -226,8 +226,26 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
         private void setupWebDir() throws Exception {
             client.addMessage("Starting to set up the web root");
             
-            File webDir = new File(userDir, "wwwroot");
+            File webDir = new File(userDir, "wwwroot/datacrow");
             webDir.mkdir();
+            
+            File file;
+            File targetDir;
+            int idx;
+            Directory dir = new Directory(new File(DataCrow.installationDir, "webapp/datacrow").toString(), false, null);
+            for (String s : dir.read()) {
+                file = new File(s);
+                idx = s.indexOf("/datacrow/") > -1 ? s.indexOf("/datacrow/") : s.indexOf("\\datacrow\\");
+                
+                if (idx == -1) continue;
+                
+                targetDir = new File(webDir, s.substring(idx + 9)).getParentFile();
+                targetDir.mkdirs();
+                Utilities.copy(file, new File(targetDir, file.getName()));
+            }
+            
+            
+            
             
             client.addMessage("Web root has been set up");
         }

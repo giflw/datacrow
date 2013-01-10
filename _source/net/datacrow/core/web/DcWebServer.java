@@ -41,7 +41,7 @@ import org.mortbay.jetty.webapp.WebAppContext;
  */
 public class DcWebServer {
     
-    private static final String context = "/";
+    private static final String context = "/datacrow";
     
 	private static DcWebServer instance = new DcWebServer();
 	

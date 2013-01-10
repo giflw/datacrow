@@ -204,12 +204,17 @@ public class DriveManager {
     
     private void clean() {
         File file = new File(getTempDir());
-        for (String filename : file.list()) {
-            if (filename.endsWith(getTempFileSuffix())) {
-                File tempFile = new File(getTempDir() + filename);
-                if (tempFile.isFile())
-                    tempFile.delete();
+        
+        try {
+            for (String filename : file.list()) {
+                if (filename.endsWith(getTempFileSuffix())) {
+                    File tempFile = new File(getTempDir() + filename);
+                    if (tempFile.isFile())
+                        tempFile.delete();
+                }
             }
+        } catch (Exception e) {
+            logger.error(e, e);
         }
     }    
     
