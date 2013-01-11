@@ -131,6 +131,7 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
     }
 
     private void setupDataDir() {
+        buttonStart.setEnabled(false);
         DataDirCreator ddc = new DataDirCreator(selectDir.getFile(), this);
         ddc.start();
     }
