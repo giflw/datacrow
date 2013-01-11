@@ -48,6 +48,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcProgressBar;
+import net.datacrow.console.windows.messageboxes.NativeMessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Directory;
@@ -161,6 +162,24 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
                     created = userDir.mkdirs();
                     
                     if (!created) throw new Exception("Folder " + userDir.toString() + " could not be created");
+                    
+                    File file = new File(userDir, "temp.txt");
+                    try {
+                        if (!file.exists())
+                            file.createNewFile();
+                        
+                        if (!file.exists() || !file.canWrite()) {
+                            String message = "Data Crow does not have permissions to modify files in the " + userDir + " directory. " +
+                                    "This indicates that the user running Data Crow has insufficient permissions. " +
+                                    "The user running Data Crow must have full control over the Data Crow user folder and all of its sub folders. " +
+                                    "Please correct this before starting Data Crow again (see the documentation of your operating system).";
+
+                            new NativeMessageBox("Warning", message);
+                            throw new Exception(message);
+                        }
+                    } finally {
+                        file.delete();
+                    }
                 }
                 
                 try {
