@@ -123,7 +123,9 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         buttonRestore.setEnabled(true);
         buttonBackup.setEnabled(true);
         buttonClose.setEnabled(true);
-        canBeClosed = true;        
+        canBeClosed = true;
+        
+        progressBar.setValue(progressBar.getMaximum());
     }
 
     private void restore() {

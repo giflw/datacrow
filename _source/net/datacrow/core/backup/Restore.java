@@ -241,30 +241,27 @@ public class Restore extends Thread {
      * Returns the target file for the provided backup file entry.
      */
     private String getTargetFile(String filename) {
-        
-        
-//        
-//        if (isImage && restoreDatabase) {
-//            filename = DataCrow.imageDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-//        } else if (isResource && restoreDatabase) {
-//            filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-//        } else if (isReport && restoreReports) {
-//            filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
-//            filename = DataCrow.installationDir + filename;
-//        } else if (isModule && restoreModules) {
-//            filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
-//            filename = DataCrow.installationDir + filename;
-//        } else if (isData && restoreDatabase) {
-//            filename = DataCrow.userDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-//        } else {
-//            if (logger.isDebugEnabled())
-//                logger.debug("Skipping " + filename);
-//            
-//            filename = null;
-//        }    
-        return filename;
-    }    
-    
+        boolean restore = true;
+        if (    !restoreDatabase && 
+               (filename.toLowerCase().indexOf("/database/") > -1 ||
+                filename.toLowerCase().indexOf("\\database\\") > -1 ||
+                filename.toLowerCase().indexOf("/mediaimages/") > -1 ||
+                filename.toLowerCase().indexOf("\\mediaimages\\") > -1)) {
+            restore = false;
+        } else if (
+                !restoreModules && 
+               (filename.toLowerCase().indexOf("/modules/") > -1 ||
+                filename.toLowerCase().indexOf("\\modules\\") > -1)) {    
+            restore = false;
+        } else if (
+                !restoreReports && 
+               (filename.toLowerCase().indexOf("/reports/") > -1 ||
+                filename.toLowerCase().indexOf("\\reports\\") > -1))   {
+            restore = false;
+        }
+   
+        return restore ? new File(DataCrow.userDir, filename).toString() : null;
+    }  
     
     /**
      * Performs the actual restore. The listener is updated on errors and events.
@@ -302,7 +299,7 @@ public class Restore extends Thread {
 
                     if (filename != null) {
                         try {
-                            new File(filename.substring(0, filename.lastIndexOf("/"))).mkdirs();
+                            new File(filename).getParentFile().mkdirs();
                         } catch (Exception e) {
                             logger.warn("Unable to create directories for " + filename, e);
                         }

@@ -99,7 +99,7 @@ public class DataCrow {
     private static SplashScreen splashScreen;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 9, 15, 0);
+    private static Version version = new Version(3, 9, 16, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -822,7 +822,8 @@ public class DataCrow {
             
             properties.store(new FileOutputStream(DataCrow.applicationSettingsDir + "log4j.properties"), "");
         } catch (Exception e) {
-            logger.error("Could not find the log4j properties file.", e);
+            DcSwingUtilities.displayErrorMessage("Could not find the log4j properties file. " + e);
+            System.out.println("Could not find the log4j properties file. " + e);
         }
         
         PropertyConfigurator.configure(DataCrow.applicationSettingsDir + "log4j.properties");        

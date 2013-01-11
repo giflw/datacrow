@@ -49,6 +49,8 @@ import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.QuickViewFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.Directory;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -72,6 +74,25 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             boolean upgraded = false;
             Version v = DatabaseManager.getVersion();
             LogForm lf = null;
+            
+            if (v.isOlder(DataCrow.getVersion())) {
+                Directory dir = new Directory(DataCrow.installationDir + "webapp", true, null);
+                File file;
+                int idx;
+                File targetDir;
+                File webDir = new File(DataCrow.userDir, "wwwroot/datacrow");
+                for (String s : dir.read()) {
+                    file = new File(s);
+                    idx = s.indexOf("webapp/datacrow/") > -1 ? s.indexOf("webapp/datacrow/") : s.indexOf("webapp\\datacrow\\");
+                    
+                    if (idx == -1) continue;
+                    
+                    targetDir = (new File(webDir, s.substring(idx + "webapp/datacrow/".length())).getParentFile());
+                    targetDir.mkdirs();
+                    Utilities.copy(file, new File(targetDir, file.getName()));
+                }
+            }
+            
             if (v.isOlder(new Version(3, 9, 2, 0))) {
                 lf = new LogForm();
                 DcSwingUtilities.displayMessage(

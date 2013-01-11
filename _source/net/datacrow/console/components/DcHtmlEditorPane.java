@@ -107,7 +107,7 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             String filename = icon.getFilename();
             filename = filename.startsWith("/") ? filename.substring(1) : filename;
             
-            sb.append("file://" + icon.getFilename());
+            sb.append("file:///" + icon.getFilename());
             sb.append("\">");
             sb.append("&nbsp;");
         }
@@ -122,6 +122,10 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         StringBuffer sb = new StringBuffer();
         int i = 0;
         for (DcObject dco : items) {
+            
+            if (dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE)
+                dco = ((DcMapping) dco).getReferencedObject();
+            
             sb.append(createLink(dco, dco.toString()));
             
             if (i < items.size() - 1)

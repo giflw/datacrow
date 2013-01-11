@@ -125,21 +125,24 @@ public class Backup extends Thread {
                 zout.closeEntry();
                 
                 for (String file : files) {
-                    if (!file.endsWith(".log")) {
-                        InputStream in = new FileInputStream(file);
-                        ZipEntry e = new ZipEntry(file.substring(DataCrow.userDir.length()));
-                        zout.putNextEntry(e);
-                        int len = 0;
-                        while ((len = in.read(b)) != -1) {
-                            zout.write(b, 0, len);
-                        }
-
-                        listener.sendMessage(DcResources.getText("msgCreatingBackupOfFile", file));
-
-                        in.close();
-                        zout.closeEntry();
+                    if (file.indexOf("wwwroot") > -1 && file.indexOf("mediaimages") == -1) 
+                        continue;
+                    
+                    if (file.endsWith(".log")) 
+                        continue;
+                    
+                     InputStream in = new FileInputStream(file);
+                    ZipEntry e = new ZipEntry(file.substring(DataCrow.userDir.length()));
+                    zout.putNextEntry(e);
+                    int len = 0;
+                    while ((len = in.read(b)) != -1) {
+                        zout.write(b, 0, len);
                     }
 
+                    listener.sendMessage(DcResources.getText("msgCreatingBackupOfFile", file));
+
+                    in.close();
+                    zout.closeEntry();
                     listener.notifyProcessed();
                 }
                 
