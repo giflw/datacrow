@@ -72,11 +72,11 @@ public class DcWebModule implements Serializable {
     }
     
     public String getIcon16() {
-        return "/images/modules/" + DcModules.get(index).getName().toLowerCase() + "16.png";
+        return "/datacrow/images/modules/" + DcModules.get(index).getName().toLowerCase() + "16.png";
     }
 
     public String getIcon32() {
-        return "/images/modules/" + DcModules.get(index).getName().toLowerCase() + "32.png";
+        return "/datacrow/images/modules/" + DcModules.get(index).getName().toLowerCase() + "32.png";
     }
     
     public int getIndex() {

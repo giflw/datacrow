@@ -127,7 +127,7 @@ public class Backup extends Thread {
                 for (String file : files) {
                     if (!file.endsWith(".log")) {
                         InputStream in = new FileInputStream(file);
-                        ZipEntry e = new ZipEntry(file.replace(File.separatorChar, '/'));
+                        ZipEntry e = new ZipEntry(file.substring(DataCrow.userDir.length()));
                         zout.putNextEntry(e);
                         int len = 0;
                         while ((len = in.read(b)) != -1) {
