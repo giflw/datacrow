@@ -111,15 +111,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false,
                             false));
         getSettings().addSetting(_General,
-                new Setting(DcRepository.ValueTypes._STRING,
-                            DcRepository.Settings.stDataDir,
-                            DataCrow.installationDir + "data",
-                            ComponentFactory._DIRECTORYFIELD,
-                            "",
-                            "lblDataDir",
-                            false,
-                            true));      
-        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stOpenItemsInEditModus,
                             Boolean.TRUE,
@@ -362,15 +353,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             false,
                             false));         
-//        getSettings().addSetting(_General,
-//                new Setting(DcRepository.ValueTypes._STRING,
-//                            DcRepository.Settings.stPersonDisplayFormat,
-//                            "lblPersonFirstnameLastName",
-//                            ComponentFactory._PERSONDISPLAYFORMATCOMBO,
-//                            "",
-//                            "lblPersonDisplayFormat",
-//                            true,
-//                            true));   
         getSettings().addSetting(_FileHashing,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stHashType,
@@ -551,15 +533,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "lblCheckRequiredFields",
                             false,
                             true));
-//        getSettings().addSetting(_General,
-//                new Setting(DcRepository.ValueTypes._BOOLEAN,
-//                            DcRepository.Settings.stAmazonFirstStartChecked,
-//                            Boolean.FALSE,
-//                            -1,
-//                            "",
-//                            "",
-//                            false,
-//                            false));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stConnectionString,

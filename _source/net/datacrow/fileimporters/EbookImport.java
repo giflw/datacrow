@@ -81,7 +81,7 @@ public class EbookImport extends FileImporter {
                 "pdf",  // PDF Box
                 "epub", // EPUB Parser
                 "prc",  
-                "rtf",  // TODO
+                "rtf",
                 "pdb", 
                 "kml", 
                 "html",  // HTML Parser 
