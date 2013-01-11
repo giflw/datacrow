@@ -1,4 +1,20 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.16  [Released on January 11, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[New]
+- You can now select a user folder where all data is stored. This helps in avoiding the
+  Windows problem of protected folders in the C:\Program Files\ folders as well as 
+  protected folders on other systems. On startup you will be asked to select the user 
+  folder. After selecting the folder Data Crow will migrate your data to this folder
+  and will use this folder from then on.
+
+[Fixed]
+- Upgrade error for Linux users.
+- Icons not shown in the multi-reference fields.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.15  [Released on January 6, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
