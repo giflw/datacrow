@@ -243,20 +243,20 @@ public class Restore extends Thread {
     private String getTargetFile(String filename) {
         boolean restore = true;
         if (    !restoreDatabase && 
-               (filename.toLowerCase().indexOf("/database/") > -1 ||
-                filename.toLowerCase().indexOf("\\database\\") > -1 ||
+               (filename.toLowerCase().startsWith("database/") ||
+                filename.toLowerCase().startsWith("database\\")  ||
                 filename.toLowerCase().indexOf("/mediaimages/") > -1 ||
                 filename.toLowerCase().indexOf("\\mediaimages\\") > -1)) {
             restore = false;
         } else if (
                 !restoreModules && 
-               (filename.toLowerCase().indexOf("/modules/") > -1 ||
-                filename.toLowerCase().indexOf("\\modules\\") > -1)) {    
+               (filename.toLowerCase().startsWith("modules/") ||
+                filename.toLowerCase().startsWith("modules\\"))) {    
             restore = false;
         } else if (
                 !restoreReports && 
-               (filename.toLowerCase().indexOf("/reports/") > -1 ||
-                filename.toLowerCase().indexOf("\\reports\\") > -1))   {
+               (filename.toLowerCase().startsWith("reports/") ||
+                filename.toLowerCase().startsWith("reports\\") ))   {
             restore = false;
         }
    

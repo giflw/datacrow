@@ -1649,8 +1649,8 @@ public class DcModule implements Comparable<DcModule> {
      */
     public Collection<DcObject> getDefaultData() throws Exception {
 
-        File csvFile = new File(DataCrow.installationDir + "data", getTableName() + ".data");
-        File xmlFile = new File(DataCrow.installationDir + "data", getTableName() + ".xml");
+        File csvFile = new File(DataCrow.installationDir + "modules/data", getTableName() + ".data");
+        File xmlFile = new File(DataCrow.installationDir + "modules/data", getTableName() + ".xml");
         
         Collection<DcObject> items = null;
         ItemImporterHelper reader = null;
