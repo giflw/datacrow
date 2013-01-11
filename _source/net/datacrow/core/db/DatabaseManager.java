@@ -310,12 +310,23 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
-    public static ResultSet executeSQLasAdmin(String sql) throws SQLException {
+    public static ResultSet executeQueryAsAdmin(String sql) throws SQLException {
         Connection connection = getAdminConnection();
         Statement stmt = connection.createStatement();
         return stmt.executeQuery(sql);
     }
     
+    /**
+     * Executes a query. 
+     * @param sql SQL statement.
+     * @param log Indicates if information on the query should be logged.
+     * @return The result set.
+     */
+    public static void executeAsAdmin(String sql) throws SQLException {
+        Connection connection = getAdminConnection();
+        Statement stmt = connection.createStatement();
+        stmt.execute(sql);
+    }
     
     /**
      * Update the item in the database with the values from the specified item.

@@ -161,8 +161,8 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
     
     private void cleanupOfPermission() {
         try {
-            DatabaseManager.executeSQLasAdmin("DELETE FROM Permission WHERE field is null and plugin is null");
-            DatabaseManager.executeSQLasAdmin("DELETE FROM Permission WHERE user is null");
+            DatabaseManager.executeAsAdmin("DELETE FROM Permission WHERE field is null and plugin is null");
+            DatabaseManager.executeAsAdmin("DELETE FROM Permission WHERE user is null");
         } catch (SQLException se) {
             logger.error("Error while cleaning up the permissions", se);
         }            

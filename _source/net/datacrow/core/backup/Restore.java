@@ -42,7 +42,6 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
@@ -105,22 +104,10 @@ public class Restore extends Thread {
     }
     
     private void restartApplication() {
-
         try {
-            listener.notifyProcessingCount(3);
-            listener.sendMessage(DcResources.getText("msgRestartingDb"));
-            
-            SecurityCentre.getInstance().initialize();
-            
             DcSwingUtilities.displayWarningMessage("msgRestoreFinishedRestarting");
-            
             DataManager.deleteIcons();
-            
-            DataCrow.mainFrame.setOnExitCheckForChanges(false);
-            DataCrow.mainFrame.setOnExitSaveSettings(false);
-            DataCrow.mainFrame.close();
             System.exit(0);
-
         } catch (Exception e) {
             listener.sendError(e);
         }
@@ -194,40 +181,42 @@ public class Restore extends Thread {
             filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
             filename = DataCrow.installationDir + filename;
         } else if (isData && restoreDatabase) {
-            if (filename.endsWith("data_crow.properties"))
+            if (filename.endsWith("data_crow.properties")) {
                 filename = new File(DataCrow.applicationSettingsDir, "data_crow.properties").toString();
-            if (filename.endsWith("data_crow_queries.txt"))
+            } else if (filename.endsWith("data_crow_queries.txt")) {
                 filename = new File(DataCrow.applicationSettingsDir, "data_crow_queries.txt").toString();
-            if (filename.endsWith("filepatterns.xml"))
+            } else if (filename.endsWith("filepatterns.xml")) {
                 filename = new File(DataCrow.applicationSettingsDir, "filepatterns.xml").toString();
-            if (filename.endsWith("filters.xml"))
+            } else if (filename.endsWith("filters.xml")) {
                 filename = new File(DataCrow.applicationSettingsDir, "filters.xml").toString();
-            if (filename.endsWith("log4j.properties"))
+            } else if (filename.endsWith("log4j.properties")) {
                 filename = new File(DataCrow.applicationSettingsDir, "log4j.properties").toString();
-            if (filename.endsWith("enhancers_autoincrement.properties"))
+            } else if (filename.endsWith("enhancers_autoincrement.properties")) {
                 filename = new File(DataCrow.applicationSettingsDir, "enhancers_autoincrement.properties").toString();
-            if (filename.endsWith("enhancers_titlerewriters.properties"))
+            } else if (filename.endsWith("enhancers_titlerewriters.properties")) {
                 filename = new File(DataCrow.applicationSettingsDir, "enhancers_titlerewriters.properties").toString();
-            if (filename.endsWith("enhancers_associatenamerewriters.properties"))
+            } else if (filename.endsWith("enhancers_associatenamerewriters.properties")) {
                 filename = new File(DataCrow.applicationSettingsDir, "enhancers_associatenamerewriters.properties").toString();
-
-            for (DcModule module : DcModules.getAllModules()) {
-                if (filename.endsWith(module.getName().toLowerCase() + ".properties")) 
-                    filename = new File(DataCrow.moduleSettingsDir, module.getName().toLowerCase() + ".properties").toString();
+            } else {
+                boolean found = false;
+                for (DcModule module : DcModules.getAllModules()) {
+                    if (module.getName().length() > 0 && filename.endsWith(module.getName().toLowerCase() + ".properties")) {
+                        filename = new File(DataCrow.moduleSettingsDir, module.getName().toLowerCase() + ".properties").toString();
+                        found = true;
+                    }
+                }
+    
+                if (!found) {
+                    if (filename.endsWith(".script")) 
+                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                    else if (filename.endsWith(".lck")) 
+                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                    else if (filename.endsWith(".log")) 
+                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                    else if (filename.endsWith(".properties")) 
+                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                }
             }
-
-            if (filename.endsWith(".script")) 
-                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
-
-            if (filename.endsWith(".lck")) 
-                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
-
-            if (filename.endsWith(".log")) 
-                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
-            
-            if (filename.endsWith(".properties")) 
-                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
-            
         } else {
             if (logger.isDebugEnabled())
                 logger.debug("Skipping " + filename);
