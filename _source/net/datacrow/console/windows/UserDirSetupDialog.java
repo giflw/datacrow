@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -46,34 +46,35 @@ import javax.swing.JTextArea;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcFileField;
+import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcProgressBar;
 import net.datacrow.core.DataCrow;
-
+import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.Directory;
 import net.datacrow.util.Utilities;
 
-public class UserDirSetupDialog extends JDialog implements ActionListener {
+public class UserDirSetupDialog extends JFrame implements ActionListener {
     
     private DcProgressBar progressBar = new DcProgressBar();
     private DcFileField selectDir = ComponentFactory.getFileField(false, true); 
     
     private JTextArea textLog = ComponentFactory.getTextArea();
     
-    private JButton buttonStart = ComponentFactory.getButton("Start");
-    private JButton buttonClose = ComponentFactory.getButton("Close");
+    private JButton buttonStart = ComponentFactory.getButton("OK");
     
     private boolean success = false;
     private String[] args;
     
     
     public UserDirSetupDialog(String[] args) {
-        super();
+        super("User Folder Configuration");
+        setIconImage(new DcImageIcon(new File(DataCrow.installationDir, "icons/datacrow64.png")).getImage());
         
         this.args = args;
         
         buildDialog();
         pack();
-        setSize(new Dimension(400, 400));
+        setSize(new Dimension(450, 300));
         setLocation(Utilities.getCenteredWindowLocation(getSize(), false));
         enableActions(true);
     }
@@ -235,11 +236,11 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
             Directory dir = new Directory(new File(DataCrow.installationDir, "webapp/datacrow").toString(), true, null);
             for (String s : dir.read()) {
                 file = new File(s);
-                idx = s.indexOf("webapp/datacrow/") > -1 ? s.indexOf("/datacrow/") : s.indexOf("\\datacrow\\");
+                idx = s.indexOf("webapp/datacrow/") > -1 ? s.indexOf("webapp/datacrow/") : s.indexOf("webapp\\datacrow\\");
                 
                 if (idx == -1) continue;
                 
-                targetDir = (new File(webDir, s.substring(idx + "webapp/datacrow/".length())).getParentFile()).getParentFile();
+                targetDir = (new File(webDir, s.substring(idx + "webapp/datacrow/".length())).getParentFile());
                 targetDir.mkdirs();
                 Utilities.copy(file, new File(targetDir, file.getName()));
             }
@@ -399,14 +400,25 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
         //**********************************************************
         JPanel panelMain = new JPanel();
         panelMain.setLayout(Layout.getGBL());
+
+        buttonStart.addActionListener(this);
+        buttonStart.setActionCommand("start");
+
+        DcLongTextField helpText = ComponentFactory.getHelpTextField();
+        helpText.setText("Please select the user folder where Data Crow will store it's data. " +
+                "Existing information will be migrated to the selected folder. You can also select a folder in the Data Crow installation folder (as per the old Data Crow standard) " +
+                "but you will have to make sure that you have the correct priviliges.");
         
-        panelMain.add(ComponentFactory.getLabel("Select the data folder"), 
-                Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+        panelMain.add(helpText, Layout.getGBC(0, 0, 2, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0));
+        panelMain.add(selectDir,     Layout.getGBC(0, 1, 1, 1, 10.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(5, 5, 5, 5), 0, 0));
-        panelMain.add(selectDir,     Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+        panelMain.add(buttonStart,   Layout.getGBC(1, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                  new Insets(5, 5, 5, 5), 0, 0));
+
         
         //**********************************************************
         //Log panel
@@ -422,43 +434,24 @@ public class UserDirSetupDialog extends JDialog implements ActionListener {
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                     new Insets(5, 5, 5, 5), 0, 0));
 
-        //**********************************************************
-        //Action panel
-        //**********************************************************
-        JPanel panelActions = new JPanel();
-        
-        buttonClose.addActionListener(this);
-        buttonClose.setActionCommand("close");
-        buttonStart.addActionListener(this);
-        buttonStart.setActionCommand("start");
-        
-        panelActions.add(buttonStart);
-        panelActions.add(buttonClose);
         
         //**********************************************************
         //Main
         //**********************************************************
-        getContentPane().add(panelMain,         Layout.getGBC(0, 0, 1, 1, 3.0, 3.0
+        getContentPane().add(panelMain,         Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(5, 5, 5, 5), 0, 0));
-        getContentPane().add(panelActions,      Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
-                 new Insets(0, 0, 0, 0), 0, 0));
-        getContentPane().add(panelLog,          Layout.getGBC( 0, 6, 1, 1, 5.0, 5.0
+        getContentPane().add(panelLog,          Layout.getGBC( 0, 1, 1, 1, 5.0, 5.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
                  new Insets(0, 0, 0, 0), 0, 0));  
-        getContentPane().add(progressBar,       Layout.getGBC( 0, 7, 1, 1, 1.0, 1.0
+        getContentPane().add(progressBar,       Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 0, 0, 0), 0, 0));
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("close"))
-            System.exit(0);
-        else if (ae.getActionCommand().equals("cancel"))
-            cancel();
-        else if (ae.getActionCommand().equals("start"))
+        if (ae.getActionCommand().equals("start"))
             setupDataDir();
     }
 }

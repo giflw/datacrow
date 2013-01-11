@@ -277,7 +277,7 @@ public class DataCrow {
                     showSplashScreen();
                     
                     // check if the web module has been installed
-                    isWebModuleInstalled = new File(DataCrow.webDir, "WEB-INF").exists();
+                    isWebModuleInstalled = new File(DataCrow.webDir, "datacrow/WEB-INF").exists();
                     
                     // initialize plugins
                     Plugins.getInstance();
@@ -740,7 +740,7 @@ public class DataCrow {
      */
     private static void createDirectories() {
         userDir = !userDir.endsWith("/") && !userDir.endsWith("\\") ? userDir + "/" : userDir;
-        webDir = DataCrow.userDir + "wwwroot/datacrow/";
+        webDir = DataCrow.userDir + "wwwroot/";
         imageDir = DataCrow.userDir + "wwwroot/datacrow/mediaimages/";
         iconsDir = DataCrow.userDir + "wwwroot/datacrow/mediaimages/icons/";
         reportDir = DataCrow.userDir + "reports/";
