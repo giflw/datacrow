@@ -30,7 +30,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.zip.ZipEntry;
@@ -39,9 +38,7 @@ import java.util.zip.ZipOutputStream;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
-import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.reporting.templates.ReportTemplates;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Directory;
 
@@ -72,34 +69,8 @@ public class Backup extends Thread {
      * @return A collection of fully classified filenames.
      */
     private Collection<String> getFiles() {
-        File dataDir = new File(DataCrow.userDir);
-        String[] list = dataDir.list();
-        Collection<String>  files = new ArrayList<String> ();
-        for (int i = 0; i < list.length; i++) {
-            String file = list[i];
-            File fl = new File(dataDir, file);
-            if (!fl.isDirectory() && !file.endsWith(".log") && !file.equals("images"))
-                files.add(fl.toString());
-        }
-
-        Directory dir = new Directory(DataCrow.resourcesDir, true, null);
-        Collection<String> resources = dir.read();
-        for (String resource : resources) {
-            if (resource.toLowerCase().endsWith(DcLanguageResource.suffix))
-                files.add(resource);
-        }
-        
-        Directory directory = new Directory(DataCrow.moduleDir, true, null);
-        files.addAll(directory.read());
-        directory = new Directory(DataCrow.imageDir, true, new String[] {"jpg", "jpeg"});
-        files.addAll(directory.read());        
-
-        for (String reportDir : new ReportTemplates(true).getFolders()) {
-            directory = new Directory(reportDir, true, new String[] {"xsl", "xslt"});
-            files.addAll(directory.read());
-        }
-        
-        return files;
+        Directory dir = new Directory(DataCrow.userDir, true, null);
+        return dir.read();
     }
 
     private ZipOutputStream getZipOutputStream(String target) {
@@ -181,10 +152,7 @@ public class Backup extends Thread {
         }
 
         DcSettings.set(DcRepository.Settings.stBackupLocation, directory.toString());
-        
         listener.sendMessage(DcResources.getText("msgRestartingDb"));
-        
-        // TODO: bug; database gets locked out after creating the backup.
         DatabaseManager.initialize();
 
         listener.sendMessage(DcResources.getText("msgBackupFinished"));

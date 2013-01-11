@@ -38,6 +38,8 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.Version;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.db.DatabaseManager;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
@@ -74,27 +76,10 @@ public class Restore extends Thread {
         this.listener = listener;
     }
     
-    private boolean isImage(String filename) {
-        return filename.toLowerCase().endsWith(".jpg");
-    }
-    
-    private boolean isResource(String filename) {
-        return filename.toLowerCase().endsWith(DcLanguageResource.suffix);
-    }
-    
     private boolean isVersion(String filename) {
         return filename.toLowerCase().equals("version.txt");
     }
     
-    private boolean isReport(String filename) {
-        return filename.toLowerCase().endsWith(".xsl") || filename.toLowerCase().endsWith(".xslt") ||
-               filename.toLowerCase().indexOf("/reports") > -1;
-    }
-    
-    private boolean isModule(String filename) {
-        return filename.toLowerCase().indexOf("/modules") > -1;
-    }    
-
     /**
      * Indicate if the database should be restores.
      * @param b
@@ -185,6 +170,103 @@ public class Restore extends Thread {
     }
     
     /**
+     * Returns the target file for the provided backup file entry.
+     * This method should only be used for backups made with versions older then 3.9.16.
+     */
+    private String getTargetFile_older_V_3_9_16(String filename) {
+        boolean isImage = filename.toLowerCase().endsWith(".jpg");
+        boolean isReport = 
+                filename.toLowerCase().endsWith(".xsl") || 
+                filename.toLowerCase().endsWith(".xslt") ||
+                filename.toLowerCase().indexOf("/reports") > -1;
+        boolean isModule = filename.toLowerCase().indexOf("/modules") > -1;
+        boolean isResource = filename.toLowerCase().endsWith(DcLanguageResource.suffix);
+        boolean isData = !isImage && !isReport && !isModule && !isResource; 
+        
+        if (isImage && restoreDatabase) {
+            filename = DataCrow.imageDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+        } else if (isResource && restoreDatabase) {
+            filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+        } else if (isReport && restoreReports) {
+            filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
+            filename = DataCrow.installationDir + filename;
+        } else if (isModule && restoreModules) {
+            filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
+            filename = DataCrow.installationDir + filename;
+        } else if (isData && restoreDatabase) {
+            if (filename.endsWith("data_crow.properties"))
+                filename = new File(DataCrow.applicationSettingsDir, "data_crow.properties").toString();
+            if (filename.endsWith("data_crow_queries.txt"))
+                filename = new File(DataCrow.applicationSettingsDir, "data_crow_queries.txt").toString();
+            if (filename.endsWith("filepatterns.xml"))
+                filename = new File(DataCrow.applicationSettingsDir, "filepatterns.xml").toString();
+            if (filename.endsWith("filters.xml"))
+                filename = new File(DataCrow.applicationSettingsDir, "filters.xml").toString();
+            if (filename.endsWith("log4j.properties"))
+                filename = new File(DataCrow.applicationSettingsDir, "log4j.properties").toString();
+            if (filename.endsWith("enhancers_autoincrement.properties"))
+                filename = new File(DataCrow.applicationSettingsDir, "enhancers_autoincrement.properties").toString();
+            if (filename.endsWith("enhancers_titlerewriters.properties"))
+                filename = new File(DataCrow.applicationSettingsDir, "enhancers_titlerewriters.properties").toString();
+            if (filename.endsWith("enhancers_associatenamerewriters.properties"))
+                filename = new File(DataCrow.applicationSettingsDir, "enhancers_associatenamerewriters.properties").toString();
+
+            for (DcModule module : DcModules.getAllModules()) {
+                if (filename.endsWith(module.getName().toLowerCase() + ".properties")) 
+                    filename = new File(DataCrow.moduleSettingsDir, module.getName().toLowerCase() + ".properties").toString();
+            }
+
+            if (filename.endsWith(".script")) 
+                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+
+            if (filename.endsWith(".lck")) 
+                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+
+            if (filename.endsWith(".log")) 
+                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+            
+            if (filename.endsWith(".properties")) 
+                filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+            
+        } else {
+            if (logger.isDebugEnabled())
+                logger.debug("Skipping " + filename);
+            
+            filename = null;
+        }    
+        return filename;
+    }
+    
+    /**
+     * Returns the target file for the provided backup file entry.
+     */
+    private String getTargetFile(String filename) {
+        
+        
+//        
+//        if (isImage && restoreDatabase) {
+//            filename = DataCrow.imageDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+//        } else if (isResource && restoreDatabase) {
+//            filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+//        } else if (isReport && restoreReports) {
+//            filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
+//            filename = DataCrow.installationDir + filename;
+//        } else if (isModule && restoreModules) {
+//            filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
+//            filename = DataCrow.installationDir + filename;
+//        } else if (isData && restoreDatabase) {
+//            filename = DataCrow.userDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+//        } else {
+//            if (logger.isDebugEnabled())
+//                logger.debug("Skipping " + filename);
+//            
+//            filename = null;
+//        }    
+        return filename;
+    }    
+    
+    
+    /**
      * Performs the actual restore. The listener is updated on errors and events.
      */
     @Override
@@ -216,34 +298,9 @@ public class Restore extends Thread {
                     if (isVersion(filename)) 
                         continue;
                     
-                    boolean isImage = isImage(filename);
-                    boolean isReport = isReport(filename);
-                    boolean isModule = isModule(filename);
-                    boolean isResource = isResource(filename);
-                    boolean isData = !isImage && !isReport && !isModule && !isResource; 
-                    
-                    boolean restore = true;
-                    
-                    if (isImage && restoreDatabase) {
-                        filename = DataCrow.imageDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-                    } else if (isResource && restoreDatabase) {
-                        filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-                    } else if (isReport && restoreReports) {
-                        filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
-                        filename = DataCrow.installationDir + filename;
-                    } else if (isModule && restoreModules) {
-                        filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
-                        filename = DataCrow.installationDir + filename;
-                    } else if (isData && restoreDatabase) {
-                        filename = DataCrow.userDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
-                    } else {
-                        if (logger.isDebugEnabled())
-                            logger.debug("Skipping " + filename);
+                    filename = version.isOlder(new Version(3, 9, 16, 0)) ? getTargetFile_older_V_3_9_16(filename) : getTargetFile(filename);
 
-                        restore = false;
-                    }
-                    
-                    if (restore) {
+                    if (filename != null) {
                         try {
                             new File(filename.substring(0, filename.lastIndexOf("/"))).mkdirs();
                         } catch (Exception e) {
