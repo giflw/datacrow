@@ -128,6 +128,21 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
     
     public void stop() {
         close();
+        
+        DataCrow.installationDir = null;
+        DataCrow.imageDir = null;
+        DataCrow.iconsDir = null;
+        DataCrow.moduleDir = null;
+        DataCrow.reportDir = null;
+        DataCrow.pluginsDir = null;
+        DataCrow.servicesDir = null;
+        DataCrow.webDir = null;
+        DataCrow.databaseDir = null;
+        DataCrow.moduleSettingsDir = null;
+        DataCrow.applicationSettingsDir = null;
+        DataCrow.userDir = null;
+        DataCrow.resourcesDir = null;
+        
         DataCrow.main(args);
     }
 
