@@ -12,6 +12,7 @@ Data Crow 3.9.17  [Released on January xx, 2013]  [testing: high]  [target: prod
 
 [Fixed]
 - Start up errors for new installations of Data Crow.
+- Module images not shown on the web due to incorrect path in user directory.
 
 
 -----------------------------------------------------------------------------------------

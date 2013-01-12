@@ -47,16 +47,16 @@ public class DcWebModule implements Serializable {
         this.index = index;
         this.label = label;
         
-        createIcon(new File(DataCrow.webDir, getIcon16()).toString(), DcModules.get(index).getXmlModule().getIcon16());
-        createIcon(new File(DataCrow.webDir, getIcon32()).toString(), DcModules.get(index).getXmlModule().getIcon32());
+        createIcon(new File(DataCrow.webDir + "datacrow/", getIcon16()).toString(), DcModules.get(index).getXmlModule().getIcon16());
+        createIcon(new File(DataCrow.webDir + "datacrow/", getIcon32()).toString(), DcModules.get(index).getXmlModule().getIcon32());
     }
 
     private void createIcon(String filename, byte[] icon) {
-        File file = new File(DataCrow.webDir, filename);
+        File file = new File(filename);
         
         if (file.exists()) {
             file.delete();
-            file = new File(DataCrow.webDir, filename);
+            file = new File(filename);
         }
             
         file.deleteOnExit();
@@ -72,11 +72,11 @@ public class DcWebModule implements Serializable {
     }
     
     public String getIcon16() {
-        return "/datacrow/images/modules/" + DcModules.get(index).getName().toLowerCase() + "16.png";
+        return "/images/modules/" + DcModules.get(index).getName().toLowerCase() + "16.png";
     }
 
     public String getIcon32() {
-        return "/datacrow/images/modules/" + DcModules.get(index).getName().toLowerCase() + "32.png";
+        return "/images/modules/" + DcModules.get(index).getName().toLowerCase() + "32.png";
     }
     
     public int getIndex() {

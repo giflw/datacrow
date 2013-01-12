@@ -135,6 +135,11 @@ Additional parameters:
     -dir:<installation directory> 
      Use this parameter when Data Crow starts incorrectly and complains 
      about missing directories (non Windows platform only). 
+     
+    -userdir:<user directory> 
+     Use this parameter to specify a specific user directory. Multiple instances
+     of Data Crow can be started using this parameter. Additionally the selected user
+     folder path will not be stored in the datacrow.properties file.      
     
     -webserver
      Starts the web server without starting the actual Data Crow application.
@@ -152,10 +157,6 @@ Additional parameters:
      
     -clearsettings
      Loads the default Data Crow settings. Disgards all user settings.
-     
-    -datadir:<path>
-     Specifies an alternative location for the data folder. Spaces need to be substituted 
-     by %20.
      
 
 ----------------------------------------------------------------------------------------
