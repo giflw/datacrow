@@ -115,12 +115,12 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
                 upgraded = cleanupReferences();
             }
             
-            if (v.isOlder(new Version(3, 9, 9, 0))) {
-                lf = new LogForm();
-                DcSwingUtilities.displayMessage(
-                        "- Pictures of previously deleted items will now be removed. This is a non crucial system task which can take a few minutes.");
-                upgraded = cleanupPictures();                
-            }
+//            if (v.isOlder(new Version(3, 9, 9, 0))) {
+//                lf = new LogForm();
+//                DcSwingUtilities.displayMessage(
+//                        "- Pictures of previously deleted items will now be removed. This is a non crucial system task which can take a few minutes.");
+//                upgraded = cleanupPictures();                
+//            }
             
             if (v.isOlder(new Version(3, 9, 12, 0))) {
                 DcModules.get(DcModules._BOOK).getSettings().set(DcRepository.ModuleSettings.stFileImportFileTypes, "txt,chm,doc,docx,pdf,prc,pdb,kml,html,htm,prc,lit,epub,odt");          

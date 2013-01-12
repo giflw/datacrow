@@ -599,6 +599,10 @@ public class Utilities {
     }
     
     public static void copy(File currentFile, File newFile) throws IOException {
+        
+        if (currentFile.equals(newFile))
+            return;
+        
         // native code failed to move the file; do it the custom way
         FileInputStream fis = new FileInputStream(currentFile);
         BufferedInputStream bis = new BufferedInputStream(fis);
@@ -624,6 +628,9 @@ public class Utilities {
     }
     
     public static void rename(File currentFile, File newFile) throws IOException {
+        
+        if (currentFile.equals(newFile))
+            return;
 
         if (newFile.getParentFile() != null)
             newFile.getParentFile().mkdirs();

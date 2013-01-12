@@ -842,6 +842,9 @@ public class DataCrow {
                 Utilities.copy(new File(DataCrow.installationDir, "log4j.properties"), fileLog4j);
             }
             
+            if (!fileLog4j.exists())
+                fileLog4j.createNewFile(); 
+            
             properties.load(new FileInputStream(fileLog4j));
             properties.setProperty("log4j.appender.logfile.File", DataCrow.userDir + "data_crow.log");
             
