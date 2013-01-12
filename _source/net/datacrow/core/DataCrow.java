@@ -137,10 +137,19 @@ public class DataCrow {
                 installationDir = getInstallationDirDeprecated();
             
             String db = null;
-            String dir = null;
+            String pInstallationDir = null;
+            String pUserDir = null;
+            boolean determiningDir = false;
+            boolean determiningUserDir = false;
             for (int i = 0; i < args.length; i++) {
                 if (args[i].toLowerCase().startsWith("-dir:")) {
-                    dir = args[i].substring(5, args[i].length());
+                    pInstallationDir = args[i].substring(5, args[i].length());
+                    determiningDir = true;
+                    determiningUserDir = false;
+                } else if (args[i].toLowerCase().startsWith("-userdir:")) {
+                    pUserDir = args[i].substring("-userdir:".length(), args[i].length());
+                    determiningUserDir = true;
+                    determiningDir = false;
                 } else if (args[i].toLowerCase().startsWith("-db:")) {
                     db = args[i].substring("-db:".length());
                 } else if (args[i].toLowerCase().startsWith("-help")) {
@@ -160,8 +169,10 @@ public class DataCrow {
                     int index = credentials.indexOf("/");
                     username = index > -1 ? credentials.substring(0, index) : credentials;
                     password = index > -1 ? credentials.substring(index + 1) : "";
-                } else if (dir != null) {
-                    dir += " " + args[i];
+                } else if (determiningDir) {
+                    pInstallationDir += " " + args[i];
+                } else if (determiningUserDir) {
+                    pUserDir += " " + args[i];                    
                 } else { 
                     System.out.println("The following optional parameters can be used:");
                     System.out.println("");
@@ -169,6 +180,10 @@ public class DataCrow {
                     System.out.println("Specifies the installation directory.");
                     System.out.println("Example: java -jar datacrow.jar -dir:d:/datacrow");
                     System.out.println("");
+                    System.out.println("-userdir:<userdir>");
+                    System.out.println("Specifies the user directory.");
+                    System.out.println("Example: java -jar datacrow.jar -userdir:d:/datacrow");
+                    System.out.println("");                    
                     System.out.println("-db:<databasename>");
                     System.out.println("Forces Data Crow to use an alternative database.");
                     System.out.println("Example: java -jar datacrow.jar -db:testdb");
@@ -195,7 +210,7 @@ public class DataCrow {
             
             noSplash = !noSplash ? webserverMode && username != null : noSplash;
             
-            installationDir = dir != null ? dir : installationDir;
+            installationDir = pInstallationDir != null ? pInstallationDir : installationDir;
             
             if (installationDir == null || installationDir.trim().length() == 0) {
                 NativeMessageBox dialog = new NativeMessageBox("Warning", 
@@ -211,11 +226,16 @@ public class DataCrow {
             
             long totalstart = 0;
             
+            DataCrow.userDir = pUserDir != null ? pUserDir : DataCrow.userDir;
+            
             try {
+                
+                boolean userFolderExists = DataCrow.userDir != null;
+
                 File userHome = new File(System.getProperty("user.home"));
                 File userDirSettings = new File(userHome, "datacrow.properties");
-                boolean dataFolderExists = false;
-                if (userDirSettings.exists()) {
+                
+                if (!userFolderExists && userDirSettings.exists()) {
                     Properties properties = new Properties();
                     properties.load(new FileInputStream(userDirSettings));
                     String userDirSetting =  (String) properties.get("userfolder");
@@ -223,12 +243,12 @@ public class DataCrow {
                     if (new File(userDirSetting).exists()) {
                         userDir = userDirSetting;
                         userDir += userDir.endsWith("/") || userDir.endsWith("\\") ? "" : "/";
-                        dataFolderExists = true;
+                        userFolderExists = true;
                     }
                 } 
                 
                 
-                if (!dataFolderExists) {
+                if (!userFolderExists) {
                     moduleDir = DataCrow.installationDir + "modules/";
                     pluginsDir = DataCrow.installationDir + "plugins/";
                     servicesDir = DataCrow.installationDir + "services/";
@@ -760,6 +780,9 @@ public class DataCrow {
         DataCrow.createDirectory(new File(iconsDir), "icons");
         DataCrow.createDirectory(new File(reportDir), "reports");
         DataCrow.createDirectory(new File(servicesDir), "services");
+        DataCrow.createDirectory(new File(moduleSettingsDir), "moduleSettingsDir");
+        DataCrow.createDirectory(new File(applicationSettingsDir), "applicationSettingsDir");
+        DataCrow.createDirectory(new File(resourcesDir), "resourcesDir");
     }
     
     private static void createDirectory(File dir, String name) {
@@ -812,7 +835,14 @@ public class DataCrow {
     private static void initLog4j() {
         try {
             Properties properties = new Properties();
-            properties.load(new FileInputStream(new File(DataCrow.applicationSettingsDir, "log4j.properties")));
+            
+            File fileLog4j = new File(DataCrow.applicationSettingsDir, "log4j.properties");
+            if (!fileLog4j.exists()) {
+                fileLog4j.getParentFile().mkdirs();
+                Utilities.copy(new File(DataCrow.installationDir, "log4j.properties"), fileLog4j);
+            }
+            
+            properties.load(new FileInputStream(fileLog4j));
             properties.setProperty("log4j.appender.logfile.File", DataCrow.userDir + "data_crow.log");
             
             if (DataCrow.debug)
@@ -822,7 +852,6 @@ public class DataCrow {
             
             properties.store(new FileOutputStream(DataCrow.applicationSettingsDir + "log4j.properties"), "");
         } catch (Exception e) {
-            DcSwingUtilities.displayErrorMessage("Could not find the log4j properties file. " + e);
             System.out.println("Could not find the log4j properties file. " + e);
         }
         
