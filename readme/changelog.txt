@@ -1,4 +1,20 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.17  [Released on January xx, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Changed]
+- Improved module importer
+
+[New]
+- Added a parameter "-userdir:" to overwrite the determination of the user directory
+  altogether. This allows for running multiple instances of Data Crow looking at 
+  separate user directories.
+
+[Fixed]
+- Start up errors for new installations of Data Crow.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.16  [Released on January 11, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

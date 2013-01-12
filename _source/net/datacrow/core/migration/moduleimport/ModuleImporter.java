@@ -99,6 +99,9 @@ public class ModuleImporter {
                     
                     client.notifyMessage(DcResources.getText("msgProcessingFileX", name));
                     
+                    name = name.indexOf("/") > 0 ? name.substring(name.indexOf("/") + 1) : 
+                           name.indexOf("\\") > 0 ? name.substring(name.indexOf("\\") + 1) : name;
+                    
                     if (name.toLowerCase().endsWith(".xsl")) {
                         // directory name is contained in the name
                         writeToFile(bis, new File(DataCrow.reportDir, name));
