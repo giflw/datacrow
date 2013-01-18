@@ -4,8 +4,8 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.9.17
-Created on January 12, 2013
+Version 3.9.18
+Created on January 18, 2013
 Created by Robert Jan van der Waals
 
 Contact me at info@datacrow.net
@@ -157,10 +157,6 @@ Additional parameters:
      
     -clearsettings
      Loads the default Data Crow settings. Disgards all user settings.
-     
-    -datadir:<path>
-     Specifies an alternative location for the data folder. Spaces need to be substituted 
-     by %20.
      
 
 ----------------------------------------------------------------------------------------
