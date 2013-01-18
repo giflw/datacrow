@@ -1,5 +1,18 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.17  [Released on January xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.18  [Released on January 18, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+Pfew, the changes I made took quite a number of releases. I hope to have it under control
+now. The backup and restore now works correct again. The issue with the upgrade of the 
+database not working is mainly a security issue on the various platforms. The only 
+solution is, when prompted, to run the command as stated in the message box from the 
+command line / command prompt / terminal.
+
+[Fixed]
+- Backup and restore ignores custom made modules.
+
+
+-----------------------------------------------------------------------------------------
+Data Crow 3.9.17  [Released on January 12, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Changed]

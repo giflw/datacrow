@@ -176,10 +176,10 @@ public class Restore extends Thread {
             filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
         } else if (isReport && restoreReports) {
             filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
-            filename = DataCrow.installationDir + filename;
+            filename = DataCrow.userDir + filename;
         } else if (isModule && restoreModules) {
             filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
-            filename = DataCrow.installationDir + filename;
+            filename = DataCrow.userDir + filename;
         } else if (isData && restoreDatabase) {
             if (filename.endsWith("data_crow.properties")) {
                 filename = new File(DataCrow.applicationSettingsDir, "data_crow.properties").toString();
@@ -214,6 +214,8 @@ public class Restore extends Thread {
                     else if (filename.endsWith(".log")) 
                         filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
                     else if (filename.endsWith(".properties")) 
+                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                    else if (filename.endsWith(".new")) 
                         filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
                 }
             }

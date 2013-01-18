@@ -71,7 +71,8 @@ public class UpgradeHsqlEngine {
 
         if (v != null && v.equals("1.8.1") && format != null && format.equals("3")) {
             DcSwingUtilities.displayMessage(
-                    "The database version of HSQL will be upgraded.\nIMPORTANT: after the upgrade your password has to be entered in CAPITALS!");
+                    "The database version of HSQL will be upgraded." +
+                    "\nIMPORTANT: after the upgrade your password has to be entered in CAPITALS!");
             
             String address = "jdbc:hsqldb:file:" + DataCrow.databaseDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
             
@@ -88,6 +89,11 @@ public class UpgradeHsqlEngine {
             
             System.out.println("The following command is being executed for the upgrade: " + cmd);
             logger.info("The following command is being executed for the upgrade: " + cmd);
+            
+            DcSwingUtilities.displayMessage(
+                    "NOTE: if the upgrade fails this process will be started again on your next startup. " +
+                    "If this continues, run the following command from the command line / terminal: \n" +
+                    cmd);
             
             Runtime rt = Runtime.getRuntime();
             try {
