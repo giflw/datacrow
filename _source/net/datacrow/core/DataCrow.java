@@ -676,7 +676,7 @@ public class DataCrow {
     public static void showSplashScreen(){
         if (!noSplash) {
             splashScreen = new SplashScreen();
-            //splashScreen.splash();
+            splashScreen.splash();
         }
     }
 
