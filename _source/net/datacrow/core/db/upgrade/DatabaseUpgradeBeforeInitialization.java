@@ -41,6 +41,7 @@ import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -121,16 +122,41 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 try { 
                 	String sql = "select distinct filename from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
                 	ResultSet rs = stmt.executeQuery(sql);
+                	ResultSet rs2;
                 	
+                	String filename;
+                	String objectID;
+                	Long width;
+                	Long height;
+                	String field;
+                	String externalFilename;
                 	while (rs.next()) {
-                	    logger.info("found duplicate records in the picture table - removing duplicates");
                 	    
-                        rs.close();
-                        
-                        stmt.execute("alter table " + module.getTableName() + " rename to " + module.getTableName() + "_tmp");
-                        sql = "select distinct * into " +  module.getTableName() + " from " + module.getTableName() + "_tmp";
-                        stmt.execute(sql);
-                        stmt.execute("drop table " + module.getTableName() + "_tmp");
+                	    sql = "select filename, objectid, width, field, height, external_filename from Picture";
+                	    rs2 = stmt.executeQuery(sql);
+                	    while (rs2.next()) {
+                	        
+                	        sql = "delete from Picture where filename = '" + rs2.getString("filename") + "'";
+                	        
+                	        filename = rs2.getString("filename");
+                            objectID = rs2.getString("objectid");
+                            width = rs2.getLong("width");
+                            height = rs2.getLong("height");
+                            field = rs2.getString("field");
+                            externalFilename = rs2.getString("external_filename");
+                            externalFilename = Utilities.isEmpty(externalFilename) ? "null" : "'" + externalFilename + "'";
+                            
+                            logger.info("found duplicate records in the picture table - removing duplicate: " + filename);
+                            
+                            stmt.execute(sql);
+                            sql = "insert into Picture (filename, objectid, width, field, height, external_filename) " +
+                                    "values ('" + filename + "','" + objectID + "'," + width + ",'," + field + "'," + height + "," + externalFilename + ")";
+                            
+                            stmt.execute(sql);
+                	        
+                            break;
+                	    }
+                	    rs2.close();
                 	}
                 	
                 	rs.close();
@@ -202,18 +228,21 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
 
         Connection conn = DatabaseManager.getConnection();
         Statement stmt = null;
+        String sql;
         for (DcModule module : DcModules.getAllModules()) {
+            
             if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                 
                 try {
                 	stmt = conn.createStatement();
-                    stmt.execute("DELETE FROM " + module.getTableName() + 
-                    		     " WHERE " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() +
-                                 " NOT IN (SELECT ID FROM " + 
-                                 DcModules.get(module.getField(DcMapping._A_PARENT_ID).getSourceModuleIdx()).getTableName() + ") " +
-                                 " OR " + module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + 
-                                 " NOT IN (SELECT ID FROM " + 
-                                 DcModules.get(module.getField(DcMapping._B_REFERENCED_ID).getSourceModuleIdx()).getTableName() + ")"); 
+                	sql = "DELETE FROM " + module.getTableName() + 
+                            " WHERE " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() +
+                            " NOT IN (SELECT ID FROM " + 
+                            DcModules.get(module.getField(DcMapping._A_PARENT_ID).getSourceModuleIdx()).getTableName() + ") " +
+                            " OR " + module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + 
+                            " NOT IN (SELECT ID FROM " + 
+                            DcModules.get(module.getField(DcMapping._B_REFERENCED_ID).getSourceModuleIdx()).getTableName() + ")";
+                    stmt.execute(sql); 
                 
                 } catch (SQLException se) {
                     logger.error("Could not remove references", se);

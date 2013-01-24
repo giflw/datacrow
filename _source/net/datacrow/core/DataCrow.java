@@ -614,9 +614,9 @@ public class DataCrow {
             if (!SecurityCentre.getInstance().unsecureLogin()) {
                 boolean success = false;
                 int retry = 0;
+                showSplashScreen(false);
                 while (!success && retry < 3) {
-                    showSplashScreen(false);
-                    
+                                       
                     LoginDialog dlg = new LoginDialog();
                     DcSwingUtilities.openDialogNativeModal(dlg);
                     if (dlg.isCanceled()) break;
