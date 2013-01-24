@@ -67,14 +67,14 @@ import org.apache.log4j.Logger;
  */
 public class DatabaseUpgradeAfterInitialization {
     
-private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitialization.class.getName());
+    private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitialization.class.getName());
     
+    private LogForm lf = null;
+
     public void start() {
         try {
             boolean upgraded = false;
             Version v = DatabaseManager.getVersion();
-            LogForm lf = null;
-            
             if (v.isOlder(DataCrow.getVersion())) {
                 Directory dir = new Directory(DataCrow.installationDir + "webapp", true, null);
                 File file;
@@ -94,40 +94,40 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             }
             
             if (v.isOlder(new Version(3, 9, 2, 0))) {
-                lf = new LogForm();
+                init();
                 DcSwingUtilities.displayMessage(
                         "Data Crow will perform a non critical upgrade. This process will take a couple of minutes.");
             	upgraded = fillUIPersistFields();
             }
 
             if (v.isOlder(new Version(3, 9, 6, 0))) {
-                lf = new LogForm();
+                init();
                 DcSwingUtilities.displayMessage(
                         "Data Crow will perform a non critical upgrade to clear unwanted characters from languages, countries and other items.");
                 upgraded = cleanupNames();
             }
             
             if (v.isOlder(new Version(3, 9, 8, 0))) {
-                lf = new LogForm();
+                init();
                 DcSwingUtilities.displayMessage(
                 		"- Ghost references will be removed. \n " +
                 		"- The sort index for persons will be recalculated.");
                 upgraded = cleanupReferences();
             }
             
-//            if (v.isOlder(new Version(3, 9, 9, 0))) {
-//                lf = new LogForm();
-//                DcSwingUtilities.displayMessage(
-//                        "- Pictures of previously deleted items will now be removed. This is a non crucial system task which can take a few minutes.");
-//                upgraded = cleanupPictures();                
-//            }
+            if (v.isOlder(new Version(3, 9, 9, 0))) {
+                init();
+                DcSwingUtilities.displayMessage(
+                        "- Pictures of previously deleted items will now be removed. This is a non crucial system task which can take a few minutes.");
+                upgraded = cleanupPictures();                
+            }
             
             if (v.isOlder(new Version(3, 9, 12, 0))) {
                 DcModules.get(DcModules._BOOK).getSettings().set(DcRepository.ModuleSettings.stFileImportFileTypes, "txt,chm,doc,docx,pdf,prc,pdb,kml,html,htm,prc,lit,epub,odt");          
             }
             
             if (v.equals(new Version(3, 9, 9, 0)) || v.equals(new Version(3, 9, 8, 0))) {
-                lf = new LogForm();
+                init();
                 DcSwingUtilities.displayMessage(
                         "The names of authors will be corrected. The format of the names can be changed afterwards using " +
                         "the Name Rewriter Tool located in the Tools menu.\n");
@@ -157,6 +157,11 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitializati
             DcSwingUtilities.displayErrorMessage(msg);
             logger.error(msg, e);
         }            
+    }
+    
+    private void init() {
+        DataCrow.showSplashScreen(false);
+        lf = lf == null ? new LogForm() : lf;
     }
     
     private void cleanupOfPermission() {

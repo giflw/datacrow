@@ -181,7 +181,7 @@ public class DataCrow {
                     System.out.println("Example: java -jar datacrow.jar -dir:d:/datacrow");
                     System.out.println("");
                     System.out.println("-userdir:<userdir>");
-                    System.out.println("Specifies the user directory.");
+                    System.out.println("Specifies the user directory. Start the name with a dot (.) to make the path relative to the installation folder.");
                     System.out.println("Example: java -jar datacrow.jar -userdir:d:/datacrow");
                     System.out.println("");                    
                     System.out.println("-db:<databasename>");
@@ -227,6 +227,11 @@ public class DataCrow {
             long totalstart = 0;
             
             DataCrow.userDir = pUserDir != null ? pUserDir : DataCrow.userDir;
+            
+            if (DataCrow.userDir != null && (DataCrow.userDir.startsWith("./") || DataCrow.userDir.startsWith(".\\"))) {
+                DataCrow.userDir = DataCrow.installationDir + DataCrow.userDir.substring(2);
+                DataCrow.userDir = DataCrow.installationDir.replaceAll("\\\\", "/");
+            }
             
             try {
                 

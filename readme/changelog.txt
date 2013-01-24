@@ -4,11 +4,13 @@ Data Crow 3.9.19  [Released on January 18, 2013]  [testing: high]  [target: prod
 
 [Fixed]
 - Users can now safely upgrade from version 3.8.16 and early; without losing of pictures.
+- Small uses during upgrades in general such as an empty log form shown after    3 
+  upgrade scripts.
 
 [Changed]
-- Specifies the user directory relative to the Data Crow installation folder. 
-  Start the name with a dot (.) to make the path relative to the installation folder;
-  ./data or .\data. This only works for the -userdir: parameter.
+- It is not possible to specify the user directory relative to the Data Crow installation 
+  folder. Start the name with a dot (.) to make the path relative to the installation 
+  folder; ./data or .\data. This only works for the -userdir: parameter.
 
 
 -----------------------------------------------------------------------------------------

@@ -30,7 +30,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import net.datacrow.console.windows.log.LogForm;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.Version;
@@ -65,20 +64,23 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
             boolean upgraded = false;
             Version v = DatabaseManager.getVersion();
             if (v.isOlder(new Version(3, 9, 0, 0))) {
+                DataCrow.showSplashScreen(false);
             	cleanupReferences();
             	DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, Long.valueOf(0));
             	upgraded |= createIndexes();
             }
             
             if (v.isOlder(new Version(3, 9, 11, 0))) {
+                DataCrow.showSplashScreen(false);
                 removeCompanyFields();
             }
             
             if (upgraded) {
+                DataCrow.showSplashScreen(false);
                 DcSwingUtilities.displayMessage("The upgrade was successful. Data Crow will now continue.");
-                new LogForm();
-                DataCrow.showSplashScreen(true);
             }
+            
+            DataCrow.showSplashScreen(true);
             
         } catch (Exception e) {
             String msg = e.toString() + ". Data conversion failed. " +
@@ -178,18 +180,32 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 			     "(select objectid from " + module.getTableName() + " group by objectid having count(referencedid) > 1)";
                 	ResultSet rs = stmt.executeQuery(sql);
                 	
+                	ResultSet rs2;
+                    String objectID;
+                    String referencedID;
                 	while (rs.next()) {
                 	    
-                	    logger.info("Duplicate records found in " + module.getTableName() + ". Going to rebuild the table and remove the duplicates.");
-                	    rs.close();
-                	    
-                	    stmt.execute("alter table " + module.getTableName() + " rename to " + module.getTableName() + "_tmp");
-                	    sql = "select distinct " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
-                	           module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + 
-                	           " into " +  module.getTableName() + 
-                	           " from " + module.getTableName() + "_tmp";
-                	    stmt.execute(sql);
-                	    stmt.execute("drop table " + module.getTableName() + "_tmp");
+                        sql = "select objectID, referencedID from " + module.getTableName() + " where objectID = '" + rs.getString("objectID") + "'";
+                        rs2 = stmt.executeQuery(sql);
+
+                        while (rs2.next()) {
+                            
+                            referencedID = rs2.getString("referencedid");
+                            objectID = rs2.getString("objectid");
+                            
+                            logger.info("Cleaning duplicates for " + module.getTableName() + ": " + objectID);
+                            
+                            sql = "delete from " + module.getTableName() + " where ObjectID = '" + objectID + "' AND referencedID = '" + referencedID + "'";
+                            
+                            stmt.execute(sql);
+                            sql = "insert into " + module.getTableName() + " (objectid, referencedid) values ('" + objectID + "','" + referencedID + "')";
+                            
+                            stmt.execute(sql);
+                            
+                            break;
+                        }
+
+                        rs2.close();
                 	    
                 	    logger.info("Duplicates were successfully removed from " + module.getTableName() + ".");
                 	    
