@@ -1,4 +1,12 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.19  [Released on January 18, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Users can now safely upgrade from version 3.8.16 and early; without losing of pictures.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.18  [Released on January 18, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 Pfew, the changes I made took quite a number of releases. I hope to have it under control
