@@ -181,7 +181,7 @@ public class DcDatabase {
                         // the column is not used.. remove!
                         if (remove) {
                             logger.info("Removing column " + columnName + " for module " + module.getName() + " as it is no longer in use");
-                            DatabaseManager.executeSQL("alter table " + module.getTableName() + " drop column " + columnName);
+                            DatabaseManager.execute("alter table " + module.getTableName() + " drop column " + columnName);
                         }
                     }
                 }

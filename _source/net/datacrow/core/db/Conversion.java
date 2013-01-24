@@ -288,7 +288,7 @@ public class Conversion {
                     } else {
                         String sql3 = "update " + DcModules.get(getModuleIdx()).getTableName() +
                                       " set " + columnName + "=" + propertyID;
-                        DatabaseManager.executeSQL(sql3);
+                        DatabaseManager.execute(sql3);
                     }
                 }
                 
@@ -304,7 +304,7 @@ public class Conversion {
         
         try {
             if (getNewFieldType() == ComponentFactory._REFERENCEFIELD) {
-                DatabaseManager.executeSQL(
+                DatabaseManager.execute(
                         "alter table " + DcModules.get(getModuleIdx()).getTableName() + 
                         " alter column " + columnName + " " + DcModules.get(getModuleIdx()).getField(columnName).getDataBaseFieldType());
             } 
@@ -325,7 +325,7 @@ public class Conversion {
             if (DcModules.get(moduleIdx).getField(columnName) != null) {
                 String sql = "alter table " + DcModules.get(moduleIdx).getTableName() + " alter column " + columnName + " " +
                              DcModules.get(moduleIdx).getField(columnName).getDataBaseFieldType();
-                DatabaseManager.executeSQL(sql);
+                DatabaseManager.execute(sql);
             }
 
         } catch (Exception se) {

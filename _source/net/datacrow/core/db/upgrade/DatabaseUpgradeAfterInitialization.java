@@ -407,7 +407,7 @@ public class DatabaseUpgradeAfterInitialization {
                 sql = "UPDATE " + module.getTableName() + " SET " + field + " = LTRIM(RTRIM(" + field + "))";
                 
                 try {
-                    DatabaseManager.executeSQL(sql);
+                    DatabaseManager.execute(sql);
                     upgraded = true;
                 } catch (SQLException se) {
                     logger.error("Could not update " + module, se);
@@ -461,7 +461,7 @@ public class DatabaseUpgradeAfterInitialization {
                             	sql = "update " + dco.getModule().getTableName() + " set " + 
                             		fldPersist.getDatabaseFieldName() + " = '" + referencedID + "' " +
                             		"where ID ='" + ID + "'";
-                            	DatabaseManager.executeSQL(sql);
+                            	DatabaseManager.execute(sql);
                             }
                             
                             prevID = ID;

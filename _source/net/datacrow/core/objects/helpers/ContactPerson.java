@@ -75,8 +75,8 @@ public class ContactPerson extends DcObject {
         } else {
             if (DcSwingUtilities.displayQuestion("msgDeletePersonLendItems")) {
                 try {
-                    DatabaseManager.executeSQL("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
-                                               loan.getField(Loan._C_CONTACTPERSONID).getDatabaseFieldName() + " = '" + getID() + "'");
+                    DatabaseManager.execute("DELETE FROM " + loan.getModule().getTableName() + " WHERE " + 
+                                            loan.getField(Loan._C_CONTACTPERSONID).getDatabaseFieldName() + " = '" + getID() + "'");
                     try {
                         super.delete(false);
                     } catch (ValidationException e) {}

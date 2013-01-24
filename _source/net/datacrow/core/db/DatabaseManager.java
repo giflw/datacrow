@@ -303,6 +303,17 @@ public class DatabaseManager {
         Statement stmt = connection.createStatement();
         return stmt.executeQuery(sql);
     }
+    
+    /**
+     * Executes a query. 
+     * @param sql SQL statement.
+     * @param log Indicates if information on the query should be logged.
+     */
+    public static boolean execute(String sql) throws SQLException {
+        Connection connection = getConnection();
+        Statement stmt = connection.createStatement();
+        return stmt.execute(sql);
+    }
 
     /**
      * Executes a query. 

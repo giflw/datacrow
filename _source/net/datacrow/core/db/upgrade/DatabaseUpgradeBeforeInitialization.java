@@ -163,14 +163,14 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 	
                 	rs.close();
                 	
-                	logger.info("Creating UNIQUE CONSTRAINT on " + module.getTableName());
+                	logger.info("Creating unique index on " + module.getTableName());
                 	
-                    stmt.execute("CREATE  UNIQUE CONSTRAINT " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                    stmt.execute("CREATE unique index " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                             module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
                             module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
                 
                 } catch (SQLException se) {
-                    // throw new Exception("Unable to create  UNIQUE CONSTRAINT on " + module.getTableName(), se);
+                    // throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                     // there is no solution for this... yet.
                     logger.debug(se, se);
                 }
@@ -214,21 +214,21 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 	
                 	rs.close();
                 	
-                	logger.info("Creating  UNIQUE CONSTRAINT on " + module.getTableName());
-                	stmt.execute("CREATE  UNIQUE CONSTRAINT " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                	logger.info("Creating unique index on " + module.getTableName());
+                	stmt.execute("CREATE unique index " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                             module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                             module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
                 } catch (SQLException se) {
-                    throw new Exception("Unable to create UNIQUE CONSTRAINT on " + module.getTableName(), se);
+                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
             } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
                 try { 
-                    logger.info("Creating UNIQUE CONSTRAINT on " + module.getTableName());
+                    logger.info("Creating unique index on " + module.getTableName());
                     stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                             module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                             module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
                 } catch (SQLException se) {
-                    throw new Exception("Unable to create UNIQUE CONSTRAINT on " + module.getTableName(), se);
+                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
             }
         }
