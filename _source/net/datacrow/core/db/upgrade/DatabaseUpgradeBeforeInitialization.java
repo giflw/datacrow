@@ -122,6 +122,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
         for (DcModule module : DcModules.getAllModules()) {
             if (module.getIndex() == DcModules._PICTURE) {
                 try { 
+                    
+                    stmt.execute("delete from picture where filename null or objectid is null or field is null");
+                    
                 	String sql = "select distinct filename from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
                 	ResultSet rs = stmt.executeQuery(sql);
                 	ResultSet rs2;
@@ -132,9 +135,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 	Long height;
                 	String field;
                 	String externalFilename;
+                	
                 	while (rs.next()) {
                 	    
-                	    sql = "select filename, objectid, width, field, height, external_filename from Picture";
+                	    sql = "select filename, objectid, width, field, height, external_filename from Picture where filename = '" + rs.getString("filename") + "'";
                 	    rs2 = stmt.executeQuery(sql);
                 	    while (rs2.next()) {
                 	        
@@ -155,9 +159,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                                     "values ('" + filename + "','" + objectID + "'," + width + ",'," + field + "'," + height + "," + externalFilename + ")";
                             
                             stmt.execute(sql);
-                	        
+                            
                             break;
                 	    }
+
                 	    rs2.close();
                 	}
                 	
@@ -176,7 +181,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 }
             } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                 try { 
-                	String sql = "select distinct objectid from " + module.getTableName() + " where objectid in " +
+                	
+                    stmt.execute("delete from " +  module.getTableName() + " where objectid is null or referencedid is null");
+                    
+                    String sql = "select distinct objectid from " + module.getTableName() + " where objectid in " +
                 			     "(select objectid from " + module.getTableName() + " group by objectid having count(referencedid) > 1)";
                 	ResultSet rs = stmt.executeQuery(sql);
                 	
@@ -196,13 +204,10 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                             logger.info("Cleaning duplicates for " + module.getTableName() + ": " + objectID);
                             
                             sql = "delete from " + module.getTableName() + " where ObjectID = '" + objectID + "' AND referencedID = '" + referencedID + "'";
-                            
                             stmt.execute(sql);
+                            
                             sql = "insert into " + module.getTableName() + " (objectid, referencedid) values ('" + objectID + "','" + referencedID + "')";
-                            
                             stmt.execute(sql);
-                            
-                            break;
                         }
 
                         rs2.close();
