@@ -289,8 +289,16 @@ public class Restore extends Thread {
                     filename = version.isOlder(new Version(3, 9, 16, 0)) ? getTargetFile_older_V_3_9_16(filename) : getTargetFile(filename);
 
                     if (filename != null) {
+                        File file = new File(filename);
+                        
+                        if (file.exists())
+                            file.delete();
+                        
+                        if (file.exists())
+                            listener.sendMessage(DcResources.getText("msgRestoreFileOverwriteIssue", filename.substring(filename.lastIndexOf("/") + 1)));
+                        
                         try {
-                            new File(filename).getParentFile().mkdirs();
+                            file.getParentFile().mkdirs();
                         } catch (Exception e) {
                             logger.warn("Unable to create directories for " + filename, e);
                         }
@@ -311,6 +319,7 @@ public class Restore extends Thread {
                         bis.close();
                         fos.flush();
                         fos.close();
+                        istr.close();
 
                         listener.sendMessage(DcResources.getText("msgRestoringFile", filename.substring(filename.lastIndexOf("/") + 1)));
                     }

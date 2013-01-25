@@ -4,8 +4,10 @@ Data Crow 3.9.19  [Released on January 18, 2013]  [testing: high]  [target: prod
 
 [Fixed]
 - Users can now safely upgrade from version 3.8.16 and early; without losing of pictures.
-- Small uses during upgrades in general such as an empty log form shown after    3 
+- Small uses during upgrades in general such as an empty log form shown after 3 or more 
   upgrade scripts.
+- Title rewriter and name rewriter work again. There was an issue after the upgrade
+  of the database engine.
 
 [Changed]
 - It is not possible to specify the user directory relative to the Data Crow installation 

@@ -310,7 +310,7 @@ public class AssociateNameRewriterDialog extends DcDialog implements ActionListe
                     newName = rewriter.getName(firstname, lastname);
                     
                     if (!name.equals(newName)) {
-                        DatabaseManager.executeSQL(
+                        DatabaseManager.execute(
                                 "UPDATE " + module.getTableName() + " SET " + field.getDatabaseFieldName() + 
                                 " = '" + newName.replaceAll("'", "''") + "' WHERE ID = '" + ID + "'");
                     }

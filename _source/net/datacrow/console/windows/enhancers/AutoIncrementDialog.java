@@ -387,7 +387,7 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
                         updateQuery = "UPDATE " + module.getTableName() + 
                                              " SET " + field.getDatabaseFieldName() + " = " + counter  + 
                                              " WHERE ID = '" + ID + "'";
-                        DatabaseManager.executeSQL(updateQuery);
+                        DatabaseManager.execute(updateQuery);
                     }
                     
                     updateProgressBar();

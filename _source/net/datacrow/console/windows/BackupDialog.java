@@ -277,7 +277,7 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         buttonRestore.setMnemonic('R');
 
         this.getContentPane().add(panelBackup,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                                   new Insets( 5, 5, 5, 5), 0, 0));
         this.getContentPane().add(panelRestore, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                                  ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
