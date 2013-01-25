@@ -304,6 +304,8 @@ public abstract class FileImporter implements ISynchronizerClient {
             if (index > 0 && index > name.length() - 5)
                 name = name.substring(0, index);
 
+            name = name.replaceAll("\\.", " ");
+            
             String remove = 
                 DcModules.get(getModule()).getSettings().getString(DcRepository.ModuleSettings.stTitleCleanup);
             

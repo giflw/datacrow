@@ -13,6 +13,7 @@ Data Crow 3.9.19  [Released on January 18, 2013]  [testing: high]  [target: prod
 - It is not possible to specify the user directory relative to the Data Crow installation 
   folder. Start the name with a dot (.) to make the path relative to the installation 
   folder; ./data or .\data. This only works for the -userdir: parameter.
+- The File Importer now allows the online search to always pick the first result.
 
 
 -----------------------------------------------------------------------------------------

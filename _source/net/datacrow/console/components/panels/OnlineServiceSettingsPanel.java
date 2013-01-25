@@ -67,12 +67,14 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
     private boolean allowAutoAddSelection = true;
     private boolean allowQueryModeSelection = true;
     private boolean allowOriginalSettingsSelection = true;
+    private boolean allowFirstIsBestMode = true;
     
     public OnlineServiceSettingsPanel(JFrame parent, 
                                       boolean allowQueryModeSelection,
                                       boolean allowAutoAddSelection,
                                       boolean updateMode,
                                       boolean allowOriginalSettingsSelection,
+                                      boolean allowFirstIsBestMode,
                                       int module) {
         this.module = module;
         this.parent = parent;
@@ -81,6 +83,7 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
         this.allowOriginalSettingsSelection = allowOriginalSettingsSelection;
         this.allowAutoAddSelection = allowAutoAddSelection;
         this.allowQueryModeSelection = allowQueryModeSelection;
+        this.allowFirstIsBestMode = allowFirstIsBestMode;
         
         build(updateMode);
         
@@ -227,6 +230,9 @@ public class OnlineServiceSettingsPanel extends JPanel implements ActionListener
             add(checkUseOriginalSettings, Layout.getGBC( 0, 4, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(0, 5, 0, 0), 0, 0));
+        }
+        
+        if (allowFirstIsBestMode) {
             add(checkAlwaysUseFirstResult, Layout.getGBC( 0, 5, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(0, 5, 0, 0), 0, 0));

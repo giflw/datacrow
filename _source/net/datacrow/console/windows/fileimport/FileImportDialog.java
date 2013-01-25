@@ -432,7 +432,7 @@ public class FileImportDialog extends DcFrame implements ActionListener {
         
         if (module.deliversOnlineService()) {
             panelServer = new OnlineServicePanel(module.getOnlineServices().getServers(), true, true);
-            panelServerSettings = new OnlineServiceSettingsPanel(null, false, false, false, false, module.getIndex());
+            panelServerSettings = new OnlineServiceSettingsPanel(null, false, false, false, false, true, module.getIndex());
             
             panelOs.add(panelServer,     Layout.getGBC( 0, 3, 3, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
