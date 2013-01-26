@@ -110,6 +110,7 @@ public class Restore extends Thread {
             System.exit(0);
         } catch (Exception e) {
             listener.sendError(e);
+            System.exit(0);
         }
     }    
     
@@ -249,6 +250,11 @@ public class Restore extends Thread {
                (filename.toLowerCase().startsWith("reports/") ||
                 filename.toLowerCase().startsWith("reports\\") ))   {
             restore = false;
+        } else if ( filename.endsWith(".log") || 
+                    filename.endsWith("version.properties") ||
+                    filename.endsWith("log4j.properties") ||
+                    filename.contains("datacrow.log")) {
+            restore = false;
         }
    
         return restore ? new File(DataCrow.userDir, filename).toString() : null;
@@ -259,6 +265,12 @@ public class Restore extends Thread {
      */
     @Override
     public void run() {
+        
+        try {
+            DataManager.deleteIcons();
+        } catch (Exception e) {
+            logger.error("Could not delete the cached icons", e);
+        }
         
         try {
             ZipFile zf = new ZipFile(source);
