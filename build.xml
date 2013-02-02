@@ -12,6 +12,7 @@
             <include name="laf/*.jar"/>
             <include name="pdf/*.jar"/>
             <include name="xml/*.jar"/>
+            <include name="zip/*.jar"/>
             <include name="xml-rpc/*.jar"/>
         </fileset>          
     </path>

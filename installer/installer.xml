@@ -4,7 +4,7 @@
 
     <info>
         <appname>Data Crow</appname>
-        <appversion>3.9.18</appversion>
+        <appversion>3.9.20</appversion>
         <authors>
             <author name="Robert Jan van der Waals" email="rwaals@datacrow.net"/>
         </authors>
@@ -73,7 +73,7 @@
             <file src="lib/xml-rpc" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/pdf" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/html" targetdir="$INSTALL_PATH/lib"/>
-            <file src="lib/zip" targetdir="$INSTALL_PATH/zip"/>
+            <file src="lib/zip" targetdir="$INSTALL_PATH/lib"/>
             <file src="services" targetdir="$INSTALL_PATH"/>
             <file src="resources" targetdir="$INSTALL_PATH"/>
             <file src="plugins" targetdir="$INSTALL_PATH"/>

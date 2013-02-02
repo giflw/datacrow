@@ -4,9 +4,9 @@
   Data /  \ Crow                               
       ^    ^ 
 
-Version 3.9.19
+Version 3.9.20
 
-Created on January 25, 2013
+Created on February 2, 2013
 
 Created by Robert Jan van der Waals
 
