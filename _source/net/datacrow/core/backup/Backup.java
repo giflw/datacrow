@@ -32,11 +32,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Directory;
 import de.schlichtherle.truezip.file.TFile;
 import de.schlichtherle.truezip.file.TFileWriter;
@@ -48,6 +51,8 @@ import de.schlichtherle.truezip.file.TVFS;
  * @author Robert Jan van der Waals
  */
 public class Backup extends Thread {
+    
+    private static Logger logger = Logger.getLogger(Backup.class.getName());
 
     private File directory;
     private IBackupRestoreListener listener;
@@ -142,7 +147,7 @@ public class Backup extends Thread {
                 try {
                     sleep(10);
                 } catch (Exception e) {
-                    listener.sendError(e);
+                    logger.warn(e, e);
                 }
             }
             
@@ -150,9 +155,12 @@ public class Backup extends Thread {
             
             TVFS.umount();
             
+            DcSwingUtilities.displayWarningMessage("msgBackupFinished");
+            
         } catch (Exception e) {
             listener.sendMessage(DcResources.getText("msgBackupError", e.getMessage()));
             listener.sendError(e);
+            DcSwingUtilities.displayWarningMessage("msgBackupFinishedUnsuccessful");
         }
         
         DcSettings.set(DcRepository.Settings.stBackupLocation, directory.toString());

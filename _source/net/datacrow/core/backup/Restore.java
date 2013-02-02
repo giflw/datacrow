@@ -356,6 +356,12 @@ public class Restore extends Thread {
                         entry.cp_rp(destFile);
                     }
                 
+                    try {
+                        sleep(10);
+                    } catch (Exception e) {
+                        logger.warn(e, e);
+                    }
+                    
                 } catch (Exception exp) {
                     listener.sendMessage(DcResources.getText("msgRestoreFileError", new String[] {filename, exp.getMessage()}));
                 }

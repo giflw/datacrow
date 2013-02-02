@@ -73,6 +73,7 @@
             <file src="lib/xml-rpc" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/pdf" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/html" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/zip" targetdir="$INSTALL_PATH/zip"/>
             <file src="services" targetdir="$INSTALL_PATH"/>
             <file src="resources" targetdir="$INSTALL_PATH"/>
             <file src="plugins" targetdir="$INSTALL_PATH"/>
