@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.20  [Released on January xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.20  [Released on February 02, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
