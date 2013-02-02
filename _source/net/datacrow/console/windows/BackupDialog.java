@@ -338,7 +338,8 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
         public boolean accept(File file) {
             if (file.isDirectory()) {
                 return true;
-            } else if (Utilities.getExtension(file).equals("bck")) {
+            } else if ( Utilities.getExtension(file).equals("bck") || 
+                        Utilities.getExtension(file).equals("zip")) {
                 return true;
             } else {
                 return false;

@@ -95,8 +95,11 @@ public class Directory {
         
         File tempFile = null;
 
+        String current;
+        String[] list;
+        String sTempCurrent;
         while (unhandled.size() > 0) {
-            String current = unhandled.get(0);
+            current = unhandled.get(0);
             tempFile = new File(current);
 
             if (listener != null && listener.isStopped()) {
@@ -109,14 +112,14 @@ public class Directory {
                 if (DcResources.isInitialized()) logger.debug(DcResources.getText("msgReadingFrom", current));
                 if (DcResources.isInitialized()) sendMessageToListener(DcResources.getText("msgReadingFrom", current));
 
-                String[] list = tempFile.list();
+                list = tempFile.list();
                 if (list != null) {
                     
                     for (int j = 0; j < list.length; j++) {
                         
                         if (listener != null) listener.notifyProcessed();
 
-                        String sTempCurrent = current + (current.endsWith(File.separator) ? "" : File.separator) + list[j];
+                        sTempCurrent = current + (current.endsWith(File.separator) ? "" : File.separator) + list[j];
                         
                         if (!unhandled.contains(sTempCurrent)) {
                             tempFile = new File(sTempCurrent);

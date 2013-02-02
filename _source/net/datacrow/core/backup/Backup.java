@@ -26,14 +26,11 @@
 package net.datacrow.core.backup;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -41,6 +38,9 @@ import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Directory;
+import de.schlichtherle.truezip.file.TFile;
+import de.schlichtherle.truezip.file.TFileWriter;
+import de.schlichtherle.truezip.file.TVFS;
 
 /**
  * Performs a backup of the Data Crow data, settings, modules and reports.
@@ -73,24 +73,26 @@ public class Backup extends Thread {
         return dir.read();
     }
 
-    private ZipOutputStream getZipOutputStream(String target) {
+    private String getZipFile(String target) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmm");
         String date = format.format(cal.getTime());
 
-        String filename = "datacrow_backup_" + date + ".bck";
+        String filename = "datacrow_backup_" + date + ".zip";
         String zipFile = target.endsWith(File.separator) ? target + filename :
                                                            target + File.separator + filename;
-        ZipOutputStream zout = null;
-        try {
-            FileOutputStream fos = new FileOutputStream(zipFile);
-            zout = new ZipOutputStream(fos);
-        } catch (Exception e) {
-            listener.sendError(e);
-        }
-
-        return zout;
+        return zipFile;
     }    
+    
+    private void addEntry(String zipName, String source) {
+        try {
+            TFile src = new TFile(source);
+            TFile dst = new TFile(zipName);
+            src.cp_rp(dst);
+        } catch (IOException ex) {
+            listener.sendError(ex);
+        }
+    }
     
     /**
      * Performs the actual back up and informs the listener on the progress.
@@ -109,56 +111,56 @@ public class Backup extends Thread {
         try {
             Collection<String> files = getFiles();
             listener.notifyProcessingCount(files.size());
+
+            String zipFileName = getZipFile(directory.toString());
             
-            byte b[] = new byte[512];
-            ZipOutputStream zout = getZipOutputStream(directory.toString());
-            
-            if (zout != null) {
-                ZipEntry versionEntry = new ZipEntry("version.txt");
-                zout.putNextEntry(versionEntry);
-                String version = String.valueOf(DataCrow.getVersion().toString());
-                zout.write(version.getBytes(), 0, version.getBytes().length);
-                
+            File entry = new TFile(zipFileName + File.separator +  "version.txt");
+            Writer writer = new TFileWriter(entry);
+            try {
+                writer.write(DataCrow.getVersion().toString());
                 if (comment.length() > 0)
-                    zout.write(("\n" + comment).getBytes(), 0, ("\n" + comment).getBytes().length);
-                
-                zout.closeEntry();
-                
-                for (String file : files) {
-                    if (file.indexOf("wwwroot") > -1 && file.indexOf("mediaimages") == -1) 
-                        continue;
-                    
-                    if (file.endsWith(".log")) 
-                        continue;
-                    
-                     InputStream in = new FileInputStream(file);
-                    ZipEntry e = new ZipEntry(file.substring(DataCrow.userDir.length()));
-                    zout.putNextEntry(e);
-                    int len = 0;
-                    while ((len = in.read(b)) != -1) {
-                        zout.write(b, 0, len);
-                    }
-
-                    listener.sendMessage(DcResources.getText("msgCreatingBackupOfFile", file));
-
-                    in.close();
-                    zout.closeEntry();
-                    listener.notifyProcessed();
-                }
-                
-                zout.close();
-                listener.sendMessage(DcResources.getText("msgWritingBackupFile"));
+                    writer.write("\n" + comment);
+            } catch (IOException e) {
+                listener.sendError(e);
+            } finally {
+                writer.close();
             }
+            
+            for (String file : files) {
+                
+                listener.notifyProcessed();
+
+                if (file.contains("wwwroot") && !file.contains("mediaimages")) 
+                    continue;
+                if (file.endsWith(".log") || file.indexOf(".log.") > -1) 
+                    continue;
+
+                addEntry(zipFileName + File.separator + file.substring(DataCrow.userDir.length()), file);
+                
+                listener.sendMessage(DcResources.getText("msgCreatingBackupOfFile", file));
+                
+                try {
+                    sleep(10);
+                } catch (Exception e) {
+                    listener.sendError(e);
+                }
+            }
+            
+            listener.sendMessage(DcResources.getText("msgWritingBackupFile"));
+            
+            TVFS.umount();
+            
         } catch (Exception e) {
             listener.sendMessage(DcResources.getText("msgBackupError", e.getMessage()));
             listener.sendError(e);
         }
-
+        
         DcSettings.set(DcRepository.Settings.stBackupLocation, directory.toString());
+        
+        listener.sendMessage(DcResources.getText("msgBackupFinished"));
         listener.sendMessage(DcResources.getText("msgRestartingDb"));
         DatabaseManager.initialize();
-
-        listener.sendMessage(DcResources.getText("msgBackupFinished"));
+        
         listener.notifyStopped();
         
         listener = null;

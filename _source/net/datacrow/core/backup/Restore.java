@@ -25,14 +25,11 @@
 
 package net.datacrow.core.backup;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.Version;
@@ -45,6 +42,10 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
+
+import de.schlichtherle.truezip.file.TFile;
+import de.schlichtherle.truezip.file.TFileReader;
+import de.schlichtherle.truezip.file.TVFS;
 
 /**
  * The restore class is capable of restoring a back up.
@@ -73,10 +74,17 @@ public class Restore extends Thread {
     public Restore(IBackupRestoreListener listener, File source) {
         this.source = source;
         this.listener = listener;
+        
+        if (source.getName().endsWith(".bck")) {
+            File tmp = new File(source.toString().replace(".bck", ".zip"));
+            new File(source.toString()).renameTo(tmp);
+            
+            this.source = tmp;
+        }
     }
     
     private boolean isVersion(String filename) {
-        return filename.toLowerCase().equals("version.txt");
+        return filename.toLowerCase().endsWith("version.txt");
     }
     
     /**
@@ -114,26 +122,22 @@ public class Restore extends Thread {
         }
     }    
     
-    private boolean isSupportedVersion(ZipFile zf) throws IOException {
-        ZipEntry ze = zf.getEntry("version.txt");
-        
-        if (ze != null) {
-            InputStream is = zf.getInputStream(ze);
-            BufferedInputStream bis = new BufferedInputStream(is);
-            
+    private boolean isSupportedVersion() throws IOException {
+        File entry = new TFile(source.toString() + File.separator + "version.txt");
+        Reader reader = new TFileReader(entry);
+        try {
+            int data = reader.read();
             StringBuffer sb = new StringBuffer();
-            byte[] b = new byte[4096];
-            for (int n; (n = bis.read(b)) != -1;) {
-                String s = new String(b, 0, n);
-                sb.append(s);
+            while(data != -1){
+                sb.append((char) data);
+                data = reader.read();
             }
-
+            
             String s = sb.toString();
             s = s.indexOf("\n") > -1 ? s.substring(0, s.indexOf("\n")) : s;
             version = new Version(s);
-            
-            bis.close();
-            is.close();
+        } finally {
+            reader.close();
         }
         
         if (version == null || version.isUndetermined()) {
@@ -250,22 +254,52 @@ public class Restore extends Thread {
                (filename.toLowerCase().startsWith("reports/") ||
                 filename.toLowerCase().startsWith("reports\\") ))   {
             restore = false;
-        } else if ( filename.endsWith(".log") || 
-                    filename.endsWith("version.properties") ||
-                    filename.endsWith("log4j.properties") ||
-                    filename.contains("datacrow.log")) {
+        } else if ( filename.toLowerCase().endsWith(".log") || 
+                    filename.toLowerCase().endsWith("version.properties") ||
+                    filename.toLowerCase().endsWith("log4j.properties") ||
+                    filename.toLowerCase().contains("datacrow.log")) {
+            restore = false;
+        }
+        
+        if (filename.toLowerCase().contains("wwwroot") && !filename.toLowerCase().contains("mediaimages")) {
             restore = false;
         }
    
         return restore ? new File(DataCrow.userDir, filename).toString() : null;
     }  
     
+    private List<TFile> getContent(TFile parent) {
+        List<TFile> files = new ArrayList<TFile>();
+
+        String name;
+        TFile jar;
+        for (TFile child : parent.listFiles()) {
+            
+            if (child.isArchive()) {
+                files.add(child);
+            } else if (child.isFile()) {
+                name = child.toString();
+                if (name.contains(".jar")) {
+                    jar = new TFile(name.substring(0, name.indexOf(".jar") + 4));
+                    if (!files.contains(jar)) 
+                        files.add(jar);
+                } else {
+                    files.add(child);
+                }
+            } else if (child.isDirectory()) {
+                files.addAll(getContent(child));
+            }
+        }
+        
+        return files;
+    }
+    
     /**
      * Performs the actual restore. The listener is updated on errors and events.
      */
     @Override
     public void run() {
-        
+        boolean success = false;
         try {
             DataManager.deleteIcons();
         } catch (Exception e) {
@@ -273,86 +307,74 @@ public class Restore extends Thread {
         }
         
         try {
-            ZipFile zf = new ZipFile(source);
-            
-            if (!isSupportedVersion(zf)) {
+            if (!isSupportedVersion()) {
                 clear();
                 return;
             }
             
-            Enumeration<? extends ZipEntry> list = zf.entries();
-
+            TFile zipFile = new TFile(source);
+            List<TFile> entries = getContent(zipFile);
+            
             listener.notifyStarted();
-            listener.notifyProcessingCount(zf.size());
+            listener.notifyProcessingCount(entries.size());
 
             listener.sendMessage(DcResources.getText("msgStartRestore"));
             listener.sendMessage(DcResources.getText("msgClosingDb"));
             DatabaseManager.closeDatabases(false);
 
-            boolean success = true;
-            while (list.hasMoreElements()) {
-                ZipEntry ze = list.nextElement();
-                String filename = ze.getName();
-                try {
-
-                    if (isVersion(filename)) 
-                        continue;
-                    
+            String filename;
+            for (TFile entry : entries) {
+                
+                listener.notifyProcessed();
+                
+                // the filename will contain the full zip name and thus needs to be stripped
+                filename = entry.toString();
+                filename = filename.substring(filename.indexOf(".zip") + 5);
+                
+                listener.sendMessage(DcResources.getText("msgRestoringFile", filename.substring(filename.lastIndexOf("/") + 1)));
+                try {                    
                     filename = version.isOlder(new Version(3, 9, 16, 0)) ? getTargetFile_older_V_3_9_16(filename) : getTargetFile(filename);
-
-                    if (filename != null) {
-                        File file = new File(filename);
-                        
-                        if (file.exists())
-                            file.delete();
-                        
-                        if (file.exists())
-                            listener.sendMessage(DcResources.getText("msgRestoreFileOverwriteIssue", filename.substring(filename.lastIndexOf("/") + 1)));
-                        
-                        try {
-                            file.getParentFile().mkdirs();
-                        } catch (Exception e) {
-                            logger.warn("Unable to create directories for " + filename, e);
-                        }
-                        
-                        InputStream istr = zf.getInputStream(ze);
-                        BufferedInputStream bis = new BufferedInputStream(istr);
-                        FileOutputStream fos = new FileOutputStream(filename);
-
-                        int sz = (int)ze.getSize();
-                        final int N = 1024;
-                        byte buf[] = new byte[N];
-                        int ln = 0;
-                        while (sz > 0 &&  // workaround for bug
-                            (ln = bis.read(buf, 0, Math.min(N, sz))) != -1) {
-                                fos.write(buf, 0, ln);
-                                sz -= ln;
-                        }
-                        bis.close();
-                        fos.flush();
-                        fos.close();
-                        istr.close();
-
-                        listener.sendMessage(DcResources.getText("msgRestoringFile", filename.substring(filename.lastIndexOf("/") + 1)));
+                    
+                    if (isVersion(filename)) continue;
+                    if (filename == null) continue;
+                    
+                    File destFile = new File(filename);
+                    
+                    if (destFile.exists()) destFile.delete();
+                    if (destFile.exists()) 
+                        listener.sendMessage(DcResources.getText("msgRestoreFileOverwriteIssue", filename.substring(filename.lastIndexOf("/") + 1)));
+                    
+                    try {
+                        destFile.getParentFile().mkdirs();
+                    } catch (Exception e) {
+                        logger.warn("Unable to create directories for " + filename, e);
                     }
                     
-                    listener.notifyProcessed();
+                    if (entry.isArchive()) {
+                        entry.cp_rp(new TFile(destFile.toString() + "/"));
+                    } else {
+                        entry.cp_rp(destFile);
+                    }
                 
                 } catch (Exception exp) {
-                    success = false;
                     listener.sendMessage(DcResources.getText("msgRestoreFileError", new String[] {filename, exp.getMessage()}));
                 }
             }
             
-            if (!success)
-                throw new Exception(DcResources.getText("msgIncompleteRestore"));
-
+            success = true;
+            
+            TVFS.umount();
+            
         } catch (Exception e) {
             listener.sendError(e);
         }
 
-        restartApplication();
-        listener.sendMessage(DcResources.getText("msgRestoreFinished"));
+        if (success) {
+            restartApplication();
+            listener.sendMessage(DcResources.getText("msgRestoreFinished"));
+        } else {
+            listener.sendError(new Exception(DcResources.getText("msgIncompleteRestore")));
+        }
         
         clear();
     }

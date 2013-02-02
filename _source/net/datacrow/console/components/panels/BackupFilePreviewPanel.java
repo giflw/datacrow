@@ -29,11 +29,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.io.Reader;
 
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -44,6 +41,9 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcLongTextField;
 
 import org.apache.log4j.Logger;
+
+import de.schlichtherle.truezip.file.TFile;
+import de.schlichtherle.truezip.file.TFileReader;
 
 public class BackupFilePreviewPanel extends JPanel implements PropertyChangeListener {
     
@@ -67,26 +67,21 @@ public class BackupFilePreviewPanel extends JPanel implements PropertyChangeList
             File selection = (File)e.getNewValue();
             
             try {
+                if (!selection.isFile() || selection.toString().toLowerCase().endsWith(".bck")) return;
                 
-                if (!selection.isFile()) return;
-                
-                ZipFile zf = new ZipFile(selection);
-                ZipEntry ze = zf.getEntry("version.txt");
-                
-                if (ze != null) {
-                    InputStream is = zf.getInputStream(ze);
-                    BufferedInputStream bis = new BufferedInputStream(is);
-                    
+                File entry = new TFile(selection.toString() + File.separator + "version.txt");
+                Reader reader = new TFileReader(entry);
+                try {
+                    int data = reader.read();
                     StringBuffer sb = new StringBuffer();
-                    byte[] b = new byte[4096];
-                    for (int n; (n = bis.read(b)) != -1;)
-                        sb.append(new String(b, 0, n));
-
-                    bis.close();
-                    is.close();
-                    
+                    while(data != -1){
+                        sb.append((char) data);
+                        data = reader.read();
+                    }
                     preview.setText(sb.toString());
-                } 
+                } finally {
+                    reader.close();
+                }
             } catch (Exception exp) {
                 logger.error(exp, exp);
             }
