@@ -29,7 +29,11 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.views.IViewComponent;
 
+import org.apache.log4j.Logger;
+
 public class ViewUpdater extends Thread {
+    
+    private static Logger logger = Logger.getLogger(ViewUpdater.class.getName());
     
     private boolean canceled = false;
     
@@ -55,10 +59,21 @@ public class ViewUpdater extends Thread {
         
         for (int i = 0; i < first && !canceled; i++) {
             clearElement(i);
+            
+            try {
+                sleep(100);
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
         }
         
         for (int i = last; i < size && !canceled; i++) {
             clearElement(i);
+            try {
+                sleep(100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     
