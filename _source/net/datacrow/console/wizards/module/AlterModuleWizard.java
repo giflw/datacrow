@@ -79,9 +79,10 @@ public class AlterModuleWizard extends Wizard {
             ModuleJar mj = new ModuleJar(module);
             mj.save();
             
+            DcModule m;
             for (XmlField field : module.getFields()) {
                 if (field.getModuleReference() != module.getIndex() && field.getModuleReference() != 0) {
-                    DcModule m = DcModules.get(field.getModuleReference()) == null ? 
+                    m = DcModules.get(field.getModuleReference()) == null ? 
                                  DcModules.get(field.getModuleReference() + module.getIndex()) : 
                                  DcModules.get(field.getModuleReference());
                     

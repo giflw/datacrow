@@ -136,8 +136,9 @@ public class SettingsView extends DcDialog implements ActionListener {
             buttonSave.setFont(ComponentFactory.getSystemFont());
             tree.setFont(ComponentFactory.getSystemFont());
 
+            Component[] components;
             for (SettingsPanel panel : getPanels()) {
-                Component[] components = panel.getComponents();
+                components = panel.getComponents();
                 for (int i = 0; i < components.length; i++) {
                     if (components[i] instanceof JLabel || components[i] instanceof JCheckBox)
                         components[i].setFont(ComponentFactory.getSystemFont());
@@ -176,14 +177,18 @@ public class SettingsView extends DcDialog implements ActionListener {
         Collection<SettingsPanel> panels = new ArrayList<SettingsPanel>();
 
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        DefaultMutableTreeNode oCurrent;
+        SettingsPanel nodePanel;
+        DefaultMutableTreeNode oChild;
+        SettingsPanel nodePanelChild;
         for (Enumeration<DefaultMutableTreeNode> enumerator = root.children(); enumerator.hasMoreElements(); ) {
-            DefaultMutableTreeNode oCurrent = enumerator.nextElement();
-            SettingsPanel nodePanel = (SettingsPanel) oCurrent.getUserObject();
+            oCurrent = enumerator.nextElement();
+            nodePanel = (SettingsPanel) oCurrent.getUserObject();
             panels.add(nodePanel);
 
             for (Enumeration<DefaultMutableTreeNode> enumChilds = oCurrent.children(); enumChilds.hasMoreElements(); ) {
-                DefaultMutableTreeNode oChild = enumChilds.nextElement();
-                SettingsPanel nodePanelChild = (SettingsPanel) oChild.getUserObject();
+                oChild = enumChilds.nextElement();
+                nodePanelChild = (SettingsPanel) oChild.getUserObject();
                 panels.add(nodePanelChild);
             }
         }
@@ -251,10 +256,13 @@ public class SettingsView extends DcDialog implements ActionListener {
         DefaultMutableTreeNode topTreeNode = new DcDefaultMutableTreeNode(DcResources.getText("lblSettings"));
         topTreeNode.setUserObject(panelInfo);
 
-        
+        JPanel panel;
+        DefaultMutableTreeNode treeNode;
+        JPanel childPanel;
+        DefaultMutableTreeNode childTreeNode;
         for (SettingsGroup group : settings.getSettingsGroups().values()) { 
-            JPanel panel = new SettingsPanel(group);
-            DefaultMutableTreeNode treeNode = new DcDefaultMutableTreeNode(panel);
+            panel = new SettingsPanel(group);
+            treeNode = new DcDefaultMutableTreeNode(panel);
 
             topTreeNode.add(treeNode);
 
@@ -269,8 +277,8 @@ public class SettingsView extends DcDialog implements ActionListener {
                                  new Insets(5, 5, 5, 5), 0, 0));
 
             for (SettingsGroup childGroup : group.getChildren().values()) {
-                JPanel childPanel = new SettingsPanel(childGroup);
-                DefaultMutableTreeNode childTreeNode = new DcDefaultMutableTreeNode(childPanel);
+                childPanel = new SettingsPanel(childGroup);
+                childTreeNode = new DcDefaultMutableTreeNode(childPanel);
                 treeNode.add(childTreeNode);
 
                 childPanel.setMinimumSize(new Dimension(700, 380));

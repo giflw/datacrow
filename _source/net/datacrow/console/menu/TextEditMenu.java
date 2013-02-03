@@ -50,8 +50,9 @@ public class TextEditMenu extends DcMenu {
     private void build(DcLongTextField fld) {
         HashMap<Object, Action> actions = new HashMap<Object, Action>();
         Action[] actionsArray = fld.getActions();
+        Action a;
         for (int i = 0; i < actionsArray.length; i++) {
-            Action a = actionsArray[i];
+            a = actionsArray[i];
             actions.put(a.getValue(Action.NAME), a);
         }
 

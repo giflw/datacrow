@@ -309,8 +309,9 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
             if (module.hasInsertView())
                 module.getInsertView().applySettings();
 
+            DcField field;
             for (DcFieldDefinition def : definitions.getDefinitions()) {
-                DcField field = module.getField(def.getIndex());
+                field = module.getField(def.getIndex());
                 field.setRequired(def.isRequired());
                 field.setEnabled(def.isEnabled());
             }

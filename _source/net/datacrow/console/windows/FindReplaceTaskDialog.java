@@ -203,8 +203,9 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
         c.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
         tblItems.addColumn(c);
         
+        String oldvalue;
         for (DcObject item : items) {
-            String oldvalue = (String) item.getValue(field);
+            oldvalue = (String) item.getValue(field);
             oldvalue = oldvalue.replaceAll("(?i)" + value, replacement);
             item.setValue(field, oldvalue);
             tblItems.add(item);

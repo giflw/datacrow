@@ -168,8 +168,9 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
                 comboFontStyle.setSelectedIndex(0);
             
             String name = font.getName();
+            String value;
             for (int i = 0; i < comboFontName.getItemCount(); i++) {
-                String value = (String) comboFontName.getItemAt(i);
+                value = (String) comboFontName.getItemAt(i);
                 if (value.toLowerCase().equals(name.toLowerCase())) 
                     comboFontName.setSelectedIndex(i);
             }

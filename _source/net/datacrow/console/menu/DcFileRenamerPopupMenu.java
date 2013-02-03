@@ -48,18 +48,19 @@ public class DcFileRenamerPopupMenu extends DcPopupMenu   {
         JMenu menuInsertField = ComponentFactory.getMenu(DcResources.getText("lblInsertField"));
         
         DcModule module = DcModules.get(modIdx); 
+        JMenuItem menuField;
         for (DcField field : DcModules.get(modIdx).getFields()) {
             
         	if (field.getIndex() == DcObject._SYS_CONTAINER)
         		continue;
         	
             if (field.getIndex() == module.getParentReferenceFieldIndex()) {
-            	JMenuItem menuField = ComponentFactory.getMenuItem(  module.getParent().getObjectName());
+                menuField = ComponentFactory.getMenuItem(module.getParent().getObjectName());
                 menuField.setActionCommand(String.valueOf(field.getIndex()));
                 menuField.addActionListener(fpf);
                 menuInsertField.add(menuField);
             } else if (isValid(field)) {
-                JMenuItem menuField = ComponentFactory.getMenuItem(field.getSystemName());
+                menuField = ComponentFactory.getMenuItem(field.getSystemName());
                 menuField.setActionCommand(String.valueOf(field.getIndex()));
                 menuField.addActionListener(fpf);
                 menuInsertField.add(menuField);

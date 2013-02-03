@@ -111,9 +111,10 @@ public class DeleteModuleWizard extends Wizard {
             
             // make sure the 'hasDependingModules' property is corrected for modules holding
             // a referencing to this module
+            DcModule reference;
             for (DcField field : module.getFields()) {
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                    DcModule reference = DcModules.getReferencedModule(field);
+                    reference = DcModules.getReferencedModule(field);
                     
                     if (reference.getXmlModule() == null) continue;
 
@@ -164,8 +165,9 @@ public class DeleteModuleWizard extends Wizard {
             
             current += 1;
             if (current <= getStepCount()) {
+                ModuleWizardPanel panel;
                 for (int i = 0; i < getStepCount(); i++) {
-                    ModuleWizardPanel panel = (ModuleWizardPanel) getWizardPanel(i);
+                    panel = (ModuleWizardPanel) getWizardPanel(i);
                     panel.setModule(module);
                     panel.setVisible(i == current);
                 }

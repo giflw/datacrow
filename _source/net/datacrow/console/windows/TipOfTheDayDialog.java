@@ -123,8 +123,9 @@ public class TipOfTheDayDialog extends DcDialog implements ActionListener {
     
     private void initializeTips() {
         Map<String, String> map = DcResources.getCurrent().getResourcesMap();
+        String key;
         for (Object o : map.keySet()) {
-            String key = (String) o;
+            key = (String) o;
             if (key.startsWith("tip")) 
                 tips.add(map.get(key));
         }

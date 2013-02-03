@@ -50,8 +50,9 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
             if (value != null) {
             	boolean existing = false;
             	
+            	Object o;
                 for (int i = 0; i < getItemCount(); i++) {
-                    Object o = getItemAt(i);
+                    o = getItemAt(i);
                     if (o.equals(value)) {
                         setSelectedItem(o);
                         existing = true;
@@ -72,8 +73,9 @@ public class DcObjectComboBox extends DcComboBox implements IComponent {
         Object o = getSelectedItem();
   
         Collection<DcObject> newValues = new ArrayList<DcObject>();
+        Object value;
         for (int i = 0; i < dataModel.getSize(); i++) {
-            Object value = dataModel.getElementAt(i);
+            value = dataModel.getElementAt(i);
             if (value instanceof DcObject && ((DcObject) value).isNew())
                 newValues.add((DcObject) value);
         }

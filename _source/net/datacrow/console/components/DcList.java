@@ -69,8 +69,9 @@ public class DcList extends JList {
     @Override
     public void setFont(Font font) {
         super.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
+        Component[] components;
         for (JPanel panel : getData()) {
-            Component[] components = panel.getComponents();
+            components = panel.getComponents();
             for (int j = 0; j < components.length; j++)
                 components[j].setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
         }

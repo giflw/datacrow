@@ -40,8 +40,9 @@ public class AdministrationMenu extends DcMenu {
         
         DcModule child = module.getChild();
         
+        int sourceIdx;
         for (DcPropertyModule pm : DcModules.getPropertyModules(module)) {
-            int sourceIdx = pm.isServingMultipleModules() ? pm.getIndex() : pm.getIndex() - module.getIndex();
+            sourceIdx = pm.isServingMultipleModules() ? pm.getIndex() : pm.getIndex() - module.getIndex();
             if (child != null && child.hasReferenceTo(sourceIdx) && !pm.isServingMultipleModules()) {
                 add(pm, module.getObjectName() + " " + pm.getObjectNamePlural());
                 add((DcPropertyModule) DcModules.get(sourceIdx + child.getIndex()), 
@@ -54,7 +55,7 @@ public class AdministrationMenu extends DcMenu {
         // add references to property modules for the child
         if (child != null) {
             for (DcPropertyModule pm : DcModules.getPropertyModules(child)) {
-                int sourceIdx = pm.isServingMultipleModules() ? pm.getIndex() : pm.getIndex() - child.getIndex();
+                sourceIdx = pm.isServingMultipleModules() ? pm.getIndex() : pm.getIndex() - child.getIndex();
                 if (!module.hasReferenceTo(sourceIdx) && !pm.isServingMultipleModules())
                     add(pm, child.getObjectName() + " " + pm.getObjectNamePlural());
             }

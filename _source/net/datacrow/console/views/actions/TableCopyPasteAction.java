@@ -80,16 +80,20 @@ public class TableCopyPasteAction implements ActionListener {
         StringBuffer sb = new StringBuffer();
         
         int[] fields = (int[]) vc.getModule().getSetting(DcRepository.ModuleSettings.stTableColumnOrder);
+        DcObject dco;
+        int fieldCount;
+        Object o;
+        String value;
         for (int index : vc.getSelectedIndices()) {
-            DcObject dco = vc.getItemAt(index);
-            int fieldCount = 0;
+            dco = vc.getItemAt(index);
+            fieldCount = 0;
             
             for (int field : fields) {
                 if (fieldCount > 0)
                     sb.append("\t");
 
-                Object o = dco.getValue(field);
-                String value = o == null ||
+                o = dco.getValue(field);
+                value = o == null ||
                     dco.getField(field).getValueType() == DcRepository.ValueTypes._PICTURE ? "" : o.toString();
                 sb.append(value);
                 fieldCount++;

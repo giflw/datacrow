@@ -103,8 +103,9 @@ public class ExportModuleWizard extends Wizard {
             
             current += 1;
             if (current <= getStepCount()) {
+                IWizardPanel panel;
                 for (int i = 0; i < getStepCount(); i++) {
-                    IWizardPanel panel = getWizardPanel(i);
+                    panel = getWizardPanel(i);
                     
                     if (panel instanceof ModuleExportWizardPanel)
                         ((ModuleExportWizardPanel) panel).setDefinition(definition);

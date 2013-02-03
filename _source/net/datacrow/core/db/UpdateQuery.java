@@ -86,19 +86,25 @@ public class UpdateQuery extends Query {
             stmt = conn.createStatement();
 
             StringBuffer sbValues = new StringBuffer();
+            Picture picture;
+            ImageIcon icon;
+            Collection<DcMapping> c;
+            DcModule mappingMod;
+            String sql;
+            String s;
             for (DcField field : dco.getFields()) {
                 // Make sure only changed fields are updated
                 if (!dco.isChanged(field.getIndex()))
                     continue;
                 
                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                    Picture picture = (Picture) dco.getValue(field.getIndex());
+                    picture = (Picture) dco.getValue(field.getIndex());
                     if (picture != null && (picture.isNew() || picture.isEdited() || picture.isDeleted())) {
                         picture.setValue(Picture._A_OBJECTID, dco.getID());
                         picture.setValue(Picture._B_FIELD, field.getDatabaseFieldName());
                         picture.setValue(Picture._C_FILENAME, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
                         
-                        ImageIcon icon = (ImageIcon) picture.getValue(Picture._D_IMAGE);
+                        icon = (ImageIcon) picture.getValue(Picture._D_IMAGE);
                         if (icon != null) {
                             picture.setValue(Picture._E_HEIGHT, Long.valueOf(icon.getIconHeight()));
                             picture.setValue(Picture._F_WIDTH, Long.valueOf(icon.getIconWidth()));
@@ -106,13 +112,13 @@ public class UpdateQuery extends Query {
                         }
                     }
                 } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                    Collection<DcMapping> c = (Collection<DcMapping>) dco.getValue(field.getIndex());
+                    c = (Collection<DcMapping>) dco.getValue(field.getIndex());
                     
                     if (c != null) references.add(c);
                     
                     if (dco.isChanged(field.getIndex())) {
-                        DcModule mappingMod = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
-                        String sql = "DELETE FROM " + mappingMod.getTableName() + " WHERE " +  
+                        mappingMod = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
+                        sql = "DELETE FROM " + mappingMod.getTableName() + " WHERE " +  
                                      mappingMod.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'";
                         stmt.execute(sql);
                     }
@@ -126,7 +132,7 @@ public class UpdateQuery extends Query {
                 }
             }
     
-            String s = sbValues.toString();
+            s = sbValues.toString();
             if (dco.getModule().getIndex() != DcModules._PICTURE && !Utilities.isEmpty(values)) {
                 ps = conn.prepareStatement("UPDATE " + dco.getTableName() + " SET " + s + "\r\n WHERE ID = '" + dco.getID() + "'");
                 setValues(ps, values);
@@ -141,40 +147,43 @@ public class UpdateQuery extends Query {
                 ps.close();
             }
     
-            for (Collection<DcMapping> c : references) {
-                saveReferences(c, dco.getID());
+            for (Collection<DcMapping> mappings : references) {
+                saveReferences(mappings, dco.getID());
             }
             
-            for (Picture picture : pictures) {
-                if (picture.isNew()) {
+            for (Picture p : pictures) {
+                if (p.isNew()) {
                     // prevent primary key violations
                     stmt.execute("DELETE FROM PICTURE WHERE OBJECTID = '" + 
-                                  picture.getValue(Picture._A_OBJECTID) + "' AND FIELD = '" + 
-                                  picture.getValue(Picture._B_FIELD) + "'");
-                    new InsertQuery(picture).run();
-                    saveImage(picture);
-                } else if (picture.isEdited()) {
-                    new UpdateQuery(picture).run();
-                    saveImage(picture);
-                } else if (picture.isDeleted()) {
-                    stmt.execute("DELETE FROM " + picture.getTableName() + " WHERE " +
-                            picture.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "' AND " +
-                            picture.getField(Picture._B_FIELD).getDatabaseFieldName() + " = '" +  picture.getValue(Picture._B_FIELD) + "'");
-                    deleteImage(picture);    
+                                  p.getValue(Picture._A_OBJECTID) + "' AND FIELD = '" + 
+                                  p.getValue(Picture._B_FIELD) + "'");
+                    new InsertQuery(p).run();
+                    saveImage(p);
+                } else if (p.isEdited()) {
+                    new UpdateQuery(p).run();
+                    saveImage(p);
+                } else if (p.isDeleted()) {
+                    stmt.execute("DELETE FROM " + p.getTableName() + " WHERE " +
+                            p.getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "' AND " +
+                            p.getField(Picture._B_FIELD).getDatabaseFieldName() + " = '" +  p.getValue(Picture._B_FIELD) + "'");
+                    deleteImage(p);    
                 }
             }
             
+            boolean exists;
+            ResultSet rs;
+            Query query;
             for (DcObject child : dco.getCurrentChildren()) {
                 if (child.isChanged()) {
-                    boolean exists = false;
+                    exists = false;
                     if (child.getID() != null) {
-                        ResultSet rs = DatabaseManager.executeSQL("select count(*) from "
-                                        + child.getModule().getTableName() + " where ID = '" + child.getID() + "'");
+                        rs = DatabaseManager.executeSQL("select count(*) from " + 
+                                child.getModule().getTableName() + " where ID = '" + child.getID() + "'");
                         rs.next();
                         exists = rs.getInt(1) > 0;
                         rs.close();
                     }
-                    Query query = exists ? new UpdateQuery(child) : new InsertQuery(child);
+                    query = exists ? new UpdateQuery(child) : new InsertQuery(child);
                     query.run();
                 }
             }

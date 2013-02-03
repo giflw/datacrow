@@ -97,8 +97,9 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         XmlModule module = getModule();
 
         Collection<XmlField> fields = new ArrayList<XmlField>();
+        XmlField field;
         for (int i = 0; i < table.getRowCount(); i++) {
-            XmlField field = (XmlField) table.getValueAt(i, 0);
+            field = (XmlField) table.getValueAt(i, 0);
             fields.add(field);
         }
         
@@ -120,13 +121,15 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
     
     private Collection<String> getCurrentFieldNames() {
         Collection<String> names = new ArrayList<String>();
+        XmlField xmlField;
         for (int i = 0; i < table.getRowCount(); i++) {
-            XmlField field = (XmlField) table.getValueAt(i, 0);
-            names.add(field.getColumn());
+            xmlField = (XmlField) table.getValueAt(i, 0);
+            names.add(xmlField.getColumn());
         }
 
+        DcField field;
         for (int i = 0; i < tableSysFields.getRowCount(); i++) {
-            DcField field = (DcField) tableSysFields.getValueAt(i, 0);
+            field = (DcField) tableSysFields.getValueAt(i, 0);
             names.add(field.getDatabaseFieldName());
         }
         

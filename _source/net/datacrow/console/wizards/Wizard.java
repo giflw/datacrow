@@ -130,8 +130,9 @@ public abstract class Wizard extends DcFrame implements ActionListener {
                 current += 1;
             
             if (current <= getStepCount()) {
+                IWizardPanel panel;
                 for (int i = 0; i < getStepCount(); i++) {
-                    IWizardPanel panel = getWizardPanel(i);
+                    panel = getWizardPanel(i);
                     panel.setVisible(i == current);
                 }
             } else {

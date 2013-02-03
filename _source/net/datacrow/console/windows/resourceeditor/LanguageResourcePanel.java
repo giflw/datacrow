@@ -90,8 +90,9 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         ArrayList<String> list = new ArrayList<String>(keys);
         Collections.sort(list);
         
+        String value;
         for (String key : list) {
-            String value = resources.get(key);
+            value = resources.get(key);
 
             if (key.startsWith("lbl")) tableLabels.addRow(new Object[] {key, value});
             if (key.startsWith("msg")) tableMessages.addRow(new Object[] {key, value});
@@ -100,14 +101,15 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
             if (key.startsWith("tip")) tableTips.addRow(new Object[] {key, value});            
         }
         
+        String key;
         for (DcModule module : DcModules.getAllModules()) {
             
             if (    module.isTopModule() || module.isChildModule() || 
                     module.getType() == DcModule._TYPE_PROPERTY_MODULE || 
                     module.isAbstract()) {
                 
-                String key = module.getModuleResourceKey();
-                String value = module.getLabel();
+                key = module.getModuleResourceKey();
+                value = module.getLabel();
                 if ((value != null && value.length() > 0) && 
                     (resources.get(key) == null || resources.get(key).length() == 0)) {
                     tableSystemLabels.addRow(new Object[] {key, value});
@@ -144,33 +146,36 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
     public void save() {
         DcLanguageResource resources = DcResources.getLanguageResource(language);
         
+        String key;
+        String value;
+        
         for (int i = 0; i < tableLabels.getRowCount(); i++) {
-            String key = (String) tableLabels.getValueAt(i, 0, true);
-            String value = (String) tableLabels.getValueAt(i, 1, true);
+            key = (String) tableLabels.getValueAt(i, 0, true);
+            value = (String) tableLabels.getValueAt(i, 1, true);
             resources.put(key, value);
         }
         
         for (int i = 0; i < tableMessages.getRowCount(); i++) {
-            String key = (String) tableMessages.getValueAt(i, 0, true);
-            String value = (String) tableMessages.getValueAt(i, 1, true);
+            key = (String) tableMessages.getValueAt(i, 0, true);
+            value = (String) tableMessages.getValueAt(i, 1, true);
             resources.put(key, value);
         }
         
         for (int i = 0; i < tableTooltips.getRowCount(); i++) {
-            String key = (String) tableTooltips.getValueAt(i, 0, true);
-            String value = (String) tableTooltips.getValueAt(i, 1, true);
+            key = (String) tableTooltips.getValueAt(i, 0, true);
+            value = (String) tableTooltips.getValueAt(i, 1, true);
             resources.put(key, value);
         }  
         
         for (int i = 0; i < tableSystemLabels.getRowCount(); i++) {
-            String key = (String) tableSystemLabels.getValueAt(i, 0, true);
-            String value = (String) tableSystemLabels.getValueAt(i, 1, true);
+            key = (String) tableSystemLabels.getValueAt(i, 0, true);
+            value = (String) tableSystemLabels.getValueAt(i, 1, true);
             resources.put(key, value);
         }   
 
         for (int i = 0; i < tableTips.getRowCount(); i++) {
-            String key = (String) tableTips.getValueAt(i, 0, true);
-            String value = (String) tableTips.getValueAt(i, 1, true);
+            key = (String) tableTips.getValueAt(i, 0, true);
+            value = (String) tableTips.getValueAt(i, 1, true);
             resources.put(key, value);
         } 
         

@@ -88,8 +88,9 @@ public class DcFieldSelectorField extends JComponent implements IComponent, Acti
     }    
 
     public void invertSelection() {
+        JCheckBox checkBox;
         for (DcField field : componentMap.keySet()) {
-            JCheckBox checkBox = componentMap.get(field);
+            checkBox = componentMap.get(field);
             checkBox.setSelected(!checkBox.isSelected());
         }
     }
@@ -116,8 +117,9 @@ public class DcFieldSelectorField extends JComponent implements IComponent, Acti
 
     public Collection<DcField> getSelectedFields() {
         Collection<DcField> fields = new ArrayList<DcField>();
+        JCheckBox checkBox;
         for (DcField field : componentMap.keySet()) {
-            JCheckBox checkBox = componentMap.get(field);
+            checkBox = componentMap.get(field);
             if (checkBox.isSelected())
                 fields.add(field);
         }
@@ -125,8 +127,9 @@ public class DcFieldSelectorField extends JComponent implements IComponent, Acti
     }
 
     public void setSelectedFields(int[] fields) {
+        JCheckBox checkBox;
         for (DcField field : componentMap.keySet()) {
-            JCheckBox checkBox = componentMap.get(field);
+            checkBox = componentMap.get(field);
             if (fields.length == 0) {
                 checkBox.setSelected(true);
             } else {
@@ -152,9 +155,10 @@ public class DcFieldSelectorField extends JComponent implements IComponent, Acti
         int x = 0;
         int y = 0;
 
+        JCheckBox checkBox;
         for (DcField field : DcModules.get(module).getFields()) {
             if (allFields || (field.getIndex() != DcObject._ID && field.getIndex() != DcObject._SYS_EXTERNAL_REFERENCES)) {
-                JCheckBox checkBox = ComponentFactory.getCheckBox(field.getLabel());
+                checkBox = ComponentFactory.getCheckBox(field.getLabel());
                 componentMap.put(field, checkBox);
     
                 panel.add(checkBox, Layout.getGBC(x, y++, 1, 1, 1.0, 1.0

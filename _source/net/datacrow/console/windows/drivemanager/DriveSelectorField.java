@@ -90,8 +90,9 @@ public class DriveSelectorField extends JComponent implements IComponent {
     public void setEditable(boolean b) {}
 
     public void setSelectedDrives(String[] drives) {
+        JCheckBox cb;
         for (File drive : componentMap.keySet()) {
-            JCheckBox cb = componentMap.get(drive);
+            cb = componentMap.get(drive);
             if (drives.length == 0) {
                 cb.setSelected(true);
             } else {
@@ -124,11 +125,13 @@ public class DriveSelectorField extends JComponent implements IComponent {
         int x = 0;
         int y = 0;
 
+        String name;
+        JCheckBox checkBox;
         for (File drive : Utilities.getDrives()) {
-            String name = Utilities.getSystemName(drive);
+            name = Utilities.getSystemName(drive);
             name = name == null || name.length() == 0 ? drive.toString() : name;
             
-            JCheckBox checkBox = ComponentFactory.getCheckBox(name);
+            checkBox = ComponentFactory.getCheckBox(name);
             componentMap.put(drive, checkBox);
 
             panel.add(checkBox, Layout.getGBC(x, y++, 1, 1, 1.0, 1.0

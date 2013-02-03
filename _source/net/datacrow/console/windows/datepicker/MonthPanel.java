@@ -101,14 +101,17 @@ public class MonthPanel extends JPanel {
         int start = (7 - (date - day) % 7) % 7;
         int days = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 
+        JLabel label;
         for (int i = 0; i < start; i++) {
-            JLabel lbl = new JLabel("");
-            add(lbl);
+            label = new JLabel("");
+            add(label);
         }
+        
         int pos = start;
+        DayLabel lbl;
         for (int i = 1; i <= days; i++) {
             pos++;
-            DayLabel lbl = new DayLabel(parent, i);
+            lbl = new DayLabel(parent, i);
             if (seldate == i && selmon == mon && selyear == year)
                 lbl.setSelectedDayStyle();
             if (currdate == i && currmon == mon && curryear == year)

@@ -96,13 +96,16 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
     private void initialize() {
         user.loadChildren(null);
 
+        DcObject permission = null;
+        Permission p;
         for (DcField field : module.getFields()) {
-            DcObject permission = null;
+            
+            permission = null;
             
             if (field.getIndex() == DcObject._ID) continue;
             
             for (DcObject child : user.getChildren()) {
-                Permission p = (Permission) child;
+                p = (Permission) child;
                 if (p.getFieldIdx() == field.getIndex() && p.getModuleIdx() == module.getIndex()) {
                     permission = p;
                     break;
@@ -222,8 +225,9 @@ public class FieldPermissionPanel extends JPanel implements ActionListener {
 
     public Collection<Permission> getPermissions() {
         Collection<Permission> permissions = new ArrayList<Permission>();
+        Permission permission;
         for (int row = 0; row < table.getRowCount(); row++) {
-            Permission permission = (Permission) table.getValueAt(row, _COLUMN_PERMISSION, true);
+            permission = (Permission) table.getValueAt(row, _COLUMN_PERMISSION, true);
             if (update && permission.isChanged())
                 permissions.add(permission);
             else if (!update)

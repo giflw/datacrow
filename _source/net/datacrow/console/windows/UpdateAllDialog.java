@@ -121,12 +121,12 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
             initProgressBar(keys.size());
             view.setListSelectionListenersEnabled(false);
             try {
-                
+                DcObject item;
 	            for (String key : keys) {
 	                
 	                if (!keepOnRunning) break;
 	                
-	                DcObject item = DataManager.getItem(dco.getModule().getIndex(), key);
+	                item = DataManager.getItem(dco.getModule().getIndex(), key);
 	                
 	                item.markAsUnchanged();
 	                item.copy(dco, true, false);

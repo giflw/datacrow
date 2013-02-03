@@ -101,8 +101,9 @@ public class TabPanel extends JPanel implements ActionListener {
         }
         
         int[] rows = tblTabs.getSelectedIndices();
+        DcObject dco;
         for (int i = rows.length - 1; i > -1; i--) {
-            DcObject dco = tblTabs.getItemAt(rows[i]);
+            dco = tblTabs.getItemAt(rows[i]);
             dco.addRequest(new UpdateItemFormSettingsWindow(dlg, true));
             try {
                 dco.delete(false);

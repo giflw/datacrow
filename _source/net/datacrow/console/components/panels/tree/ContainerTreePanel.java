@@ -214,12 +214,14 @@ public class ContainerTreePanel extends TreePanel {
 		    	
 		    	DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		    	int counter = 0;
+		    	ContainerNodeElement ne;
+		    	DcDefaultMutableTreeNode current;
 		    	for (String parentKey : parents.keySet()) {
 		    		
 		    		if (stop) break;
 		    		
-		    		ContainerNodeElement ne = new ContainerNodeElement(parentKey, (String) parents.get(parentKey), icons.get(parentKey));
-		    		DcDefaultMutableTreeNode current = new DcDefaultMutableTreeNode(ne);
+		    		ne = new ContainerNodeElement(parentKey, (String) parents.get(parentKey), icons.get(parentKey));
+		    		current = new DcDefaultMutableTreeNode(ne);
 		    		model.insertNodeInto(current, top, counter++);
 		    		top.addItem(parentKey, Integer.valueOf(module.getIndex()));
 		    		createChildren(model, parentKey, current, relations, all, icons);

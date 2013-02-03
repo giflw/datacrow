@@ -85,14 +85,15 @@ public class PluginPermissionPanel extends JPanel implements ActionListener {
     private void initialize() {
         user.loadChildren(null);
 
+        DcObject permission = null;
+        Permission p;
         for (RegisteredPlugin plugin : Plugins.getInstance().getRegistered()) {
-            DcObject permission = null;
-            
+            permission = null;
             if (!plugin.isAuthorizable())
                 continue;
             
             for (DcObject child : user.getChildren()) {
-                Permission p = (Permission) child;
+                p = (Permission) child;
                 if (p.getPlugin() != null &&  plugin.getKey().equals(p.getPlugin())) {
                     permission = p;
                     break;
@@ -171,8 +172,9 @@ public class PluginPermissionPanel extends JPanel implements ActionListener {
 
     public Collection<Permission> getPermissions() {
         Collection<Permission> permissions = new ArrayList<Permission>();
+        Permission permission;
         for (int row = 0; row < table.getRowCount(); row++) {
-            Permission permission = (Permission) table.getValueAt(row, _COLUMN_PERMISSION, true);
+            permission = (Permission) table.getValueAt(row, _COLUMN_PERMISSION, true);
             if (update && permission.isChanged())
                 permissions.add(permission);
             else if (!update)

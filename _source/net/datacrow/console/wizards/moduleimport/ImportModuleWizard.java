@@ -90,8 +90,9 @@ public class ImportModuleWizard extends Wizard {
             
             current += 1;
             if (current <= getStepCount()) {
+                ModuleImportWizardPanel panel;
                 for (int i = 0; i < getStepCount(); i++) {
-                    ModuleImportWizardPanel panel = (ModuleImportWizardPanel) getWizardPanel(i);
+                    panel = (ModuleImportWizardPanel) getWizardPanel(i);
                     panel.setDefinition(definition);
                     panel.setVisible(i == current);
                 }

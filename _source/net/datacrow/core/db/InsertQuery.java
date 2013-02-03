@@ -83,10 +83,12 @@ public class InsertQuery extends Query {
             conn = DatabaseManager.getAdminConnection();
             stmt = conn.createStatement();
         
+            Picture picture;
+            ImageIcon image;
             for (DcField field : dco.getFields()) {
                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                    Picture picture = (Picture) dco.getValue(field.getIndex());
-                    ImageIcon image = picture != null ? (ImageIcon) picture.getValue(Picture._D_IMAGE) : null; 
+                    picture = (Picture) dco.getValue(field.getIndex());
+                    image = picture != null ? (ImageIcon) picture.getValue(Picture._D_IMAGE) : null; 
                     if (image != null) {
                         if (image.getIconHeight() == 0 || image.getIconWidth() == 0) {
                             logger.warn("Image " + dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg" + " is invalid and will not be saved");
@@ -125,12 +127,12 @@ public class InsertQuery extends Query {
             
             saveReferences(references, dco.getID());
             
-            for (Picture picture : pictures) {
+            for (Picture p : pictures) {
                 try {
-                    new InsertQuery(picture).run();
-                    saveImage(picture);
+                    new InsertQuery(p).run();
+                    saveImage(p);
                 } catch (SQLException e) {
-                    logger.error("An error occured while inserting the following picture: " + picture, e);
+                    logger.error("An error occured while inserting the following picture: " + p, e);
                 }   
             }
 

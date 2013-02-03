@@ -157,17 +157,20 @@ public class DcDatabase {
         if (DataCrow.getVersion().isNewer(DatabaseManager.getOriginalVersion()))
             return;
         
+        String sql;
+        ResultSet rs = null;
+        ResultSetMetaData md;
+        String columnName;
+        boolean remove;
         for (DcModule module : DcModules.getAllModules()) {
             
             if (module.isAbstract()) continue;
             
             try {
-                String sql = "select top 1 * from " + module.getTableName();
-                ResultSet rs = DatabaseManager.executeSQL(sql);
-                ResultSetMetaData md = rs.getMetaData();
-                
-                String columnName;
-                boolean remove;
+                sql = "select top 1 * from " + module.getTableName();
+                rs = DatabaseManager.executeSQL(sql);
+                md = rs.getMetaData();
+
                 for (int i = 1; i < md.getColumnCount() + 1; i++) {
                 	columnName = md.getColumnName(i);
                 	remove = false;
@@ -189,6 +192,8 @@ public class DcDatabase {
                 rs.close();
             } catch (Exception e) {
                 logger.error("Error while trying to cleanup unused columns", e);
+            } finally {
+                try { if (rs != null) rs.close(); } catch (Exception e) {}
             }
         }
     }
@@ -249,16 +254,17 @@ public class DcDatabase {
         Statement stmt = connection.createStatement();
 
         initializeSystemTable(stmt);
-        
+        String testQuery;
+        ResultSet rs;
         for (DcModule module : DcModules.getAllModules()) {
             if (!module.isAbstract()) {
-                String testQuery = "select * from " + module.getTableName();
+                testQuery = "select * from " + module.getTableName();
                 try {
                     stmt.setMaxRows(1);
-                    ResultSet result = stmt.executeQuery(testQuery);
-                    initializeColumns(connection, result.getMetaData(), module);
+                    rs = stmt.executeQuery(testQuery);
+                    initializeColumns(connection, rs.getMetaData(), module);
                     logger.debug(DcResources.getText("msgTableFound", module.getTableName()));
-                    result.close();
+                    rs.close();
                 } catch (SQLException e) {
                     logger.info((DcResources.getText("msgTableNotFound", module.getTableName())));
                     createTable(module);
@@ -286,19 +292,26 @@ public class DcDatabase {
     private void initializeColumns(Connection connection, ResultSetMetaData metaData, DcModule module) throws SQLException {
         String tablename = module.getTableName();
         
+        String column;
+        String type;
+        boolean found;
+        boolean convert;
+        int dbSize;
+        int dbType;
         for (DcField field : module.getFields()) {
-            String column = field.getDatabaseFieldName();
-            String type = field.getDataBaseFieldType();
             
-            boolean found = false;
-            boolean convert = false;
+            column = field.getDatabaseFieldName();
+            type = field.getDataBaseFieldType();
+            
+            found = false;
+            convert = false;
             
             if (!field.isUiOnly()) {
                 for (int i = 1; i < metaData.getColumnCount() + 1; i++) {
                     if (metaData.getColumnName(i).equalsIgnoreCase(column)) {
                         found = true;
-                        int dbSize = metaData.getColumnDisplaySize(i);
-                        int dbType = metaData.getColumnType(i);
+                        dbSize = metaData.getColumnDisplaySize(i);
+                        dbType = metaData.getColumnType(i);
                         
                         convert = false;
                         if (    dbType == Types.BIGINT && 

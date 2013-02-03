@@ -47,8 +47,9 @@ public class ItemImporterFieldMappings {
      */
     public void setFields(int moduleIdx, Collection<String> fields) {
         DcModule module = DcModules.get(moduleIdx);
+        DcField target;
         for (String fieldName : fields) {
-            DcField target = null;
+            target = null;
             for (DcField field : module.getFields()) {
                 if (field.getDatabaseFieldName().equals(fieldName) || 
                     field.getLabel().equals(fieldName) || 

@@ -118,8 +118,9 @@ public class ResourceEditorDialog extends DcFrame implements ActionListener {
         //**********************************************************
         //Language tabs
         //**********************************************************
+        LanguageResourcePanel lrp;
         for (String language : DcResources.getLanguages()) {
-            LanguageResourcePanel lrp = new LanguageResourcePanel(language);
+            lrp = new LanguageResourcePanel(language);
             tp.addTab(language, lrp);
             panels.add(lrp);
         }

@@ -70,9 +70,10 @@ public class SystemInfoPanel extends JPanel {
         columnCount.setCellRenderer(NumberTableCellRenderer.getInstance());
         
         int total = 0;
+        int count;
         for (DcModule module : DcModules.getModules()) {
             if (!module.isAbstract() && module.isTopModule()) {
-                int count = getRecordCount(module);
+                count = getRecordCount(module);
                 total += count;
                 table.addRow(new Object[] {module.getLabel(), count});
             }

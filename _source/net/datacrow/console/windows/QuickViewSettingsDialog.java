@@ -266,8 +266,9 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
             table.clear();
             
             // add re-enabled fields
+            boolean exists;
             for (DcFieldDefinition def : module.getFieldDefinitions().getDefinitions()) {
-                boolean exists = false;
+                exists = false;
                 for (QuickViewFieldDefinition qvDef : definitions.getDefinitions()) {
                     if (def.getIndex() == qvDef.getField())
                         exists = true;
@@ -286,11 +287,15 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
             table.cancelEdit();
             
             QuickViewFieldDefinitions qvDefs = new QuickViewFieldDefinitions();
+            boolean enabled;
+            String direction;
+            DcField field;
+            int length;
             for (int row = 0; row < table.getRowCount(); row++) {
-                boolean enabled = ((Boolean) table.getValueAt(row, 1, true)).booleanValue();
-                String direction = (String) table.getValueAt(row, 2, true);
-                DcField field = (DcField) table.getValueAt(row, 3, true);
-                int length = !Utilities.isEmpty(table.getValueAt(row, 4, true)) ? 
+                enabled = ((Boolean) table.getValueAt(row, 1, true)).booleanValue();
+                direction = (String) table.getValueAt(row, 2, true);
+                field = (DcField) table.getValueAt(row, 3, true);
+                length = !Utilities.isEmpty(table.getValueAt(row, 4, true)) ? 
                               Integer.valueOf(table.getValueAt(row, 4, true).toString()) : 0;
                 qvDefs.add(new QuickViewFieldDefinition(field.getIndex(), enabled, direction, length));
             }

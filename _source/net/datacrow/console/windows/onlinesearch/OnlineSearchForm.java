@@ -186,8 +186,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     private void removeValues(DcObject dco) {
         int[] fields = getModule().getSettings().getIntArray(DcRepository.ModuleSettings.stOnlineSearchRetrievedFields);
 
+        boolean allowed;
         for (DcField field : dco.getFields()) {
-            boolean allowed = false;
+            allowed = false;
             for (int i = 0; fields != null && i < fields.length; i++) {
                 if (field.getIndex() == fields[i] || field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES || field.getIndex() == DcObject._ID)
                     allowed = true;
@@ -269,8 +270,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
         ArrayList<DcObject> result = new ArrayList<DcObject>();
         if (ID == null) {
             int[] rows = getView().getSelectedIndices();
+            DcObject dco;
             for (int i = 0; i < rows.length; i++) {
-                DcObject dco = items.get(rows[i]);
+                dco = items.get(rows[i]);
                 result.add(fill(dco));
             }
         } else {
@@ -387,8 +389,9 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                                 new Thread(new Runnable() { 
                                     @Override
                                     public void run() {
+                                        DcObject clone;
                                         for (DcObject o : selected) {
-                                            DcObject clone = o.clone();
+                                            clone = o.clone();
                                             clone.setValue(DcObject._ID, null);
                                             clone.setIDs();
                                             getModule().getCurrentInsertView().add(clone);

@@ -184,12 +184,13 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
         JMenu menuAdmin = ComponentFactory.getMenu(IconLibrary._icoModuleTypeProperty16, DcResources.getText("lblAdministration"));
         
         Collection<DcPropertyModule> modules = new ArrayList<DcPropertyModule>(); 
+        DcField field;
+        DcPropertyModule mod;
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-            DcField field = module.getField(definition.getIndex());
-            DcPropertyModule pm = DcModules.getPropertyModule(field);
-            
-            if (pm != null && !modules.contains(pm))
-                modules.add(pm);
+            field = module.getField(definition.getIndex());
+            mod = DcModules.getPropertyModule(field);
+            if (mod != null && !modules.contains(mod))
+                modules.add(mod);
         }
 
         for (DcModule pm : modules) {

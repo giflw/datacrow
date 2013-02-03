@@ -97,12 +97,15 @@ public class DcModuleList extends DcList implements ListSelectionListener {
         if (elements != null) elements.clear();
         
         DcModule referencedMod;
+        List<ModulePanel> c;
         for (DcModule module : DcModules.getAllModules()) {
             try {
                 
+                c = null;
+                
                 if (module.isSelectableInUI() && module.isEnabled()) {
                     
-                    List<ModulePanel> c = new ArrayList<ModulePanel>();
+                    c = new ArrayList<ModulePanel>();
                     c.add(new ModulePanel(module, ModulePanel._ICON32));
                     
                     for (DcField field : module.getFields()) {

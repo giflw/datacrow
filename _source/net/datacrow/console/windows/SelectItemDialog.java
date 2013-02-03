@@ -175,8 +175,9 @@ public class SelectItemDialog extends DcDialog implements ActionListener, KeyLis
             list.setListData(elements);
         } else {
             Vector<DcListElement> newElements = new Vector<DcListElement>();
+            String displayValue;
             for (DcListElement element : elements) {
-                String displayValue = ((DcObjectListElement) element).getDcObject().toString();
+                displayValue = ((DcObjectListElement) element).getDcObject().toString();
                 if (displayValue.toLowerCase().startsWith(filter.toLowerCase()))
                     newElements.add(element);
             }

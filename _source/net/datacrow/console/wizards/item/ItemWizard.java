@@ -140,8 +140,9 @@ public class ItemWizard extends Wizard {
                                     public void run() {
                                         current += 1;
                                         if (current <= getStepCount()) {
+                                            ItemWizardPanel panel;
                                             for (int i = 0; i < getStepCount(); i++) {
-                                                ItemWizardPanel panel = (ItemWizardPanel) getWizardPanel(i);
+                                                panel = (ItemWizardPanel) getWizardPanel(i);
                                                 panel.setObject(dco);
                                                 panel.setVisible(i == current);
                                             }

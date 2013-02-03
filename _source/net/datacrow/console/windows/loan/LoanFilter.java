@@ -100,11 +100,14 @@ public class LoanFilter {
         List<DcObject> items = new ArrayList<DcObject>();
         
         DcObject dco;
+        Date endDate;
+        Date dueDate;
+        String ID;
         for (DcObject loan : DataManager.get(df)) {
             
             if (onlyOverdue) {
-                Date endDate = (Date) loan.getValue(Loan._B_ENDDATE);
-                Date dueDate = (Date) loan.getValue(Loan._E_DUEDATE);
+                endDate = (Date) loan.getValue(Loan._B_ENDDATE);
+                dueDate = (Date) loan.getValue(Loan._E_DUEDATE);
                 
                 if (dueDate == null)
                     continue;
@@ -115,7 +118,7 @@ public class LoanFilter {
             }
             
             
-            String ID = (String) loan.getValue(Loan._D_OBJECTID);
+            ID = (String) loan.getValue(Loan._D_OBJECTID);
             if (selectedModule != null) {
                 dco = DataManager.getItem(selectedModule.getIndex(), ID);
                 if (dco != null) {

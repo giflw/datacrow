@@ -77,10 +77,11 @@ public class DeleteQuery extends Query {
                 String sql = "DELETE FROM " + dco.getTableName() + " WHERE ";
                 
                 int counter = 0;
+                boolean isString;
                 for (DcField field : dco.getFields()) {
                     
-                    boolean isString = field.getValueType() == DcRepository.ValueTypes._STRING ||
-                                       field.getValueType() == DcRepository.ValueTypes._DATE;
+                    isString = field.getValueType() == DcRepository.ValueTypes._STRING ||
+                               field.getValueType() == DcRepository.ValueTypes._DATE;
                     if (    dco.isChanged(field.getIndex()) && 
                             !field.isUiOnly() && 
                             !Utilities.isEmpty(dco.getValue(field.getIndex()))) {

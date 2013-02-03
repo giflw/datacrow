@@ -227,10 +227,13 @@ public class ItemForm extends DcFrame implements ActionListener {
             public void windowOpened(WindowEvent we) {
                 try {
                 	
+                    int index;
+                    DcField field;
+                    JComponent component;
                     for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-                        int index = definition.getIndex();
-                        DcField field = dco.getField(index);
-                        JComponent component = fields.get(field);
+                        index = definition.getIndex();
+                        field = dco.getField(index);
+                        component = fields.get(field);
                         
                         if (component == null)
                             break;
@@ -275,8 +278,9 @@ public class ItemForm extends DcFrame implements ActionListener {
 
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
             
+            String title;
             for (int i = tabbedPane.getTabCount() - 1; i > 0; i--) {
-                String title = tabbedPane.getTitleAt(i);
+                title  = tabbedPane.getTitleAt(i);
                 if (title.equals(field.getLabel()))
                     tabbedPane.removeTabAt(i);
             }
@@ -372,18 +376,24 @@ public class ItemForm extends DcFrame implements ActionListener {
             }
     
             int[] indices = object.getFieldIndices();
+            int index;
+            DcField field;
+            JComponent component;
+            Object oldValue;
+            Object newValue;
+            boolean empty;
             for (int i = 0; i < indices.length; i++) {
-                int index = indices[i];
+                index = indices[i];
                 
-                DcField field = dco.getField(index);
-                JComponent component = fields.get(field);
-                Object oldValue = ComponentFactory.getValue(component);
-                Object newValue = object.getValue(index);
+                field = dco.getField(index);
+                component = fields.get(field);
+                oldValue = ComponentFactory.getValue(component);
+                newValue = object.getValue(index);
     
                 if (newValue instanceof Picture)
                     ((Picture) newValue).loadImage(false);
     
-                boolean empty = Utilities.getComparableString(oldValue).length() == 0;
+                empty = Utilities.getComparableString(oldValue).length() == 0;
                 if ((empty || overwrite) && (!Utilities.isEmpty(newValue)))
                     ComponentFactory.setValue(component, newValue);
             }
@@ -400,9 +410,10 @@ public class ItemForm extends DcFrame implements ActionListener {
     }
 
     private void setRequiredFields() {
+        JLabel label;
         for (DcFieldDefinition def : DcModules.get(moduleIdx).getFieldDefinitions().getDefinitions()) {
             if (def.isRequired()) {
-                JLabel label = labels.get(DcModules.get(moduleIdx).getField(def.getIndex()));
+                label = labels.get(DcModules.get(moduleIdx).getField(def.getIndex()));
                 label.setForeground(ComponentFactory.getRequiredColor());
             }
         }
@@ -451,8 +462,9 @@ public class ItemForm extends DcFrame implements ActionListener {
             newList = newList == null ? new ArrayList<DcMapping>() : newList;
             
             if (oldList.size() == newList.size()) {
+                boolean found;
                 for (DcMapping newMapping : newList) {
-                    boolean found = false;
+                    found = false;
                     for (DcMapping oldMapping : oldList) {
                         if (newMapping.getReferencedID().equals(oldMapping.getReferencedID()))
                             found = true;
@@ -502,8 +514,9 @@ public class ItemForm extends DcFrame implements ActionListener {
         boolean changed = dcoOrig.isChanged();
 
         int[] indices = dcoOrig.getFieldIndices();
+        int index;
         for (int i = 0; i < indices.length && !changed; i++) {
-            int index = indices[i];
+            index = indices[i];
             
             if (index == DcObject._ID || index == DcObject._SYS_CREATED || index == DcObject._SYS_MODIFIED)
                 continue;
@@ -537,10 +550,12 @@ public class ItemForm extends DcFrame implements ActionListener {
         if (update) 
             dco.markAsUnchanged();
         
+        JComponent component;
+        Object value;
         for (DcField field : fields.keySet()) {
             
-            JComponent component = fields.get(field);
-            Object value = ComponentFactory.getValue(component);
+            component = fields.get(field);
+            value = ComponentFactory.getValue(component);
             value = value == null ? "" : value;
 
             if (update && isChanged(field.getIndex())) {
@@ -595,15 +610,18 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     private void initializeComponents() {
         int[] indices = dco.getFieldIndices();
+        int index;
+        DcField field;
+        JComponent c;
         for (int i = 0; i < indices.length; i ++) {
-            int index = indices[i];
-            DcField field = dco.getField(index);
+            index = indices[i];
+            field = dco.getField(index);
 
             labels.put(field, ComponentFactory.getLabel(dco.getLabel(index)));
             if (index == DcObject._ID) {
                 fields.put(field, ComponentFactory.getIdFieldDisabled());
             } else {
-                JComponent c = ComponentFactory.getComponent(field.getModule(),
+                c = ComponentFactory.getComponent(field.getModule(),
                                                              field.getReferenceIdx(),
                                                              field.getIndex(),
                                                              field.getFieldType(),
@@ -620,37 +638,49 @@ public class ItemForm extends DcFrame implements ActionListener {
         
         DcModule module = DcModules.get(moduleIdx);
         
+        String name;
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-            String name = definition.getTab(module.getIndex());
+            name = definition.getTab(module.getIndex());
             if (name != null && name.trim().length() > 0)
                 DataManager.checkTab(module.getIndex(), name);
         }
         
         // get the tabs (sorted) and initialize the panels
+        JPanel panel;
         for (DcObject tab : DataManager.getTabs(moduleIdx)) {
-            String name = tab.getDisplayString(Tab._A_NAME);
-            JPanel panel = new JPanel();
+            name = tab.getDisplayString(Tab._A_NAME);
+            panel = new JPanel();
             panel.setLayout(Layout.getGBL());
             panels.put(name, panel);
         }
         
         // add the fields to the panels
+        int y;
+        int fieldIdx;
+        DcField field;
+        JLabel label;
+        JComponent component;
+        int stretch;
+        int factor;
+        DcLongTextField longText;
+        JScrollPane pane;
+        int space;
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
             
-            String name = definition.getTab(module.getIndex());
+            name = definition.getTab(module.getIndex());
             if (name == null || name.trim().length() == 0)
                 continue;
 
-            JPanel panel = panels.get(name);
+            panel = panels.get(name);
             if (!positions.containsKey(name))
                 positions.put(name, new Integer(0));
             
-            int y = positions.get(name).intValue();
+            y = positions.get(name).intValue();
             
-            int fieldIdx = definition.getIndex();
-            DcField field = dco.getField(fieldIdx);
-            JLabel label = labels.get(field);
-            JComponent component = fields.get(field);
+            fieldIdx = definition.getIndex();
+            field = dco.getField(fieldIdx);
+            label = labels.get(field);
+            component = fields.get(field);
             
         	if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
         	      field.isEnabled() && 
@@ -659,20 +689,20 @@ public class ItemForm extends DcFrame implements ActionListener {
                  (fieldIdx != dco.getParentReferenceFieldIndex() || 
                   fieldIdx == DcObject._SYS_CONTAINER )) { // not a reference field
 
-                int stretch = GridBagConstraints.HORIZONTAL;
-                int factor = 10;
+        	    stretch = GridBagConstraints.HORIZONTAL;
+                factor = 10;
 
                 if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD) {
                     stretch = GridBagConstraints.BOTH;
                     factor = 200;
 
-                    DcLongTextField longText = (DcLongTextField) component;
+                    longText = (DcLongTextField) component;
                     longText.setMargin(new Insets(1, 1, 1, 5));
 
                     if (field.isReadOnly()) 
                         ComponentFactory.setUneditable(longText);
                     
-                    JScrollPane pane = new JScrollPane(longText);
+                    pane = new JScrollPane(longText);
                     
                     ComponentFactory.setBorder(pane);
                     pane.setPreferredSize(new Dimension(100,100));
@@ -689,7 +719,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 if (component instanceof DcCheckBox)
                     ((DcCheckBox) component).setText("");
 
-                int space = y == 0 ? 5 : 0; 
+                space = y == 0 ? 5 : 0; 
                 panel.add(label,     Layout.getGBC(0, y, 1, 1, 1.0, 1.0
                         ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                          new Insets(space, 2, 2, 5), 0, 0));
@@ -704,15 +734,17 @@ public class ItemForm extends DcFrame implements ActionListener {
             }
         }
         
+        boolean containsLongFields;
+        JPanel dummy;
         for (String tab : panels.keySet()) {
             
-            JPanel panel = panels.get(tab);
+            panel = panels.get(tab);
             
             if (panel.getComponents().length == 0)
                 continue;
             
             // check if we have vertical stretching fields.
-            boolean containsLongFields = false;
+            containsLongFields = false;
             for (Component c : panel.getComponents()) 
                 if (c instanceof JScrollPane || c instanceof JTextArea)
                     containsLongFields = true;
@@ -720,7 +752,7 @@ public class ItemForm extends DcFrame implements ActionListener {
             if (containsLongFields) {
                 tabbedPane.addTab(tab, DataManager.getTab(moduleIdx, tab).getIcon(), panel);
             } else {
-                JPanel dummy = new JPanel();
+                dummy = new JPanel();
                 dummy.setLayout(Layout.getGBL());
                 dummy.add(panel,  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
                        ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
@@ -768,16 +800,20 @@ public class ItemForm extends DcFrame implements ActionListener {
     protected void addPictureTabs() {
         DcModule module = DcModules.get(moduleIdx);
 
+        int index;
+        DcField field;
+        JComponent component;
+        JPanel panel;
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-            int index = definition.getIndex();
-            DcField field = dco.getField(index);
-            JComponent component = fields.get(field);
+            index = definition.getIndex();
+            field = dco.getField(index);
+            component = fields.get(field);
 
             if (field.isEnabled() &&
                (field.getValueType() == DcRepository.ValueTypes._PICTURE || 
                 field.getValueType() == DcRepository.ValueTypes._ICON)) {
 
-                JPanel panel = new JPanel();
+                panel = new JPanel();
                 panel.setLayout(Layout.getGBL());
 
                 component.setPreferredSize(component.getMinimumSize());

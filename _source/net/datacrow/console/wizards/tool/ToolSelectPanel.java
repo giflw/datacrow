@@ -114,10 +114,10 @@ public class ToolSelectPanel extends ToolSelectBasePanel implements ActionListen
             addPlugin(plugins, "MassUpdate");
         }
         
+        DcPluginField fld;
         for (Plugin plugin : plugins) {
             if (SecurityCentre.getInstance().getUser().isAuthorized(plugin)) {
-                DcPluginField fld = new DcPluginField(plugin);
-                
+                fld = new DcPluginField(plugin);
                 fld.addActionListener(this);
                 add(fld, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

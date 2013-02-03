@@ -339,13 +339,14 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                     startTask();
                     denyActions();
                     int counter = 1;
+                    Requests requests;
                     for (DcObject dco : items) {
                         updateProgressBar(counter);
                         
                         dco.markAsUnchanged();
                         
                         if (counter == items.size()) {
-                            Requests requests = getAfterDeleteRequests();
+                            requests = getAfterDeleteRequests();
                             for (int j = 0; j < requests.get().length; j++) {
                                 dco.addRequest(requests.get()[j]);
                             }

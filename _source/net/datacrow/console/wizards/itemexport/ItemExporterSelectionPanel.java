@@ -54,9 +54,10 @@ public class ItemExporterSelectionPanel extends ItemExporterWizardPanel {
         int y = 0;
         int x = 0;
         
+        JRadioButton rb;
         for (ItemExporter exporter : ItemExporters.getInstance().getExporters(wizard.getModuleIdx())) {
             exporters.add(exporter);
-            JRadioButton rb = ComponentFactory.getRadioButton(exporter.getName(), exporter.getIcon(), exporter.getKey());
+            rb = ComponentFactory.getRadioButton(exporter.getName(), exporter.getIcon(), exporter.getKey());
             bg.add(rb);
             add(rb, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

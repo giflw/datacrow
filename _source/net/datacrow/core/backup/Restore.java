@@ -336,6 +336,7 @@ public class Restore extends Thread {
             DatabaseManager.closeDatabases(false);
 
             String filename;
+            File destFile;
             for (TFile entry : entries) {
                 
                 listener.notifyProcessed();
@@ -351,7 +352,7 @@ public class Restore extends Thread {
                     if (isVersion(filename)) continue;
                     if (filename == null) continue;
                     
-                    File destFile = new File(filename);
+                    destFile = new File(filename);
                     
                     if (destFile.exists()) destFile.delete();
                     if (destFile.exists()) 

@@ -71,8 +71,9 @@ public class Conversions {
             if (module.getXmlModule() == null)
                 continue;
             
+            DcField field;
             for (XmlField xmlField : module.getXmlModule().getFields()) {
-                DcField field = module.getField(xmlField.getIndex());
+                field = module.getField(xmlField.getIndex());
                 
                 if (field != null && field.getIndex() != DcObject._ID && field.getFieldType() != xmlField.getFieldType()) {
                     Conversion conversion = new Conversion(module.getIndex());
@@ -101,15 +102,17 @@ public class Conversions {
         // sort them in their natural order
         Collections.sort(filenames);
 
+        FileInputStream fos;
+        Properties properties;
         for (String filename : filenames) {
             
             if (!filename.endsWith("conversions.properties"))
                 continue;
             
-            FileInputStream fos = null;
+            fos = null;
             try {
                 fos = new FileInputStream(filename);
-                Properties properties = new Properties();
+                properties = new Properties();
                 properties.load(fos);
                 for (Object value : properties.values())
                     conversions.add(new Conversion((String) value));

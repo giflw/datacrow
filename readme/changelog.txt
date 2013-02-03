@@ -4,7 +4,10 @@ Data Crow 3.9.21  [Released on February xx, 2013]  [testing: high]  [target: pro
 
 [Fixed]
 - Minor fixes for the restore process.
-  
+
+[Changed]
+- Various optimizations.  
+
   
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.20  [Released on February 02, 2013]  [testing: high]  [target: production]

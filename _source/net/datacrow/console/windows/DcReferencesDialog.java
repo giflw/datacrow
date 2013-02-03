@@ -120,8 +120,10 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
     
     public Collection<DcObject> getDcObjects() {
         Collection<DcObject> items = new ArrayList<DcObject>();
+        
+        DcMapping mapping;
         for (DcSimpleValue sv : getValues(tblSelectedItems)) {
-            DcMapping mapping = (DcMapping) mappingModule.getItem();
+            mapping = (DcMapping) mappingModule.getItem();
             mapping.setValue(DcMapping._B_REFERENCED_ID, sv.getID());
             items.add(mapping);
         }

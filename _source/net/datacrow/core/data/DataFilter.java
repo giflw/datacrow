@@ -328,6 +328,8 @@ public class DataFilter {
         
         storage += "<ENTRIES>\n";
         
+        Object value;
+        String ids;
         for (DataFilterEntry entry : entries) {
             
             if (entry == null || entry.getValue() == null) continue;
@@ -339,9 +341,9 @@ public class DataFilter {
             storage += "<MODULE>" + entry.getModule() + "</MODULE>\n";
             storage += "<FIELD>" + entry.getField() + "</FIELD>\n";
             
-            Object value = "";
+            value = "";
             if (entry.getValue() instanceof Collection) {
-                String ids = "";
+                ids = "";
                 for (Object o : ((Collection) entry.getValue())) {
                     if (o != null && o instanceof DcObject) {
                         ids += (ids.length() > 0 ? "," : "") + ((DcObject) o).getID();

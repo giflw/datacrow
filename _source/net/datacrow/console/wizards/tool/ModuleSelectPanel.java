@@ -128,9 +128,10 @@ public class ModuleSelectPanel extends ToolSelectBasePanel {
         int y = 0;
         int x = 0;
         
+        JRadioButton rb;
         for (DcModule module : DcModules.getModules()) {
             if (module.isSelectableInUI() && module.isTopModule()) {
-                JRadioButton rb = ComponentFactory.getRadioButton(module.getLabel(), module.getIcon32(), "" + module.getIndex());
+                rb = ComponentFactory.getRadioButton(module.getLabel(), module.getIcon32(), "" + module.getIndex());
                 rb.addMouseListener(new ModuleSelectionListener());
                 bg.add(rb);
                 

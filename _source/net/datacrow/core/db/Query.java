@@ -165,17 +165,20 @@ public abstract class Query {
     
     @SuppressWarnings("unchecked")
     protected void createReferences(DcObject dco) {
+        Object value;
+        DcObject reference;
+        DcObject existing;
         for (DcField field : dco.getFields()) {        
-            Object value = dco.getValue(field.getIndex());
+            value = dco.getValue(field.getIndex());
             if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-                DcObject reference = value instanceof DcObject ? (DcObject) value : null;
+                reference = value instanceof DcObject ? (DcObject) value : null;
                 if (reference == null) continue;
                 
                 // also created references for the sub items of this reference...
                 createReferences(reference);
                 
                 try { 
-                    DcObject existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
+                    existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
                     existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
                     if (existing == null) {
                         // save the value that was set
@@ -196,14 +199,14 @@ public abstract class Query {
                     continue;
                 
                 for (DcMapping mapping : (Collection<DcMapping>) value) {
-                    DcObject reference = mapping.getReferencedObject();
+                    reference = mapping.getReferencedObject();
                     try { 
                         if (reference == null) continue;
                         
                         // also created references for the sub items of this reference...
                         createReferences(reference);
                         
-                        DcObject existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
+                        existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
                         existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
 
                         if (existing == null) {

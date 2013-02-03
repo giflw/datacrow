@@ -103,9 +103,12 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
     @Override
     public Object getValue() {
     	ProgramDefinitions definitions = new ProgramDefinitions();
+    	String extension;
+    	String program;
         for (int i = 0; i < programTable.getRowCount(); i++) {
-            String extension = (String) programTable.getValueAt(i, 0, true);
-            String program = (String) programTable.getValueAt(i, 1, true);
+            extension = (String) programTable.getValueAt(i, 0, true);
+            program = (String) programTable.getValueAt(i, 1, true);
+            
             ProgramDefinition definition = new ProgramDefinition(extension, program);
     		definitions.add(definition);
     	}
@@ -120,8 +123,9 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
     public void setValue(Object o) {
     	if (o instanceof ProgramDefinitions) {
     		ProgramDefinitions definitions = (ProgramDefinitions) o;
+    		Object[] row;
     		for (ProgramDefinition definition : definitions.getDefinitions()) {
-                Object[] row = {definition.getExtension(), definition.getProgram()}; 
+                row = new Object[] {definition.getExtension(), definition.getProgram()}; 
                 programTable.addRow(row);
     		}
     	}

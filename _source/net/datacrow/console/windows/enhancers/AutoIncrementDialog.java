@@ -145,8 +145,9 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
         comboOrderBy2.addItem("");
         comboOrderBy3.addItem("");
         
+        DcField field;
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-            DcField field = module.getField(definition.getIndex());
+            field = module.getField(definition.getIndex());
             if (field.isSearchable() && !field.isUiOnly()) {
                 comboOrderBy1.addItem(field);
                 comboOrderBy2.addItem(field);
@@ -274,9 +275,11 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
             boolean active = false;
             initiliazeUI(module);
             
+            DcField field;
+            IValueEnhancer[] enhancers;
             for (Iterator<DcField> iter = module.getFields().iterator(); iter.hasNext() && !canceled; ) {
-                DcField field =  iter.next();
-                IValueEnhancer[] enhancers = field.getValueEnhancers();
+                field =  iter.next();
+                enhancers = field.getValueEnhancers();
                 for (int i = 0; i < enhancers.length && !canceled; i++) {
                     if (enhancers[i].isEnabled() && enhancers[i] instanceof AutoIncrementer) {
                         active = true;
@@ -295,8 +298,9 @@ public class AutoIncrementDialog extends DcDialog implements ActionListener {
         private void initiliazeUI(DcModule module) {
             int totalEnhancers = 0;
             
+            IValueEnhancer[] enhancers;
             for (DcField field : module.getFields()) {
-                IValueEnhancer[] enhancers = field.getValueEnhancers();
+                enhancers = field.getValueEnhancers();
                 for (int i = 0; i < enhancers.length; i++) {
                     totalEnhancers = enhancers[i].isEnabled() && enhancers[i] instanceof AutoIncrementer ? 
                                      totalEnhancers + 1 : totalEnhancers;

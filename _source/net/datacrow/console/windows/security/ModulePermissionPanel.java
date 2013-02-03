@@ -64,8 +64,9 @@ public class ModulePermissionPanel extends JPanel {
             GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL,
             new Insets(0, 0, 0, 0), 0, 0));
     	
+        FieldPermissionPanel modulePanel;
         for (DcModule module : SecurityCentre.getInstance().getManagedModules()) {
-            FieldPermissionPanel modulePanel = new FieldPermissionPanel(module, user, update);
+            modulePanel = new FieldPermissionPanel(module, user, update);
             
             modulePanel.setEnabled(!((User) user).isAdmin());
             modulePermissionPanels.put(module.getIndex(), modulePanel);

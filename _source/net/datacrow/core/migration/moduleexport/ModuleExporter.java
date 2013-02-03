@@ -169,9 +169,11 @@ public class ModuleExporter {
 					    String reportDir = DataCrow.reportDir + module.getName().toLowerCase().replaceAll("[/\\*%., ]", "");
 					    
 				        Directory dir = new Directory(reportDir, true, new String[] {"xsl, xslt"});
+				        byte[] content;
+				        String name;
 					    for (String filename : dir.read()) {
-					        byte[] content = Utilities.readFile(new File(filename));
-					        String name = filename.substring(filename.indexOf(File.separator + "reports" + File.separator) + 9);
+					        content = Utilities.readFile(new File(filename));
+					        name = filename.substring(filename.indexOf(File.separator + "reports" + File.separator) + 9);
 		                    zf.addEntry(name, content);
 					    }
 					}
@@ -193,13 +195,15 @@ public class ModuleExporter {
     					        // get the images
     					        File imgPath = new File(parent.getPath(), module.getTableName() + "_images");
     					        if (imgPath.exists()) {
+    					            File imgFile;
+    					            byte[] img;
     					            for (String image : imgPath.list()) {
     					                
     					                if (canceled) break;
     					                
     					                // add the image
-    					                File imgFile = new File(imgPath.toString(), image);
-    					                byte[] img = Utilities.readFile(imgFile);
+    					                imgFile = new File(imgPath.toString(), image);
+    					                img = Utilities.readFile(imgFile);
     					                zf.addEntry(module.getTableName() + "_" + image, img);
     					                imgFile.delete();
     					            }

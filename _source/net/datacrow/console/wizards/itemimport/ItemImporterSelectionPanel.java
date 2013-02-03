@@ -82,10 +82,11 @@ public class ItemImporterSelectionPanel extends ItemImporterWizardPanel {
         int y = 0;
         int x = 0;
         
+        JRadioButton rb;
         for (ItemImporter reader : ItemImporters.getInstance().getImporters(wizard.getModuleIdx())) {
         	readers.add(reader);
 
-        	JRadioButton rb = ComponentFactory.getRadioButton(reader.getName(), reader.getIcon(), reader.getKey());
+        	rb = ComponentFactory.getRadioButton(reader.getName(), reader.getIcon(), reader.getKey());
             bg.add(rb);
             add(rb, Layout.getGBC( x, y++, 1, 1, 1.0, 1.0
                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,

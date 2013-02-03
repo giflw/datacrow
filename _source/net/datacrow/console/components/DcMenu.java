@@ -79,10 +79,12 @@ public class DcMenu extends JMenu implements ItemListener {
     public void itemStateChanged(ItemEvent e) {
         
         if (e.getStateChange() == ItemEvent.SELECTED) {
+            DcMenuItem mi;
+            Plugin plugin;
             for (Component c : getMenuComponents()) {
                 if (c instanceof DcMenuItem && ((DcMenuItem) c).getAction() instanceof Plugin) {
-                    DcMenuItem mi = (DcMenuItem) c;
-                    Plugin plugin = (Plugin) mi.getAction();
+                    mi = (DcMenuItem) c;
+                    plugin = (Plugin) mi.getAction();
                     mi.setIcon(plugin.getIcon());
                     mi.setEnabled(plugin.isEnabled());
                     mi.setText(plugin.getLabel());

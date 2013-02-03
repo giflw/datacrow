@@ -392,6 +392,7 @@ public class DataManager {
     public static List<DcObject> getReferencingItems(DcObject item) {
         List<DcObject> items = new ArrayList<DcObject>();
         
+        DataFilter df;
         for (DcModule module : DcModules.getActualReferencingModules(item.getModule().getIndex())) {
             if ( module.getIndex() != item.getModule().getIndex() && 
                  module.getType() != DcModule._TYPE_MAPPING_MODULE &&   
@@ -399,7 +400,7 @@ public class DataManager {
                 
                 for (DcField field : module.getFields()) {
                     if (field.getReferenceIdx() == item.getModule().getIndex()) {
-                        DataFilter df = new DataFilter(module.getIndex());
+                        df = new DataFilter(module.getIndex());
                         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, item));
                         
                         for (DcObject dco : DataManager.get(df, module.getMinimalFields(null))) {

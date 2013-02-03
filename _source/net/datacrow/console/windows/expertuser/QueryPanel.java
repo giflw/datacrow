@@ -85,8 +85,9 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
         
         table.setColumnCount(columns);
         int counter = 1;
+        TableColumn column;
         for (Enumeration<TableColumn> enumerator = table.getColumnModel().getColumns(); enumerator.hasMoreElements(); counter++) {
-            TableColumn column = enumerator.nextElement();
+            column = enumerator.nextElement();
             column.setHeaderValue(result.getMetaData().getColumnName(counter).toLowerCase());
         }
 
@@ -213,10 +214,12 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
             queryFile.createNewFile();
             RandomAccessFile access  = new RandomAccessFile(queryFile, "rw");
 
+            Object o;
+            String query;
             for (int i = 0; i < comboSQLCommands.getItemCount(); i++) {
-                Object o = comboSQLCommands.getItemAt(i);
+                o = comboSQLCommands.getItemAt(i);
                 if (o != null && o instanceof QueryObject) {
-                    String query = ((QueryObject) o).getQryString();
+                    query  = ((QueryObject) o).getQryString();
                     query = query.replaceAll("\r", " ");
                     query = query.replaceAll("\n", " ");
                     access.writeBytes(query + '\n');

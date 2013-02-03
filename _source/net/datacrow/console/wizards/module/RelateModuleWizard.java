@@ -124,8 +124,9 @@ public class RelateModuleWizard extends Wizard {
             
             current += 1;
             if (current <= getStepCount()) {
+                ModuleWizardPanel panel;
                 for (int i = 0; i < getStepCount(); i++) {
-                    ModuleWizardPanel panel = (ModuleWizardPanel) getWizardPanel(i);
+                    panel = (ModuleWizardPanel) getWizardPanel(i);
                     panel.setModule(module);
                     panel.setVisible(i == current);
                 }

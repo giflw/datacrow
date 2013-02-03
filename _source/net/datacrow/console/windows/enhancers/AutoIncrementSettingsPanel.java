@@ -102,9 +102,11 @@ public class AutoIncrementSettingsPanel extends JPanel {
             enhancers.add(new AutoIncrementer(DcMediaObject._U5_USER_NUMERIC2));
         }
         
+        int field;
+        Object[] row;
         for (AutoIncrementer incrementer : enhancers) {            
-            int field = incrementer.getField();
-            Object[] row = new Object[] {  module.getField(field),  
+            field = incrementer.getField();
+            row = new Object[] {  module.getField(field),  
                                            incrementer.isEnabled(), 
                                            incrementer.isFillGaps(), 
                                            incrementer.getStep()};
@@ -115,12 +117,16 @@ public class AutoIncrementSettingsPanel extends JPanel {
 
     public Collection<AutoIncrementer> getEnhancers() {
         Collection<AutoIncrementer> enhancers = new ArrayList<AutoIncrementer>(); 
+        DcField field;
+        boolean enabled;
+        boolean fillGaps;
+        int step;
         for (int i = 0; i < table.getRowCount(); i++) {
-            DcField field = (DcField) table.getValueAt(i, 0, true);
+            field = (DcField) table.getValueAt(i, 0, true);
             if (field != null) {
-                boolean enabled = ((Boolean) table.getValueAt(i, 1, true)).booleanValue();
-                boolean fillGaps = ((Boolean) table.getValueAt(i, 2, true)).booleanValue();
-                int step = ((Integer) table.getValueAt(i, 3, true)).intValue();
+                enabled = ((Boolean) table.getValueAt(i, 1, true)).booleanValue();
+                fillGaps = ((Boolean) table.getValueAt(i, 2, true)).booleanValue();
+                step = ((Integer) table.getValueAt(i, 3, true)).intValue();
                 
                 enhancers.add(new AutoIncrementer(field.getIndex(), enabled, fillGaps, step));
             }

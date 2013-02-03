@@ -197,8 +197,9 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 	private class SavingTask extends Thread {
 		@Override
 		public void run() {
+		    DcObject dco;
 			for (int row = table.getRowCount(); row > 0; row--) {
-				DcObject dco = table.getItemAt(row - 1);
+				dco = table.getItemAt(row - 1);
 				dco.setIDs();
 				
 				try {

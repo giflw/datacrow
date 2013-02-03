@@ -189,9 +189,6 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                     cbModules.addItem(m);
             }
             
-//            if (current != null && current.canBeLend())
-//                cbModules.setSelectedItem(current);
-            
             cbLoans.addItem(DcResources.getText("lblOnlyCurrentLoans"));
             cbLoans.addItem(DcResources.getText("lblOnlyHistoricalLoans"));
             cbLoans.addItem(DcResources.getText("lblAllLoans"));

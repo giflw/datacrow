@@ -71,12 +71,15 @@ public class DcModuleSelector extends JComponent implements IComponent {
 
         int y = 0;
         int x = 0;
+        
+        JCheckBox checkBox;
+        JLabel label;
         for (DcModule module : DcModules.getAllModules()) {
             if (DcModules.isTopModule(module.getIndex())) {
-                JCheckBox checkBox = ComponentFactory.getCheckBox("");
+                checkBox = ComponentFactory.getCheckBox("");
                 checkBox.setSelected(module.isEnabled());
                 checkBox.addActionListener(new ToggleModuleAction(module.getIndex()));
-                JLabel label = ComponentFactory.getLabel(module.getLabel(), module.getIcon32());
+                label = ComponentFactory.getLabel(module.getLabel(), module.getIcon32());
                 panel.add(checkBox,   Layout.getGBC( x, y, 1, 1, 1.0, 1.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets( 0, 5, 5, 5), 0, 0));

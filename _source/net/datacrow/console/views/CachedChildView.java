@@ -98,10 +98,12 @@ public class CachedChildView extends View implements ActionListener {
     
     protected void syncCache() {
         DcObject[] c = children.toArray(new DcObject[0]);
+        DcObject dcoCached;
+        boolean exists = false;
         for (DcObject dco : vc.getItems()) {
-            boolean exists = false;
+            exists = false;
             for (int j = 0; j < c.length; j++) {
-                DcObject dcoCached = c[j];
+                dcoCached = c[j];
                 if (dcoCached.getID().equals(dco.getID())) {
                     dcoCached.copy(dco, true, true);
                     exists = true;
@@ -129,8 +131,9 @@ public class CachedChildView extends View implements ActionListener {
     public List<DcObject> getChildren(String parentID) {
         syncCache();
         List<DcObject> c = new ArrayList<DcObject>();
+        DcObject dco;
         for (int i = 0; i < children.size(); i++) {
-            DcObject dco = children.get(i);
+            dco = children.get(i);
             if (dco.getParentID().equals(parentID))
                 c.add(dco);
         }

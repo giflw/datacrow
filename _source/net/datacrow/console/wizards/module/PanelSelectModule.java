@@ -134,9 +134,10 @@ public class PanelSelectModule extends ModuleWizardPanel {
         int y = 0;
         int x = 0;
         
+        JRadioButton rb;
         for (DcModule module : getModules()) {
             if (isModuleAllowed(module)) {
-                JRadioButton rb = ComponentFactory.getRadioButton(module.getLabel(), module.getIcon16(), "" + module.getIndex());
+                rb = ComponentFactory.getRadioButton(module.getLabel(), module.getIcon16(), "" + module.getIndex());
                 rb.addMouseListener(new ModuleSelectionListener());
                 bg.add(rb);
                 

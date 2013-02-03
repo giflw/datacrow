@@ -124,13 +124,14 @@ public class PanelChildModule extends ModuleWizardPanel {
         int y = 0;
         int x = 0;
         
+        JRadioButton rb;
         for (DcModule module : DcModules.getAllModules()) {
             
             if (!module.isAbstract() &&
                  module.isTopModule() && 
                 !module.isParentModule() && !module.isChildModule()) {
 
-                JRadioButton rb = ComponentFactory.getRadioButton(
+                rb = ComponentFactory.getRadioButton(
                         module.getName(), module.getIcon16(), "" + module.getIndex());
 
                 fields.put(module.getIndex(), rb);

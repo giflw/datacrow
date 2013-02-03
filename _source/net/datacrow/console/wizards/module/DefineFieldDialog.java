@@ -131,8 +131,9 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         checkSearchable.setSelected(field.isSearchable());
         numberMaxLength.setValue(field.getMaximumLength());
         
+        FieldType ft;
         for (int i = 0; i < comboFieldType.getItemCount(); i++) {
-            FieldType ft = (FieldType) comboFieldType.getItemAt(i);
+            ft = (FieldType) comboFieldType.getItemAt(i);
             if (ft.getIndex() == field.getFieldType()) {
                 comboFieldType.setSelectedItem(ft);
                 break;
@@ -141,9 +142,9 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
 
         if (field.getFieldType() == ComponentFactory._REFERENCESFIELD ||
             field.getFieldType() == ComponentFactory._REFERENCEFIELD) {
-            
+            DcModule m;
             for (int i = 0; i < comboReference.getItemCount(); i++) {
-                DcModule m = (DcModule) comboReference.getItemAt(i);
+                m = (DcModule) comboReference.getItemAt(i);
                 if (m.getIndex() == field.getModuleReference())
                     comboReference.setSelectedIndex(i);
             }

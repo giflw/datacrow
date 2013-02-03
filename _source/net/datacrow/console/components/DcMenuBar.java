@@ -50,8 +50,9 @@ public class DcMenuBar extends JMenuBar {
     public void setFont(Font font) {
         super.setFont(font);
         
+        JMenu menu;
         for (int i = 0; i < getMenuCount(); i++) {
-            JMenu menu = getMenu(i);
+            menu = getMenu(i);
             menu.setFont(ComponentFactory.getSystemFont());
             for (int j = 0; j < menu.getMenuComponents().length; j++) {
                 menu.getMenuComponents()[j].setFont(ComponentFactory.getStandardFont());

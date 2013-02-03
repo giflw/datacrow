@@ -43,14 +43,16 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
 			source.setFile(wizard.getDefinition().getFile());
 			
 			int y = 1;
+			Setting setting;
+			JComponent c;
+			JLabel label;
 	        for (String key : wizard.getDefinition().getImporter().getSettingKeys()) {
-	        	Setting setting = DcSettings.getSetting(key) != null ? DcSettings.getSetting(key) : 
+	        	setting = DcSettings.getSetting(key) != null ? DcSettings.getSetting(key) : 
 	        		wizard.getModule().getSettings().getSetting(key);
 	        	
-	        	JComponent c = setting.getUIComponent();
+	        	c = setting.getUIComponent();
 	        	settings.put(key, (IComponent) c);
-	        	
-	        	JLabel label = ComponentFactory.getLabel(setting.getLabelText());
+	        	label = ComponentFactory.getLabel(setting.getLabelText());
 	
 	        	add(label, 
 	        	         Layout.getGBC( 0, y, 1, 1, 1.0, 1.0
@@ -79,8 +81,9 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
         
         // store the settings
         // note: I have made sure this works for both module and application settings 
+        Setting setting;
         for (String key : settings.keySet()) {
-            Setting setting = DcSettings.getSetting(key) != null ? DcSettings.getSetting(key) : wizard.getModule().getSettings().getSetting(key);
+            setting = DcSettings.getSetting(key) != null ? DcSettings.getSetting(key) : wizard.getModule().getSettings().getSetting(key);
             setting.setValue(settings.get(key).getValue());
         }        
         

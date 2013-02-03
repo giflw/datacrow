@@ -77,11 +77,12 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
     
     protected void save() {
         DcFieldDefinitions definitions = new DcFieldDefinitions();
+        DcFieldDefinition def;
         for (String key : listsRight.keySet()) {
             for (DcField field : listsRight.get(key).getFields()) {
-                DcFieldDefinition definition = field.getDefinition(); 
-                definition.setTab(key);
-                definitions.add(definition);
+                def = field.getDefinition(); 
+                def.setTab(key);
+                definitions.add(def);
             }
         }
         
@@ -111,8 +112,9 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
         cbTabs.removeActionListener(this);
         cbTabs.removeAllItems();
         
+        String name;
         for (DcObject tab : DataManager.getTabs(module.getIndex())) {
-            String name = tab.getDisplayString(Tab._A_NAME);
+            name = tab.getDisplayString(Tab._A_NAME);
             cbTabs.addItem(name);
             
             if (!scrollersRight.containsKey(name)) {
@@ -181,23 +183,23 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
     
     private void initialize() {
         
+        DcField fld;
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
             
-            DcField field = module.getField(definition.getIndex());
+            fld = module.getField(definition.getIndex());
             
-            if ((!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
-                field.isEnabled() && 
-                field.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
-                field.getValueType() != DcRepository.ValueTypes._ICON &&
-               (field.getIndex() != module.getParentReferenceFieldIndex() || 
-                field.getIndex() == DcObject._SYS_CONTAINER )) {
+            if ((!fld.isUiOnly() || fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) && 
+                fld.isEnabled() && fld.getValueType() != DcRepository.ValueTypes._PICTURE && // check the field type
+                fld.getValueType() != DcRepository.ValueTypes._ICON &&
+                (fld.getIndex() != module.getParentReferenceFieldIndex() || fld.getIndex() == DcObject._SYS_CONTAINER )) {
 
-                listLeft.add(field);
+                listLeft.add(fld);
             }
         }
         
+        String tab;
         for (DcField field : listLeft.getFields()) {
-            String tab = field.getDefinition().getTab(field.getModule());
+            tab = field.getDefinition().getTab(field.getModule());
             
             if (tab != null && !tab.trim().equals("")) {
                 listsRight.get(tab).add(field);
@@ -246,9 +248,9 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
         /*****************************************************************************
          * Input panel
          *****************************************************************************/
-        
+        String name;
         for (DcObject tab : DataManager.getTabs(module.getIndex())) {
-            String name = tab.getDisplayString(Tab._A_NAME);
+            name = tab.getDisplayString(Tab._A_NAME);
             cbTabs.addItem(name);
             createTabPanel(name);
         }
@@ -369,9 +371,10 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
         Dimension dimLeft = listLeft.getParent().getSize();
         
         Dimension dim = null;
+        int width;
         for (DcFieldList listRight : listsRight.values()) {
             if (listRight.isVisible()) {
-                int width = (int) ((dimLeft.getWidth() + listRight.getParent().getWidth()) - 20) / 2; 
+                width = (int) ((dimLeft.getWidth() + listRight.getParent().getWidth()) - 20) / 2; 
                 dim = new Dimension(width, (int) dimLeft.getHeight());
                 break;
             }

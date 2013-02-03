@@ -40,9 +40,11 @@ public class ItemImporterMappingPanel extends ItemImporterWizardPanel {
     public Object apply() throws WizardException {
         ItemImporter importer = wizard.getDefinition().getImporter();
         
+        String source;
+        DcField target;
         for (int i = 0; i < table.getRowCount(); i++) {
-        	String source = (String) table.getValueAt(i, 1, true);
-        	DcField target = (DcField) table.getValueAt(i, 2, true);
+        	source = (String) table.getValueAt(i, 1, true);
+        	target = (DcField) table.getValueAt(i, 2, true);
         	if (target != null)
         		importer.addMapping(source,  target);
         }

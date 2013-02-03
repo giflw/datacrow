@@ -85,10 +85,12 @@ public class SettingsPanel extends JPanel {
         int y = 0;
         this.setLayout(Layout.getGBL());
         
+        JLabel label;
+        JComponent c;
         for (Setting setting : settings.values()) {
             if (ignoreUISettings || setting.showToUser()) {
-                JLabel label = ComponentFactory.getLabel(setting.getLabelText());
-                JComponent c = setting.getUIComponent();
+                label = ComponentFactory.getLabel(setting.getLabelText());
+                c = setting.getUIComponent();
                 
                 boolean simplecomp = false;
                 if (c instanceof JComboBox || c instanceof JTextField || c instanceof DcCheckBox) {
@@ -140,9 +142,12 @@ public class SettingsPanel extends JPanel {
 	}
 
 	public void initializeSettings() {
+	    Component c;
+	    Object value;
+	    Color color;
         for (Setting setting : components.keySet()) {
-            Component c = components.get(setting);
-            Object value = setting.getValue();
+            c = components.get(setting);
+            value = setting.getValue();
             if (c instanceof IComponent) {
                 ((IComponent) c).setValue(value);
             } else if (c instanceof JTextComponent) {
@@ -153,16 +158,18 @@ public class SettingsPanel extends JPanel {
                 boolean bValue = ((Boolean) value).booleanValue();
                 ((JCheckBox) c).setSelected(bValue);
             } else if (c instanceof JColorChooser) {
-                Color color = (Color) value;
+                color = (Color) value;
                 ((JColorChooser) c).setColor(color);
             } 
         }
     }
     
     public void saveSettings() {
+        Component c;
+        Object value;
         for (Setting setting : components.keySet()) {
-            Component c = components.get(setting);
-            Object value = setting.getValue();
+            c = components.get(setting);
+            value = setting.getValue();
             
             if (c instanceof IComponent) {
                 value = ((IComponent) c).getValue();  

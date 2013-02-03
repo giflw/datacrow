@@ -48,8 +48,9 @@ public class DcEditableComboBox extends DcComboBox {
         Object selectedItem = getSelectedItem();
         if (selectedItem.toString().trim().length() > 0) {
             boolean unique = true;
+            Object o;
             for (int i = 1; i < getItemCount(); i++) {
-                Object o = getItemAt(i);
+                o = getItemAt(i);
                 if (o.equals(selectedItem)) {
                     unique = false;
                     break;

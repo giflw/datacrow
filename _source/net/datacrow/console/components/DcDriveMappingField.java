@@ -110,9 +110,11 @@ public class DcDriveMappingField extends JComponent implements IComponent, Actio
         if (o == null) return;
         
         String[] values = (String[]) o;
+        StringTokenizer st;
+        String[] row;
         for (String value : values) {
-            StringTokenizer st = new StringTokenizer(value, "/&/");
-            String[] row = new String[2];
+            st = new StringTokenizer(value, "/&/");
+            row = new String[2];
             row[0] = (String) st.nextElement();
             row[1] = (String) st.nextElement();
             mappingTable.addRow(row);
