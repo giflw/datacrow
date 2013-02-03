@@ -170,20 +170,33 @@ public class Restore extends Thread {
         boolean isReport = 
                 filename.toLowerCase().endsWith(".xsl") || 
                 filename.toLowerCase().endsWith(".xslt") ||
+                filename.toLowerCase().indexOf("\\reports") > -1 ||
                 filename.toLowerCase().indexOf("/reports") > -1;
-        boolean isModule = filename.toLowerCase().indexOf("/modules") > -1;
-        boolean isResource = filename.toLowerCase().endsWith(DcLanguageResource.suffix);
-        boolean isData = !isImage && !isReport && !isModule && !isResource; 
+        boolean isModule = 
+                filename.toLowerCase().indexOf("/modules") > -1 || 
+                filename.toLowerCase().indexOf("\\modules") > -1;
+        boolean isResource = 
+                filename.toLowerCase().endsWith(DcLanguageResource.suffix);
+        boolean isData = 
+                !isImage && !isReport && !isModule && !isResource; 
+        
+        String name = filename.lastIndexOf("/") > -1 ? 
+                      filename.substring(filename.lastIndexOf("/") + 1, filename.length()) :
+                      filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
         
         if (isImage && restoreDatabase) {
-            filename = DataCrow.imageDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+            filename = DataCrow.imageDir + name;
         } else if (isResource && restoreDatabase) {
-            filename = DataCrow.resourcesDir + filename.substring(filename.lastIndexOf("/") + 1, filename.length());
+            filename = DataCrow.resourcesDir + name;
         } else if (isReport && restoreReports) {
-            filename = filename.substring(filename.lastIndexOf("/reports") + 1, filename.length());
+            filename = filename.lastIndexOf("/reports") > -1 ?
+                    filename.substring(filename.lastIndexOf("/reports") + 1, filename.length()) :
+                    filename.substring(filename.lastIndexOf("\\reports") + 1, filename.length());
             filename = DataCrow.userDir + filename;
         } else if (isModule && restoreModules) {
-            filename = filename.substring(filename.lastIndexOf("/modules") + 1, filename.length());
+            filename = filename.lastIndexOf("/modules") > -1 ?
+                    filename.substring(filename.lastIndexOf("/modules") + 1, filename.length()) :
+                    filename.substring(filename.lastIndexOf("\\modules") + 1, filename.length());
             filename = DataCrow.userDir + filename;
         } else if (isData && restoreDatabase) {
             if (filename.endsWith("data_crow.properties")) {
@@ -213,15 +226,15 @@ public class Restore extends Thread {
     
                 if (!found) {
                     if (filename.endsWith(".script")) 
-                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                        filename = new File(DataCrow.databaseDir, name).toString();
                     else if (filename.endsWith(".lck")) 
-                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                        filename = new File(DataCrow.databaseDir, name).toString();
                     else if (filename.endsWith(".log")) 
-                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                        filename = new File(DataCrow.databaseDir, name).toString();
                     else if (filename.endsWith(".properties")) 
-                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                        filename = new File(DataCrow.databaseDir, name).toString();
                     else if (filename.endsWith(".new")) 
-                        filename = new File(DataCrow.databaseDir, filename.substring(filename.lastIndexOf("/") + 1, filename.length())).toString();
+                        filename = new File(DataCrow.databaseDir, name).toString();
                 }
             }
         } else {
@@ -327,11 +340,11 @@ public class Restore extends Thread {
                 
                 listener.notifyProcessed();
                 
-                // the filename will contain the full zip name and thus needs to be stripped
+                // the filename will contain the full zip file name and thus needs to be stripped
                 filename = entry.toString();
                 filename = filename.substring(filename.indexOf(".zip") + 5);
                 
-                listener.sendMessage(DcResources.getText("msgRestoringFile", filename.substring(filename.lastIndexOf("/") + 1)));
+                listener.sendMessage(DcResources.getText("msgRestoringFile", entry.getName()));
                 try {                    
                     filename = version.isOlder(new Version(3, 9, 16, 0)) ? getTargetFile_older_V_3_9_16(filename) : getTargetFile(filename);
                     
@@ -342,7 +355,7 @@ public class Restore extends Thread {
                     
                     if (destFile.exists()) destFile.delete();
                     if (destFile.exists()) 
-                        listener.sendMessage(DcResources.getText("msgRestoreFileOverwriteIssue", filename.substring(filename.lastIndexOf("/") + 1)));
+                        listener.sendMessage(DcResources.getText("msgRestoreFileOverwriteIssue", entry.getName()));
                     
                     try {
                         destFile.getParentFile().mkdirs();
