@@ -90,6 +90,7 @@ public class HtmlUtils {
         }
 
         in.close();
+        reader.close();
         
         return document;
     }    
