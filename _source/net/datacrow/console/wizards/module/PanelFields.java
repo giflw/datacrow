@@ -131,6 +131,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
         for (int i = 0; i < tableSysFields.getRowCount(); i++) {
             field = (DcField) tableSysFields.getValueAt(i, 0);
             names.add(field.getDatabaseFieldName());
+            names.add(field.getLabel());
         }
         
         return names;
