@@ -7,6 +7,7 @@ Data Crow 3.9.21  [Released on February xx, 2013]  [testing: high]  [target: pro
 
 [Changed]
 - Various optimizations.  
+- Updated the German translation - thanks to Norman Weimar
 
   
 -----------------------------------------------------------------------------------------

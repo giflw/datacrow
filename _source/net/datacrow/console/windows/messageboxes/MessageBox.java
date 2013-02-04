@@ -109,7 +109,7 @@ public class MessageBox extends DcDialog implements ActionListener, KeyListener 
         scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollIn.setPreferredSize(new Dimension(350,50));
         scrollIn.setBorder(null);
-        buttonOk = ComponentFactory.getButton(DcResources.getText("lblOK"));
+        buttonOk = ComponentFactory.getButton(DcResources.isInitialized() ? DcResources.getText("lblOK") : "Ok");
         buttonOk.addActionListener(this);
 
         panel.setLayout(Layout.getGBL());

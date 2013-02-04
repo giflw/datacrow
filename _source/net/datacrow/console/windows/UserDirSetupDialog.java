@@ -51,6 +51,7 @@ import net.datacrow.console.components.DcProgressBar;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Directory;
 import net.datacrow.util.Utilities;
 
@@ -148,8 +149,18 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
 
     private void setupDataDir() {
         buttonStart.setEnabled(false);
-        DataDirCreator ddc = new DataDirCreator(selectDir.getFile(), this);
-        ddc.start();
+        
+        
+        File file = selectDir.getFile();
+        File installDir = new File(DataCrow.installationDir);
+        
+        if (file.equals(installDir)) {
+            DcSwingUtilities.displayMessage("The installation directory can't selected as the user folder. " +
+            		"You CAN select a sub folder within the installation folder though.");
+        } else {
+            DataDirCreator ddc = new DataDirCreator(file, this);
+            ddc.start();
+        }
     }
     
     private class DataDirCreator extends Thread {

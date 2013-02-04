@@ -252,7 +252,6 @@ public class DataCrow {
                     }
                 } 
                 
-                
                 if (!userFolderExists) {
                     moduleDir = DataCrow.installationDir + "modules/";
                     pluginsDir = DataCrow.installationDir + "plugins/";
@@ -278,6 +277,15 @@ public class DataCrow {
                     totalstart = logger.isDebugEnabled() ? new Date().getTime() : 0;                
                     
                     installLafs();
+                    
+                    File installDir = new File(DataCrow.installationDir);
+                    if (pUserDir != null && installDir.equals(new File(DataCrow.userDir))) {
+                        DcSwingUtilities.displayMessage(
+                                "The installation directory can't selected as the user folder. " +
+                                "You CAN select a sub folder within the installation folder though.");
+                        
+                        System.exit(0);
+                    }
                     
                     logger.info(new Date() + " Starting Data Crow.");
                     
