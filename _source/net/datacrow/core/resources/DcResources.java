@@ -68,8 +68,13 @@ public class DcResources {
      * Loads the default language (English) and the custom languages.
      */
     private void initialize() {
-        String[] propertyFiles = {"DcLabels.properties", "DcMessages.properties", "DcTooltips.properties",
-                                  "DcAudioCodecs.properties", "DcTips.properties"}; 
+        resources.clear();
+        
+        String[] propertyFiles = {"DcLabels.properties", 
+                                  "DcMessages.properties", 
+                                  "DcTooltips.properties",
+                                  "DcAudioCodecs.properties", 
+                                  "DcTips.properties"}; 
         
         DcLanguageResource english = new DcLanguageResource("English");
         for (String propertyFile : propertyFiles) {

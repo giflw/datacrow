@@ -50,13 +50,9 @@ public class DcSettings {
 
     private static DcApplicationSettings applicationSettings = new DcApplicationSettings();
 
-    /**
-     * Saves all settings to file.
-     */
-    public static void reset() {
+    public DcSettings() {
         applicationSettings = new DcApplicationSettings();
     }
-
     
     /**
      * Saves all settings to file.
