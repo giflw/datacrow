@@ -4,9 +4,10 @@ Data Crow 3.9.21  [Released on February xx, 2013]  [testing: high]  [target: pro
 
 [Fixed]
 - Minor fixes for the restore process.
+- Fix for the HSQL upgrade.
 
 [Changed]
-- Various optimizations.  
+- Various small optimizations.  
 - Updated the German translation - thanks to Norman Weimar
 - Prevent users from selecting the installation folder as the user folder. The user 
   folder is and was meant to separate the installation folder from the user folder.
