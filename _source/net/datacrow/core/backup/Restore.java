@@ -478,9 +478,9 @@ public class Restore extends Thread {
             }
             
             if (version.isOlder(new Version(3, 9, 20, 0))) {
-                restoreOldVersion();
+                success = restoreOldVersion();
             } else {
-                restoreNewVersion();
+                success = restoreNewVersion();
             }
             
         } catch (Exception e) {

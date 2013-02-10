@@ -169,17 +169,20 @@ public class DatabaseManager {
                 conversions.save();
                 
                 Connection connection = getAdminConnection();
-                Statement stmt = connection.createStatement();
                 
-                if (!isServerClientMode) {
-                    if (compact)
-                        stmt.execute("SHUTDOWN COMPACT");
-                    else 
-                        stmt.execute("SHUTDOWN");
+                if (connection != null) {
+                    Statement stmt = connection.createStatement();
+                    
+                    if (!isServerClientMode) {
+                        if (compact)
+                            stmt.execute("SHUTDOWN COMPACT");
+                        else 
+                            stmt.execute("SHUTDOWN");
+                    }
+                    
+                    stmt.close();
+                    connection.close();
                 }
-                
-                stmt.close();
-                connection.close();
                 
                 // just to make sure the database is really released..
                 org.hsqldb.DatabaseManager.closeDatabases(0);
