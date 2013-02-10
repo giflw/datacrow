@@ -1,10 +1,11 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.21  [Released on February xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.21  [Released on February 10, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - Minor fixes for the restore process.
 - Fix for the HSQL upgrade.
+- Ratings from IMDB.com were no longer retrieved.
 
 [Changed]
 - Various small optimizations.  
