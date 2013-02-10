@@ -344,8 +344,9 @@ public class Restore extends Thread {
             try {                    
                 filename = version.isOlder(new Version(3, 9, 16, 0)) ? getTargetFile_older_V_3_9_16(filename) : getTargetFile(filename);
                 
-                if (isVersion(filename)) continue;
                 if (filename == null) continue;
+                
+                if (isVersion(filename)) continue;
                 
                 destFile = new File(filename);
                 
@@ -373,6 +374,7 @@ public class Restore extends Thread {
                 
             } catch (Exception exp) {
                 success = false;
+                logger.error(exp, exp);
                 listener.sendMessage(DcResources.getText("msgRestoreFileError", new String[] {filename, exp.getMessage()}));
             }
         }
@@ -452,6 +454,7 @@ public class Restore extends Thread {
             
             } catch (Exception exp) {
                 success = false;
+                logger.error(exp, exp);
                 listener.sendMessage(DcResources.getText("msgRestoreFileError", new String[] {filename, exp.getMessage()}));
             }
         }
