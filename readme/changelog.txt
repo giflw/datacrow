@@ -1,4 +1,12 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.21  [Released on March 24, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Issue with the file importer; resource consumption has been lowered
+- Issue with the file importer; check whether an item already exists has been improved
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.21  [Released on February 10, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

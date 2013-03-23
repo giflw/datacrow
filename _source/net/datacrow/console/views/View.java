@@ -668,6 +668,9 @@ public class View extends DcPanel implements ListSelectionListener {
 
     public void remove(String[] keys) {
         // remove it from the view
+        setListSelectionListenersEnabled(false);
+        vc.setIgnorePaintRequests(true);
+        
         if (vc.remove(keys)) {
             
             if (actionsAllowed) {
@@ -686,6 +689,9 @@ public class View extends DcPanel implements ListSelectionListener {
                 if (isParent()) childView.clear(false);
             }
         }
+        
+        vc.setIgnorePaintRequests(false);
+        setListSelectionListenersEnabled(true);
     }
 
     public void remove(int[] indices) {

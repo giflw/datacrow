@@ -9,6 +9,7 @@ import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.itemimport.IItemImporterClient;
 import net.datacrow.core.migration.itemimport.ItemImporter;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
@@ -114,6 +115,11 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
         notifyMessage(DcResources.getText("msgItemsImported", String.valueOf(updated + created)));
         notifyMessage("\n");
         notifyMessage(DcResources.getText("msgImportFinished"));
+        
+        DcModule m = wizard.getModule();
+        if (m.getSearchView() != null) {
+            m.getSearchView().refresh();
+        }   
     }
 
     @Override
@@ -121,17 +127,18 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
         DcObject other = DataManager.getItem(item.getModule().getIndex(), item.getID());
         other = other == null ? DataManager.getObjectForString(item.getModule().getIndex(), item.toString()) : other;
         // Check if the item exists and if so, update the item with the found values. Else just create a new item.
-        // This is to make sure the order in which XML files are processed (first software, then categories)
+        // This is to make sure the order in which the files are processed (first software, then categories)
         // is of no importance (!).
         try {
             if (other != null) {
                 updated++;
                 other.copy(item, true, false);
-                other.saveUpdate(true, false);
+                other.saveUpdate(false, false);
             } else {
                 created++;
+                item.setUpdateGUI(false);
                 item.setValidate(false);
-                item.saveNew(true);
+                item.saveNew(false);
             }
         } catch (ValidationException ve) {
             // will not occur as validation has been disabled.
@@ -140,5 +147,6 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
         
         tp.updateProgressTask();
         notifyMessage(DcResources.getText("msgImportedX", item.toString()));
+        item.destroy();
     }
 }

@@ -141,6 +141,12 @@ public class CsvImporter extends ItemImporter {
                         }
                     }
                     
+                    try {
+                        sleep(100);
+                    } catch (Exception e) {
+                        logger.error(e, e);
+                    }
+                    
                     dco.setIDs();
                     listener.notifyProcessed(dco);
                 }

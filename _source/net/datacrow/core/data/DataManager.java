@@ -550,20 +550,28 @@ public class DataManager {
             
             ResultSet rs = ps.executeQuery();
             String referenceID;
+            DcModule mappingMod;
+            int idx;
+            PreparedStatement ps2;
+            List<DcObject> items;
             while (rs.next()) {
                 referenceID = rs.getString(1);
                 
-                int idx = DcModules.getMappingModIdx(extRefModule.getIndex() - DcModules._EXTERNALREFERENCE, extRefModule.getIndex(), DcObject._SYS_EXTERNAL_REFERENCES);
-                DcModule mappingMod = DcModules.get(idx);
+                idx = DcModules.getMappingModIdx(extRefModule.getIndex() - DcModules._EXTERNALREFERENCE, extRefModule.getIndex(), DcObject._SYS_EXTERNAL_REFERENCES);
+                mappingMod = DcModules.get(idx);
                 sql = "SELECT * FROM " + DcModules.get(moduleIdx) + " WHERE ID IN (" +
                 	  "SELECT OBJECTID FROM " + mappingMod.getTableName() + 
                       " WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?)";
     
-                PreparedStatement ps2 = conn.prepareStatement(sql);
+                ps2 = conn.prepareStatement(sql);
                 ps2.setString(1, referenceID);
                 
-                List<DcObject> items = WorkFlow.getInstance().convert(ps2.executeQuery(), new int[] {DcObject._ID});
+                items = WorkFlow.getInstance().convert(ps2.executeQuery(), new int[] {DcObject._ID});
                 result = items.size() > 0 ? items.get(0) : null;
+                
+                if (result != null) break;
+                
+                ps2.close();
             }
         
             ps.close();
@@ -575,8 +583,27 @@ public class DataManager {
     }
     
     public static DcObject getObjectForString(int module, String reference) {
-        DcObject dco = getObjectByExternalID(module, DcRepository.ExternalReferences._PDCR, reference); 
-        dco = dco == null ? getObjectForDisplayValue(module, reference) : dco;
+        
+        String[] names = new String[(reference.indexOf(" ") > -1 && reference.indexOf(", ") == -1 && module != DcModules._EXTERNALREFERENCE ? 3 : 1)];
+        names[0] = reference;
+        if (names.length > 1) {
+            names[1] = reference.replaceFirst(" ", ", ");
+            names[2] = reference.substring(reference.indexOf(" ") + 1) + ", " + reference.substring(0, reference.indexOf(" "));
+        }
+        
+        DcObject dco = null;
+        for (String name : names) {
+            dco = getObjectByExternalID(module, DcRepository.ExternalReferences._PDCR, name);
+            if (dco != null) break;
+        }
+        
+        if (dco == null) {
+            for (String name : names) {
+                dco = getObjectForDisplayValue(module, name);
+                if (dco != null) break;
+            }
+        }
+        
         return dco;
     }
     

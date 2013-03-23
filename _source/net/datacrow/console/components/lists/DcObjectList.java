@@ -130,11 +130,9 @@ public class DcObjectList extends DcList implements IViewComponent {
 
     @Override
     public void paintRegionChanged() {
-        //if (view.getType() != View._TYPE_INSERT) {
-            if (vu != null) vu.cancel();
-            vu = new ViewUpdater(this);
-            vu.start();
-       // }
+        if (vu != null) vu.cancel();
+        vu = new ViewUpdater(this);
+        vu.start();
     }
 
     @Override
@@ -374,6 +372,7 @@ public class DcObjectList extends DcList implements IViewComponent {
     public boolean remove(String[] keys) {
         boolean removed = false;
         DcObjectListElement element;
+        
         for (String key : keys) {
             element = getElement(key);
             if (element != null) {
@@ -381,6 +380,7 @@ public class DcObjectList extends DcList implements IViewComponent {
                 removed = true;
             }
         }
+        
         return removed;
     }
 
