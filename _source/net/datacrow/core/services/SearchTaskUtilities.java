@@ -41,8 +41,11 @@ public abstract class SearchTaskUtilities {
     public static final void checkForIsbn(SearchTask task) {
 
         // clean search query (removed non digits)
-        if (task.getMode() instanceof IsbnSearchMode)
-            task.setQuery(String.valueOf(StringUtils.getContainedNumber(task.getQuery())));
+        if (task.getMode() instanceof IsbnSearchMode) {
+            String query = task.getQuery();
+            query = query.replaceAll("x|X", "0");
+            task.setQuery(String.valueOf(StringUtils.getContainedNumber(query)));
+        }
 
         // already using a very specific search mode or the online service does not support 
         // search modes.

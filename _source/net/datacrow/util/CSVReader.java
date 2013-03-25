@@ -132,24 +132,15 @@ public class CSVReader {
                 char c = nextLine.charAt(i);
                 if (c == quotechar) {
                 	// the quote may end a quoted block, or escape another quote. do a 1-char lookahead:
-                	if( inQuotes  
-                	    && nextLine.length() > (i+1)  
-                	    && nextLine.charAt(i+1) == quotechar ){
-
-                        sb.append(nextLine.charAt(i+1));
-                		i++;
+                    char next = nextLine.charAt(i+1);
+                	if( inQuotes && (nextLine.length() == i - 1 || next == '\n' || next == '\r' || separator.equals("" + next))) {
+                        inQuotes = false;
+                	} else if (!inQuotes && i == 0 || separator.equals("" + nextLine.charAt(i-1))) {
+                	    inQuotes = true;
                 	} else {
-                		inQuotes = !inQuotes;
-                		// the tricky case of an embedded quote in the middle: a,bc"d"ef,g
-                		if(i>2 //not on the beginning of the line
-                				&& this.separator.equals("" + nextLine.charAt(i-1)) //not at the beginning of an escape sequence 
-                				&& nextLine.length()>(i+1) &&
-                                   !this.separator.equals("" + nextLine.charAt(i+1)) //not at the	end of an escape sequence
-                		){
-                			sb.append(c);
-                		}
+                	    sb.append(c);
                 	}
-                } else if (("" + c).equals(separator) && !inQuotes) {
+                } else if (separator.equals("" + c) && !inQuotes) {
                     String val = sb.toString();
                     tokensOnThisLine.add(val.startsWith("\"") ? val.substring(1, val.length()) : val);
                     sb = new StringBuffer(); // start work on next token

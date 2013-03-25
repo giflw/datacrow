@@ -698,7 +698,7 @@ public class DataFilter {
                         sql.append(")");
                     } else {
                         counter2 = 0;
-                        for (Object o : (Collection<DcObject>) value) {
+                        for (Object o : (Collection) value) {
                             
                             if (counter2 > 0)  sql.append(",");
 
