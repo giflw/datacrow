@@ -75,9 +75,9 @@ public class HtmlUtils {
         
         ByteArrayInputStream in = new ByteArrayInputStream(html.getBytes());
         
-        if (logger.isDebugEnabled()) {
-            Utilities.writeToFile(html.getBytes(), "c:\\online_service_document.xml");
-        }
+//        if (logger.isDebugEnabled()) {
+//            Utilities.writeToFile(html.getBytes(), "c:\\online_service_document.xml");
+//        }
         
         Reader reader = new InputStreamReader(in);
         Document document = builder.newDocument();
