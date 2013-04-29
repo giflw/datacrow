@@ -707,6 +707,7 @@ public class DataFilter {
                                 sql.append(((DcObject) o).getID());
                             else
                                 sql.append(o.toString());
+                            
                             sql.append("'");
                             
                             counter2++;

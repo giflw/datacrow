@@ -92,6 +92,9 @@ public class Conversion {
     public boolean isNeeded() {
         boolean needed = false;
         
+        if (DcModules.get(moduleIdx) == null)
+            return false;
+        
         DcModule refMod = DcModules.get(moduleIdx + referencingModuleIdx) != null ? DcModules.get(moduleIdx + referencingModuleIdx) : DcModules.get(referencingModuleIdx);
         
         // check if the column exists (old version with old module will not have the column)
