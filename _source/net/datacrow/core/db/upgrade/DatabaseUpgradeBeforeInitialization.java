@@ -63,7 +63,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
         try {
             boolean upgraded = false;
             Version v = DatabaseManager.getVersion();
-            if (v.isOlder(new Version(3, 9, 0, 0))) {
+            if (v.isOlder(new Version(3, 9, 22, 0))) {
                 DataCrow.showSplashScreen(false);
             	cleanupReferences();
             	DcSettings.set(DcRepository.Settings.stGarbageCollectionIntervalMs, Long.valueOf(0));
@@ -106,11 +106,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
             }
         }
     }
-
-    
     
     private boolean createIndexes() throws Exception {
-        Connection conn = DatabaseManager.getConnection();
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = null;
 
         try {
@@ -120,10 +118,25 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
         }
 
         for (DcModule module : DcModules.getAllModules()) {
+            
+            
+            if (module.getTableName() == null)
+                continue;
+            
+            // test if table exists
+            try {
+                stmt.execute("select TOP 1 * from " + module.getTableName());
+            } catch (Exception e) {
+                // no privileges and/or the table does not yet exist
+                logger.info("Skipping constraint creation for table " + module.getTableName() + " as it does not yet exist");
+                continue;
+            }
+            
+            
             if (module.getIndex() == DcModules._PICTURE) {
                 try { 
                     
-                    stmt.execute("delete from picture where filename null or objectid is null or field is null");
+                    stmt.execute("delete from picture where filename is null or objectid is null or field is null");
                     
                 	String sql = "select distinct filename from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
                 	ResultSet rs = stmt.executeQuery(sql);
@@ -138,7 +151,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 	
                 	while (rs.next()) {
                 	    
-                	    sql = "select filename, objectid, width, field, height, external_filename from Picture where filename = '" + rs.getString("filename") + "'";
+                	    sql = "select distinct filename, objectid, width, field, height, external_filename from Picture where filename = '" + rs.getString("filename") + "'";
                 	    rs2 = stmt.executeQuery(sql);
                 	    while (rs2.next()) {
                 	        
@@ -174,7 +187,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                             module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
                             module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
                 
-                } catch (SQLException se) {
+                } catch (Exception se) {
                     // throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                     // there is no solution for this... yet.
                     logger.debug(se, se);
@@ -184,8 +197,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 	
                     stmt.execute("delete from " +  module.getTableName() + " where objectid is null or referencedid is null");
                     
-                    String sql = "select distinct objectid from " + module.getTableName() + " where objectid in " +
-                			     "(select objectid from " + module.getTableName() + " group by objectid having count(referencedid) > 1)";
+                    String sql = "select objectid, objectid + referencedid from " + module.getTableName() + " group by objectid, objectid + referencedid having count(*) > 1";
                 	ResultSet rs = stmt.executeQuery(sql);
                 	
                 	ResultSet rs2;
@@ -193,7 +205,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                     String referencedID;
                 	while (rs.next()) {
                 	    
-                        sql = "select objectID, referencedID from " + module.getTableName() + " where objectID = '" + rs.getString("objectID") + "'";
+                        sql = "select distinct objectID, referencedID from " + module.getTableName() + " where objectID = '" + rs.getString("objectID") + "'";
                         rs2 = stmt.executeQuery(sql);
 
                         while (rs2.next()) {
@@ -201,7 +213,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                             referencedID = rs2.getString("referencedid");
                             objectID = rs2.getString("objectid");
                             
-                            logger.info("Cleaning duplicates for " + module.getTableName() + ": " + objectID);
+                            logger.info("Cleaning duplicates for " + module.getTableName() + ": " + objectID + ", reference ID: " + referencedID);
                             
                             sql = "delete from " + module.getTableName() + " where ObjectID = '" + objectID + "' AND referencedID = '" + referencedID + "'";
                             stmt.execute(sql);
@@ -211,10 +223,6 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                         }
 
                         rs2.close();
-                	    
-                	    logger.info("Duplicates were successfully removed from " + module.getTableName() + ".");
-                	    
-                	    break;
                 	}
                 	
                 	rs.close();
@@ -223,16 +231,19 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 	stmt.execute("CREATE unique index " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
                             module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
                             module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
-                } catch (SQLException se) {
+                } catch (Exception se) {
                     throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
             } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
                 try { 
                     logger.info("Creating unique index on " + module.getTableName());
-                    stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
-                            module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
-                            module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
-                } catch (SQLException se) {
+                    
+                    if (module.getField(DcMapping._A_PARENT_ID) != null && module.getField(DcMapping._B_REFERENCED_ID) != null) {
+                        stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                                module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
+                                module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+                    }
+                } catch (Exception se) {
                     throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
             }
@@ -246,16 +257,26 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
     }
     
     private void cleanupReferences() {
-
-        Connection conn = DatabaseManager.getConnection();
+        
+        Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = null;
         String sql;
         for (DcModule module : DcModules.getAllModules()) {
             
             if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
                 
+                // test if table exists
                 try {
                 	stmt = conn.createStatement();
+                	
+                    try {
+                        stmt.execute("select TOP 1 * from " + module.getTableName());
+                    } catch (Exception e) {
+                        // no privileges and/or the table does not yet exist
+                        logger.info("Skipping constraint creation for table " + module.getTableName() + " as it does not yet exist");
+                        continue;
+                    }
+                	
                 	sql = "DELETE FROM " + module.getTableName() + 
                             " WHERE " + module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() +
                             " NOT IN (SELECT ID FROM " + 
@@ -265,7 +286,7 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                             DcModules.get(module.getField(DcMapping._B_REFERENCED_ID).getSourceModuleIdx()).getTableName() + ")";
                     stmt.execute(sql); 
                 
-                } catch (SQLException se) {
+                } catch (Exception se) {
                     logger.error("Could not remove references", se);
                 }
             }

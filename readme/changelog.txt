@@ -3,10 +3,15 @@ Data Crow 3.9.22  [Released on March xx, 2013]  [testing: high]  [target: produc
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Issue with the file importer; resource consumption has been lowered
-- Issue with the file importer; check whether an item already exists has been improved
-- Searching on ISBN for books does not work in case the ISBN contains an X
-- Fixed the CSV import for text containing a double quote character
+- Fixed multiple upgrade issues (not being able to log in after upgrade). The system
+  will correct problems on startup for failed upgrades or else when newly upgrading.
+- Issue with the file importer; resource consumption has been lowered.
+- Issue with the file importer; check whether an item already exists has been improved.
+- Searching on ISBN for books does not work in case the ISBN contains an X.
+- Fixed the CSV import for text containing a double quote character.
+
+[Changed]
+- Updated version of the Italian translation from Marco Artioli (thanks!).
 
 
 -----------------------------------------------------------------------------------------

@@ -28,14 +28,18 @@ package net.datacrow.core.db.upgrade;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.Properties;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -113,6 +117,42 @@ public class UpgradeHsqlEngine {
                 
             } catch (Exception exp) {
                 logger.debug("Could not launch the command [" + cmd + "]", exp);
+            }
+        } else if (v != null && v.equals("1.8.1") && format != null && format.equals("0")) {
+            // conversion failure or not yet converted from the old version to the new version
+            File file = new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script");
+            
+            FileInputStream in = null;
+            BufferedReader br = null;
+            try {
+                in = new FileInputStream(file);
+                br = new BufferedReader(new InputStreamReader(in));
+                String strLine;
+
+                FileWriter outFile = new FileWriter(new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".dcnew"));
+                PrintWriter out = new PrintWriter(outFile);
+                
+                // All unique indexes will be skipped. The uniqueness will be fixed with the upgrade to version 3.9.22
+                while((strLine = br.readLine()) != null) {
+                    if (!strLine.startsWith("CREATE UNIQUE INDEX ")) {
+                        out.write(strLine);
+                        out.write("\r\n");
+                    }
+                }
+                
+                out.close();
+                in.close();
+                br.close();
+
+                new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script").delete();
+                Utilities.rename(
+                        new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".dcnew"), 
+                        new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script"));
+                
+            } catch (Exception e) {
+                logger.error(e, e);
+                try { in.close(); } catch (IOException exp) {};
+                try { br.close(); } catch (IOException exp) {};
             }
         }
     }
