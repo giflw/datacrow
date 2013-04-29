@@ -38,6 +38,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.Picture;
+import net.datacrow.core.objects.helpers.ExternalReference;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
@@ -107,6 +108,25 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
         }
     }
     
+    private boolean isExistingConstraint(Statement stmt, String contraint) {
+        boolean exists = false;
+        ResultSet rs = null;
+        
+        try {
+            rs  = stmt.executeQuery("SELECT * FROM INFORMATION_SCHEMA.SYSTEM_INDEXINFO WHERE upper(index_name) = '" + contraint.toUpperCase() + "'");
+            
+            while (rs.next()) {
+                exists = true;
+            }
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+        
+        try { rs.close(); } catch (Exception e) {}
+        
+        return exists;
+    }
+    
     private boolean createIndexes() throws Exception {
         Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = null;
@@ -132,6 +152,9 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 continue;
             }
             
+            // check if the constraint already exists
+            if (isExistingConstraint(stmt, module.getTableName() + "_IDX")) 
+                continue;
             
             if (module.getIndex() == DcModules._PICTURE) {
                 try { 
@@ -236,13 +259,48 @@ private static Logger logger = Logger.getLogger(DatabaseUpgradeBeforeInitializat
                 }
             } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
                 try { 
-                    logger.info("Creating unique index on " + module.getTableName());
                     
-                    if (module.getField(DcMapping._A_PARENT_ID) != null && module.getField(DcMapping._B_REFERENCED_ID) != null) {
-                        stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
-                                module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
-                                module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+                    stmt.execute("delete from " +  module.getTableName() + " where externalid is null or externalidtype is null");
+                    
+                    String sql = "select externalid, externalidtype from " + module.getTableName() + " group by externalid, externalidtype having count(*) > 1";
+                    ResultSet rs = stmt.executeQuery(sql);
+                    
+                    ResultSet rs2;
+                    String externalidtype;
+                    String externalid;
+                    String name;
+                    String ID;
+                    while (rs.next()) {
+                        
+                        sql = "select top 1 id, externalid, externalidtype, name from " + module.getTableName() + 
+                                " where externalid = '" + rs.getString("externalid") + "' and externalidtype = '" + rs.getString("externalidtype") + "'";
+                        rs2 = stmt.executeQuery(sql);
+
+                        while (rs2.next()) {
+                            
+                            externalid = rs2.getString("externalid");
+                            externalidtype = rs2.getString("externalidtype");
+                            name = rs2.getString("name");
+                            ID = rs2.getString("id");
+                            
+                            logger.info("Cleaning duplicates for " + module.getTableName() + ": " + externalid + ", reference type: " + externalidtype);
+                            
+                            sql = "delete from " + module.getTableName() + " where externalid = '" + externalid + "' AND externalidtype = '" + externalidtype + "'";
+                            stmt.execute(sql);
+                            
+                            sql = "insert into " + module.getTableName() + " (id, externalid, externalidtype, name) values ('" + ID + "','" + externalid + "','" + externalidtype + "','" + name + "')";
+                            stmt.execute(sql);
+                        }
+
+                        rs2.close();
                     }
+                    
+                    rs.close();
+                    
+                    logger.info("Creating unique index on " + module.getTableName());
+                    stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                            module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + ", " +
+                            module.getField(ExternalReference._EXTERNAL_ID_TYPE).getDatabaseFieldName() + ")");
                 } catch (Exception se) {
                     throw new Exception("Unable to create unique index on " + module.getTableName(), se);
                 }
