@@ -44,29 +44,13 @@ public class TemplateItemForm extends ItemForm {
     
     @Override
     protected void saveValues() {
-        apply();
-
         if (((DcTemplate) dco).isDefault())
             dco.addRequest(new UpdateDefaultTemplate((String) dco.getValue(50), dco.getModule().getIndex()));
 
         dco.addRequest(new RefreshSimpleViewRequest(parent));
-        dco.addRequest(new CloseWindowRequest(this));
         
-        if (!update)  {
-            try {
-                dco.saveNew(true);
-            } catch (ValidationException vExp) {
-                DcSwingUtilities.displayWarningMessage(vExp.getMessage());
-            }
-        } else if (isChanged()) {
-            try {
-                dco.saveUpdate(true);
-            } catch (ValidationException vExp) {
-                DcSwingUtilities.displayWarningMessage(vExp.getMessage());
-            }
-        } else if (! isChanged()) {
-            DcSwingUtilities.displayWarningMessage("msgNoChangesToSave");
-        }
+        super.saveValues();
+
     }  
     
     /**

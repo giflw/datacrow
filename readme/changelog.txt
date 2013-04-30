@@ -1,4 +1,19 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.23  [Released on xxxxx xx, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Sourceforge.net search did not work correctly
+- OFDB online search no longer retrieved the genres correctly
+
+[Changed]
+- Imdb movie search now uses ImdbApi.org instead of Imdb web site parsing.
+  Language setting now only applies to the localized title name. All other texts, etc,
+  will be retrieved in English. This is a deliberate change as the web parsing is very
+  error prone and hard to maintain. Note that you are limited to 3000 searches per hour.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.22  [Released on April 29, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

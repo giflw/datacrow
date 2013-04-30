@@ -268,7 +268,8 @@ public abstract class SearchTask extends Thread {
      */
     protected Collection<DcObject> getItems(Object key, boolean full) throws Exception {
         Collection<DcObject> items = new ArrayList<DcObject>();
-        items.add(getItem(key, full));
+        DcObject dco = getItem(key, full);
+        if (dco != null) items.add(dco);
         return items;
     }
 
