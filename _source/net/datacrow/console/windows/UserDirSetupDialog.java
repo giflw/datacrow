@@ -66,14 +66,17 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
     
     private boolean success = false;
     private String[] args;
+    private final String selectedUserDir;
     
     
-    public UserDirSetupDialog(String[] args) {
+    public UserDirSetupDialog(String[] args, String selectedUserDir) {
         super("User Folder Configuration");
         setIconImage(new DcImageIcon(new File(DataCrow.installationDir, "icons/datacrow64.png")).getImage());
-        
         this.args = args;
-        
+        this.selectedUserDir = selectedUserDir;
+    }
+
+    public void build() {
         buildDialog();
         pack();
         setSize(new Dimension(450, 300));
@@ -143,6 +146,7 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
         DataCrow.applicationSettingsDir = null;
         DataCrow.userDir = null;
         DataCrow.resourcesDir = null;
+        DataCrow.upgradeDir = null;
         
         DataCrow.main(args);
     }
@@ -221,6 +225,7 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
                 setupIconDir();
                 setupImagesDir();
                 setupWebDir();
+                setupUpgradeDir();
                 
                 File userHome = new File(System.getProperty("user.home"));
                 userHome.mkdir();
@@ -292,6 +297,22 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
             }
             
             client.addMessage("Web root has been set up");
+        }
+        
+        private void setupUpgradeDir() throws Exception {
+            client.addMessage("Starting to set up the upgrade folder");
+            
+            File upgradeDir = new File(userDir, "upgrade");
+            upgradeDir.mkdir();
+            
+            Directory dir = new Directory(DataCrow.upgradeDir, false, null);
+            File file;
+            for (String s : dir.read()) {
+                file = new File(s);
+                Utilities.copy(file, new File(upgradeDir, file.getName()));
+            }
+            
+            client.addMessage("Upgrade folder has been set up");
         }
         
         private void setupModulesDir() throws Exception {
@@ -454,6 +475,9 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
         helpText.setText("Please select the user folder where Data Crow will store it's data. " +
                 "Existing information will be migrated to the selected folder. You can also select a folder in the Data Crow installation folder (as per the old Data Crow standard) " +
                 "but you will have to make sure that you have the correct priviliges.");
+        
+        if (selectedUserDir != null) 
+            selectDir.setFile(new File(selectedUserDir));
         
         panelMain.add(helpText, Layout.getGBC(0, 0, 2, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

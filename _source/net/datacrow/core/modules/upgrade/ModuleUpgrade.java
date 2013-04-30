@@ -72,9 +72,9 @@ public class ModuleUpgrade extends XmlObject {
     
     public void upgrade() throws ModuleUpgradeException {
         removeDuplicates();
-        add = new File(DataCrow.installationDir + "upgrade/add.xml");
-        alter = new File(DataCrow.installationDir + "upgrade/alter.xml");
-        remove = new File(DataCrow.installationDir + "upgrade/remove.xml");
+        add = new File(DataCrow.upgradeDir + "add.xml");
+        alter = new File(DataCrow.upgradeDir + "alter.xml");
+        remove = new File(DataCrow.upgradeDir + "remove.xml");
         
         try {
             

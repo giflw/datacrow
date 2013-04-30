@@ -130,8 +130,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
         
         for (DcField field : module.getFields()) {
             
-            boolean enabled = field.isEnabled() && (!field.isUiOnly() || field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION);
-            
+            boolean enabled = field.getOriginalLabel().contains("_persist") ? false : true;
+
             fldDefinitions.add(new DcFieldDefinition(field.getIndex(), null, enabled, false, false, false, null));
             qvDefinitions.add(new QuickViewFieldDefinition(field.getIndex(), enabled, DcResources.getText("lblHorizontal"), 0));
             webDefinitions.add(new WebFieldDefinition(field.getIndex(), 100, 0, enabled, field.getIndex() == DcMediaObject._A_TITLE, field.getIndex() == DcMediaObject._A_TITLE));

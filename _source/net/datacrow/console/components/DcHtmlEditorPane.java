@@ -122,9 +122,11 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         StringBuffer sb = new StringBuffer();
         int i = 0;
         for (DcObject dco : items) {
-            
+
             if (dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE)
                 dco = ((DcMapping) dco).getReferencedObject();
+            
+            if (dco == null) continue;
             
             sb.append(createLink(dco, dco.toString()));
             

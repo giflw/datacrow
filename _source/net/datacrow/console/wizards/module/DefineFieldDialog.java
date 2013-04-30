@@ -218,7 +218,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             field.setFieldType(ft.getIndex());
             field.setOverwritable(true);
             
-            if (!update) {
+            if (field.getDefinition() == null) {
                 field.setDefinition(new DcFieldDefinition(
                         field.getIndex(), 
                         null, 

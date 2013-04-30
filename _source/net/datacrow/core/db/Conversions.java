@@ -57,7 +57,7 @@ public class Conversions {
     private static Logger logger = Logger.getLogger(Conversions.class.getName());
 
     private Collection<Conversion> conversions = new ArrayList<Conversion>();
-    private String filename = DataCrow.installationDir + "upgrade" + File.separator + "conversions.properties";
+    private String filename = DataCrow.upgradeDir + "conversions.properties";
     
     public Conversions() {}
     

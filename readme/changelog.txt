@@ -1,16 +1,26 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.23  [Released on xxxxx xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.23  [Released on April 20, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Sourceforge.net search did not work correctly
-- OFDB online search no longer retrieved the genres correctly
+- Sourceforge.net search did not work correctly.
+- OFDB online search no longer retrieved the genres correctly.
+- Templates cannot have image / image not saved.
+- Startup error in case default data is present for non existing module.
+- When selecting a new user directory through the parameters Data Crow does not set up the
+  user folder. This results in you only having access to the user module.
+- The directory for upgrade script was not yet transferred to the new user folder. 
+  This was no problem for upgrading, however, for new conversion required Data Crow
+  could not have any write privileges to these files. 
+- Newly added fields (using the Alter Module Wizard) are now enabled by default in the
+  general field settings. 
 
 [Changed]
-- Imdb movie search now uses ImdbApi.org instead of Imdb web site parsing.
+- Imdb.com movie search now uses ImdbApi.org instead of Imdb.com web site parsing.
   Language setting now only applies to the localized title name. All other texts, etc,
   will be retrieved in English. This is a deliberate change as the web parsing is very
   error prone and hard to maintain. Note that you are limited to 3000 searches per hour.
+- Items shown for the container module are now sorted alphabetically.
 
 
 -----------------------------------------------------------------------------------------

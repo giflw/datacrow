@@ -41,20 +41,31 @@ public class DcObjectComparator implements Comparator<DcObject> {
     public static final int _SORTORDER_DESCENDING = 1;
     
     private final int field;
+    private final int[] fields;
     private final int order;
     
     public DcObjectComparator(int field) {
         this.field = field;
+        this.fields = new int[] {field};
         this.order = _SORTORDER_ASCENDING;
     }
     
     public DcObjectComparator(int field, int order) {
         this.field = field;
+        this.fields = new int[] {field};
         this.order = order;
     }
     
     @Override
     public int compare(DcObject dco1, DcObject dco2) {
+        
+        // this is a fix for the container child items since these cannot be loaded on retrieval from the database
+        // as the children come from different modules.
+        try {
+            dco1.load(fields);
+            dco2.load(fields);
+        } catch (Exception e) {}
+        
         Object o1 = dco1.getValue(field);
         Object o2 = dco2.getValue(field);
 

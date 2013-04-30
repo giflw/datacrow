@@ -67,11 +67,6 @@ public class TemplateModule extends DcModule {
         
         this.parent = parent;
         
-        if ("grom".equals(parent.getTableName())) {
-        	System.out.println();
-        }
-        	
-        
         for (DcField field : parent.getFields()) {
             addField(new DcField(field.getIndex(), getIndex(), field.getLabel(), field.isUiOnly(),
                                  field.isEnabled(), field.isReadOnly(), field.isSearchable(),
@@ -88,6 +83,11 @@ public class TemplateModule extends DcModule {
     @Override
     public boolean hasSearchView() {
         return false;
+    }
+    
+    @Override
+    public boolean isHasImages() {
+        return parent.isHasImages();
     }
 
     /**

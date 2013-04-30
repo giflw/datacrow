@@ -114,6 +114,7 @@ public class DataCrow {
     public static String applicationSettingsDir;
     public static String userDir;
     public static String resourcesDir;
+    public static String upgradeDir;
     
     private static boolean initialized = false;
     private static boolean debug = false;
@@ -252,7 +253,8 @@ public class DataCrow {
                     }
                 } 
                 
-                if (!userFolderExists) {
+                if (!userFolderExists || (userFolderExists && !new File(DataCrow.userDir).exists())) {
+                    String selectedUserDir = DataCrow.userDir;
                     moduleDir = DataCrow.installationDir + "modules/";
                     pluginsDir = DataCrow.installationDir + "plugins/";
                     servicesDir = DataCrow.installationDir + "services/";
@@ -260,12 +262,14 @@ public class DataCrow {
                     reportDir = DataCrow.installationDir + "reports/";
                     userDir = DataCrow.installationDir + "data/";
                     databaseDir  = DataCrow.installationDir + "data/";
+                    upgradeDir  = DataCrow.installationDir + "upgrade/";
                     applicationSettingsDir = databaseDir  = DataCrow.installationDir + "data/";
                     imageDir = DataCrow.installationDir + "webapp/datacrow/mediaimages";
                     
                     new DcSettings();
                     
-                    UserDirSetupDialog dlg = new UserDirSetupDialog(args);
+                    UserDirSetupDialog dlg = new UserDirSetupDialog(args, selectedUserDir);
+                    dlg.build();
                     dlg.setVisible(true);
                 } else {
                     checkCurrentDir();
@@ -554,13 +558,17 @@ public class DataCrow {
     }
     
     private static void loadDefaultData(DcModule module) {
-        for (DcModule referenced1 : DcModules.getReferencedModules(module.getIndex())) {
-            for (DcModule referenced2 : DcModules.getReferencedModules(referenced1.getIndex())) {
-                saveDefaultData(referenced2);
+        try {
+            for (DcModule referenced1 : DcModules.getReferencedModules(module.getIndex())) {
+                for (DcModule referenced2 : DcModules.getReferencedModules(referenced1.getIndex())) {
+                    saveDefaultData(referenced2);
+                }
+                saveDefaultData(referenced1);
             }
-            saveDefaultData(referenced1);
+            saveDefaultData(module);
+        } catch (Exception e) {
+            logger.error("Could not load default data for " + module, e);
         }
-        saveDefaultData(module);
     }
         
     private static void saveDefaultData(DcModule module) {
@@ -782,6 +790,7 @@ public class DataCrow {
         databaseDir = DataCrow.userDir + "database/";
         moduleSettingsDir = DataCrow.userDir + "settings/modules/";
         applicationSettingsDir = DataCrow.userDir + "settings/application/";
+        upgradeDir = DataCrow.userDir + "upgrade/";
         
         pluginsDir = DataCrow.installationDir + "plugins/";
         servicesDir = DataCrow.installationDir + "services/";
@@ -796,6 +805,7 @@ public class DataCrow {
         DataCrow.createDirectory(new File(moduleSettingsDir), "moduleSettingsDir");
         DataCrow.createDirectory(new File(applicationSettingsDir), "applicationSettingsDir");
         DataCrow.createDirectory(new File(resourcesDir), "resourcesDir");
+        DataCrow.createDirectory(new File(upgradeDir), "upgradeDir");
     }
     
     private static void createDirectory(File dir, String name) {

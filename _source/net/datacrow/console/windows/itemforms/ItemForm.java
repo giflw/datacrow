@@ -564,7 +564,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                 if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
                     dco.setChanged(DcObject._ID, true);
 
-            } else if (isChanged()) {
+            } else if (isChanged(field.getIndex())) {
                 
                 // check if the value has been cleared manually 
                 // do not save if the value is empty, however do clear it when it was not empty before 

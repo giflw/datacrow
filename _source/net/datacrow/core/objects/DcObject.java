@@ -95,7 +95,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     private Map<Integer, DcValue> values = new HashMap<Integer, DcValue>();
     private Requests requests = new Requests();
     
-    protected Collection<DcObject> children = new ArrayList<DcObject>();
+    protected List<DcObject> children = new ArrayList<DcObject>();
 
     private boolean validate = true;
     private boolean updateGUI = true;
@@ -426,7 +426,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
      * when reloading an object.
      */
     public void initializeImages() {
-        // Remove all the old picture. This makes no weird stuff happens.
+        // Remove all the old picture. This makes sure no weird stuff happens.
         for (DcField field : getFields()) {
             if (field.getValueType() == DcRepository.ValueTypes._PICTURE)
                 setValueLowLevel(field.getIndex(), null);
