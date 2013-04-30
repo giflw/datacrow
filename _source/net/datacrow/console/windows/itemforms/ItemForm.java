@@ -57,6 +57,7 @@ import javax.swing.ScrollPaneConstants;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcCheckBox;
+import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcPictureField;
 import net.datacrow.console.components.panels.LoanPanel;
@@ -745,12 +746,28 @@ public class ItemForm extends DcFrame implements ActionListener {
             
             // check if we have vertical stretching fields.
             containsLongFields = false;
-            for (Component c : panel.getComponents()) 
+            int componentCount = 0;
+            for (Component c : panel.getComponents()) {
+                if (c instanceof DcLabel)
+                    componentCount += 1;
+                    
                 if (c instanceof JScrollPane || c instanceof JTextArea)
                     containsLongFields = true;
+            }
             
-            if (containsLongFields) {
+            if (componentCount >= 15) {
+                JScrollPane sp = new JScrollPane(panel);
+                sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                dummy = new JPanel();
+                dummy.setLayout(Layout.getGBL());
+                dummy.add(sp,  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+                       ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                        new Insets(2, 0, 0, 0), 0, 0));
+                tabbedPane.addTab(tab, DataManager.getTab(moduleIdx, tab).getIcon(), dummy);
+            
+            } else if (containsLongFields) {
                 tabbedPane.addTab(tab, DataManager.getTab(moduleIdx, tab).getIcon(), panel);
+
             } else {
                 dummy = new JPanel();
                 dummy.setLayout(Layout.getGBL());
