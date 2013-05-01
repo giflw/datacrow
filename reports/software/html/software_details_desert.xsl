@@ -98,7 +98,7 @@
 						<tr>
 							<th>Rating</th>
 							<td>
-								<xsl:value-of select="rating" />
+                                <xsl:call-template name="print-rating-starts" /> 
 							</td>
 						</tr>
 					</table>
@@ -141,4 +141,5 @@
 			</body>
 		</html>
 	</xsl:template>
+    <xsl:include href="../../_stylesheets/dc_html_base.xsl" />
 </xsl:stylesheet>
