@@ -101,6 +101,8 @@ public class DcMapping extends DcObject {
             } catch (Exception e) {
                 logger.warn(e, e);
             }
+        } else {
+            reference.reload();
         }
         
         return reference;

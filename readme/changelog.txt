@@ -3,7 +3,7 @@ Data Crow 3.9.23  [Released on May 6, 2013]  [testing: high]  [target: productio
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- References show without a name.
+- References show without a name, sometimes...
 
 
 -----------------------------------------------------------------------------------------
