@@ -33,19 +33,19 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.border.Border;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -57,7 +57,7 @@ import net.datacrow.settings.DcSettings;
 
 public class ModuleListPanel extends DcPanel {
     
-    private Map<Integer, ModuleButton> buttons = new HashMap<Integer, ModuleButton>();
+    private Collection<JComponent> components = new ArrayList<JComponent>();
     private static Border borderDefault;
     private static Border borderSelected;
     
@@ -73,9 +73,9 @@ public class ModuleListPanel extends DcPanel {
     
     @Override
     public void setFont(Font font) {
-        if (buttons == null) return;
-        for (ModuleButton mb : buttons.values()) {
-            mb.setFont(font);
+        if (components == null) return;
+        for (JComponent c : components) {
+            c.setFont(font);
         }
     }
     
@@ -88,13 +88,15 @@ public class ModuleListPanel extends DcPanel {
         setLayout(Layout.getGBL());
 
         int x = 0;
+        ModuleSelector ms;
         for (DcModule module : DcModules.getModules()) {
             
             if (module.isSelectableInUI() && module.isEnabled()) {
-                ModuleSelector bt = new ModuleSelector(module);
-                add(bt, Layout.getGBC( x++, 0, 1, 1, 1.0, 1.0
+                ms = new ModuleSelector(module);
+                add(ms, Layout.getGBC( x++, 0, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
+                components.add(ms);
             }
         }
     }
@@ -127,6 +129,13 @@ public class ModuleListPanel extends DcPanel {
             build();
         }
         
+        @Override
+        public void setFont(Font font) {
+            super.setFont(font);
+            
+            if (menuBar != null) menuBar.setFont(font);
+            if (mb != null) mb.setFont(font);
+        }
         
         @Override
         public Border getBorder() {
@@ -152,9 +161,11 @@ public class ModuleListPanel extends DcPanel {
             if (referencedModules.size() > 0) {
                 menuBar = ComponentFactory.getMenuBar();
                 menuBar.setBackground(getBackground());
-                menuBar.setMinimumSize(new Dimension(30, 35));
-                menuBar.setPreferredSize(new Dimension(30, 35));
-                menuBar.setMaximumSize(new Dimension(30, 35));
+                menuBar.setMinimumSize(new Dimension(20, 35));
+                menuBar.setPreferredSize(new Dimension(20, 35));
+                menuBar.setMaximumSize(new Dimension(15, 35));
+                
+                components.add(menuBar);
                 
                 JMenu menu = ComponentFactory.getMenu(IconLibrary._icoArrowDownThin, "");
                 menu.setRolloverEnabled(false);
@@ -189,14 +200,16 @@ public class ModuleListPanel extends DcPanel {
         }
     }
     
-    private class ModuleButton extends JMenuItem {
+    private class ModuleButton extends DcMenuItem {
         
         private DcModule module;
         
         private ModuleButton(DcModule module) {
+            super(module.getLabel());
             this.module = module;
             setBorder(null);
             setRolloverEnabled(false);
+            setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
             
             setMinimumSize(new Dimension(120, 35));
             setPreferredSize(new Dimension(120, 35));
