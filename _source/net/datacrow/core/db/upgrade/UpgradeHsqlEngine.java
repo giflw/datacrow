@@ -134,7 +134,8 @@ public class UpgradeHsqlEngine {
                 
                 // All unique indexes will be skipped. The uniqueness will be fixed with the upgrade to version 3.9.22
                 while((strLine = br.readLine()) != null) {
-                    if (!strLine.startsWith("CREATE UNIQUE INDEX ")) {
+                    strLine = strLine.replaceAll("_KEEP", "KEEP_ME");
+                    if (!strLine.startsWith("CREATE UNIQUE INDEX ") && !strLine.equals("\n") && !strLine.equals("\r") && !strLine.equals("\n\r") && !strLine.equals("")) {
                         out.write(strLine);
                         out.write("\r\n");
                     }

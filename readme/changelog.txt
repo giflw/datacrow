@@ -1,4 +1,14 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.25  [Released on May xx, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- More upgrade errors for old versions have been fixed. This time it's related to old
+  columns still being present due to failed upgrades in the past. The upgrade process
+  will now actively check for these and correct where necessary.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.24  [Released on May 9, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

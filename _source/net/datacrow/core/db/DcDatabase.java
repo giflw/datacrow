@@ -175,7 +175,7 @@ public class DcDatabase {
                 	columnName = md.getColumnName(i);
                 	remove = false;
                 	
-                    if (!columnName.startsWith("_KEEP_")) { 
+                    if (!columnName.startsWith("KEEP_ME_")) { 
                         for (DcField field : module.getFields()) {
                             if (columnName.equalsIgnoreCase(field.getDatabaseFieldName())) 
                                 remove = field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ? true : false; 
