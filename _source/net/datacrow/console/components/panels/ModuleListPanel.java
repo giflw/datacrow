@@ -26,12 +26,15 @@
 package net.datacrow.console.components.panels;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,11 +44,15 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JToolTip;
 import javax.swing.border.Border;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcMenuItem;
+import net.datacrow.console.components.DcMultiLineToolTip;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -104,14 +111,13 @@ public class ModuleListPanel extends DcPanel {
     private class ModuleSelector extends DcPanel implements ActionListener {
         
         private JMenuBar menuBar;
-        private ModuleButton mb;
+        private MainModuleButton mb;
         private List<DcModule> referencedModules = new ArrayList<DcModule>();
         
         private ModuleSelector(DcModule module) {
-            mb = new ModuleButton(module);
-            mb.setActionCommand("module_change");
-            mb.addActionListener(this);
+            mb = new MainModuleButton(module);
             mb.setBackground(getBackground());
+            addMouseListener(new ModuleMouseListener(module.getIndex()));
             
             DcModule rm;
             for (DcField field : module.getFields()) {
@@ -157,7 +163,7 @@ public class ModuleListPanel extends DcPanel {
             setLayout(Layout.getGBL());
             
             int x = 0;
-            ModuleButton mi;
+            ReferenceModuleButton mi;
             if (referencedModules.size() > 0) {
                 menuBar = ComponentFactory.getMenuBar();
                 menuBar.setBackground(getBackground());
@@ -172,7 +178,7 @@ public class ModuleListPanel extends DcPanel {
                 menu.setContentAreaFilled(false);
                 
                 for (DcModule rm : referencedModules) {
-                    mi = new ModuleButton(rm);
+                    mi = new ReferenceModuleButton(rm);
                     mi.setActionCommand("module_change");
                     mi.addActionListener(this);
                     mi.setBackground(getBackground());
@@ -194,17 +200,92 @@ public class ModuleListPanel extends DcPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().startsWith("module_change")) {
-                ModuleButton mb = (ModuleButton) ae.getSource();
+                ReferenceModuleButton mb = (ReferenceModuleButton) ae.getSource();
                 setSelectedModule(mb.getModule().getIndex());
+            }
+        }
+        
+
+    }
+    
+    private class ModuleMouseListener implements MouseListener {
+        
+        private final int module;
+        
+        public ModuleMouseListener(int module) {
+            this.module = module;
+        }
+        
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            setSelectedModule(module);
+        }
+        
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseClicked(MouseEvent e) {}
+    }
+    
+    protected class MainModuleButton extends JPanel {
+        
+        private final DcModule module;
+        
+        public MainModuleButton(DcModule module) {
+            super(Layout.getGBL());
+            this.module = module;
+            setMinimumSize(new Dimension(120, 35));
+            setPreferredSize(new Dimension(120, 35));
+            add(ComponentFactory.getLabel(module.getIcon32()), Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.WEST, GridBagConstraints.NONE,
+                    new Insets(0, 3, 0, 0), 0, 0));
+            
+            DcLongTextField ltf = ComponentFactory.getHelpTextField();
+            ltf.setText(module.getLabel());
+            for (MouseListener ml : ltf.getMouseListeners())
+                ltf.removeMouseListener(ml);
+            
+            ltf.addMouseListener(new ModuleMouseListener(module.getIndex()));
+            ltf.setBackground(getBackground());
+            
+            add(ltf, Layout.getGBC( 1, 0, 1, 1, 100.0, 100.0
+                    ,GridBagConstraints.WEST, GridBagConstraints.BOTH,
+                    new Insets(2, 2, 0, 0), 0, 0));;
+        }
+        
+        public DcModule getModule() {
+            return module;
+        }
+        
+        @Override
+        public JToolTip createToolTip() {
+            return new DcMultiLineToolTip();
+        }        
+        
+        @Override
+        public String getToolTipText() {
+            return module.getDescription();
+        }
+        
+        @Override
+        public void setFont(Font font) {
+            Component[] components = getComponents();
+            for (int i = 0; i < components.length; i++) {
+                components[i].setFont(font);
+                components[i].setForeground(ComponentFactory.getCurrentForegroundColor());
             }
         }
     }
     
-    private class ModuleButton extends DcMenuItem {
+    private class ReferenceModuleButton extends DcMenuItem {
         
         private DcModule module;
         
-        private ModuleButton(DcModule module) {
+        private ReferenceModuleButton(DcModule module) {
             super(module.getLabel());
             this.module = module;
             setBorder(null);

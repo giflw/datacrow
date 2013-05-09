@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.23  [Released on May xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.24  [Released on May 9, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -17,9 +17,9 @@ Data Crow 3.9.23  [Released on May xx, 2013]  [testing: high]  [target: producti
 - In the Dutch translation the categories field for Software Items was labeled as license.
 
 [Changed]
-- New layout of the main screen
-- Removed the JTattoo border in the menus
-- Removed a few icons from the toolbar
+- New layout of the main screen.
+- Removed the JTattoo border in the menus.
+- Removed a few icons from the toolbar.
 
 
 -----------------------------------------------------------------------------------------
