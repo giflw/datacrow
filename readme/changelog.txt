@@ -14,7 +14,7 @@ Data Crow 3.9.23  [Released on May xx, 2013]  [testing: high]  [target: producti
   the header text is now always 4 points larger as the text font.
 - The space between the text and the icon was underlined (quick view and multi-reference
   fields in the item form).
-- 
+- In the Dutch translation the categories field for Software Items was labeled as license.
 
 [Changed]
 - New layout of the main screen
