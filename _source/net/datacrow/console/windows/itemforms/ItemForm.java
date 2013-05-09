@@ -164,8 +164,10 @@ public class ItemForm extends DcFrame implements ActionListener {
                 if (this.template == null) 
                     this.template = (DcTemplate) dco.getModule().getTemplateModule().getItem();
                 
-                this.template.setValue(DcObject._SYS_CONTAINER,
-                                       DcModules.getCurrent().getCurrentSearchView().getSelectedItem());
+                DataManager.createReference(
+                        this.template, 
+                        DcObject._SYS_CONTAINER, 
+                        DcModules.getCurrent().getCurrentSearchView().getSelectedItem());
             }
             
             if (!Utilities.isEmpty(parentID))

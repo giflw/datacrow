@@ -135,7 +135,7 @@ public class DcMultiLineToolTipUI extends BasicToolTipUI {
     private String getHtmlStyle(int length) {
         String width = "";
         if (length > 100) width = "width:400";
-        return Utilities.getHtmlStyle(width);
+        return Utilities.getHtmlStyle(width, null);
     }       
     
     @Override

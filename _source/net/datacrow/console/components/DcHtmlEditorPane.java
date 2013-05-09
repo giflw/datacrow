@@ -85,8 +85,19 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         DcImageIcon icon = DataManager.getIcon(dco);
             
         StringBuffer sb = new StringBuffer();
-        sb.append("<a ");
-        sb.append(Utilities.getHtmlStyle());
+        
+        if (icon != null && icon.exists()) {
+            sb.append("<img border=\"0\" src=\"");
+            
+            String filename = icon.getFilename();
+            filename = filename.startsWith("/") ? filename.substring(1) : filename;
+            
+            sb.append("file:///" + icon.getFilename());
+            sb.append("\">");
+            sb.append("&nbsp;");
+        }
+        
+        sb.append("<a");
         sb.append(" href=\"http://");
         
         String ID = dco.getModule().getType() == DcModule._TYPE_MAPPING_MODULE ?
@@ -101,18 +112,14 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             sb.append(dco.getModule().getIndex());
         
         sb.append("\">");
-        if (icon != null && icon.exists()) {
-            sb.append("<img border=\"0\" src=\"");
-            
-            String filename = icon.getFilename();
-            filename = filename.startsWith("/") ? filename.substring(1) : filename;
-            
-            sb.append("file:///" + icon.getFilename());
-            sb.append("\">");
-            sb.append("&nbsp;");
-        }
+
         
+        sb.append("<span ");
+        sb.append(Utilities.getHtmlStyle(DcSettings.getFont(DcRepository.Settings.stSystemFontNormal)));
+        sb.append(">");
         sb.append(description); 
+        sb.append("</span>");
+        
         sb.append("</a>");
         
         return sb.toString();

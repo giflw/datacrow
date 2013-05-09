@@ -47,6 +47,8 @@ public class ChildItemForm extends ItemForm {
         
         if (!update)  {
             try {
+                //dco.getModule().is
+                
                 dco.addRequest(new RefreshChildView(childForm));
                 dco.saveNew(true);
             } catch (ValidationException vExp) {

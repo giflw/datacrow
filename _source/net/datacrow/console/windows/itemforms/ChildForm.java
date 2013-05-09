@@ -26,6 +26,7 @@
 package net.datacrow.console.windows.itemforms;
 
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.wf.requests.RefreshChildView;
 import net.datacrow.core.wf.requests.Requests;
@@ -69,7 +70,13 @@ public class ChildForm extends DcMinimalisticItemView {
     @Override
     public void createNew() {
         DcObject dco = getModule().getItem();
-        dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
+        
+        // The Container module works differently; not managed from here.
+        // Those are managed from within the Item Form as we do no yet know which item we are dealing with
+        if (parentModuleIdx != DcModules._CONTAINER) {
+            DcObject parentDCO = DataManager.getItem(parentModuleIdx, parentID);
+            DataManager.createReference(dco, dco.getParentReferenceFieldIndex(), parentDCO);
+        }
         
         ChildItemForm itemForm = new ChildItemForm(false, dco, this);
         itemForm.setVisible(true);

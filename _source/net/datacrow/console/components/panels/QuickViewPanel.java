@@ -201,9 +201,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
             if (DcModules.getCurrent().isAbstract())
             	this.dco.reload();
             
-            String html = "<html><body " + 
-                           Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + 
-                           ">\n" +
+            String html = "<html><body >\n" +
                             getDescriptionTable(dco) +
                           "</body> </html>";
             
@@ -239,7 +237,8 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         dco = null;
         key = null;
         tabbedPane.setSelectedIndex(0);
-        descriptionPane.setHtml("<html><body " + Utilities.getHtmlStyle("", DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
+        descriptionPane.setHtml("<html><body " + 
+                Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n</body> </html>");
     	clearImages();
     }
     
@@ -265,9 +264,11 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
     }
     
     private String getDescriptionTable(DcObject dco) {
-        String table = "<h3>" + dco.toString() + "</h3>";
+        Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
         
-        table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
+        String table = "<div " + Utilities.getHtmlStyle("margin-bottom: 10pt;", null, font, font.getSize() + 4) + ">" +
+        		"<b>" + dco.toString() + "</b><br></div>";
+        table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">";
         
         QuickViewFieldDefinitions definitions = (QuickViewFieldDefinitions) 
             dco.getModule().getSettings().getDefinitions(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
@@ -309,7 +310,12 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         if (children == null || children.size() == 0)
             return "";
         
-        String table = "<br><h3>" + module.getObjectNamePlural() + "</h3>";
+        Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
+        font = font.deriveFont(Font.BOLD);
+
+
+        String table = "<p " + Utilities.getHtmlStyle(null, null, font, font.getSize() + 4) + ">" +
+                "<b>" + module.getObjectNamePlural()  + "</b></p>";
         
         table += "<table " + Utilities.getHtmlStyle(DcSettings.getColor(DcRepository.Settings.stQuickViewBackgroundColor)) + ">\n";
         
@@ -356,36 +362,34 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         String table = htmlTable;
         
         if (dco.isEnabled(index)) {
-            Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
+            Font fText = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
             boolean horizontal = direction.equals(_DIRECTION_HORIZONTAL);
 
             if (!Utilities.isEmpty(dco.getValue(index))) {
-                table += "<tr><td>\n";
+                table += "<tr><td>";
                 
                 if (dco.getField(index).getFieldType() != ComponentFactory._PICTUREFIELD)
                     table += "<b>" + dco.getLabel(index) + "</b>";
                 
                 if (!horizontal) {
                     table += "</td></tr>";
-                    table += "<tr><td>\n";
+                    table += "<tr><td>";
                 } else {
-                    table += " ";
+                    table += "&nbsp;";
                 }
 
                 String value = "";
-                
-                // Create links
                 if (dco.getField(index).getFieldType() == ComponentFactory._FILEFIELD ||
                     dco.getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) { 
                 
                     String filename = dco.getDisplayString(index);
                     filename = filename.replaceAll(" ", "%20");
-                    value = "<a " + Utilities.getHtmlStyle() + " href=\"file:///" + filename + "\">" + new File(dco.getDisplayString(index)).getName() + "</a>";                        
+                    value = "<a href=\"file:///" + filename + "\" " + Utilities.getHtmlStyle(fText) + ">" + new File(dco.getDisplayString(index)).getName() + "</a>";                        
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._PICTUREFIELD) {
                 	Picture p = (Picture) dco.getValue(index);
-                	value = "<p><img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\" alt=\"" + dco.getLabel(index) + "\"><p>";
+                	value = "<img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\" alt=\"" + dco.getLabel(index) + "\">";
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
-                	value = "<a " + Utilities.getHtmlStyle() + "  href=\"" +  dco.getValue(index) + "\">" + DcResources.getText("lblLink") + "</a>";
+                	value = "<a href=\"" +  dco.getValue(index) + "\" " + Utilities.getHtmlStyle(fText) + ">" + DcResources.getText("lblLink") + "</a>";
                 } else if (dco.getField(index).getReferenceIdx() > 0 && 
                     dco.getField(index).getReferenceIdx() != dco.getModule().getIndex()) {
                     
@@ -426,13 +430,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                   
                     if (maxLength > 0)
                         value = StringUtils.concatUserFriendly(value, maxLength);
-                    
-                    if (font.getStyle() == Font.BOLD) 
-                        value = "<b>" + value + "</b>";
-                    
                 }
-                    
-                table += value;                
+                
+                table += value;
                 table += "</td></tr>";
             } else if (dco.getField(index).getValueType() == DcRepository.ValueTypes._PICTURE) {
                 Picture picture = (Picture) dco.getValue(index);

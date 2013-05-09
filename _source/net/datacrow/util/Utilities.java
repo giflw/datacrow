@@ -650,35 +650,39 @@ public class Utilities {
     }
     
     public static String getHtmlStyle() {
-        return getHtmlStyle(null, null);
+        return getHtmlStyle(null, null, null, 0);
+    }
+    
+    public static String getHtmlStyle(Font font) {
+        return getHtmlStyle(null, null, font, font.getSize());
     }
     
     public static String getHtmlStyle(Color bg) {
-        return getHtmlStyle(null, bg);
+        return getHtmlStyle(null, bg, null, 0);
     }
     
-    public static String getHtmlStyle(String additionalStyleInfo) {
-        return getHtmlStyle(additionalStyleInfo, null);
+    public static String getHtmlStyle(String additionalStyleInfo, Font font) {
+        return getHtmlStyle(additionalStyleInfo, null, font, font == null ? 0 : font.getSize());
     }
     
-    public static String getHtmlStyle(String additionalStyleInfo, Color bg) {
-        Font font = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
+    public static String getHtmlStyle(String additionalStyleInfo, Color bg, Font f, int fSize) {
         Color color = ComponentFactory.getCurrentForegroundColor();
         String foreground = Utilities.getHexColor(color);
-        
-        String fontstyle = "";
-        if (font.isItalic())
-            fontstyle = ";font-style:italic";
-        else if (font.isBold())
-            fontstyle = ";font-weigth:bolder";
+        Font font = f == null ? DcSettings.getFont(DcRepository.Settings.stSystemFontNormal) : f;
+        int fontSize = fSize <= 0 ? font.getSize() : fSize;
         
         StringBuffer sb = new StringBuffer();
         sb.append("style=\"");
+        
         sb.append("font-family:");
         sb.append(font.getFamily());
         sb.append(";font-size:");
-        sb.append(font.getSize());
-        sb.append(fontstyle);
+        sb.append(fontSize);
+        
+        if (font.isItalic())
+            sb.append(";font-style:italic");
+        if (font.isBold())
+            sb.append(";font-weigth:bolder");
         
         if (bg != null) {
             String background = Utilities.getHexColor(bg);

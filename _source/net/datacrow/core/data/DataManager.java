@@ -583,8 +583,10 @@ public class DataManager {
     }
     
     public static DcObject getObjectForString(int module, String reference) {
-        
-        String[] names = new String[(reference.indexOf(" ") > -1 && reference.indexOf(", ") == -1 && module != DcModules._EXTERNALREFERENCE ? 3 : 1)];
+        // Establish the names on which we will check if the item already exists.
+        // Skip multiple checks for the external references; this will results in errors.
+        String[] names = new String[(reference.indexOf(" ") > -1 && reference.indexOf(", ") == -1 && 
+                DcModules.get(module).getType() != DcModule._TYPE_EXTERNALREFERENCE_MODULE ? 3 : 1)];
         names[0] = reference;
         if (names.length > 1) {
             names[1] = reference.replaceFirst(" ", ", ");
