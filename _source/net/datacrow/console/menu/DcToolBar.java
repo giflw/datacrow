@@ -36,7 +36,6 @@ import java.util.Collection;
 
 import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.DcPopupMenu;
@@ -86,8 +85,8 @@ public class DcToolBar extends JToolBar implements MouseListener {
                 add(ComponentFactory.getToolBarButton(plugin));
         }
         
-        boolean showLabels = DcSettings.getBoolean(DcRepository.Settings.stShowMenuBarLabels);
-        setLabelsVisible(showLabels);
+        //boolean showLabels = DcSettings.getBoolean(DcRepository.Settings.stShowMenuBarLabels);
+        setLabelsVisible(false);
         
         addMouseListener(this);
         
@@ -148,8 +147,8 @@ public class DcToolBar extends JToolBar implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (SwingUtilities.isRightMouseButton(e))
-            new PopupMenu().show(this, e.getX(), e.getY());
+//        if (SwingUtilities.isRightMouseButton(e))
+//            new PopupMenu().show(this, e.getX(), e.getY());
     }
     
     public class PopupMenu extends DcPopupMenu implements ActionListener {

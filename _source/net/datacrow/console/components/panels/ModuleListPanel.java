@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components.panels;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -36,23 +37,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.border.Border;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcButton;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.core.DataCrow;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.settings.DcSettings;
 
 public class ModuleListPanel extends DcPanel {
     
     private Map<Integer, ModuleButton> buttons = new HashMap<Integer, ModuleButton>();
+    private static Border borderDefault;
+    private static Border borderSelected;
     
     public ModuleListPanel() {
         super(null, null);
@@ -94,6 +101,7 @@ public class ModuleListPanel extends DcPanel {
     
     private class ModuleSelector extends DcPanel implements ActionListener {
         
+        private JMenuBar menuBar;
         private ModuleButton mb;
         private List<DcModule> referencedModules = new ArrayList<DcModule>();
         
@@ -117,41 +125,54 @@ public class ModuleListPanel extends DcPanel {
             }
             
             build();
-            
-            setBorder(ComponentFactory.getTitleBorder(""));
         }
         
+        
+        @Override
+        public Border getBorder() {
+            if (mb != null && mb.getModule() == DcModules.getCurrent()) {
+                return borderSelected;
+            } else {
+                return borderDefault;
+            }
+        }
+
         private void build() {
-            setBorder(null);
             
+            borderDefault = BorderFactory.createTitledBorder(
+                    BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+            borderSelected = BorderFactory.createTitledBorder(
+                    BorderFactory.createLineBorder(DcSettings.getColor(DcRepository.Settings.stSelectionColor), 1));
+            
+            setBorder(borderDefault);
             setLayout(Layout.getGBL());
             
             int x = 0;
             ModuleButton mi;
             if (referencedModules.size() > 0) {
-                JMenuBar jb = new JMenuBar();
-                
-                jb.setBackground(getBackground());
-                jb.setMinimumSize(new Dimension(30, 35));
-                jb.setPreferredSize(new Dimension(30, 35));
-                jb.setMaximumSize(new Dimension(30, 35));
+                menuBar = ComponentFactory.getMenuBar();
+                menuBar.setBackground(getBackground());
+                menuBar.setMinimumSize(new Dimension(30, 35));
+                menuBar.setPreferredSize(new Dimension(30, 35));
+                menuBar.setMaximumSize(new Dimension(30, 35));
                 
                 JMenu menu = ComponentFactory.getMenu(IconLibrary._icoArrowDownThin, "");
-                menu.setBackground(getBackground());
+                menu.setRolloverEnabled(false);
+                menu.setContentAreaFilled(false);
+                
                 for (DcModule rm : referencedModules) {
                     mi = new ModuleButton(rm);
                     mi.setActionCommand("module_change");
                     mi.addActionListener(this);
-                    
-                    mi.setMinimumSize(new Dimension(148, 35));
-                    mi.setPreferredSize(new Dimension(148, 35));
                     mi.setBackground(getBackground());
-                    
+                    mi.setMinimumSize(new Dimension(148, 39));
+                    mi.setPreferredSize(new Dimension(148, 39));
+                         
                     menu.add(mi);
                 }
                 
-                jb.add(menu);
-                add(jb, Layout.getGBC(x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, 
+                menuBar.add(menu);
+                add(menuBar, Layout.getGBC(x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, 
                         GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
             }
             
@@ -168,13 +189,14 @@ public class ModuleListPanel extends DcPanel {
         }
     }
     
-    private class ModuleButton extends DcButton {
+    private class ModuleButton extends JMenuItem {
         
         private DcModule module;
         
         private ModuleButton(DcModule module) {
             this.module = module;
             setBorder(null);
+            setRolloverEnabled(false);
             
             setMinimumSize(new Dimension(120, 35));
             setPreferredSize(new Dimension(120, 35));
