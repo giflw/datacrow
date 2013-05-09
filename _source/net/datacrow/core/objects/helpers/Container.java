@@ -62,8 +62,14 @@ public class Container extends DcObject {
     }
     
     public Container getParentContainer() {
-        reload();
+        
         Object parent = getValue(_F_PARENT);
+        
+        if (parent == null) {
+            reload();
+            parent = getValue(_F_PARENT);
+        }
+            
         return parent instanceof String ? (Container) DataManager.getItem(DcModules._CONTAINER, (String) parent) : 
                (Container) parent;
     }

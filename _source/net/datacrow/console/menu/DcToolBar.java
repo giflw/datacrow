@@ -79,19 +79,6 @@ public class DcToolBar extends JToolBar implements MouseListener {
             PluginHelper.add(this, "OnlineSearch");
         
         addSeparator();
-        
-        PluginHelper.add(this, "Settings");
-        
-        if (module.hasReports())
-            PluginHelper.add(this, "Report");
-        
-        if (module.getImporterClass() != null)
-            PluginHelper.add(this, "FileImport");
-        
-        addSeparator();
-        
-        PluginHelper.add(this, "Log");
-        PluginHelper.add(this, "Help");
 
         Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(null, -1, module.getIndex());
         for (Plugin plugin : plugins) {

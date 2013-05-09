@@ -25,71 +25,178 @@
 
 package net.datacrow.console.components.panels;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.ListModel;
+import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcLabel;
+import net.datacrow.console.components.DcButton;
 import net.datacrow.console.components.DcPanel;
-import net.datacrow.console.components.lists.DcModuleList;
-import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.DataCrow;
+import net.datacrow.core.IconLibrary;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcField;
 
 public class ModuleListPanel extends DcPanel {
     
-    private JPanel panelHeader = new JPanel();
-    private DcModuleList moduleList = new DcModuleList();
-    private JLabel label = new DcLabel(DcResources.getText("lblModules"));
-
+    private Map<Integer, ModuleButton> buttons = new HashMap<Integer, ModuleButton>();
+    
     public ModuleListPanel() {
         super(null, null);
     	buildPanel();
     }
     
+    public void rebuild() {
+        removeAll();
+        buildPanel();
+    }
+    
     @Override
     public void setFont(Font font) {
-        if (moduleList != null) {
-            moduleList.setFont(font);
-            label.setFont(ComponentFactory.getSystemFont());
+        if (buttons == null) return;
+        for (ModuleButton mb : buttons.values()) {
+            mb.setFont(font);
         }
     }
     
     public void setSelectedModule(int index) {
-    	moduleList.setSelectedModule(index);
-    }
-    
-    public void rebuild() {
-        ListModel model = moduleList.getModel();
-        if (model instanceof DefaultListModel) {
-            ((DefaultListModel) model).clear();    
-        } else {
-            moduleList.setModel(new DefaultListModel());
-        }
-        
-        moduleList.addModules();
+        if (DataCrow.mainFrame != null)
+            DataCrow.mainFrame.changeModule(index);
     }
     
     private void buildPanel() {
-        setLayout(new BorderLayout());
+        setLayout(Layout.getGBL());
 
-        label.setFont(ComponentFactory.getSystemFont());
-        label.setHorizontalAlignment(JLabel.CENTER);
-        panelHeader.setLayout(Layout.getGBL());
-        panelHeader.setBorder(BorderFactory.createEtchedBorder());
-        panelHeader.add(label, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                new Insets(0, 0, 0, 0), 0, 0));
+        int x = 0;
+        for (DcModule module : DcModules.getModules()) {
+            
+            if (module.isSelectableInUI() && module.isEnabled()) {
+                ModuleSelector bt = new ModuleSelector(module);
+                add(bt, Layout.getGBC( x++, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+        }
+    }
+    
+    private class ModuleSelector extends DcPanel implements ActionListener {
         
-        add(panelHeader, BorderLayout.NORTH);
-        add(moduleList, BorderLayout.CENTER);
-        ComponentFactory.setBorder(this);
+        private ModuleButton mb;
+        private List<DcModule> referencedModules = new ArrayList<DcModule>();
+        
+        private ModuleSelector(DcModule module) {
+            mb = new ModuleButton(module);
+            mb.setActionCommand("module_change");
+            mb.addActionListener(this);
+            mb.setBackground(getBackground());
+            
+            DcModule rm;
+            for (DcField field : module.getFields()) {
+                rm = DcModules.getReferencedModule(field);
+                if (    rm.isEnabled() && 
+                        rm.getIndex() != module.getIndex() && 
+                        rm.getType() != DcModule._TYPE_PROPERTY_MODULE &&
+                        rm.getType() != DcModule._TYPE_EXTERNALREFERENCE_MODULE &&
+                        rm.getIndex() != DcModules._CONTACTPERSON &&
+                        rm.getIndex() != DcModules._CONTAINER) {
+                    referencedModules.add(rm);
+                }
+            }
+            
+            build();
+            
+            setBorder(ComponentFactory.getTitleBorder(""));
+        }
+        
+        private void build() {
+            setBorder(null);
+            
+            setLayout(Layout.getGBL());
+            
+            int x = 0;
+            ModuleButton mi;
+            if (referencedModules.size() > 0) {
+                JMenuBar jb = new JMenuBar();
+                
+                jb.setBackground(getBackground());
+                jb.setMinimumSize(new Dimension(30, 35));
+                jb.setPreferredSize(new Dimension(30, 35));
+                jb.setMaximumSize(new Dimension(30, 35));
+                
+                JMenu menu = ComponentFactory.getMenu(IconLibrary._icoArrowDownThin, "");
+                menu.setBackground(getBackground());
+                for (DcModule rm : referencedModules) {
+                    mi = new ModuleButton(rm);
+                    mi.setActionCommand("module_change");
+                    mi.addActionListener(this);
+                    
+                    mi.setMinimumSize(new Dimension(148, 35));
+                    mi.setPreferredSize(new Dimension(148, 35));
+                    mi.setBackground(getBackground());
+                    
+                    menu.add(mi);
+                }
+                
+                jb.add(menu);
+                add(jb, Layout.getGBC(x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, 
+                        GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+            }
+            
+            add(mb, Layout.getGBC(x++, 0, 1, 1, 2.0, 1.0, GridBagConstraints.NORTHWEST, 
+                    GridBagConstraints.BOTH,new Insets(0, 0, 0, 0), 0, 0));
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            if (ae.getActionCommand().startsWith("module_change")) {
+                ModuleButton mb = (ModuleButton) ae.getSource();
+                setSelectedModule(mb.getModule().getIndex());
+            }
+        }
+    }
+    
+    private class ModuleButton extends DcButton {
+        
+        private DcModule module;
+        
+        private ModuleButton(DcModule module) {
+            this.module = module;
+            setBorder(null);
+            
+            setMinimumSize(new Dimension(120, 35));
+            setPreferredSize(new Dimension(120, 35));
+        }
+        
+        public DcModule getModule() {
+            return module;
+        }
+
+        @Override
+        public Icon getIcon() {
+            return module.getIcon32();
+        }
+
+        @Override
+        public String getLabel() {
+            return module.getLabel();
+        }
+
+        @Override
+        public String getText() {
+            return module != null ? module.getLabel() : "";
+        }
     }
 }

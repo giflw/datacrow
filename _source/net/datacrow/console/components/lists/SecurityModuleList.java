@@ -31,6 +31,7 @@ import java.util.List;
 
 import javax.swing.event.ListSelectionEvent;
 
+import net.datacrow.console.components.panels.DcModuleList;
 import net.datacrow.console.windows.security.ModulePermissionPanel;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;

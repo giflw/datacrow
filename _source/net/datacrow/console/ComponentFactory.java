@@ -274,6 +274,7 @@ public final class ComponentFactory {
             UIManager.put("TabbedPane.lightHighlight", UIManager.get("TabbedPane.background") );
             UIManager.put("TabbedPane.darkShadow", UIManager.get("TabbedPane.background") );
             UIManager.put("TabbedPane.shadow", UIManager.get("TabbedPane.background") );
+            UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Color.black, 1));
             
             UIManager.put("Tree.leafIcon", IconLibrary._icoTreeLeaf);
             UIManager.put("Tree.openIcon", IconLibrary._icoTreeOpen);

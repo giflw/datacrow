@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.lists;
+package net.datacrow.console.components.panels;
 
 import java.awt.Color;
 import java.awt.Component;

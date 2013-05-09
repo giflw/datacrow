@@ -1,9 +1,25 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.23  [Released on May 6, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.23  [Released on May xx, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - References show without a name, sometimes...
+- PDCR error when creating new items (item was created successfully)
+- It was possible to create infinite loops in the hierarchical structure of the 
+  containers when creating tree structures of 3 levels or deeper.
+- NullPointerException when clicking the "New" button from within the container item
+  form.
+- When adding new children (such as tracks) the view was not always updated correctly.
+- Quick view font and font sizes were not fully in line with the settings. Additionally
+  the header text is now always 4 points larger as the text font.
+- The space between the text and the icon was underlined (quick view and multi-reference
+  fields in the item form).
+- 
+
+[Changed]
+- New layout of the main screen
+- Removed the JTattoo border in the menus
+- Removed a few icons from the toolbar
 
 
 -----------------------------------------------------------------------------------------
