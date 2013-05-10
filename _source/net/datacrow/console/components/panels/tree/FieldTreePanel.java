@@ -222,9 +222,10 @@ public class FieldTreePanel extends TreePanel {
             	
 	            for (int idx : fields) {
 	                field = module.getField(idx);
-	                if (field.isUiOnly() &&
-	                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
-	                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
+	                if (field == null ||
+	                    (field.isUiOnly() &&
+	                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+	                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE)) continue;
 	                
                     columns.append(",");
 	                
@@ -349,10 +350,11 @@ public class FieldTreePanel extends TreePanel {
             boolean ordered = false;
             for (int idx : fields) { 
             	field = DcModules.get(getModule()).getField(idx);
-                if (field.isUiOnly() &&
-                    field.getIndex() != DcObject._SYS_MODULE &&
-                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
-                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) continue;
+                if (field == null ||
+                    (field.isUiOnly() &&
+                     field.getIndex() != DcObject._SYS_MODULE &&
+                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                     field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE)) continue;
 
                 if (!ordered) {
                 	 sql.append(" order by ");
@@ -418,10 +420,11 @@ public class FieldTreePanel extends TreePanel {
                     for (int idx = 0; idx < fields.length; idx++) {
                     	
                     	field = DcModules.get(getModule()).getField(fields[idx]);
-                    	if (field.isUiOnly() &&
-                    	    field.getIndex() != DcObject._SYS_MODULE &&
-                    	    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
-	                        field.getFieldType() != ComponentFactory._REFERENCEFIELD) 
+                    	if (field == null ||
+                    	    (field.isUiOnly() &&
+                    	     field.getIndex() != DcObject._SYS_MODULE &&
+                    	     field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+	                         field.getFieldType() != ComponentFactory._REFERENCEFIELD)) 
                     		continue;
                     	
                         
@@ -488,8 +491,11 @@ public class FieldTreePanel extends TreePanel {
         
         if (isEnabled() && fields != null && fields.length > 0) {
             label += " by ";
-            for (int i = 0; i < fields.length; i++)
+            for (int i = 0; i < fields.length; i++) {
+                if (mod.getField(fields[i]) == null) continue;
+                
                 label += (i > 0 ? " & " : "") + mod.getField(fields[i]).getLabel();
+            }
         }
         
         top = new DcDefaultMutableTreeNode(label);

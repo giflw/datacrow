@@ -31,6 +31,7 @@ import java.util.Date;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.util.Utilities;
 
 /**
  * @author Robert Jan van der Waals
@@ -61,13 +62,19 @@ public class DcObjectComparator implements Comparator<DcObject> {
         
         // this is a fix for the container child items since these cannot be loaded on retrieval from the database
         // as the children come from different modules.
-        try {
-            dco1.load(fields);
-            dco2.load(fields);
-        } catch (Exception e) {}
-        
         Object o1 = dco1.getValue(field);
         Object o2 = dco2.getValue(field);
+        
+        if (Utilities.isEmpty(o1) && Utilities.isEmpty(o2)) {
+            try {
+                dco1.load(dco1.getModule().getMinimalFields(null));
+                dco2.load(dco2.getModule().getMinimalFields(null));
+                
+                o1 = dco1.getValue(field);
+                o2 = dco2.getValue(field);
+                
+            } catch (Exception e) {}
+        }
 
         if (o1 == null && o2 == null)
             return 0;

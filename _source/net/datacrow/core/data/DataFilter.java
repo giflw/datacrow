@@ -562,7 +562,7 @@ public class DataFilter {
 			} else {
 				for (int idx : queryFields) {
 					field = m.getField(idx);
-					if (!field.isUiOnly()) {
+					if (field != null && !field.isUiOnly()) {
 						if (columnCounter > 0) sql.append(", ");
 						sql.append(field.getDatabaseFieldName());
 						columnCounter++;

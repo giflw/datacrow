@@ -28,6 +28,7 @@ package net.datacrow.core.objects;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -102,7 +103,8 @@ public class DcMapping extends DcObject {
                 logger.warn(e, e);
             }
         } else {
-            reference.reload();
+            if (Utilities.isEmpty(reference.toString()))
+                reference.reload();
         }
         
         return reference;

@@ -35,7 +35,6 @@ import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.comparators.DcObjectComparator;
@@ -130,7 +129,11 @@ public class Container extends DcObject {
                 df.addEntry(new DataFilterEntry(DataFilterEntry._AND, DcModules._ITEM, DcObject._SYS_CONTAINER, Operator.EQUAL_TO, this));
                 children = DataManager.get(df, fields);
                 
-                Collections.sort(children, new DcObjectComparator(DcProperty._A_NAME));
+                // We need to have the minimum set of information available for sorting
+                for (DcObject dco : children)
+                    dco.load(dco.getModule().getMinimalFields(null));
+                
+                Collections.sort(children, new DcObjectComparator(DcObject._SYS_DISPLAYVALUE));
                                 
             } finally {
                 isLoading = false;
