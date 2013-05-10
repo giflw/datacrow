@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.25  [Released on May xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.25  [Released on May 10, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -10,6 +10,9 @@ Data Crow 3.9.25  [Released on May xx, 2013]  [testing: high]  [target: producti
 - Lend items in the loan administration are not shown by title.
 - Sometimes the items in the quick view for the container items are not sorted 
   alphabetically. 
+
+[Changed]
+- Small change to the module selection panel.
 
 
 -----------------------------------------------------------------------------------------

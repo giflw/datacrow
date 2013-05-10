@@ -46,20 +46,22 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcLongTextField;
+import net.datacrow.console.components.DcMenu;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcMultiLineToolTip;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
 public class ModuleListPanel extends DcPanel {
@@ -162,38 +164,50 @@ public class ModuleListPanel extends DcPanel {
             setBorder(borderDefault);
             setLayout(Layout.getGBL());
             
-            int x = 0;
             ReferenceModuleButton mi;
             if (referencedModules.size() > 0) {
                 menuBar = ComponentFactory.getMenuBar();
+                menuBar.setBorderPainted(false);
                 menuBar.setBackground(getBackground());
-                menuBar.setMinimumSize(new Dimension(20, 35));
-                menuBar.setPreferredSize(new Dimension(20, 35));
-                menuBar.setMaximumSize(new Dimension(15, 35));
                 
                 components.add(menuBar);
                 
-                JMenu menu = ComponentFactory.getMenu(IconLibrary._icoArrowDownThin, "");
+                JMenu menu = new DcMenu(DcResources.getText("lblSubModule")) {
+                    private Font font = new Font(DcSettings.getFont(DcRepository.Settings.stSystemFontBold).getFontName(), Font.PLAIN, 8);
+                    @Override
+                    public void setFont(Font font) {
+                        super.setFont(font);
+                    }
+                };
+                menu.setHorizontalAlignment(SwingConstants.CENTER);
+                menu.setVerticalAlignment(SwingConstants.CENTER);
+                
                 menu.setRolloverEnabled(false);
                 menu.setContentAreaFilled(false);
+                
+                menu.setMinimumSize(new Dimension(100, 12));
+                menu.setPreferredSize(new Dimension(100, 12));
+                //menu.setMaximumSize(new Dimension(120, 12));
+                
+                menu.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
                 
                 for (DcModule rm : referencedModules) {
                     mi = new ReferenceModuleButton(rm);
                     mi.setActionCommand("module_change");
                     mi.addActionListener(this);
                     mi.setBackground(getBackground());
-                    mi.setMinimumSize(new Dimension(148, 39));
-                    mi.setPreferredSize(new Dimension(148, 39));
+                    mi.setMinimumSize(new Dimension(118, 39));
+                    mi.setPreferredSize(new Dimension(118, 39));
                          
                     menu.add(mi);
                 }
                 
                 menuBar.add(menu);
-                add(menuBar, Layout.getGBC(x++, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, 
-                        GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+                add(menuBar, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTH, 
+                        GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
             }
             
-            add(mb, Layout.getGBC(x++, 0, 1, 1, 2.0, 1.0, GridBagConstraints.NORTHWEST, 
+            add(mb, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTH, 
                     GridBagConstraints.BOTH,new Insets(0, 0, 0, 0), 0, 0));
         }
         
@@ -238,8 +252,11 @@ public class ModuleListPanel extends DcPanel {
         public MainModuleButton(DcModule module) {
             super(Layout.getGBL());
             this.module = module;
-            setMinimumSize(new Dimension(120, 35));
-            setPreferredSize(new Dimension(120, 35));
+            
+            setBorder(null);
+            
+            setMinimumSize(new Dimension(100, 35));
+            setPreferredSize(new Dimension(100, 35));
             add(ComponentFactory.getLabel(module.getIcon32()), Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.WEST, GridBagConstraints.NONE,
                     new Insets(0, 3, 0, 0), 0, 0));
@@ -249,6 +266,7 @@ public class ModuleListPanel extends DcPanel {
             for (MouseListener ml : ltf.getMouseListeners())
                 ltf.removeMouseListener(ml);
             
+            ltf.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
             ltf.addMouseListener(new ModuleMouseListener(module.getIndex()));
             ltf.setBackground(getBackground());
             
