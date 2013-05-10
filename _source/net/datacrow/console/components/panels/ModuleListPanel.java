@@ -173,12 +173,15 @@ public class ModuleListPanel extends DcPanel {
                 components.add(menuBar);
                 
                 JMenu menu = new DcMenu(DcResources.getText("lblSubModule")) {
-                    private Font font = new Font(DcSettings.getFont(DcRepository.Settings.stSystemFontBold).getFontName(), Font.PLAIN, 8);
+                    private Font f = new Font(DcSettings.getFont(DcRepository.Settings.stSystemFontBold).getFontName(), Font.ITALIC, 9);
                     @Override
                     public void setFont(Font font) {
-                        super.setFont(font);
+                        super.setFont(this.f);
                     }
                 };
+                
+                menu.setFont(null);
+                
                 menu.setHorizontalAlignment(SwingConstants.CENTER);
                 menu.setVerticalAlignment(SwingConstants.CENTER);
                 
