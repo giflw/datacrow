@@ -61,10 +61,11 @@ public class GroupByDialog extends DcDialog implements ActionListener {
         Collection<DcField> fields = new ArrayList<DcField>();
         for (DcField field : DcModules.get(module).getFields()) {
             
-            if (field.isUiOnly() &&
-                field.getIndex() != DcObject._SYS_MODULE &&
-                field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
-                field.getFieldType() != ComponentFactory._REFERENCEFIELD) 
+            if (field.getSystemName().endsWith("_persist") ||
+                (field.isUiOnly() &&
+                 field.getIndex() != DcObject._SYS_MODULE &&
+                 field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
+                 field.getFieldType() != ComponentFactory._REFERENCEFIELD)) 
                 continue;
             
             fields.add(field);
