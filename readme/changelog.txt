@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- Fixed an issue with the -userdir: parameter; relatives paths could not be used due to 
+  a, cough, small coding error.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.25  [Released on May 10, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

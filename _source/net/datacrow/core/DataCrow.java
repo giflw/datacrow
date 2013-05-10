@@ -231,7 +231,7 @@ public class DataCrow {
             
             if (DataCrow.userDir != null && (DataCrow.userDir.startsWith("./") || DataCrow.userDir.startsWith(".\\"))) {
                 DataCrow.userDir = DataCrow.installationDir + DataCrow.userDir.substring(2);
-                DataCrow.userDir = DataCrow.installationDir.replaceAll("\\\\", "/");
+                DataCrow.userDir = DataCrow.userDir.replaceAll("\\\\", "/");
             }
             
             try {
