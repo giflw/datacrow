@@ -6,6 +6,10 @@ Data Crow 3.9.25  [Released on May xx, 2013]  [testing: high]  [target: producti
 - More upgrade errors for old versions have been fixed. This time it's related to old
   columns still being present due to failed upgrades in the past. The upgrade process
   will now actively check for these and correct where necessary.
+- Performance bug in the table view.
+- Lend items in the loan administration are not shown by title.
+- Sometimes the items in the quick view for the container items are not sorted 
+  alphabetically. 
 
 
 -----------------------------------------------------------------------------------------

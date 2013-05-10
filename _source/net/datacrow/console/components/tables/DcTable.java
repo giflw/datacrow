@@ -632,6 +632,8 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
         cancelEdit();
         for (int i = rows.length - 1; i > -1; i--)
             removeRow(rows[i]);
+        
+        loadedRows.clear();
     }
 
     public void removeRow(int row) {
