@@ -233,7 +233,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         menuTools.addSeparator();
         PluginHelper.add(menuTools, "BackupAndRestore");
         menuTools.addSeparator();
-        PluginHelper.add(menuTools, "ExpertUser");
+        PluginHelper.add(menuTools, "DatabaseEditor");
         PluginHelper.add(menuTools, "DriveManager");
         
         if (module.isFileBacked())

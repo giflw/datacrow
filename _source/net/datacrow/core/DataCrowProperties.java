@@ -34,6 +34,10 @@ public class DataCrowProperties {
         save();
     }
     
+    public File getFile() {
+        return file;
+    }
+    
     public void save() {
         try {
             FileOutputStream fos = new FileOutputStream(file);

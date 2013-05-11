@@ -164,8 +164,6 @@ public abstract class DcRepository {
         public static final String stShowToolbar = "show_toolbar";
         public static final String stReportFile = "report_file";
     	public static final String stShowQuickFilterBar = "show_quick_filter_bar";
-        public static final String stHsqlCacheScale = "hsql_cache_scale";
-        public static final String stHsqlCacheSizeScale = "hsql_cache_size_scale";
         public static final String stGarbageCollectionIntervalMs = "gargabe_collection_interval_milliseconds";
         public static final String stFontRendering = "font_rendering";
         public static final String stImportCharacterSet = "import_character_set";

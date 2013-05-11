@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.expertuser;
+package net.datacrow.console.windows.databaseeditor;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;

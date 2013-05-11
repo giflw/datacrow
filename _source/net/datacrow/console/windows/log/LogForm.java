@@ -29,8 +29,10 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
@@ -60,7 +62,11 @@ public class LogForm extends DcFrame {
 
         SwingUtilities.updateComponentTreeUI(LogPanel.getInstance());
         
-        add(LogPanel.getInstance(), Layout.getGBC( 0, 1, 1, 1, 20.0, 50.0
+        JTabbedPane tabbedPane = ComponentFactory.getTabbedPane();
+        tabbedPane.addTab(DcResources.getText("lblLog"), IconLibrary._icoEventLog, LogPanel.getInstance());
+        tabbedPane.addTab(DcResources.getText("lblSystemInformation"), IconLibrary._icoAbout, new SystemInformationPanel());
+        
+        add(tabbedPane, Layout.getGBC( 0, 1, 1, 1, 20.0, 50.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets( 5, 0, 0, 0), 0, 0));        
         

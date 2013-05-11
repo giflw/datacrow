@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.windows.expertuser;
+package net.datacrow.console.windows.databaseeditor;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -32,7 +32,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -42,13 +41,13 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
-public class ExpertForm extends DcFrame implements ActionListener {
+public class DatabaseEditorForm extends DcFrame implements ActionListener {
 
-    public ExpertForm() {
-        super(DcResources.getText("lblExpertUser"), IconLibrary._icoSettings32);
+    public DatabaseEditorForm() {
+        super(DcResources.getText("lblDatabaseEditor"), IconLibrary._icoSettings32);
         
         buildForm();
-        setHelpIndex("dc.tools.expertuser");
+        setHelpIndex("dc.tools.databaseeditor");
     }
     
     @Override
@@ -58,29 +57,7 @@ public class ExpertForm extends DcFrame implements ActionListener {
     }
     
     private void buildForm() {
-        JTabbedPane tabbedPane = ComponentFactory.getTabbedPane();
-        
-    	SystemInfoPanel systemInfoPanel = new SystemInfoPanel();
-        MaintenancePanel maintenancePanel = new MaintenancePanel();
-        PerformancePanel performancePanel = new PerformancePanel();
         QueryPanel queryPanel = new QueryPanel();
-        
-        JPanel systemPanel = new JPanel();
-        systemPanel.setLayout(Layout.getGBL());
-        
-        systemInfoPanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblSystemInformation")));
-        maintenancePanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblMaintenance")));
-        performancePanel.setBorder(ComponentFactory.getTitleBorder(DcResources.getText("lblPerformanceTweaking")));
-        
-        systemPanel.add(systemInfoPanel,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
-                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                  new Insets(5, 5, 5, 5), 0, 0));
-        systemPanel.add(maintenancePanel, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                  new Insets(5, 5, 5, 5), 0, 0));
-        systemPanel.add(performancePanel, Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
-                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                  new Insets(5, 5, 5, 5), 0, 0));
 
         JPanel panelActions = new JPanel();
         JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
@@ -88,11 +65,8 @@ public class ExpertForm extends DcFrame implements ActionListener {
         buttonClose.addActionListener(this);
         panelActions.add(buttonClose);
         
-        tabbedPane.addTab(DcResources.getText("lblSystem"), IconLibrary._icoSettings16, systemPanel);
-        tabbedPane.addTab(DcResources.getText("lblSQLTool"), IconLibrary._icoSQLTool, queryPanel);
-
         getContentPane().setLayout(Layout.getGBL());
-        getContentPane().add(tabbedPane, Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
+        getContentPane().add(queryPanel, Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
         		            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
 							 new Insets(0, 0, 0, 0), 0, 0));
         getContentPane().add(panelActions, Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0

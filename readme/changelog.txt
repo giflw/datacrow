@@ -27,7 +27,7 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
   same Data Crow user folder while not being effected by the settings done by other users.
   The module settings are the exception though.
 - For Windows systems the default font has been changed to "Arial Unicode MS" for 
-  foreign character support.
+  foreign character support. This only applies to new installations.
 
 
 -----------------------------------------------------------------------------------------
