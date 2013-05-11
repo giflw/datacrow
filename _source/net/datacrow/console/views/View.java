@@ -825,12 +825,10 @@ public class View extends DcPanel implements ListSelectionListener {
         // only the search view uses view dividers
         if (getType() == _TYPE_SEARCH && !getModule().isChildModule()) {
             vdGroupingPane = new DcViewDivider(groupingPane, panelResult, DcRepository.Settings.stTreeDividerLocation);
-        
             quickView = getModule().getQuickView();
             vdQuickPane = new DcViewDivider(vdGroupingPane, quickView, DcRepository.Settings.stQuickViewDividerLocation);
 
             quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
-            quickView.setBorder(null);
         }
         
         //**********************************************************

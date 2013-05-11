@@ -47,7 +47,6 @@ public class LogPanel extends JPanel implements ITextPaneAppenderListener {
     private void buildPanel() {
         
         JPanel panelLog = new JPanel();
-        JPanel panelInfo = new JPanel();
 
         //**********************************************************
         //Logging panel
@@ -62,16 +61,7 @@ public class LogPanel extends JPanel implements ITextPaneAppenderListener {
 
         panelLog.add(scroller, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 0, 5, 0, 5), 0, 0));
-
-        //**********************************************************
-        //Product information panel
-        //**********************************************************
-        panelInfo.setLayout(Layout.getGBL());
-
-        panelInfo.add(labelVersion, Layout.getGBC( 0, 0, 1, 1, 0.0, 0.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 5, 0, 0), 0, 0));
+                 new Insets( 0, 5, 5, 5), 0, 0));
 
         //**********************************************************
         //Main panel
@@ -81,8 +71,5 @@ public class LogPanel extends JPanel implements ITextPaneAppenderListener {
         add(panelLog,    Layout.getGBC( 0, 1, 1, 1, 20.0, 50.0
            ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
             new Insets( 5, 0, 0, 0), 0, 0));
-        add(panelInfo, Layout.getGBC( 0, 2, 1, 1, 0.0, 0.0
-           ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-            new Insets( 5, 0, 5, 0), 0, 0));
     }
 }

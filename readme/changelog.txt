@@ -28,6 +28,10 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
   The module settings are the exception though.
 - For Windows systems the default font has been changed to "Arial Unicode MS" for 
   foreign character support. This only applies to new installations.
+- The Expert Form has been replaced by the Database Editor tool. This one now only has
+  the SQL queries panel.
+- The log form has been expanded to include system information (moved from the expert
+  form).
 
 
 -----------------------------------------------------------------------------------------
