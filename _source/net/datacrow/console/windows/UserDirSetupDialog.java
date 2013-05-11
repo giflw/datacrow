@@ -32,10 +32,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -213,7 +211,7 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
                 }
                 
                 try {
-                    Utilities.rename(new File(DataCrow.userDir, "data_crow.log"), new File(userDir, "data_crow.log"));
+                    Utilities.rename(new File(DataCrow.installationDir, "data_crow.log"), new File(userDir, "data_crow.log"));
                 } catch (IOException e) {}
                 
                 setupDatabaseDir();
@@ -230,17 +228,10 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
                 File userHome = new File(System.getProperty("user.home"));
                 userHome.mkdir();
                 
-                File userDirSettings = new File(userHome, "datacrow.properties");
-                Properties properties = new Properties();
-                properties.setProperty("userfolder", userDir.toString());
-                FileOutputStream fos = new FileOutputStream(userDirSettings);
-                properties.store(fos, "Data Crow user directory setting file. Better to leave it right here.");
+                DataCrow.getDcproperties().setUserDir(userDir.toString());
                 
                 client.setSuccess(true);
-                fos.close();
-                
                 client.addMessage("The user folder has been initialized");
-                
                 client.stop();
                 
             } catch (Exception e) {
@@ -326,6 +317,27 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
             for (String s : dir.read()) {
                 file = new File(s);
                 Utilities.copy(file, new File(modulesDir, file.getName()));
+            }
+            
+            File modulesDataDir = new File(modulesDir, "data");
+            modulesDataDir.mkdir();
+            
+            dir = new Directory(new File(DataCrow.moduleDir, "data").toString(), true, null);
+            int idx;
+            File targetDir;
+            for (String s : dir.read()) {
+                file = new File(s);
+                
+                if (file.isDirectory()) continue;
+                
+                if (file.getParent().endsWith("data")) {
+                    Utilities.copy(file, new File(modulesDataDir, file.getName()));
+                } else {
+                    idx = s.indexOf("/data/") > -1 ? s.indexOf("/data/") : s.indexOf("\\data\\");
+                    targetDir = new File(modulesDataDir, s.substring(idx + 6)).getParentFile();
+                    targetDir.mkdirs();
+                    Utilities.copy(file, new File(targetDir, file.getName()));
+                }
             }
             
             client.addMessage("Modules folder has been set up");

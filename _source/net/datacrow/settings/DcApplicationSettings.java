@@ -41,6 +41,9 @@ import net.datacrow.core.settings.Setting;
 import net.datacrow.core.settings.SettingsGroup;
 import net.datacrow.settings.definitions.ProgramDefinitions;
 import net.datacrow.synchronizers.Synchronizer;
+import net.datacrow.util.Utilities;
+
+import org.apache.log4j.Logger;
 
 /**
  * Holder for application settings.
@@ -51,6 +54,8 @@ import net.datacrow.synchronizers.Synchronizer;
  * @author Robert Jan van der Waals
  */
 public class DcApplicationSettings extends net.datacrow.settings.Settings {
+    
+    private static Logger logger = Logger.getLogger(Settings.class.getName());
     
     public static final String _General = "lblGroupGeneral";
     public static final String _FileHashing = "lblFileHashing";
@@ -69,8 +74,22 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
     public DcApplicationSettings() {
         super();
         createSettings();
-        getSettings().setSettingsFile(new File(DataCrow.applicationSettingsDir, "data_crow.properties"));
         
+        String clientID = DataCrow.getDcproperties().getClientID();
+        File fileClient = new File(DataCrow.applicationSettingsDir, clientID + "_data_crow.properties");
+        File fileDefault = new File(DataCrow.applicationSettingsDir, "data_crow.properties");
+        
+        try {
+            if (fileDefault.exists() && !fileClient.exists())
+                Utilities.copy(fileDefault, fileClient);
+        } catch (Exception e) {
+            logger.warn("Could not use the default settings as template for " + clientID + 
+                    "_data_crow.properties. Failed to copy " + fileDefault, e);
+        }
+        
+        logger.debug("Using settings file: " + fileClient);
+        getSettings().setSettingsFile(fileClient);
+
         if (DataCrow.loadSettings)
             load();
     }
@@ -586,11 +605,11 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             "lblFontRendering",
                             true,
-                            true));        
+                            true)); 
         getSettings().addSetting(_Font,
                 new Setting(DcRepository.ValueTypes._FONT,
                             DcRepository.Settings.stSystemFontNormal,
-                            new Font("Arial", Font.PLAIN, 11),
+                            (DataCrow.getPlatform().isWin() ? new Font("Arial Unicode MS", Font.PLAIN, 11) : new Font("Arial", Font.PLAIN, 11)),
                             ComponentFactory._FONTSELECTOR,
                             "tpFont",
                             "lblFontNormal",
@@ -599,7 +618,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_Font,
                 new Setting(DcRepository.ValueTypes._FONT,
                             DcRepository.Settings.stSystemFontBold,
-                            new Font("Arial", Font.PLAIN, 11),
+                            (DataCrow.getPlatform().isWin() ? new Font("Arial Unicode MS", Font.PLAIN, 11) : new Font("Arial", Font.PLAIN, 11)),
                             ComponentFactory._FONTSELECTOR,
                             "tpFont",
                             "lblFontBold",

@@ -50,6 +50,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -193,6 +197,27 @@ public class Utilities {
         }
         
         return result;
+    }
+    
+    public static String getMacAddress() {
+        InetAddress ip;
+        try {
+     
+            ip = InetAddress.getLocalHost();
+            NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+            byte[] mac = network.getHardwareAddress();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < mac.length; i++) {
+                sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));        
+            }
+            return sb.toString();
+     
+        } catch (UnknownHostException e) {
+            logger.debug(e, e);
+        } catch (SocketException e){
+            logger.debug(e, e);
+        }
+        return null;
     }
     
     public static Object getQueryValue(Object o, DcField field) {

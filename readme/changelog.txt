@@ -20,6 +20,14 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
 - Loan Administration would open very slowly in case you have many loans outstanding.
   Items are now loaded in a separate process and the progress is shown in the 
   progress bar. 
+- Same as above, but then also for the lend items tab of the contact person.
+- Settings are now stored per client. On startup a Unique ID for your system is generated
+  and stored in the datacrow.properties file. The existing system settings are used as 
+  a template for these new settings files. This allows multiple client to work in the
+  same Data Crow user folder while not being effected by the settings done by other users.
+  The module settings are the exception though.
+- For Windows systems the default font has been changed to "Arial Unicode MS" for 
+  foreign character support.
 
 
 -----------------------------------------------------------------------------------------

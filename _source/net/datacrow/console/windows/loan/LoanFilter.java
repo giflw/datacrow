@@ -29,6 +29,8 @@ public class LoanFilter extends Thread {
     public static final int _HISTORIC_LOANS = 1;
     public static final int _ALL_LOANS = 2;
     
+    private int loanType = _CURRENT_LOANS;
+    
     private Date startDateFrom;
     private Date startDateTo;
 
@@ -36,6 +38,10 @@ public class LoanFilter extends Thread {
     private Date dueDateTo;
     
     private boolean onlyOverdue = false;
+    private boolean keepOnRunning = true;
+    
+    private DcObject person;
+    private DcModule selectedModule;
     
     private LoanInformationPanel listener;
     
@@ -48,11 +54,11 @@ public class LoanFilter extends Thread {
     public void setOnlyOverdue(boolean onlyOverdue) {
         this.onlyOverdue = onlyOverdue;
     }
-
-    private int loanType = _CURRENT_LOANS;
-    private DcObject person;
     
-    private DcModule selectedModule;
+    public void cancel() {
+        keepOnRunning = false;
+    }
+
 
     public void setStartDateFrom(Date startDateFrom) {
         this.startDateFrom = startDateFrom;
@@ -124,6 +130,9 @@ public class LoanFilter extends Thread {
         int processed = 0;
         for (DcObject loan : loans) {
             
+            if (!keepOnRunning) 
+                break;
+            
             if (onlyOverdue) {
                 endDate = (Date) loan.getValue(Loan._B_ENDDATE);
                 dueDate = (Date) loan.getValue(Loan._E_DUEDATE);
@@ -165,6 +174,8 @@ public class LoanFilter extends Thread {
         
         listener.setProcessed(loans.size());
 
+        if (!keepOnRunning) return;
+        
         if (loanType == _CURRENT_LOANS) {
             DcObjectComparator comparator = new DcObjectComparator(Item._SYS_LOANDUEDATE);
             comparator.setAllowReloading(false);
@@ -176,13 +187,16 @@ public class LoanFilter extends Thread {
         }
         
         for (final DcObject item : items) {
+            
+            if (!keepOnRunning) break;
+            
             if (!SwingUtilities.isEventDispatchThread()) {
                 try {
                     SwingUtilities.invokeAndWait(
                             new Thread(new Runnable() { 
                                 @Override
                                 public void run() {
-                                    listener.addItem(item);
+                                    if (keepOnRunning) listener.addItem(item);
                                 }
                             }));
                 } catch (Exception e) {

@@ -118,6 +118,10 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         
         person = null;
         table = null;
+        
+        if (filter != null)
+            filter.cancel();
+        
         super.clear();
     }
     

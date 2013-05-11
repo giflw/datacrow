@@ -121,6 +121,8 @@ public class DataCrow {
     private static boolean noSplash = false;
     private static boolean isWebModuleInstalled = false;
     
+    private static DataCrowProperties dcProperties;
+    
     public static boolean loadSettings = true;
     public static MainFrame mainFrame;
 
@@ -209,6 +211,8 @@ public class DataCrow {
                 }
             }
             
+            dcProperties = new DataCrowProperties();
+            
             noSplash = !noSplash ? webserverMode && username != null : noSplash;
             
             installationDir = pInstallationDir != null ? pInstallationDir : installationDir;
@@ -235,19 +239,12 @@ public class DataCrow {
             }
             
             try {
-                
                 boolean userFolderExists = DataCrow.userDir != null;
 
-                File userHome = new File(System.getProperty("user.home"));
-                File userDirSettings = new File(userHome, "datacrow.properties");
-                
-                if (!userFolderExists && userDirSettings.exists()) {
-                    Properties properties = new Properties();
-                    properties.load(new FileInputStream(userDirSettings));
-                    String userDirSetting =  (String) properties.get("userfolder");
-                    
-                    if (new File(userDirSetting).exists()) {
-                        userDir = userDirSetting;
+                if (!userFolderExists && dcProperties.exists()) {
+                    File userDirSetting =  dcProperties.getUserDir();
+                    if (userDirSetting != null && userDirSetting.exists()) {
+                        userDir = userDirSetting.toString();
                         userDir += userDir.endsWith("/") || userDir.endsWith("\\") ? "" : "/";
                         userFolderExists = true;
                     }
@@ -530,7 +527,10 @@ public class DataCrow {
             
             System.exit(0);
         }
-
+    }
+    
+    public static DataCrowProperties getDcproperties() {
+        return dcProperties;
     }
     
     public static boolean isInitialized() {
@@ -807,7 +807,7 @@ public class DataCrow {
         DataCrow.createDirectory(new File(resourcesDir), "resourcesDir");
         DataCrow.createDirectory(new File(upgradeDir), "upgradeDir");
     }
-    
+
     private static void createDirectory(File dir, String name) {
 
         dir.mkdirs();

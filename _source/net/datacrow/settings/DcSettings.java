@@ -48,7 +48,7 @@ import net.datacrow.util.DcImageIcon;
  */
 public class DcSettings {
 
-    private static DcApplicationSettings applicationSettings = new DcApplicationSettings();
+    private static DcApplicationSettings applicationSettings;// = new DcApplicationSettings();
 
     public DcSettings() {
         applicationSettings = new DcApplicationSettings();
