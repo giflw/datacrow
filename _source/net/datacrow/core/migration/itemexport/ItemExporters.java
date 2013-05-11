@@ -44,7 +44,7 @@ public class ItemExporters {
         Class<?> clazz = exporters.get(type.toUpperCase());
         if (clazz != null) {
             return (ItemExporter) clazz.getConstructors()[0].newInstance(
-                    new Object[] {Integer.valueOf(moduleIdx), Integer.valueOf(mode)});
+                    new Object[] {Integer.valueOf(moduleIdx), Integer.valueOf(mode), Boolean.TRUE});
         } else {
             throw new Exception("No item exporter found for " + type);
         }

@@ -34,7 +34,6 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcProperty;
 
@@ -154,12 +153,19 @@ public class XmlSchemaWriter extends XmlBaseWriter {
         writeLine("<xsd:complexType name=\"type-" + baseName + "\">", 1);
         writeLine("<xsd:sequence>", 2);
         
-        if (dco instanceof DcProperty || dco instanceof DcAssociate) {
+        if (    dco.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE || 
+                dco.getModule().getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
+            
             int field = dco instanceof DcProperty ? DcProperty._A_NAME : DcAssociate._A_NAME;
             String label = getValidTag(dco.getField(field).getSystemName());
             writeLine("<xsd:element name=\"" + label + "\" type=\"xsd:string\"/>", 3);
-        } else if (dco instanceof DcMediaObject) {
+            
+        } else if (
+                dco.getModule().getType() == DcModule._TYPE_MEDIA_MODULE || 
+                dco.getModule().getType() == DcModule._TYPE_MODULE) {
+            
             writeField(dco.getField(DcObject._SYS_MODULE));
+            
             for (int fieldIdx : fields) {
                 DcField field = dco.getField(fieldIdx);
                 if (field != null) writeField(field);

@@ -145,8 +145,13 @@ public class BackupDialog extends DcDialog implements ActionListener, IBackupRes
     private void backup() {
         File directory = fileFieldTarget.getFile();
         if (directory != null) {
-            Backup bck = new Backup(this, fileFieldTarget.getFile(), textComment.getText().trim());
-            bck.start();
+            
+            if (directory.getParent() == null) {
+                DcSwingUtilities.displayWarningMessage("msgCantBackupToRoot");
+            } else {
+                Backup bck = new Backup(this, fileFieldTarget.getFile(), textComment.getText().trim());
+                bck.start();
+            }
         } else {
             DcSwingUtilities.displayWarningMessage("msgSelectOutputDir");
         }

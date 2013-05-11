@@ -88,19 +88,22 @@ public class DcDatabase {
         int patch = 0;
 
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM VERSION");
             
-            while (rs.next()) {
-                major = rs.getInt("major");
-                minor = rs.getInt("minor");
-                build = rs.getInt("build");
-                patch = rs.getInt("patch");
+            if (connection != null) {
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM VERSION");
+                
+                while (rs.next()) {
+                    major = rs.getInt("major");
+                    minor = rs.getInt("minor");
+                    build = rs.getInt("build");
+                    patch = rs.getInt("patch");
+                }
+                
+                rs.close();
+                stmt.close();
             }
-            
-            rs.close();
-            stmt.close();
-            
+                
         } catch (SQLException se) {}
         
         return new Version(major, minor, build, patch);

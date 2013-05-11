@@ -31,7 +31,7 @@ import java.util.List;
 import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
-import net.datacrow.console.wizards.module.CreateModuleWizard;
+import net.datacrow.console.wizards.module.RestartDataCrowDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
@@ -113,14 +113,13 @@ public class ImportModuleWizard extends Wizard {
     }
 
     @Override
-    protected void restart() {
-        try {
-            finish();
-            saveSettings();
-            CreateModuleWizard wizard = new CreateModuleWizard();
-            wizard.setVisible(true);
-        } catch (WizardException exp) {
-            DcSwingUtilities.displayWarningMessage(exp.getMessage());
-        }
+    public void close() {
+        if (!isCancelled() && !isRestarted())
+            new RestartDataCrowDialog(this);
+        
+        super.close();
     }
+
+    @Override
+    protected void restart() {}
 }

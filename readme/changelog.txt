@@ -3,8 +3,16 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Fixed an issue with the -userdir: parameter; relatives paths could not be used due to 
-  a, cough, small coding error.
+- Fixed an issue with the -userdir: parameter; relatives paths could not be used.
+  The setting would always revert back to the installation dir which is not allowed to 
+  be used.
+- Module Exporter error for exporting items from related modules.
+- Module Exporter exports all items assigned to containers. This is faulty since the main
+  items are already exported. Container items should not be treated as normal children.
+- XSD fix for the Item Export (it was not fully correct).
+
+[Changed]
+- Added a restart message after the module has been imported successfully.
 
 
 -----------------------------------------------------------------------------------------

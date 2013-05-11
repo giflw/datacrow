@@ -48,7 +48,7 @@ public class CsvExporter extends ItemExporter {
     
     private static Logger logger = Logger.getLogger(CsvExporter.class.getName());
     
-    public CsvExporter(int moduleIdx, int mode) throws Exception {
+    public CsvExporter(int moduleIdx, int mode, boolean processChildren) throws Exception {
         super(moduleIdx, "CSV", mode, false);
     }
 
