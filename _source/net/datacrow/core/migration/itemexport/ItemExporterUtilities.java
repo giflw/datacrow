@@ -81,7 +81,7 @@ public class ItemExporterUtilities {
             picture.loadImage(false);
             DcImageIcon icon = (DcImageIcon) picture.getValue(Picture._D_IMAGE);
 
-            if (icon != null) {
+            if (icon.exists() && icon != null) {
                 if (settings.getBoolean(ItemExporterSettings._SCALE_IMAGES)) {
                     int width = settings.getInt(ItemExporterSettings._IMAGE_WIDTH);
                     int height = settings.getInt(ItemExporterSettings._IMAGE_HEIGHT);

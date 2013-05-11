@@ -402,6 +402,16 @@ public class Utilities {
         return UUID.randomUUID().toString();
     }
     
+    public static boolean isSameFile(File src, File tgt) {
+        if (Utilities.getSize(src).longValue() == Utilities.getSize(tgt).longValue()) {
+            String hash1 = Hash.getInstance().calculateHash(src.toString());
+            String hash2 = Hash.getInstance().calculateHash(tgt.toString());
+            return hash1.equals(hash2);
+        } else {
+            return false;
+        }
+    }
+    
     /**
      * Retrieved the file extension of a file
      * @param f file to get the extension from

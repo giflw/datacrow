@@ -88,7 +88,6 @@ public class Directory {
         boolean useFilter = false;
         if (extensions != null && extensions.length > 0)
             useFilter = true;
-        
 
         List<String> unhandled = new ArrayList<String>();
         unhandled.add(directory.toString());

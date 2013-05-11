@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core.db.upgrade;
+package net.datacrow.core.upgrade;
 
 import java.io.File;
 import java.sql.Connection;
@@ -65,9 +65,9 @@ import org.apache.log4j.Logger;
  * 
  * @author Robert Jan van der Waals
  */
-public class DatabaseUpgradeAfterInitialization {
+public class SystemUpgradeAfterInitialization {
     
-    private static Logger logger = Logger.getLogger(DatabaseUpgradeAfterInitialization.class.getName());
+    private static Logger logger = Logger.getLogger(SystemUpgradeAfterInitialization.class.getName());
     
     private LogForm lf = null;
 

@@ -69,9 +69,9 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
             boolean upgraded = false;
             Version v = DatabaseManager.getVersion();
             
-            //if (v.isOlder(DataCrow.getVersion())) {
+            if (v.isOlder(DataCrow.getVersion())) {
                 checkSystemFiles();
-            //}
+            }
             
             if (v.isOlder(new Version(3, 9, 22, 0))) {
                 DataCrow.showSplashScreen(false);
@@ -126,6 +126,8 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
         }
         
         if (files.size() > 0) {
+            DataCrow.showSplashScreen(false);
+            
             boolean copy = DcSwingUtilities.displayQuestion(
                     "The installation folder has new language files available. Do you want to install these to your user folder?");
             if (copy) {
@@ -133,6 +135,8 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
                     Utilities.copy(source, files.get(source));
                 }
             }
+            
+            DataCrow.showSplashScreen(true);
         }
     }
     
@@ -160,6 +164,8 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
         }
         
         if (files.size() > 0) {
+            DataCrow.showSplashScreen(false);
+            
             boolean copy = DcSwingUtilities.displayQuestion(
                     "The installation folder has new report files available. Do you want to install these to your user folder?");
             if (copy) {
@@ -168,6 +174,8 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
                     Utilities.copy(source, files.get(source));
                 }
             }
+            
+            DataCrow.showSplashScreen(true);
         }    
     }     
 

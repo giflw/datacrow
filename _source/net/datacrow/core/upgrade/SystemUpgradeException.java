@@ -23,21 +23,21 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core.db.upgrade;
+package net.datacrow.core.upgrade;
 
 /**
  * This exception is thrown when an exception occurs during a database upgrade.
  * @author Robert Jan van der Waals
  */
-public class DatabaseUpgradeException extends Exception {
+public class SystemUpgradeException extends Exception {
 
     private static final long serialVersionUID = -4176526283444984974L;
 
-    public DatabaseUpgradeException(String message) {
+    public SystemUpgradeException(String message) {
         super(message);
     }
     
-    public DatabaseUpgradeException(String message, Throwable cause) {
+    public SystemUpgradeException(String message, Throwable cause) {
         super(message, cause);
     }
 }
