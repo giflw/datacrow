@@ -64,17 +64,17 @@ public class SystemInformationPanel extends JPanel {
         String html =
                 "<HTML><BODY>" +
                 "<TABLE cellpadding=\"5\" cellspacing=\"5\"  " + Utilities.getHtmlStyle() + ">" +
-                		"<TR><TD><b>" + db + ":</b></TD><TD>" + DcSettings.getString(DcRepository.Settings.stConnectionString) + "</TD></TR>" +
+                        "<TR><TD><b>Data Crow version</b></TD><TD>" + DataCrow.getVersion() + "</TD></TR>" + 
+                        "<TR><TD><b>Data Crow system file</TD></b><TD>" + DataCrow.getDcproperties().getFile() + "</TD></TR>" + 
+                        "<TR><TD><b>Installation folder</b></TD><TD>" + DataCrow.installationDir + "</TD></TR>" + 
+                        "<TR><TD><b>User folder</b></TD><TD>" + DataCrow.userDir + "</TD></TR>" +
+                        "<TR><TD><b>" + db + ":</b></TD><TD>" + DcSettings.getString(DcRepository.Settings.stConnectionString) + "</TD></TR>" +
                 		"<TR><TD><b>" + dbDriver + ":</b></TD><TD>" + DcSettings.getString(DcRepository.Settings.stDatabaseDriver) + "</TD></TR>" +
                 		"<TR><TD><b>Memory maximum</b></TD><TD>" + max + "MB</TD></TR>" +
                         "<TR><TD><b>Memory available</b></TD><TD>" + (max - used) + "MB</TD></TR>" +
                         "<TR><TD><b>Memory used</TD></b><TD>" + used + "MB</TD></TR>" +
                 		"<TR><TD><b>Java version</b></TD><TD>" + System.getProperty("java.version") + "</TD></TR>" +
                 		"<TR><TD><b>Operating system</b></TD><TD>" + System.getProperty("os.name") + "</TD></TR>" +
-                        "<TR><TD><b>Data Crow version</b></TD><TD>" + DataCrow.getVersion() + "</TD></TR>" + 
-                        "<TR><TD><b>Data Crow system file</TD></b><TD>" + DataCrow.getDcproperties().getFile() + "</TD></TR>" + 
-                        "<TR><TD><b>Installation folder</b></TD><TD>" + DataCrow.installationDir + "</TD></TR>" +
-                        "<TR><TD><b>User folder</b></TD><TD>" + DataCrow.userDir + "</TD></TR>" +
                 "</TABLE></BODY></HTML>";
         hep.setHtml(html);
        

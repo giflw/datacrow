@@ -32,7 +32,10 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
   the SQL queries panel.
 - The log form has been expanded to include system information (moved from the expert
   form).
-
+- Removed some borders from the main screen.
+- Changed some of the default settings, for new users, mostly for colors and the 
+  default look and feel.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.25  [Released on May 10, 2013]  [testing: high]  [target: production]

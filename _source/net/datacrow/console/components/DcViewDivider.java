@@ -28,8 +28,10 @@ package net.datacrow.console.components;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
+import javax.swing.border.Border;
 
 import net.datacrow.settings.DcSettings;
 
@@ -42,6 +44,9 @@ public class DcViewDivider extends JSplitPane implements ComponentListener {
         this.settingKey = settingKey;
         left.addComponentListener(this);
         setDividerLocation(DcSettings.getInt(settingKey));
+        
+        Border border = BorderFactory.createEmptyBorder(0, 0, 0, 0);
+        setBorder(border);
     }
 
     @Override

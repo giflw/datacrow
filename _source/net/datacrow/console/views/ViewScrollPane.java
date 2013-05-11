@@ -28,6 +28,7 @@ package net.datacrow.console.views;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -44,6 +45,8 @@ public class ViewScrollPane extends JScrollPane implements AdjustmentListener {
         
         if (sb != null) 
             sb.addAdjustmentListener(this);
+        
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
     }
 
     @Override

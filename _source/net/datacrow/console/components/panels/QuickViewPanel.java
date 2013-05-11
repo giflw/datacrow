@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -95,6 +96,9 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         this.showImages = showImages;
         setLayout(Layout.getGBL());
         tabbedPane.addChangeListener(this);
+        
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         buildPanel();
     }    
     
@@ -136,7 +140,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     	pictures.add(picture);    
 
                     	picField = ComponentFactory.getPictureField(true, false);
-                    	ComponentFactory.setBorder(this);
+//                    	ComponentFactory.setBorder(this);
                         
                         panel = new JPanel();
                         panel.setLayout(Layout.getGBL());

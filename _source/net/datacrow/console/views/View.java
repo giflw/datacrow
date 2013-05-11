@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -140,6 +141,8 @@ public class View extends DcPanel implements ListSelectionListener {
             actionPanel = new ViewActionPanel(this);
         
         build();
+        
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         
         setFocusable(true);
 
@@ -808,6 +811,7 @@ public class View extends DcPanel implements ListSelectionListener {
         //Search result panel
         //**********************************************************
         panelResult.setLayout(Layout.getGBL());
+        panelResult.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         ViewScrollPane scroller1 = new ViewScrollPane(this);
         scroller1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

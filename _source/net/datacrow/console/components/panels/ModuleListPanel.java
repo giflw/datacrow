@@ -188,9 +188,8 @@ public class ModuleListPanel extends DcPanel {
                 menu.setRolloverEnabled(false);
                 menu.setContentAreaFilled(false);
                 
-                menu.setMinimumSize(new Dimension(100, 12));
-                menu.setPreferredSize(new Dimension(100, 12));
-                //menu.setMaximumSize(new Dimension(120, 12));
+                menu.setMinimumSize(new Dimension(90, 12));
+                menu.setPreferredSize(new Dimension(90, 12));
                 
                 menu.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
                 
@@ -258,8 +257,8 @@ public class ModuleListPanel extends DcPanel {
             
             setBorder(null);
             
-            setMinimumSize(new Dimension(100, 35));
-            setPreferredSize(new Dimension(100, 35));
+            setMinimumSize(new Dimension(90, 35));
+            setPreferredSize(new Dimension(90, 35));
             add(ComponentFactory.getLabel(module.getIcon32()), Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.WEST, GridBagConstraints.NONE,
                     new Insets(0, 3, 0, 0), 0, 0));
