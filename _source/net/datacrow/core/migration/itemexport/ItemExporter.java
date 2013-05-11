@@ -19,8 +19,8 @@ public abstract class ItemExporter extends ItemMigrater {
     
     protected boolean success = true;
     
-    public ItemExporter(int moduleIdx, String key, int mode) throws Exception {
-        super(moduleIdx, key, mode);
+    public ItemExporter(int moduleIdx, String key, int mode, boolean processChildren) throws Exception {
+        super(moduleIdx, key, mode, processChildren);
     }
 
     @Override

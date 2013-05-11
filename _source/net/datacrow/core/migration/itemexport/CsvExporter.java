@@ -49,7 +49,7 @@ public class CsvExporter extends ItemExporter {
     private static Logger logger = Logger.getLogger(CsvExporter.class.getName());
     
     public CsvExporter(int moduleIdx, int mode) throws Exception {
-        super(moduleIdx, "CSV", mode);
+        super(moduleIdx, "CSV", mode, false);
     }
 
     private void writeBytes(String value, boolean addTab) throws IOException {

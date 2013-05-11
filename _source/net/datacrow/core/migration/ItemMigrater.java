@@ -14,14 +14,17 @@ public abstract class ItemMigrater {
     public static final int _MODE_THREADED = 0;
     /** Runs the parser in a non threaded mode  */
     public static final int _MODE_NON_THREADED = 1;
- 
+
+    /** Indicate whether child items should be processed or not. Convenient for container items. */
+    protected final boolean processChildren;
     protected final int moduleIdx;
     protected final int mode;
     protected String key;
     protected File file;
     protected DcThread task;
     
-    public ItemMigrater(int moduleIdx, String key, int mode) throws Exception {
+    public ItemMigrater(int moduleIdx, String key, int mode, boolean processChildren) throws Exception {
+        this.processChildren = processChildren;
         this.moduleIdx = moduleIdx;
         this.key = key;
         this.mode = mode;

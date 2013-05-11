@@ -257,7 +257,8 @@ public class ModuleExporter {
             if (items.size() == 0)
                 return;
 		    
-			XmlExporter itemExporter = new XmlExporter(parent.getModule(), XmlExporter._MODE_NON_THREADED);
+			XmlExporter itemExporter = 
+			        new XmlExporter(module, XmlExporter._MODE_NON_THREADED, module != DcModules._CONTAINER);
 			
 			ItemExporterSettings settings = new ItemExporterSettings();
 			settings.set(ItemExporterSettings._COPY_IMAGES, Boolean.TRUE);

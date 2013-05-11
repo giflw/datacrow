@@ -38,7 +38,7 @@ public abstract class ItemImporter extends ItemMigrater {
     private Map<String, String> settings = new HashMap<String, String>(); 
 
     public ItemImporter(int moduleIdx, String key, int mode) throws Exception {
-        super(moduleIdx, key, mode);
+        super(moduleIdx, key, mode, true);
     }
     
     public boolean requiresMapping() {

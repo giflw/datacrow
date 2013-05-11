@@ -529,9 +529,13 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     }
 
     public void addChild(DcObject child) {
-        child.setValue(child.getParentReferenceFieldIndex(), getID());
-        this.children = children == null ? new ArrayList<DcObject>() : children;
-        children.add(child);
+        if (child.getParentReferenceFieldIndex() == DcObject._SYS_CONTAINER) {
+            DataManager.createReference(child, child.getParentReferenceFieldIndex(), this);
+        } else {
+            child.setValue(child.getParentReferenceFieldIndex(), getID());
+            this.children = children == null ? new ArrayList<DcObject>() : children;
+            children.add(child);
+        }
     }
 
     /**

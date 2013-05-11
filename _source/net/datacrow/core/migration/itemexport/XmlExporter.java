@@ -51,8 +51,8 @@ public class XmlExporter extends ItemExporter {
     
     private static Logger logger = Logger.getLogger(XmlExporter.class.getName());
     
-    public XmlExporter(int moduleIdx, int mode) throws Exception {
-        super(moduleIdx, "XML", mode);
+    public XmlExporter(int moduleIdx, int mode, boolean processChildren) throws Exception {
+        super(moduleIdx, "XML", mode, processChildren);
     }
 
     @Override
@@ -140,26 +140,28 @@ public class XmlExporter extends ItemExporter {
                     if (field != null) writer.writeAttribute(dco, field.getIndex());
                 }
 
-                dco.loadChildren(null);
-                
-                if (dco.getModule().getChild() != null) {
-                    writer.startRelations(dco.getModule().getChild());
-                    writer.setIdent(2);
-
-                    for (DcObject child : dco.getChildren()) {
-                        writer.startEntity(child);
-                        writer.writeAttribute(child, DcObject._SYS_MODULE);
-                        int[] fields = child.getFieldIndices();
-                        for (int i = 0; i < fields.length; i++)
-                            writer.writeAttribute(child, fields[i]);
+                if (processChildren) {
+                    dco.loadChildren(null);
                         
-                        writer.endEntity(child);
+                    if (dco.getModule().getChild() != null) {
+                        writer.startRelations(dco.getModule().getChild());
+                        writer.setIdent(2);
+    
+                        for (DcObject child : dco.getChildren()) {
+                            writer.startEntity(child);
+                            writer.writeAttribute(child, DcObject._SYS_MODULE);
+                            int[] fields = child.getFieldIndices();
+                            for (int i = 0; i < fields.length; i++)
+                                writer.writeAttribute(child, fields[i]);
+                            
+                            writer.endEntity(child);
+                        }
+                        
+                        writer.resetIdent();
+                        writer.endRelations(dco.getModule().getChild());
                     }
+                }
                     
-                    writer.resetIdent();
-                    writer.endRelations(dco.getModule().getChild());
-                } 
-                
                 writer.endEntity(dco);
                 client.notifyProcessed();
                 bos.flush();

@@ -142,7 +142,8 @@ public class XmlImporter extends ItemImporter {
                     	DcObject dco = parseItem(module, eItem);
                     	
                     	DcModule cm = module.getChild();
-                    	if (cm != null) {
+                    	// Child items for module ITEM will be skipped since these are abstract items.
+                    	if (cm != null && cm.getIndex() != DcModules._ITEM) {
                     	    String childName = Converter.getValidXmlTag(cm.getSystemObjectName());
                             NodeList nlChildren = eItem.getElementsByTagName(childName);
                             
