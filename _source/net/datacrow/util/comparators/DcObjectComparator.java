@@ -45,6 +45,8 @@ public class DcObjectComparator implements Comparator<DcObject> {
     private final int[] fields;
     private final int order;
     
+    private boolean allowReloading = false;
+    
     public DcObjectComparator(int field) {
         this.field = field;
         this.fields = new int[] {field};
@@ -57,6 +59,14 @@ public class DcObjectComparator implements Comparator<DcObject> {
         this.order = order;
     }
     
+    public boolean isAllowReloading() {
+        return allowReloading;
+    }
+
+    public void setAllowReloading(boolean allowReloading) {
+        this.allowReloading = allowReloading;
+    }
+
     @Override
     public int compare(DcObject dco1, DcObject dco2) {
         
@@ -65,7 +75,7 @@ public class DcObjectComparator implements Comparator<DcObject> {
         Object o1 = dco1.getValue(field);
         Object o2 = dco2.getValue(field);
         
-        if (Utilities.isEmpty(o1) && Utilities.isEmpty(o2)) {
+        if (isAllowReloading() && Utilities.isEmpty(o1) && Utilities.isEmpty(o2)) {
             try {
                 dco1.load(dco1.getModule().getMinimalFields(null));
                 dco2.load(dco2.getModule().getMinimalFields(null));

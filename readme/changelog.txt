@@ -13,6 +13,13 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
 
 [Changed]
 - Added a restart message after the module has been imported successfully.
+- When the database is upgraded the system will now also check whether there are new
+  reports and/or resource (language) files available in the installation folder. If so, 
+  Data Crow will ask if it is okay to copy the files over from the installation folder 
+  to the user folder.
+- Loan Administration would open very slowly in case you have many loans outstanding.
+  Items are now loaded in a separate process and the progress is shown in the 
+  progress bar. 
 
 
 -----------------------------------------------------------------------------------------

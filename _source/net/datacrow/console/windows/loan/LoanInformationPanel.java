@@ -32,11 +32,13 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcPanel;
+import net.datacrow.console.components.DcProgressBar;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.core.IconLibrary;
@@ -59,6 +61,8 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     private DcTable table = new DcTable(DcModules.get(DcModules._ITEM), true, false);
     private DcObject person;
     
+    private DcProgressBar pb = new DcProgressBar();
+    
     private LoanFilter filter;
     
     public LoanInformationPanel() {
@@ -80,18 +84,31 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     public void setFilter(LoanFilter filter) {
         this.filter = filter;
     }
-
+    
+    public void setProcessed(int i) {
+        pb.setValue(i);
+    }
+    
+    public void setMaximum(int max) {
+        pb.setMinimum(0);
+        pb.setMaximum(max);
+        pb.setValue(0);
+    }
+    
     @Override
     public void load() {
+        table.clear();
         
         if (filter == null) {
             filter = new LoanFilter();
         }
         
-        table.clear();
-        for (DcObject dco : filter.getItems()) {
-            table.add(dco);
-        }
+        filter.setListener(this);
+        filter.start();    
+    }
+    
+    protected void addItem(DcObject dco) {
+        table.add(dco);
     }
     
     @Override
@@ -115,9 +132,18 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         
         setLayout(Layout.getGBL());
         
+        JPanel panelProgress = new JPanel();
+        panelProgress.setLayout(Layout.getGBL());
+        panelProgress.add(pb, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
+                        GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
+                        new Insets(0, 0, 0, 0), 0, 0));
+        
         add(sp,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0, 0, 0, 0), 0, 0));
+        add(panelProgress,  Layout.getGBC( 0, 1, 1, 1, 10.0, 10.0
+                ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets(0, 0, 0, 0), 0, 0));        
         
         if (person == null)
             table.setVisibleColumns(new int[] {Item._SYS_MODULE, Item._SYS_DISPLAYVALUE, Item._SYS_LENDBY, Item._SYS_LOANSTARTDATE, Item._SYS_LOANENDDATE, Item._SYS_LOANDUEDATE, Item._SYS_LOANSTATUS, Item._SYS_LOANSTATUSDAYS});

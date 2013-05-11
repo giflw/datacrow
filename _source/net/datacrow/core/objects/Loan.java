@@ -31,6 +31,7 @@ import java.util.Date;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.helpers.ContactPerson;
+import net.datacrow.util.Utilities;
 
 /**
  * Represents a loan.
@@ -90,7 +91,7 @@ public class Loan extends DcObject {
     public DcObject getPerson() {
         String personID = (String) getValue(Loan._C_CONTACTPERSONID);
         
-        if (personID == null)
+        if (Utilities.isEmpty(personID))
         	return null;
         else 
         	return DataManager.getItem(DcModules._CONTACTPERSON, personID, new int[] {DcObject._ID, ContactPerson._A_NAME});
