@@ -10,6 +10,10 @@ Data Crow 3.9.26  [Released on May 12, 2013]  [testing: high]  [target: producti
 - Module Exporter exports all items assigned to containers. This is faulty since the main
   items are already exported. Container items should not be treated as normal children.
 - XSD fix for the Item Export (it was not fully correct).
+- Java 7 denies creating backups in the root folder of any drive. I have added a 
+  message, preventing the root folder to be selected. Hopefully I find a real fix for this.
+  The issue is with TrueZip. They have a newer version but that would force all users to
+  start using Java 7, while I still want to support Java 6 as well.
 
 [Changed]
 - Added a restart message after the module has been imported successfully.

@@ -51,8 +51,8 @@ del build-javadoc.bat
 rd _classes /S /Q
 rd temp /S /Q
 cd ..
-7z a -tZip datacrow_3_9_25_source .\datacrow
-7z a -tZip datacrow_3_9_25_javadoc .\javadoc
+7z a -tZip datacrow_3_9_26_source .\datacrow
+7z a -tZip datacrow_3_9_26_javadoc .\javadoc
 rd javadoc /S /Q
 cd datacrow
 call build.bat
@@ -66,9 +66,9 @@ del build.xml
 del *.classpath
 del *.project
 cd ..
-7z a -tZip datacrow_3_9_25_zipped .\datacrow
-7z a -tZip datacrow_3_9_25_installer installer.jar installer.sh installer.txt
-7z a -tZip datacrow_3_9_25_windows_installer installer.jar setup.exe
+7z a -tZip datacrow_3_9_26_zipped .\datacrow
+7z a -tZip datacrow_3_9_26_installer installer.jar installer.sh installer.txt
+7z a -tZip datacrow_3_9_26_windows_installer installer.jar setup.exe
 del installer.sh
 del installer.txt
 del installer.jar
