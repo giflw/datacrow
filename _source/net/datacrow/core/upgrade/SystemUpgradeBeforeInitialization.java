@@ -169,8 +169,10 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
             boolean copy = DcSwingUtilities.displayQuestion(
                     "The installation folder has new report files available. Do you want to install these to your user folder?");
             if (copy) {
+                File targetDir;
                 for (File source : files.keySet()) {
-                    files.get(source).mkdirs();
+                    targetDir = files.get(source).getParentFile();
+                    targetDir.mkdirs();
                     Utilities.copy(source, files.get(source));
                 }
             }

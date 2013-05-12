@@ -8,8 +8,6 @@ java -version
 pause
 cd C:\Users\RJ\Data\Development\projects\datacrow
 rd ..\..\release /S /Q
-rd _data /S /Q
-rd __data /S /Q
 md ..\..\release
 md ..\..\release\datacrow
 del webapp\datacrow\mediaimages\*.* /Q
