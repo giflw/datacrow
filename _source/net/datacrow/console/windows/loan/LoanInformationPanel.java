@@ -145,7 +145,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         add(sp,  Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0, 0, 0, 0), 0, 0));
-        add(panelProgress,  Layout.getGBC( 0, 1, 1, 1, 10.0, 10.0
+        add(panelProgress,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 0, 0, 0), 0, 0));        
         

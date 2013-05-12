@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.26  [Released on May 12, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -13,7 +13,7 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
 
 [Changed]
 - Added a restart message after the module has been imported successfully.
-- When the database is upgraded the system will now also check whether there are new
+- When the system is upgraded the system will now also check whether there are new
   reports and/or resource (language) files available in the installation folder. If so, 
   Data Crow will ask if it is okay to copy the files over from the installation folder 
   to the user folder.
@@ -25,7 +25,7 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
   and stored in the datacrow.properties file. The existing system settings are used as 
   a template for these new settings files. This allows multiple client to work in the
   same Data Crow user folder while not being effected by the settings done by other users.
-  The module settings are the exception though.
+  The module settings are still shared though.
 - For Windows systems the default font has been changed to "Arial Unicode MS" for 
   foreign character support. This only applies to new installations.
 - The Expert Form has been replaced by the Database Editor tool. This one now only has
@@ -35,7 +35,8 @@ Data Crow 3.9.26  [Released on May xx, 2013]  [testing: high]  [target: producti
 - Removed some borders from the main screen.
 - Changed some of the default settings, for new users, mostly for colors and the 
   default look and feel.
-  
+- Small improvement to the file structure tree panel.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.25  [Released on May 10, 2013]  [testing: high]  [target: production]

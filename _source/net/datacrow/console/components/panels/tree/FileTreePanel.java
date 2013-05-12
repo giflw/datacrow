@@ -173,9 +173,9 @@ public class FileTreePanel extends TreePanel {
             	
             	sql.append("SELECT ID, ");
             	sql.append(module.getIndex());
-            	sql.append(" AS MODULEIDX, ");
+            	sql.append(" AS MODULEIDX,  lower(REPLACE(");
             	sql.append(module.getFileField().getDatabaseFieldName());
-            	sql.append(" AS FILENAME FROM ");
+            	sql.append(" , '\\', '/')) AS FILENAME FROM ");
             	sql.append(module.getTableName());
             	sql.append(" WHERE ");
             	sql.append(module.getFileField().getDatabaseFieldName());
@@ -241,9 +241,6 @@ public class FileTreePanel extends TreePanel {
                     	key = (String) st.nextElement();
                     	
                         if (stop) break;
-                        
-                        // check the whole last leaf
-                        top.getLastLeaf();
                         
                         previous = parent.getChildCount() == 0 ? null : ((DefaultMutableTreeNode) parent.getChildAt(parent.getChildCount() - 1));
                         exists = previous != null && ((NodeElement)  previous.getUserObject()).getComparableKey().equals(key.toLowerCase());

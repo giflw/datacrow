@@ -36,4 +36,9 @@ public class ContainerNodeElement extends NodeElement {
     public Map<String, Integer> getItemsSorted(List<String> allOrderedItems) {
     	return getItems();
     }
+	
+    @Override
+    public String toString() {
+        return getDisplayValue();
+    }
 }

@@ -94,18 +94,18 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
     	getContentPane().add(panelFilter,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(5, 5, 5, 5), 0, 0));
-        getContentPane().add(panelLoans,        Layout.getGBC( 0, 1, 1, 1, 10.0, 10.0
+        getContentPane().add(panelLoans,        Layout.getGBC( 0, 1, 1, 1, 50.0, 50.0
                 ,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
                  new Insets(5, 5, 5, 5), 0, 0));
         
-        JButton buttonOk = ComponentFactory.getButton(DcResources.getText("lblOK"));
+        JButton buttonOk = ComponentFactory.getButton(DcResources.getText("lblClose"));
         buttonOk.setActionCommand("ok");
         buttonOk.addActionListener(this);
         
         JPanel pActions = new JPanel();
         pActions.add(buttonOk);
         
-        getContentPane().add(pActions,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
+        getContentPane().add(pActions,  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets(5, 5, 5, 5), 0, 0));
     }
