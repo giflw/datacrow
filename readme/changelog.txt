@@ -1,4 +1,15 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.9.27  [Released on May XX, 2013]  [testing: high]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- The log file is created initially in an incorrect location.
+- Create multiple not working for any non track modules.
+- Issue where images are not always imported for items part of the imported main module.
+- Container sometimes can't be saved.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.9.26  [Released on May 12, 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 

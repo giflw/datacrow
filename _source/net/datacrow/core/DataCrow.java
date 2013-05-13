@@ -860,28 +860,43 @@ public class DataCrow {
             Properties properties = new Properties();
             
             File fileLog4j = new File(DataCrow.applicationSettingsDir, "log4j.properties");
-            if (!fileLog4j.exists()) {
-                fileLog4j.getParentFile().mkdirs();
-                Utilities.copy(new File(DataCrow.installationDir, "log4j.properties"), fileLog4j);
+
+            if (fileLog4j.exists()) {
+                try {
+                    FileInputStream fis = new FileInputStream(fileLog4j);
+                    properties.load(fis);
+                    fis.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            
-            if (!fileLog4j.exists())
-                fileLog4j.createNewFile(); 
-            
-            properties.load(new FileInputStream(fileLog4j));
-            properties.setProperty("log4j.appender.logfile.File", DataCrow.userDir + "data_crow.log");
+                
+            properties.setProperty("log4j.appender.logfile.File", new File(DataCrow.userDir, "data_crow.log").toString());
+            properties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
+            properties.setProperty("log4j.appender.logfile.layout.ConversionPattern", "%5p [%t] (%F\\:%L) - %m%n");
+            properties.setProperty("log4j.appender.textpane", "net.datacrow.util.logging.TextPaneAppender");
+            properties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F\\:%L) - %m%n");
+            properties.setProperty("log4j.appender.textpane.layout", "org.apache.log4j.PatternLayout");
+            properties.setProperty("log4j.appender.logfile.MaxFileSize", "500KB");
+            properties.setProperty("log4j.appender.logfile.layout", "org.apache.log4j.PatternLayout");
+            properties.setProperty("log4j.appender.logfile.MaxBackupIndex", "1");
+            properties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
+            properties.setProperty("log4j.appender.logfile", "org.apache.log4j.RollingFileAppender");
             
             if (DataCrow.debug)
                 properties.setProperty("log4j.rootLogger", "debug, textpane, logfile, stdout");
             else
                 properties.setProperty("log4j.rootLogger", "info, textpane, logfile");
             
-            properties.store(new FileOutputStream(DataCrow.applicationSettingsDir + "log4j.properties"), "");
+            
+            FileOutputStream fos = new FileOutputStream(DataCrow.applicationSettingsDir + "log4j.properties");
+            properties.store(fos, "");
+            fos.close();
         } catch (Exception e) {
             System.out.println("Could not find the log4j properties file. " + e);
         }
         
-        PropertyConfigurator.configure(DataCrow.applicationSettingsDir + "log4j.properties");        
+        PropertyConfigurator.configure(new File(DataCrow.applicationSettingsDir, "log4j.properties").toString());        
     }
     
     private static void initDbProperties() {

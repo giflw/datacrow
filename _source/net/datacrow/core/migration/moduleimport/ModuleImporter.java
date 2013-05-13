@@ -115,6 +115,7 @@ public class ModuleImporter {
                         bis.read(bytes);
                         
                         DcImageIcon icon = new DcImageIcon(bytes);
+                        icon.setBytes(bytes);
                         icon.setFilename(name.substring(name.indexOf("_") + 1));
                         c.add(icon);
                         

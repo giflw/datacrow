@@ -73,42 +73,33 @@ folder. It does not obey platform specific rules and can run on any platform
 2.0 Requirements
 
 Data Crow was tested on:
-Windows XP, Windows 98 and Ubuntu (latest version at the moment of testing).
-Systems used: P4 2.4 Ghz, Core 2 Duo 2.2ghz
+Windows XP, Windows 7 and Ubuntu (latest version at the moment of testing).
+Systems used: Core 2 Duo 2.2ghz
 
 Minimum requirement: 
-An 1000 Mhz system is perfectly capable of running Data Crow.
+An 1.0 Ghz system is perfectly capable of running Data Crow.
 Data Crow needs, for large collections, at least 256 MB of free memory.
 (a collection of 10,000 items or more is considered large).
 
 Data Crow needs Java:
-  * JRE 1.6 (or higher) from Sun (http://java.sun.com/)
+  * JRE 1.6 (or higher) from Oracle (http://java.com/)
 
 
 ----------------------------------------------------------------------------------------
 3.0 About the database (HSQL)
 
 Data Crow uses the HSQL database engine. It's powerful, fast and can run on
-any system. Look at http://hsqldb.sourceforge.net/web/hsqlDocsFrame.html 
-for more information
+any system. Look at http://http://hsqldb.org/ for more information
 
-By default a database with the name "dc" is used. 
-To use another database, add the database name as a parameter:
-java -jar datacrow.jar -db:<database name> or
-datacrow.exe -db:<database name>
+By default a database with the name "dc" is used. You can use a different database by 
+using the parameters. See chapter 6.0 for more information.
 
 
 ----------------------------------------------------------------------------------------
 4.0 Upgrading
 
-1) Create a backup ("Backup & Restore" functionality situated in the "tools" menu) from 
-   within the old version. 
-2) Uninstall the old version (or simply delete the Data Crow installation folder).
-3) Install the new version.
-4) Restore the backup created in step 1 on top of this latest version.
-
-Note that you first have to upgrade to 3.8.16 version before you can upgrade to version
-3.9.0 of Data Crow.
+1) Create a backup of your data in the old version using the Backup & Restore utility
+2) Install the new version on top of the existing version.
 
 
 ----------------------------------------------------------------------------------------
@@ -124,24 +115,35 @@ the build.xml file to compile the full Data Crow project.
 Data Crow can be started by typing "java -Xmx256m -jar datacrow.jar". 
 On Windows platforms the datacrow.exe file can be used to start.
 
-Data Crow needs to be pointed to its installation directory. This can be done by setting
-the DATACROW_HOME system environment variable. In case you do not know how to do this for 
-your operating system or when you are using multiple installations of Data Crow you can
-also choose to use the -dir: parameter (explained below).  
+If you use multiple Data Crow installations you have several choices to make:
 
-Additional parameters:
+    -Set up a user folder on a network share. Each of the Data Crow installations will
+     point to this user folder. This is established by selecting the same user folder  
+     on each of the Data Crow installations.
+
+    -In case you run multiple Data Crow instances on one machine you can either have  
+     them using the same user directory (sharing the same settings and data) or assign a 
+     separate user folder to each of the installations (-userdir parameter).. 
+
+    -In addition to the above you can share the user folder between the various 
+     installations but have them using a different database per installation 
+     (-db parameter).
+
+The various parameters you can use are listed below:
     
     -db:<database name> 
      Forces Data Crow to use another database.
     
     -dir:<installation directory> 
-     Use this parameter when Data Crow starts incorrectly and complains 
-     about missing directories (non Windows platform only). 
+     Use this parameter when Data Crow starts incorrectly and complains about missing 
+     directories (non Windows platform only). 
      
     -userdir:<user directory> 
      Use this parameter to specify a specific user directory. Multiple instances
      of Data Crow can be started using this parameter. Additionally the selected user
-     folder path will not be stored in the datacrow.properties file.      
+     folder path will not be stored in the datacrow.properties file. You can also make
+     the path relative to the Data Crow installation folder by supplying the path as
+     './<folder name>'. Example: -userdir:./data
     
     -webserver
      Starts the web server without starting the actual Data Crow application.
@@ -166,7 +168,6 @@ Additional parameters:
 
 This application would not have succeeded (or even existed) without the help of:
 
-* Bas Uildriks who designed and created the web site (http://www.datacrow.net).
 * HSQL: This product includes Hypersonic SQL.
   Originally developed by Thomas Mueller and the Hypersonic SQL Group. 
   I want to thank Thomas Mueller for providing this application with an easy

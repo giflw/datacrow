@@ -703,6 +703,9 @@ public class DcModule implements Comparable<DcModule> {
                 fields.add(Integer.valueOf(DcAssociate._F_LASTTNAME));
         }
         
+        if (getIndex() == DcModules._CONTAINER)
+            fields.add(Integer.valueOf(Container._F_PARENT));
+        
         if (getField(DcObject._ID) != null && !fields.contains(Integer.valueOf(DcObject._ID))) 
             fields.add(Integer.valueOf(DcObject._ID));
         

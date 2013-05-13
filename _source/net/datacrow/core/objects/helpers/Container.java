@@ -61,14 +61,7 @@ public class Container extends DcObject {
     }
     
     public Container getParentContainer() {
-        
         Object parent = getValue(_F_PARENT);
-        
-        if (parent == null) {
-            reload();
-            parent = getValue(_F_PARENT);
-        }
-            
         return parent instanceof String ? (Container) DataManager.getItem(DcModules._CONTAINER, (String) parent) : 
                (Container) parent;
     }
@@ -87,17 +80,20 @@ public class Container extends DcObject {
     
     @Override
     protected void beforeSave() throws ValidationException {
-        Container parent = getParentContainer();
-        String ID = getID();
+        if (isChanged(_F_PARENT)) {
         
-        if (parent != null && parent.getID().equals(ID)) {
-            throw new ValidationException(DcResources.getText("msgCannotSetItemAsParent"));
-        } else  {
-            while (parent != null) {
-                if (ID.equals(parent.getID()))
-                    throw new ValidationException(DcResources.getText("msgCannotSetItemAsParentLoop"));        
-
-                parent = parent.getParentContainer();
+            Container parent = getParentContainer();
+            String ID = getID();
+            
+            if (parent != null && parent.getID().equals(ID)) {
+                throw new ValidationException(DcResources.getText("msgCannotSetItemAsParent"));
+            } else  {
+                while (parent != null) {
+                    if (ID.equals(parent.getID()))
+                        throw new ValidationException(DcResources.getText("msgCannotSetItemAsParentLoop"));        
+    
+                    parent = parent.getParentContainer();
+                }
             }
         }
         super.beforeSave();

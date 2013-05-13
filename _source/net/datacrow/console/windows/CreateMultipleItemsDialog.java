@@ -96,34 +96,34 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
 			
 			dco.setValue(dco.getParentReferenceFieldIndex(), parentID);
 			
-			// determine highest track number
-            String sql = "select (MAX(" + 
-                    dco.getDatabaseFieldName(dco.getModule().getIndex() == DcModules._AUDIOTRACK ?  AudioTrack._F_TRACKNUMBER : MusicTrack._F_TRACKNUMBER) + ") + 1) as nr from " + 
-                    dco.getTableName() + " where " +
-                    dco.getDatabaseFieldName(dco.getModule().getIndex() == DcModules._AUDIOTRACK ?  AudioTrack._I_ALBUM : MusicTrack._P_ALBUM) + " = '" + parentID + "'";
-            long tracknr = 1;
-            if (table.getRowCount() == 0) {
-                
-                try {
-                    ResultSet rs = DatabaseManager.executeSQL(sql);
-                    while (rs.next()) {
-                        tracknr = rs.getLong(1);
-                    }
+			if (dco.getModule().getIndex() == DcModules._AUDIOTRACK || dco.getModule().getIndex() == DcModules._MUSICTRACK) {
+    			// determine highest track number
+                String sql = "select (MAX(" + 
+                        dco.getDatabaseFieldName(dco.getModule().getIndex() == DcModules._AUDIOTRACK ?  AudioTrack._F_TRACKNUMBER : MusicTrack._F_TRACKNUMBER) + ") + 1) as nr from " + 
+                        dco.getTableName() + " where " +
+                        dco.getDatabaseFieldName(dco.getModule().getIndex() == DcModules._AUDIOTRACK ?  AudioTrack._I_ALBUM : MusicTrack._P_ALBUM) + " = '" + parentID + "'";
+                long tracknr = 1;
+                if (table.getRowCount() == 0) {
                     
-                    tracknr = tracknr == 0 ? 1 : tracknr;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    try {
+                        ResultSet rs = DatabaseManager.executeSQL(sql);
+                        while (rs.next()) {
+                            tracknr = rs.getLong(1);
+                        }
+                        
+                        tracknr = tracknr == 0 ? 1 : tracknr;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    tracknr = (Long) table.getValueAt(table.getRowCount() - 1, 0, false)  + 1;
                 }
-            } else {
-                tracknr = (Long) table.getValueAt(table.getRowCount() - 1, 0, false)  + 1;
-            }
-					
-			
-			
-			if (dco.getModule().getIndex() == DcModules._AUDIOTRACK) {
-				dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(tracknr));
-			} else if (dco.getModule().getIndex() == DcModules._MUSICTRACK) {
-				dco.setValue(MusicTrack._F_TRACKNUMBER, Long.valueOf(tracknr));
+                
+                if (dco.getModule().getIndex() == DcModules._AUDIOTRACK) {
+                    dco.setValue(AudioTrack._F_TRACKNUMBER, Long.valueOf(tracknr));
+                } else if (dco.getModule().getIndex() == DcModules._MUSICTRACK) {
+                    dco.setValue(MusicTrack._F_TRACKNUMBER, Long.valueOf(tracknr));
+                }
 			}
 		}
 		table.add(dco);
