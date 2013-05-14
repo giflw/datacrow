@@ -185,32 +185,158 @@
         Enables or disables the module list.
         </td></tr>
         <tr><td>-</td>
-        <td><a href="../general/screen_layout.html">Toggle Quick View</a>. 
-        Enables or disables the module list.
-        </td></tr>            
+        <td><a href="../general/quickview.html">Toggle Quick View</a>. 
+        Enables or disables the Quick View.
+        </td></tr> 
+        <tr><td>-</td>
+        <td><a href="../general/grouping_pane.html">Toggle Grouping Pane</a>. 
+        Enables or disables the Grouping Pane.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../general/toolbar.html">Toggle Toolbar</a>. 
+        Enables or disables the Toolbar.
+        </td></tr>         
 
     </table>    
 
     <h2>Filter</h2>
-    Via this menu a new filter or a previous filter can be applied
-
+    <table>
+        <tr><td>-</td>
+        <td><a href="../filters/filters.html">Filter</a>. 
+        The Filter allows you to build complex filters to find your items. These filters can even be stored, so you can use them again in the future.
+        </td></tr>    
+        <tr><td>-</td>
+        <td><a href="../filters/filters.html">Re-apply Filter</a>. 
+        Applies the filter again, refreshing the view completely.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../filters/filters.html">Undo Current Filter</a>. 
+        Removes any filter condition and loads all items.
+        </td></tr> 
+    </table>
+    
     <h2>Settings</h2>
-    Here you find all the means to change the behaviour and presentation of Data Crow
+    <table>
+        <tr><td>-</td>
+        <td><a href="../settings/general.html">Settings</a>. 
+        The Settings view allows you to change all of the system settings. It contains settings such as the proxy server, program associations,
+        font options and much, much more. These settings are stored per computer. So if you run multiple installations, from multiple computers, but share
+        the same user folder, these settings are not shared between the computers. All the rest will be shared, but not these settings.
+        </td></tr>    
+        <tr><td>-</td>
+        <td><a href="../settings/fields.html">General Field Settings</a>. 
+        Don't want to use a certain field? Want to change the label on one of the fields? Each and every field option can be found here. 
+        These are very important settings and it is always good to take a look at this section. The most important part might be is that you can indicate
+        how your items are described with the "Descriptive?" option. Read more <a href="../filters/fields.html">here</a>.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../settings/quickview.html">Quick View Settings</a>. 
+        The <a href="../general/quickview.html">quick view</a> can be modified to yoru desires. Here you can indicate which fields should be shown and in which order. 
+        </td></tr> 
+        <tr><td>-</td>
+        <td><a href="../settings/cardview.html">View Settings</a>. 
+        To modify the current view, such as the colors and the information to be shown, you have to use the View Settings. 
+        The settings differ slightly between the <a href="../settings/cardview.html">Card View</a> and the <a href="../settings/tableview.html">Table View</a>.
+        </td></tr> 
+        <tr><td>-</td>
+        <td><a href="../settings/webfields.html">Web Field Settings</a>. 
+        Here you can change the fields as shown in the <a href="../webserver/webserver.html">web application</a> of Data Crow.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../settings/itemformsettings.html">Item Form Settings</a>. 
+        Change the appearance of the <a href="../items/itemform.html">item form</a>. You can even assign fields to tabs and change the order of the fields.
+        </td></tr> 
+        <tr><td>-</td>
+        <td><a href="../settings/laf.html">Look &amp; Feel</a>. 
+        The Look and Feel determines how the fields and such look in the application. It's best just to try it for yourself!
+        </td></tr>          
+    </table>    
 
-    <h2>Users</h2>
-    From within this menu you can change your password
-
+    <h2>User</h2>
+    <table>
+        <tr><td>-</td>
+        <td><a href="#">Change Password</a>. 
+        Change your own password from here.
+        </td></tr> 
+    </table>    
+    
     <h2>Tools</h2>
-    The tools available here depend on the module that is active. Some tools, such as "Item import", are common to all modules
+    <table>
+        <tr><td>-</td>
+        <td><a href="../tools/fileinformationimport.html">File Import</a>. 
+        Extracts information from the files on your system. For music albums for example Data Crow can get the name of the artist and album from the
+        MP3 or other file formats. Additionally it can find missing information using one of the <a href="../onlinesearch/onlinesearch.html">online services</a>. This tool is only availble for "file backed" modules / items. This should not be confused with the ability of Data Crow to import items from 
+        text files. Use the <a href="../tools/item_import.html">Item Importer</a> to import items from a CSV, text or XML file.
+        </td></tr> 
+        <tr><td>-</td>
+        <td><a href="../onlinesearch/onlinesearch.html">Online Search</a>. 
+        Find information on your items online, select the item and save it. 
+        <br>Not all modules will have this tool available. Custom modules 
+        won't either unless you have programmed one specifically for your module.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/mass_update.html">Mass Update</a>. 
+        Update many items at once, using the online search and file import capabilities of Data Crow. 
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../reports/reporting.html">Create Report</a>. 
+        Create HTML and PDF reports. If this menu option is not available it means that no XSLT files (report templates) have been defined for yoru module. 
+        There is a manual on how to do this, which can be found on the Data Crow website.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/item_export.html">Item Export Wizard</a>. 
+        Export your items to a CSV or XML (recommended) file.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/item_import.html">Item Import Wizard</a>. 
+        Import your items from a CSV or XML file.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/update_all.html">Update All</a>. 
+        Update many items (or all..) at once. This is a simple, but powerful, tools applying manually entered values to multiple items at once.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/findreplace.html">Find &amp; Replace</a>. 
+        Replace one value with another value within text fields. It will show you a preview first (luckily) before it is applied on your items.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/auto_numbering.html">Auto Numbering</a>. 
+        Number, or renumber, your items. All of them and all at once. It even has options to skip or fill gaps in the numbering.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/title_rewriter.html">Title Rewriter / Name Rewriter</a>. 
+        Rewrites the titles of your items. It's a great tool to change titles from "The Doctor" to "Doctor, The" for example. 
+        The <a href="../tools/associate_name_rewriter.html">person rewriter</a> is different for person records as opposed to <a href="../tools/title_rewriter.html">other items</a>.
+        </td></tr>   
+        <tr><td>-</td>
+        <td><a href="../tools/backup_restore.html">Backup &amp; Restore</a>. 
+        Create a full backup of your data, including settings, modules and pictures. And it also allows for restore backups (just saying..).
+        </td></tr> 
+        <tr><td>-</td>
+        <td><a href="../tools/database_editor.html">Database Editor</a>. 
+        Direct access to the database. It ignores all the safety rules I have build into the application. Use at your own risk! (make.. backups..)
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../tools/drivemanager.html">Drive Manager</a>. 
+        Scans your drives for files added to Data Crow and corrects the file links in case the file has been moved or renamed. An undervalued but oh so
+        sophisticated tool.
+        </td></tr>  
+        <tr><td>-</td>
+        <td><a href="../tools/filerenamer.html">File Renamer</a>. 
+        Rename files on your drives based on the information present in Data Crow. It also allows you to move files to a new location and a new 
+        folder structured. It will show you a preview first before doing anything.
+        </td></tr>        
+    </table>      
 
     <h2>Plugins</h2>
-    This menu is not present by default. This menu will only be shown if you have installed additional (custom) plugins
+    This menu is not present by default. This menu will only be shown if you have additional (custom) plugins installed.
 
     <h2>Web Server</h2>
-    This menu is not present by default. This menu will only be shown if you have installed the web module. Using this menu the web server settings can be changed and the web server can be started.
+    This menu will only be shown if you have installed the <a href="../webserver/webserver.html">web application</a>. 
+    Using this menu the web server settings can be changed and the web server can be started.
 
     <h2>Help</b></h2>
-    Contains a link to the about dialog, the tip of the day and the help
+    Contains a link to the about dialog, the tip of the day, the donation page and the help.
 
 </body>
 </html>
