@@ -9,8 +9,8 @@
 
     <tocitem target="dc.general.screenlayout" text="Main Window">
       <tocitem target="dc.general.grouping" text="Grouping Pane"/>
-      <tocitem target="dc.general.menubar" text="Menu bar"/>
-      <tocitem target="dc.general.toolbar" text="Tool bar"/>
+      <tocitem target="dc.general.menubar" text="Menu"/>
+      <tocitem target="dc.general.toolbar" text="Toolbar"/>
       <tocitem target="dc.general.quickview" text="Quick View"/>
     </tocitem>
 
