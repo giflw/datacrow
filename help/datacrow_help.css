@@ -3,11 +3,12 @@
 }
 
 BODY, TD, TABLE {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Geneva, Helvetica, sans-serif;
 	font-size: 11pt;
 	text-align: left;
 	margin-left: 5px;
 	margin-right: 5px;
+    color: #918F8F;
 }
 
 TABLE, TD, TR {
@@ -19,8 +20,8 @@ TD, TR {
 }
 
 H1, H2, H3 {
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    margin-top: 25px;
+	font-family: Arial, Verdana, Geneva, Arial, Helvetica, sans-serif;
+    margin-top: 15px;
     margin-bottom: 5px;
 }
 
@@ -30,31 +31,27 @@ IMG {
 }
 
 H1 {
-	font-size: 12pt;
-	color: #0000CC;
+	font-size: 14pt;
+	color: #000000;
+    text-decoration: underline;
 }	
 
 H2 {
-	font-size: 11pt;
-	color: #3399FF;
+	font-size: 12pt;
+	color: #4E4E4E;
+    text-decoration: underline;
 }	
 
 H3 {
-	font-size: 11pt;
-	color: #66CCFF;
+	font-size: 12pt;
+	color: #777676;
+    font-style: italic;
 }	
-
-H4 {
-	font-size: 11pt;
-	color: #66CCFF;
-        font-style: italic;
-}
 
 A {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	text-decoration: underline;
-	color: #006600;
-	font-weight: bold;
+	color: #918F8F;
 }
 
 A:Hover {

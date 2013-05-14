@@ -3,7 +3,6 @@
   <map version="1.0">
     <mapID target="dc" url="index.html"/>
     <mapID target="dc.general.introduction" url="general/index.html"/>
-    <mapID target="dc.general.featurelist" url="general/featurelist.html"/>
     <mapID target="dc.general.starting" url="general/starting_datacrow.html"/>
     <mapID target="dc.general.screenlayout" url="general/screen_layout.html"/>
     <mapID target="dc.general.grouping" url="general/grouping_pane.html"/>

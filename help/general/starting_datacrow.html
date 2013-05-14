@@ -8,38 +8,93 @@
 <body>
 
 	<h1>Starting the application</h1>
-
-	Data Crow creates a shortcut after installation. You can also start Data Crow manually: <br>
-    Java -jar datacrow.jar <i>or</i><br>
-    datacrow.exe
+    
+    Obviously you have managed to start Data Crow otherwise you would not be here, reading the 
+    help file. There are however some additional startup options that could be beneficial for you.
+    
+    
+    <h2>Available Memory</h2>
+    You have either started Data Crow by using the "datacrow.exe" file or you are using the Java command
+    (directly or indirectly) "Java -jar datacrow.jar". First of all, Java (not Data Crow) will always limit
+    the amount of memory available to Data Crow. If you get OutOfMemoryErrors, let me know, but also try 
+    and assign more memory to Data Crow like so: <br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar</i>
+    
+    <h2>Using multiple installations / environments</h2>
+    If you use multiple Data Crow installations you have several choices to make:<br>
+    <table cellspacing="2" cellpadding="2" border="0">
+    	<tr><td>-</td>
+    		<td>Set up a user folder on a network share. Each of the Data Crow installations will
+             point to this user folder. This is established by selecting the same user folder  
+             on each of the Data Crow installations.
+             </td></tr>
+    	<tr><td>-</td>
+    		<td>In case you run multiple Data Crow instances on one machine you can either have  
+             them using the same user directory (sharing the same settings and data) or assign a 
+             separate user folder to each of the installations (-userdir parameter). 
+            </td></tr>
+    	<tr><td>-</td>
+    		<td>
+            In addition to the above you can share the user folder between the various 
+             installations but have them using a different database per installation 
+             (-db parameter).
+            </td></tr>
+	</table>
+    The required parameters are explained in the next paragraph.
+    
+    <h2>Startup parameters</h2>
+    Each of the parameters listed below can supplied when starting the datacrow.exe file or when using the
+    Java command to start Data Crow.
 	
-	<h2>Using a different database</h2>
-	To create an additional database: -db:&lt;database name&gt;.
-	
-	<h2>Allowing Data Crow to use more memory</h2>
-	To allow Data Crow access to more memory start Data Crow with the following parameters: <br>
-	Java -Xmx512m -jar datacrow.jar
-	
-	<h2>Starting the web server</h2>
-	You can start the web server without opening the main application by using the -webserver parameter.
+	<h3>Using a different database</h3>
+    By default Data Crow uses a database named "dc".<br>
+	To use another database (for testing purposes for example) you can use the following parameter: 
+    -db:&lt;database name&gt;. <br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar -db:dc_new</i>
+    
+    <h3>Specifying the user folder</h3>
+     
+    Use this parameter to specify a specific user directory. Multiple instances
+    of Data Crow can be started using this parameter. Additionally the selected user
+    folder path will not be stored in the datacrow.properties file. Parameter: -userdir:&lt;user directory&gt;<br>
+    Example: <i>Java -Xmx512m -jar datacrow.jar -userdir:C:\Data Crow\Data</i><br>
+    You can also make the path relative to the Data Crow installation folder by supplying the path as
+    './<folder name>'.<br> 
+    <b>Example:</b> <i>-userdir:./data</i> 
+    
+    
+	<h3>Specifying the installation directory</h3>
+    In case Data Crow can't dinf the installtion folder you can specify the installation folder yourself.<br>
+    This can happen on platforms other than Windows. Parameter: -dir:&lt;installation path&gt;<br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar -dir:/usr/home/datacrow</i>
+    
+    <h3>Starting the web server</h3>
+    You can start the web server without opening the main application by using the -webserver parameter.
     This parameter can be used in combination with the credentials parameter to bypass all the GUI stuff 
-    (such as the splash screen and the login dialog).
+    (such as the splash screen and the login dialog): 
+    -webserver -credentials <br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar -webserver -credentials:me/12345</i>
+        
+    <h3>Specifying the login credentials</h3>
+    As indicated above this option can be used to skip the login dialog. It really is only logical to use
+    in combination with the webserver command.
+    Parameter: -credentials:username/password<br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar -credentials:me/12345</i>
 
-    <h2>Specifying the login credentials</h2>
-    Parameter: -credentials:username/password <br>
-    Specifies the login credentials to start Data Crow without displaying the login dialog.
+    <h3>Add additional information to log (debug)</h3>
+    Append -debug to the startup command of Data Crow to log debug information. Parameter: -debug<br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar -debug</i>
 
-    <h2>Avoiding the use of cached items</h2>
-    Data Crow creates cache files instead of loading all items from the database on every startup.
-    In case there are issues Data Crow can be forced to discard the cache and load all the items 
-    from the database instead: -nocache
+    <h3>Hide the splashscreen at startup</h3>
+    To prevent the splashscreen when starting Data Crow you can supply the nosplash parameter. Parameter: -nosplash<br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar -nosplash</i>    
     
-    <h2>Add additional information to log (debug)</h2>
-    Append -debug to the startup command of Data Crow to log debug information.
-    
-    <h2>Using an alternative data folder</h2>
-    Specify an alternative data folder by using the -datadir: parameter (followed by the data folder like so:
-    -datadir:d:\data%20crow\data). Spaces need to be substituted by %20.
+    <h3>Clear all settings</h3>
+    To reset Data Crow to its original settings supply the following parameter: -clearsettings<br>
+    <b>Example:</b> <i>Java -Xmx512m -jar datacrow.jar -clearsettings</i>        
     
 </body>
 </html>
+
+
+

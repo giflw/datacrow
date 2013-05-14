@@ -4,16 +4,115 @@
 <body>
 
     <h1>The menu bar</h1>
-    The menu bars contains links to all of the functionality of Data Crow
+    The menu bars contains links to all of the functionality of Data Crow. This help page will explain the 
+    basic meaning of the menu.
 
     <h2>File</h2>
-    Items can be created, deleted, or opened. You can also view events or quit the application
-
-    <h2>Administration</h2>
-    Maintain genres, categories, etc., templates and view the loan information.
+    Items can be created, deleted, or opened. You can also view events or quit the application.
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/wizard.html">Item Wizard</a>.
+        The item wizard is a quick way to add new items to the database (apart from importing them from a 
+        CSV or XML file). It will first start with an online search (if the module supports online searches). 
+        After the item has been found it allows you in the next step to edit the item manually. 
+        After finishing the wizard the item is saved to the database.
+        </td></tr>
+    </table>   
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/itemform.html">New &lt;name&gt; Item</a>. 
+        With the New &lt;name&gt; Item menu option (the &lt;name&gt; will mention the item name, such as Movie in the Movie module) 
+        you can add a new item to Data Crow, manually. It will open the <a href="../items/itemform.html">item form</a>.
+        </td></tr>
+    </table>
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/itemform.html">Open &lt;name&gt; Item</a>. 
+        The Open &lt;name&gt; Item menu option (the &lt;name&gt; will mention the item name, such as Movie in the Movie module) 
+        opens the currently selected item (in the overview) in the <a href="../items/itemform.html">item form</a>. 
+        The item information cannot be changed using the option, it will open the item readonly.
+        </td></tr>
+    </table>     
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/itemform.html">Edit &lt;name&gt; Item</a>.
+        The Open &lt;name&gt; Item menu option (the &lt;name&gt; will mention the item name, such as Movie in the Movie module) 
+        opens the currently selected item (in the overview) in the <a href="../items/itemform.html">item form</a>. 
+        The item form allows you to change the information on the item.
+        </td></tr>
+    </table> 
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/views.html">Save all</a>.
+        The table view allows you to edit the items directly in the view. To save all changes you have made you can use the 
+        save all menu option.
+        </td></tr>
+    </table>
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/views.html">Delete</a>.
+        Deletes all selected items (in the view) from the database. This cannot be reverted (only by restoring a backup).
+        </td></tr>
+    </table>
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../general/log.html">TBD Show Log</a>.
+        The log shows events, things that happened in the system. If something went wrong, Data Crow will 
+        log an error here. Always a good place to look if you are having issues. It will also show informative 
+        messages, "I did this at this and this time".<br>
+        The System Information tab shows additional information. What directories are being used, how much resources
+        are available, which Java version is used, etcetera.
+        </td></tr>
+    </table> 
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="#">Quit</a>.
+        Exit the application. 
+        </td></tr>
+    </table>      
+    
+    <h2>Maintenance</h2>
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/administration.html">TBD Administration</a>. 
+        Most modules make use of drop downs or multi-reference fields. An example is the state field for 
+        software items. 
+        This state field has a default set of values. You can modify this list, completely. The administration
+        of these items (we call them property items, part of property modules) can be maintained in the 
+        administration menu.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../loan/loanadmin.html">Loan Administration</a>. 
+        This overview gives you a complete picture of yoru current loans, historical loans and overdue items. 
+        It has some powerful search options for you to work with.
+        </td></tr>        
+    </table>
 
     <h2>Experience Level</h2>
-    Set the experience level to either expert or beginner.
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/administration.html">TBD Administration</a>. 
+        Most modules make use of drop downs or multi-reference fields. An example is the state field for 
+        software items. 
+        This state field has a default set of values. You can modify this list, completely. The administration
+        of these items (we call them property items, part of property modules) can be maintained in the 
+        administration menu.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../loan/loanadmin.html">Loan Administration</a>. 
+        This overview gives you a complete picture of yoru current loans, historical loans and overdue items. 
+        It has some powerful search options for you to work with.
+        </td></tr>        
+    </table>
 
     <h2>Modules</h2>
     Allows you to select the module you want to use without using the module panel and contains links to the <a href="../modules/createmodulewizard.html">create</a>,
