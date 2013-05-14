@@ -16,6 +16,7 @@
     <mapID target="dc.items.wizard" url="items/wizard.html"/>
     <mapID target="dc.items.itemform" url="items/itemform.html"/>
     <mapID target="dc.items.sort" url="items/sort.html"/>
+    <mapID target="dc.items.administration" url="items/administration.html"/>
     
     <mapID target="dc.charts" url="charts/charts.html"/>
 

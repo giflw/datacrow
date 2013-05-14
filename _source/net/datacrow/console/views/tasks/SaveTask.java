@@ -27,13 +27,11 @@ package net.datacrow.console.views.tasks;
 
 import java.util.Collection;
 
-import net.datacrow.console.MainFrame;
 import net.datacrow.console.views.View;
 import net.datacrow.console.windows.messageboxes.SaveQuestionBox;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
-import net.datacrow.core.wf.requests.StatusUpdateRequest;
 import net.datacrow.util.DataTask;
 
 import org.apache.log4j.Logger;
@@ -65,11 +63,6 @@ public class SaveTask extends DataTask {
                 if (!keepOnRunning()) break;
                 
                 try {
-                    if (counter == items.size()) {
-                        dco.addRequest(new StatusUpdateRequest(dco.getModule().getIndex(), 
-                                       view.getType() == View._TYPE_SEARCH ? MainFrame._SEARCHTAB : MainFrame._INSERTTAB, "msgDataSaved"));
-                    }
-
                     if (view.getType() == View._TYPE_SEARCH) {
                         view.updateProgressBar(counter);
                         dco.saveUpdate(true);

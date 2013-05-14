@@ -381,7 +381,6 @@ public class View extends DcPanel implements ListSelectionListener {
 
         vc.ignoreEdit(true);
         vc.clear();
-        setStatus(DcResources.getText("msgViewCleared"));
         updateProgressBar(0);      
         
         if (isParent()) {

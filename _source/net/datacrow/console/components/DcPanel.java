@@ -30,24 +30,15 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
 
-import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.core.DataCrow;
-import net.datacrow.core.DcRepository;
-import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
 
 public class DcPanel extends JPanel {
 
 	private String helpIndex = "";
 
-    private TitledBorder border = ComponentFactory.getTitleBorder(DcResources.getText("lblStatus"));
-    private JLabel labelStatus = ComponentFactory.getLabel("");
     private DcProgressBar progress = new DcProgressBar();
     private String title;
     private ImageIcon icon;
@@ -83,12 +74,6 @@ public class DcPanel extends JPanel {
     @Override
     public void setFont(Font font) {
         super.setFont(font);
-
-        if (labelStatus != null) {
-            Font system = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
-            labelStatus.setFont(system);
-            border.setTitleFont(system);
-        }
     }
 
     public void setHelpIndex(String helpIndex) {
@@ -99,20 +84,20 @@ public class DcPanel extends JPanel {
     	return helpIndex;
     }
 
-    public void setStatus(final String text) {
-        if (text != null) {
-            if (SwingUtilities.isEventDispatchThread()) {
-                labelStatus.setText(text);
-            } else {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        labelStatus.setText(text);
-                    }
-                });
-            }
-        }
-    }
+//    public void setStatus(final String text) {
+//        if (text != null) {
+//            if (SwingUtilities.isEventDispatchThread()) {
+//                labelStatus.setText(text);
+//            } else {
+//                SwingUtilities.invokeLater(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        labelStatus.setText(text);
+//                    }
+//                });
+//            }
+//        }
+//    }
     
     
     public void setMaxForProgressBar(final int maxValue) {
@@ -174,8 +159,6 @@ public class DcPanel extends JPanel {
     
     public void clear() {
         helpIndex = null;
-        border = null;
-        labelStatus = null;
         progress = null;
         title = null;
         icon = null;
@@ -184,17 +167,12 @@ public class DcPanel extends JPanel {
     private void createStatusPanel() {
         panelStatus.setLayout(Layout.getGBL());
 
-        labelStatus.setBorder(border);
-        labelStatus.setText(DataCrow.getVersion().toString());
         JPanel panelProgress = new JPanel();
         panelProgress.setLayout(Layout.getGBL());
         panelProgress.add(progress, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
                         GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets(0, 0, 0, 0), 0, 0));
 
-        panelStatus.add(labelStatus, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
-                        GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
-                        new Insets(0, 0, 0, 0), 0, 0));
         panelStatus.add(panelProgress, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
                         GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets(0, 0, 0, 0), 0, 0));

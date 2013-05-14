@@ -175,10 +175,6 @@ public class MasterView {
         views.put(index, view);        
     }
 
-    public void setStatus(String message) {
-        getCurrent().setStatus(message);
-    }    
-    
     public void saveSettings() {
         for (View view : getViews())
             view.saveSettings();

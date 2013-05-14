@@ -108,7 +108,6 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
 
         // apply the correct headers (colors and such)
         table.applyHeaders();
-        setStatus(DcResources.getText("msgSQLTableHasBeenFilled"));
     }
 
     protected void runQuery() {

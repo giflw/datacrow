@@ -365,7 +365,6 @@ public class FilterDialog extends DcFrame implements ActionListener {
                 module.getSearchView().getGroupingPane().isEnabled() ?
                         new HashMap<String, Integer>() : DataManager.getKeys(df);
             
-            parent.setStatus(DcResources.getText("msgSearchHasBeenExecuted"));
             parent.add(keys);
 
             DataFilters.setCurrent(module.getIndex(), df);

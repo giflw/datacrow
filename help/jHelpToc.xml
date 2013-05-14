@@ -20,6 +20,7 @@
       <tocitem target="dc.items.templates" text="Using Templates"/>
       <tocitem target="dc.items.wizard" text="New Item Wizard"/>
       <tocitem target="dc.items.sort" text="Sorting"/>
+      <tocitem target="dc.items.administration" text="Administration"/>
     </tocitem>   
 
     <tocitem target="dc.charts" text="Charts" />

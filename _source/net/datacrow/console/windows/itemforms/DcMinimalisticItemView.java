@@ -103,6 +103,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
 
         pack();
         
+        setHelpIndex("dc.items.administration");
+        
         Settings settings = DcModules.get(module).getSettings();
         setSize(settings.getDimension(DcRepository.ModuleSettings.stSimpleItemViewSize));
         setCenteredLocation();
@@ -278,7 +280,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         //**********************************************************
         statusPanel = panel.getStatusPanel();
         
-        getContentPane().add(panel,         Layout.getGBC( 0, 0, 1, 1, 10.0, 10.0
+        getContentPane().add(panel,         Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0, 0, 0, 0), 0, 0));
         
@@ -301,10 +303,6 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     public void updateProgressBar(int value) {
         panel.updateProgressBar(value);
     }
-    
-    public void setStatus(String text) {
-        panel.setStatus(text);
-    }    
     
     public void delete() {
         if (!isTaskRunning()) {
@@ -330,8 +328,6 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 updateProgressBar(0);
                 initProgressBar(items.size());   
                 list.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                
-                setStatus("Deleting " + items.size() + " items from to the database");
                 
                 if (!DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
                     return;
