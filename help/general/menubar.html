@@ -100,7 +100,7 @@
     <h2>Experience Level</h2>
     <table>
         <tr><td>-</td>
-        <td><a href="../items/administration.html">TBD Administration</a>. 
+        <td><a href="../items/administration.html">Administration</a>. 
         Most modules make use of drop downs or multi-reference fields. An example is the state field for 
         software items. 
         This state field has a default set of values. You can modify this list, completely. The administration
@@ -115,13 +115,81 @@
     </table>
 
     <h2>Modules</h2>
-    Allows you to select the module you want to use without using the module panel and contains links to the <a href="../modules/createmodulewizard.html">create</a>,
-    <a href="../modules/altermodulewizard.html">alter</a>, <a href="../modules/copymodulewizard.html">copy</a>,
-    <a href="../modules/exportmodulewizard.html">export</a>, <a href="../modules/importmodulewizard.html">import</a> and
-    <a href="../modules/relatemodulewizard.html">relate</a> module wizards.
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../modules/createmodulewizard.html">Create Module Wizard</a>. 
+        This tool allows you to create a new module. It is a powerful tool allowing you to design your own 
+        collection management section within the application. Items stored in these modules are stored in the database, just 
+        as is done with the dfeault modules. You'll have many of the standard tools at your disposal when administrating your items.
+        There is a separate manual available for download from the website.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../modules/copymodulewizard.html">Copy Module Wizard</a>.  
+        This wizard based tool allows you to create a new module based on an existing module. It saves you from having to define each and
+        every field while there is another module already available which almost fits your needs. 
+        </td></tr>            
+        <tr><td>-</td>
+        <td><a href="../modules/altermodulewizard.html">Alter Module Wizard</a>.  
+        In case you want to add a field to one of the modules you can use the alter module wizard. This powerful tool allows you to change
+        existing fields or add new fields. Additionally you can modify some of the settings (indicate if tems be lend to other for example).
+        </td></tr>   
+        <tr><td>-</td>
+        <td><a href="../modules/relatemodulewizard.html">Relate Module Wizard</a>.  
+        A wizard driven tool allow to create a parent-child relationshio between two modules. An example of such a relationship can be found in 
+        the Audio CDs module. This module is the parent of the Audio Tracks module. This means that Audio tracks cannot exist without an Audio CD.
+        There is no unrelate option available; be careful using this tool!
+        </td></tr>   
+        <tr><td>-</td>
+        <td><a href="../modules/deletemodulewizard.html">Delete Custom Module Wizard</a>.  
+        wanting to delete a module? This is the wizard to be used. In two simple steps the module will be destroyed. This cannot be undone.
+        Note that you can also disable modules from within the <a href="../settings/module.html">settings</a>. 
+        This hides the module without removing it. This option is not available in case you have not created or imported a custom module.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../modules/exportmodulewizard.html">Export Module Wizard</a>.  
+        So you have created this really awesome module! So much work while it is only in use in your local installation. Why not share it 
+        with other persons? use the export module wizard to export the created module structure along with its settings, data and pictures. 
+        This option is not available in case you have not created or imported a custom module.
+        </td></tr>           
+        <tr><td>-</td>
+        <td><a href="../modules/importmodulewizard.html">Import Module Wizard</a>.  
+        This tool allows you to import a module previosuly export with the export module wizard. It's a simple process which will load the module,
+        its items, settings and pictures.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="#">Active Module</a>.  
+        From here you switch between modules. Simply select the module to start using it. This menu is here in case you have disabled the module list, 
+        the area where modules normally are selected.
+        </td></tr>
+    </table>    
 
     <h2>View</h2>
-    Contains links to the different views, such as the table and the list view. Also the Look and Feel can be changed
+    
+    <table>
+        <tr><td>-</td>
+        <td><a href="../items/views.html">Card View</a>. 
+        The card view is graphically the nicest looking view. Items are displayed as small cards and show a picture and a short decription of the item
+        based on the <a href="../settings/fields.html">field settings</a>, "is descriptive".
+        </td></tr>    
+        <tr><td>-</td>
+        <td><a href="../items/views.html">Table View</a>. 
+        The table view allows you to edit items directly in the view, withou having to open the item form.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../filters/filters.html">Toggle Quick Filter bar</a>. 
+        Enables or disables the quick filter bar.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../general/screen_layout.html">Toggle Module List</a>. 
+        Enables or disables the module list.
+        </td></tr>
+        <tr><td>-</td>
+        <td><a href="../general/screen_layout.html">Toggle Quick View</a>. 
+        Enables or disables the module list.
+        </td></tr>            
+
+    </table>    
 
     <h2>Filter</h2>
     Via this menu a new filter or a previous filter can be applied

@@ -11,6 +11,7 @@
       <tocitem target="dc.general.grouping" text="Grouping Pane"/>
       <tocitem target="dc.general.menubar" text="Menu bar"/>
       <tocitem target="dc.general.toolbar" text="Tool bar"/>
+      <tocitem target="dc.general.quickview" text="Quick View"/>
     </tocitem>
 
     <tocitem target="dc.items" text="Items">

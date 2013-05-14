@@ -8,6 +8,7 @@
     <mapID target="dc.general.grouping" url="general/grouping_pane.html"/>
     <mapID target="dc.general.menubar" url="general/menubar.html"/>
     <mapID target="dc.general.toolbar" url="general/toolbar.html"/>
+    <mapID target="dc.general.quickview" url="general/quickview.html"/>
     <mapID target="dc.general.defaultmodules" url="general/default_modules.html"/>  
     
     <mapID target="dc.items.views" url="items/views.html"/>
@@ -45,6 +46,7 @@
     <mapID target="dc.settings.drivemappings" url="settings/drivemappings.html"/>
     <mapID target="dc.settings.directoriesasdrives" url="settings/directoriesasdrives.html"/>    
 
+    <mapID target="dc.modules" url="general/default_modules.html"/>
     <mapID target="dc.modules.create" url="modules/createmodulewizard.html"/>
     <mapID target="dc.modules.alter" url="modules/altermodulewizard.html"/>
     <mapID target="dc.modules.fields" url="modules/definingfields.html"/>
