@@ -9,7 +9,8 @@
     <mapID target="dc.general.menubar" url="general/menubar.html"/>
     <mapID target="dc.general.toolbar" url="general/toolbar.html"/>
     <mapID target="dc.general.quickview" url="general/quickview.html"/>
-    <mapID target="dc.general.defaultmodules" url="general/default_modules.html"/>  
+    <mapID target="dc.general.defaultmodules" url="general/default_modules.html"/>
+    <mapID target="dc.general.log" url="general/log.html"/>    
     
     <mapID target="dc.items.views" url="items/views.html"/>
     <mapID target="dc.items.tableview" url="items/views_tableview.html"/>

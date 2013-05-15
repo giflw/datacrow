@@ -17,7 +17,7 @@
     </tocitem>
 
     <tocitem target="dc.general" text="Items">
-      <tocitem target="dc.items.views" text="Views">
+      <tocitem target="dc.items" text="Views">
         <tocitem target="dc.items.views" text="Views" />
         <tocitem target="dc.items.cardview" text="Card View" />
         <tocitem target="dc.items.tableview" text="Table View" />
@@ -30,17 +30,11 @@
       <tocitem target="dc.items.itemform" text="Item Form"/>
       <tocitem target="dc.items.templates" text="Templates"/>
     </tocitem>   
-
-    <tocitem target="dc.charts" text="Charts" />
-    
-    <tocitem target="dc.onlinesearch" text="Online Search" />
     
     <tocitem target="dc.items" text="Loans">
         <tocitem target="dc.loans" text="Lending items" />
         <tocitem target="dc.loanadmin" text="Loan Administration" />
      </tocitem>     
-        
-    <tocitem target="dc.reports" text="Reports" />
 
     <tocitem target="dc.modules" text="Modules">
       <tocitem target="dc.modules.alter" text="Altering a Module"/>
@@ -52,8 +46,6 @@
       <tocitem target="dc.modules.export" text="Export Module Wizard"/>
       <tocitem target="dc.modules.import" text="Import Module Wizard"/>
     </tocitem>
-
-    <tocitem target="dc.security" text="Security" />
 
     <tocitem target="dc.settings" text="Settings">
       <tocitem target="dc.settings" text="Settings">
@@ -102,10 +94,15 @@
         <tocitem target="dc.tools.filerenamer" text="File Renamer" />
       </tocitem>
     </tocitem> 
-    
+
     <tocitem target="dc.help" text="Help">
       <tocitem target="dc.tools.wizard" text="Tool Select Wizard" />
     </tocitem>
     
+    <tocitem target="dc.charts" text="Charts" />
+    <tocitem target="dc.reports" text="Reports" />
+    <tocitem target="dc.security" text="Security" />       
+    <tocitem target="dc.onlinesearch" text="Online Search" />    
+    <tocitem target="dc.general.log" text="The Log"/>
     <tocitem target="dc.webserver" text="Web Server" />
 </toc>

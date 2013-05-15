@@ -35,7 +35,6 @@ import javax.swing.SwingUtilities;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcFrame;
-import net.datacrow.console.windows.databaseeditor.SystemInformationPanel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.resources.DcResources;
@@ -48,6 +47,7 @@ public class LogForm extends DcFrame {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         build();
 
+        setHelpIndex("dc.general.log");
         setVisible(true);
         toFront();
     }
