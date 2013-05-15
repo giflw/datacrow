@@ -9,6 +9,7 @@ Data Crow 3.9.27  [Released on May XX, 2013]  [testing: high]  [target: producti
 - Container sometimes can't be saved.
 - Loan shows incorrect period in case no due date has been set.
 - Loan text shows "item is due on null" in case the due date is empty.
+- Size of the help screen was not remembered.
 
 [Changed]
 - I have made a lot of improvements to the help text (F1). I have added links in there,

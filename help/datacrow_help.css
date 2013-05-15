@@ -4,7 +4,7 @@
 
 BODY, TD, TABLE {
 	font-family: Arial, Verdana, Geneva, Helvetica, sans-serif;
-	font-size: 11pt;
+	font-size: 12pt;
 	text-align: left;
 	margin-left: 5px;
 	margin-right: 5px;
@@ -31,33 +31,33 @@ IMG {
 }
 
 H1 {
-	font-size: 14pt;
+	font-size: 15pt;
 	color: #000000;
     text-decoration: underline;
 }	
 
 H2 {
-	font-size: 12pt;
+	font-size: 13pt;
 	color: #4E4E4E;
     text-decoration: underline;
 }	
 
 H3 {
-	font-size: 12pt;
+	font-size: 13pt;
 	color: #777676;
     font-style: italic;
 }
 
 A {
     font-family: Arial, Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11pt;
+    font-size: 12pt;
 	text-decoration: underline;
 	color: #918F8F;
 }
 
 A:Hover {
     font-family: Arial, Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11pt;
+    font-size: 12pt;
 	text-decoration: underline;
 	color: #00D647;
 }

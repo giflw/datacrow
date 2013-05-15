@@ -6,69 +6,116 @@
   <body>
 
     <h1>Using Filters</h1>
-    By default, all items are shown in a view. To find specific items you can specify a filter. These filters can be saved to be reused. There are two option for filtering, you can use the quick filter bar which is located in the upper part of the main screen or you can use the filter dialog which allows for filtering on more then one field / value and has more options.
+    By default, all items are shown in a view. To find specific items you can specify a filter. 
+    There are two option for filtering, you can use the quick filter bar which is 
+    located in the upper part of the main screen or you can use the filter dialog which allows for filtering on more then one 
+    field / value and has more options.
 
     <h1>Quick Filter bar</h1>
     
+    By default a quick filter bar is shown in the upper part of the main screen. <br>
+
     <img src="./images/quick_filter_bar.png"><br><br>
-       
-    By default a quick filter bar is shown in the upper part of the main screen. Using this bar you can quickly filter on a single value. Select a field from the list and then type or select the value you want to filter on. If there are saved filters present, you can select a filter from the "Filters" list (right-handside of the quick filter bar). Please read the next chapter for advanced filtering and how to create and save a filter.<br>
-    You can disable or enable the quick filter bar from the settings menu "Toggle Quick Filter bar" or by pressing the F7 key.
+
+    You can disable or enable the quick filter bar from the settings <a href="../general/menubar.html">menu</a> 
+    (the "Toggle Quick Filter bar" option) or by pressing the F7 key.<br><br>
+    
+    Using this bar you can quickly 
+    filter on a single value. Select a field from the list (the first drop down). Then, select or type a value 
+    in the second field. 
+    <br><br>
+    The following options are always available in the drop down:
+    <table>
+        <tr><td>-</td>
+        <td><b>Is Filled</b>. Filter on the items where the value is filled with any value for the selected field.
+        </td></tr>
+        <tr><td>-</td>
+        <td><b>Is Empty</b>. Filter on the items where the value is blank for the selected field.
+        </td></tr>
+    </table>       
+    
+    Apply the filter by clicking on the <img src="../general/images/tb_filteraccept.png"> icon.
+    
+
+    <h2>Undoing a filter</h2>
+    To undo a filter click on the <img src="../general/images/tb_filterclear.png"> icon.    
+    
+    <h2>Saved Filters</h2>
+    If there are saved filters present, you can select a filter from the "Filters" list (right hand side of the quick filter bar). 
+    Please read the next chapter for advanced filtering and how to create and save a filter.<br>
+
 
     <h1>Filter Dialog</h1>
     <i>Menu Path: Filter &gt; Filter</i><br><br>
     
-    Go to the filter dialog via the "Filter" button, which is available from the toolbar. The dialog has three tabs; the "filter", "sort" and "manage". In the filter tab the actual filter is defined. The sort tab allows for defining the way the result should be sorted and the manage tab allows for filters to be saved and saved filters to be deleted or edited.<br><br>
+    Go to the filter dialog via the "Filter" button, which is available from the <a href="../general/toolbar.html">tool bar</a>. 
+    The dialog has three tabs; the "Filter", "Sort" and "Maintain". In the filter tab the filter is defined. 
+    The sort tab allows for defining the way the result should be sorted and the manage tab allows for filters to be saved for reuse and 
+    saved filters to be deleted or edited.<br><br>
     
     <img src="./images/filterdialog.jpg">
     
-    <h2>Adding Filter Entries</h2>
-    A filter is made up of entries. In the "filter" tab you can define these entries. In the lower part you define which field should be filtered on,  the value and the operator used for comparison. After entering all the information press "add" to add the entry to filter.
+    <h2>Creating a Filter</h2>
+    A filter is made up of entries. In the "filter" tab you can define these entries. In the lower part you define
+    which field should be filtered on,  the value and the operator used for comparison. After entering all the information press 
+    "add" to add the entry to filter.
     
     <h3>And / Or</h3>
-    In the first list you can select the inclusion type, "and" or "or". The first entry in the filter always is "and" so you can not select this. For the next entries however you can choose to include the entry as "and" or as "or". Example: You want to filter on movies having the state "seen" or "want to have". The filter will have the follow entries:<br>
+    In the first list you can select the inclusion type, "and" or "or". The first entry in the filter always is "and" 
+    so you can not select this. For the next entries however you can choose to include the entry as "and" or as "or". 
+    <br><br>Example: You want to filter on movies having the state "seen" or "want to have". <br>
+    The filter should then have the follow entries:<br>
     <i>And</i> State equal to "seen".<br>
     <i>Or</i> State equal to "want to have". 
     
     <h3>Module</h3>
-    The module you want to select a field from. Mostly this list will only contain the current module, such as the "Software" module or the "Book" module. However when a module has a child module such as is the case with the "Audio CD" module (having "Audio Track" module as child) you can select either the parent or the child module. 
+    The module you want to select a field from. Mostly this list will only contain the current module, such as the "Software" module 
+    or the "Book" module. However when a module has a child module such as is the case with the "Audio CD" module 
+    (having "Audio Track" module as child) you can select either the parent or the child module.<br>
+    The selected module determines the fields to be shown in the fields drop down.
     
     <h3>Field</h3>
-    Shows the fields belonging to the selected module. Not all fields might be shown as there are fields on which no filter can be created.
+    Shows the fields belonging to the selected module. Not all fields might be shown as there are fields on which no 
+    filter can be created.
     
     <h3>Operator</h3>
-    Here you can define how the value of the field should be compared. By default the "Equal To" operator is selected which means the value should be exactly the same. The operators speak pretty much for themselves ("is filled", "is empty", "contains", ..). Note that you can create multiple entries for one field. This allows for filtering on one field using multiple types of operators (such as "is empty" combined with "or.. contains 'test').
+    Here you can define how the value of the field should be compared. By default the "Equal To" operator is selected 
+    which means the value should be exactly the same. The operators speak pretty much for themselves 
+    ("is filled", "is empty", "contains", ..). Note that you can create multiple entries for one field. This allows for 
+    filtering on one field using multiple types of operators (such as "is empty" combined with "or contains 'test').
     
     <h3>Value</h3>
     The way this field represents itself depends on the field you have selected. Either this will contain a list of fixed values or allows you to enter a value yourself (by typing).
     
-    <h2>Editing Filter Entries</h2>
+    <h3>Editing Filter Entries</h3>
     You can modify any entry in the entry list by double-clicking it. You can then edit the filter in the lower part off the screen. After making the desired changes you add the entry by pressing the "add" button.
     
-    <h2>Removing Filter Entries</h2>
+    <h3>Removing Filter Entries</h3>
     You can remove the entry by double-clicking it.
 
-    <h1>Sort</h1>
-    In the sort tab you can define how the result should be sorted. On the left-handside the available fields are shown on the right-handside fields are shown on which is sorted. Data Crow will sort the result top to bottom. Use the arrow buttons to move fields from the left-handside to the right-handise and vica versa or double-click the corresponding field.<br><br>
+    <h2>Sort</h2>
+    In the sort tab you can define how the result should be sorted. This is explained in the <a href="../items/sort.html">Sort section</a> of this help.
     
     <img src="./images/filterdialog-sort.jpg">
     
-    <h1>Managing filters</h1>
+    <h2>Managing filters</h2>
     To manage filters you go to the "manage" tab. Here you can save a filter so it can be re-used. Saved filters will appear in the quick filter toolbar. <br><br>
     
     <img src="./images/filterdialog-manage.jpg">
     
-	<h2>Saving a new Filter</h2>
-	You can save a filter so it can be reused. In the manage tab there is an area called "Save filter". Enter a name for the filter and press the "save" button. The filter is now saved and can be selected from the list in this tab or from the quick filter bar.
+	<h3>Saving a new Filter</h3>
+	You can save a filter so it can be reused. In the manage tab there is an area called "Save filter". Enter a name for the 
+	filter and press the "save" button. The filter is now saved and can be selected from the list in this tab or from the quick filter bar.
 
-	<h2>Modifying an existing Filter</h2>
-	Select the filter you want to modify from the list in the "Extisting filters" area and press the "edit" button. The filter tab is opened, showing the entries of the selected filter. Make the changes. Return to the "manage" tab to save the changes you have made.
+	<h3>Modifying an existing Filter</h3>
+	Select the filter you want to modify from the list in the "Existing filters" area and press the "edit" button. The filter tab is opened, showing the entries of the selected filter. Make the changes. Return to the "manage" tab to save the changes you have made.
 
-	<h2>Deleting an existing Filter</h2>
-	Select the filter you want to delete from the list in the "Extisting filters" area and press the "delete" button.
+	<h3>Deleting an existing Filter</h3>
+	Select the filter you want to delete from the list in the "Existing filters" area and press the "delete" button.
 	
-	<h2>Applying an existing Filter</h2>
-	You can apply a saved filter either by selecting it from the quick filter toolbar or by selecting it from the list in the manage tab en pressing the "apply" button.
+	<h3>Applying an existing Filter</h3>
+	You can apply a saved filter either by selecting it from the quick filter tool bar or by selecting it from the list in the 
+	manage tab by pressing the "apply" button.
 
   </body>
 </html>

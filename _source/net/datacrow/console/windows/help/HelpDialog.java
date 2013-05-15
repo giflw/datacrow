@@ -26,6 +26,8 @@
 package net.datacrow.console.windows.help;
 
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.help.DefaultHelpBroker;
 import javax.help.HelpSet;
@@ -60,7 +62,7 @@ public class HelpDialog {
             HelpSet hs = new HelpSet(cl, hsURL);
             hs.setTitle(DcResources.getText("lblHelp"));
             
-            DefaultHelpBroker hb = new DefaultHelpBroker();
+            final DefaultHelpBroker hb = new DefaultHelpBroker();
             hb.setHelpSet(hs);
             hb.setActivationWindow(window);
             hb.setCurrentID(helpIndex);
@@ -69,11 +71,21 @@ public class HelpDialog {
             hb.setFont(ComponentFactory.getSystemFont());
             hb.setDisplayed(true);
             
+
             Window helpWindow = hb.getWindowPresentation().getHelpWindow();
             if (helpWindow instanceof JFrame) {
                 JFrame helpFrame = (JFrame) helpWindow;
                 helpFrame.setIconImage(IconLibrary._icoMain.getImage());
                 helpFrame.setTitle(DcResources.getText("lblDataCrowHelp"));
+
+                
+                helpWindow.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        if (hb != null)
+                            DcSettings.set(DcRepository.Settings.stHelpFormSize, hb.getSize());
+                    }
+                });
             }
 
         } catch (Exception e) {
