@@ -139,7 +139,7 @@ public class LoanPanel extends JPanel implements ActionListener {
         if (!available) {
             
             String due = "";
-            if (loan.getDaysTillDueDate() != null) {
+            if (loan.getDueDate() != null) {
                 due = DcResources.getText("msgLoanInformationDue", String.valueOf(loan.getDueDate()));
             }
             

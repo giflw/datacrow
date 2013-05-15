@@ -99,12 +99,21 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     public void load() {
         table.clear();
         
-        if (filter == null) {
+        if (filter != null && filter.isAlive())
+            filter.cancel();
+        
+        if (filter == null || filter.isAlive()) {
             filter = new LoanFilter();
         }
         
-        filter.setListener(this);
-        filter.start();    
+        try {
+            filter.setListener(this);
+            filter.start();    
+        } catch (Exception exp) {
+            filter = new LoanFilter();
+            filter.setListener(this);
+            filter.start();
+        }
     }
     
     protected void addItem(DcObject dco) {

@@ -7,6 +7,8 @@ Data Crow 3.9.27  [Released on May XX, 2013]  [testing: high]  [target: producti
 - Create multiple not working for any non track modules.
 - Issue where images are not always imported for items part of the imported main module.
 - Container sometimes can't be saved.
+- Loan shows incorrect period in case no due date has been set.
+- Loan text shows "item is due on null" in case the due date is empty.
 
 
 -----------------------------------------------------------------------------------------

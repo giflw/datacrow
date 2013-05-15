@@ -679,7 +679,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             setValue(DcObject._SYS_LOANDUEDATE, loan.getDueDate());
             setValue(DcObject._SYS_LOANDURATION, loan.getDaysLoaned());
             setValue(DcObject._SYS_LOANSTATUS, status);
-            setValue(DcObject._SYS_LOANSTATUSDAYS, available ? null : Long.valueOf(overdue ? daysTillOverdue * -1 :  + 1));
+            setValue(DcObject._SYS_LOANSTATUSDAYS, available ? null : Long.valueOf(overdue ? daysTillOverdue * -1 : daysLoaned));
         }
     }
 

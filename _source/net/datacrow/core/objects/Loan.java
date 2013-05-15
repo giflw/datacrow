@@ -126,6 +126,8 @@ public class Loan extends DcObject {
             calDaysTillOverdue.setTime(overDueDate);
             long date2Milliseconds = calDaysTillOverdue.getTime().getTime();
             days = Long.valueOf((date2Milliseconds - date1Milliseconds) / msPerDay);            
+        } else {
+            days = daysLoaned;
         }
         
         return days;
