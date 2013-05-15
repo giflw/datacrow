@@ -5,7 +5,6 @@ echo setting PATH
 set PATH=C:\Program Files\Java\jdk1.6.0_38\bin;%PATH%
 echo Display java version
 java -version
-pause
 rd _classes /S /Q
 del datacrow.jar
 call ant

@@ -10,13 +10,12 @@ cd C:\Users\RJ\Data\Development\projects\datacrow
 rd ..\..\release /S /Q
 md ..\..\release
 md ..\..\release\datacrow
-del webapp\datacrow\mediaimages\*.* /Q
-del webapp\datacrow\mediaimages\icons\*.* /Q
-del data\*.* /Q
-del data\cache\*.* /Q
-del data\temp\*.* /Q
 rd _build /S /Q
 call build.bat
+cd help
+call create_index.bat
+cd ..
+pause
 del installer\*.jar
 del installer\*.exe
 cd ..\services

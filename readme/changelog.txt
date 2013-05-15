@@ -10,6 +10,11 @@ Data Crow 3.9.27  [Released on May XX, 2013]  [testing: high]  [target: producti
 - Loan shows incorrect period in case no due date has been set.
 - Loan text shows "item is due on null" in case the due date is empty.
 
+[Changed]
+- I have made a lot of improvements to the help text (F1). I have added links in there,
+  pointing to the detailed help text where necessary, have added a lot of additional 
+  information in general, etc.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.26  [Released on May 12, 2013]  [testing: high]  [target: production]
