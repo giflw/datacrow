@@ -12,6 +12,8 @@
     <mapID target="dc.general.defaultmodules" url="general/default_modules.html"/>  
     
     <mapID target="dc.items.views" url="items/views.html"/>
+    <mapID target="dc.items.tableview" url="items/views_tableview.html"/>
+    <mapID target="dc.items.cardview" url="items/views_cardview.html"/>
     <mapID target="dc.items.inserting" url="items/inserting.html"/>
     <mapID target="dc.items.templates" url="items/templates.html"/>
     <mapID target="dc.items.wizard" url="items/wizard.html"/>
