@@ -18,14 +18,17 @@
   <h2>Configuration</h2>
   Depending on the format you have chosen some of the configuration options might not be available.
 
-  <ul>
-  <li /><i>Character Set</i><br>Select the character set or encoding. In most cases UTF-8 will be sufficient. In case you end up with items containing strange characters
-  or lotds of questions marks you most likely selected the incorrect character set. Data Crow cannot guess the encoding of the import file. To find out which character set you
-  should use I refer you to the documentation of the application which created the export file. Note that the XML exports of Data Crow are always performed in UTF-8.
-
-  <li /><i>Value separator</i><br>For CSV imports you need to indicate which character was used to separate the values of the items. Set value separator to "TAB" in case
-  tabs were used.
-  </ul>
+  <table cellspacing="2" cellpadding="2" border="0">
+    <tr><td>-</td>
+        <td><b>Character Set</b>. 
+        Select the character set or encoding. In most cases UTF-8 will be sufficient. In case you end up with items containing strange characters
+        or lots of questions marks you most likely selected the incorrect character set. Data Crow cannot guess the encoding of the import file. To find out which character set you
+  should use I refer you to the documentation of the application which created the export file. Note that the XML exports of Data Crow are always performed in UTF-8.</td></tr>
+    <tr><td>-</td>
+        <td><b>Value separator</b>. 
+        For CSV imports you need to indicate which character was used to separate the values of the items. Set value separator to "TAB" in case
+  tabs were used.</td></tr>
+  </table><br>
 
   <h2>Source field mappings</h2>
   In case you are importing a CSV file you will be asked to map the source fields to the actual Data Crow fields. This is a crucial step in the import.
@@ -33,9 +36,8 @@
   target name in the table. The target name can be selected from a drop down.
 
   <h2>Limitations</h2>
-  <ul>
-  <li />The CSV import will always skip the first line as it expect the field names to be located on this position.
-  </ul>
+  
+  The CSV import will always skip the first line as it expect the field names to be located on this position.
 
   </body>
 </html>
