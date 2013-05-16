@@ -2,7 +2,8 @@
   <!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN" "http://java.sun.com/products/javahelp/map_1_0.dtd">
   <map version="1.0">
     <mapID target="dc" url="index.html"/>
-    <mapID target="dc.general.introduction" url="general/index.html"/>
+    <mapID target="dc.general.introduction" url="general/index.html"/>   
+    <mapID target="dc.general.wheretostart" url="general/wheretostart.html"/>    
     <mapID target="dc.general.starting" url="general/starting_datacrow.html"/>
     <mapID target="dc.general.screenlayout" url="general/screen_layout.html"/>
     <mapID target="dc.general.grouping" url="general/grouping_pane.html"/>
@@ -15,7 +16,6 @@
     <mapID target="dc.items.views" url="items/views.html"/>
     <mapID target="dc.items.tableview" url="items/views_tableview.html"/>
     <mapID target="dc.items.cardview" url="items/views_cardview.html"/>
-    <mapID target="dc.items.inserting" url="items/inserting.html"/>
     <mapID target="dc.items.templates" url="items/templates.html"/>
     <mapID target="dc.items.wizard" url="items/wizard.html"/>
     <mapID target="dc.items.itemform" url="items/itemform.html"/>

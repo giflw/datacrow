@@ -7,29 +7,45 @@
     <h1>General settings</h1>
     <i>Menu path: Settings &gt; Settings &gt; General</i>
 
-    <h2>Sorting method for persons</h2>
-    Define here how persons should be sorted. The default order will sort persons in the order they have been saved.
+    This section described the general Data Crow settings. These settings change the fundamental behavior of
+    Data Crow. 
     
-    <h2>Default Display format for the persons name</h2>
-    Define how the name of persons should be displayed by default.
+    <br><br><b>Note</b>: these settings are stored per computer; even when you have multiple computers looking at the same
+    user folder (see <a href="../general/starting_datacrow.html">starting Data Crow</a>) each computer will
+    have its very own settings.
+
+    <h2>Open items by default in the edit modus</h2>
+    By default Data Crow will open items in edit mode. In case you untick this option, items will be opened in 
+    view mode instead. You can still edit items but you'll have to select Edit specifically from the 
+    <a href="../general/menubar.html">menu bar</a> or from the <a href="../items/views.html">right-click menu</a>
+    in the view.
+    
+    <h2>Enable high quality rendering (low performance)</h2>
+    Data Crow can render graphics in higher quality. By default this option is turned off for perfomance reasons, 
+    but you can try how it works for you. It solely impacts the presentation, it does not impact how images are stored in
+    Data Crow.
 
 	<h2>Check for value uniqueness upon saving</h2>
-	Data Crow will check if the item is unique before it is saved. Uniqueness is determined by the values of key field (<a href="fields.html">more about this</a>). If the item is not unique it will not be saved and a message will be displayed.<br>
-	This option is enabled by default and I do not recommend turning it off
+	Data Crow will check if the item is unique before it is saved. Uniqueness is determined by the values of 
+    key field (as defined in the <a href="../settings/fields.html">general field settings</a>). 
+    If the item is not unique it will not be saved and a message will be displayed.<br>
+	This option is enabled by default and I do not recommend turning it off.
 
 	<h2>Check for required fields</h2>
-	Check if all the required fields have been entered. If not, the item is not saved to the database and Data Crow displays a message showing which fields should be filled in.
-	This option is enabled by default and I do not recommend turning it off because it could cause data inconsistencies. However, I do recommend that you define your own required fields
-	(<a href="fields.html">more about this)</a>
+	Check if all the required fields have been entered. If not, the item is not saved to the database and Data Crow 
+    displays a message showing which fields should be filled in.
+	This option is enabled by default and I do not recommend turning it off because as it could cause data inconsistencies. 
+    <br><br>You can define your own required fields in the <a href="../settings/fields.html">general field settings</a>.
 
-	<h2>Show tool tips for tables</h2>
-	Toggle the tool tips for values in the tables
+	<h2>Show tooltips for tables</h2>
+	Toggle the tooltips for values in the tables off or on (on by default).
 
 	<h2>Delete picture file after adding it to an item</h2>
-	Deletes the picture from your disk after it has been added to the Data Crow database</td>
+	Deletes the picture from your disk after it has been added to the Data Crow database. 
+    Off by default which is the recommended settings.</td>
 	
     <h2>Check for new versions on startup</h2>
-    Checks whether there is a new release of Data Crow available (on startup).</td>
+    Checks whether there is a new release of Data Crow available (on startup). On by default.</td>
 
   </body>
 </html>

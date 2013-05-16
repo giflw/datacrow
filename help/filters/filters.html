@@ -13,9 +13,9 @@
 
     <h1>Quick Filter bar</h1>
     
-    By default a quick filter bar is shown in the upper part of the main screen. <br>
+    By default a quick filter bar is shown in the upper part of the main screen.
 
-    <img src="./images/quick_filter_bar.png"><br><br>
+    <br><br><img src="./images/quick_filter_bar.png"><br><br>
 
     You can disable or enable the quick filter bar from the settings <a href="../general/menubar.html">menu</a> 
     (the "Toggle Quick Filter bar" option) or by pressing the F7 key.<br><br>
@@ -83,6 +83,71 @@
     which means the value should be exactly the same. The operators speak pretty much for themselves 
     ("is filled", "is empty", "contains", ..). Note that you can create multiple entries for one field. This allows for 
     filtering on one field using multiple types of operators (such as "is empty" combined with "or contains 'test').
+
+    <br><b>All Field Types</b>
+    <table>
+        <tr><td>-</td>
+            <td><b>Is Filled</b>
+                Field contains any value.</td></tr>
+        <tr><td>-</td>
+            <td><b>Is Empty</b>
+                Field contains no value.</td></tr>
+        <tr><td>-</td>
+            <td><b>Equal To</b>
+                Field value matches the value. Example: Data Crow Equal to "Data Crow".</td></tr>
+        <tr><td>-</td>
+            <td><b>Not Equal To</b>
+                Field value does not match the value. Example: Data Crow Not Equal to "Doom".</td></tr>                
+    </table>
+    
+    
+    <br><b>Text Fields</b>
+
+    <table>
+        <tr><td>-</td>
+            <td><b>Contains</b>
+                Field value contains the selected or entered value. Example: Data Crow contains "Cro".</td></tr>
+        <tr><td>-</td>
+            <td><b>Does not Contain</b>
+                Field value does not contain the value. Example: Data Crow does not contain "Bo".</td></tr>  
+        <tr><td>-</td>
+            <td><b>Starts with</b>
+                Field value starts with the value. Example: Data Crow Starts with "Data".</td></tr>                 
+        <tr><td>-</td>
+            <td><b>Ends with</b>
+                Field value ends with the value. Example: Data Crow Ends with "Crow".</td></tr>  
+    </table>   
+    
+    <br><b>Numeric Fields</b>
+
+    <table>    
+        <tr><td>-</td>
+        <td><b>Is Less Then</b>
+            Field value is smaller then the value. Example: 5 is Less Then "10".</td></tr>
+        <tr><td>-</td>
+        <td><b>Is Greater Then</b>
+            Field value is greater then the value. Example: 10 is Greater Then "5".</td></tr>                
+    </table>
+    
+    <<br><b>Date Fields</b>
+
+    <table>    
+        <tr><td>-</td>
+        <td><b>Days Before</b>
+            Field value is a selected number of days ago.</td></tr>
+        <tr><td>-</td>
+        <td><b>Days After</b>
+            Field value is a selected number of days in the future.</td></tr>
+        <tr><td>-</td>
+        <td><b>Today</b>
+            Field value is today.</td></tr>  
+        <tr><td>-</td>
+        <td><b>Months ago</b>
+            Field value is a selected number of days ago.</td></tr>
+        <tr><td>-</td>
+        <td><b>Years ago</b>
+            Field value is a selected number of years ago.</td></tr>                 
+    </table>    
     
     <h3>Value</h3>
     The way this field represents itself depends on the field you have selected. Either this will contain a list of fixed values or allows you to enter a value yourself (by typing).
@@ -96,12 +161,12 @@
     <h2>Sort</h2>
     In the sort tab you can define how the result should be sorted. This is explained in the <a href="../items/sort.html">Sort section</a> of this help.
     
-    <img src="./images/filterdialog-sort.jpg">
+    <br><br><img src="./images/filterdialog-sort.jpg">
     
     <h2>Managing filters</h2>
-    To manage filters you go to the "manage" tab. Here you can save a filter so it can be re-used. Saved filters will appear in the quick filter toolbar. <br><br>
+    To manage filters you go to the "manage" tab. Here you can save a filter so it can be re-used. Saved filters will appear in the quick filter toolbar.
     
-    <img src="./images/filterdialog-manage.jpg">
+    <br><br><img src="./images/filterdialog-manage.jpg">
     
 	<h3>Saving a new Filter</h3>
 	You can save a filter so it can be reused. In the manage tab there is an area called "Save filter". Enter a name for the 

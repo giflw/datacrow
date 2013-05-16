@@ -4,8 +4,9 @@
 
     <tocitem target="dc.general" text="General">
       <tocitem target="dc.general.introduction" text="Introduction to Data Crow"/>
-      <tocitem target="dc.general.starting" text="Starting Data Crow"/>  
+      <tocitem target="dc.general.wheretostart" text="Where to Start?"/>  
       <tocitem target="dc.general.defaultmodules" text="Default Modules"/>  
+      <tocitem target="dc.general.starting" text="Starting Data Crow"/>  
     </tocitem>      
 
     <tocitem target="dc.general" text="Work Area">
@@ -25,7 +26,6 @@
       <tocitem target="dc.items.sort" text="Sort"/>
       <tocitem target="dc.filters" text="Filter &amp; Search" />
       <tocitem target="dc.items.wizard" text="New Item Wizard"/>
-      <tocitem target="dc.items.inserting" text="Creating items"/>
       <tocitem target="dc.items.administration" text="Administration"/>
       <tocitem target="dc.items.itemform" text="Item Form"/>
       <tocitem target="dc.items.templates" text="Templates"/>
