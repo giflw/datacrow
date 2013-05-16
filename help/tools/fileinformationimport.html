@@ -14,54 +14,73 @@
     <b>Note:</b> This tool is not to be confused with the ability of Data Crow to import items from 
     text files. Use the <a href="../tools/item_import.html">Item Importer</a> to import items from a CSV, text or XML file.
 
-	<h1>Directories / Files</h1>
-	Here you can select the files to import. <br>
+	<h2>Directories / Files</h2>
+	Here you can select the files to import.
+
+	<br><br><img src="./images/fileimport_directoriesandfiles.png" /><br><br>
 	
-	<img src="./images/fileimport_directoriesandfiles.png" /><br><br>
+	Use the following options to include files for processing:<br><br>
 	
-	<ul>
-	<li><b>Select Directory</b> Select a directory in which the file importer should look for files. In case the recursive option is selected
-	the file importer will scan the selected directory for files as well as any sub folder of the directory. The Start button starts the file lookup.
-	Each found file is added to the files table.</li>
-	<li><b>Select a File</b> Select a specific file from which the information should be parsed. The selected file is added to the files table.</li>
-	</ul>
+	<table cellspacing="2" cellpadding="2" border="0">
+      <tr><td>-</td>
+          <td><b>Select Directory</b>. 
+          Select a directory in which the file importer should look for files. In case the recursive option is selected
+	      the file importer will scan the selected directory for files as well as any sub folder of the directory. The Start button starts the file lookup.
+	      Each found file is added to the files table.</td></tr>
+      <tr><td>-</td>
+          <td><b>Select a File</b>. 
+          Select a specific file from which the information should be parsed. The selected file is added to the files table.</td></tr>
+    </table><br>
 	
-	<br>
-	All found files are added to the files table.<br>
-	<img src="./images/fileimport_directoriesandfiles_files.png" /> <br><br>
+	All found files are added to the files table.
+	
+	<br><br><img src="./images/fileimport_directoriesandfiles_files.png" /> <br><br>
+	
 	Each of the checked files will be processed when the actual file import is started.	
 		
-	<h1>Settings</h1>
+	<h2>Settings</h2>
 
-    <ul>
-    <li><i>Container</i>
-         <br>Select the container for the imported items. A container can be anything, for example a CD suitcase.</li>
-    <li><i>Storage Medium</i>
-         <br>Optionally you can select the Storage Media type on which the to be imported data resides. 
-             The storage medium indicates on which type of media the item is stored (CD, DVD, etc.). </li>
-    </ul>
+    <h3>Media Information</h3>
 
-    <h2>Directory usage information</h2>
+    <table cellspacing="2" cellpadding="2" border="0">
+        <tr><td>-</td>
+            <td><b>Container</b>. 
+            Select the container for the imported items. A container can be anything, for example a CD suitcase.</td></tr>
+        <tr><td>-</td>
+            <td><b>Storage Medium</b>. 
+            Optionally you can select the Storage Media type on which the to be imported data resides. 
+            The storage medium indicates on which type of media the item is stored (CD, DVD, etc.).</td></tr>
+    </table> 
+
+    <h3>Directory usage information</h3>
     Allows directory information to be used for filling fields like the title, album name or artist name (these last two are only available for the music album module). The available options might vary depending on the module you are using.
-    <lu>
-    <li><i>Use directory name as title</i><br>Select the container for the imported items. A container can be anything, for example a CD suitcase.</li>
-    </lu>
 
-    <h2>Options for music files</h2>
+    <table cellspacing="2" cellpadding="2" border="0">
+        <tr><td>-</td>
+            <td><b>Use directory name as title</b>. 
+            Select the container for the imported items. A container can be anything, for example a CD suitcase.</td></tr>
+    </table> 
 
-    <lu>
-    <li><i>Do not use directory information</i>
-         <br>Only use the information from the music file itself, such as the tag information of an mp3.</li>
-    <li><i>Use directory name as album name</i>
-         <br>The directory in which the music file resides has the album name (example ..\..\Abba Gold).</li>
-    <li><i>Use directory name as artist name</i>
-         <br>The directory in which the music file resides has the artist name (example ..\..\Abba).</li>
-    <li><i>Use directory name as artist name and its sub-directory as album name</i>
-         <br>The directory in which the music file resides has the artist name and its sub-directory has the album name
-             (example ..\..\Abba\Abba Gold).</li>
-    </lu>
-    
-    <h2>Saving items</h2>
+    <br><b>Options for Music Files</b><br>
+    The following options only apply for music files (in the Music Album module).<br><br>
+
+    <table cellspacing="2" cellpadding="2" border="0">
+        <tr><td>-</td>
+            <td><b>Do not use directory information</b>. 
+            Only use the information from the music file itself, such as the tag information of an mp3.</td></tr>
+        <tr><td>-</td>
+            <td><b>Use directory name as album name</b>. 
+            The directory in which the music file resides has the album name (example ..\..\Abba Gold).</td></tr>    
+        <tr><td>-</td>
+            <td><b>Use directory name as artist name</b>. 
+            The directory in which the music file resides has the artist name (example ..\..\Abba).</td></tr>  
+        <tr><td>-</td>
+            <td><b>Use directory name as artist name and its sub-directory as album name</b>. 
+            The directory in which the music file resides has the artist name and its sub-directory has the album name
+             (example ..\..\Abba\Abba Gold).</td></tr>  
+    </table> 
+
+    <h3>Saving items</h3>
     You can choose to save items directly into the database instead of adding them first to the new items tab. 
     Using this option (save directly; bypass the new items tab) reduces the memory needed by the importer. 
 
@@ -69,30 +88,39 @@
     
     When the directory usage has been de-activated in the settings panel, Data Crow will try to create the title from the filename. As you can imagine
     this requires some cleaning. In order to get better results you can specify words to be removed from the filename and &#47; or use a regex pattern. 
+    
+    <br><br><img src="./images/fileimport_titlecleaning.png" /><br><br>
+    
     Data Crow will first remove the defined words and then apply the regex pattern.  
 
-	<h2>Remove the following words from the title</h2>
+	<h3>Remove the following words</h3>
 	The import tries to get the title from the filename if the information cannot be parsed from the file itself. Here you can enter words which should be removed when transforming the filename into a title. 
 	The words are matched regardless if they are upper or lower case.  
 
-    <h2>Apply the following regex pattern</h2>
+    <h3>Apply the following regex pattern</h3>
     A regex pattern is a sort of scripting language which can be used to parse information. Matched words or characters are removed.
 
-	<h1>Online Search</h1>
-	This panel will only appear if the module supports the use of online services. An online service can be used to retrieve additional information such as covers. You can decide whether you want to use an online service by checking the "Use online service" box. If selected you can specify the online service to be used..
+	<h2>Online Search</h2>
+	This panel will only appear if the module supports the use of online services. 
+	
+	<br><br><img src="./images/fileimport_onlinesearch.png" /><br><br>
+	
+	An <a href="../onlinesearch/onlinesearch.html">online service</a> can be used to retrieve additional information such as covers. 
+	You can decide whether you want to use an online service by checking the "Use online service" box. 
+	If selected you can specify the online service to be used. The settings are best explained <a href="../onlinesearch/onlinesearch.html">here</a>.
 
-	<h2>Use Online Service Settings to retrieve missing information</h2>
-	This panel will only appear if the module supports the use of online services. These settings correspond to the settings as found in a normal online search. Please read <a href="../onlinesearch/onlinesearch.html">here</a> for more information.
-
-	<h1>Local Art</h1>
+	<h2>Local Art</h2>
 	Local art are pictures, stored on the storage medium, which belong to the imported item.
+	
+	<br><br><img src="./images/fileimport_localart.png" /><br><br>
+	
 	Instead of relying on Data Crow to find the images on the internet it can be preferable to use these 
 	local files.  
 	
-	<h2>Recursive directory search</h2>
+	<h3>Recursive directory search</h3>
 	Allow local art to be found in one of the sub directories of the currently imported item.
 	
-	<h2>Search for art using keywords</h2>
+	<h3>Search for art using keywords</h3>
 	Specify the keywords which a picture's filename should contain for it to be considered local art. 
 	The keywords have to be entered comma separated.
 

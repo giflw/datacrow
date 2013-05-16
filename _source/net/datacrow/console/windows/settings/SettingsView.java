@@ -210,7 +210,7 @@ public class SettingsView extends DcDialog implements ActionListener {
     }
 
     private void buildView() {
-        setResizable(true);
+        setResizable(false);
 
         panelInfo = new InformationPanel();
         panelInfo.setMinimumSize(new Dimension(700, 380));

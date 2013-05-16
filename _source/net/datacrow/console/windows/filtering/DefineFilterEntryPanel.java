@@ -189,7 +189,9 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
         
         DcField field = (DcField) comboFields.getSelectedItem();
         
-        if (field != null && field.getValueType() == DcRepository.ValueTypes._DATE) {
+        if (field != null && 
+                (field.getValueType() == DcRepository.ValueTypes._DATE ||
+                 field.getValueType() == DcRepository.ValueTypes._DATETIME)) {
         
             boolean changed = false;
             if (    (operator == Operator.DAYS_AFTER ||
@@ -197,7 +199,7 @@ public class DefineFilterEntryPanel extends JPanel implements MouseListener, Act
                      operator == Operator.MONTHS_AGO ||
                      operator == Operator.YEARS_AGO)) {
              
-                if (c != null) panelInput.remove(c);
+            if (c != null) panelInput.remove(c);
                 c = ComponentFactory.getNumberField();
                 changed = true;
             } else if (c instanceof DcNumberField) {

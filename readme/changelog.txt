@@ -10,11 +10,15 @@ Data Crow 3.9.27  [Released on May XX, 2013]  [testing: high]  [target: producti
 - Loan shows incorrect period in case no due date has been set.
 - Loan text shows "item is due on null" in case the due date is empty.
 - Size of the help screen was not remembered.
+- Resizing the settings view caused the application to crash.
+- Date operators for the filter were not correct for dates.
 
 [Changed]
 - I have made a lot of improvements to the help text (F1). I have added links in there,
   pointing to the detailed help text where necessary, have added a lot of additional 
   information in general, etc.
+- Removed the filter operator 'Equal' and 'Not Equal To' for multi-reference fields;
+  already covered with contains and does not contain.
 
 
 -----------------------------------------------------------------------------------------
