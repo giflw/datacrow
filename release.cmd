@@ -15,7 +15,6 @@ call build.bat
 cd help
 call create_index.bat
 cd ..
-pause
 del installer\*.jar
 del installer\*.exe
 cd ..\services
@@ -32,7 +31,6 @@ rd logo_design /S /Q
 rd documentation /S /Q
 chmod -R +r+w ./*.*
 call build.bat
-call build-javadoc.bat
 cd installer
 call compile_installer.bat
 call compile_webapp_installer.bat
@@ -49,8 +47,6 @@ rd _classes /S /Q
 rd temp /S /Q
 cd ..
 7z a -tZip datacrow_3_9_26_source .\datacrow
-7z a -tZip datacrow_3_9_26_javadoc .\javadoc
-rd javadoc /S /Q
 cd datacrow
 call build.bat
 rd _classes /S /Q

@@ -2,10 +2,10 @@
 
 <shortcuts>
 
-  <skipIfNotSupported />
+  <programGroup defaultName="Data Crow" location="applications"/>
 
-  <programGroup defaultName="data crow" location="applications"/>
-
+  <skipIfNotSupported/>
+               
   <shortcut
      name="Data Crow"
      programGroup="yes"
@@ -18,8 +18,8 @@
      commandLine=""
      description="Data Crow"
      iconFile="$INSTALL_PATH\icons\datacrow.ico"
+     initialState="normal"
      iconIndex="0">
-     <createForPack name="Core"/>
    </shortcut>
    
 </shortcuts>

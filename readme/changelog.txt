@@ -1,10 +1,11 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.9.27  [Released on May XX, 2013]  [testing: high]  [target: production]
+Data Crow 3.9.27  [Released on May 18 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
+- No ShortCut created by the installer for Windows 64bit version.
 - The log file is created initially in an incorrect location.
-- Create multiple not working for any non track modules.
+- Create multiple not working for any non music track modules.
 - Issue where images are not always imported for items part of the imported main module.
 - Container sometimes can't be saved.
 - Loan shows incorrect period in case no due date has been set.
@@ -16,7 +17,8 @@ Data Crow 3.9.27  [Released on May XX, 2013]  [testing: high]  [target: producti
 [Changed]
 - I have made a lot of improvements to the help text (F1). I have added links in there,
   pointing to the detailed help text where necessary, have added a lot of additional 
-  information in general, etc.
+  information in general, screenshots, etc. This was 24+ hours of work, so you better 
+  read all of it! ;-)
 - Removed the filter operator 'Equal' and 'Not Equal To' for multi-reference fields;
   already covered with contains and does not contain.
 

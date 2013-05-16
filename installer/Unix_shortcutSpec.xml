@@ -4,6 +4,8 @@
 
   <programGroup defaultName="Data Crow" location="applications"/>
 
+  <skipIfNotSupported/>
+
   <shortcut
      name="Data Crow"
      programGroup="yes"
@@ -22,7 +24,6 @@
      terminal="true"
      KdeSubstUID="false"
      initialState="normal">   
-     <createForPack name="Core"/>     
    </shortcut>
    
 </shortcuts>
