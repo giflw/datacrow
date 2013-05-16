@@ -67,14 +67,14 @@
       <tocitem target="dc.settings.fields" text="General Field Settings"/>
       <tocitem target="dc.settings.quickview" text="Quick View"/>
       <tocitem target="dc.settings.webfields" text="Web Field Settings"/>
-      <tocitem target="dc.settings.laf" text="Look &amp; Feel"/>
       <tocitem target="dc.settings.itemformsettings" text="Item Form Settings"/>
+      <tocitem target="dc.settings.laf" text="Look &amp; Feel"/>
+      <tocitem target="dc.tools.resourceeditor" text="Resource Editor" />
     </tocitem> 
 
     <tocitem target="dc.tools" text="Tools">
       <tocitem target="dc.tools.backup_restore" text="Backup &amp; Restore" />
       <tocitem target="dc.tools.databaseeditor" text="Database Editor"/>
-      <tocitem target="dc.tools.resourceeditor" text="Resource Editor" />
       <tocitem target="dc.tools" text="Updating Items">
         <tocitem target="dc.tools.massupdate" text="Mass Update"/>
         <tocitem target="dc.tools.titlerewriter" text="Title Rewriting" />

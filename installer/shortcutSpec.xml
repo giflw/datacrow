@@ -22,19 +22,4 @@
      <createForPack name="Core"/>
    </shortcut>
    
-   <shortcut
-     name="Uninstaller"
-     programGroup="yes"
-     desktop="no"
-     applications="no"
-     startMenu="no"
-     startup="no"
-     iconFile="$INSTALL_PATH/icons/uninstall.ico"
-     target="$INSTALL_PATH\Uninstaller\uninstaller.jar"
-     commandLine=""
-     description="Data Crow uninstaller">
-     
-     <createForPack name="Core" />
-   </shortcut>   
-   
 </shortcuts>
