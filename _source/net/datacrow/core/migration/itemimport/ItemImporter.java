@@ -98,21 +98,26 @@ public abstract class ItemImporter extends ItemMigrater {
     }
     
     private File getImagePath(String s) {
-        String value = s; 
+        
+        String value = s;
         value = value.startsWith("file://") ? value.substring("file://".length()) : value;
+        value = value.replaceAll("\\\\" , "/"); 
+
         File file = new File(value); 
-        file = file.exists() ? file : new File(DataCrow.installationDir, value);
+        file = file.exists() ? file : new File(DataCrow.userDir, value);
         
         if (!file.exists()) {
+            
             // maybe the path is relative ?
             String importName = getFile().getName();
             importName = importName.lastIndexOf(".") > -1 ?  importName.substring(0, importName.lastIndexOf(".")) : importName; 
             file = new File(getFile().getParent(), importName + "_images/" + file.getName());    
-            
+
             if (!file.exists())
-                file = new File(DataCrow.installationDir , value);
+                file = new File(DataCrow.userDir , value);
             
         }
+
         return file;
     }
 

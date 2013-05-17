@@ -1,6 +1,7 @@
 -----------------------------------------------------------------------------------------
 Data Crow 3.9.27  [Released on May 18 2013]  [testing: high]  [target: production]
 -----------------------------------------------------------------------------------------
+Thanks mrpenguin007 for the updated German translation!
 
 [Fixed]
 - No ShortCut created by the installer for Windows 64bit version.
@@ -17,12 +18,15 @@ Data Crow 3.9.27  [Released on May 18 2013]  [testing: high]  [target: productio
   works correctly, case-sensitive. 
 - The horizontal setting for the Quick Fields Setting did only work when working in the
   English language.
+- Picture not shown on the Data Crow item after starting Data Crow for the very first 
+  time on Linux systems.
 
 [Changed]
 - I have made a lot of improvements to the help text (F1). I have added links in there,
   pointing to the detailed help text where necessary, have added a lot of additional 
   information in general, screenshots, etc. This was 24+ hours of work, so you better 
-  read all of it! ;-)
+  read all of it!
+- Updated the German Translation. See http://sourceforge.net/projects/inventarverwalt/
 - Removed the filter operator 'Equal' and 'Not Equal To' for multi-reference fields;
   already covered with contains and does not contain.
 - The Item Importer now has a setting to disable the item merging.
