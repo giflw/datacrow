@@ -262,7 +262,9 @@ public class DataFilter {
                 int valueType = field.getValueType();
                 if (valueType == DcRepository.ValueTypes._BOOLEAN) {
                     value = Boolean.valueOf(sValue);
-                } else if (valueType == DcRepository.ValueTypes._DATE) {
+                } else if (
+                        valueType == DcRepository.ValueTypes._DATE ||
+                        valueType == DcRepository.ValueTypes._DATETIME) {
                     value = sdf.parse(sValue);
                 } else if (valueType == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     

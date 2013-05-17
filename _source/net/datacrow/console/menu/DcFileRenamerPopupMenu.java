@@ -100,6 +100,7 @@ public class DcFileRenamerPopupMenu extends DcPopupMenu   {
         return field.isEnabled() && 
                vt != DcRepository.ValueTypes._BLOB &&
                vt != DcRepository.ValueTypes._DATE &&
+               vt != DcRepository.ValueTypes._DATETIME &&
                vt != DcRepository.ValueTypes._IMAGEICON &&
                vt != DcRepository.ValueTypes._PICTURE &&
                ft != ComponentFactory._LONGTEXTFIELD;

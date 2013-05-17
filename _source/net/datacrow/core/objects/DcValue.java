@@ -227,7 +227,9 @@ public class DcValue implements Serializable {
                         s.substring(0, field.getMaximumLength()) : s;
 
                     setValueNative(s, field);         
-                } else if (field.getValueType() == DcRepository.ValueTypes._DATE) {
+                } else if (
+                        field.getValueType() == DcRepository.ValueTypes._DATE ||
+                        field.getValueType() == DcRepository.ValueTypes._DATETIME) {
                     if (o instanceof Date) {
                         setValueNative(o, field);
                     } else if (o instanceof String) {

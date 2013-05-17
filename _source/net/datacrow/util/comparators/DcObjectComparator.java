@@ -109,7 +109,10 @@ public class DcObjectComparator implements Comparator<DcObject> {
             
             return (int) (n1.longValue() - n2.longValue());
 
-        } else if (fld.getValueType() == DcRepository.ValueTypes._DATE) {
+        } else if (
+                fld.getValueType() == DcRepository.ValueTypes._DATE ||
+                fld.getValueType() == DcRepository.ValueTypes._DATETIME) {
+            
             Date d1 = (Date) o1;
             Date d2 = (Date) o2;
         

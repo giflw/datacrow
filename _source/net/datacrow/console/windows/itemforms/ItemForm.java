@@ -482,7 +482,9 @@ public class ItemForm extends DcFrame implements ActionListener {
         } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION || 
                   (!field.isUiOnly() && field.getValueType() != DcRepository.ValueTypes._PICTURE)) {
             
-            if (field.getValueType() == DcRepository.ValueTypes._DATE) {
+            if (field.getValueType() == DcRepository.ValueTypes._DATE ||
+                field.getValueType() == DcRepository.ValueTypes._DATETIME) {
+                
                 Date dateOld = (Date) dcoOrig.getValue(fieldIdx);
                 Date dateNew = (Date) o;
                 

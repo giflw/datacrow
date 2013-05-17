@@ -89,7 +89,8 @@ public class DcWebField extends DcSecured {
             type = _URLFIELD;
         } else if (getDcField().getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
             type = _MULTIRELATE;
-        } else if (getDcField().getValueType() == DcRepository.ValueTypes._DATE &&
+        } else if ((getDcField().getValueType() == DcRepository.ValueTypes._DATE ||
+                    getDcField().getValueType() == DcRepository.ValueTypes._DATETIME) &&
                    getDcField().getIndex() != DcObject._SYS_LOANDUEDATE) {
             type = _DATE;
         } else if (getDcField().getFieldType() == ComponentFactory._FILEFIELD ||

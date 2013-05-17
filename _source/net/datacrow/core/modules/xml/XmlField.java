@@ -162,6 +162,7 @@ public class XmlField extends XmlObject {
                     fieldType != ComponentFactory._REFERENCESFIELD &&
                    (getValueType() == DcRepository.ValueTypes._BOOLEAN || 
                     getValueType() == DcRepository.ValueTypes._DATE ||
+                    getValueType() == DcRepository.ValueTypes._DATETIME ||
                     getValueType() == DcRepository.ValueTypes._STRING ||
                     getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
                     getValueType() == DcRepository.ValueTypes._LONG ||

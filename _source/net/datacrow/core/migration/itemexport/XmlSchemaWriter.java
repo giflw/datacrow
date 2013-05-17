@@ -131,6 +131,7 @@ public class XmlSchemaWriter extends XmlBaseWriter {
             case DcRepository.ValueTypes._BOOLEAN :
                 type = "boolean";
                 break;
+            case DcRepository.ValueTypes._DATETIME :
             case DcRepository.ValueTypes._DATE :
                 type = "date";
                 break;

@@ -81,7 +81,9 @@ public class DeleteQuery extends Query {
                 for (DcField field : dco.getFields()) {
                     
                     isString = field.getValueType() == DcRepository.ValueTypes._STRING ||
+                               field.getValueType() == DcRepository.ValueTypes._DATETIME ||
                                field.getValueType() == DcRepository.ValueTypes._DATE;
+                    
                     if (    dco.isChanged(field.getIndex()) && 
                             !field.isUiOnly() && 
                             !Utilities.isEmpty(dco.getValue(field.getIndex()))) {
