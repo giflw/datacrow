@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 
 /**
@@ -126,6 +127,11 @@ public enum Operator {
     public static Collection<Operator> get(DcField field, boolean simple) {
         ArrayList<Operator> operators = new ArrayList<Operator>();
 
+        if (field.getIndex() == DcObject._SYS_LENDBY) {
+            operators.add(EQUAL_TO);
+            return operators;
+        }
+        
         if (    field.getValueType() != DcRepository.ValueTypes._PICTURE &&
                 field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
             operators.add(EQUAL_TO);
@@ -140,9 +146,11 @@ public enum Operator {
         if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
             operators.add(IS_EMPTY);
             operators.add(IS_FILLED);
+            
         } else if (
                 field.getValueType() == DcRepository.ValueTypes._DATE ||
                 field.getValueType() == DcRepository.ValueTypes._DATETIME) {
+            
         	operators.add(BEFORE);
             operators.add(AFTER);
             
@@ -161,13 +169,13 @@ public enum Operator {
             
             if (field.getValueType() != DcRepository.ValueTypes._LONG &&
             	field.getValueType() != DcRepository.ValueTypes._DATE && 
-            	field.getValueType() != DcRepository.ValueTypes._DATETIME) {
+            	field.getValueType() != DcRepository.ValueTypes._DATETIME &&
+            	field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) {
 
             	operators.add(0, CONTAINS);
 	            operators.add(1, DOES_NOT_CONTAIN);
 	            
-	            if (    field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION &&
-	                    field.getValueType() != DcRepository.ValueTypes._DCOBJECTREFERENCE) {
+	            if (field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
     	            operators.add(STARTS_WITH);
     	            operators.add(ENDS_WITH);
 	            }
