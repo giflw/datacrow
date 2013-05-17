@@ -344,7 +344,16 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             "",
                             "lblCharacterSet",
                             false,
-                            false));           
+                            false));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stImportMatchAndMerge,
+                            Boolean.TRUE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "lblMatchAndMerge",
+                            false,
+                            false)); 
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.Settings.stButtonHeight,
@@ -402,7 +411,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.Settings.stImportSeperator,
-                            "TAB",
+                            ",",
                             ComponentFactory._SHORTTEXTFIELD,
                             "",
                             "lblValueSeperator",

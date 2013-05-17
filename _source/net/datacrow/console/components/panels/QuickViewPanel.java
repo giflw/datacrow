@@ -367,7 +367,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
         
         if (dco.isEnabled(index)) {
             Font fText = DcSettings.getFont(DcRepository.Settings.stSystemFontNormal);
-            boolean horizontal = direction.equals(_DIRECTION_HORIZONTAL);
+            boolean horizontal = direction.equals(_DIRECTION_HORIZONTAL) || direction.equals("horizontal");
 
             if (!Utilities.isEmpty(dco.getValue(index))) {
                 table += "<tr><td>";

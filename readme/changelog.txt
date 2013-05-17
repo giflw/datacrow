@@ -5,7 +5,7 @@ Data Crow 3.9.27  [Released on May 18 2013]  [testing: high]  [target: productio
 [Fixed]
 - No ShortCut created by the installer for Windows 64bit version.
 - The log file is created initially in an incorrect location.
-- Create multiple not working for any non track modules.
+- Create multiple not working for any non music track modules.
 - Issue where images are not always imported for items part of the imported main module.
 - Container sometimes can't be saved.
 - Loan shows incorrect period in case no due date has been set.
@@ -13,13 +13,19 @@ Data Crow 3.9.27  [Released on May 18 2013]  [testing: high]  [target: productio
 - Size of the help screen was not remembered.
 - Resizing the settings view caused the application to crash.
 - Date operators for the filter were not correct for dates.
+- Passwords always needed to be entered in upper case after changing it. Now it
+  works correctly, case-sensitive. 
+- The horizontal setting for the Quick Fields Setting did only work when working in the
+  English language.
 
 [Changed]
 - I have made a lot of improvements to the help text (F1). I have added links in there,
   pointing to the detailed help text where necessary, have added a lot of additional 
-  information in general, etc.
+  information in general, screenshots, etc. This was 24+ hours of work, so you better 
+  read all of it! ;-)
 - Removed the filter operator 'Equal' and 'Not Equal To' for multi-reference fields;
   already covered with contains and does not contain.
+- The Item Importer now has a setting to disable the item merging.
 
 
 -----------------------------------------------------------------------------------------

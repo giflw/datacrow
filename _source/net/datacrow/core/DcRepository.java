@@ -168,6 +168,7 @@ public abstract class DcRepository {
         public static final String stFontRendering = "font_rendering";
         public static final String stImportCharacterSet = "import_character_set";
         public static final String stImportSeperator = "import_seperator";
+        public static final String stImportMatchAndMerge = "import_match_merge";
         public static final String stSortDialogSize = "sort_dialog_size";
         public static final String stGroupByDialogSize = "group_by_dialog_size";
         public static final String stLookAndFeel = "look_and_feel";

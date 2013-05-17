@@ -2,6 +2,7 @@ package net.datacrow.core.migration.itemimport;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Collection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,6 +29,13 @@ public class XmlImporter extends ItemImporter {
     
     public XmlImporter(int moduleIdx, int mode) throws Exception {
         super(moduleIdx, "XML", mode);
+    }
+    
+    @Override
+    public Collection<String> getSettingKeys() {
+        Collection<String> settingKeys = super.getSettingKeys();
+        settingKeys.add(DcRepository.Settings.stImportMatchAndMerge);
+        return settingKeys;
     }
     
     @Override

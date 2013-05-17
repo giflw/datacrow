@@ -52,7 +52,7 @@ public class CsvExporter extends ItemExporter {
         super(moduleIdx, "CSV", mode, false);
     }
 
-    private void writeBytes(String value, boolean addTab) throws IOException {
+    private void writeBytes(String value, boolean separator) throws IOException {
         String s = value;
         s = s.replaceAll("\t", "");
         if (!s.equals("\r\n")) {
@@ -60,7 +60,7 @@ public class CsvExporter extends ItemExporter {
             s = s.replaceAll("\n", " ");
         }
         
-        if (addTab)
+        if (separator)
             s = "\t" + s;
         
         bos.write(s.getBytes("UTF8"));

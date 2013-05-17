@@ -432,7 +432,7 @@ public class DatabaseManager {
             c = getAdminConnection();
             stmt = c.createStatement();
 
-            String sql = "ALTER USER " + user.getValue(User._A_LOGINNAME) + " SET PASSWORD " + password;
+            String sql = "ALTER USER " + user.getValue(User._A_LOGINNAME) + " SET PASSWORD '" + password + "'";
             stmt.execute(sql);
             
         } catch (SQLException se) {

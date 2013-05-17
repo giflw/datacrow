@@ -6,13 +6,14 @@ import java.awt.Insets;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.TaskPanel;
 import net.datacrow.console.wizards.WizardException;
+import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.migration.itemimport.IItemImporterClient;
 import net.datacrow.core.migration.itemimport.ItemImporter;
-import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.settings.DcSettings;
 
 import org.apache.log4j.Logger;
 
@@ -98,7 +99,8 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
     
     @Override
     public void notifyMessage(String msg) {
-        tp.addMessage(msg);
+        if (tp != null)
+            tp.addMessage(msg);
     }
 
     @Override
@@ -115,20 +117,20 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
         notifyMessage(DcResources.getText("msgItemsImported", String.valueOf(updated + created)));
         notifyMessage("\n");
         notifyMessage(DcResources.getText("msgImportFinished"));
-        
-        DcModule m = wizard.getModule();
-        if (m.getSearchView() != null) {
-            m.getSearchView().refresh();
-        }   
     }
 
     @Override
     public void notifyProcessed(DcObject item) {
+        // Always use this one. If an ID is defined we will use it.
         DcObject other = DataManager.getItem(item.getModule().getIndex(), item.getID());
-        other = other == null ? DataManager.getObjectForString(item.getModule().getIndex(), item.toString()) : other;
-        // Check if the item exists and if so, update the item with the found values. Else just create a new item.
-        // This is to make sure the order in which the files are processed (first software, then categories)
-        // is of no importance (!).
+        
+        if (DcSettings.getBoolean(DcRepository.Settings.stImportMatchAndMerge)) {
+            // Check if the item exists and if so, update the item with the found values. Else just create a new item.
+            // This is to make sure the order in which the files are processed (first software, then categories)
+            // is of no importance (!).
+            other = other == null ? DataManager.getObjectForString(item.getModule().getIndex(), item.toString()) : other;
+        }
+
         try {
             if (other != null) {
                 updated++;

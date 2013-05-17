@@ -7,6 +7,7 @@ import net.datacrow.console.wizards.IWizardPanel;
 import net.datacrow.console.wizards.Wizard;
 import net.datacrow.console.wizards.WizardException;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
@@ -41,6 +42,13 @@ public class ItemImporterWizard extends Wizard {
         if (definition != null && definition.getImporter() != null)
             definition.getImporter().cancel();
 
+        if (!isCancelled()) {
+            DcModule m = getModule();
+            if (m.getSearchView() != null) {
+                m.getSearchView().refresh();
+            }  
+        }
+        
         definition = null;
         close();
     }

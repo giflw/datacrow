@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.IComponent;
 import net.datacrow.console.wizards.WizardException;
@@ -53,14 +54,20 @@ public class ItemImporterDefinitionPanel extends ItemImporterWizardPanel {
 	        	c = setting.getUIComponent();
 	        	settings.put(key, (IComponent) c);
 	        	label = ComponentFactory.getLabel(setting.getLabelText());
-	
-	        	add(label, 
-	        	         Layout.getGBC( 0, y, 1, 1, 1.0, 1.0
-	                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-	                     new Insets( 0, 5, 5, 5), 0, 0));
-	            add(c,   Layout.getGBC( 1, y, 1, 1, 1.0, 1.0
-	                    ,GridBagConstraints.NORTHEAST, GridBagConstraints.HORIZONTAL,
-	                     new Insets( 0, 5, 5, 5), 0, 0));
+	        	
+	        	if (!(c instanceof DcCheckBox)) {
+    	        	add(label, 
+    	        	         Layout.getGBC( 0, y, 1, 1, 1.0, 1.0
+    	                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+    	                     new Insets( 0, 5, 5, 5), 0, 0));
+    	            add(c,   Layout.getGBC( 1, y, 1, 1, 1.0, 1.0
+    	                    ,GridBagConstraints.NORTHEAST, GridBagConstraints.HORIZONTAL,
+    	                     new Insets( 0, 5, 5, 5), 0, 0));
+	        	} else {
+                    add(c,   Layout.getGBC( 0, y, 2, 1, 1.0, 1.0
+                            ,GridBagConstraints.NORTHEAST, GridBagConstraints.HORIZONTAL,
+                             new Insets( 0, 5, 5, 5), 0, 0));	        	    
+	        	}
             	
 	            ((IComponent) c).setValue(setting.getValue());
 	             

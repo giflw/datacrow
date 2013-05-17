@@ -127,21 +127,29 @@ public class CSVReader {
                 if (nextLine == null)
                     break;
             }
+        	
+        	char c;
+        	String val;
             for (int i = 0; i < nextLine.length(); i++) {
 
-                char c = nextLine.charAt(i);
+                c = nextLine.charAt(i);
                 if (c == quotechar) {
                 	// the quote may end a quoted block, or escape another quote. do a 1-char lookahead:
-                    char next = nextLine.charAt(i+1);
-                	if( inQuotes && (nextLine.length() == i - 1 || next == '\n' || next == '\r' || separator.equals("" + next))) {
-                        inQuotes = false;
-                	} else if (!inQuotes && i == 0 || separator.equals("" + nextLine.charAt(i-1))) {
-                	    inQuotes = true;
-                	} else {
-                	    sb.append(c);
-                	}
+                    if (i == nextLine.length() -1) {
+                        if (!inQuotes)
+                            sb.append(c);
+                    } else {
+                        char next = nextLine.charAt(i+1);
+                    	if( inQuotes && (nextLine.length() == i - 1 || next == '\n' || next == '\r' || separator.equals("" + next))) {
+                            inQuotes = false;
+                    	} else if (!inQuotes && i == 0 || separator.equals("" + nextLine.charAt(i-1))) {
+                    	    inQuotes = true;
+                    	} else {
+                    	    sb.append(c);
+                    	}
+                    }
                 } else if (separator.equals("" + c) && !inQuotes) {
-                    String val = sb.toString();
+                    val = sb.toString();
                     tokensOnThisLine.add(val.startsWith("\"") ? val.substring(1, val.length()) : val);
                     sb = new StringBuffer(); // start work on next token
                 } else {

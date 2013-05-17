@@ -36,6 +36,7 @@ public class CsvImporter extends ItemImporter {
         Collection<String> settingKeys = super.getSettingKeys();
         settingKeys.add(DcRepository.Settings.stImportCharacterSet);
         settingKeys.add(DcRepository.Settings.stImportSeperator);
+        settingKeys.add(DcRepository.Settings.stImportMatchAndMerge);
         return settingKeys;
     }
     
