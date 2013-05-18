@@ -204,16 +204,16 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
 
         getContentPane().add(txtFilter,     Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 0, 0, 0), 0, 0));
+                 new Insets( 5, 5, 0, 5), 0, 0));
         getContentPane().add(scrollerLeft,  Layout.getGBC( 0, 2, 1, 1, 40.0, 40.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 0, 0, 0, 0), 0, 0));
+                 new Insets( 0, 5, 0, 5), 0, 0));
         getContentPane().add(scrollerRight, Layout.getGBC( 1, 2, 1, 1, 40.0, 40.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 0, 0, 0, 0), 0, 0));
+                 new Insets( 0, 5, 0, 5), 0, 0));
         getContentPane().add(panelActions,  Layout.getGBC( 0, 3, 2, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                 new Insets( 5, 0, 5, 0), 0, 0));
+                 new Insets( 5, 5, 5, 0), 0, 0));
     }
     
     @Override
