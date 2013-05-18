@@ -29,6 +29,7 @@
       <tocitem target="dc.items.administration" text="Administration"/>
       <tocitem target="dc.items.itemform" text="Item Form"/>
       <tocitem target="dc.items.itemform_property" text="Item Form for Properties"/>
+      <tocitem target="dc.items.itemform_multiref" text="Item Form Multiple Reference Field"/>
       <tocitem target="dc.items.templates" text="Templates"/>
     </tocitem>   
     

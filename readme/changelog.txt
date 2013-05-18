@@ -22,6 +22,7 @@ Thanks mrpenguin007 for the updated German translation!
   time on Linux systems.
 - "Is Filled" and "Is Empty" operators for filters on multi-reference fields were
   not correct.
+- Saving from the web client could go wrong. Fixed. 
 
 [Changed]
 - I have made a lot of improvements to the help text (F1). I have added links in there,
@@ -36,6 +37,8 @@ Thanks mrpenguin007 for the updated German translation!
   to the item form layout and adjust the field settings. This was the only part of 
   Data Crow where you can not make modifications.
 - Better initial settings for the item forms of the property modules.
+- Added a filter field to the property maintenance overviews.
+- Improvement made for multi-reference fields item selector
 
 
 -----------------------------------------------------------------------------------------

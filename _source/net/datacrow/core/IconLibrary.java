@@ -132,7 +132,9 @@ public abstract class IconLibrary {
     public static final DcImageIcon _icoTableView = new DcImageIcon(picPath + "viewtable.gif");
     public static final DcImageIcon _icoUnchecked = new DcImageIcon(picPath + "unchecked.gif");
     public static final DcImageIcon _icoChecked = new DcImageIcon(picPath + "checked.gif");
-    public static final DcImageIcon _icoArrowDownThin = new DcImageIcon(picPath + "arrow_down_thin.png");
+//    public static final DcImageIcon _icoArrowDownThin = new DcImageIcon(picPath + "arrow_down_thin.png");
+//    public static final DcImageIcon _icoArrowLeft = new DcImageIcon(picPath + "arrow_left.png");
+//    public static final DcImageIcon _icoArrowRight = new DcImageIcon(picPath + "arrow_right.png");
     public static final DcImageIcon _icoArrowTop = new DcImageIcon(picPath + "arrow_top.png");
     public static final DcImageIcon _icoArrowBottom = new DcImageIcon(picPath + "arrow_bottom.png");
     public static final DcImageIcon _icoArrowUp = new DcImageIcon(picPath + "arrow_up.png");

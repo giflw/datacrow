@@ -20,6 +20,8 @@
     <mapID target="dc.items.wizard" url="items/wizard.html"/>
     <mapID target="dc.items.itemform" url="items/itemform.html"/>
     <mapID target="dc.items.itemform_property" url="items/itemform_property.html"/>
+    <mapID target="dc.items.itemform_multiref" url="items/itemform_multireference.html"/>
+    
     <mapID target="dc.items.sort" url="items/sort.html"/>
     <mapID target="dc.items.administration" url="items/administration.html"/>
     

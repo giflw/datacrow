@@ -45,6 +45,7 @@ import javax.swing.table.TableColumn;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcButton;
 import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.renderers.SimpleValueTableCellRenderer;
 import net.datacrow.console.components.tables.DcTable;
@@ -74,6 +75,8 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         
         setTitle(DcModules.get(mappingModule.getReferencedModIdx()).getObjectNamePlural());
         buildDialog();
+        
+        setHelpIndex("dc.items.itemform_multiref");
         
         DcSimpleValue sv;
         DcObject reference;
@@ -152,6 +155,28 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         close();
     }
     
+    private void move(boolean rightToLeft) {
+        if (rightToLeft) {
+            int[] rows = tblSelectedItems.getSelectedRows();
+            for (int i = rows.length - 1; i < rows.length && i > -1; i--) {
+                DcSimpleValue sv = (DcSimpleValue) tblSelectedItems.getValueAt(rows[i], 0);
+                tblSelectedItems.getDcModel().removeRow(rows[i]);
+                tblAvailableItems.addRow(new Object[] {sv});
+                availableItems.add(sv);
+            }
+            tblSelectedItems.clearSelection();
+        } else {
+            int[] rows = tblAvailableItems.getSelectedRows();
+            for (int i = rows.length - 1; i < rows.length && i > -1; i--) {
+                DcSimpleValue sv = (DcSimpleValue) tblAvailableItems.getValueAt(rows[i], 0);
+                tblAvailableItems.getDcModel().removeRow(rows[i]);
+                tblSelectedItems.addRow(new Object[] {sv});
+                availableItems.remove(sv);
+            }
+            tblAvailableItems.clearSelection();
+        }        
+    }
+    
     @Override
     public void close() {
         DcSettings.set(DcRepository.Settings.stReferencesDialogSize, getSize());
@@ -161,6 +186,26 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
     private void buildDialog() {
         getContentPane().setLayout(Layout.getGBL());
         
+        JPanel panelbuttons = new JPanel();
+        panelbuttons.setLayout(Layout.getGBL());
+        
+        JButton btLeft = new DcButton();
+        JButton btRight = new DcButton();
+        btLeft.setText("<");
+        btRight.setText(">");
+        
+        btLeft.setActionCommand("toleft");
+        btRight.setActionCommand("toright");
+        btLeft.addActionListener(this);
+        btRight.addActionListener(this);
+        
+        panelbuttons.add(btRight, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 0, 0, 0, 0), 0, 0));
+        panelbuttons.add(btLeft,  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                new Insets( 0, 0, 0, 0), 0, 0));
+
         JTextField txtFilter = ComponentFactory.getShortTextField(255);
         txtFilter.addKeyListener(this);
 
@@ -202,16 +247,19 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
 
-        getContentPane().add(txtFilter,     Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
+        getContentPane().add(txtFilter,     Layout.getGBC( 0, 0, 3, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets( 5, 5, 0, 5), 0, 0));
-        getContentPane().add(scrollerLeft,  Layout.getGBC( 0, 2, 1, 1, 40.0, 40.0
+        getContentPane().add(scrollerLeft,  Layout.getGBC( 0, 1, 1, 1, 40.0, 40.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 5, 0, 5), 0, 0));
-        getContentPane().add(scrollerRight, Layout.getGBC( 1, 2, 1, 1, 40.0, 40.0
+        getContentPane().add(panelbuttons,  Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 0), 0, 0));
+        getContentPane().add(scrollerRight, Layout.getGBC( 2, 1, 1, 1, 40.0, 40.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets( 0, 5, 0, 5), 0, 0));
-        getContentPane().add(panelActions,  Layout.getGBC( 0, 3, 2, 1, 1.0, 1.0
+        getContentPane().add(panelActions,  Layout.getGBC( 0, 2, 3, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets( 5, 5, 5, 0), 0, 0));
     }
@@ -222,6 +270,10 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
             close();
         else if (ae.getActionCommand().equals("save"))
             save();
+        else if (ae.getActionCommand().equals("toright"))
+            move(false);        
+        else if (ae.getActionCommand().equals("toleft"))
+            move(true);        
     }
     
     @Override
@@ -270,19 +322,9 @@ public class DcReferencesDialog extends DcDialog implements ActionListener, KeyL
         public void mouseReleased(MouseEvent e) {
             if (e.getClickCount() == 2) {
                 if (direction == _LEFT) {
-                    int row = tblSelectedItems.getSelectedIndex();
-                    DcSimpleValue sv = (DcSimpleValue) tblSelectedItems.getValueAt(row, 0);
-                    tblSelectedItems.getDcModel().removeRow(row);
-                    tblAvailableItems.addRow(new Object[] {sv});
-                    availableItems.add(sv);
-                    tblSelectedItems.clearSelection();
+                    move(true);
                 } else {
-                    int row = tblAvailableItems.getSelectedIndex();
-                    DcSimpleValue sv = (DcSimpleValue) tblAvailableItems.getValueAt(row, 0);
-                    tblAvailableItems.getDcModel().removeRow(row);
-                    tblSelectedItems.addRow(new Object[] {sv});
-                    availableItems.remove(sv);
-                    tblAvailableItems.clearSelection();
+                    move(false);
                 }
             }  
         }
