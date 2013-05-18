@@ -182,7 +182,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
 
         // settings menu
         PluginHelper.add(menuSettings, "Settings");
-        PluginHelper.add(menuSettings, "FieldSettings");
+        PluginHelper.add(menuSettings, "FieldSettings", module.getIndex());
         menuSettings.addSeparator();
         
         if (!module.isAbstract())

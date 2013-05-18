@@ -55,7 +55,6 @@ import net.datacrow.core.objects.DcAssociate;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
@@ -74,9 +73,13 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
     private DefinitionPanel panelDefinitionsParent = null;
     private DefinitionPanel panelDefinitionsChild = null;
 
-    public FieldDefinitionsDialog() {
+    private DcModule module;
+    
+    public FieldDefinitionsDialog(DcModule module) {
         super(DataCrow.mainFrame);
 
+        this.module = module;
+        
         setHelpIndex("dc.settings.fields");
 
         buildDialog();
@@ -87,7 +90,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
 
     @Override
     public void close() {
-        Settings settings = DcModules.getCurrent().getSettings();
+        Settings settings = module.getSettings();
         settings.set(DcRepository.ModuleSettings.stFieldSettingsDialogSize,
                 getSize());
 
@@ -143,7 +146,6 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
 
         JTabbedPane tp = ComponentFactory.getTabbedPane();
 
-        DcModule module = DcModules.get(DcSettings.getInt(DcRepository.Settings.stModule));
         panelDefinitionsParent = new DefinitionPanel(module);
 
         tp.addTab(DcResources.getText("lblXFields", module.getLabel()),
@@ -164,7 +166,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
 
         pack();
 
-        Settings settings = DcModules.getCurrent().getSettings();
+        Settings settings = module.getSettings();
         Dimension dim = settings.getDimension(DcRepository.ModuleSettings.stFieldSettingsDialogSize);
         setSize(dim);
 

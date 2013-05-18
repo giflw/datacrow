@@ -596,7 +596,8 @@ public class DataCrow {
     private static void checkTabs() {
         for (DcModule module : DcModules.getAllModules()) {
             
-            if (module.getFieldDefinitions() == null ||!module.isTopModule()) continue;
+            if (module.getFieldDefinitions() == null ||  
+                    (!module.isTopModule() && module.getType() != DcModule._TYPE_PROPERTY_MODULE)) continue;
             
             Collection<String> tabs = new ArrayList<String>();
             for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {

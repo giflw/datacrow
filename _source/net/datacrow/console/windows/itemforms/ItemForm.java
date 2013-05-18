@@ -141,7 +141,10 @@ public class ItemForm extends DcFrame implements ActionListener {
         setIconImage(icon);
         this.applyTemplate =  applyTemplate && !update;
         
-        setHelpIndex("dc.items.itemform");
+        if (o.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE)
+            setHelpIndex("dc.items.itemform_property");
+        else 
+            setHelpIndex("dc.items.itemform");
         
         this.template = template;
         this.update = update;

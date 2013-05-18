@@ -46,6 +46,8 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcMenu;
+import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.menu.DcPropertyViewPopupMenu;
@@ -60,6 +62,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
+import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 import net.datacrow.core.wf.requests.Requests;
@@ -280,7 +283,10 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         //**********************************************************
         statusPanel = panel.getStatusPanel();
         
-        getContentPane().add(panel,         Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
+        if (DcModules.get(module).getType() == DcModule._TYPE_PROPERTY_MODULE)
+            setJMenuBar(new DcMinimalisticItemViewMenu(DcModules.get(module)));
+        
+        getContentPane().add(panel, Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0, 0, 0, 0), 0, 0));
         
@@ -294,7 +300,6 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         }
         
     }
-    
     
     public void initProgressBar(int maxValue) {
         panel.initProgressBar(maxValue);
@@ -420,5 +425,22 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             close();
         else if (e.getActionCommand().equals("createMultiple"))
             createMultiple();
+    }
+    
+    private class DcMinimalisticItemViewMenu extends DcMenuBar {
+        
+        private DcModule module;
+        
+        public DcMinimalisticItemViewMenu(DcModule module) {
+            this.module = module;
+            build();
+        }
+        
+        private void build() {
+            DcMenu menuSettings = ComponentFactory.getMenu(DcResources.getText("lblSettings"));
+            PluginHelper.add(menuSettings, "ItemFormSettings", module.getIndex());
+            PluginHelper.add(menuSettings, "FieldSettings", module.getIndex());
+            add(menuSettings);
+        }
     }
 }
