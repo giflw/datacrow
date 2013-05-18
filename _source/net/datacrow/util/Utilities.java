@@ -223,14 +223,21 @@ public class Utilities {
     public static Object getQueryValue(Object o, DcField field) {
         Object value = o;
         
+        // This first check does not make much sense but I honestly do not dare to remove it.. for now..
         if (Utilities.isEmpty(value) && (field.getModule() != DcModules._PERMISSION && field.getIndex() == Permission._B_FIELD))
+            value = null;
+        else if ("".equals(value))
             value = null;
         else if (value instanceof DcObject)
             value = ((DcObject) value).getID();
+        else if ((field.getValueType() == DcRepository.ValueTypes._DOUBLE) && value instanceof String)
+            value = Double.valueOf((String) value);
         else if ((field.getValueType() == DcRepository.ValueTypes._BIGINTEGER ||
                   field.getValueType() == DcRepository.ValueTypes._LONG) &&
                  value instanceof String)
             value = Long.valueOf((String) value);
+        else if (value instanceof DcObject)
+            value = ((DcObject) value).getID();        
 
         return value;
     }  

@@ -139,7 +139,10 @@ public abstract class Query {
                 ps.setObject(pos, value);
                 pos++;
             } catch (Exception e) {
-                logger.error("Could not set values [" + values + "] for " + ps, e);
+                logger.error("Could not set value [" + value + "] on position [" + pos + "] for " + ps, e);
+                try {ps.setObject(pos, null); pos++;} catch (Exception e2) {
+                    logger.error("Could not set [" + pos + "] to NULL (to correct error with value [" + value + "])", e2);
+                }
             }
         }
     }
