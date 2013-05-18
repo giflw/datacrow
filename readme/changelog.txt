@@ -20,6 +20,8 @@ Thanks mrpenguin007 for the updated German translation!
   English language.
 - Picture not shown on the Data Crow item after starting Data Crow for the very first 
   time on Linux systems.
+- "Is Filled" and "Is Empty" operators for filters on multi-reference fields were
+  not correct.
 
 [Changed]
 - I have made a lot of improvements to the help text (F1). I have added links in there,

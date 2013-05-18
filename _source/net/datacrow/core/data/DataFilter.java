@@ -671,7 +671,16 @@ public class DataFilter {
                 sql.append(" IN (SELECT OBJECTID FROM " + picModule.getTableName() + 
                            " WHERE " + picModule.getField(Picture._B_FIELD).getDatabaseFieldName() + 
                            " = '" + field.getDatabaseFieldName() + "')");
+            } else if ((operator == Operator.IS_EMPTY.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
+                       (operator == Operator.IS_FILLED.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION)) {
                 
+                if (operator == Operator.IS_EMPTY.getIndex()) 
+                    sql.append(" NOT");
+                
+                DcModule mapping = DcModules.get(DcModules.getMappingModIdx(entryModule.getIndex(), field.getReferenceIdx(), field.getIndex()));
+                sql.append(" IN (SELECT " + mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + 
+                                 " FROM " + mapping.getTableName() + 
+                                 " WHERE " + mapping.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = ID)");
             } else if ( operator == Operator.CONTAINS.getIndex() || 
                         operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
                        (operator == Operator.EQUAL_TO.getIndex() && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) ||
@@ -679,6 +688,7 @@ public class DataFilter {
 
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     if (operator == Operator.DOES_NOT_CONTAIN.getIndex() ||
+                        operator == Operator.IS_EMPTY.getIndex() ||
                         operator == Operator.NOT_EQUAL_TO.getIndex()) 
                         sql.append(" NOT");
 
