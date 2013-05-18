@@ -68,7 +68,6 @@ import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 import net.datacrow.core.wf.requests.Requests;
-import net.datacrow.settings.DcApplicationSettings;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
 import net.datacrow.util.DataTask;
