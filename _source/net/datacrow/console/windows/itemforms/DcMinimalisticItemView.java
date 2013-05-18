@@ -32,8 +32,11 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,6 +44,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
@@ -50,7 +54,10 @@ import net.datacrow.console.components.DcMenu;
 import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcPanel;
+import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.lists.DcObjectList;
+import net.datacrow.console.components.lists.elements.DcListElement;
+import net.datacrow.console.components.lists.elements.DcObjectListElement;
 import net.datacrow.console.menu.DcPropertyViewPopupMenu;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.CreateMultipleItemsDialog;
@@ -73,7 +80,7 @@ import net.datacrow.settings.Settings;
 import net.datacrow.util.DataTask;
 import net.datacrow.util.DcSwingUtilities;
 
-public class DcMinimalisticItemView extends DcFrame implements ActionListener, MouseListener, ISimpleItemView {
+public class DcMinimalisticItemView extends DcFrame implements ActionListener, MouseListener, ISimpleItemView, KeyListener {
 
     private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     
@@ -93,6 +100,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     protected DcObjectList list;
     protected int module;
 
+    private List<DcListElement> all = new ArrayList<DcListElement>();
+    
     private DcPanel panel = new DcPanel();
     
     public DcMinimalisticItemView(int module, boolean readonly) {
@@ -156,8 +165,11 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     }    
     
     public void setObjects(List<DcObject> objects) {
+        all.clear();
         list.clear();
         list.add(objects);
+        
+        all.addAll(list.getElements());
     }
     
     public Collection<DcObject> getItems() {
@@ -189,6 +201,10 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         if (task != null)
             task.cancel();
         
+        if (all != null)
+            all.clear();
+        
+        all = null;
         task = null;
         scroller = null;
         panelActions = null;
@@ -208,6 +224,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         DataFilter filter = new DataFilter(module);
         filter.setOrder(new DcField[] {dco.getField(DcModules.get(module).getDefaultSortFieldIdx())});
         list.add(DataManager.getKeys(filter));
+        
+        all.addAll(list.getElements());
     }    
 
     @Override
@@ -292,15 +310,23 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         if (DcModules.get(module).getType() == DcModule._TYPE_PROPERTY_MODULE)
             setJMenuBar(new DcMinimalisticItemViewMenu(DcModules.get(module), this));
         
-        getContentPane().add(panel, Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
+        JTextField txtFilter = ComponentFactory.getShortTextField(255);
+        txtFilter.addKeyListener(this);        
+        
+        getContentPane().add(txtFilter, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 5, 0, 5), 0, 0));
+        
+        
+        getContentPane().add(panel, Layout.getGBC( 0, 1, 1, 1, 80.0, 80.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0, 0, 0, 0), 0, 0));
         
         if (!readonly) {
-            getContentPane().add(panelActions,  Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+            getContentPane().add(panelActions,  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                      new Insets(0, 0, 0, 0), 0, 0));
-            getContentPane().add(statusPanel,  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+            getContentPane().add(statusPanel,  Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(0, 0, 0, 0), 0, 0));
         }
@@ -325,7 +351,34 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 DcSwingUtilities.displayWarningMessage("msgSelectItemToDel");
             }
         }
-    }     
+    }  
+    
+    @Override
+    public void keyPressed(KeyEvent e) {}
+    @Override
+    public void keyTyped(KeyEvent e) {}    
+    
+    @Override
+    public void keyReleased(KeyEvent e) {
+        DcShortTextField txtFilter = (DcShortTextField) e.getSource();
+        String filter = txtFilter.getText();
+        
+        if (filter.trim().length() == 0) {
+            list.clear();
+            list.addElements(all);
+        } else {
+            List<DcListElement> filtered = new ArrayList<DcListElement>();
+            for (DcListElement el : all) {
+                DcObjectListElement element = (DcObjectListElement) el;
+                if (element.getDcObject().toString().toLowerCase().startsWith(filter.toLowerCase()))
+                    filtered.add(el);
+            }
+        
+            list.clear();
+            
+            list.addElements(filtered);
+        }
+    }    
     
     protected class DeletingThread extends DataTask {
 
