@@ -307,16 +307,16 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         //**********************************************************
         statusPanel = panel.getStatusPanel();
         
-        if (DcModules.get(module).getType() == DcModule._TYPE_PROPERTY_MODULE)
+        if (DcModules.get(module).getType() == DcModule._TYPE_PROPERTY_MODULE) {
             setJMenuBar(new DcMinimalisticItemViewMenu(DcModules.get(module), this));
         
-        JTextField txtFilter = ComponentFactory.getShortTextField(255);
-        txtFilter.addKeyListener(this);        
-        
-        getContentPane().add(txtFilter, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 5, 0, 5), 0, 0));
-        
+            JTextField txtFilter = ComponentFactory.getShortTextField(255);
+            txtFilter.addKeyListener(this);        
+    
+            getContentPane().add(txtFilter, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                     new Insets( 0, 5, 0, 5), 0, 0));
+        }
         
         getContentPane().add(panel, Layout.getGBC( 0, 1, 1, 1, 80.0, 80.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

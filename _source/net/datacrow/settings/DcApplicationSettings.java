@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
  */
 public class DcApplicationSettings extends net.datacrow.settings.Settings {
     
-    private static Logger logger = Logger.getLogger(Settings.class.getName());
+    private static Logger logger = Logger.getLogger(DcApplicationSettings.class.getName());
     
     public static final String _General = "lblGroupGeneral";
     public static final String _FileHashing = "lblFileHashing";

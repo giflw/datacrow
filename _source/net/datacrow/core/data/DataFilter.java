@@ -510,7 +510,7 @@ public class DataFilter {
     	return sql.toString();
     }
     
-    public String toSQL(int[] fields, boolean order, boolean includeMod) {
+    public String toSQL(int[] fields, boolean orderResults, boolean includeMod) {
         DcField field;
         
         DcModule m = DcModules.get(getModule());
@@ -575,7 +575,8 @@ public class DataFilter {
 			sql.append(" FROM ");
 			sql.append(module.getTableName());
 
-			if (order) addOrderByClause(sql);
+			if (orderResults)
+			    addOrderByClause(sql);
 			
 	        addEntries(sql, module);
 
@@ -585,7 +586,7 @@ public class DataFilter {
         if (m.isAbstract()) sql.append(") media ");
 	        
         // add a join to the reference table part of the sort
-        if (order) addOrderBy(sql);
+        if (orderResults) addOrderBy(sql);
         return sql.toString();
     }
     
