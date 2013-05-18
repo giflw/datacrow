@@ -48,6 +48,7 @@ import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcMenu;
 import net.datacrow.console.components.DcMenuBar;
+import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.menu.DcPropertyViewPopupMenu;
@@ -55,6 +56,7 @@ import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.CreateMultipleItemsDialog;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
@@ -66,6 +68,7 @@ import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
 import net.datacrow.core.wf.requests.Requests;
+import net.datacrow.settings.DcApplicationSettings;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
 import net.datacrow.util.DataTask;
@@ -124,10 +127,14 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     }
     
     public void open() {
+        open(true);
+    }
+    
+    public void open(boolean edit) {
         DcObject dco = list.getSelectedItem();
         if (dco != null) {
             dco.markAsUnchanged();
-            DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(false, true, dco, this);
+            DcMinimalisticItemForm itemForm = new DcMinimalisticItemForm(!edit, true, dco, this);
             itemForm.setVisible(true);
         }
     }
@@ -284,7 +291,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         statusPanel = panel.getStatusPanel();
         
         if (DcModules.get(module).getType() == DcModule._TYPE_PROPERTY_MODULE)
-            setJMenuBar(new DcMinimalisticItemViewMenu(DcModules.get(module)));
+            setJMenuBar(new DcMinimalisticItemViewMenu(DcModules.get(module), this));
         
         getContentPane().add(panel, Layout.getGBC( 0, 0, 1, 1, 50.0, 50.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
@@ -425,18 +432,52 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             close();
         else if (e.getActionCommand().equals("createMultiple"))
             createMultiple();
+        else if (e.getActionCommand().equals("delete"))
+            delete();
+        else if (e.getActionCommand().equals("open_readonly"))
+            open(false);        
+        else if (e.getActionCommand().equals("open_edit"))
+            open(true);
     }
     
     private class DcMinimalisticItemViewMenu extends DcMenuBar {
         
         private DcModule module;
         
-        public DcMinimalisticItemViewMenu(DcModule module) {
+        public DcMinimalisticItemViewMenu(DcModule module, DcMinimalisticItemView parent) {
             this.module = module;
-            build();
+            build(parent);
         }
         
-        private void build() {
+        private void build(DcMinimalisticItemView parent) {
+            DcMenu menuEdit = ComponentFactory.getMenu(DcResources.getText("lblEdit"));
+            
+            DcMenuItem miOpen = new DcMenuItem(DcResources.getText("lblOpen"));
+            DcMenuItem miEdit = new DcMenuItem(DcResources.getText("lblEdit"));
+            DcMenuItem miAdd = new DcMenuItem(DcResources.getText("lblNewItem", ""));
+            DcMenuItem miDelete = new DcMenuItem(DcResources.getText("lblDelete"));
+            
+            miOpen.addActionListener(parent);
+            miEdit.addActionListener(parent);
+            miAdd.addActionListener(parent);
+            miDelete.addActionListener(parent);
+            
+            miOpen.setActionCommand("open_readonly");
+            miEdit.setActionCommand("open_edit");
+            miAdd.setActionCommand("createNew");
+            miDelete.setActionCommand("delete");
+            
+            miOpen.setIcon(IconLibrary._icoOpen);
+            miEdit.setIcon(IconLibrary._icoOpen);
+            miAdd.setIcon(IconLibrary._icoAdd);
+            miDelete.setIcon(IconLibrary._icoDelete);
+            
+            menuEdit.add(miOpen);
+            menuEdit.add(miEdit);
+            menuEdit.add(miAdd);
+            menuEdit.add(miDelete);
+            add(menuEdit);
+            
             DcMenu menuSettings = ComponentFactory.getMenu(DcResources.getText("lblSettings"));
             PluginHelper.add(menuSettings, "ItemFormSettings", module.getIndex());
             PluginHelper.add(menuSettings, "FieldSettings", module.getIndex());
