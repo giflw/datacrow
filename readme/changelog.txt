@@ -30,6 +30,10 @@ Thanks mrpenguin007 for the updated German translation!
 - Removed the filter operator 'Equal' and 'Not Equal To' for multi-reference fields;
   already covered with contains and does not contain.
 - The Item Importer now has a setting to disable the item merging.
+- I have added a Settings menu to the property item views. From here you can make changes
+  to the item form layout and adjust the field settings. This was the only part of 
+  Data Crow where you can not make modifications.
+- Better initial settings for the item forms of the property modules.
 
 
 -----------------------------------------------------------------------------------------
