@@ -116,12 +116,14 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
     
     public void setSelectedFields(int[] fields) {
         reset();
-        DcField field;
-        for (int i = 0; i < fields.length; i++) {
-            field = module.getField(fields[i]);
-            if (field != null) {
-                listLeft.remove(field);
-                listRight.add(field);
+        for (DcField field : module.getFields()) {
+            
+            for (int i = 0; i < fields.length; i++) {
+                if (field.getIndex() == fields[i]) {
+                    listLeft.remove(field);
+                    listRight.add(field);
+                    break;
+                }
             }
         }
     }

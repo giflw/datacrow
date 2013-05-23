@@ -93,6 +93,7 @@ public class UpdateQuery extends Query {
             String sql;
             String s;
             for (DcField field : dco.getFields()) {
+
                 // Make sure only changed fields are updated
                 if (!dco.isChanged(field.getIndex()))
                     continue;

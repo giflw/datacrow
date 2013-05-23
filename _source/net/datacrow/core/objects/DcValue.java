@@ -124,10 +124,14 @@ public class DcValue implements Serializable {
 	        			newImage.getIconHeight() != 0 && 
 	        			newImage.getIconWidth() != 0) {
 	        		
-	        	    if (currentImage != null) currentImage.flush();
+	        	    if (currentImage != null) 
+	        	        currentImage.flush();
+	        	    else 
+	        	        picture.setNew(true);
 	        	    
 	                picture.setValue(Picture._D_IMAGE, newImage);
-                	picture.isEdited(true);
+	                picture.isEdited(true);
+	                
                     setValueNative(picture, field);
 	            } else if (currentImage != null) {
 	                currentImage.flush();

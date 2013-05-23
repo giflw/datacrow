@@ -7,6 +7,7 @@ Data Crow 3.10.1  [Released on May 23 2013]  [testing: moderate]  [target: produ
 - Saving the field settings for property modules also changes the quick view settings of
   the currently active module
 - Table view shows the same column multiple times.
+- Mass Update does not save images.
 
 
 -----------------------------------------------------------------------------------------
