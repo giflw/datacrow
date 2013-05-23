@@ -69,6 +69,15 @@ public class WebFieldDefinition extends Definition {
     public boolean isQuickSearch() {
         return quickSearch;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof WebFieldDefinition) {
+            WebFieldDefinition def = (WebFieldDefinition) o;
+            return def.getField() == getField();
+        }
+        return false;
+    }    
 
     @Override
     public String toSettingValue() {

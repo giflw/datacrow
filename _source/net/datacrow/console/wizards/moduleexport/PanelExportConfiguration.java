@@ -97,12 +97,12 @@ public class PanelExportConfiguration extends ModuleExportWizardPanel {
         group = new SettingsGroup("", "");
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_DATA_MAIN_MODULE, Boolean.FALSE, ComponentFactory._CHECKBOX,
-                "",  DcResources.getText("lblExportModuleItemsMain"), false, false));
+                "",  DcResources.getText("lblExportModuleItemsMain"), false, false, -1));
         group.add(new Setting(DcRepository.ValueTypes._BOOLEAN,
         		PanelExportConfiguration._EXPORT_DATA_RELATED_MODULES, Boolean.TRUE, ComponentFactory._CHECKBOX,
-                "", DcResources.getText("lblExportModuleItemsSub"), false, false));     
+                "", DcResources.getText("lblExportModuleItemsSub"), false, false, -1));     
         group.add(new Setting(DcRepository.ValueTypes._STRING, PanelExportConfiguration._PATH, null, ComponentFactory._DIRECTORYFIELD,
-                "", DcResources.getText("lblExportModulePath"), true, true));         
+                "", DcResources.getText("lblExportModulePath"), true, true, -1));         
         
         settingsPanel = new SettingsPanel(group, true);
         settingsPanel.setVisible(true);

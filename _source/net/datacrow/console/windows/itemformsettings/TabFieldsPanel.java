@@ -76,7 +76,7 @@ public class TabFieldsPanel extends JPanel implements ActionListener, ComponentL
     }
     
     protected void save() {
-        DcFieldDefinitions definitions = new DcFieldDefinitions();
+        DcFieldDefinitions definitions = new DcFieldDefinitions(module.getIndex());
         DcFieldDefinition def;
         for (String key : listsRight.keySet()) {
             for (DcField field : listsRight.get(key).getFields()) {

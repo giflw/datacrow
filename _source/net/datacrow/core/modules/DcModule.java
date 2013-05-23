@@ -1332,7 +1332,7 @@ public class DcModule implements Comparable<DcModule> {
         QuickViewFieldDefinitions qvDefinitions = 
             (QuickViewFieldDefinitions) settings.get(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
         
-        QuickViewFieldDefinitions newQvDefinitions = new QuickViewFieldDefinitions();
+        QuickViewFieldDefinitions newQvDefinitions = new QuickViewFieldDefinitions(getIndex());
         for (QuickViewFieldDefinition definition : qvDefinitions.getDefinitions()) {
             if (getField(definition.getField()) != null)
                 newQvDefinitions.add(definition);
@@ -1342,7 +1342,7 @@ public class DcModule implements Comparable<DcModule> {
         WebFieldDefinitions webDefinitions = 
             (WebFieldDefinitions) settings.get(DcRepository.ModuleSettings.stWebFieldDefinitions);
         
-        WebFieldDefinitions newWebDefinitions = new WebFieldDefinitions();
+        WebFieldDefinitions newWebDefinitions = new WebFieldDefinitions(getIndex());
         for (WebFieldDefinition definition : webDefinitions.getDefinitions()) {
             if (getField(definition.getField()) != null)
                 newWebDefinitions.add(definition);
@@ -1351,7 +1351,7 @@ public class DcModule implements Comparable<DcModule> {
         DcFieldDefinitions definitions = 
             (DcFieldDefinitions) settings.get(DcRepository.ModuleSettings.stFieldDefinitions);
         
-        DcFieldDefinitions newDefinitions = new DcFieldDefinitions();
+        DcFieldDefinitions newDefinitions = new DcFieldDefinitions(getIndex());
         for (DcFieldDefinition definition : definitions.getDefinitions()) {
             if (getField(definition.getIndex()) != null)
                 newDefinitions.add(definition);

@@ -219,6 +219,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     
     @Override
     public void load() {
+        if (all != null) all.clear();
         list.clear();
         DcObject dco = DcModules.get(module).getItem();
         DataFilter filter = new DataFilter(module);

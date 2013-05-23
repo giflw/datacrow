@@ -91,7 +91,7 @@ public class PanelImportConfiguration extends ModuleImportWizardPanel {
         group = new SettingsGroup("", "");
         group.add(new Setting(DcRepository.ValueTypes._STRING,
                 PanelImportConfiguration._IMPORT_FILE, null, ComponentFactory._FILEFIELD,
-                "", DcResources.getText("lblModuleImportFile"), true, true));         
+                "", DcResources.getText("lblModuleImportFile"), true, true, -1));         
         
         settingsPanel = new SettingsPanel(group, true);
         settingsPanel.setVisible(true);

@@ -132,7 +132,7 @@ public class TemplateModule extends DcModule {
     @Override
     public DcFieldDefinitions getFieldDefinitions() {
         DcFieldDefinitions fds = parent.getFieldDefinitions();
-        DcFieldDefinitions definitions = new DcFieldDefinitions();
+        DcFieldDefinitions definitions = new DcFieldDefinitions(getIndex());
         
         definitions.add(new DcFieldDefinition(DcTemplate._SYS_TEMPLATENAME, null, true, true, true, true, "lblSummary"));
         definitions.add(new DcFieldDefinition(DcTemplate._SYS_DEFAULT, null, true, true, true, false, "lblSummary"));

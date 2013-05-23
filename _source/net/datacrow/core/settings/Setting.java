@@ -71,6 +71,8 @@ public class Setting {
     private boolean showToUser = true;
     private String labelText;
     
+    private final int module;
+    
     private boolean temporary = false;
     
     /**
@@ -92,7 +94,8 @@ public class Setting {
                    String helpText,
                    String labelText,
                    boolean displayLabel,
-                   boolean showToUser) {
+                   boolean showToUser,
+                   int module) {
 
         this.dataType = dataType;
         this.key = key;
@@ -102,6 +105,7 @@ public class Setting {
         this.showToUser = showToUser;
         this.labelText = labelText;
         this.helpText = helpText;
+        this.module = module;
     }
     
     public void isTemporary(boolean b) {
@@ -237,11 +241,11 @@ public class Setting {
                         if (key.equals(DcRepository.Settings.stProgramDefinitions))
                             definitions = new ProgramDefinitions();
                         else if (key.equals(DcRepository.ModuleSettings.stQuickViewFieldDefinitions))
-                            definitions = new QuickViewFieldDefinitions();
+                            definitions = new QuickViewFieldDefinitions(module);
                         else if (key.equals(DcRepository.ModuleSettings.stWebFieldDefinitions))
-                            definitions = new QuickViewFieldDefinitions();
+                            definitions = new QuickViewFieldDefinitions(module);
                         else 
-                            definitions = new DcFieldDefinitions();
+                            definitions = new DcFieldDefinitions(module);
                     }
                     
                     while (group > -1) {

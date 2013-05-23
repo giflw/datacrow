@@ -123,10 +123,9 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
     
     private void createDefinitions(DcModule module) {
         
-        DcFieldDefinitions fldDefinitions = new DcFieldDefinitions();
-        WebFieldDefinitions webDefinitions = new WebFieldDefinitions();
-        
-        QuickViewFieldDefinitions qvDefinitions = new QuickViewFieldDefinitions();
+        DcFieldDefinitions fldDefinitions = new DcFieldDefinitions(module.getIndex());
+        WebFieldDefinitions webDefinitions = new WebFieldDefinitions(module.getIndex());
+        QuickViewFieldDefinitions qvDefinitions = new QuickViewFieldDefinitions(module.getIndex());
         
         for (DcField field : module.getFields()) {
             
@@ -145,7 +144,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stFileImportRecursive,
@@ -154,7 +153,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._TABLESETTINGS,
                             DcRepository.ModuleSettings.stTableSettings,
@@ -163,7 +162,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stShowPicturesInSeparateTabs,
@@ -172,7 +171,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stExportFields,
@@ -181,7 +180,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stMassUpdateUseOriginalServiceSettings,
@@ -190,7 +189,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stMassUpdateAlwaysUseFirst,
@@ -199,7 +198,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stMassUpdateServer,
@@ -208,7 +207,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false)); 
+                            false, module.getIndex())); 
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stMassUpdateMode,
@@ -217,7 +216,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));    
+                            false, module.getIndex()));    
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stMassUpdateRegion,
@@ -226,7 +225,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));          
+                            false, module.getIndex()));          
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BIGINTEGER,
                             DcRepository.ModuleSettings.stDefaultView,
@@ -235,7 +234,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));  
+                            false, module.getIndex()));  
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DEFINITIONGROUP,
                             DcRepository.ModuleSettings.stQuickViewFieldDefinitions,
@@ -244,7 +243,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));           
+                            false, module.getIndex()));           
         
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DEFINITIONGROUP,
@@ -254,7 +253,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
     }
     
     protected void createSettings(DcModule module) {
@@ -268,7 +267,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                                 "",
                                 "",
                                 false,
-                                false));
+                                false,
+                                module.getIndex()));
         }
         
         if (module.getIndex() == DcModules._CONTAINER) {
@@ -280,7 +280,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                                 "",
                                 "",
                                 false,
-                                false));
+                                false,
+                                module.getIndex()));
             getSettings().addSetting(_General,
                     new Setting(DcRepository.ValueTypes._BOOLEAN,
                                 DcRepository.ModuleSettings.stContainerTreePanelFlat,
@@ -289,7 +290,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                                 "",
                                 "",
                                 false,
-                                false));            
+                                false,
+                                module.getIndex()));            
         }
         
         int[] order;
@@ -336,7 +338,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false,
+                            module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stTableColumnOrder,
@@ -345,7 +348,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false,
+                            module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stCardViewItemDescription,
@@ -354,7 +358,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false,
+                            module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stTitleCleanup,
@@ -363,7 +368,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false,
+                            module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stTitleCleanupRegex,
@@ -372,7 +378,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false,
+                            module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stImportLocalArt,
@@ -381,7 +388,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false,
+                            module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stFileImportUseOnlineService,
@@ -390,7 +398,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false,
+                            module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.ModuleSettings.stFileImportDirectoryUsage,
@@ -399,7 +408,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false,
+                            module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stFileImportOnlineService,
@@ -408,7 +418,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false,
+                            module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stFileImportOnlineServiceMode,
@@ -417,7 +428,8 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));   
+                            false,
+                            module.getIndex()));   
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stFileImportOnlineServiceRegion,
@@ -426,7 +438,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));           
+                            false, module.getIndex()));           
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stImportLocalArtRecurse,
@@ -435,7 +447,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,        
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stOnlineSearchQueryFullDetailsInitially,
@@ -444,7 +456,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stImportLocalArtFrontKeywords,
@@ -453,7 +465,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stImportLocalArtBackKeywords,
@@ -462,7 +474,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stImportLocalArtMediaKeywords,
@@ -471,7 +483,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         
         FileImporter importer = module.getImporter();
         if (importer != null) {
@@ -483,7 +495,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                                 "",
                                 "",
                                 false,
-                                false));
+                                false, module.getIndex()));
         }
         
         getSettings().addSetting(_General,
@@ -494,7 +506,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRINGARRAY,
                             DcRepository.ModuleSettings.stSearchOrder,
@@ -503,7 +515,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stItemFormSize,
@@ -512,7 +524,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stFilterDialogSize,
@@ -521,7 +533,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));   
+                            false, module.getIndex()));   
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stFieldSettingsDialogSize,
@@ -530,7 +542,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stCardViewSettingsDialogSize,
@@ -539,7 +551,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false)); 
+                            false, module.getIndex())); 
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stTableViewSettingsDialogSize,
@@ -548,7 +560,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stWebFieldSettingsDialogSize,
@@ -557,7 +569,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stGroupedBy,
@@ -566,7 +578,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stQuickViewSettingsDialogSize,
@@ -575,7 +587,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stLoanFormSize,
@@ -584,7 +596,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                new Setting(DcRepository.ValueTypes._DIMENSION,
                            DcRepository.ModuleSettings.stImportCDDialogSize,
@@ -593,7 +605,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                            "",
                            "",
                            false,
-                           false));
+                           false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stImportCDContainer,
@@ -602,7 +614,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stImportCDStorageMedium,
@@ -611,7 +623,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stFileImportDialogSize,
@@ -620,7 +632,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stSynchronizerDialogSize,
@@ -629,7 +641,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));  
+                            false, module.getIndex()));  
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stFieldSettingsDialogSize,
@@ -638,7 +650,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stOnlineSearchFormSize,
@@ -647,7 +659,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stSimpleItemViewSize,
@@ -656,7 +668,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stSimpleItemFormSize,
@@ -665,7 +677,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));  
+                            false, module.getIndex()));  
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stOnlineSearchFieldSettingsDialogSize,
@@ -674,7 +686,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._LONG,
                             DcRepository.ModuleSettings.stQuickFilterDefaultField,
@@ -683,7 +695,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));           
+                            false, module.getIndex()));           
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stOnlineSearchSubItems,
@@ -692,7 +704,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             DcResources.getText("tpOnlineSearchSubItems"),
                             DcResources.getText("lblOnlineSearchSubItems"),
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stImportSaveDirectly,
@@ -701,7 +713,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             DcResources.getText("lblSaveDirectly"),
                             DcResources.getText("lblSaveDirectly"),
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stOnlineSearchDefaultServer,
@@ -710,7 +722,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stOnlineSearchDefaultRegion,
@@ -719,7 +731,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stOnlineSearchDefaultMode,
@@ -728,7 +740,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stAutoAddPerfectMatch,
@@ -737,7 +749,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             DcResources.getText("tpAutoAddPerfectMatch"),
                             DcResources.getText("lblAutoAddPerfectMatch"),
                             false,
-                            false)); 
+                            false, module.getIndex())); 
         
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
@@ -747,7 +759,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false)); 
+                            false, module.getIndex())); 
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.ModuleSettings.stOnlineSearchFieldSettingsDialogSize,
@@ -756,7 +768,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.ModuleSettings.stOnlineSearchOverwrite,
@@ -765,7 +777,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));        
+                            false, module.getIndex()));        
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stOnlineSearchFieldOverwriteSettings,
@@ -774,7 +786,7 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._INTEGERARRAY,
                             DcRepository.ModuleSettings.stOnlineSearchRetrievedFields,
@@ -783,6 +795,6 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             "",
                             "",
                             false,
-                            false));
+                            false, module.getIndex()));
     }
 }

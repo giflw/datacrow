@@ -286,7 +286,7 @@ public class QuickViewSettingsDialog extends DcDialog implements ActionListener 
         public IDefinitions getDefinitions() {
             table.cancelEdit();
             
-            QuickViewFieldDefinitions qvDefs = new QuickViewFieldDefinitions();
+            QuickViewFieldDefinitions qvDefs = new QuickViewFieldDefinitions(module.getIndex());
             boolean enabled;
             String direction;
             DcField field;

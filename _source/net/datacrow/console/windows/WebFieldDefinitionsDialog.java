@@ -273,7 +273,7 @@ public class WebFieldDefinitionsDialog extends DcDialog implements ActionListene
 
         public WebFieldDefinitions getDefinitions() {
             table.cancelEdit();
-            WebFieldDefinitions definitions = new WebFieldDefinitions();
+            WebFieldDefinitions definitions = new WebFieldDefinitions(module.getIndex());
             for (int i = 0; i < table.getRowCount(); i++) {
                 definitions.add(getDefinition(i));
             }

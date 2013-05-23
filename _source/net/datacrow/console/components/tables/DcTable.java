@@ -969,46 +969,53 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
         DcFieldDefinitions definitions = (DcFieldDefinitions) 
             module.getSetting(DcRepository.ModuleSettings.stFieldDefinitions);
 
-        for (int field : fields) {
-
-            DcFieldDefinition definition = definitions.get(field);
-
+        for (DcFieldDefinition definition : definitions.getDefinitions()) {
+            
+            
             if (!module.canBeLend()
-                    && (field == DcObject._SYS_AVAILABLE
-                     || field == DcObject._SYS_LOANDURATION
-                     || field == DcObject._SYS_LENDBY
-                     || field == DcObject._SYS_LOANSTATUS
-                     || field == DcObject._SYS_LOANSTATUSDAYS
-                     || field == DcObject._SYS_LOANDUEDATE))
+                    && (definition.getIndex() == DcObject._SYS_AVAILABLE
+                     || definition.getIndex() == DcObject._SYS_LOANDURATION
+                     || definition.getIndex() == DcObject._SYS_LENDBY
+                     || definition.getIndex() == DcObject._SYS_LOANSTATUS
+                     || definition.getIndex() == DcObject._SYS_LOANSTATUSDAYS
+                     || definition.getIndex() == DcObject._SYS_LOANDUEDATE))
                 continue;
+            
+            for (int field : fields) {
+                
+                if (field == definition.getIndex()) {
 
-            try {
-                TableColumn column = columns.get(Integer.valueOf(field));
+                    try {
+                        TableColumn column = columns.get(Integer.valueOf(field));
 
-                if (column == null)
-                    continue;
+                        if (column == null)
+                            continue;
 
-                if (definition.isRequired())
-                    column.setHeaderRenderer(DcTableHeaderRendererRequired.getInstance());
-                else
-                    column.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
+                        if (definition.isRequired())
+                            column.setHeaderRenderer(DcTableHeaderRendererRequired.getInstance());
+                        else
+                            column.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
 
-                String label = module.getField(field).getLabel();
+                        String label = module.getField(field).getLabel();
 
-                if (label != null && label.length() > 0) {
-                    column.setHeaderValue(label);
-                } else {
-                    column.setHeaderValue(module.getField(definition.getIndex()).getSystemName());
+                        if (label != null && label.length() > 0) {
+                            column.setHeaderValue(label);
+                        } else {
+                            column.setHeaderValue(module.getField(definition.getIndex()).getSystemName());
+                        }
+
+                        addColumn(column);
+
+                    } catch (Exception e) {
+                        Integer key = definition.getIndex();
+                        TableColumn column = columns.containsKey(key) ? columns.get(key) : null;
+                        logger.debug("Error while applying settings to column "
+                                + column + " for field definition "
+                                + definition.getLabel());
+                    }
+                    
+                    break;
                 }
-
-                addColumn(column);
-
-            } catch (Exception e) {
-                Integer key = definition.getIndex();
-                TableColumn column = columns.containsKey(key) ? columns.get(key) : null;
-                logger.debug("Error while applying settings to column "
-                        + column + " for field definition "
-                        + definition.getLabel());
             }
         }
     }

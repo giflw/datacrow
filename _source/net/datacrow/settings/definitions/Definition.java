@@ -30,4 +30,5 @@ public abstract class Definition {
     protected final String seperator = "/&/";
     
     public abstract String toSettingValue();
+
 }

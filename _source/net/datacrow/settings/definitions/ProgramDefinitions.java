@@ -62,6 +62,11 @@ public class ProgramDefinitions implements IDefinitions {
 		return null;
 	}
 	
+    @Override
+    public boolean exists(Definition definition) {
+        return definitions.contains(definition);
+    }    	
+	
 	@Override
     public Collection<ProgramDefinition> getDefinitions() {
 	    return definitions;

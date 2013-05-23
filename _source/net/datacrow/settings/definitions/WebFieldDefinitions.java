@@ -33,10 +33,17 @@ public class WebFieldDefinitions implements IDefinitions {
 
     private Collection<WebFieldDefinition> definitions = new ArrayList<WebFieldDefinition>();
 
+    private final int module;
+    
+    public WebFieldDefinitions(int module) {
+        this.module = module;
+    }
+    
     @Override
     public void add(Collection<Definition> c) {
-        for (Definition definition : c)
+        for (Definition definition : c) {
             add(definition);
+        }
     }
     
     @Override
@@ -82,6 +89,11 @@ public class WebFieldDefinitions implements IDefinitions {
         
         if (definition != null)
             definitions.remove(definition);
+    }  
+    
+    @Override
+    public boolean exists(Definition definition) {
+        return definitions.contains(definition);
     }    
     
     @Override

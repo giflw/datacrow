@@ -32,7 +32,13 @@ import java.util.StringTokenizer;
 public class QuickViewFieldDefinitions implements IDefinitions {
 
     private Collection<QuickViewFieldDefinition> definitions = new ArrayList<QuickViewFieldDefinition>();
-
+    
+    private final int module;
+    
+    public QuickViewFieldDefinitions(int module) {
+        this.module = module;
+    }
+    
     @Override
     public void add(Collection<Definition> c) {
         for (Definition definition : c)
@@ -41,7 +47,8 @@ public class QuickViewFieldDefinitions implements IDefinitions {
     
     @Override
     public void add(Definition definition) {
-        definitions.add((QuickViewFieldDefinition) definition);
+        if (!exists(definition))
+            definitions.add((QuickViewFieldDefinition) definition);
     }
 
     @Override
@@ -74,7 +81,12 @@ public class QuickViewFieldDefinitions implements IDefinitions {
         
         if (definition != null)
             definitions.remove(definition);
-    }    
+    }
+    
+    @Override
+    public boolean exists(Definition definition) {
+        return definitions.contains(definition);
+    }        
     
     @Override
     public void add(String s) {

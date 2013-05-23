@@ -357,7 +357,7 @@ public class FieldDefinitionsDialog extends DcDialog implements ActionListener {
         public DcFieldDefinitions getDefinitions() {
             table.cancelEdit();
 
-            DcFieldDefinitions definitions = new DcFieldDefinitions();
+            DcFieldDefinitions definitions = new DcFieldDefinitions(module.getIndex());
             for (int i = 0; i < table.getRowCount(); i++)
                 definitions.add(getDefinition(i));
 

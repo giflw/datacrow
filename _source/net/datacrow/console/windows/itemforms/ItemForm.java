@@ -396,8 +396,22 @@ public class ItemForm extends DcFrame implements ActionListener {
                 oldValue = ComponentFactory.getValue(component);
                 newValue = object.getValue(index);
     
-                if (newValue instanceof Picture)
-                    ((Picture) newValue).loadImage(false);
+                if (newValue instanceof Picture) {
+                    Picture pic = ((Picture) newValue);
+                    boolean isEdited = pic.isEdited();
+                    boolean isDeleted = pic.isDeleted();
+                    
+                    pic.loadImage(false);
+                    
+                    pic.isEdited(isEdited);
+                    pic.isDeleted(isDeleted);
+                    
+                    if ((isEdited || isDeleted) &&
+                         field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                        dco.setChanged(DcObject._ID, true);
+                        dcoOrig.setChanged(field.getIndex(), true);
+                    }
+                }
     
                 empty = Utilities.getComparableString(oldValue).length() == 0;
                 if ((empty || overwrite) && (!Utilities.isEmpty(newValue)))
@@ -506,7 +520,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
             Picture picture = (Picture) dcoOrig.getValue(fieldIdx);
             changed = (picture != null && (picture.isEdited() || picture.isNew() || picture.isDeleted())) ||
-                      ((DcPictureField) component).isChanged();
+                      ((DcPictureField) component).isChanged() || dcoOrig.isChanged(fieldIdx);
             
             if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
         }
@@ -561,7 +575,6 @@ public class ItemForm extends DcFrame implements ActionListener {
         JComponent component;
         Object value;
         for (DcField field : fields.keySet()) {
-            
             component = fields.get(field);
             value = ComponentFactory.getValue(component);
             value = value == null ? "" : value;

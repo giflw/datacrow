@@ -67,4 +67,13 @@ public class QuickViewFieldDefinition extends Definition {
         return new Object[] {module.getField(field).getLabel(),
                              enabled, direction, module.getField(field), maxLength};
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof QuickViewFieldDefinition) {
+            QuickViewFieldDefinition def = (QuickViewFieldDefinition) o;
+            return def.getField() == getField();
+        }
+        return false;
+    }    
 }

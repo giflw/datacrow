@@ -38,9 +38,16 @@ public class DcFieldDefinitions implements IDefinitions {
     
     private java.util.List<DcFieldDefinition> definitions = new ArrayList<DcFieldDefinition>();
     
+    private final int module;
+    
+    public DcFieldDefinitions(int module) {
+        this.module = module;
+    }
+    
     @Override
     public void add(Definition definition) {
-        definitions.add((DcFieldDefinition) definition);
+        if (!exists(definition))
+            definitions.add((DcFieldDefinition) definition);
     }
 
     @Override
@@ -87,7 +94,12 @@ public class DcFieldDefinitions implements IDefinitions {
      * - Table column order
      */
     public void checkDependencies() {
-        int[] columnOrder = DcModules.getCurrent().getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder);
+        
+        if (module == -1 || !DcModules.get(module).isTopModule())
+            return;
+        
+        int[] columnOrder = DcModules.get(module).getSettings().getIntArray(DcRepository.ModuleSettings.stTableColumnOrder);
+        
         QuickViewFieldDefinitions qvDefs = (QuickViewFieldDefinitions) DcModules.getCurrent().getSetting(DcRepository.ModuleSettings.stQuickViewFieldDefinitions);
         
         Collection<Integer> c = new ArrayList<Integer>();
@@ -105,7 +117,7 @@ public class DcFieldDefinitions implements IDefinitions {
         
         DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stTableColumnOrder, columnOrder);
         
-        QuickViewFieldDefinitions qvDefsNew = new QuickViewFieldDefinitions();
+        QuickViewFieldDefinitions qvDefsNew = new QuickViewFieldDefinitions(module);
         for (QuickViewFieldDefinition qvDef : qvDefs.getDefinitions()) {
             for (DcFieldDefinition definition : getDefinitions()) {
                 if (qvDef.getField() == definition.getIndex() && definition.isEnabled())
@@ -115,7 +127,12 @@ public class DcFieldDefinitions implements IDefinitions {
         
         DcModules.getCurrent().setSetting(DcRepository.ModuleSettings.stQuickViewFieldDefinitions, qvDefsNew);
     }
-	
+    
+    @Override
+    public boolean exists(Definition definition) {
+        return definitions.contains(definition);
+    }
+
     @Override
     public void add(String s) {
         StringTokenizer st = new StringTokenizer(s, "/&/");

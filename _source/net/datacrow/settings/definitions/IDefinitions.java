@@ -34,6 +34,7 @@ public interface IDefinitions {
     void clear();
     void add(Collection<Definition> c);
     void add(Definition definition);
+    boolean exists(Definition definition);
     
     Collection<? extends Definition> getDefinitions();
 }
