@@ -48,7 +48,10 @@
         <pack name="Data Crow" required="yes" preselected="yes">
             <description>Data Crow</description>
             <file src="log4j.properties" targetdir="$INSTALL_PATH"/>
-            <file src="datacrow.exe" targetdir="$INSTALL_PATH"/>
+            <file src="datacrow32bit.exe" targetdir="$INSTALL_PATH"/>
+            <file src="datacrow64bit.exe" targetdir="$INSTALL_PATH"/>
+            <file src="datacrow32bit" targetdir="$INSTALL_PATH"/>
+            <file src="datacrow64bit" targetdir="$INSTALL_PATH"/>            
             <file src="datacrow.jar" targetdir="$INSTALL_PATH"/>
             <file src="datacrow.sh" targetdir="$INSTALL_PATH"/>
             <file src="hsqlmanager.sh" targetdir="$INSTALL_PATH"/>

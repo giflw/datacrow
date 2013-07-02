@@ -175,6 +175,15 @@ public class DcFontSelector extends JComponent implements IComponent, ActionList
                     comboFontName.setSelectedIndex(i);
             }
             
+            // default back to arial if not found
+            if (comboFontName.getSelectedIndex() == -1) {
+                for (int i = 0; i < comboFontName.getItemCount(); i++) {
+                    value = (String) comboFontName.getItemAt(i);
+                    if (value.toLowerCase().equals("arial")) 
+                        comboFontName.setSelectedIndex(i);
+                }
+            }
+            
             int size = font.getSize() == 0 ? 11 : font.getSize();
         	comboFontName.setSelectedItem(font.getName());
             comboFontSize.setSelectedItem(Integer.valueOf(size));

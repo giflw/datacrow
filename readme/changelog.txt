@@ -1,4 +1,16 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.10.2  [Released on July 2 2013]  [testing: moderate]  [target: production]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- 64 bit JRE not detected by executable of Data Crow
+- Incorrect Font when saving settings (while not having changed the font settings)
+- Issue with web application where read only user only sees ID values for drop downs.
+- Issue with extracting ISBN information from PDF files (old libraries updated to current
+  versions - thanks Gene!).
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.10.1  [Released on May 23 2013]  [testing: moderate]  [target: production]
 -----------------------------------------------------------------------------------------
 

@@ -99,7 +99,7 @@ public class DataCrow {
     private static SplashScreen splashScreen;
     
     private static Platform platform = new Platform();
-    private static Version version = new Version(3, 10, 1, 0);
+    private static Version version = new Version(3, 10, 2, 0);
     
     public static String installationDir;
     public static String imageDir;
@@ -135,6 +135,9 @@ public class DataCrow {
     
             // legacy stuff but it still works..
             installationDir = System.getenv("DATACROW_HOME");
+
+            if (installationDir == null || installationDir.length() == 0)
+                installationDir = System.getProperty("application.home");
             
             if (installationDir == null || installationDir.length() == 0)
                 installationDir = getInstallationDirDeprecated();

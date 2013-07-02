@@ -1,0 +1,1 @@
+"C:\Program Files\Jar2Exe Wizard\j2ewiz" /jar C:\Users\RJ\Data\Development\projects\datacrow\datacrow.jar /o C:\Users\RJ\Data\Development\projects\datacrow\datacrow64bit /m net.datacrow.core.DataCrow /type console /minjre 1.6 /platform linux /checksum /amd64 /config "option -Xms512m"

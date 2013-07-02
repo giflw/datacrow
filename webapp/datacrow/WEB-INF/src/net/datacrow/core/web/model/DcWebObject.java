@@ -133,9 +133,6 @@ public class DcWebObject extends DcSecured {
                 DcWebField wf = new DcWebField(field);
                 
                 wf.setType(wf.isUrl() ? DcWebField._TEXTFIELD : wf.getType());
-                if (wf.isReadonly() && wf.isDropDown())
-                    wf.setType(DcWebField._TEXTFIELD);
-                
                 if (wf.isImage()) 
                     addPictureField(wf);
                 else

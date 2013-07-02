@@ -62,9 +62,7 @@
 	<classpathentry kind="lib" path="lib/tika-app-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/bcmail-jdk14-132.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/bcprov-jdk14-132.jar"/>
-	<classpathentry kind="lib" path="lib/pdf/FontBox-0.1.0-dev.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/ISBNExtractor-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/pdf/PDFBox-0.7.3.jar"/>
 	<classpathentry kind="lib" path="lib/bol/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/bol/fluent-hc-4.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/bol/httpclient-4.2.2.jar"/>
@@ -76,5 +74,7 @@
 	<classpathentry kind="lib" path="lib/xml/commons-io-1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/xml/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/zip/truezip_7_7_1.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/fontbox-1.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/pdf/pdfbox-1.8.2.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>
