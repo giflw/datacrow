@@ -76,5 +76,7 @@
 	<classpathentry kind="lib" path="lib/zip/truezip_7_7_1.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/fontbox-1.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/pdfbox-1.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/jmbdiscid/jna-3.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/jmbdiscid/platform-3.4.0.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>
