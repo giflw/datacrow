@@ -146,6 +146,7 @@ public class PluginClassLoader extends ClassLoader {
      * Returns a resource from the path or JAR files as an InputStream
      * @param name a resource name.
      */
+    @SuppressWarnings("resource")
     @Override
     public InputStream getResourceAsStream(String name) {
         // try the system loader first

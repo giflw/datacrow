@@ -61,6 +61,7 @@ public class DeleteQuery extends Query {
         dco = null;
     }
     
+    @SuppressWarnings("resource")
     @Override
     public List<DcObject> run() {
     	boolean success = false;
@@ -70,10 +71,8 @@ public class DeleteQuery extends Query {
         try { 
             conn = DatabaseManager.getAdminConnection();
             stmt = conn.createStatement();
-            
-            if (dco.hasPrimaryKey()) {
-                stmt.execute("DELETE FROM " + dco.getTableName() + " WHERE ID = '" + dco.getID() + "'");
-            } else {
+                
+            if (!dco.hasPrimaryKey()) {
                 String sql = "DELETE FROM " + dco.getTableName() + " WHERE ";
                 
                 int counter = 0;
@@ -103,77 +102,77 @@ public class DeleteQuery extends Query {
                 } catch (SQLException e) {
                     logger.error("Error while closing connection", e);
                 }
-                
-                // exit: other queries depend on ID!
-                return null;
-            }
+            } else {
+                stmt.execute("DELETE FROM " + dco.getTableName() + " WHERE ID = '" + dco.getID() + "'");
 
-            if (dco.getModule().canBeLend()) {
-                stmt.execute("DELETE FROM " + DcModules.get(DcModules._LOAN).getTableName() + " WHERE " +
-                             DcModules.get(DcModules._LOAN).getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
-            }
-
-            // Delete children. Ignore any abstract module (parent and/or children)
-            if (    dco.getModule().getChild() != null && 
-                   !dco.getModule().isAbstract() && 
-                   !dco.getModule().getChild().isAbstract()) {
-                
-                DcModule childModule = dco.getModule().getChild(); 
-                stmt.execute("DELETE FROM " + childModule.getTableName() + " WHERE " + 
-                             childModule.getField(childModule.getParentReferenceFieldIndex()).getDatabaseFieldName() + " = '" + dco.getID() + "'");
-            }
-            
-            // Remove any references to the to be deleted item.
-            if (dco.getModule().hasDependingModules()) {
-                for (DcModule m : DcModules.getReferencingModules(dco.getModule().getIndex())) {
-                    if (m.isAbstract()) continue;
+                if (dco.getModule().canBeLend()) {
+                    stmt.execute("DELETE FROM " + DcModules.get(DcModules._LOAN).getTableName() + " WHERE " +
+                                 DcModules.get(DcModules._LOAN).getField(Loan._D_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                }
+    
+                // Delete children. Ignore any abstract module (parent and/or children)
+                if (    dco.getModule().getChild() != null && 
+                       !dco.getModule().isAbstract() && 
+                       !dco.getModule().getChild().isAbstract()) {
                     
-                    if (m.getType() == DcModule._TYPE_MAPPING_MODULE) {
-                        stmt.execute("DELETE FROM " + m.getTableName() + " WHERE " + 
-                                m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
-                    } else {
-                        for (DcField field : m.getFields()) {
-                            if (!field.isUiOnly() && field.getReferenceIdx() == dco.getModule().getIndex()) {
-                                stmt.execute("UPDATE " + m.getTableName() + " SET " +  field.getDatabaseFieldName() + " = NULL WHERE " + 
-                                             field.getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                    DcModule childModule = dco.getModule().getChild(); 
+                    stmt.execute("DELETE FROM " + childModule.getTableName() + " WHERE " + 
+                                 childModule.getField(childModule.getParentReferenceFieldIndex()).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                }
+                
+                // Remove any references to the to be deleted item.
+                if (dco.getModule().hasDependingModules()) {
+                    for (DcModule m : DcModules.getReferencingModules(dco.getModule().getIndex())) {
+                        if (m.isAbstract()) continue;
+                        
+                        if (m.getType() == DcModule._TYPE_MAPPING_MODULE) {
+                            stmt.execute("DELETE FROM " + m.getTableName() + " WHERE " + 
+                                    m.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                        } else {
+                            for (DcField field : m.getFields()) {
+                                if (!field.isUiOnly() && field.getReferenceIdx() == dco.getModule().getIndex()) {
+                                    stmt.execute("UPDATE " + m.getTableName() + " SET " +  field.getDatabaseFieldName() + " = NULL WHERE " + 
+                                                 field.getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                                }
                             }
                         }
                     }
                 }
-            }
-            
-            File file;
-            boolean deleted;
-            for (DcField field : dco.getFields()) {
                 
-                if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                    file = new File(DataCrow.imageDir, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
-                    if (file.exists()) {
-                        deleted = file.delete();
-                        logger.debug("Delete file " + file + " [success = " + deleted + "]");
+                File file;
+                boolean deleted;
+                for (DcField field : dco.getFields()) {
+                    
+                    if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                        file = new File(DataCrow.imageDir, dco.getID() + "_" + field.getDatabaseFieldName() + ".jpg");
+                        if (file.exists()) {
+                            deleted = file.delete();
+                            logger.debug("Delete file " + file + " [success = " + deleted + "]");
+                        }
+                        
+                        file = new File(DataCrow.imageDir, dco.getID() + "_" + field.getDatabaseFieldName() + "_small.jpg");
+                        if (file.exists()) {
+                            deleted = file.delete();
+                            logger.debug("Delete file " + file + " [success = " + deleted + "]");
+                        }
                     }
                     
-                    file = new File(DataCrow.imageDir, dco.getID() + "_" + field.getDatabaseFieldName() + "_small.jpg");
-                    if (file.exists()) {
-                        deleted = file.delete();
-                        logger.debug("Delete file " + file + " [success = " + deleted + "]");
-                    }
+                    if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    	DcModule m = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
+                        stmt.execute("DELETE FROM " + m.getTableName() + " WHERE " + m.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                    }   
                 }
                 
-                if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                	DcModule m = DcModules.get(DcModules.getMappingModIdx(field.getModule(), field.getReferenceIdx(), field.getIndex()));
-                    stmt.execute("DELETE FROM " + m.getTableName() + " WHERE " + m.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
-                }   
+                stmt.execute("DELETE FROM " + DcModules.get(DcModules._PICTURE).getTableName() + " WHERE " +
+                             DcModules.get(DcModules._PICTURE).getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
+                
+                success = true;
             }
             
-            stmt.execute("DELETE FROM " + DcModules.get(DcModules._PICTURE).getTableName() + " WHERE " +
-                         DcModules.get(DcModules._PICTURE).getField(Picture._A_OBJECTID).getDatabaseFieldName() + " = '" + dco.getID() + "'");
-            
-            success = true;
         } catch (SQLException se) {
             logger.error(se, se);
         }
-        
+                
         try {
             if (stmt != null) stmt.close();
         } catch (SQLException e) {
@@ -181,7 +180,6 @@ public class DeleteQuery extends Query {
         }
         
         handleRequest(success);
-
         return null;
     }
     

@@ -65,7 +65,7 @@ public class UpdateQuery extends Query {
         dco = null;
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "resource" })
     @Override
     public List<DcObject> run() {
         boolean success = false;

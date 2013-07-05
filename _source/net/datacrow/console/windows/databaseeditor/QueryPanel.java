@@ -78,30 +78,30 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
         build();
     }
 
-    private void fillTable(ResultSet result) throws Exception {
+    private void fillTable(ResultSet rs) throws Exception {
         clearTable();
 
-        int columns = result.getMetaData().getColumnCount();
+        int columns = rs.getMetaData().getColumnCount();
         
         table.setColumnCount(columns);
         int counter = 1;
         TableColumn column;
         for (Enumeration<TableColumn> enumerator = table.getColumnModel().getColumns(); enumerator.hasMoreElements(); counter++) {
             column = enumerator.nextElement();
-            column.setHeaderValue(result.getMetaData().getColumnName(counter).toLowerCase());
+            column.setHeaderValue(rs.getMetaData().getColumnName(counter).toLowerCase());
         }
 
         Object[] values = new String[columns];
-        while (result.next()) {
+        while (rs.next()) {
             for (int i = 0; i < columns; i++) {
-                values[i] = result.getString((result.getMetaData().getColumnName(i + 1)));
+                values[i] = rs.getString((rs.getMetaData().getColumnName(i + 1)));
             }
             table.addRow(values);
         }
 
         // close the result set
         try {
-            result.close();
+            rs.close();
         } catch (SQLException e) {
             logger.error("Could not release the result set", e);
         }
@@ -110,6 +110,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
         table.applyHeaders();
     }
 
+    @SuppressWarnings("resource")
     protected void runQuery() {
         String sql   = textInput.getText().trim();
 
@@ -119,16 +120,16 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
         }
 
         try {
-            ResultSet result = null;
+            ResultSet rs = null;
             if (sql.toLowerCase().startsWith("select"))
-                result = DatabaseManager.executeSQL(sql);
+                rs = DatabaseManager.executeSQL(sql);
             else 
                 DatabaseManager.execute(sql);
 
             boolean empty = false;
-            if (result != null) {
+            if (rs != null) {
                 try {
-                    result.isLast();
+                    rs.isLast();
                 } catch (Exception exp) {
                 	empty = true;
                 }
@@ -137,7 +138,8 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
             if (empty) {
                 DcSwingUtilities.displayMessage("msgQueryWasSuccessFull");
             } else {
-                fillTable(result);
+                // also closes the result set
+                fillTable(rs);
             }
 
             addQueryToComboBox(sql);

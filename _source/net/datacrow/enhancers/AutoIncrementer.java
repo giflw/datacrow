@@ -26,6 +26,7 @@
 package net.datacrow.enhancers;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -104,6 +105,7 @@ public class AutoIncrementer implements IValueEnhancer {
         return true;
     }
     
+    @SuppressWarnings("resource")
     @Override
     public Object apply(DcField field, Object value) {
         Object result = value;
@@ -111,11 +113,12 @@ public class AutoIncrementer implements IValueEnhancer {
         DcModule module = DcModules.get(field.getModule());
         int counter = 0;
         
+        ResultSet rs = null;
         try {
             if (!fillGaps) {
                 String query = "SELECT MAX(" + field.getDatabaseFieldName() + ") AS COUNTMAXIMUM FROM " +
                                module.getTableName();
-                ResultSet rs = DatabaseManager.executeSQL(query);
+                rs = DatabaseManager.executeSQL(query);
                 int maximum = 0;
                 while (rs.next()) {
                     maximum = rs.getInt("COUNTMAXIMUM");
@@ -132,7 +135,7 @@ public class AutoIncrementer implements IValueEnhancer {
                 "ORDER BY 1";            
                 
                 Collection<Integer> currentValues = new ArrayList<Integer>();
-                ResultSet rs = DatabaseManager.executeSQL(qryCurrent);
+                rs = DatabaseManager.executeSQL(qryCurrent);
                 while (rs.next())
                     currentValues.add(rs.getInt(field.getDatabaseFieldName()));
                 
@@ -149,6 +152,12 @@ public class AutoIncrementer implements IValueEnhancer {
             String msg = DcResources.getText("msgAutoNumberError",  new String[] {field.getLabel(), e.getMessage()});
             logger.error(msg, e);
             DcSwingUtilities.displayErrorMessage(msg);
+        }
+        
+        try {
+            if (rs != null) rs.close();
+        } catch (SQLException se) {
+            logger.debug("Failed to close the database resources", se);
         }
             
         return result;
