@@ -149,6 +149,9 @@ The various parameters you can use are listed below:
      Starts the web server without starting the actual Data Crow application.
      Can be used in combination with the credentials parameter to bypass all the GUI
      stuff (such as the splash screen and the login dialog)
+    
+    -port:<port number>
+     Supply the port number to be used by the web server.
      
     -credentials:username/password
      Specify the login credentials to start Data Crow without displaying the login dialog.
