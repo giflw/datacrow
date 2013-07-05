@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -53,7 +52,7 @@ import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Directory;
 import net.datacrow.util.Utilities;
 
-public class UserDirSetupDialog extends JFrame implements ActionListener {
+public class UserDirSetupDialog extends NativeDialog implements ActionListener {
     
     private DcProgressBar progressBar = new DcProgressBar();
     private DcFileField selectDir = ComponentFactory.getFileField(false, true); 
@@ -68,7 +67,7 @@ public class UserDirSetupDialog extends JFrame implements ActionListener {
     
     
     public UserDirSetupDialog(String[] args, String selectedUserDir) {
-        super("User Folder Configuration");
+        setTitle("User Folder Configuration");
         setIconImage(new DcImageIcon(new File(DataCrow.installationDir, "icons/datacrow64.png")).getImage());
         this.args = args;
         this.selectedUserDir = selectedUserDir;

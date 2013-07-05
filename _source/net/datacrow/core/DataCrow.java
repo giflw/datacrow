@@ -256,9 +256,15 @@ public class DataCrow {
                     if (userDirSetting != null && userDirSetting.exists()) {
                         userDir = userDirSetting.toString();
                         userDir += userDir.endsWith("/") || userDir.endsWith("\\") ? "" : "/";
-                        userFolderExists = true;
+                        userFolderExists = new File(DataCrow.userDir).exists();
                     }
                 } 
+                
+                if (userFolderExists) {
+                    userFolderExists = 
+                            new File(DataCrow.userDir, "modules").exists() &&
+                            new File(DataCrow.userDir, "reports").exists();
+                }
                 
                 if (!userFolderExists || (userFolderExists && !new File(DataCrow.userDir).exists())) {
                     String selectedUserDir = DataCrow.userDir;
@@ -278,6 +284,7 @@ public class DataCrow {
                     UserDirSetupDialog dlg = new UserDirSetupDialog(args, selectedUserDir);
                     dlg.build();
                     dlg.setVisible(true);
+                    
                 } else {
                     checkCurrentDir();
                     createDirectories();
@@ -319,6 +326,10 @@ public class DataCrow {
                     }
                     
                     showSplashScreen();
+                    
+                    // ask the user to confirm the user directory
+                    if (pUserDir == null)
+                        changeUserDir(args);
                     
                     // check if the web module has been installed
                     isWebModuleInstalled = new File(DataCrow.webDir, "datacrow/WEB-INF").exists();
@@ -647,6 +658,22 @@ public class DataCrow {
     public static boolean isWebModuleInstalled() {
         return isWebModuleInstalled; 
     }
+    
+    
+    private static void changeUserDir(String[] args) {
+        
+        showSplashScreen(false);
+        boolean answer = DcSwingUtilities.displayQuestion("The current user folder is " + DataCrow.userDir + " do you want to use this?");
+        
+        if (!answer) {
+            showSplashScreen(false);
+            UserDirSetupDialog dlg = new UserDirSetupDialog(args, DataCrow.userDir);
+            dlg.build();
+            DcSwingUtilities.openDialogNativeModal(dlg);
+        }
+        showSplashScreen(true);
+    }
+    
     
     private static void login(String username, String password) {
         // use the login dialog method

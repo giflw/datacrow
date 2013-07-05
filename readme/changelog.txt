@@ -8,7 +8,9 @@ Data Crow 3.10.3  [Released on July x 2013]  [testing: moderate]  [target: produ
 - Changed the backup process to ignore any "non-DataCrow" files.
 
 [Changed]
-- Added parameter "port:" to specify the port to be used by teh web server on start up.
+- Added parameter "port:" to specify the port to be used by the web server on start up.
+- In case the user folder is cleaned Data Crow will re-initialize the folder.
+
 
 TODO:
 - Google books: 103 instead of 1030 pages
