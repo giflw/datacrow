@@ -110,7 +110,8 @@ public class UpgradeHsqlEngine {
                     logger.error(line);
                 
                 p.waitFor();
-
+                br.close();
+                
                 DcSwingUtilities.displayMessage("The upgrade has been completed. Data Crow will now exit.");
                 
                 System.exit(0);

@@ -68,10 +68,12 @@ public class MovieImporter extends FileImporter {
         movie.setValue(Movie._SYS_FILENAME, filename);
         movie.setValue(Movie._A_TITLE, getName(filename, directoryUsage));
 
+        FilePropertiesMovie fpm = null;
+        
         try {
             Hash.getInstance().calculateHash(movie);
 
-            FilePropertiesMovie fpm = new FilePropertiesMovie(filename);
+            fpm = new FilePropertiesMovie(filename);
             Long playlength = Long.valueOf(fpm.getDuration());
             if (playlength.intValue() <= 0 && fpm.getVideoWidth() <= 0)
                 return movie;
@@ -80,7 +82,6 @@ public class MovieImporter extends FileImporter {
                 movie.setValue(Movie._A_TITLE, fpm.getName());
             
             DataManager.createReference(movie, Movie._D_LANGUAGE, fpm.getLanguage());
-            
             
             movie.setValue(Movie._L_PLAYLENGTH, playlength);
             movie.setValue(Movie._N_VIDEOCODEC, fpm.getVideoCodec());
@@ -110,6 +111,8 @@ public class MovieImporter extends FileImporter {
 
         } catch (Exception exp) {
             getClient().addMessage(DcResources.getText("msgCouldNotReadInfoFrom", filename));
+        } finally {
+            if (fpm != null) fpm.close();
         }
         
         return movie;

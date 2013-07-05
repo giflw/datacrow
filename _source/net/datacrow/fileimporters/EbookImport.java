@@ -121,63 +121,61 @@ public class EbookImport extends FileImporter {
             
             if (!filename.toLowerCase().endsWith("pdf")) {
                 // non PDF files are handled with the Tika library
-                InputStream input = new FileInputStream(new File(filename));
-                org.xml.sax.ContentHandler textHandler = new BodyContentHandler();
-                Metadata metadata = new Metadata();
-                ParseContext context = new ParseContext();
-                Parser parser = null;
-                if (filename.toLowerCase().endsWith("chm")) {
-                    parser = new org.apache.tika.parser.chm.ChmParser();
-                    parser.parse(input, textHandler, metadata, context);
-                    input.close();
-                } else if (filename.toLowerCase().endsWith("doc") || filename.toLowerCase().endsWith("docx")) {
-                    parser = new org.apache.tika.parser.microsoft.OfficeParser();
-                    parser.parse(input, textHandler, metadata, context);
-                    input.close();
-                } else if (filename.toLowerCase().endsWith("htm") || filename.toLowerCase().endsWith("html")) {
-                    parser = new org.apache.tika.parser.html.HtmlParser();
-                    parser.parse(input, textHandler, metadata, context);
-                    input.close();
-                } else if (filename.toLowerCase().endsWith("odt")) {
-                    parser = new org.apache.tika.parser.odf.OpenDocumentMetaParser();
-                    parser.parse(input, textHandler, metadata, context);
-                    input.close();
-                } else if (filename.toLowerCase().endsWith("epub")) {
-                    parser = new org.apache.tika.parser.epub.EpubParser();
-                    parser.parse(input, textHandler, metadata, context);
-                    input.close();
-                }
-                
-                String author = metadata.get(Metadata.AUTHOR);
-                String creator = metadata.get(Metadata.CREATOR);
-                
-                String description = metadata.get(Metadata.DESCRIPTION);
-                String publisher = metadata.get(Metadata.PUBLISHER);
-                String pagecount = metadata.get(Metadata.PAGE_COUNT);
-                String title = metadata.get(Metadata.TITLE);
-                
-                if (!Utilities.isEmpty(author))
-                    DataManager.createReference(book, Book._G_AUTHOR, author);
-                else if (!Utilities.isEmpty(creator))
-                    DataManager.createReference(book, Book._G_AUTHOR, creator);
-
-                if (!Utilities.isEmpty(title))
-                    book.setValue(Book._A_TITLE, title);
-
-                if (!Utilities.isEmpty(description))
-                    book.setValue(Book._B_DESCRIPTION, description);
-
-                if (!Utilities.isEmpty(publisher))
-                    DataManager.createReference(book, Book._F_PUBLISHER, publisher);
-                
-                if (!Utilities.isEmpty(pagecount)) {
-                    try { 
-                        book.setValue(Book._T_NROFPAGES, Long.parseLong(pagecount));
-                    } catch (NumberFormatException nfe) {
-                        logger.debug("Could not parse number of pages for " + pagecount, nfe);
+                InputStream is = null;
+                try {
+                    is = new FileInputStream(new File(filename));
+                    org.xml.sax.ContentHandler textHandler = new BodyContentHandler();
+                    Metadata metadata = new Metadata();
+                    ParseContext context = new ParseContext();
+                    Parser parser = null;
+                    if (filename.toLowerCase().endsWith("chm")) {
+                        parser = new org.apache.tika.parser.chm.ChmParser();
+                    } else if (filename.toLowerCase().endsWith("doc") || filename.toLowerCase().endsWith("docx")) {
+                        parser = new org.apache.tika.parser.microsoft.OfficeParser();
+                    } else if (filename.toLowerCase().endsWith("htm") || filename.toLowerCase().endsWith("html")) {
+                        parser = new org.apache.tika.parser.html.HtmlParser();
+                    } else if (filename.toLowerCase().endsWith("odt")) {
+                        parser = new org.apache.tika.parser.odf.OpenDocumentMetaParser();
+                    } else if (filename.toLowerCase().endsWith("epub")) {
+                        parser = new org.apache.tika.parser.epub.EpubParser();
                     }
+                    
+                    if (parser != null) {
+                        parser.parse(is, textHandler, metadata, context);
+                        
+                        String author = metadata.get(Metadata.AUTHOR);
+                        String creator = metadata.get(Metadata.CREATOR);
+                        
+                        String description = metadata.get(Metadata.DESCRIPTION);
+                        String publisher = metadata.get(Metadata.PUBLISHER);
+                        String pagecount = metadata.get(Metadata.PAGE_COUNT);
+                        String title = metadata.get(Metadata.TITLE);
+                        
+                        if (!Utilities.isEmpty(author))
+                            DataManager.createReference(book, Book._G_AUTHOR, author);
+                        else if (!Utilities.isEmpty(creator))
+                            DataManager.createReference(book, Book._G_AUTHOR, creator);
+    
+                        if (!Utilities.isEmpty(title))
+                            book.setValue(Book._A_TITLE, title);
+    
+                        if (!Utilities.isEmpty(description))
+                            book.setValue(Book._B_DESCRIPTION, description);
+    
+                        if (!Utilities.isEmpty(publisher))
+                            DataManager.createReference(book, Book._F_PUBLISHER, publisher);
+                        
+                        if (!Utilities.isEmpty(pagecount)) {
+                            try { 
+                                book.setValue(Book._T_NROFPAGES, Long.parseLong(pagecount));
+                            } catch (NumberFormatException nfe) {
+                                logger.debug("Could not parse number of pages for " + pagecount, nfe);
+                            }
+                        }
+                    }
+                } finally {
+                    if (is != null) is.close();
                 }
-                
             } else if (filename.toLowerCase().endsWith("pdf")) {
                 // PDF files are handled the old fashioned way with PDFBox
                 File file = new File(filename);
@@ -201,6 +199,8 @@ public class EbookImport extends FileImporter {
                     raf = new RandomAccessFile(file, "r");
                     FileChannel channel = raf.getChannel();
                     ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+                    channel.close();
+                    
                     pdffile = new PDFFile(buf);
                     pdffile.stop(1);
     
@@ -230,9 +230,7 @@ public class EbookImport extends FileImporter {
                         book.setValue(Book._K_PICTUREFRONT, new DcImageIcon(Utilities.getBytes(new DcImageIcon(front))));
                     }
                 } finally {
-                    if (raf != null)
-                        raf.close();
-                    
+                    if (raf != null) raf.close();
                 }
             }
             

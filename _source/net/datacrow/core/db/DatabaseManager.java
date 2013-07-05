@@ -126,6 +126,7 @@ public class DatabaseManager {
      * @return The current version. If version information could not be found an undetermined
      * version is returned.
      */
+    @SuppressWarnings("resource")
     public static Version getVersion() {
         Connection connection = getAdminConnection();
         if (connection != null)
@@ -301,6 +302,7 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
+    @SuppressWarnings("resource")
     public static ResultSet executeSQL(String sql) throws SQLException {
         Connection connection = getConnection();
         Statement stmt = connection.createStatement();
@@ -312,10 +314,24 @@ public class DatabaseManager {
      * @param sql SQL statement.
      * @param log Indicates if information on the query should be logged.
      */
+    @SuppressWarnings("resource")
     public static boolean execute(String sql) throws SQLException {
-        Connection connection = getConnection();
-        Statement stmt = connection.createStatement();
-        return stmt.execute(sql);
+        Statement stmt = null;
+        boolean success = false;
+        
+        try {
+            Connection connection = getConnection();
+            stmt = connection.createStatement();
+            success = stmt.execute(sql);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+                logger.debug("Failed to close statement", e);
+            }
+        }
+        
+        return success;
     }
 
     /**
@@ -324,9 +340,10 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
+    @SuppressWarnings("resource")
     public static ResultSet executeQueryAsAdmin(String sql) throws SQLException {
         Connection connection = getAdminConnection();
-        Statement stmt = connection.createStatement();
+        Statement stmt = connection.createStatement(); // can't close the Statement since this would close the rs as well.
         return stmt.executeQuery(sql);
     }
     
@@ -336,10 +353,21 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
+    @SuppressWarnings("resource")
     public static void executeAsAdmin(String sql) throws SQLException {
         Connection connection = getAdminConnection();
-        Statement stmt = connection.createStatement();
-        stmt.execute(sql);
+        Statement stmt = null;
+        
+        try {
+            stmt = connection.createStatement();
+            stmt.execute(sql);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+                logger.debug("Failed to close statement", e);
+            }
+        }
     }
     
     /**
@@ -424,6 +452,7 @@ public class DatabaseManager {
      * @param user
      * @param password
      */
+    @SuppressWarnings("resource")
     public static void changePassword(User user, String password) {
         Connection c = null;
         Statement stmt = null;
@@ -448,6 +477,7 @@ public class DatabaseManager {
     /**
      * Removes a user from the database
      */
+    @SuppressWarnings("resource")
     public static void deleteUser(User user) {
         Connection c = null;
         Statement stmt = null;
@@ -467,13 +497,16 @@ public class DatabaseManager {
             try {
                 if (stmt != null) stmt.close();
                 if (c != null) c.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                logger.debug("Failed to close database resources", e);
+            }
         }
     }
     
     /**
      * Creates a user with all the correct privileges
      */
+    @SuppressWarnings("resource")
     public static void createUser(User user, String password) {
         Connection c = null;
         Statement stmt = null;
@@ -496,7 +529,9 @@ public class DatabaseManager {
             try {
                 if (stmt != null) stmt.close();
                 if (c != null) c.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                logger.debug("Failed to close database reources", e);
+            }
         }
     }    
     
@@ -539,13 +574,13 @@ public class DatabaseManager {
      * @param user
      * @param admin
      */
+    @SuppressWarnings("resource")
     protected static void setPriviliges(DcModule module, String user, boolean admin) {
 
        Connection c = null;
        Statement stmt = null;
        
        try {
-            
             String tablename = module.getTableName();
             
             if (tablename == null || tablename.trim().length() == 0)
@@ -555,46 +590,48 @@ public class DatabaseManager {
             stmt = c.createStatement();
 
             // check if the table exists
+            boolean created = false;
             try {
                 String sql = "SELECT TOP 1 * from " + tablename;
                 stmt.execute(sql);
+                created = true;
             } catch (SQLException se) {
-                // the table has not been created yet; empty database.
-                return;
+                logger.debug("Table " + tablename + " has not yet been created, will not set priviliges");
             }
             
-            String sql = "REVOKE ALL PRIVILEGES ON TABLE " + tablename + " FROM " + user + " RESTRICT";
-            stmt.execute(sql);
-            
-            if (admin) {
-                sql = "GRANT ALL ON TABLE " + tablename + " TO " + user;
-                stmt.execute(sql);
-
-            } else {
-                sql = "GRANT SELECT ON TABLE " + tablename + " TO " + user;
+            if (created) {
+                String sql = "REVOKE ALL PRIVILEGES ON TABLE " + tablename + " FROM " + user + " RESTRICT";
                 stmt.execute(sql);
                 
-                if (module.isEditingAllowed()) {
-                    sql = "GRANT UPDATE ON TABLE " + tablename + " TO " + user;
+                if (admin) {
+                    sql = "GRANT ALL ON TABLE " + tablename + " TO " + user;
                     stmt.execute(sql);
-                    sql = "GRANT INSERT ON TABLE " + tablename + " TO " + user;
+    
+                } else {
+                    sql = "GRANT SELECT ON TABLE " + tablename + " TO " + user;
                     stmt.execute(sql);
-                }
-                
-                if (admin || module.getIndex() == DcModules._PICTURE || module.getType() == DcModule._TYPE_MAPPING_MODULE) {
-                    sql = "GRANT DELETE ON TABLE " + tablename + " TO " + user;
-                    stmt.execute(sql);
+                    
+                    if (module.isEditingAllowed()) {
+                        sql = "GRANT UPDATE ON TABLE " + tablename + " TO " + user;
+                        stmt.execute(sql);
+                        sql = "GRANT INSERT ON TABLE " + tablename + " TO " + user;
+                        stmt.execute(sql);
+                    }
+                    
+                    if (admin || module.getIndex() == DcModules._PICTURE || module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+                        sql = "GRANT DELETE ON TABLE " + tablename + " TO " + user;
+                        stmt.execute(sql);
+                    }
                 }
             }
-           
         } catch (SQLException se) {
             logger.error(se, se);
-            
         } finally {
             try {
                 if (stmt != null) stmt.close();
-                //if (c != null) c.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                logger.debug("Failed to release database resources", e);
+            }
         }
     }    
 }

@@ -145,8 +145,12 @@ public class DataManager {
         }
     }
     
+    @SuppressWarnings("resource")
     public static int getCount(int module, int field, Object value) {
         int count = 0;
+        
+        ResultSet rs = null;
+        PreparedStatement ps = null;
         
         try {
             DcModule m = DcModules.get(module);
@@ -169,18 +173,26 @@ public class DataManager {
                 }
             }
                 
-            PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+            ps = DatabaseManager.getConnection().prepareStatement(sql);
             
-            if (f != null && value != null) ps.setObject(1, value instanceof DcObject ? ((DcObject) value).getID() : value);
+            if (f != null && value != null) 
+                ps.setObject(1, value instanceof DcObject ? ((DcObject) value).getID() : value);
             
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next())
                 count = rs.getInt(1);
             
-            rs.close();
         } catch (Exception e) {
             logger.error(e, e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (rs != null) rs.close();
+            } catch (SQLException se) {
+                logger.debug("Could not close database resources", se);
+            }
         }
+        
         return count;
     }
 
@@ -530,6 +542,7 @@ public class DataManager {
         return items.size() > 0 ? (Loan) items.get(0) : new Loan();
     }
     
+    @SuppressWarnings("resource")
     public static DcObject getObjectByExternalID(int moduleIdx, String type, String externalID) {
         DcModule module =  DcModules.get(moduleIdx);
        
@@ -542,42 +555,52 @@ public class DataManager {
         
         Connection conn = DatabaseManager.getConnection();
         DcObject result = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, externalID);
             ps.setString(2, type);
             
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
+            
             String referenceID;
             DcModule mappingMod;
             int idx;
-            PreparedStatement ps2;
+            PreparedStatement ps2 = null;
+            
             List<DcObject> items;
             while (rs.next()) {
-                referenceID = rs.getString(1);
-                
-                idx = DcModules.getMappingModIdx(extRefModule.getIndex() - DcModules._EXTERNALREFERENCE, extRefModule.getIndex(), DcObject._SYS_EXTERNAL_REFERENCES);
-                mappingMod = DcModules.get(idx);
-                sql = "SELECT * FROM " + DcModules.get(moduleIdx) + " WHERE ID IN (" +
-                	  "SELECT OBJECTID FROM " + mappingMod.getTableName() + 
-                      " WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?)";
-    
-                ps2 = conn.prepareStatement(sql);
-                ps2.setString(1, referenceID);
-                
-                items = WorkFlow.getInstance().convert(ps2.executeQuery(), new int[] {DcObject._ID});
-                result = items.size() > 0 ? items.get(0) : null;
-                
-                if (result != null) break;
-                
-                ps2.close();
-            }
+                try {
+                    referenceID = rs.getString(1);
+                    
+                    idx = DcModules.getMappingModIdx(extRefModule.getIndex() - DcModules._EXTERNALREFERENCE, extRefModule.getIndex(), DcObject._SYS_EXTERNAL_REFERENCES);
+                    mappingMod = DcModules.get(idx);
+                    sql = "SELECT * FROM " + DcModules.get(moduleIdx) + " WHERE ID IN (" +
+                    	  "SELECT OBJECTID FROM " + mappingMod.getTableName() + 
+                          " WHERE " + mappingMod.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + " = ?)";
         
-            ps.close();
-            rs.close();
+                    ps2 = conn.prepareStatement(sql);
+                    ps2.setString(1, referenceID);
+                    
+                    items = WorkFlow.getInstance().convert(ps2.executeQuery(), new int[] {DcObject._ID});
+                    result = items.size() > 0 ? items.get(0) : null;
+                    if (result != null) break;  
+                } finally {
+                    ps2.close();
+                }             
+            }
         } catch (SQLException se) {
             logger.error(se, se);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                logger.debug("Failed to release database resources", e);
+            }
+            
         }
         return result;
     }
@@ -656,6 +679,7 @@ public class DataManager {
             for (String value : values)
                 ps.setString(idx++, value.toUpperCase());
             
+            ps.close();
             List<DcObject> items = WorkFlow.getInstance().convert(ps.executeQuery(), new int[] {DcObject._ID});
             return items.size() > 0 ? items.get(0) : null;
             
@@ -722,6 +746,7 @@ public class DataManager {
      * @param filter
      * @param fields 
      */
+    @SuppressWarnings("resource")
     public static List<DcSimpleValue> getSimpleValues(int module, boolean icons) {
         DcModule m = DcModules.get(module);
         boolean useIcons = icons && m.getIconField() != null;
@@ -731,8 +756,10 @@ public class DataManager {
                      " order by 2";
 
         List<DcSimpleValue> values = new ArrayList<DcSimpleValue>();
+        
+        ResultSet rs = null;
         try {
-            ResultSet rs = DatabaseManager.executeSQL(sql);
+            rs = DatabaseManager.executeSQL(sql);
             DcImageIcon icon; 
             DcSimpleValue sv;
             String s;
@@ -751,7 +778,12 @@ public class DataManager {
         } catch (SQLException se) {
             DcSwingUtilities.displayErrorMessage(se.getMessage());
             logger.error(se, se);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+            } catch (SQLException e) {}    
         }
+        
         return values;
     }
     

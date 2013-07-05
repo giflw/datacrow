@@ -62,7 +62,7 @@ import org.apache.log4j.Logger;
  */
 public class SystemUpgradeBeforeInitialization {
     
-private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitialization.class.getName());
+    private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitialization.class.getName());
     
     public void start() {
         try {
@@ -196,6 +196,7 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
         }
     }
     
+    @SuppressWarnings("resource")
     private boolean isExistingConstraint(Statement stmt, String contraint) {
         boolean exists = false;
         ResultSet rs = null;
@@ -210,11 +211,16 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
             logger.error(e, e);
         }
         
-        try { rs.close(); } catch (Exception e) {}
+        try { 
+            if (rs != null) rs.close(); 
+        } catch (Exception e) {
+            logger.debug("Could not release database resources", e);
+        }
         
         return exists;
     }
     
+    @SuppressWarnings("resource")
     private boolean createIndexes() throws Exception {
         Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = null;
@@ -225,185 +231,188 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
             logger.error(se, se);
         }
 
-        for (DcModule module : DcModules.getAllModules()) {
-            
-            
-            if (module.getTableName() == null)
-                continue;
-            
-            // test if table exists
-            try {
-                stmt.execute("select TOP 1 * from " + module.getTableName());
-            } catch (Exception e) {
-                // no privileges and/or the table does not yet exist
-                logger.info("Skipping constraint creation for table " + module.getTableName() + " as it does not yet exist");
-                continue;
-            }
-            
-            // check if the constraint already exists
-            if (isExistingConstraint(stmt, module.getTableName() + "_IDX")) 
-                continue;
-            
-            if (module.getIndex() == DcModules._PICTURE) {
-                try { 
-                    
-                    stmt.execute("delete from picture where filename is null or objectid is null or field is null");
-                    
-                	String sql = "select distinct filename from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
-                	ResultSet rs = stmt.executeQuery(sql);
-                	ResultSet rs2;
-                	
-                	String filename;
-                	String objectID;
-                	Long width;
-                	Long height;
-                	String field;
-                	String externalFilename;
-                	
-                	while (rs.next()) {
-                	    
-                	    sql = "select distinct filename, objectid, width, field, height, external_filename from Picture where filename = '" + rs.getString("filename") + "'";
-                	    rs2 = stmt.executeQuery(sql);
-                	    while (rs2.next()) {
-                	        
-                	        sql = "delete from Picture where filename = '" + rs2.getString("filename") + "'";
-                	        
-                	        filename = rs2.getString("filename");
-                            objectID = rs2.getString("objectid");
-                            width = rs2.getLong("width");
-                            height = rs2.getLong("height");
-                            field = rs2.getString("field");
-                            externalFilename = rs2.getString("external_filename");
-                            externalFilename = Utilities.isEmpty(externalFilename) ? "null" : "'" + externalFilename + "'";
-                            
-                            logger.info("found duplicate records in the picture table - removing duplicate: " + filename);
-                            
-                            stmt.execute(sql);
-                            sql = "insert into Picture (filename, objectid, width, field, height, external_filename) " +
-                                    "values ('" + filename + "','" + objectID + "'," + width + ",'," + field + "'," + height + "," + externalFilename + ")";
-                            
-                            stmt.execute(sql);
-                            
-                            break;
-                	    }
-
-                	    rs2.close();
-                	}
-                	
-                	rs.close();
-                	
-                	logger.info("Creating unique index on " + module.getTableName());
-                	
-                    stmt.execute("CREATE unique index " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
-                            module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
-                            module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
+        try {
+            for (DcModule module : DcModules.getAllModules()) {
+                if (module.getTableName() == null)
+                    continue;
                 
-                } catch (Exception se) {
-                    // throw new Exception("Unable to create unique index on " + module.getTableName(), se);
-                    // there is no solution for this... yet.
-                    logger.debug(se, se);
+                // test if table exists
+                try {
+                    stmt.execute("select TOP 1 * from " + module.getTableName());
+                } catch (Exception e) {
+                    // no privileges and/or the table does not yet exist
+                    logger.info("Skipping constraint creation for table " + module.getTableName() + " as it does not yet exist");
+                    continue;
                 }
-            } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
-                try { 
-                	
-                    stmt.execute("delete from " +  module.getTableName() + " where objectid is null or referencedid is null");
-                    
-                    String sql = "select objectid, objectid + referencedid from " + module.getTableName() + " group by objectid, objectid + referencedid having count(*) > 1";
-                	ResultSet rs = stmt.executeQuery(sql);
-                	
-                	ResultSet rs2;
-                    String objectID;
-                    String referencedID;
-                	while (rs.next()) {
-                	    
-                        sql = "select distinct objectID, referencedID from " + module.getTableName() + " where objectID = '" + rs.getString("objectID") + "'";
-                        rs2 = stmt.executeQuery(sql);
-
-                        while (rs2.next()) {
-                            
-                            referencedID = rs2.getString("referencedid");
-                            objectID = rs2.getString("objectid");
-                            
-                            logger.info("Cleaning duplicates for " + module.getTableName() + ": " + objectID + ", reference ID: " + referencedID);
-                            
-                            sql = "delete from " + module.getTableName() + " where ObjectID = '" + objectID + "' AND referencedID = '" + referencedID + "'";
-                            stmt.execute(sql);
-                            
-                            sql = "insert into " + module.getTableName() + " (objectid, referencedid) values ('" + objectID + "','" + referencedID + "')";
-                            stmt.execute(sql);
-                        }
-
-                        rs2.close();
-                	}
-                	
-                	rs.close();
-                	
-                	logger.info("Creating unique index on " + module.getTableName());
-                	stmt.execute("CREATE unique index " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
-                            module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
-                            module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
-                } catch (Exception se) {
-                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
-                }
-            } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
-                try { 
-                    
-                    stmt.execute("delete from " +  module.getTableName() + " where externalid is null or externalidtype is null");
-                    
-                    String sql = "select externalid, externalidtype from " + module.getTableName() + " group by externalid, externalidtype having count(*) > 1";
-                    ResultSet rs = stmt.executeQuery(sql);
-                    
-                    ResultSet rs2;
-                    String externalidtype;
-                    String externalid;
-                    String name;
-                    String ID;
-                    while (rs.next()) {
+                
+                // check if the constraint already exists
+                if (isExistingConstraint(stmt, module.getTableName() + "_IDX")) 
+                    continue;
+                
+                if (module.getIndex() == DcModules._PICTURE) {
+                    try { 
                         
-                        sql = "select top 1 id, externalid, externalidtype, name from " + module.getTableName() + 
-                                " where externalid = '" + rs.getString("externalid") + "' and externalidtype = '" + rs.getString("externalidtype") + "'";
-                        rs2 = stmt.executeQuery(sql);
-
-                        while (rs2.next()) {
-                            
-                            externalid = rs2.getString("externalid");
-                            externalidtype = rs2.getString("externalidtype");
-                            name = rs2.getString("name");
-                            ID = rs2.getString("id");
-                            
-                            logger.info("Cleaning duplicates for " + module.getTableName() + ": " + externalid + ", reference type: " + externalidtype);
-                            
-                            sql = "delete from " + module.getTableName() + " where externalid = '" + externalid + "' AND externalidtype = '" + externalidtype + "'";
-                            stmt.execute(sql);
-                            
-                            sql = "insert into " + module.getTableName() + " (id, externalid, externalidtype, name) values ('" + ID + "','" + externalid + "','" + externalidtype + "','" + name + "')";
-                            stmt.execute(sql);
-                        }
-
-                        rs2.close();
+                        stmt.execute("delete from picture where filename is null or objectid is null or field is null");
+                        
+                    	String sql = "select distinct filename from picture where filename in (select filename from picture group by filename having count(ObjectID) > 1)";
+                    	ResultSet rs = stmt.executeQuery(sql);
+                    	ResultSet rs2;
+                    	
+                    	String filename;
+                    	String objectID;
+                    	Long width;
+                    	Long height;
+                    	String field;
+                    	String externalFilename;
+                    	
+                    	while (rs.next()) {
+                    	    
+                    	    sql = "select distinct filename, objectid, width, field, height, external_filename from Picture where filename = '" + rs.getString("filename") + "'";
+                    	    rs2 = stmt.executeQuery(sql);
+                    	    while (rs2.next()) {
+                    	        
+                    	        sql = "delete from Picture where filename = '" + rs2.getString("filename") + "'";
+                    	        
+                    	        filename = rs2.getString("filename");
+                                objectID = rs2.getString("objectid");
+                                width = rs2.getLong("width");
+                                height = rs2.getLong("height");
+                                field = rs2.getString("field");
+                                externalFilename = rs2.getString("external_filename");
+                                externalFilename = Utilities.isEmpty(externalFilename) ? "null" : "'" + externalFilename + "'";
+                                
+                                logger.info("found duplicate records in the picture table - removing duplicate: " + filename);
+                                
+                                stmt.execute(sql);
+                                sql = "insert into Picture (filename, objectid, width, field, height, external_filename) " +
+                                        "values ('" + filename + "','" + objectID + "'," + width + ",'," + field + "'," + height + "," + externalFilename + ")";
+                                
+                                stmt.execute(sql);
+                                
+                                break;
+                    	    }
+    
+                    	    rs2.close();
+                    	}
+                    	
+                    	rs.close();
+                    	
+                    	logger.info("Creating unique index on " + module.getTableName());
+                    	
+                        stmt.execute("CREATE unique index " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                                module.getField(Picture._A_OBJECTID).getDatabaseFieldName() + ", " +
+                                module.getField(Picture._B_FIELD).getDatabaseFieldName() + ")");
+                    
+                    } catch (Exception se) {
+                        // throw new Exception("Unable to create unique index on " + module.getTableName(), se);
+                        // there is no solution for this... yet.
+                        logger.debug(se, se);
                     }
-                    
-                    rs.close();
-                    
-                    logger.info("Creating unique index on " + module.getTableName());
-                    stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
-                            module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + ", " +
-                            module.getField(ExternalReference._EXTERNAL_ID_TYPE).getDatabaseFieldName() + ")");
-                } catch (Exception se) {
-                    throw new Exception("Unable to create unique index on " + module.getTableName(), se);
+                } else if (module.getType() == DcModule._TYPE_MAPPING_MODULE) {
+                    try { 
+                    	
+                        stmt.execute("delete from " +  module.getTableName() + " where objectid is null or referencedid is null");
+                        
+                        String sql = "select objectid, objectid + referencedid from " + module.getTableName() + " group by objectid, objectid + referencedid having count(*) > 1";
+                    	ResultSet rs = stmt.executeQuery(sql);
+                    	
+                    	ResultSet rs2;
+                        String objectID;
+                        String referencedID;
+                    	while (rs.next()) {
+                    	    
+                            sql = "select distinct objectID, referencedID from " + module.getTableName() + " where objectID = '" + rs.getString("objectID") + "'";
+                            rs2 = stmt.executeQuery(sql);
+    
+                            while (rs2.next()) {
+                                
+                                referencedID = rs2.getString("referencedid");
+                                objectID = rs2.getString("objectid");
+                                
+                                logger.info("Cleaning duplicates for " + module.getTableName() + ": " + objectID + ", reference ID: " + referencedID);
+                                
+                                sql = "delete from " + module.getTableName() + " where ObjectID = '" + objectID + "' AND referencedID = '" + referencedID + "'";
+                                stmt.execute(sql);
+                                
+                                sql = "insert into " + module.getTableName() + " (objectid, referencedid) values ('" + objectID + "','" + referencedID + "')";
+                                stmt.execute(sql);
+                            }
+    
+                            rs2.close();
+                    	}
+                    	
+                    	rs.close();
+                    	
+                    	logger.info("Creating unique index on " + module.getTableName());
+                    	stmt.execute("CREATE unique index " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                                module.getField(DcMapping._A_PARENT_ID).getDatabaseFieldName() + ", " +
+                                module.getField(DcMapping._B_REFERENCED_ID).getDatabaseFieldName() + ")");
+                    } catch (Exception se) {
+                        throw new Exception("Unable to create unique index on " + module.getTableName(), se);
+                    }
+                } else if (module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
+                    try { 
+                        
+                        stmt.execute("delete from " +  module.getTableName() + " where externalid is null or externalidtype is null");
+                        
+                        String sql = "select externalid, externalidtype from " + module.getTableName() + " group by externalid, externalidtype having count(*) > 1";
+                        ResultSet rs = stmt.executeQuery(sql);
+                        
+                        ResultSet rs2;
+                        String externalidtype;
+                        String externalid;
+                        String name;
+                        String ID;
+                        while (rs.next()) {
+                            
+                            sql = "select top 1 id, externalid, externalidtype, name from " + module.getTableName() + 
+                                    " where externalid = '" + rs.getString("externalid") + "' and externalidtype = '" + rs.getString("externalidtype") + "'";
+                            rs2 = stmt.executeQuery(sql);
+    
+                            while (rs2.next()) {
+                                
+                                externalid = rs2.getString("externalid");
+                                externalidtype = rs2.getString("externalidtype");
+                                name = rs2.getString("name");
+                                ID = rs2.getString("id");
+                                
+                                logger.info("Cleaning duplicates for " + module.getTableName() + ": " + externalid + ", reference type: " + externalidtype);
+                                
+                                sql = "delete from " + module.getTableName() + " where externalid = '" + externalid + "' AND externalidtype = '" + externalidtype + "'";
+                                stmt.execute(sql);
+                                
+                                sql = "insert into " + module.getTableName() + " (id, externalid, externalidtype, name) values ('" + ID + "','" + externalid + "','" + externalidtype + "','" + name + "')";
+                                stmt.execute(sql);
+                            }
+    
+                            rs2.close();
+                        }
+                        
+                        rs.close();
+                        
+                        logger.info("Creating unique index on " + module.getTableName());
+                        stmt.execute("CREATE UNIQUE INDEX " + module.getTableName() + "_IDX ON " + module.getTableName() + " (" +
+                                module.getField(ExternalReference._EXTERNAL_ID).getDatabaseFieldName() + ", " +
+                                module.getField(ExternalReference._EXTERNAL_ID_TYPE).getDatabaseFieldName() + ")");
+                    } catch (Exception se) {
+                        throw new Exception("Unable to create unique index on " + module.getTableName(), se);
+                    }
                 }
+            }
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException se) {
+                logger.debug("Failed to close database reources", se);
             }
         }
-        
-        try {
-            if (stmt != null) stmt.close();
-        } catch (SQLException ignore) {}
         
         return true;
     }
     
     private void cleanupReferences() {
         
+        @SuppressWarnings("resource")
         Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = null;
         String sql;
@@ -440,6 +449,8 @@ private static Logger logger = Logger.getLogger(SystemUpgradeBeforeInitializatio
         
         try {
             if (stmt != null) stmt.close();
-        } catch (SQLException ignore) {}
+        } catch (SQLException se) {
+            logger.debug("Failed to close database resources", se);
+        }
    }
 }

@@ -63,6 +63,7 @@ public class SelectQuery extends Query {
         this.df = df;
     }
     
+    @SuppressWarnings("resource")
     @Override
     public List<DcObject> run()  {
         boolean success = false;
@@ -79,20 +80,19 @@ public class SelectQuery extends Query {
             conn = DatabaseManager.getConnection();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
-            
             items = WorkFlow.getInstance().convert(rs, fields);
             
             success = true;
             
         } catch (SQLException e) {
             logger.error("Error while executing query: " + sql, e);
-        }
-
-        try {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
-        } catch (SQLException e) {
-            logger.error("Error while closing connection", e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                logger.error("Error while closing connection", e);
+            }
         }
         
         handleRequest(success);

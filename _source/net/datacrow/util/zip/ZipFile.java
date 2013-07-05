@@ -47,9 +47,9 @@ public class ZipFile {
     
     public void close() {
     	try {
-    		zout.close();
-    		bos.close();
-    		fos.close();
+    		if (zout != null) zout.close();
+    		if (bos != null) bos.close();
+    		if (fos != null) fos.close();
     	} catch (Exception e) {
     		logger.debug("Could not close zip file streams", e);
     	}

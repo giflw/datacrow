@@ -279,12 +279,15 @@ public class SystemUpgradeAfterInitialization {
         return success;
     }
     
+    @SuppressWarnings("resource")
     private boolean cleanupReferences() {
     	MappingModule mm;
     	DcModule pm;
     	DcModule cm;
     	String sql;
-    	ResultSet rs;
+    	
+    	ResultSet rs = null;
+    	
     	int count;
     	for (DcModule module : DcModules.getAllModules()) {
     		
@@ -301,7 +304,6 @@ public class SystemUpgradeAfterInitialization {
 	    			rs = DatabaseManager.executeSQL(sql);
 	    			rs.next();
 	    			count = rs.getInt(1);
-	    			rs.close();
 	    			
 	    			if (count > 0) {
 		    			logger.info("Cleaning " + mm.getTableName() + " of " + count + " ghost record(s).");
@@ -310,19 +312,23 @@ public class SystemUpgradeAfterInitialization {
 		    				"(select id from " + pm.getTableName() + ") or referencedid not in " +
 		    				"(select id from " + cm.getTableName() + ")";
 	    			
-		    			rs = DatabaseManager.executeSQL(sql);
-		    			
-		    			if (rs != null) rs.close();
+		    			DatabaseManager.execute(sql);
 	    			}
     			} catch (SQLException se) {
     				logger.error("Error while cleaning references for module " + module, se);
-    			}
-    			
+    			} finally {
+    			    try {
+    			        if (rs != null) rs.close();
+    			    } catch (SQLException se) {
+    			        logger.debug("Error while closing database resources", se);
+    			    }
+    			}	
     		}
     	}
     	return true;
     }
 
+    @SuppressWarnings("resource")
     private boolean correctAssociateNames() {
 
         boolean upgraded = false;
@@ -339,6 +345,7 @@ public class SystemUpgradeAfterInitialization {
         
         Connection conn = DatabaseManager.getAdminConnection();
         PreparedStatement ps = null;
+        ResultSet rs = null;
         String tmp;
         for (DcModule module : DcModules.getAllModules()) {
             if (module.getType() == DcModule._TYPE_ASSOCIATE_MODULE) {
@@ -349,7 +356,8 @@ public class SystemUpgradeAfterInitialization {
                     
                     sql = "select " + fieldFn + ", " + fieldLn + ", ID from " + module.getTableName() + 
                           " where firstname is not null and lastname is not null"; 
-                    ResultSet rs = DatabaseManager.executeSQL(sql);
+                    
+                    rs = DatabaseManager.executeSQL(sql);
                     while (rs.next()) {
                         firstname = rs.getString(1);
                         lastname = rs.getString(2);
@@ -382,13 +390,18 @@ public class SystemUpgradeAfterInitialization {
                         ps.setString(4, id);
                         
                         ps.execute();
-                        ps.close();
                     }
                     
-                    rs.close();
                     upgraded = true;
                 } catch (SQLException se) {
                     logger.error("Could not update " + module, se);
+                } finally {
+                    try {
+                        if (rs != null) rs.close();
+                        if (ps != null) ps.close();
+                    } catch (SQLException se) {
+                        logger.debug("Failed to close database resources", se); 
+                    }
                 }
             }
         }
@@ -418,60 +431,72 @@ public class SystemUpgradeAfterInitialization {
         return upgraded;
     }
     
+    @SuppressWarnings("resource")
     private boolean fillUIPersistFieldsPersons() {
         boolean upgraded = false;
         
-        ResultSet rs;
+        ResultSet rs = null;
+        
         DcField fldPersist;
         
         String ID;
         String referencedID;
         String sql;
 
+        DcObject dco;
+        DcModule mm;
+        
+        String prevID;
         for (DcModule module : DcModules.getAllModules()) {
-
-            if (module.isAbstract() || module.getType() == DcModule._TYPE_TEMPLATE_MODULE) continue;
             
-            DcObject dco = module.getItem();
-            for (DcField fld : module.getFields()) {
-            	logger.info("Creating persistant field for module: " + module.getTableName() + ": " + fld);
-                if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                	
-                	if (DcModules.get(fld.getReferenceIdx()).getType() != DcModule._TYPE_ASSOCIATE_MODULE)
-                		continue;
-                	
-                	fldPersist = module.getPersistentField(fld.getIndex());
-                	
-                    try {
-                        DcModule mm = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
+            if (module.isAbstract() || module.getType() == DcModule._TYPE_TEMPLATE_MODULE) continue;
 
-                        sql = 
-                        	" select objectid, referencedid from " + mm.getTableName() + 
-                        	" inner join " + DcModules.get(fld.getReferenceIdx()).getTableName() + 
-                        	" on " + DcModules.get(fld.getReferenceIdx()).getTableName() + ".ID = " +  mm.getTableName() + ".referencedID " +
-                        	" order by objectid, name";
-                        
-                        rs = DatabaseManager.executeSQL(sql);
-                        
-                        String prevID = null;
-                        while (rs.next()) {
-                            ID = rs.getString(1);
-                            referencedID = rs.getString(2);
-                            if (!ID.equals(prevID)) {
-                            	sql = "update " + dco.getModule().getTableName() + " set " + 
-                            		fldPersist.getDatabaseFieldName() + " = '" + referencedID + "' " +
-                            		"where ID ='" + ID + "'";
-                            	DatabaseManager.execute(sql);
-                            }
+            try {
+                dco = module.getItem();
+                for (DcField fld : module.getFields()) {
+                	logger.info("Creating persistant field for module: " + module.getTableName() + ": " + fld);
+                    if (fld.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    	
+                    	if (DcModules.get(fld.getReferenceIdx()).getType() != DcModule._TYPE_ASSOCIATE_MODULE)
+                    		continue;
+                    	
+                    	fldPersist = module.getPersistentField(fld.getIndex());
+                    	
+                        try {
+                            mm = DcModules.get(DcModules.getMappingModIdx(fld.getModule(), fld.getReferenceIdx(), fld.getIndex()));
+    
+                            sql = 
+                            	" select objectid, referencedid from " + mm.getTableName() + 
+                            	" inner join " + DcModules.get(fld.getReferenceIdx()).getTableName() + 
+                            	" on " + DcModules.get(fld.getReferenceIdx()).getTableName() + ".ID = " +  mm.getTableName() + ".referencedID " +
+                            	" order by objectid, name";
                             
-                            prevID = ID;
+                            rs = DatabaseManager.executeSQL(sql);
+                            
+                            prevID = null;
+                            while (rs.next()) {
+                                ID = rs.getString(1);
+                                referencedID = rs.getString(2);
+                                if (!ID.equals(prevID)) {
+                                	sql = "update " + dco.getModule().getTableName() + " set " + 
+                                		fldPersist.getDatabaseFieldName() + " = '" + referencedID + "' " +
+                                		"where ID ='" + ID + "'";
+                                	DatabaseManager.execute(sql);
+                                }
+                                
+                                prevID = ID;
+                            }
+                        } catch (SQLException se) {
+                            logger.error("Could not remove references", se);
                         }
-                        rs.close();
-                    } catch (SQLException se) {
-                        logger.error("Could not remove references", se);
+                        upgraded = true;
                     }
-                    
-                    upgraded = true;
+                }
+            } finally {
+                try {
+                    if (rs != null) rs.close();
+                } catch (SQLException se) {
+                    logger.debug("Error while closing database resources", se);
                 }
             }
         }
@@ -479,11 +504,12 @@ public class SystemUpgradeAfterInitialization {
         return upgraded;
     }
     
+    @SuppressWarnings("resource")
     private boolean fillUIPersistFields() {
         boolean upgraded = false;
         
-        ResultSet rs;
-        ResultSet rs2;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
         
         DcField fldPersist;
         String referenceID;
@@ -505,36 +531,48 @@ public class SystemUpgradeAfterInitialization {
                         sql = "select distinct objectid from " + mm.getTableName();
                         rs = DatabaseManager.executeSQL(sql);
                         
-                        while (rs.next()) {
-                            ID = rs.getString(1);
-                            sql = "select top 1 referencedid from " + mm.getTableName() + " where objectid = '" + ID + "'";
-                            rs2 = DatabaseManager.executeSQL(sql);
-                            if (rs2.next()) {
-                                dco.clearValues();
-                                
-                                referenceID = rs2.getString(1);
-                                dco.setValueLowLevel(DcObject._ID, ID);
-                                fldPersist = module.getPersistentField(fld.getIndex());
-                                dco.setValue(fldPersist.getIndex(), referenceID);
-                                dco.setUpdateGUI(false);
+                        try {
+                            while (rs.next()) {
                                 try {
-                                    dco.saveUpdate(false, false);
-                                } catch (Exception e) {
-                                    logger.error(e, e);
+                                    ID = rs.getString(1);
+                                    sql = "select top 1 referencedid from " + mm.getTableName() + " where objectid = '" + ID + "'";
+                                    rs2 = DatabaseManager.executeSQL(sql);
+                                    if (rs2.next()) {
+                                        dco.clearValues();
+                                        
+                                        referenceID = rs2.getString(1);
+                                        dco.setValueLowLevel(DcObject._ID, ID);
+                                        fldPersist = module.getPersistentField(fld.getIndex());
+                                        dco.setValue(fldPersist.getIndex(), referenceID);
+                                        dco.setUpdateGUI(false);
+                                        try {
+                                            dco.saveUpdate(false, false);
+                                        } catch (Exception e) {
+                                            logger.error(e, e);
+                                        }
+                                    }
+                                } finally {
+                                    try {
+                                        if (rs2 != null) rs2.close();
+                                    } catch (SQLException se) {
+                                        logger.debug("Failed to close database resources", se);
+                                    }
                                 }
                             }
-                            rs2.close();
+                        } finally {
+                            try {
+                                if (rs != null) rs.close();
+                            } catch (SQLException se) {
+                                logger.debug("Failed to close database resources", se);
+                            }
                         }
-                        rs.close();
                     } catch (SQLException se) {
                         logger.error("Could not remove references", se);
                     }
-                    
                     upgraded = true;
                 }
             }
         }
-        
         return upgraded;
     }
 }

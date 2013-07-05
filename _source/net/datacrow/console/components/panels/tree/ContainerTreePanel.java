@@ -157,7 +157,8 @@ public class ContainerTreePanel extends TreePanel {
             stop = true;
         }
         
-	    private void createTree() {
+	    @SuppressWarnings("resource")
+        private void createTree() {
 	    	
 	    	build();
 	    	
@@ -167,7 +168,6 @@ public class ContainerTreePanel extends TreePanel {
 	    	String sql = null;
 	    	
 	    	try {
-	    	
 		    	DcModule module = DcModules.get(DcModules._CONTAINER);
 		    	
 		    	DataFilter df = DataFilters.getCurrent(DcModules._CONTAINER);
@@ -175,9 +175,9 @@ public class ContainerTreePanel extends TreePanel {
 		    	
 		    	conn = DatabaseManager.getConnection();
 		    	stmt = conn.createStatement();
+		    	rs = stmt.executeQuery(sql);
 		    	
 		    	logger.debug(sql);
-		    	rs = stmt.executeQuery(sql);
 		    	
 		    	String name;
 		    	String id;
@@ -209,6 +209,7 @@ public class ContainerTreePanel extends TreePanel {
 		    		}
 		    		
 		    		if (icon != null) icons.put(id, Utilities.base64ToImage(icon));
+		    		
 		    		all.put(id, name);
 		    	}
 		    	
@@ -229,14 +230,14 @@ public class ContainerTreePanel extends TreePanel {
 		    	
 	    	} catch (Exception e) {
 	    		logger.error("Error while building the container tree", e);
+	    	} finally {
+    	    	try {
+    	    		if (rs != null) rs.close();
+    	    		if (stmt != null) stmt.close();
+    			} catch (Exception e) {
+    				logger.error("Error while closing connection (statement, resultset and/or connection)", e);
+    			}
 	    	}
-	    	
-	    	try {
-	    		if (rs != null) rs.close();
-	    		if (stmt != null) stmt.close();
-			} catch (Exception e) {
-				logger.error("Error while closing connection (statement, resultset and/or connection)", e);
-			}
 			
             SwingUtilities.invokeLater(
                     new Thread(new Runnable() { 

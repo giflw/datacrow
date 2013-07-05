@@ -25,12 +25,8 @@
 
 package net.datacrow.util.movie;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.RandomAccessFile;
 import java.util.StringTokenizer;
-
-import net.datacrow.core.DataCrow;
 
 import org.apache.log4j.Logger;
 
@@ -47,7 +43,7 @@ class FilePropertiesOGM extends FileProperties {
     private final int ffff = 0xffffffff;
 
     private float frameRate;
-
+    
     /**
      * Processes a file from the given RandomAccessFile.
      */
@@ -105,11 +101,9 @@ class FilePropertiesOGM extends FileProperties {
                     // Video info 
                     if (type == vide) {
                         skipBytes(dataStream, 4);
-                        videoFccHandler = readUnsignedInt32(dataStream);
-
-                        FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "FOURCCvideo.txt"));
-                        String videoCodec = findName(fis, fromByteToAscii(videoFccHandler, 4));
-
+                        videoFccHandler = readUnsignedInt32(dataStream);                        
+                        String videoCodec = findName(fromByteToAscii(videoFccHandler, 4), FileProperties._TYPE_VIDEO_CODEC);
+                        
                         setVideoCodec(videoCodec);
 
                         skipBytes(dataStream, 4);
@@ -135,9 +129,9 @@ class FilePropertiesOGM extends FileProperties {
 
                         if (!audioCodecs.equals(""))
                             audioCodecs += ", ";
-
-                        FileInputStream fis = new FileInputStream("resources/FOURCCaudio.txt");
-                        audioCodecs += findName(fis, "0x" + fromByteToAscii(audioFccHandler, 4));
+                        
+                        audioCodecs += findName("0x" + fromByteToAscii(audioFccHandler, 4), FileProperties._TYPE_AUDIO_CODEC);
+                        
                         skipBytes(dataStream, 12);
                         float sampleRate = readUnsignedInt32(dataStream);
 
@@ -198,7 +192,7 @@ class FilePropertiesOGM extends FileProperties {
                         }
                     } else {
                         if (streamCounter == 0) {
-                            getExtendedCodecInfo(dataStream, 100);
+                            setExtendedCodecInfo(dataStream, 100);
                             quit = true;
                         }
                     }
@@ -305,8 +299,7 @@ class FilePropertiesOGM extends FileProperties {
         return (int) (duration / frameRate);
     }
 
-    private void getExtendedCodecInfo(RandomAccessFile dataStream, int iLimit)
-            throws Exception {
+    private void setExtendedCodecInfo(RandomAccessFile dataStream, int iLimit) throws Exception {
 
         int limit = iLimit;
         int temp;
@@ -351,8 +344,7 @@ class FilePropertiesOGM extends FileProperties {
                             extendedInfo = extendedInfo.replaceFirst("Build", "b");
                     }
 
-                    FileInputStream fis = new FileInputStream("resources/videoExtended.txt");
-                    String codecName = findName(fis, extendedInfo);
+                    String codecName = findName(extendedInfo, FileProperties._TYPE_VIDEO_CODEC_EXT);
                     if (!codecName.equals("")) {
                         setVideoCodec(codecName);
                         return;

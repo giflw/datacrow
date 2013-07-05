@@ -147,6 +147,7 @@ public class DataCrow {
             String pUserDir = null;
             boolean determiningDir = false;
             boolean determiningUserDir = false;
+            String port = null;
             for (int i = 0; i < args.length; i++) {
                 if (args[i].toLowerCase().startsWith("-dir:")) {
                     pInstallationDir = args[i].substring(5, args[i].length());
@@ -168,6 +169,8 @@ public class DataCrow {
                     noSplash = true;
                 } else if (args[i].toLowerCase().startsWith("-webserver")) {
                     webserverMode = true;
+                } else if (args[i].toLowerCase().startsWith("-port:")) {
+                    port = args[i].substring("-port:".length());;
                 } else if (args[i].toLowerCase().startsWith("-clearsettings")) {
                     loadSettings = false;
                 } else if (args[i].toLowerCase().startsWith("-credentials:")) {
@@ -197,6 +200,10 @@ public class DataCrow {
                     System.out.println("-webserver");
                     System.out.println("Starts the web server without starting the Data Crow GUI. Specify -credentials to avoid the login dialog.");
                     System.out.println("Example: java -jar datacrow.jar -webserver");
+                    System.out.println("");
+                    System.out.println("-port:<port nnumber>");
+                    System.out.println("Specifies the port to be used by the web server. This overrules the settings.");
+                    System.out.println("Example: java -jar datacrow.jar -webserver -port:8080");
                     System.out.println("");
                     System.out.println("-debug");
                     System.out.println("Debug mode for additional logging information.");
@@ -437,6 +444,14 @@ public class DataCrow {
                             Runtime.getRuntime().addShutdownHook(new ShutdownThread());
                             
                             showSplashMsg(DcResources.getText("msgStartingWebServer"));
+                            
+                            if (port != null) {
+                                try {
+                                    DcWebServer.getInstance().setPort(Integer.parseInt(port));
+                                } catch (NumberFormatException nfe) {
+                                    System.out.println("Incorrect sserver port: [" + port + "]");
+                                }
+                            }
                             
                             DcWebServer.getInstance().start();
                             if (DcWebServer.getInstance().isRunning())
@@ -908,14 +923,19 @@ public class DataCrow {
             File file = new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".properties");
             if (file.exists()) {
                 Properties properties = new Properties();
-                properties.load(new FileInputStream(file));
+                
+                FileInputStream fis = new FileInputStream(file);
+                properties.load(fis);
+                fis.close();
                 
                 properties.setProperty("readonly", "false");
                 properties.setProperty("hsqldb.nio_data_file", "true");
                 properties.setProperty("hsqldb.lock_file", "false");
                 properties.setProperty("hsqldb.log_size", "10000");
 
-                properties.store(new FileOutputStream(file), "Default properties for the DC database of Data Crow.");
+                FileOutputStream fos = new FileOutputStream(file);
+                properties.store(fos, "Default properties for the DC database of Data Crow.");
+                fos.close();
             }
         } catch (Exception e) {
             logger.error("Could not set the default database properties.", e);

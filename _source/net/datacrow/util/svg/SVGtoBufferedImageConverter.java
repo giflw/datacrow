@@ -48,6 +48,7 @@ public class SVGtoBufferedImageConverter{
         InputStream in = new FileInputStream(inputFile);
         TranscoderInput input = new TranscoderInput(in);
         TranscoderOutput output = new TranscoderOutput();
-        transcoder.transcode(input, output);    
+        transcoder.transcode(input, output);
+        in.close();
     }
 }

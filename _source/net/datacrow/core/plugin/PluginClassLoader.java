@@ -148,14 +148,14 @@ public class PluginClassLoader extends ClassLoader {
      */
     @Override
     public InputStream getResourceAsStream(String name) {
-        //try the system loader first
+        // try the system loader first
         InputStream is = super.getSystemResourceAsStream(name);
         if (is != null)
             return is;
 
         File resFile;
 
-        //try plugins directory
+        // try plugins directory
         resFile = new File(path, name);
         try { // read the byte codes
             is = new FileInputStream(resFile);
@@ -164,7 +164,7 @@ public class PluginClassLoader extends ClassLoader {
         if (is != null)
             return is;
 
-        //try subdirectories
+        // try sub directories
         resFile = new File(path);
         String[] list = resFile.list();
         if (list != null) {
@@ -175,7 +175,9 @@ public class PluginClassLoader extends ClassLoader {
                         File f = new File(path + list[i], name);
                         is = new FileInputStream(f);
                     } catch (Exception e) {
+                        logger.debug("Error while processing the plugin file", e);
                     }
+                    
                     if (is != null)
                         return is;
                 }

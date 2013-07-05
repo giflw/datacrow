@@ -51,8 +51,12 @@ import net.datacrow.core.objects.helpers.MusicTrack;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
+import org.apache.log4j.Logger;
+
 public class CreateMultipleItemsDialog extends DcDialog implements ActionListener {
-	
+    
+    private static Logger logger = Logger.getLogger(CreateMultipleItemsDialog.class.getName());
+    
 	private DcTable table;
 	
 	private int moduleIdx;
@@ -112,8 +116,9 @@ public class CreateMultipleItemsDialog extends DcDialog implements ActionListene
                         }
                         
                         tracknr = tracknr == 0 ? 1 : tracknr;
+                        rs.close();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Error while creating multiple", e);
                     }
                 } else {
                     tracknr = (Long) table.getValueAt(table.getRowCount() - 1, 0, false)  + 1;

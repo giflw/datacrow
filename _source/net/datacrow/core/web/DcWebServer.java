@@ -26,8 +26,6 @@
 package net.datacrow.core.web;
 
 import net.datacrow.core.DataCrow;
-import net.datacrow.core.DcRepository;
-import net.datacrow.settings.DcSettings;
 
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
@@ -45,15 +43,20 @@ public class DcWebServer {
     
 	private static DcWebServer instance = new DcWebServer();
 	
+	private int port;
 	private boolean isRunning;
-
 	private Server server;
 	
 	/**
 	 * Returns the instance of the web server.
 	 */
 	public static DcWebServer getInstance() {
+	    
 	    return instance;
+	}
+	
+	public void setPort(int port) {
+	    this.port = port;
 	}
 	
 	/**
@@ -84,7 +87,8 @@ public class DcWebServer {
 	    server = server == null ? new Server() : server;
 	    
 	    Connector connector = new SelectChannelConnector();
-	    connector.setPort(DcSettings.getInt(DcRepository.Settings.stWebServerPort)); 
+	    connector.setPort(port);
+	    
 	    server.setConnectors(new Connector[]{connector});
 	    
 	    String baseDir = DataCrow.webDir;

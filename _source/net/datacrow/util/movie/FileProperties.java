@@ -26,14 +26,25 @@
 package net.datacrow.util.movie;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.List;
 import java.util.StringTokenizer;
 
-abstract class FileProperties {
+import net.datacrow.core.DataCrow;
 
+import org.apache.log4j.Logger;
+
+abstract class FileProperties {
+    
+    private static Logger logger = Logger.getLogger(FileProperties.class.getName());
+
+    public static final int _TYPE_AUDIO_CODEC = 0;
+    public static final int _TYPE_VIDEO_CODEC = 1;
+    public static final int _TYPE_VIDEO_CODEC_EXT = 2;
+    
     private String filename = "";
     private String language = "";
     private String name = "";
@@ -51,7 +62,34 @@ abstract class FileProperties {
     private String mediaType = "";
     
     private List<String> metaData;
+    
+    private BufferedReader rdrVideo;
+    private BufferedReader rdrVideoExt;
+    private BufferedReader rdrAudio;
 
+    public FileProperties() {
+        try {
+            InputStreamReader isrVideo = new InputStreamReader(new FileInputStream(new File(DataCrow.resourcesDir, "FOURCCvideo.txt")));
+            rdrVideo = new BufferedReader(isrVideo);
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+        
+        try {
+            InputStreamReader isrAudio = new InputStreamReader(new FileInputStream(new File(DataCrow.resourcesDir, "FOURCCaudio.txt")));
+            rdrAudio = new BufferedReader(isrAudio);
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
+        
+        try {
+            InputStreamReader isrVideoExt = new InputStreamReader(new FileInputStream(new File(DataCrow.resourcesDir, "videoExtended.txt")));
+            rdrVideoExt = new BufferedReader(isrVideoExt);
+        } catch (Exception e) {
+            logger.error(e, e);
+        }            
+    }
+    
     public String getFilename() {
         return filename;
     }
@@ -402,26 +440,64 @@ abstract class FileProperties {
         }
         return bits;
     }
+    
+    public void close() {
+        if (metaData != null) metaData.clear();
+        if (rdrVideo != null) { 
+            try { 
+                rdrVideo.close();
+            } catch (Exception e) {
+                logger.debug("Failed to close file", e);
+            }
+        }
+        
+        if (rdrVideoExt != null) { 
+            try { 
+                rdrVideoExt.close();
+            } catch (Exception e) {
+                logger.debug("Failed to close file", e);
+            }
+        }
+        
+        if (rdrAudio != null) { 
+            try { 
+                rdrAudio.close();
+            } catch (Exception e) {
+                logger.debug("Failed to close file", e);
+            }
+        }
+    }
 
     /**
      * Searches in the inputStream stream the name following the string id
      * (separated by a \t).
      */
-    protected String findName(InputStream stream, String id) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+           
+    protected String findName(String id, int type) throws Exception {
         String line = null;
-
-        while ((line = reader.readLine()) != null) {
-            if (line.length() > 0) {
-                StringTokenizer tokenizer = new StringTokenizer(line, "\t");
-                if (tokenizer.countTokens() > 0
-                        && id.compareToIgnoreCase(tokenizer.nextToken()) == 0) {
-                    return tokenizer.nextToken();
+        String result = "";
+        
+        // do not close rdr, reused throughout the session
+        @SuppressWarnings("resource")
+        BufferedReader rdr = 
+                type == _TYPE_AUDIO_CODEC ? rdrAudio :
+                type == _TYPE_VIDEO_CODEC ? rdrVideo : rdrVideoExt;
+        
+        if (rdr == null) {
+            logger.error("No valid resource file found for codec identification");
+        } else {
+            while ((line = rdr.readLine()) != null) {
+                if (line.length() > 0) {
+                    StringTokenizer tokenizer = new StringTokenizer(line, "\t");
+                    if (    tokenizer.countTokens() > 0 &&
+                            id.compareToIgnoreCase(tokenizer.nextToken()) == 0) {
+                        result = tokenizer.nextToken();
+                        break;
+                    }
                 }
             }
         }
         
-        reader.close();
-        return "";
+        return result;
     }
 }

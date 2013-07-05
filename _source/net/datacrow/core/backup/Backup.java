@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -74,8 +75,24 @@ public class Backup extends Thread {
      * @return A collection of fully classified filenames.
      */
     private Collection<String> getFiles() {
-        Directory dir = new Directory(DataCrow.userDir, true, null);
-        return dir.read();
+        
+        Collection<String> files = new ArrayList<String>();
+        String paths[] = {
+                DataCrow.applicationSettingsDir,
+                DataCrow.moduleSettingsDir,
+                DataCrow.databaseDir,
+                DataCrow.moduleDir,
+                DataCrow.reportDir,
+                DataCrow.resourcesDir,
+                DataCrow.upgradeDir,
+                DataCrow.imageDir};
+        
+        Directory dir;
+        for (String path : paths) {
+            dir = new Directory(path, true, null);
+            files.addAll(dir.read());
+        }
+        return files;
     }
 
     private String getZipFile(String target) {
@@ -131,18 +148,20 @@ public class Backup extends Thread {
                 writer.close();
             }
             
-            for (String file : files) {
+            String name;
+            for (String filename : files) {
+                
+                name =  filename.substring(DataCrow.userDir.length() - 
+                        (DataCrow.userDir.startsWith("/") && !filename.startsWith("/") ? 2 : 1));
+                
+                while (name.startsWith("/") || name.startsWith("\\"))
+                    name = name.substring(1);
                 
                 listener.notifyProcessed();
 
-                if (file.contains("wwwroot") && !file.contains("mediaimages")) 
-                    continue;
-                if (file.endsWith(".log") || file.indexOf(".log.") > -1) 
-                    continue;
-
-                addEntry(zipFileName + File.separator + file.substring(DataCrow.userDir.length()), file);
+                addEntry(zipFileName + File.separator + name, filename);
                 
-                listener.sendMessage(DcResources.getText("msgCreatingBackupOfFile", file));
+                listener.sendMessage(DcResources.getText("msgCreatingBackupOfFile", filename));
                 
                 try {
                     sleep(10);

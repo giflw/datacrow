@@ -37,13 +37,20 @@ public class ServiceClassLoader extends ClassLoader {
     public ServiceClassLoader(String path) {
         init(path);
         
+        @SuppressWarnings("resource")
+        ZipFile zf = null;
+        Enumeration<? extends ZipEntry> entries;
+        ZipEntry entry;
+        String name;
         for (File jf : jarFiles) {
             try {
-                ZipFile zf = new ZipFile(jf);
-                Enumeration<? extends ZipEntry> entries = zf.entries();
+                
+                zf = new ZipFile(jf);
+                entries = zf.entries();
+                
                 while (entries.hasMoreElements()) {
-                    ZipEntry entry = entries.nextElement();
-                    String name = entry.getName();
+                    entry = entries.nextElement();
+                    name = entry.getName();
                     
                     if (name.endsWith(".class")) {
                         name = name.replaceAll("/", ".");
@@ -53,6 +60,12 @@ public class ServiceClassLoader extends ClassLoader {
                 }
             } catch (Exception e) {
                 logger.error(e, e);
+            } finally {
+                try {
+                    if (zf != null) zf.close();
+                } catch (Exception e) {
+                    logger.debug("Could not close zip file", e);
+                }
             }
         }
     }

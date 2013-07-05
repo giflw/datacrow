@@ -116,6 +116,7 @@ public class SecurityCentre {
         users.remove(user.getID());
     }
     
+    @SuppressWarnings("resource")
     public SecuredUser login(String username, String password, boolean web) throws SecurityException {
         Connection connection = DatabaseManager.getConnection(username, password);
         
@@ -265,28 +266,31 @@ public class SecurityCentre {
         return modules;
     }
     
+    @SuppressWarnings("resource")
     private int getUserCount() {
         Connection connection = null;
         Statement stmt = null;
+        ResultSet rs = null;
         int users = 0;
         try {
             connection = DatabaseManager.getConnection("DC_ADMIN", "UK*SOCCER*96");
             connection = connection == null ? DatabaseManager.getConnection("SA", "") : connection;
             
             stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT ID FROM user");
+            rs = stmt.executeQuery("SELECT ID FROM user");
             while (rs.next())
                 users++;
-            
-            rs.close();
             
         } catch (SQLException se) {
             logger.error(se, se);
         } finally {
             try {
+                if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
                 if (connection != null) connection.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                logger.debug("Failed to close database resource", e);
+            }
         }
         return users;
     }
@@ -299,9 +303,15 @@ public class SecurityCentre {
                 if (getUserCount() == 0) // no user. create default.
                     createDefaultUser();
 
-                connection.close();
+                
             } catch (Exception e) {
                 logger.error(e, e);
+            } finally {
+                try {
+                    if (connection != null) connection.close();
+                } catch (SQLException se) {
+                    logger.debug("Failed to close database connection", se);
+                }
             }
         }
     }

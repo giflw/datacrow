@@ -29,7 +29,11 @@ import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.List;
 
-public class FilePropertiesMovie extends FileProperties {
+import org.apache.log4j.Logger;
+
+public class FilePropertiesMovie  {
+    
+    private static Logger logger = Logger.getLogger(FilePropertiesMovie.class.getName());
     
     private static final int[][] MAGIC_BYTES = { 
         { 0x00, 0x00, 0x01, 0xb3 }, // MPEG (video)
@@ -41,6 +45,13 @@ public class FilePropertiesMovie extends FileProperties {
         { 0x30, 0x26, 0xb2, 0x75 }  // ASF (audio / video)
     };
     
+    private FileProperties format;
+    
+    private FileProperties[] formats = { new FilePropertiesMPEG(),
+            new FilePropertiesMPEG(), new FilePropertiesRIFF(),
+            new FilePropertiesOGM(), new FilePropertiesIFO(),
+            new FilePropertiesMKV(), new FilePropertiesASF()};
+    
     /**
      * Initializes the movie file properties. 
      * @param filename
@@ -48,83 +59,66 @@ public class FilePropertiesMovie extends FileProperties {
      */
 	public FilePropertiesMovie(String filename) throws Exception {
 		boolean supported = false;
-		FileProperties fileProperties = null;
-        RandomAccessFile dataStream = null;
+        RandomAccessFile ds = null;
 
 		try {
-		    FileProperties[] FORMATS = { new FilePropertiesMPEG(),
-		            new FilePropertiesMPEG(), new FilePropertiesRIFF(),
-		            new FilePropertiesOGM(), new FilePropertiesIFO(),
-		            new FilePropertiesMKV(), new FilePropertiesASF()};
-
-			dataStream = new RandomAccessFile(filename, "r");
+		    
+			ds = new RandomAccessFile(filename, "r");
 
 			// gets the header for file type identification 
 			int[] header = new int[4];
 			for (int i = 0; i < header.length; i++)
-				header[i] = dataStream.readUnsignedByte();
+				header[i] = ds.readUnsignedByte();
 
 			// finds the right object
-			int format = 0;
-			for (format = 0; format < FORMATS.length; format++) {
-				if (Arrays.equals(header, MAGIC_BYTES[format]))
-					break;
+			int type = 0;
+			for (type = 0; type < formats.length; type++) {
+				if (Arrays.equals(header, MAGIC_BYTES[type])) {
+					format = formats[type];
+					format.process(ds, filename);
+					format.setFilename(filename);
+					supported = true;
+				}
 			}
-
-			if (format < FORMATS.length) {
-				supported = true;
-
-				fileProperties = FORMATS[format];
-				fileProperties.process(dataStream, filename);
-
-				setFilename(filename);
-				
-				setName(fileProperties.getName());
-				setLanguage(fileProperties.getLanguage());
-				setSubtitles(fileProperties.getSubtitles());
-				setVideoResolution(fileProperties.getVideoResolution());
-				setVideoCodec(fileProperties.getVideoCodec());
-				setVideoRate(fileProperties.getVideoRate());
-				setVideoBitRate(fileProperties.getVideoBitRate());
-				setDuration(fileProperties.getDuration());
-				setAudioCodec(fileProperties.getAudioCodec());
-				setAudioRate(fileProperties.getAudioRate());
-				setAudioBitRate(fileProperties.getAudioBitRate());
-				setAudioChannels(fileProperties.getAudioChannels());
-				setContainer(fileProperties.getContainer());
-				setMetaData(fileProperties.getMetaData());
-			}
-			
 		} catch (Exception e) {
 			throw new Exception("File is corrupted. Some info may have been saved.");
 		} finally {
-		    if (dataStream != null) dataStream.close();
+		    if (ds != null) ds.close();
 			if (!supported) throw new Exception("File format not supported.");
 		}
+	}
+	
+	public void close() {
+	    for (FileProperties format : formats) {
+	        format.close();
+	    }
 	}
 
 	public int getVideoWidth() {
 		try {
-			String width = getVideoResolution().substring(0, getVideoResolution().indexOf("x"));
+			String width = format.getVideoResolution().substring(0, format.getVideoResolution().indexOf("x"));
 			return Integer.valueOf(width);
-		} catch (Exception exp) {
+		} catch (Exception e) {
+		    logger.debug("Error while determining the video width", e);
 			return 0;
 		}
 	}
 
 	public int getVideoHeight() {
 		try {
-			String height = getVideoResolution().substring(
-					getVideoResolution().indexOf("x") + 1,
-					getVideoResolution().length());
+			String height = 
+			        format.getVideoResolution().substring(
+			        format.getVideoResolution().indexOf("x") + 1,
+			        format.getVideoResolution().length());
 			return Integer.valueOf(height);
-		} catch (Exception exp) {
+		} catch (Exception e) {
+		    logger.debug("Error while determining the video height", e);
 			return 0;
 		}
 	}
 
 	public String getMetaDataTagInfo(String tag) {
-	    List<String> metaData = getMetaData();
+	    List<String> metaData = format.getMetaData();
 		if (metaData != null) {
 			for (int i = 0; i < metaData.size(); i++) {
 				String temp = metaData.get(i);
@@ -134,4 +128,83 @@ public class FilePropertiesMovie extends FileProperties {
 		}
 		return "";
 	}
+	
+    public String getFilename() {
+        return format.getFilename();
+    }
+
+    public String getLanguage() {
+        return format.getLanguage();
+    }
+
+    public String getName() {
+        return format.getName();
+    }
+
+    public String getSubtitles() {
+        return format.getSubtitles();
+    }
+
+    /**
+     * Returns the resolution.
+     */
+    public String getVideoResolution() {
+        return format.getVideoResolution();
+    }
+
+    /**
+     * Returns the video codec.
+     */
+    public String getVideoCodec() {
+        return format.getVideoCodec();
+    }
+
+    /**
+     * Returns the video rate.
+     */
+    public double getVideoRate() {
+        return format.getVideoRate();
+    }
+
+    /**
+     * Returns the video bit rate.
+     */
+    public int getVideoBitRate() {
+        return format.getVideoBitRate();
+    }
+
+    /**
+     * Returns the duration.
+     */
+    public int getDuration() {
+        return format.getDuration();
+    }
+
+    /**
+     * Returns the audio codec.
+     */
+    public String getAudioCodec() {
+        return format.getAudioCodec();
+    }
+
+    /**
+     * Returns the audio rate.
+     */
+    public int getAudioRate() {
+        return format.getAudioRate();
+    }
+
+    /**
+     * Returns the audio bit rate.
+     */
+    public int getAudioBitRate() {
+        return format.getAudioBitRate();
+    }
+
+    /**
+     * Returns the audio channels.
+     */
+    public int getAudioChannels() {
+        return format.getAudioChannels();
+    }
 }

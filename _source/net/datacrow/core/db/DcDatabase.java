@@ -119,6 +119,7 @@ public class DcDatabase {
         stmt.execute("DELETE FROM VERSION");
         stmt.execute("INSERT INTO VERSION(MAJOR, MINOR, BUILD, PATCH) VALUES (" + 
                      v.getMajor() + "," + v.getMinor() + "," + v.getBuild() + "," + v.getPatch() + ")");
+        stmt.close();
     }
     
     /**
@@ -191,8 +192,6 @@ public class DcDatabase {
                         }
                     }
                 }
-                
-                rs.close();
             } catch (Exception e) {
                 logger.error("Error while trying to cleanup unused columns", e);
             } finally {
@@ -258,7 +257,7 @@ public class DcDatabase {
 
         initializeSystemTable(stmt);
         String testQuery;
-        ResultSet rs;
+        ResultSet rs = null;
         for (DcModule module : DcModules.getAllModules()) {
             if (!module.isAbstract()) {
                 testQuery = "select * from " + module.getTableName();
@@ -267,10 +266,15 @@ public class DcDatabase {
                     rs = stmt.executeQuery(testQuery);
                     initializeColumns(connection, rs.getMetaData(), module);
                     logger.debug(DcResources.getText("msgTableFound", module.getTableName()));
-                    rs.close();
                 } catch (SQLException e) {
                     logger.info((DcResources.getText("msgTableNotFound", module.getTableName())));
                     createTable(module);
+                } finally {
+                    try {
+                        if (rs != null) rs.close();
+                    } catch (Exception e) {
+                        logger.debug("Failed to close ResultSet", e);
+                    }
                 }
             }
         }

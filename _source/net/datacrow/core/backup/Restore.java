@@ -384,78 +384,88 @@ public class Restore extends Thread {
         return success;
     }
     
+    @SuppressWarnings("resource")
     private boolean restoreOldVersion() throws Exception {
         
-        ZipFile zf = new ZipFile(source);
-        
-        Enumeration<? extends ZipEntry> list = zf.entries();
-        listener.notifyStarted();
-        listener.notifyProcessingCount(zf.size());
-
-        listener.sendMessage(DcResources.getText("msgStartRestore"));
-        listener.sendMessage(DcResources.getText("msgClosingDb"));
-        DatabaseManager.closeDatabases(false);
-
+        ZipFile zf = null;
         boolean success = true;
-        while (list.hasMoreElements()) {
-            ZipEntry ze = list.nextElement();
-            String filename = ze.getName();
-            try {
-
-                if (isVersion(filename)) 
-                    continue;
-                
-                
+        
+        try {
+            zf = new ZipFile(source);
+            Enumeration<? extends ZipEntry> list = zf.entries();
+            listener.notifyStarted();
+            listener.notifyProcessingCount(zf.size());
+    
+            listener.sendMessage(DcResources.getText("msgStartRestore"));
+            listener.sendMessage(DcResources.getText("msgClosingDb"));
+            DatabaseManager.closeDatabases(false);
+    
+            
+            while (list.hasMoreElements()) {
+                ZipEntry ze = list.nextElement();
+                String filename = ze.getName();
                 try {
-                    sleep(10);
-                } catch (Exception e) {
-                    logger.warn(e, e);
-                }
-                
-                filename = version.isOlder(new Version(3, 9, 16, 0)) ? getTargetFile_older_V_3_9_16(filename) : getTargetFile(filename);
-
-                if (filename != null) {
-                    File file = new File(filename);
-                    
-                    if (file.exists())
-                        file.delete();
-                    
-                    if (file.exists())
-                        listener.sendMessage(DcResources.getText("msgRestoreFileOverwriteIssue", filename.substring(filename.lastIndexOf("/") + 1)));
+    
+                    if (isVersion(filename)) 
+                        continue;
                     
                     try {
-                        file.getParentFile().mkdirs();
+                        sleep(10);
                     } catch (Exception e) {
-                        logger.warn("Unable to create directories for " + filename, e);
+                        logger.warn(e, e);
                     }
                     
-                    InputStream istr = zf.getInputStream(ze);
-                    BufferedInputStream bis = new BufferedInputStream(istr);
-                    FileOutputStream fos = new FileOutputStream(filename);
-
-                    int sz = (int)ze.getSize();
-                    final int N = 1024;
-                    byte buf[] = new byte[N];
-                    int ln = 0;
-                    while (sz > 0 &&  // workaround for bug
-                        (ln = bis.read(buf, 0, Math.min(N, sz))) != -1) {
-                            fos.write(buf, 0, ln);
-                            sz -= ln;
+                    filename = version.isOlder(new Version(3, 9, 16, 0)) ? getTargetFile_older_V_3_9_16(filename) : getTargetFile(filename);
+    
+                    if (filename != null) {
+                        File file = new File(filename);
+                        
+                        if (file.exists())
+                            file.delete();
+                        
+                        if (file.exists())
+                            listener.sendMessage(DcResources.getText("msgRestoreFileOverwriteIssue", filename.substring(filename.lastIndexOf("/") + 1)));
+                        
+                        try {
+                            file.getParentFile().mkdirs();
+                        } catch (Exception e) {
+                            logger.warn("Unable to create directories for " + filename, e);
+                        }
+                        
+                        InputStream istr = zf.getInputStream(ze);
+                        BufferedInputStream bis = new BufferedInputStream(istr);
+                        FileOutputStream fos = new FileOutputStream(filename);
+    
+                        int sz = (int)ze.getSize();
+                        final int N = 1024;
+                        byte buf[] = new byte[N];
+                        int ln = 0;
+                        while (sz > 0 &&  // workaround for bug
+                            (ln = bis.read(buf, 0, Math.min(N, sz))) != -1) {
+                                fos.write(buf, 0, ln);
+                                sz -= ln;
+                        }
+                        bis.close();
+                        fos.flush();
+                        fos.close();
+                        istr.close();
+    
+                        listener.sendMessage(DcResources.getText("msgRestoringFile", filename.substring(filename.lastIndexOf("/") + 1)));
                     }
-                    bis.close();
-                    fos.flush();
-                    fos.close();
-                    istr.close();
-
-                    listener.sendMessage(DcResources.getText("msgRestoringFile", filename.substring(filename.lastIndexOf("/") + 1)));
-                }
+                    
+                    listener.notifyProcessed();
                 
-                listener.notifyProcessed();
-            
-            } catch (Exception exp) {
-                success = false;
-                logger.error(exp, exp);
-                listener.sendMessage(DcResources.getText("msgRestoreFileError", new String[] {filename, exp.getMessage()}));
+                } catch (Exception exp) {
+                    success = false;
+                    logger.error(exp, exp);
+                    listener.sendMessage(DcResources.getText("msgRestoreFileError", new String[] {filename, exp.getMessage()}));
+                }
+            }
+        } finally {
+            try {
+                if (zf != null) zf.close();
+            } catch (Exception e) {
+                logger.debug("Could not close zip file", e);
             }
         }
         

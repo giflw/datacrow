@@ -127,10 +127,11 @@ public class XmlImporter extends ItemImporter {
         
         @Override
         public void run() {
+            FileInputStream fis = null;
             try {
             	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
-                FileInputStream fis = new FileInputStream(file);
+                fis = new FileInputStream(file);
                 Document document = db.parse(fis);
                 
                 Element eTop = document.getDocumentElement();
@@ -140,23 +141,27 @@ public class XmlImporter extends ItemImporter {
     
                 listener.notifyStarted(nlItems != null ? nlItems.getLength() : 0);
                 
+                Element eItem;
+                DcObject dco;
+                DcModule cm;
+                String childName;
+                NodeList nlChildren;
+                Element eChild;
                 for (int i = 0; !isCanceled() && nlItems != null && i < nlItems.getLength(); i++) {
                     try {
-                    	Element eItem = (Element) nlItems.item(i);
+                    	eItem = (Element) nlItems.item(i);
                     	
-                    	if (eItem.getParentNode() != eTop)
-                    	    continue;
+                    	if (eItem.getParentNode() != eTop) continue;
                     	
-                    	DcObject dco = parseItem(module, eItem);
-                    	
-                    	DcModule cm = module.getChild();
+                    	dco = parseItem(module, eItem);
+                    	cm = module.getChild();
                     	// Child items for module ITEM will be skipped since these are abstract items.
                     	if (cm != null && cm.getIndex() != DcModules._ITEM) {
-                    	    String childName = Converter.getValidXmlTag(cm.getSystemObjectName());
-                            NodeList nlChildren = eItem.getElementsByTagName(childName);
+                    	    childName = Converter.getValidXmlTag(cm.getSystemObjectName());
+                            nlChildren = eItem.getElementsByTagName(childName);
                             
                             for (int j = 0; nlChildren != null && j < nlChildren.getLength(); j++) {
-                                Element eChild = (Element) nlChildren.item(j);
+                                eChild = (Element) nlChildren.item(j);
                                 dco.addChild(parseItem(cm, eChild));
                             }
                     	}
@@ -171,6 +176,12 @@ public class XmlImporter extends ItemImporter {
                 
             } catch (Exception e) {
                 logger.error(e, e) ;
+            } finally {
+                try {
+                    if (fis != null) fis.close();
+                } catch (Exception e) {
+                    logger.debug("Failed to close resource", e);
+                }
             }
         }
     }

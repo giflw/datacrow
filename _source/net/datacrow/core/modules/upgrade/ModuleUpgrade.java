@@ -267,6 +267,8 @@ public class ModuleUpgrade extends XmlObject {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         FileInputStream bis = new FileInputStream(file);
-        return db.parse(bis);
+        Document doc = db.parse(bis);
+        bis.close();
+        return doc;
     }
 }

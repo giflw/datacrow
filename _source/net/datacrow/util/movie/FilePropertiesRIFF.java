@@ -25,14 +25,10 @@
 
 package net.datacrow.util.movie;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import net.datacrow.core.DataCrow;
 
 class FilePropertiesRIFF extends FileProperties {
 
@@ -286,10 +282,10 @@ class FilePropertiesRIFF extends FileProperties {
         while (i-- > 0) {
             buffer.append('0');
         }
+        
         buffer.append(value);
 
-        FileInputStream fis = new FileInputStream("resources/FOURCCaudio.txt");
-        return findName(fis, new String(buffer));
+        return findName(new String(buffer), FileProperties._TYPE_AUDIO_CODEC);
     }
 
     private void calculateVideoBitRate() {
@@ -333,8 +329,7 @@ class FilePropertiesRIFF extends FileProperties {
         }
 
         String codecName = fromByteToAscii(fccHandler, 4).toUpperCase();
-        FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "FOURCCvideo.txt"));
-        codecName = findName(fis, codecName);
+        codecName = findName(codecName, FileProperties._TYPE_VIDEO_CODEC);
 
         setVideoCodec(codecName);
     }
@@ -398,9 +393,7 @@ class FilePropertiesRIFF extends FileProperties {
                         }
                     }
 
-                    FileInputStream fis = new FileInputStream("resources/videoExtended.txt");
-                    String codecName = findName(fis, extendedInfo);
-
+                    String codecName = findName(extendedInfo, FileProperties._TYPE_VIDEO_CODEC_EXT);
                     if (!codecName.equals("")) {
                         setVideoCodec(codecName);
                         extendedCodecInfoFound = true;

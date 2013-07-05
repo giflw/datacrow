@@ -78,11 +78,15 @@ public class ModuleImporter {
 		
 		@Override
 		public void run() {
+		    
+		    @SuppressWarnings("resource")
+            ZipFile zf = null;
+		    
 		    try {
 		        
 		        client.notifyNewTask();
 		        
-    		    ZipFile zf = new ZipFile(file);
+    		    zf = new ZipFile(file);
     
                 Collection<ModuleJar> modules = new ArrayList<ModuleJar>();
                 Map<String, Collection<DcImageIcon>> icons = new HashMap<String, Collection<DcImageIcon>>();
@@ -91,11 +95,21 @@ public class ModuleImporter {
                 Enumeration<? extends ZipEntry> list = zf.entries();
                 
                 client.notifyStarted(zf.size());
+                
+                ZipEntry ze;
+                BufferedInputStream bis;
+                String name;
+                String moduleName;
+                Collection<DcImageIcon> c;
+                int size;
+                byte[] bytes;
+                DcImageIcon icon;
+                File file;
+                ModuleJar moduleJar;
                 while (list.hasMoreElements() && !canceled) {
-                    ZipEntry ze = list.nextElement();
-    
-                    BufferedInputStream bis = new BufferedInputStream(zf.getInputStream(ze));
-                    String name = ze.getName();
+                    ze = list.nextElement();
+                    bis = new BufferedInputStream(zf.getInputStream(ze));
+                    name = ze.getName();
                     
                     client.notifyMessage(DcResources.getText("msgProcessingFileX", name));
                     
@@ -106,15 +120,16 @@ public class ModuleImporter {
                         // directory name is contained in the name
                         writeToFile(bis, new File(DataCrow.reportDir, name));
                     } else if (name.toLowerCase().endsWith(".jpg")) {
-                        String moduleName = name.substring(0, name.indexOf("_"));
-                        Collection<DcImageIcon> c = icons.get(moduleName);
+                        moduleName = name.substring(0, name.indexOf("_"));
+                        
+                        c = icons.get(moduleName);
                         c = c == null ? new ArrayList<DcImageIcon>() : c;
                         
-                        int size = (int) ze.getSize();
-                        byte[] bytes = new byte[size];
+                        size = (int) ze.getSize();
+                        bytes = new byte[size];
                         bis.read(bytes);
                         
-                        DcImageIcon icon = new DcImageIcon(bytes);
+                        icon = new DcImageIcon(bytes);
                         icon.setBytes(bytes);
                         icon.setFilename(name.substring(name.indexOf("_") + 1));
                         c.add(icon);
@@ -123,7 +138,7 @@ public class ModuleImporter {
                     } else if (name.toLowerCase().endsWith(".properties")) {
                         writeToFile(bis, new File(DataCrow.moduleDir, name));
                     } else if (name.toLowerCase().endsWith(".xml")) {
-                        File file =  new File(System.getProperty("java.io.tmpdir"), name);
+                        file = new File(System.getProperty("java.io.tmpdir"), name);
                         writeToFile(bis, file);
                         file.deleteOnExit();
                         data.put(name.substring(0, name.toLowerCase().indexOf(".xml")), file);
@@ -131,7 +146,8 @@ public class ModuleImporter {
                         // check if the custom module does not already exist
                         if (DcModules.get(name.substring(0, name.indexOf(".jar"))) == null) {
                             writeToFile(bis, new File(DataCrow.moduleDir, name));
-                            ModuleJar moduleJar = new ModuleJar(name);
+                            
+                            moduleJar = new ModuleJar(name);
                             moduleJar.load();
                             modules.add(moduleJar);
                         }
@@ -145,6 +161,12 @@ public class ModuleImporter {
 
 		    } catch (Exception e) {
 		        client.notifyError(e);
+		    } finally {
+		        try {
+		            if (zf != null) zf.close();
+		        } catch (Exception e) {
+		            logger.debug("Could not close zip file", e);
+		        }
 		    }
 		    
 		    client.notifyFinished();
