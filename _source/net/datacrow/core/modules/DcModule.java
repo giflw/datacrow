@@ -68,6 +68,7 @@ import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.services.OnlineServices;
 import net.datacrow.core.services.Servers;
 import net.datacrow.core.services.plugin.IServer;
+import net.datacrow.core.settings.Setting;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.reporting.templates.ReportTemplates;
@@ -1336,8 +1337,7 @@ public class DcModule implements Comparable<DcModule> {
         for (QuickViewFieldDefinition definition : qvDefinitions.getDefinitions()) {
             if (getField(definition.getField()) != null)
                 newQvDefinitions.add(definition);
-        }  
-        
+        } 
         
         WebFieldDefinitions webDefinitions = 
             (WebFieldDefinitions) settings.get(DcRepository.ModuleSettings.stWebFieldDefinitions);
@@ -1355,6 +1355,27 @@ public class DcModule implements Comparable<DcModule> {
         for (DcFieldDefinition definition : definitions.getDefinitions()) {
             if (getField(definition.getIndex()) != null)
                 newDefinitions.add(definition);
+        }
+        
+        FileImporter importer = getImporter();
+        if (importer != null) {
+            String[] extensions = settings.getStringArray(DcRepository.ModuleSettings.stFileImportFileTypes);
+            Collection<String> s = new ArrayList<String>();
+            for (String ext : extensions)
+                s.add(ext.toLowerCase());
+            
+            for (String ext : importer.getDefaultSupportedFileTypes()) {
+                if (!s.contains(ext.toLowerCase()))
+                    s.add(ext.toLowerCase());
+            }
+            
+            extensions = new String[s.size()];
+            int index = 0;
+            for (String ext : s) {
+                extensions[index++] = ext;
+            }
+            
+            settings.set(DcRepository.ModuleSettings.stFileImportFileTypes, extensions);
         }
         
         settings.set(DcRepository.ModuleSettings.stQuickViewFieldDefinitions, newQvDefinitions);

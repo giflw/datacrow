@@ -63,7 +63,7 @@ public class MusicAlbumImporter extends FileImporter {
     @Override
     public String[] getDefaultSupportedFileTypes() {
         return new String[] {"mp3", "ogg", "mp4", "mp4a", "m4p", "flac", "m4a",
-                             "flc", "ape", "asf", "wav", "mpc", "ra", "wma"};
+                             "flc", "ape", "asf", "wav", "mpc", "ra", "wma", "rm"};
     }
 
     @Override

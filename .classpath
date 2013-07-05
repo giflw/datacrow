@@ -58,7 +58,6 @@
 	<classpathentry kind="lib" path="lib/xml-rpc/xmlrpc-client-3.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/xml-rpc/xmlrpc-common-3.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/xml-rpc/xmlrpc-server-3.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jaudiotagger-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/tika-app-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/bcmail-jdk14-132.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/bcprov-jdk14-132.jar"/>
@@ -76,7 +75,6 @@
 	<classpathentry kind="lib" path="lib/zip/truezip_7_7_1.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/fontbox-1.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/pdf/pdfbox-1.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/jmbdiscid/jna-3.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/jmbdiscid/platform-3.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/jaudiotagger-2.2.0.jar"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>
