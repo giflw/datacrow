@@ -62,6 +62,8 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
     private JButton buttonStart = ComponentFactory.getButton("OK");
     
     private boolean success = false;
+    private boolean shutdown = false;
+    
     private String[] args;
     private final String selectedUserDir;
     
@@ -79,6 +81,10 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
         setSize(new Dimension(450, 300));
         setLocation(Utilities.getCenteredWindowLocation(getSize(), false));
         enableActions(true);
+    }
+    
+    public void setShutDown(boolean b) {
+        this.shutdown = b;
     }
     
     protected void initialize() {
@@ -145,7 +151,13 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
         DataCrow.resourcesDir = null;
         DataCrow.upgradeDir = null;
         
-        DataCrow.main(args);
+        DataCrow.restart = true;
+        
+        if (shutdown) {
+            DataCrow.mainFrame.close();
+        } else {
+            DataCrow.main(args);
+        }
     }
 
     private void setupDataDir() {
@@ -155,7 +167,9 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
         File file = selectDir.getFile();
         File installDir = new File(DataCrow.installationDir);
         
-        if (file.equals(installDir)) {
+        if (file == null) {
+            DcSwingUtilities.displayMessage("Please select a folder before continuing");
+        } else if (file.equals(installDir)) {
             DcSwingUtilities.displayMessage("The installation directory can't selected as the user folder. " +
             		"You CAN select a sub folder within the installation folder though.");
         } else {

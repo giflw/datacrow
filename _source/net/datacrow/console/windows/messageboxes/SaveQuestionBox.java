@@ -127,7 +127,8 @@ public class SaveQuestionBox extends DcDialog implements ActionListener {
         JScrollPane scrollIn = new JScrollPane(textMessage);
         scrollIn.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollIn.setPreferredSize(new Dimension(350,50));
+        scrollIn.setPreferredSize(new Dimension(400,120));
+        scrollIn.setMinimumSize(new Dimension(400,120));
         scrollIn.setBorder(null);
 
         buttonContinue = ComponentFactory.getButton(DcResources.getText("lblContinue"));

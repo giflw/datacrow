@@ -205,6 +205,8 @@ public class DriveManager {
     private void clean() {
         File file = new File(getTempDir());
         
+        if (file.exists()) return;
+        
         try {
             for (String filename : file.list()) {
                 if (filename.endsWith(getTempFileSuffix())) {

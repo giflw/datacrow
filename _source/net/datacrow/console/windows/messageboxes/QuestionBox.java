@@ -27,7 +27,6 @@ package net.datacrow.console.windows.messageboxes;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,7 +52,6 @@ public class QuestionBox extends DcDialog implements ActionListener {
     private JTextArea textMessage;
     private JButton buttonYes;
     private JButton buttonNo;
-    private JPanel panel = new JPanel();
     private boolean affirmative = false;
     
     private final JLabel labelIcon = ComponentFactory.getLabel("");
@@ -77,7 +75,6 @@ public class QuestionBox extends DcDialog implements ActionListener {
         textMessage = null;
         buttonYes = null;
         buttonNo = null;
-        panel = null;   
         
         super.close();
     }
@@ -98,24 +95,23 @@ public class QuestionBox extends DcDialog implements ActionListener {
 
     private void buildDialog() {
         this.setResizable(false);
-        this.getContentPane().setLayout(new GridLayout());
-
-        // Input panel
-        panel.setLayout(Layout.getGBL());
+        this.getContentPane().setLayout(Layout.getGBL());
 
         textMessage = ComponentFactory.getTextArea();
         textMessage.setEditable(false);
-        textMessage.setBackground(panel.getBackground());
-        
+                
         JScrollPane scrollIn = new JScrollPane(textMessage);
         scrollIn.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollIn.setPreferredSize(new Dimension(350,50));
+        scrollIn.setPreferredSize(new Dimension(400,120));
+        scrollIn.setMinimumSize(new Dimension(400,120));
         scrollIn.setBorder(null);
 
         buttonYes = ComponentFactory.getButton(DcResources.getText("lblYes"));
         buttonNo = ComponentFactory.getButton(DcResources.getText("lblNo"));
 
+        textMessage.setBackground(buttonYes.getBackground());
+        
         buttonYes.addActionListener(this);
         buttonYes.setActionCommand("confirm");
         buttonNo.addActionListener(this);
@@ -127,20 +123,19 @@ public class QuestionBox extends DcDialog implements ActionListener {
 
         labelIcon.setIcon(IconLibrary._icoQuestion);
 
-        panel.setLayout(Layout.getGBL());
-        panel.add(labelIcon,   Layout.getGBC( 0, 0, 1, 1, 0.0, 0.0
+        this.getContentPane().setLayout(Layout.getGBL());
+        this.getContentPane().add(labelIcon,   Layout.getGBC( 0, 0, 1, 1, 0.0, 0.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                  new Insets(5, 5, 5, 5), 0, 0));
-        panel.add(scrollIn,    Layout.getGBC( 1, 0, 1, 1, 90.0, 90.0
+        this.getContentPane().add(scrollIn,    Layout.getGBC( 1, 0, 1, 1, 90.0, 90.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(5, 5, 5, 5), 0, 0));
-        panel.add(panelAction, Layout.getGBC( 0, 1, 2, 1, 0.0, 0.0
+        this.getContentPane().add(panelAction, Layout.getGBC( 0, 1, 2, 1, 0.0, 0.0
                ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                 new Insets(5, 5, 5, 5), 0, 0));
 
         this.pack();
         this.setModal(true);
-        this.getContentPane().add(panel);
     }
 
     @Override

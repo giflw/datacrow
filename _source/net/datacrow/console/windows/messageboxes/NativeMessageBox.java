@@ -117,7 +117,8 @@ public class NativeMessageBox extends NativeDialog implements ActionListener, ID
         JScrollPane scrollIn = new JScrollPane(textMessage);
         scrollIn.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollIn.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollIn.setPreferredSize(new Dimension(400,100));
+        scrollIn.setPreferredSize(new Dimension(400,120));
+        scrollIn.setMinimumSize(new Dimension(400,120));
         scrollIn.setBorder(null);
         buttonOk = new JButton("Ok");
         buttonOk.addActionListener(this);

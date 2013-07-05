@@ -41,6 +41,7 @@ import javax.swing.UIManager;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.MainFrame;
+import net.datacrow.console.windows.ChangeUserFolderQuestionBox;
 import net.datacrow.console.windows.DonateDialog;
 import net.datacrow.console.windows.SelectExpienceLevelDialog;
 import net.datacrow.console.windows.SelectLanguageDialog;
@@ -123,6 +124,7 @@ public class DataCrow {
     
     private static DataCrowProperties dcProperties;
     
+    public static boolean restart = false;
     public static boolean loadSettings = true;
     public static MainFrame mainFrame;
 
@@ -325,11 +327,14 @@ public class DataCrow {
                         DcSwingUtilities.openDialogNativeModal(dlg);
                     }
                     
-                    showSplashScreen();
-                    
                     // ask the user to confirm the user directory
-                    if (pUserDir == null)
+                    if (    pUserDir == null && // not set through the parameters
+                            !restart && // we are not restarting
+                            !DcSettings.getBoolean(DcRepository.Settings.stDoNotAskAgainChangeUserDir)) {
                         changeUserDir(args);
+                    }
+                    
+                    showSplashScreen();
                     
                     // check if the web module has been installed
                     isWebModuleInstalled = new File(DataCrow.webDir, "datacrow/WEB-INF").exists();
@@ -663,17 +668,17 @@ public class DataCrow {
     private static void changeUserDir(String[] args) {
         
         showSplashScreen(false);
-        boolean answer = DcSwingUtilities.displayQuestion("The current user folder is " + DataCrow.userDir + " do you want to use this?");
+        
+        ChangeUserFolderQuestionBox qb = new ChangeUserFolderQuestionBox();
+        DcSwingUtilities.openDialogNativeModal(qb);
+        boolean answer = qb.isAffirmative();
         
         if (!answer) {
-            showSplashScreen(false);
             UserDirSetupDialog dlg = new UserDirSetupDialog(args, DataCrow.userDir);
             dlg.build();
             DcSwingUtilities.openDialogNativeModal(dlg);
         }
-        showSplashScreen(true);
     }
-    
     
     private static void login(String username, String password) {
         // use the login dialog method
