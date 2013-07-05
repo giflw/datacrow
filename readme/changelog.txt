@@ -6,15 +6,16 @@ Data Crow 3.10.3  [Released on July x 2013]  [testing: moderate]  [target: produ
 - Various potential resource leaks have been discovered and fixed.
 - Potential errors in video parser have been fixed.
 - Changed the backup process to ignore any "non-DataCrow" files.
+- Number of pages returned from Google Books was incorrect (103 was shown as 10).
+- Setup EXE files now available for both the 32bit and the 64bit Java version.
 
 [Changed]
 - Added parameter "port:" to specify the port to be used by the web server on start up.
 - In case the user folder is cleaned Data Crow will re-initialize the folder.
-
-
-TODO:
-- Google books: 103 instead of 1030 pages
-- Setup EXE does not detect JRE 64BIT
+- Added the option to change the user folder on startup. You can hide this question on 
+  next runs. The option is always available from the settings menu.
+- For new users only - font size increased from 11 to 12. Note that you can change the
+  font and its size yourself from within Settings > Settings > Font.
 
 
 -----------------------------------------------------------------------------------------

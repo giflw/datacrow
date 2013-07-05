@@ -679,8 +679,9 @@ public class DataManager {
             for (String value : values)
                 ps.setString(idx++, value.toUpperCase());
             
-            ps.close();
             List<DcObject> items = WorkFlow.getInstance().convert(ps.executeQuery(), new int[] {DcObject._ID});
+            ps.close();
+            
             return items.size() > 0 ? items.get(0) : null;
             
         } catch (SQLException e) {
