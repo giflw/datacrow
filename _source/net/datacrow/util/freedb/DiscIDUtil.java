@@ -60,7 +60,9 @@ public class DiscIDUtil {
         String exec = getScript();
         setExecutionAllowed(exec);
         
-        Process p = Runtime.getRuntime().exec(exec);
+        ProcessBuilder pb = new ProcessBuilder(new String[] {exec});
+        Process p =  pb.start();
+        
         try { 
             p.waitFor();
         } catch (Exception exp) {}
@@ -96,9 +98,6 @@ public class DiscIDUtil {
         } else {
             exec = DataCrow.pluginsDir + "discid/linux/discid";
         }           
-        
-        if (exec.indexOf(" ") > -1) 
-        	exec = '"' + exec + '"';
         
         return exec;
     }

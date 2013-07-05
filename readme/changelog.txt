@@ -8,6 +8,8 @@ Data Crow 3.10.3  [Released on July x 2013]  [testing: moderate]  [target: produ
 - Changed the backup process to ignore any "non-DataCrow" files.
 - Number of pages returned from Google Books was incorrect (103 was shown as 10).
 - Setup EXE files now available for both the 32bit and the 64bit Java version.
+- Issue with the CD reader "Executable name has embedded quote, split the arguments java" 
+  has been fixed.
 
 [Changed]
 - Added parameter "port:" to specify the port to be used by the web server on start up.
@@ -17,6 +19,7 @@ Data Crow 3.10.3  [Released on July x 2013]  [testing: moderate]  [target: produ
 - For new users only - font size increased from 11 to 12. Note that you can change the
   font and its size yourself from within Settings > Settings > Font.
 - Newly supported file types for the file importer are now configured automatically.
+- jAudioTagger library update from 2.0 to 2.2.
 
 
 -----------------------------------------------------------------------------------------
