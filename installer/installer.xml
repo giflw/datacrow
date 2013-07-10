@@ -75,6 +75,7 @@
             <file src="lib/xml" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/xml-rpc" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/pdf" targetdir="$INSTALL_PATH/lib"/>
+            <file src="lib/tmdb" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/html" targetdir="$INSTALL_PATH/lib"/>
             <file src="lib/zip" targetdir="$INSTALL_PATH/lib"/>
             <file src="services" targetdir="$INSTALL_PATH"/>

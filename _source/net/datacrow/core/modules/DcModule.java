@@ -68,7 +68,6 @@ import net.datacrow.core.security.SecurityCentre;
 import net.datacrow.core.services.OnlineServices;
 import net.datacrow.core.services.Servers;
 import net.datacrow.core.services.plugin.IServer;
-import net.datacrow.core.settings.Setting;
 import net.datacrow.enhancers.IValueEnhancer;
 import net.datacrow.fileimporters.FileImporter;
 import net.datacrow.reporting.templates.ReportTemplates;
