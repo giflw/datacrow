@@ -203,7 +203,7 @@ public class DataCrow {
                     System.out.println("Starts the web server without starting the Data Crow GUI. Specify -credentials to avoid the login dialog.");
                     System.out.println("Example: java -jar datacrow.jar -webserver");
                     System.out.println("");
-                    System.out.println("-port:<port nnumber>");
+                    System.out.println("-port:<port number>");
                     System.out.println("Specifies the port to be used by the web server. This overrules the settings.");
                     System.out.println("Example: java -jar datacrow.jar -webserver -port:8080");
                     System.out.println("");
