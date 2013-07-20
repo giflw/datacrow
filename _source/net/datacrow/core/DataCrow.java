@@ -533,6 +533,11 @@ public class DataCrow {
                         wizard.setVisible(true);
                     }  
                     
+                    // TMP
+                    ICalenderExporter ice = new ICalenderExporter(new File("c:\\testje.ics"));
+                    ice.start();
+                    
+                    
                     if (logger.isDebugEnabled()) {
                         long end = new Date().getTime();
                         logger.debug("Total startup time was " + (end - totalstart) + "ms");
