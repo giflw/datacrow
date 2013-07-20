@@ -78,11 +78,12 @@ public class DcModules {
     public static final int _MUSICTRACK = 58;
     public static final int _AUDIOTRACK = 59;
     public static final int _PICTURE = 60;
-    public static final int _LOAN = 61;
     public static final int _USER = 62;
     public static final int _PERMISSION = 63;
     public static final int _CONTAINER = 64;
     public static final int _ITEM = 65;
+    public static final int _LOAN = 66;
+    public static final int _LOANEXPORT = 67;
     
     public static final int _CATEGORY = 10000;
     public static final int _STORAGEMEDIA = 11000;
@@ -274,6 +275,7 @@ public class DcModules {
     private static void loadSystemModules() {
         register(new PictureModule());
         register(new LoanModule());
+        register(new LoanExportModule());
         register(new UserModule());
         register(new PermissionModule());
         register(new TabModule());

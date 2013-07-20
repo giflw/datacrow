@@ -51,6 +51,18 @@ public class LoanModule extends DcModule {
     
     private static final long serialVersionUID = -1777037389578494831L;
 
+    public LoanModule(int index, 
+            boolean topModule, 
+            String name,
+            String description,
+            String objectName,
+            String objectNamePlural,
+            String tableName, 
+            String tableShortName) {
+        
+        super(index, topModule, name, description, objectName, objectNamePlural, tableName, tableShortName);
+    }
+    
     /**
      * Creates a new instance of this module.
      */

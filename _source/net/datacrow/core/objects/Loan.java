@@ -27,8 +27,12 @@ package net.datacrow.core.objects;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.helpers.ContactPerson;
 import net.datacrow.util.Utilities;
@@ -51,6 +55,10 @@ public class Loan extends DcObject {
     public static final int _D_OBJECTID = 4;
     public static final int _E_DUEDATE = 5;
 
+    public Loan(int module) {
+        super(module);
+    }
+    
     /**
      * Creates a new instance.
      */
@@ -95,6 +103,24 @@ public class Loan extends DcObject {
         	return null;
         else 
         	return DataManager.getItem(DcModules._CONTACTPERSON, personID, new int[] {DcObject._ID, ContactPerson._A_NAME});
+    }
+    
+    /**
+     * This is a slow way of getting the actual lend item.
+     * 
+     */
+    public DcObject getItem() {
+        String objectID = (String) getValue(Loan._D_OBJECTID);
+        
+        DataFilter df = new DataFilter(DcModules._ITEM);
+        df.addEntry(new DataFilterEntry(
+                DcModules._ITEM,
+                net.datacrow.core.objects.helpers.Item._ID,
+                Operator.EQUAL_TO,
+                objectID));
+        
+        List<DcObject> items = DataManager.get(df);
+        return items.size() == 1 ? items.get(0) : null;
     }
     
     public Date getDueDate() {
