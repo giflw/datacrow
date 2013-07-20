@@ -1278,12 +1278,18 @@ public class DcModule implements Comparable<DcModule> {
                     getIndex() != DcModules._CONTAINER && getIndex() != DcModules._USER &&
                     getIndex() != DcModules._EXTERNALREFERENCE && getIndex() != DcModules._LOAN &&
                     getIndex() != DcModules._MAPPING && getIndex() != DcModules._PERMISSION &&
-                    getIndex() != DcModules._TAB && getIndex() != DcModules._CONTACTPERSON) {
+                    getIndex() != DcModules._TAB && getIndex() != DcModules._CONTACTPERSON &&
+                    getIndex() != DcModules._TAG) {
                 
                 addField(new DcField(DcObject._SYS_EXTERNAL_REFERENCES, getIndex(), "External References",  
                         true, true, false, true,  
                         4, ComponentFactory._SIMPLEREFERENCESFIELD, DcModules._EXTERNALREFERENCE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
-                        "externalreferences"));       
+                        "externalreferences"));     
+                
+                addField(new DcField(DcObject._SYS_TAGS, getIndex(), "Tags", 
+                        true, true, false, true,  
+                        4000, ComponentFactory._TAGFIELD, DcModules._TAG, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
+                        "Tags"));     
             }
     
             if (isContainerManaged())

@@ -111,6 +111,7 @@ import net.datacrow.console.components.DcReferenceField;
 import net.datacrow.console.components.DcReferencesField;
 import net.datacrow.console.components.DcShortTextField;
 import net.datacrow.console.components.DcTabbedPane;
+import net.datacrow.console.components.DcTagField;
 import net.datacrow.console.components.DcTextPane;
 import net.datacrow.console.components.DcTimeField;
 import net.datacrow.console.components.DcTitledBorder;
@@ -180,6 +181,7 @@ public final class ComponentFactory {
     public static final int _FONTRENDERINGCOMBO = 35;
     public static final int _DIRECTORYFIELD = 36;
     public static final int _SIMPLEREFERENCESFIELD = 37;    
+    public static final int _TAGFIELD = 38;
     
     private static final Font fontUnreadable = new Font("Dialog", Font.PLAIN, 1);
     private static final Dimension iconButtonSize = new Dimension(25, ComponentFactory.getPreferredButtonHeight());
@@ -437,11 +439,17 @@ public final class ComponentFactory {
                 return getDirectoriesAsDrivesField();
             case _FONTRENDERINGCOMBO:
                 return getFontRenderingCombo();
+            case _TAGFIELD:
+                return getTagField();
             case _SIMPLEREFERENCESFIELD:
                 return getSimpleReferencesField(DcModules.getMappingModIdx(majormodule, minormodule, fieldIdx));
             default:
                 return getShortTextField(maxTextLength);
         }
+    }
+    
+    public static DcTagField getTagField() {
+        return new DcTagField();
     }
     
     public static DcHtmlEditorPane getHtmlEditorPane() {

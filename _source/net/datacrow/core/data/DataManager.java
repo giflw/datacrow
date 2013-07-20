@@ -604,7 +604,7 @@ public class DataManager {
         }
         return result;
     }
-    
+
     public static DcObject getObjectForString(int module, String reference) {
         // Establish the names on which we will check if the item already exists.
         // Skip multiple checks for the external references; this will results in errors.

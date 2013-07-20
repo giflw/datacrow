@@ -94,6 +94,7 @@ public class DcModules {
     public static final int _GENRE = 16000;
     public static final int _CONTAINERTYPE = 17000;
     public static final int _TAB = 18000;
+    public static final int _TAG = 19000;
     
     public static final int _ACTOR = 30000;
     public static final int _DIRECTOR = 31000;
@@ -279,6 +280,7 @@ public class DcModules {
         register(new UserModule());
         register(new PermissionModule());
         register(new TabModule());
+        register(new DcTagModule());
     }
     
     /**

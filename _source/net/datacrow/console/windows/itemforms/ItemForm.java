@@ -713,7 +713,9 @@ public class ItemForm extends DcFrame implements ActionListener {
         	    stretch = GridBagConstraints.HORIZONTAL;
                 factor = 10;
 
-                if (field.getFieldType() == ComponentFactory._LONGTEXTFIELD) {
+                if (    field.getFieldType() == ComponentFactory._LONGTEXTFIELD ||
+                        field.getFieldType() == ComponentFactory._TAGFIELD) {
+                    
                     stretch = GridBagConstraints.BOTH;
                     factor = 200;
 
@@ -726,7 +728,12 @@ public class ItemForm extends DcFrame implements ActionListener {
                     pane = new JScrollPane(longText);
                     
                     ComponentFactory.setBorder(pane);
-                    pane.setPreferredSize(new Dimension(100,100));
+                    
+                    if (field.getFieldType() == ComponentFactory._TAGFIELD)
+                        pane.setPreferredSize(new Dimension(22,100));
+                    else 
+                        pane.setPreferredSize(new Dimension(100,100));
+                    
                     pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                     pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                     component = pane;

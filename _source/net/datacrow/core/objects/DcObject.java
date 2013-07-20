@@ -124,6 +124,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
     public static final int _SYS_LOANSTATUS = 219;
     public static final int _SYS_LOANSTARTDATE = 220;
     public static final int _SYS_LOANENDDATE = 221;
+    public static final int _SYS_TAGS = 222;
     
     public static final int _VALUE = 217;
     

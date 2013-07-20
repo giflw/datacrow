@@ -171,6 +171,7 @@ public class DataCrow {
                 } else if (args[i].toLowerCase().startsWith("-nosplash")) {
                     noSplash = true;
                 } else if (args[i].toLowerCase().startsWith("-webserver")) {
+                    noSplash = true;
                     webserverMode = true;
                 } else if (args[i].toLowerCase().startsWith("-port:")) {
                     port = args[i].substring("-port:".length());;
@@ -531,11 +532,6 @@ public class DataCrow {
                         ToolSelectWizard wizard = new ToolSelectWizard();
                         wizard.setVisible(true);
                     }  
-                    
-                    // TMP
-                    ICalenderExporter ice = new ICalenderExporter(new File("c:\\testje.ics"));
-                    ice.start();
-                    
                     
                     if (logger.isDebugEnabled()) {
                         long end = new Date().getTime();
