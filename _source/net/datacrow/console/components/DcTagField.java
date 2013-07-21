@@ -62,8 +62,6 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     
     private Collection<DcObject> references = new ArrayList<DcObject>();
     
-    private DataFilter df = new DataFilter(DcModules._TAG);
-    
     private int mappingModIdx;
     
     public DcTagField(int mappingModIdx) {
@@ -113,8 +111,10 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
             
             if (!found) {
                 try {
+                    DataFilter df = new DataFilter(DcModules._TAG);
                     df.addEntry(new DataFilterEntry(DcModules._TAG, DcTag._A_NAME, Operator.EQUAL_TO, name));
                     List<DcObject> items = DataManager.get(df);
+                    
                     tag = items.size() > 0 ? items.get(0) : null;
                     
                     if (tag == null) {
@@ -151,11 +151,11 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         highlightTags();
     }
     
-    private Collection<String> getTags() {
+    private List<String> getTags() {
         String s = getText();
         StringTokenizer st = new StringTokenizer(s, " ");
         
-        Collection<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<String>();
         String tag;
         while (st.hasMoreElements()) {
             tag = (String) st.nextElement();
@@ -233,6 +233,36 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
             highlightTags();
         }
     }
+    
+    boolean autoCompleting = false;
+    private void autoComplete() {
+        autoCompleting = true;
+        
+        String text = getText();
+        
+        String tag = text.indexOf(" ") > -1 ? text.substring(text.lastIndexOf(" ") + 1, text.length()) : text;
+        
+        DataFilter df = new DataFilter(DcModules._TAG);
+        df.addEntry(new DataFilterEntry(DcModules._TAG, DcTag._A_NAME, Operator.STARTS_WITH, tag));
+        List<DcObject> items = DataManager.get(df);
+       
+        if (items.size() > 0) {
+            
+            int caret = getCaretPosition();
+            
+            int start = text.length();
+            text = text.substring(0, text.length() - tag.length());
+            text += items.get(0).toString();
+            int end = text.length();
+            setText(text);
+
+            setCaretPosition(caret);
+            setSelectionStart(start);
+            setSelectionEnd(end);
+        }
+        
+        autoCompleting = false;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {}
@@ -273,6 +303,9 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
                 super.insertString(i, " ", attributeset);
             } else {
                 super.insertString(i, s, attributeset);
+                
+                if (s.length() == 1 && !autoCompleting)
+                    autoComplete();
             }
         }
     }

@@ -733,7 +733,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     ComponentFactory.setBorder(pane);
                     
                     if (field.getFieldType() == ComponentFactory._TAGFIELD)
-                        pane.setPreferredSize(new Dimension(22,100));
+                        pane.setPreferredSize(new Dimension(100,40));
                     else 
                         pane.setPreferredSize(new Dimension(100,100));
                     

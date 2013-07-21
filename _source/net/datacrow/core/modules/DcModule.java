@@ -1285,13 +1285,19 @@ public class DcModule implements Comparable<DcModule> {
                         true, true, false, true,  
                         4, ComponentFactory._SIMPLEREFERENCESFIELD, DcModules._EXTERNALREFERENCE, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                         "externalreferences"));     
+            }
+
+            if (    isTopModule() && !isAbstract() &&
+                    getIndex() != DcModules._USER && getIndex() != DcModules._EXTERNALREFERENCE && 
+                    getIndex() != DcModules._MAPPING && getIndex() != DcModules._PERMISSION &&
+                    getIndex() != DcModules._TAB && getIndex() != DcModules._TAG) {
                 
                 addField(new DcField(DcObject._SYS_TAGS, getIndex(), "Tags", 
                         true, true, false, true,  
                         4000, ComponentFactory._TAGFIELD, DcModules._TAG, DcRepository.ValueTypes._DCOBJECTCOLLECTION,
                         "Tags"));     
             }
-    
+            
             if (isContainerManaged())
                 addField(getField(DcObject._SYS_CONTAINER));
             

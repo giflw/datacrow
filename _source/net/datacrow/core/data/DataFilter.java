@@ -740,7 +740,7 @@ public class DataFilter {
             } else if (operator == Operator.ENDS_WITH.getIndex()) {
                 sql.append(" LIKE ");
                 if (useUpper) sql.append("UPPER(");
-                sql.append("'%" + queryValue);
+                sql.append("'%" + queryValue + "'");
                 if (useUpper) sql.append(")");
             } else if (operator == Operator.EQUAL_TO.getIndex()) {
                 if (useUpper) {
@@ -775,16 +775,9 @@ public class DataFilter {
                     if (value instanceof String) sql.append("'");
                 }
             } else if (operator == Operator.STARTS_WITH.getIndex()) {
-                
                 sql.append(" LIKE ");
                 if (useUpper) sql.append("UPPER(");
-                sql.append("'%" + queryValue);
-                
-                if (value instanceof String)
-                    sql.append("'"+ queryValue +"%'");
-                else 
-                    sql.append(queryValue);
-                
+                sql.append("'" + queryValue + "%'");
                 if (useUpper) sql.append(")");
             } else if (operator == Operator.TODAY.getIndex()) {
                 sql.append(" = TODAY");

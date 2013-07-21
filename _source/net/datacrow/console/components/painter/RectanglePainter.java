@@ -9,7 +9,7 @@ import javax.swing.text.*;
  *
  */
 public class RectanglePainter extends
-        DefaultHighlighter.DefaultHighlightPainter {
+    DefaultHighlighter.DefaultHighlightPainter {
     public RectanglePainter(Color color) {
         super(color);
     }
@@ -23,7 +23,7 @@ public class RectanglePainter extends
 
         Color color = getColor();
         g.setColor(color == null ? c.getSelectionColor() : color);
-        g.fillRoundRect(r.x, r.y, r.width, r.height, 4, 4);
+        g.fillRect(r.x, r.y, r.width, r.height); //, 4, 4);
 
         return r;
     }
