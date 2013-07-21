@@ -10,24 +10,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
+import javax.swing.JTextArea;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 import net.datacrow.console.components.painter.RectanglePainter;
-import net.datacrow.console.menu.DcEditorPopupMenu;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTag;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
-public class DcTagField extends DcLongTextField implements KeyListener, MouseListener {
+public class DcTagField extends JTextArea implements IComponent, KeyListener, MouseListener {
     
     private static Logger logger = Logger.getLogger(DcTagField.class.getName());
-    
-    private JPopupMenu jpm = new DcEditorPopupMenu(this);
-    
     private RectanglePainter red = new RectanglePainter( Color.RED );
     private RectanglePainter cyan = new RectanglePainter( Color.CYAN );
     
@@ -35,10 +33,11 @@ public class DcTagField extends DcLongTextField implements KeyListener, MouseLis
     
     public DcTagField() {
         super();
-        
-        jpm.add(new JMenuItem("BLAAAHHH"));
         this.addKeyListener(this);
     }
+    
+    @Override
+    public void clear() {}
     
     private void removeWord() {
         if (getTextLength() > 0) {
@@ -131,36 +130,62 @@ public class DcTagField extends DcLongTextField implements KeyListener, MouseLis
     public void keyTyped(KeyEvent ke) {}
 
     @Override
-    public void keyPressed(KeyEvent ke) {
-        if (ke.getKeyCode() == KeyEvent.VK_TAB) {
-            insert(" ", getTextLength());
-            ke.consume();
-            highlightTags();
-        } else if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE ||
-                   ke.getKeyCode() == KeyEvent.VK_DELETE) {
-            removeWord();   
-        }
-    } 
+    public void keyPressed(KeyEvent ke) {} 
     
     @Override
     public void keyReleased(KeyEvent ke) {
-        if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            jpm.setVisible(false);
+       
+        if (    ke.getKeyCode() == KeyEvent.VK_SPACE ||
+                ke.getKeyCode() == KeyEvent.VK_TAB) {
             highlightTags();
-        } else if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            jpm.setVisible(false);
-        } else {
-//            int loc = getCaretPosition();
-//            String text = getText();
-//            Point p = getCaret().getMagicCaretPosition();
-//            SwingUtilities.convertPointToScreen(p, this);
-//            jpm.setLocation(p);
-//            jpm.setVisible(true);
+        } else if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE ||
+                ke.getKeyCode() == KeyEvent.VK_DELETE) {
+            removeWord();   
         }
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-        super.mouseReleased(e);
+    public void mouseClicked(MouseEvent e) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
+
+    @Override
+    public void refresh() {}
+    
+    
+    @Override
+    protected Document createDefaultModel() {
+        return new TagDocument(this);
+    }
+    
+    protected class TagDocument extends PlainDocument {
+        
+        private DcTagField fld;
+        
+        protected TagDocument(DcTagField fld) {
+            this.fld = fld;
+        }
+        
+        @Override
+        public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
+            if ((fld.getText().endsWith(" ") && (s.equals(" ") || s.equals("\t"))) ||
+                 s.length() > 1) {
+                return;
+            } else if (s.equals("\t")) {
+                super.insertString(i, " ", attributeset);
+            } else {
+                super.insertString(i, s, attributeset);
+            }
+        }
     }
 }

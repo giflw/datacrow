@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -78,6 +79,14 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         this.person = person;
         
         build();
+    }
+    
+    public List<DcObject> getSelectedItems() {
+        List<DcObject> items = new ArrayList<DcObject>();
+        for (int row : table.getSelectedIndices()) {
+            items.add(table.getItemAt(row));
+        }
+        return items;
     }
     
     public void setFilter(LoanFilter filter) {
@@ -221,7 +230,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
                 DcModule module = (DcModule) value;
                 dco = DataManager.getItem(module.getIndex(), dco.getID());
                 
-                LoanInformationPanelPopupMenu menu = new LoanInformationPanelPopupMenu(dco); 
+                LoanInformationPanelPopupMenu menu = new LoanInformationPanelPopupMenu(dco, getSelectedItems()); 
                 menu.setInvoker(table);
                 menu.show(table, e.getX(), e.getY());
             }

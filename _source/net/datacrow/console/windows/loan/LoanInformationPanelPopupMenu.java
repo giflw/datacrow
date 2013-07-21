@@ -27,6 +27,7 @@ package net.datacrow.console.windows.loan;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JMenuItem;
 
@@ -37,6 +38,7 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
+import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -45,18 +47,27 @@ public class LoanInformationPanelPopupMenu extends DcPopupMenu implements Action
     private static Logger logger = Logger.getLogger(LoanInformationPanelPopupMenu.class.getName());
     
     private DcObject dco;
+    private List<DcObject> items;
     
-    public LoanInformationPanelPopupMenu(DcObject dco) {
+    public LoanInformationPanelPopupMenu(DcObject dco, List<DcObject> items) {
+        
         this.dco = dco;
+        this.items = items;
+        
         JMenuItem menuOpen = ComponentFactory.getMenuItem(IconLibrary._icoOpen, DcResources.getText("lblOpenItem", dco.getModule().getObjectName()));
         JMenuItem menuEdit = ComponentFactory.getMenuItem(IconLibrary._icoOpen, DcResources.getText("lblEditItem", dco.getModule().getObjectName()));
-         
+        JMenuItem menuLoan = ComponentFactory.getMenuItem(IconLibrary._icoLoan, DcResources.getText("lblLoanAdministration"));
+             
+        menuLoan.setActionCommand("loan");
         menuOpen.setActionCommand("openItem");
         menuEdit.setActionCommand("editItem");
         
         menuOpen.addActionListener(this);
         menuEdit.addActionListener(this);
+        menuLoan.addActionListener(this);
         
+        this.add(menuLoan);
+        this.addSeparator();
         this.add(menuOpen);
 
         if (SecurityCentre.getInstance().getUser().isAuthorized(dco.getModule())) {
@@ -67,16 +78,24 @@ public class LoanInformationPanelPopupMenu extends DcPopupMenu implements Action
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent ae) {
         dco.markAsUnchanged();
         dco.getModule();
         
-        if (e.getActionCommand().equals("openItem")) {
+        if (ae.getActionCommand().equals("openItem")) {
             ItemForm form = new ItemForm(true, true, dco, false);
             form.setVisible(true);
-        } else if (e.getActionCommand().equals("editItem")) {
+        } else if (ae.getActionCommand().equals("editItem")) {
             ItemForm form = new ItemForm(false, true, dco, false);
             form.setVisible(true);
+        } else if (ae.getActionCommand().equals("loan")) {
+            try {
+                LoanForm form = new LoanForm(items);
+                form.setVisible(true);
+            } catch (Exception e) {
+                logger.warn(e, e);
+                DcSwingUtilities.displayWarningMessage(e.getMessage());
+            }
         }
     }
 }

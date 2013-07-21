@@ -53,6 +53,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.JTextComponent;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
@@ -685,7 +686,7 @@ public class ItemForm extends DcFrame implements ActionListener {
         JComponent component;
         int stretch;
         int factor;
-        DcLongTextField longText;
+        JTextComponent longText;
         JScrollPane pane;
         int space;
         for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
@@ -721,7 +722,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                     stretch = GridBagConstraints.BOTH;
                     factor = 200;
 
-                    longText = (DcLongTextField) component;
+                    longText = (JTextArea) component;
                     longText.setMargin(new Insets(1, 1, 1, 5));
 
                     if (field.isReadOnly()) 
