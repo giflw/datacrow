@@ -78,7 +78,6 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         this.person = person;
         
         build();
-        load();
     }
     
     public void setFilter(LoanFilter filter) {
@@ -95,6 +94,11 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         pb.setValue(0);
     }
     
+    public void cancel() {
+        if (filter != null && filter.isAlive())
+            filter.cancel();
+    }
+    
     @Override
     public void load() {
         table.clear();
@@ -104,6 +108,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
         
         if (filter == null || filter.isAlive()) {
             filter = new LoanFilter();
+            if (person != null) filter.setPerson(person);
         }
         
         try {
@@ -111,6 +116,9 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
             filter.start();    
         } catch (Exception exp) {
             filter = new LoanFilter();
+            
+            if (person != null) filter.setPerson(person);
+            
             filter.setListener(this);
             filter.start();
         }

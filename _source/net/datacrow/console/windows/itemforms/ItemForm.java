@@ -115,7 +115,7 @@ public class ItemForm extends DcFrame implements ActionListener {
     private DcMinimalisticItemView childView;
     
     private IItemFormListener listener;
-    
+    private LoanInformationPanel panelLoans;
     private DcTemplate template;
     
     public ItemForm(
@@ -350,6 +350,8 @@ public class ItemForm extends DcFrame implements ActionListener {
         fields = null;
         labels = null;
         tabbedPane = null;
+        
+        if (panelLoans != null) panelLoans.cancel();
         
         super.close();
     }
@@ -831,8 +833,9 @@ public class ItemForm extends DcFrame implements ActionListener {
 	        }
 	        
 	        if (moduleIdx == DcModules._CONTACTPERSON) {
-	        	LoanInformationPanel panel = new LoanInformationPanel(dco);
-	            tabbedPane.addTab(panel.getTitle(), panel.getIcon(),  panel);
+	        	panelLoans = new LoanInformationPanel(dco);
+	            tabbedPane.addTab(panelLoans.getTitle(), panelLoans.getIcon(),  panelLoans);
+	            panelLoans.load();
 	        }
     	}
     }

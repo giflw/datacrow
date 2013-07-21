@@ -54,6 +54,7 @@ import net.datacrow.settings.DcSettings;
 public class LoanInformationForm extends DcFrame implements ActionListener {
     
     private LoanInformationPanel panelLoans;
+    private LoanFilterPanel panelFilter;
     
 	public LoanInformationForm() {
 		this(null);
@@ -68,25 +69,31 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         
         setCenteredLocation();
         setHelpIndex("dc.loanadmin");
+        
+        refresh();
     }
     
     public void refresh() {
-        panelLoans.load();
+        search();
     }
     
     @Override
     public void close() {
         DcSettings.set(DcRepository.Settings.stLoanAdminFormSize, getSize());
         
-        if (panelLoans != null)
+        if (panelLoans != null) {
+            panelLoans.cancel();
             panelLoans.clear();
-
+        }
+        
         panelLoans = null;
+        panelFilter = null;
+        
         super.close();
     }
     
     private void build(DcObject person) {
-        JPanel panelFilter = new LoanFilterPanel();
+        panelFilter = new LoanFilterPanel(this);
         panelLoans = new LoanInformationPanel(person);
         
     	getContentPane().setLayout(Layout.getGBL());
@@ -109,14 +116,31 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                  new Insets(5, 5, 5, 5), 0, 0));
     }
+    
+    private void search() {
+        panelFilter.allowActions(false);
+        
+        panelLoans.setFilter(panelFilter.getLoanFilter());
+        panelLoans.load();
+    }
+    
+    private void stop() {
+        panelFilter.allowActions(true);
+        panelLoans.cancel();
+    }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("ok"))
+        if (ae.getActionCommand().equals("ok")) {
             close();
+        } else if (ae.getActionCommand().equals("search")) {
+            search();
+        } else if (ae.getActionCommand().equals("cancel")) {
+            stop();
+        }
     }
     
-    private class LoanFilterPanel extends JPanel implements ActionListener {
+    private class LoanFilterPanel extends JPanel {
         
         private DcObjectComboBox cbPersons = ComponentFactory.getObjectCombo(DcModules._CONTACTPERSON);
         private DcComboBox cbModules = ComponentFactory.getComboBox();
@@ -130,9 +154,12 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         private DcComboBox cbLoans = ComponentFactory.getComboBox(); 
         
         private DcCheckBox cbOnlyTooLate = ComponentFactory.getCheckBox(""); 
+        
+        private DcButton btCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
+        private DcButton btSearch = ComponentFactory.getButton(DcResources.getText("lblSearch"));
                 
-        public LoanFilterPanel() {
-            build();
+        public LoanFilterPanel(LoanInformationForm parent) {
+            build(parent);
         }
         
         protected LoanFilter getLoanFilter() {
@@ -181,7 +208,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
             return lf;
         }
         
-        private void build() {
+        private void build(LoanInformationForm parent) {
             DcModule module = DcModules.get(DcModules._SOFTWARE);
             cbModules.addItem(" ");
             for (DcModule m : DcModules.getModules()) {
@@ -225,45 +252,63 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
                     new Insets(5, 5, 5, 0), 0, 0)); 
 
             add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
-                    DcResources.getText("lblBetween")),  
+                    DcResources.getText("lblFrom")),  
                     Layout.getGBC( 2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));
             add(dtDueFrom,  
                     Layout.getGBC( 3, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));        
-            add(ComponentFactory.getLabel(DcResources.getText("lblAnd")),  
+            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
+                    DcResources.getText("lblTo")),  
                     Layout.getGBC( 2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));        
             add(dtDueTo,  
                     Layout.getGBC( 3, 1, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));
             
-            
             add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANSTARTDATE).getLabel() + " " +
-                    DcResources.getText("lblBetween")),  
+                    DcResources.getText("lblFrom")),  
                     Layout.getGBC( 2, 2, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));
             add(dtStartFrom,  
                     Layout.getGBC( 3, 2, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));        
-            add(ComponentFactory.getLabel(DcResources.getText("lblAnd")),  
+            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANSTARTDATE).getLabel() + " " +
+                    DcResources.getText("lblTo")),  
                     Layout.getGBC( 2, 3, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));        
             add(dtStartTo,  
                     Layout.getGBC( 3, 3, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));            
-            
-            DcButton btSearch = ComponentFactory.getButton(DcResources.getText("lblSearch"));
-            btSearch.addActionListener(this);
-            add(btSearch,  
-                    Layout.getGBC(3, 4, 1, 1, 1.0, 1.0,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                    new Insets(10, 5, 5, 5), 0, 0));             
-        }
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            panelLoans.setFilter(getLoanFilter());
-            panelLoans.load();
+            
+            btCancel.setActionCommand("cancel");
+            btCancel.addActionListener(parent);
+            btCancel.setEnabled(false);
+            
+            btSearch.setActionCommand("search");
+            btSearch.addActionListener(parent);
+            
+            JPanel panelActions = new JPanel();
+            panelActions.add(btCancel);
+            panelActions.add(btSearch);
+            
+            add(panelActions, Layout.getGBC(3, 4, 1, 1, 1.0, 1.0,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                    new Insets(10, 5, 5, 5), 0, 0));  
+        }
+        
+        protected void allowActions(boolean b) {
+            cbLoans.setEnabled(b);
+            cbModules.setEnabled(b);
+            cbOnlyTooLate.setEnabled(b);
+            cbPersons.setEnabled(b);
+            dtDueFrom.setEnabled(b);
+            dtDueTo.setEnabled(b);
+            dtStartFrom.setEnabled(b);
+            dtStartTo.setEnabled(b);
+            
+            btSearch.setEnabled(b);
+            btCancel.setEnabled(!b);
         }
     }
 }
