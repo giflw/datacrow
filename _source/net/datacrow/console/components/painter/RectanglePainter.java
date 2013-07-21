@@ -23,7 +23,7 @@ public class RectanglePainter extends
 
         Color color = getColor();
         g.setColor(color == null ? c.getSelectionColor() : color);
-        g.fillRect(r.x, r.y, r.width, r.height); //, 4, 4);
+        g.fillRect(r.x, r.y, r.width - 1, r.height -1); //, 4, 4);
 
         return r;
     }

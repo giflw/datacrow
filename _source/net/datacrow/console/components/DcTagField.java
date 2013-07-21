@@ -58,7 +58,7 @@ import org.apache.log4j.Logger;
 public class DcTagField extends JTextArea implements IComponent, KeyListener, MouseListener {
     
     private static Logger logger = Logger.getLogger(DcTagField.class.getName());
-    private static final RectanglePainter red = new RectanglePainter(new Color(153, 204, 255));
+    private static final RectanglePainter highlighter = new RectanglePainter(new Color(153, 204, 255));
     
     private Collection<DcObject> references = new ArrayList<DcObject>();
     
@@ -148,7 +148,6 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         }
         
         setText(sb.toString());
-        highlightTags();
     }
     
     private List<String> getTags() {
@@ -197,7 +196,7 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     private void highlightTags() {
         for (Point point : getLocations()) {
             try {
-                this.getHighlighter().addHighlight(point.x, point.y, red);
+                this.getHighlighter().addHighlight(point.x, point.y, highlighter);
             } catch (BadLocationException ble) {
                 logger.debug(ble, ble);
             }
@@ -266,10 +265,12 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
             text += items.get(0).toString();
             int end = text.length();
             setText(text);
-
+            
             setCaretPosition(caret);
             setSelectionStart(start);
             setSelectionEnd(end);
+            
+            //highlightTags();
         }
         
         autoCompleting = false;
