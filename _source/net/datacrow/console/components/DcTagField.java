@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JTextArea;
@@ -17,23 +18,38 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import net.datacrow.console.components.painter.RectanglePainter;
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.DcTag;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class DcTagField extends JTextArea implements IComponent, KeyListener, MouseListener {
     
     private static Logger logger = Logger.getLogger(DcTagField.class.getName());
-    private RectanglePainter red = new RectanglePainter( Color.RED );
-    private RectanglePainter cyan = new RectanglePainter( Color.CYAN );
+    private static final RectanglePainter red = new RectanglePainter(new Color(153, 204, 255));
     
-    private Collection<DcObject> tags = new ArrayList<DcObject>();
+    private Collection<DcObject> references = new ArrayList<DcObject>();
     
-    public DcTagField() {
+    private int mappingModIdx;
+    
+    public DcTagField(int mappingModIdx) {
         super();
+        
+        this.mappingModIdx = mappingModIdx;
         this.addKeyListener(this);
+        
+        List<String> items = new ArrayList<String>();
+        for (DcObject dco : DataManager.getTags()) 
+            items.add(dco.toString());
+        
+        if (items.size() > 0)
+            AutoCompleteDecorator.decorate(this, items, false);
     }
     
     @Override
@@ -50,17 +66,59 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     }
     
     @Override
-    public Collection<DcObject> getValue() {
-        return tags;
+    public Object getValue() {
+        Collection<DcObject> mappings = new ArrayList<DcObject>();
+        
+        DcObject tag = null;
+        DcMapping mapping;
+        
+        boolean found;
+        for (String name : getTags()) {
+            found = false;
+            for (DcObject existingRef : references) {
+                if (name.equals(existingRef.toString())) {
+                    mappings.add(existingRef);
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found) {
+                try {
+                    for (DcObject existingTag : DataManager.getTags()) {
+                        if (name.equals(existingTag.toString())) {
+                            tag = existingTag;
+                            break;
+                        }
+                    }
+                    
+                    if (tag == null) {
+                        tag = new DcTag();
+                        tag.setValue(DcTag._A_NAME, name);
+                        tag.setIDs();
+                    }
+                    
+                    mapping = (DcMapping) DcModules.get(mappingModIdx).getItem();
+                    mapping.setReference(tag);
+                    mapping.setValue(DcMapping._B_REFERENCED_ID, tag.getID());
+                    mappings.add(mapping);
+                } catch (Exception e) {
+                    logger.error("Error while saving Tag " + tag, e);
+                }
+            }
+        }
+        
+        return mappings;
     }
 
     @Override
     public void setValue(Object o) {
-        tags = (Collection<DcObject>) o;
+        
+        references = (Collection<DcObject>) o;
         
         StringBuffer sb = new StringBuffer("");
-        for (DcObject tag : tags) {
-            sb.append(tag.getValue(DcTag._A_NAME));
+        for (DcObject tag : references) {
+            sb.append(tag);
             sb.append(" ");   
         }
         
@@ -73,8 +131,13 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         StringTokenizer st = new StringTokenizer(s, " ");
         
         Collection<String> tags = new ArrayList<String>();
+        String tag;
         while (st.hasMoreElements()) {
-            tags.add((String) st.nextElement());
+            tag = (String) st.nextElement();
+            tag = tag.trim();
+            
+            if (!tags.contains(tag))
+                tags.add(tag);
         }
         
         return tags;
@@ -136,11 +199,12 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     public void keyReleased(KeyEvent ke) {
        
         if (    ke.getKeyCode() == KeyEvent.VK_SPACE ||
-                ke.getKeyCode() == KeyEvent.VK_TAB) {
+                ke.getKeyCode() == KeyEvent.VK_TAB ||
+                ke.getKeyCode() == KeyEvent.VK_ENTER) {
             highlightTags();
         } else if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE ||
                 ke.getKeyCode() == KeyEvent.VK_DELETE) {
-            removeWord();   
+            removeWord();
         }
     }
 
@@ -178,10 +242,9 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         
         @Override
         public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
-            if ((fld.getText().endsWith(" ") && (s.equals(" ") || s.equals("\t"))) ||
-                 s.length() > 1) {
+            if ((fld.getText().endsWith(" ") && (s.equals(" ") || s.equals("\t") || s.equals("\r") || s.equals("\n")))) {
                 return;
-            } else if (s.equals("\t")) {
+            } else if (s.equals("\t") || s.equals("\n") || s.equals("\r")) {
                 super.insertString(i, " ", attributeset);
             } else {
                 super.insertString(i, s, attributeset);
