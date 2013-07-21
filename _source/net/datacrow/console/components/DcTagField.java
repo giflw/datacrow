@@ -1,3 +1,28 @@
+/******************************************************************************
+ *                                     __                                     *
+ *                              <-----/@@\----->                              *
+ *                             <-< <  \\//  > >->                             *
+ *                               <-<-\ __ /->->                               *
+ *                               Data /  \ Crow                               *
+ *                                   ^    ^                                   *
+ *                              info@datacrow.net                             *
+ *                                                                            *
+ *                       This file is part of Data Crow.                      *
+ *       Data Crow is free software; you can redistribute it and/or           *
+ *        modify it under the terms of the GNU General Public                 *
+ *       License as published by the Free Software Foundation; either         *
+ *              version 3 of the License, or any later version.               *
+ *                                                                            *
+ *        Data Crow is distributed in the hope that it will be useful,        *
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.             *
+ *           See the GNU General Public License for more details.             *
+ *                                                                            *
+ *        You should have received a copy of the GNU General Public           *
+ *  License along with this program. If not, see http://www.gnu.org/licenses  *
+ *                                                                            *
+ ******************************************************************************/
+
 package net.datacrow.console.components;
 
 import java.awt.Color;
@@ -18,7 +43,10 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import net.datacrow.console.components.painter.RectanglePainter;
+import net.datacrow.core.data.DataFilter;
+import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
+import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
@@ -34,6 +62,8 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     
     private Collection<DcObject> references = new ArrayList<DcObject>();
     
+    private DataFilter df = new DataFilter(DcModules._TAG);
+    
     private int mappingModIdx;
     
     public DcTagField(int mappingModIdx) {
@@ -41,10 +71,8 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         
         this.mappingModIdx = mappingModIdx;
         this.addKeyListener(this);
-        
-        List<String> items = new ArrayList<String>();
-        for (DcObject dco : DataManager.getTags()) 
-            items.add(dco.toString());
+        this.addMouseListener(this);
+        setLineWrap(true);
     }
     
     @Override
@@ -53,8 +81,13 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     private void removeWord() {
         if (getTextLength() > 0) {
             if (Utilities.isEmpty(getSelectedText())) {
-                setSelectionStart(getLastTagStart());
-                setSelectionEnd(getText().length());
+                try {
+                    int start = javax.swing.text.Utilities.getWordStart(this, getCaretPosition());
+                    int end = javax.swing.text.Utilities.getWordEnd(this, getCaretPosition());
+                    select(start, end);
+                } catch (Exception e) {
+                    logger.error(e, e);
+                }   
             }
             cut();
         }
@@ -80,12 +113,9 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
             
             if (!found) {
                 try {
-                    for (DcObject existingTag : DataManager.getTags()) {
-                        if (name.equals(existingTag.toString())) {
-                            tag = existingTag;
-                            break;
-                        }
-                    }
+                    df.addEntry(new DataFilterEntry(DcModules._TAG, DcTag._A_NAME, Operator.EQUAL_TO, name));
+                    List<DcObject> items = DataManager.get(df);
+                    tag = items.size() > 0 ? items.get(0) : null;
                     
                     if (tag == null) {
                         tag = new DcTag();
@@ -188,18 +218,19 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     public void keyTyped(KeyEvent ke) {}
 
     @Override
-    public void keyPressed(KeyEvent ke) {} 
+    public void keyPressed(KeyEvent ke) {
+        if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE ||
+                ke.getKeyCode() == KeyEvent.VK_DELETE) {
+            removeWord();
+        }
+    } 
     
     @Override
     public void keyReleased(KeyEvent ke) {
-       
         if (    ke.getKeyCode() == KeyEvent.VK_SPACE ||
                 ke.getKeyCode() == KeyEvent.VK_TAB ||
                 ke.getKeyCode() == KeyEvent.VK_ENTER) {
             highlightTags();
-        } else if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE ||
-                ke.getKeyCode() == KeyEvent.VK_DELETE) {
-            removeWord();
         }
     }
 
@@ -220,7 +251,6 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
 
     @Override
     public void refresh() {}
-    
     
     @Override
     protected Document createDefaultModel() {
