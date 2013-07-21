@@ -82,7 +82,6 @@ import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Directory;
 import net.datacrow.util.SystemMonitor;
 import net.datacrow.util.Utilities;
-import net.datacrow.util.ical.ICalenderExporter;
 import net.datacrow.util.logging.TextPaneAppender;
 
 import org.apache.log4j.Appender;
@@ -532,11 +531,6 @@ public class DataCrow {
                         ToolSelectWizard wizard = new ToolSelectWizard();
                         wizard.setVisible(true);
                     }  
-                    
-                    // TMP
-                    ICalenderExporter ice = new ICalenderExporter(new File("c:\\testje.ics"));
-                    ice.start();
-                    
                     
                     if (logger.isDebugEnabled()) {
                         long end = new Date().getTime();
