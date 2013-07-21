@@ -32,9 +32,10 @@ public class ICalendarExporterDialog extends DcDialog implements ActionListener,
 
     private static Logger logger = Logger.getLogger(ICalendarExporterDialog.class.getName());
     
-    private DcFileField ffTarget = ComponentFactory.getFileField(false, true);
+    private DcFileField ffTarget = ComponentFactory.getFileField(true, false);
     private JButton btExport = ComponentFactory.getButton(DcResources.getText("lblExport"));
     private JButton btCancel = ComponentFactory.getButton(DcResources.getText("lblCancel"));
+    
     private JCheckBox cbFullExport = ComponentFactory.getCheckBox(DcResources.getText("lblFullExport"));
     
     private JTextArea textLog = ComponentFactory.getTextArea();

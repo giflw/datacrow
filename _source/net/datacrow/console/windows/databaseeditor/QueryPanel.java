@@ -80,6 +80,8 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
 
     private void fillTable(ResultSet rs) throws Exception {
         clearTable();
+        
+        if (rs == null || rs.getMetaData() == null) return;
 
         int columns = rs.getMetaData().getColumnCount();
         

@@ -150,7 +150,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
             if (dueDateTo != null) {
                 cal.setTime(dueDateTo);
                 cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
-                lf.setDueDateFrom(cal.getTime());
+                lf.setDueDateTo(cal.getTime());
             }
 
             Date startDateFrom = (Date) dtStartFrom.getValue();

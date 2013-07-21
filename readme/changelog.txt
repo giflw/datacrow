@@ -20,6 +20,7 @@ Data Crow 3.10.3  [Released on July x 2013]  [testing: moderate]  [target: produ
   font and its size yourself from within Settings > Settings > Font.
 - Newly supported file types for the file importer are now configured automatically.
 - jAudioTagger library update from 2.0 to 2.2.
+- Filter error when filtering on the due date from / to in the loan administration.
 
 
 -----------------------------------------------------------------------------------------

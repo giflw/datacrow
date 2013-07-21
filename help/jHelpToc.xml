@@ -85,7 +85,8 @@
         <tocitem target="dc.tools.findreplace" text="Find &amp; Replace"/>
         <tocitem target="dc.tools.autonumbering" text="Auto Numbering" />
       </tocitem>
-      <tocitem target="dc.tools" text="Item Import &amp; Export">
+      <tocitem target="dc.tools" text="Item Import &amp; Export">      
+        <tocitem target="dc.tools.icalendar_export" text="ICalendar Loan Export"/>
         <tocitem target="dc.tools.fileinfoimport" text="File Import"/>
         <tocitem target="dc.migration.wizard.importer" text="Item Import Wizard"/>
         <tocitem target="dc.migration.wizard.exporter" text="Item Export Wizard"/>

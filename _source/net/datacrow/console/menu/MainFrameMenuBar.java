@@ -133,9 +133,6 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         if (module.getImporterClass() != null)
             PluginHelper.add(menuTools, "FileImport");
         
-        if (DcModules.get(DcModules._LOAN).isEnabled()) 
-            PluginHelper.add(menuView, "ICalendarExporter");
-       
         if (module.deliversOnlineService()) {
             menuTools.addSeparator();
 
@@ -212,6 +209,9 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         menuTools.addSeparator();
         PluginHelper.add(menuTools, "ItemExporterWizard");
         PluginHelper.add(menuTools, "ItemImporterWizard");
+        
+        if (DcModules.get(DcModules._LOAN).isEnabled()) 
+            PluginHelper.add(menuTools, "ICalendarExporter");
         
         if (!module.isAbstract()) {
             menuTools.addSeparator();
