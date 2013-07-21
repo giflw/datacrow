@@ -12,7 +12,6 @@ import java.util.StringTokenizer;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
 import net.datacrow.console.components.painter.RectanglePainter;
@@ -143,11 +142,6 @@ public class DcTagField extends DcLongTextField implements KeyListener, MouseLis
         }
     } 
     
-//    if (   (ke.getKeyCode() == KeyEvent.VK_SPACE ||
-//            ke.getKeyCode() == KeyEvent.VK_TAB) && getLastChar() == ' ') {
-//        ke.consume();
-//    } else 
-    
     @Override
     public void keyReleased(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -156,10 +150,10 @@ public class DcTagField extends DcLongTextField implements KeyListener, MouseLis
         } else if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
             jpm.setVisible(false);
         } else {
-            int loc = getCaretPosition();
-            String text = getText();
-            Point p = getCaret().getMagicCaretPosition();
-            SwingUtilities.convertPointToScreen(p, this);
+//            int loc = getCaretPosition();
+//            String text = getText();
+//            Point p = getCaret().getMagicCaretPosition();
+//            SwingUtilities.convertPointToScreen(p, this);
 //            jpm.setLocation(p);
 //            jpm.setVisible(true);
         }
