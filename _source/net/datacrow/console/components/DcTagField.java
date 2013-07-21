@@ -222,7 +222,13 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         if (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE ||
                 ke.getKeyCode() == KeyEvent.VK_DELETE) {
             removeWord();
-        }
+        } else if (
+                getSelectionEnd() > -1 && 
+               (ke.getKeyCode() == KeyEvent.VK_SPACE ||
+                ke.getKeyCode() == KeyEvent.VK_TAB ||
+                ke.getKeyCode() == KeyEvent.VK_ENTER)) {
+            acceptSuggestion();
+        } 
     } 
     
     @Override
@@ -235,6 +241,11 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     }
     
     boolean autoCompleting = false;
+    
+    private void acceptSuggestion() {
+        setCaretPosition(getTextLength());
+    }
+    
     private void autoComplete() {
         autoCompleting = true;
         
@@ -297,6 +308,7 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         
         @Override
         public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
+            
             if ((fld.getText().endsWith(" ") && (s.equals(" ") || s.equals("\t") || s.equals("\r") || s.equals("\n")))) {
                 return;
             } else if (s.equals("\t") || s.equals("\n") || s.equals("\r")) {
