@@ -440,7 +440,7 @@ public final class ComponentFactory {
             case _FONTRENDERINGCOMBO:
                 return getFontRenderingCombo();
             case _TAGFIELD:
-                return getTagField();
+                return getTagField(DcModules.getMappingModIdx(majormodule, minormodule, fieldIdx));
             case _SIMPLEREFERENCESFIELD:
                 return getSimpleReferencesField(DcModules.getMappingModIdx(majormodule, minormodule, fieldIdx));
             default:
@@ -448,8 +448,8 @@ public final class ComponentFactory {
         }
     }
     
-    public static DcTagField getTagField() {
-        return new DcTagField();
+    public static DcTagField getTagField(int mappingModIx) {
+        return new DcTagField(mappingModIx);
     }
     
     public static DcHtmlEditorPane getHtmlEditorPane() {

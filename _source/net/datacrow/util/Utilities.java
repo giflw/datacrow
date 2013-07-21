@@ -186,7 +186,7 @@ public class Utilities {
         if (mappings) {
         	for (DcObject reference : references) {
         		for (DcObject mapping : items) {
-        			if (mapping.getValue(DcMapping._B_REFERENCED_ID).equals(reference.getID())) {
+        		    if (mapping.getValue(DcMapping._B_REFERENCED_ID).equals(reference.getID())) {
         				result.add(mapping);
         				break;
         			}

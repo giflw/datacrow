@@ -57,7 +57,6 @@ public class ChangeUserFolderQuestionBox extends QuestionBox {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
         super.actionPerformed(e);
         
         if (e.getActionCommand().equals("askagain")) {

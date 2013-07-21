@@ -37,47 +37,12 @@ import net.datacrow.core.modules.DcModules;
  */
 public class DcTag extends DcProperty {
 
-    private static final long serialVersionUID = -936831554081323250L;
-
-    public static final int _A_NAME = 150;
-    public static final int _B_ICON = 151;
-    public static final int _C_ALTERNATIVE_NAMES = 152;
-    
     /**
      * Creates a new instance.
      * @param module
      */
     public DcTag() {
         super(DcModules._TAG);
-    }
-    
-    @Override
-    public int getSystemDisplayFieldIdx() {
-        return DcTag._A_NAME;
-    }
-    
-    @Override
-	public int getDefaultSortFieldIdx() {
-    	return DcTag._A_NAME;
-	}
-
-	/**
-     * The filename on which this item is based.
-     * @return Returns always null.
-     */
-    @Override
-    public String getFilename() {
-        return null;
-    }    
-    
-    @Override
-    public String toString() {
-        return getValue(_A_NAME) != null ? getValue(_A_NAME).toString() : "";
-    }  
-
-    @Override
-    public String getName() {
-        return toString();
     }
     
     @Override

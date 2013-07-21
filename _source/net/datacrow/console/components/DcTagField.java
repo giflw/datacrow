@@ -18,7 +18,6 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import net.datacrow.console.components.painter.RectanglePainter;
-import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcMapping;
@@ -27,7 +26,6 @@ import net.datacrow.core.objects.DcTag;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class DcTagField extends JTextArea implements IComponent, KeyListener, MouseListener {
     
@@ -47,9 +45,6 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         List<String> items = new ArrayList<String>();
         for (DcObject dco : DataManager.getTags()) 
             items.add(dco.toString());
-        
-        if (items.size() > 0)
-            AutoCompleteDecorator.decorate(this, items, false);
     }
     
     @Override

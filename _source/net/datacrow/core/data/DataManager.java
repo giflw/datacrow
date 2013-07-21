@@ -72,11 +72,20 @@ public class DataManager {
     private static Logger logger = Logger.getLogger(DataManager.class.getName());
     
     private static Map<String, DcImageIcon> icons = new HashMap<String, DcImageIcon>();
+    private static Collection<DcObject> tags;
+    
     
     static {
         for (String file : new File(DataCrow.iconsDir).list()) {
             icons.put(file.substring(0, file.length() - 4), new DcImageIcon(DataCrow.iconsDir + file));
         }
+        
+        refreshTags();
+    }
+    
+    private static void refreshTags() {
+        DataFilter df = new DataFilter(DcModules._TAG);
+        tags = DataManager.get(df);
     }
     
     public static DcImageIcon addIcon(String ID, String base64) {
@@ -101,6 +110,10 @@ public class DataManager {
             icon.setImage(icon.getImage());
         
         return icon;
+    }
+    
+    public static Collection<DcObject> getTags() {
+        return tags;
     }
 
     public static DcImageIcon getIcon(DcObject dco) {
@@ -415,9 +428,14 @@ public class DataManager {
                         df = new DataFilter(module.getIndex());
                         df.addEntry(new DataFilterEntry(DataFilterEntry._AND, module.getIndex(), field.getIndex(), Operator.EQUAL_TO, item));
                         
-                        for (DcObject dco : DataManager.get(df, module.getMinimalFields(null))) {
-                            if (!items.contains(dco))
-                                items.add(dco);
+                        
+                        try {
+                            for (DcObject dco : DataManager.get(df, module.getMinimalFields(null))) {
+                                if (!items.contains(dco))
+                                    items.add(dco);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }
