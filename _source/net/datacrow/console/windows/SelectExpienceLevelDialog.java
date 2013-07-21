@@ -50,7 +50,7 @@ public class SelectExpienceLevelDialog extends DcDialog implements ActionListene
         build();
         setCenteredLocation();
         setModal(true);
-        setSize(new Dimension(300, 200));
+        setSize(new Dimension(300, 260));
     }
 
     private void build() {

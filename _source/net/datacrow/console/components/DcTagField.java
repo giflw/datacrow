@@ -148,6 +148,7 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
         }
         
         setText(sb.toString());
+        highlightTags();
     }
     
     private List<String> getTags() {

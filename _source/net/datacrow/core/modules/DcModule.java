@@ -174,7 +174,8 @@ public class DcModule implements Comparable<DcModule> {
     private ChartPanel chartPanel;
     private FileRenamerDialog fileRenamerDialog;
     
-    private Map<Integer, DcField> fields = new HashMap<Integer, DcField>();
+    protected Map<Integer, DcField> fields = new HashMap<Integer, DcField>();
+    
     private Map<Integer, DcField> systemFields = new HashMap<Integer, DcField>();
     private Collection<DcField> sortedFields;
     

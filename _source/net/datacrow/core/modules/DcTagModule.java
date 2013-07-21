@@ -49,9 +49,7 @@ import net.datacrow.util.DcImageIcon;
  * @author Robert Jan van der Waals
  */
 public class DcTagModule extends DcPropertyModule {
-
-    private static final long serialVersionUID = -1481435217423089270L;
-    
+      
     /**
      * Creates a new module based on a XML definition.
      * @param module
@@ -74,7 +72,7 @@ public class DcTagModule extends DcPropertyModule {
             String tableShortName, 
             String objectName, 
             String objectNamePlural) {
-        
+     
         return new DcTagModule();
     }
     
@@ -105,20 +103,6 @@ public class DcTagModule extends DcPropertyModule {
 		return new int[] {DcObject._ID, DcTag._A_NAME};
 	}
 
-//	/**
-//     * Initializes the default fields.
-//     */
-//    @Override
-//    protected void initializeFields() {
-//        super
-//        addField(new DcField(DcTag._A_NAME, getIndex(), "Name", 
-//                false, true, false, true, 
-//                255, ComponentFactory._SHORTTEXTFIELD, getIndex(), DcRepository.ValueTypes._STRING,
-//                "Name"));
-//     
-//        getField(DcObject._ID).setEnabled(false);
-//    }  
-    
     @Override
     public DcImageIcon getIcon16() {
         return  super.getIcon16() == null ? IconLibrary._icoModuleTypeProperty16 : super.getIcon16();
