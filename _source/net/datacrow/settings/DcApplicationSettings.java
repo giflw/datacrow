@@ -1060,6 +1060,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false, -1));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stICalendarExportDialogSize,
+                            new Dimension(500, 500),
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false, -1));        
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stFileRenamerDialogSize,
                             new Dimension(300, 300),
                             -1,

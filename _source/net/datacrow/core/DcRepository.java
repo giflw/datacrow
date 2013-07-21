@@ -184,6 +184,7 @@ public abstract class DcRepository {
         public static final String stDeleteImageFileAfterImport = "delete_images_after_import";
         public static final String stShowQuickView = "show_quick_view";
         public static final String stBackupDialogSize = "backup_dialog_size";
+        public static final String stICalendarExportDialogSize = "icalendar_export_dialog_size";
         public static final String stItemFormSettingsDialogSize = "item_form_dialog_size";
         public static final String stReportingDialogSize = "reporting_dialog_size";
         public static final String stModuleWizardFormSize = "module_wizard_form_size";
