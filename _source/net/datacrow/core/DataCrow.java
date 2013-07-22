@@ -466,7 +466,7 @@ public class DataCrow {
                                 try {
                                     DcWebServer.getInstance().setPort(Integer.parseInt(port));
                                 } catch (NumberFormatException nfe) {
-                                    System.out.println("Incorrect sserver port: [" + port + "]");
+                                    System.out.println("Incorrect server port: [" + port + "]");
                                 }
                             }
                             

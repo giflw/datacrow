@@ -195,6 +195,7 @@ public class DcTagField extends JTextArea implements IComponent, KeyListener, Mo
     }
     
     private void highlightTags() {
+        this.getHighlighter().removeAllHighlights();
         for (Point point : getLocations()) {
             try {
                 this.getHighlighter().addHighlight(point.x, point.y, highlighter);

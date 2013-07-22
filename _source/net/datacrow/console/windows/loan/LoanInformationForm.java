@@ -124,7 +124,7 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
         panelLoans.load();
     }
     
-    private void stop() {
+    public void stop() {
         panelFilter.allowActions(true);
         panelLoans.cancel();
     }

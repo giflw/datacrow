@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import net.datacrow.console.IWindow;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
@@ -17,6 +18,7 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.helpers.Item;
+import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.comparators.DcObjectComparator;
 
 import org.apache.log4j.Logger;
@@ -58,7 +60,6 @@ public class LoanFilter extends Thread {
     public void cancel() {
         keepOnRunning = false;
     }
-
 
     public void setStartDateFrom(Date startDateFrom) {
         this.startDateFrom = startDateFrom;
@@ -206,5 +207,12 @@ public class LoanFilter extends Thread {
                 listener.addItem(item);
             }
         }
+        
+        for (IWindow window : DcSwingUtilities.getOpenWindows()) {
+            if (window instanceof LoanInformationForm) {
+                ((LoanInformationForm) window).stop();
+            }
+        }
+        
     }
 }
