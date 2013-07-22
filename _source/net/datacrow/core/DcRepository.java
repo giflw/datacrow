@@ -111,6 +111,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
+        public static final String stICalendarFullExport = "icalendar_full_export";
         public static final String stDoNotAskAgainChangeUserDir = "do_not_ask_again_change_user_dir";
         public static final String stLoanAdminFormSize = "loan_admin_form_size";
         public static final String stImdbMaxActors = "imdb_max_actors";

@@ -49,6 +49,8 @@ public class ICalendarExporterDialog extends DcDialog implements ActionListener,
         setHelpIndex("dc.tools.icalendar_export");
 
         buildDialog();
+        
+        cbFullExport.setSelected(DcSettings.getBoolean(DcRepository.Settings.stICalendarFullExport));
     }
     
     private void export() {
@@ -197,7 +199,8 @@ public class ICalendarExporterDialog extends DcDialog implements ActionListener,
         stopped = true;
         
         DcSettings.set(DcRepository.Settings.stICalendarExportDialogSize, getSize());
-
+        DcSettings.set(DcRepository.Settings.stICalendarFullExport, cbFullExport.isSelected());
+        
         ffTarget = null;
         textLog = null;
         progressBar = null;

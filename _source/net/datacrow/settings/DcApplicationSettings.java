@@ -132,6 +132,16 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             -1));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._BOOLEAN,
+                            DcRepository.Settings.stICalendarFullExport,
+                            Boolean.FALSE,
+                            ComponentFactory._CHECKBOX,
+                            "",
+                            "",
+                            false,
+                            false, 
+                            -1));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._BOOLEAN,
                             DcRepository.Settings.stOpenItemsInEditModus,
                             Boolean.TRUE,
                             ComponentFactory._CHECKBOX,
