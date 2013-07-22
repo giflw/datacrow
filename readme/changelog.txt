@@ -1,6 +1,14 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.10.3  [Released on July x 2013]  [testing: moderate]  [target: production]
+Data Crow 3.11  [Released on July 22 2013]  [testing: moderate]  [target: production]
 -----------------------------------------------------------------------------------------
+
+[New]
+- iCalendar export for the loan administration (Tools > iCalendar Loan Export)
+- New online search (TheMovieDB.org). This online search supports searching for movie
+  information in multiple languages.
+- Tag words functionality has been added to all top modules. Easily add and remove
+  tags to items. Tags are the same across all modules. Auto-completion while typing 
+  is supported to re-use existing tags. 
 
 [Fixed]
 - Various potential resource leaks have been discovered and fixed.
@@ -25,14 +33,10 @@ Data Crow 3.10.3  [Released on July x 2013]  [testing: moderate]  [target: produ
   for the current search action.
 - Allow multiple items to be returned from the loan administration overview (right-click,
   select Loan Administration).
-  
-[New]
-- iCalendar export for the loan administration (Tools > iCalendar Loan Export)
-- New online search (TheMovieDB.org). This online search supports searching for movie
-  information in multiple languages.
-- Tag words functionality has been added to all top modules. 
-  
-  
+- Lending containers will now also lend all its item. Same applies for returning an 
+  container. 
+
+
 -----------------------------------------------------------------------------------------
 Data Crow 3.10.2  [Released on July 2 2013]  [testing: moderate]  [target: production]
 -----------------------------------------------------------------------------------------

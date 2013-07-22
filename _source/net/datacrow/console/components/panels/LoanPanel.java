@@ -58,6 +58,7 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.helpers.ContactPerson;
+import net.datacrow.core.objects.helpers.Container;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.wf.requests.CloseWindowRequest;
 import net.datacrow.util.DcSwingUtilities;
@@ -90,9 +91,17 @@ public class LoanPanel extends JPanel implements ActionListener {
 
     private DcHtmlEditorPane descriptionPane = ComponentFactory.getHtmlEditorPane();
     
+    boolean containerMode = false;
+    
     public LoanPanel(DcObject dco, DcFrame owner) {
-        objects = new ArrayList<DcObject>();
-        objects.add(dco);
+        this.objects = new ArrayList<DcObject>();
+        this.objects.add(dco);
+        
+        if (dco.getModule().getIndex() == DcModules._CONTAINER) {
+            this.objects.addAll(((Container) dco).getChildren());
+            containerMode = true;
+        }
+        
         this.dco = dco;
         this.owner = owner;
         
@@ -102,6 +111,14 @@ public class LoanPanel extends JPanel implements ActionListener {
     
     public LoanPanel(Collection<? extends DcObject> objects, DcFrame owner) throws Exception {
         this.objects = new ArrayList<DcObject>(objects);
+        
+        for (DcObject dco : objects) {
+            if (dco.getModule().getIndex() == DcModules._CONTAINER)
+                this.objects.addAll(((Container) dco).getChildren());
+            
+            containerMode = true;
+        }
+        
         this.owner = owner;
         
         int counter = 0;
@@ -161,11 +178,17 @@ public class LoanPanel extends JPanel implements ActionListener {
                                           loan.getDaysLoaned().toString(),
                                           due});
                 }
+            } else if (containerMode) {
+                s = DcResources.getText("msgContainerItemsLoanInformation");
             } else {
                 s = DcResources.getText("msgAllItemsLoanInformation", String.valueOf(objects.size()));
             }
         } else {
-            s = objects.size() == 1 ? DcResources.getText("msgItemIsAvailable") : DcResources.getText("msgAllItemsAreAvailable", String.valueOf(objects.size()));
+            if (containerMode) {
+                s = DcResources.getText("msgContainerItemsAreAvailable", String.valueOf(objects.size()));
+            } else  {
+                s = objects.size() == 1 ? DcResources.getText("msgItemIsAvailable") : DcResources.getText("msgAllItemsAreAvailable", String.valueOf(objects.size()));
+            }
         }
         
         return s;
@@ -211,6 +234,9 @@ public class LoanPanel extends JPanel implements ActionListener {
         for (DcObject o : objects) {
             currentLoan = DataManager.getCurrentLoan(o.getID());
             startDate = (Date) currentLoan.getValue(Loan._A_STARTDATE);
+            if (startDate == null)
+                break;
+                
             if (startDate.compareTo(endDate) > 0) {
                 DcSwingUtilities.displayWarningMessage("msgEndDateMustBeAfterStartDate");
                 return;
@@ -228,7 +254,6 @@ public class LoanPanel extends JPanel implements ActionListener {
                         if (currentLoan.getID() != null) {
                             currentLoan.setValue(Loan._D_OBJECTID, o.getID());
                             currentLoan.setValue(Loan._B_ENDDATE, endDate);
-                            //currentLoan.setValue(Loan._E_DUEDATE, null);
                             
                             if (owner != null && i == objects.size()  - 1) // last item
                                 currentLoan.addRequest(new CloseWindowRequest(owner));

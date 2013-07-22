@@ -78,7 +78,7 @@
     <mapID target="dc.tools.drivemanager" url="tools/drivemanager.html"/>
     <mapID target="dc.tools.filerenamer" url="tools/filerenamer.html"/>
     <mapID target="dc.tools.resourceeditor" url="tools/resource_editor.html"/>
-    <mapID target="dc.tools.icalendar_export" url="tools/icalendar_export.html"/>
+    <mapID target="dc.tools.icalendar_export" url="tools/icalendar_loan_export.html"/>
 
     <mapID target="dc.webserver" url="webserver/webserver.html"/>
     
