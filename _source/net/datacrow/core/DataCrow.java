@@ -79,7 +79,6 @@ import net.datacrow.filerenamer.FilePatterns;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.Directory;
 import net.datacrow.util.SystemMonitor;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.logging.TextPaneAppender;
@@ -378,11 +377,6 @@ public class DataCrow {
                     logger.info(DcResources.getText("msgModulesLoaded"));
             
                     ValueEnhancers.initialize();
-        
-                    // delete lock file
-                    Directory directory = new Directory(databaseDir, false, new String[] {"lck"});
-                    for (String file : directory.read())
-                    	new File(file).delete();
                     
                     // set the database name
                     DcSettings.set(DcRepository.Settings.stConnectionString, "dc");
@@ -965,6 +959,7 @@ public class DataCrow {
                 properties.setProperty("hsqldb.nio_data_file", "true");
                 properties.setProperty("hsqldb.lock_file", "false");
                 properties.setProperty("hsqldb.log_size", "10000");
+                properties.setProperty("hsqldb.lock_file", "false");
 
                 FileOutputStream fos = new FileOutputStream(file);
                 properties.store(fos, "Default properties for the DC database of Data Crow.");
