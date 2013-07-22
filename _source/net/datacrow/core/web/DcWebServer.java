@@ -25,6 +25,8 @@
 
 package net.datacrow.core.web;
 
+import java.io.File;
+
 import net.datacrow.core.DataCrow;
 
 import org.mortbay.jetty.Connector;
@@ -51,7 +53,6 @@ public class DcWebServer {
 	 * Returns the instance of the web server.
 	 */
 	public static DcWebServer getInstance() {
-	    
 	    return instance;
 	}
 	
@@ -93,10 +94,11 @@ public class DcWebServer {
 	    
 	    String baseDir = DataCrow.webDir;
 	    
+	    File contextDir = new File(baseDir, context);
 	    WebAppContext webapp = new WebAppContext();
 	    webapp.setContextPath(context);
-	    webapp.setWar(baseDir + context);
-	    webapp.setDefaultsDescriptor(baseDir + context + "/WEB-INF/webdefault.xml");
+	    webapp.setWar(contextDir.toString());
+	    webapp.setDefaultsDescriptor(new File(contextDir, "/WEB-INF/webdefault.xml").toString());
 	    
 	    server.setHandler(webapp);
 	    

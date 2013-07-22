@@ -98,12 +98,16 @@ public class WebServerControlPanel extends JPanel implements java.awt.event.Acti
     private void start() {
         try {
             long port = (Long) fldPort.getValue();
-            if (port < 1) 
-                fldPort.setValue(8080);
+            if (port < 1) {
+                port = 8080;
+                fldPort.setValue(port);
+            }
             
             saveSettings();
             
+            DcWebServer.getInstance().setPort((int) port);
             DcWebServer.getInstance().start();
+            
             setMessage(DcResources.getText("msgWebServerStarted"));
             isRunning(true);
         } catch (Exception e) {
