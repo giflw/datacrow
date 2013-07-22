@@ -16,7 +16,6 @@ cd help
 call create_index.bat
 cd ..
 del installer\*.jar
-del installer\*.exe
 cd ..\services
 call build.bat
 cd ..\datacrow
