@@ -129,6 +129,9 @@ public class DataCrow {
 
     public static void main(String[] args) {
         try {
+            
+            initTemporaryLog4j();
+            
             boolean webserverMode = false; 
             
             String password = null;
@@ -899,6 +902,14 @@ public class DataCrow {
         } finally {
             file.delete();
         }
+    }
+    
+    private static void initTemporaryLog4j() {
+        Properties properties = new Properties();
+        properties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
+        properties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F\\:%L) - %m%n");
+        properties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
+        PropertyConfigurator.configure(properties);        
     }
     
     private static void initLog4j() {
