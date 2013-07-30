@@ -37,6 +37,7 @@ move *.jar ..\..\
 move *.exe ..\..\
 move installer.sh ..\..\
 move installer.txt ..\..\
+move readme.txt ..\..\
 rd installer /S /Q
 cd ..
 del *.j2e

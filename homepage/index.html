@@ -28,9 +28,13 @@
 <div id="wrap"> 
   <div id="sidebar"> 
     <a href="#" id="logo"><img src="./images/logo.png" alt="" /></a> 
+    <center><a href="https://twitter.com/data_crow" class="twitter-follow-button" data-show-count="false" data-lang="nl">@data_crow volgen</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </center> 
     <ul id="navigation">
       <li><a href="#home" class="active">Home</a></li>
       <li><a href="#about">About Us</a></li>
+      <li><a href="#faq">FAQ</a></li>
       <li><b><a href="#downloads">Downloads</a></b></li>
       <li><a href="#donations">Donations</a></li>
       <li><a href="#screenshots">Screenshots</a></li>
@@ -136,23 +140,57 @@
         
       </div>
     </div>
+    <div class="page" id="faq"> 
+      <h3 class="page_title"> F.A.Q.</h3>
+      <div class="page_content">
+        <ul>
+            <p><i>Windows - Data Crow won't install to C:\Program Files folder</p>
+            <li><blockquote>
+            The setup has to be run "as administrator" in this case. Right-click the setup file and select "Run as Administrator".
+            </blockquote></li>
+            
+            <p><i>Data Crow won't run</p>
+            <li><blockquote>
+            Let me guess, Windows? If you installed to the C:\Program Files folder (or that other one if you are running from a 64bit
+            Windows version) and Data Crow won't start you can fix this in most cases by allowing Data Crow to run as administrator. <br>
+            Right-click the shortcut you use to start Data Crow (also read belows topic), select the properties tab and check the option which
+            mumbles about running this program as an administrator. It's perfectly safe, promise.
+            </blockquote></li> 
+            
+            <p><i>Which version of Data Crow to launch?</p>
+            <li><blockquote>
+            Data Crow comes in two flavours, 32 bit and 64 bit. Which one to start? It depends solely on the version of Java
+            installed (and set as default) on your machine. If you have a 64bit Windows version but a 32bit version of Java installed you can
+            only start Data Crow using the Data Crow 32bit shortcut / executable.
+            </blockquote></li> 
+            
+            <p><i>I wasn't helped by above topics</p>
+            <li><blockquote>
+            That's not a question.. Anyway, check the <a href="http://sourceforge.net/forum/forum.php?forum_id=650035" target="new">forum</a>.
+            If you really are experiencing a bug, please register it at <a href="http://sourceforge.net/projects/datacrow" target="new">Sourceforge.net</a> (it's the
+            place where Data Crow is resides).
+            </blockquote></li> 
+        </ul>
+      </div>
+    </div>
+    
     <div class="page" id="downloads"> 
       <h3 class="page_title"> Downloads</h3>
       <div class="page_content">
         <ul id="download_sources" class="grid">
-          <li class="windows_installer"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.0/datacrow_3_11_0_windows_installer.zip" target="new">
+          <li class="windows_installer"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.1/datacrow_3_11_1_windows_installer.zip" target="new">
             <img src="images/downloads/windows.png" alt="Windows Installer"></a>
             <i><small><center>Data Crow Windows Installer</center></small></i></li>
-          <li class="installer"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.0/datacrow_3_11_0_installer.zip" target="new">
+          <li class="installer"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.1/datacrow_3_11_1_installer.zip" target="new">
             <img src="images/downloads/installer.png" alt="Installer"></a>
             <i><small><center>Data Crow Other OS Installer</center></small></i></li>            
-          <li class="zipped"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.0/datacrow_3_11_0_zipped.zip" target="new">
+          <li class="zipped"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.1/datacrow_3_11_1_zipped.zip" target="new">
             <img src="images/downloads/zipped.png" alt="Zipped version"></a>
             <i><small><center>Data Crow: Unpack and Run</center></small></i></li>            
           <li class="java"><a href="http://www.java.com" target="new">
             <img src="images/downloads/java.png" alt="Java from Oracle"></a>
             <i><small><center>Java - External Site</center></small></i></li>   
-          <li class="source"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.0/datacrow_3_11_0_source.zip" target="new">
+          <li class="source"><a href="http://downloads.sourceforge.net/project/datacrow/Production%20versions/3.11.1/datacrow_3_11_1_source.zip" target="new">
             <img src="images/downloads/source.png" alt="Source Code"></a>
             <i><small><center>Data Crow Source Code</center></small></i></li>
 
@@ -174,18 +212,18 @@
         Below you find an overview of the donations made, this month and in the past 3 months:<br><br></p>
         
         <ul id="donations_overview" class="grid">
-          <li><b>April</b></li>
           <li><b>May</b></li>
           <li><b>June</b></li>
           <li><b>July</b></li>
-          <li>&euro;  40,00</li>    
+          <li><b>August</b></li>
           <li>&euro;  55,00</li>
           <li>&euro;  61,00</li>
           <li>&euro;  41,50</li>
+          <li>&euro;   0,00</li>
         </ul>
         
         <p><br><b>A big thanks to all contributors!</b> The total for 2013 so far is: <b>&euro; 406,50</b>.</p>
-        <p><i>Last updated on July 22nd, 2013.</i></p>
+        <p><i>Last updated on July 31st, 2013.</i></p>
 
         <p><br>I hope you enjoy using Data Crow. In case you want to make a donation you can use one of the buttons below. Donations can be made
         via Paypal. In case you want your donation to be visible to the public I suggest you use the Sourceforge.net donation method.<br><br></p>
@@ -225,12 +263,17 @@
         <div class="page_content"> 
           <ul>
           
+            <p><i>30 July 2013</i> - Data Crow 3.11.1</p>
+            <li><blockquote>
+            Bugs? Just a couple. Imdb.com was not functioning due some site changes. Additionally I wanted to introduce fixes
+            for launching files as well as to introduce some new features in that area. Not much else!<br>
+            <a href="./changelog.txt" target="new">changelog</a> for more information (text file, opens in a new window).
+            </blockquote></li>  
+          
             <p><i>22 July 2013</i> - Data Crow 3.11</p>
             <li><blockquote>
             A whole new version! Medium in size and packed with changes and new functionality. TheMovieDB online search has been added, 
-            tags can be added to items and loans can be exported to an iCalendar file.<br>
-            Check the changelog for the details:
-            <a href="./changelog.txt" target="new">changelog</a> for more information (text file, opens in a new window).
+            tags can be added to items and loans can be exported to an iCalendar file.
             </blockquote></li>    
           
             <p><i>2 July 2013</i> - Data Crow 3.10.2</p>
