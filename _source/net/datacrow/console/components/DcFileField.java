@@ -125,10 +125,8 @@ public class DcFileField extends JComponent implements IComponent, ActionListene
     }
 
     public void setFile(File file) {
-        String filename = file == null ? "" : file.toString();
-
-        this.file = new File(filename);
-        text.setText(Utilities.getMappedFilename(filename));
+        this.file = file;
+        text.setText(Utilities.getValidPath(file != null ? file.toString() : null));
     }
 
     protected void showFileSaveDialog() {

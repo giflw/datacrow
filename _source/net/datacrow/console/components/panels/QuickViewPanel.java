@@ -387,8 +387,11 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     dco.getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) { 
                 
                     String filename = dco.getDisplayString(index);
+                    if (filename.startsWith("./") || filename.startsWith(".\\"))
+                        filename = new File(DataCrow.installationDir, filename.substring(2, filename.length())).toString();
+                    
                     filename = filename.replaceAll(" ", "%20");
-                    value = "<a href=\"file:///" + filename + "\" " + Utilities.getHtmlStyle(fText) + ">" + new File(dco.getDisplayString(index)).getName() + "</a>";                        
+                    value = "<a href=\"file://" + filename + "\" " + Utilities.getHtmlStyle(fText) + ">" + new File(filename.replaceAll("%20", " ")).getName() + "</a>";                        
                 } else if (dco.getField(index).getFieldType() == ComponentFactory._PICTUREFIELD) {
                 	Picture p = (Picture) dco.getValue(index);
                 	value = "<img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\" alt=\"" + dco.getLabel(index) + "\">";

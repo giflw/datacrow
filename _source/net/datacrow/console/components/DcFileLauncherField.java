@@ -112,9 +112,8 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     }
 
     public void setFile(File file) {
-        String filename = file == null ? "" : file.toString();
         this.file =  file;
-        text.setText(file == null ? "" : Utilities.getMappedFilename(filename));
+        text.setText(file == null ? "" : Utilities.getValidPath(file == null ? "" : file.toString()));
     }
     
     @Override
@@ -149,7 +148,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
     
     private void launch() {
         if (!Utilities.isEmpty(text.getText())) {
-            String filename = Utilities.getMappedFilename(text.getText());
+            String filename = Utilities.getValidPath(text.getText());
             new FileLauncher(filename).launch();
         }
     }

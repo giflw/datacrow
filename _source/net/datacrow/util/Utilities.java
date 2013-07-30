@@ -242,10 +242,13 @@ public class Utilities {
         return value;
     }  
     
-    public static String getMappedFilename(String filename) {
+    public static String getValidPath(String filename) {
+        
+        if (filename == null) return "";
+        
         String s = filename;
         
-        if (s != null) {
+        if (filename.indexOf('\\') > -1 || filename.indexOf('/') > -1) {
             String[] mappings = DcSettings.getStringArray(DcRepository.Settings.stDriveMappings);
             if (mappings != null) {
                 for (String mapping : mappings) {
@@ -259,9 +262,42 @@ public class Utilities {
                     }
                 }
             }
+
+            s = getRelativePath(DataCrow.installationDir, s);
         }
         
         return s;
+    }
+    
+    public static String getRelativePath(String basePath, String targetFile) {
+        
+        if (targetFile == null || targetFile.startsWith("."))
+            return targetFile;
+        
+        String relativePath = "";
+        
+        //make them equal first
+        if (!DataCrow.getPlatform().isWin()) {
+            basePath = new File(basePath.replaceAll("\\\\", "\\/")).toString();
+            targetFile = new File(targetFile.replaceAll("\\\\", "\\/")).toString();
+        } else {
+            basePath = new File(basePath.replaceAll("\\/", "\\\\")).toString();
+            targetFile = new File(targetFile.replaceAll("\\/", "\\\\")).toString();            
+        }
+        
+        while (basePath.endsWith("/") || basePath.endsWith("\\"))
+            basePath = basePath.substring(0, basePath.length() - 1);
+
+        while (targetFile.endsWith("/") || targetFile.endsWith("\\"))
+            targetFile = targetFile.substring(0, targetFile.length() - 1);
+
+        if (targetFile.startsWith(basePath)) {
+            relativePath = "." + File.separator + targetFile.substring(basePath.length() + 1, targetFile.length());
+        } else {
+            relativePath = targetFile;
+        }
+        
+        return relativePath;
     }
     
     public static String getOriginalFilename(String filename) {

@@ -336,7 +336,7 @@ public class DcValue implements Serializable {
                     text = Utilities.toFileSizeString((Long) o);
                 } else if (field.getFieldType() == ComponentFactory._FILEFIELD ||
                            field.getFieldType() == ComponentFactory._FILELAUNCHFIELD) {
-                    text = Utilities.getMappedFilename((String) o);
+                    text = Utilities.getValidPath((String) o);
                 } else {
                 	text = o == null ? "" : o instanceof String ? (String) o : o.toString();
                 }

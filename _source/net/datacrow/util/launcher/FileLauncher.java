@@ -42,7 +42,7 @@ public class FileLauncher extends Launcher {
 
 	private static Logger logger = Logger.getLogger(FileLauncher.class.getName());
 	
-    private final String filename;
+    private String filename;
     
     public FileLauncher(File file) {
         this.filename = file != null ? file.toString() : null;
@@ -50,6 +50,10 @@ public class FileLauncher extends Launcher {
     
     public FileLauncher(String filename) {
         this.filename = filename;
+        
+        if (filename.startsWith("./") || filename.startsWith(".\\")) {
+            this.filename = new File(DataCrow.installationDir, filename.substring(2, filename.length())).toString();
+        }
     }
     
     @Override
