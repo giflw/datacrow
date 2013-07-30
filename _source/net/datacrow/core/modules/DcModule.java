@@ -80,7 +80,7 @@ import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinitions;
 import net.datacrow.synchronizers.Synchronizer;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -1221,7 +1221,7 @@ public class DcModule implements Comparable<DcModule> {
                     ComponentFactory._SHORTTEXTFIELD, 
                     field.getModule(), 
                     DcRepository.ValueTypes._STRING,
-                    StringUtils.normalize(field.getSystemName()).replaceAll(" ", "").replaceAll("[\\-]", "") + "_persist");
+                    Utilities.toDatabaseName(field.getSystemName()) + "_persist");
             
             addField(fld);
         }

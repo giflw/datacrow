@@ -49,7 +49,6 @@ import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -115,7 +114,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
         File file = null;
         
         try {
-            file = File.createTempFile("module_" + StringUtils.normalize(module.getName()).replaceAll(" ", "") + suffix, ".png");
+            file = File.createTempFile("module_" + Utilities.toFilename(module.getName()) + suffix, ".png");
             byte[] bytes = icon.getBytes();
             
             FileOutputStream fos = new FileOutputStream(file);
@@ -131,7 +130,7 @@ public class PanelBasicInfo extends ModuleWizardPanel {
     }
     
     private String toTablename(String s) {
-        String tablename = StringUtils.normalize(s.toLowerCase()).replaceAll(" ", "").toLowerCase();
+        String tablename = Utilities.toDatabaseName(s.toLowerCase()).toLowerCase();
         return Character.isDigit(tablename.charAt(0)) ? "module" + tablename : tablename ;
     }
     

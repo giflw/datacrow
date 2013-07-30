@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 public class DriveScanner {
@@ -50,7 +49,7 @@ public class DriveScanner {
     private final String filename;
     
     public DriveScanner(DriveManager dm, File drive) {
-        filename = StringUtils.normalize(drive.toString()) + dm.getTempFileSuffix(); 
+        filename = drive.toString() + dm.getTempFileSuffix(); 
 
         report = Logger.getAnonymousLogger();
         report.setLevel(Level.INFO);

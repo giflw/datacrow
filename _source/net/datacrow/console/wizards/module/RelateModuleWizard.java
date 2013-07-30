@@ -44,7 +44,7 @@ import net.datacrow.core.modules.xml.XmlModule;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 public class RelateModuleWizard extends Wizard {
 
@@ -91,7 +91,7 @@ public class RelateModuleWizard extends Wizard {
             
             Collection<XmlField> fields = childModule.getFields();
             XmlField field = new XmlField();
-            field.setColumn(StringUtils.normalize(parentModule.getObjectName()).replaceAll(" ", "") + "ID");
+            field.setColumn(Utilities.toDatabaseName(parentModule.getObjectName()) + "ID");
             field.setName(parentModule.getObjectName());
             field.setFieldType(ComponentFactory._SHORTTEXTFIELD);
             field.setMaximumLength(50);

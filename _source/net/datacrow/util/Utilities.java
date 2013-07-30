@@ -65,6 +65,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -103,6 +105,11 @@ public class Utilities {
     
     private static final FileSystemView fsv = new JFileChooser().getFileSystemView();
     
+    
+    private static final Pattern[] normalizer = {
+        Pattern.compile("('|~|\\!|@|#|\\$|%|\\^|\\*|_|\\[|\\{|\\]|\\}|\\||\\\\|;|:|`|\"|<|,|>|\\.|\\?|/|&|_|-)"),
+        Pattern.compile("[(,)]")};
+    
     static {
         try {
             FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "languages.properties"));
@@ -115,6 +122,44 @@ public class Utilities {
     
     public static Toolkit getToolkit() {
         return tk;
+    }
+    
+    /**
+     * Converts an ordinary string to something which is allowed to be used in a
+     * filename or pathname.
+     */
+    public static String toFilename(String text) {
+        String s = text == null ? "" : text.trim().toLowerCase();
+
+        s = s.replaceAll("\n", "");
+        s = s.replaceAll("\r", "");
+        
+        for (int i = 0; i < normalizer.length; i++) {
+            Matcher ma = normalizer[i].matcher(s);
+            s = ma.replaceAll("");
+        }
+        
+        s = StringUtils.normalize2(s);
+        s = s.replaceAll("[\\-]", "");
+        s = s.replaceAll(" ", "");
+        
+        return s.trim();
+    }
+    
+    /**
+     * Converts an ordinary string to something which is allowed to be used in a
+     * column or table name. It does not check for any preserved names (!). 
+     */
+    public static String toDatabaseName(String text) {
+        String s = toFilename(text);
+        
+        if (s.length() > 0) {
+            char c = s.charAt(0);
+            if (Character.isDigit(c))
+                s = "db_" + s;      
+        }
+        
+        return s.trim();
     }
     
     public static String getFirstName(String name) {

@@ -59,7 +59,6 @@ import net.datacrow.core.modules.xml.XmlField;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 public class DefineFieldDialog extends DcDialog implements ActionListener {
@@ -181,7 +180,7 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
             }
             
             if (!existingField) {
-                String column = StringUtils.normalize(name).replaceAll(" ", "").replaceAll("[\\-]", "");
+                String column = Utilities.toDatabaseName(name);
 
                 if (Utilities.isKeyword(column))
                     throw new WizardException(DcResources.getText("msgFieldNameNotAllowed"));

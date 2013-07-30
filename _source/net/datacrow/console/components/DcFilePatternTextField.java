@@ -5,7 +5,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 public class DcFilePatternTextField extends DcShortTextField {
 
@@ -23,7 +23,7 @@ public class DcFilePatternTextField extends DcShortTextField {
         @Override
         public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
             if (i + 1 < MAX_TEXT_LENGTH)
-                super.insertString(i, s.equals("_") ? "_" : StringUtils.normalize(s), attributeset);
+                super.insertString(i, s.equals("_") ? "_" : Utilities.toFilename(s), attributeset);
         }
     }
 }
