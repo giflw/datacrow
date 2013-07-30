@@ -113,7 +113,19 @@ the build.xml file to compile the full Data Crow project.
 6.0 Starting Data Crow
 
 Data Crow can be started by typing "java -Xmx256m -jar datacrow.jar". 
-On Windows platforms the datacrow.exe file can be used to start.
+On Windows platforms the datacrow32bit.exe or datacrow64bit.exe file can be used to start.
+
+    -datacrow32bit.exe: can only be used in case the 32 bit version of Java has been 
+     installed.
+
+    -datacrow64bit.exe: can only be used in case the 64 bit version of Java has been 
+     installed. It could be that you have a 64bit operating system while having 
+     a 32bit version of Java installed. In this case the datacrow64bit.exe will
+     fail to start.
+     
+If Data Crow fails to start try and run it "as administrator":
+    -Right-click the EXE file or the shortcut (as created by the installer), select the
+     properties tab and tick the option called "Run as administrator".
 
 If you use multiple Data Crow installations you have several choices to make:
 
