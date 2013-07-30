@@ -31,9 +31,11 @@ public class URLLauncher extends Launcher {
 		
 		if (!Utilities.isEmpty(browserPath)) {
 			try {
-				runCmd(browserPath + " " + url);
+				runCmd(new String[] {browserPath, url.toString()});
 				launched = true;
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			    logger.debug("Failed to launch "  + browserPath + " " + url.toString(), e);
+			}
 		}
 		
 		if (!launched) {

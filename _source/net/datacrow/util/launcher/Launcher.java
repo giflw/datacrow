@@ -1,7 +1,10 @@
 package net.datacrow.util.launcher;
 
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 
@@ -18,12 +21,29 @@ public abstract class Launcher {
         return null;
     }
     
-    protected void runCmd(String cmd) throws Exception {
+    protected void runCmd(String[] command) throws Exception {
     	try { 
-    		Process p = Runtime.getRuntime().exec(cmd);
-    		p.waitFor();
+    	    Process p = new ProcessBuilder(command).start();
+    		
+    		InputStream is = p.getErrorStream();
+    	    InputStreamReader isr = new InputStreamReader(is);
+    	    BufferedReader br = new BufferedReader(isr);
+    	    String line;
+    	    
+    	    // log the error messages
+    	    while ((line = br.readLine()) != null) {
+    	        logger.error(line);
+    	    }
+    	    
+    	    p.waitFor();
+    	    br.close();
+    		
     	} catch (IOException ie) {
-        	logger.debug("Could not launch command using the runCmd method [" + cmd + "]", ie);
+    	    String s = "";
+    	    for (String cmd : command)
+    	        s+= cmd + " ";
+    	    
+        	logger.debug("Could not launch command using the runCmd method [" + s.trim() + "]", ie);
         	throw new Exception(ie);
     	}
     }

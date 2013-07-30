@@ -80,28 +80,19 @@ public class UpgradeHsqlEngine {
             
             String address = "jdbc:hsqldb:file:" + DataCrow.databaseDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
             
-            String cmd;
             String path = DataCrow.installationDir;
-            if (!DataCrow.getPlatform().isWin()) {
-                cmd = "java -jar '" + path + "upgradeHSQL/upgradeHSQL.jar' '" + address + "'";
-            } else {
-                while (path.startsWith("/"))
-                    path = path.substring(1);
-
-                cmd = "java -jar \"" + path + "upgradeHSQL/upgradeHSQL.jar\" \"" + address + "\"" ;
-            }
-            
-            System.out.println("The following command is being executed for the upgrade: " + cmd);
-            logger.info("The following command is being executed for the upgrade: " + cmd);
-            
+            String[] command  = new String[] {
+                    "java", 
+                    "-jar",
+                    path + "upgradeHSQL/upgradeHSQL.jar",
+                    "address"};
             DcSwingUtilities.displayMessage(
                     "NOTE: if the upgrade fails this process will be started again on your next startup. " +
                     "If this continues, run the following command from the command line / terminal: \n" +
-                    cmd);
+                    "java -jar " + path + "upgradeHSQL/upgradeHSQL.jar " + address);
             
-            Runtime rt = Runtime.getRuntime();
             try {
-                Process p = rt.exec(cmd);
+                Process p = new ProcessBuilder(command).start();
                 InputStream stderr = p.getErrorStream();
                 InputStreamReader isr = new InputStreamReader(stderr);
                 BufferedReader br = new BufferedReader(isr);
@@ -117,7 +108,8 @@ public class UpgradeHsqlEngine {
                 System.exit(0);
                 
             } catch (Exception exp) {
-                logger.debug("Could not launch the command [" + cmd + "]", exp);
+                logger.debug("Could not launch the command [" + 
+                        "java -jar " + path + "upgradeHSQL/upgradeHSQL.jar " + address + "]", exp);
             }
         } else if (v != null && v.equals("1.8.1") && format != null && format.equals("0")) {
             // conversion failure or not yet converted from the old version to the new version

@@ -43,9 +43,11 @@ public class FileLauncher extends Launcher {
 	private static Logger logger = Logger.getLogger(FileLauncher.class.getName());
 	
     private String filename;
+    private File file;
     
     public FileLauncher(File file) {
         this.filename = file != null ? file.toString() : null;
+        this.file = file;
     }
     
     public FileLauncher(String filename) {
@@ -54,6 +56,8 @@ public class FileLauncher extends Launcher {
         if (filename.startsWith("./") || filename.startsWith(".\\")) {
             this.filename = new File(DataCrow.installationDir, filename.substring(2, filename.length())).toString();
         }
+        
+        this.file = new File(filename);
     }
     
     @Override
@@ -63,7 +67,6 @@ public class FileLauncher extends Launcher {
             return;
         }
         
-        File file = new File(filename);
         if (!file.exists()) {
             DcSwingUtilities.displayWarningMessage(DcResources.getText("msgFileDoesNotExist", filename));
             return;
@@ -89,42 +92,18 @@ public class FileLauncher extends Launcher {
 
             if (!launched) {
                 try {
-                    runCmd(filename);
+                    // a direct launch based on the filename
+                    runCmd(new String[] {filename});
                 } catch (Exception ignore) {
-                    try {
-                        runCmd(getLaunchableName());
-                    } catch (Exception exp) {
-                        DcSwingUtilities.displayWarningMessage("msgNoProgramDefinedForExtension");
-                    }
+                    DcSwingUtilities.displayWarningMessage(DcResources.getText("msgNoProgramDefinedForExtension", Utilities.getExtension(file)));
                 }
             }
-        } else {
-            String cmd = program + " " + getLaunchableName();
+        } else { // a program has been defined to open the specified file
             try {
-                runCmd(cmd);
+                runCmd(new String[] {program, filename});
             } catch (Exception ignore) {
-                try {
-                    runCmd("'" + cmd + "' " + getLaunchableName());
-                } catch (Exception exp) {
-                    DcSwingUtilities.displayWarningMessage(DcResources.getText("msgErrorWhileExecuting", cmd));
-                }
+                DcSwingUtilities.displayWarningMessage(DcResources.getText("msgErrorWhileExecuting", filename));
             } 
         }
     }   
-    
-    private String getLaunchableName() {
-    	String name = "";    
-    	
-        if (!DataCrow.getPlatform().isWin()) {
-        	for (int i = 0; i < filename.length(); i++) {
-        		char c = filename.charAt(i);
-        		name += (c == '*' || c == '?' || c == '\\') ? "\\" + c : "" + c; 
-        	}
-        	name = "'" + filename + "'";
-        } else {
-        	name = '"' + filename + '"';
-        }
-    	
-    	return name;
-    }
 }

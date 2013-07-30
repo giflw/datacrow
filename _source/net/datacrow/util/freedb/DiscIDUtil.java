@@ -109,9 +109,8 @@ public class DiscIDUtil {
     private void setExecutionAllowed(String scriptFile) {
         try {
             if (!DataCrow.getPlatform().isWin()) {
-                String cmd = "chmod u=rwx " + scriptFile;
-                Process proc = Runtime.getRuntime().exec(cmd);
-                proc.waitFor();
+                Process p = new ProcessBuilder(new String[] {"chmod", "u=rwx", scriptFile}).start();
+                p.waitFor();
             }
         } catch (Exception e) {
             logger.error(e, e);
