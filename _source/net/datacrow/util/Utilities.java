@@ -124,10 +124,6 @@ public class Utilities {
         return tk;
     }
     
-    /**
-     * Converts an ordinary string to something which is allowed to be used in a
-     * filename or pathname.
-     */
     public static String toFilename(String text) {
         String s = text == null ? "" : text.trim().toLowerCase();
 
@@ -146,10 +142,6 @@ public class Utilities {
         return s.trim();
     }
     
-    /**
-     * Converts an ordinary string to something which is allowed to be used in a
-     * column or table name. It does not check for any preserved names (!). 
-     */
     public static String toDatabaseName(String text) {
         String s = toFilename(text);
         

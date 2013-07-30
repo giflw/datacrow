@@ -5,6 +5,9 @@ Data Crow 3.11.1  [Released on August xx 2013]  [testing: moderate]  [target: pr
 [Fixed]
 - Logger not initialized error message on prompt / console.
 - File launcher fixes (for all platforms).
+- Indicated "run as administrator" for the data crow executable and the setup executables
+- Column names in the database are no longer allowed to start with a digit. The
+  module wizards have been updated accordingly.
 
 [Changed]
 - Paths for files linked to items are now handled a bit differently;
