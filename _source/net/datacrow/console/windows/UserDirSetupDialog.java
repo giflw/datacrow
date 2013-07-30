@@ -46,9 +46,9 @@ import net.datacrow.console.components.DcFileField;
 import net.datacrow.console.components.DcLongTextField;
 import net.datacrow.console.components.DcProgressBar;
 import net.datacrow.console.windows.messageboxes.NativeMessageBox;
+import net.datacrow.console.windows.messageboxes.NativeQuestionBox;
 import net.datacrow.core.DataCrow;
 import net.datacrow.util.DcImageIcon;
-import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Directory;
 import net.datacrow.util.Utilities;
 
@@ -67,6 +67,8 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
     private String[] args;
     private final String selectedUserDir;
     
+    private boolean overwrite = false;
+    private boolean copymode = true;
     
     public UserDirSetupDialog(String[] args, String selectedUserDir) {
         setTitle("User Folder Configuration");
@@ -161,19 +163,58 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
     }
 
     private void setupDataDir() {
-        buttonStart.setEnabled(false);
-        
-        
-        File file = selectDir.getFile();
+        File target = selectDir.getFile();
         File installDir = new File(DataCrow.installationDir);
         
-        if (file == null) {
-            DcSwingUtilities.displayMessage("Please select a folder before continuing");
-        } else if (file.equals(installDir)) {
-            DcSwingUtilities.displayMessage("The installation directory can't selected as the user folder. " +
-            		"You CAN select a sub folder within the installation folder though.");
+        if (target == null) {
+            new NativeMessageBox("Warning", "Please select a folder before continuing");
         } else {
-            DataDirCreator ddc = new DataDirCreator(file, this);
+            
+           if (Utilities.isEmpty(target.getParent())) {
+                NativeQuestionBox qb = new NativeQuestionBox(
+                        "It is not recommended to select the root folder for the user folder of Data Crow. " +
+                        "Continue anyway?");
+                
+                if (!qb.isAffirmative()) return;
+            }
+            
+            Directory dir = new Directory(DataCrow.databaseDir, false, new String[] {"script"});
+            File f = new File(target, "database");
+            boolean filesChecked = false;
+            if (dir.read().size() > 0 && f.exists()) {
+                NativeQuestionBox qb = new NativeQuestionBox(
+                        "It seems the target folder has been set up as a user folder before. Do you want to move " +
+                        "the data from the old location to the new location?\n " +
+                        "\"No\" = leave target directory as is, \n " +
+                        "\"Yes\" = moves all files over from the old to the new location.");
+                
+                copymode = qb.isAffirmative();
+                overwrite = qb.isAffirmative();
+                
+                filesChecked = true;
+            }
+            
+            if (!filesChecked) {
+                dir = new Directory(target.toString(), false, null);
+                
+                if (dir.read().size() > 0 && !f.exists()) {
+                    NativeQuestionBox qb = new NativeQuestionBox(
+                            "The selected target folder already contains files and / or directories. " +
+                            "Do you want to continue?");
+                    
+                    if (!qb.isAffirmative()) return;
+                }
+            }
+            
+            if (target.equals(installDir)) {
+                new NativeMessageBox("Warning", "The installation directory can't selected as the user folder. " +
+                        "You CAN select a sub folder within the installation folder though.");
+                return;
+            }
+
+            buttonStart.setEnabled(false);
+            
+            DataDirCreator ddc = new DataDirCreator(target, this);
             ddc.start();
         }
     }
@@ -223,20 +264,22 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
                     }
                 }
                 
-                try {
-                    Utilities.rename(new File(DataCrow.installationDir, "data_crow.log"), new File(userDir, "data_crow.log"));
-                } catch (IOException e) {}
-                
-                setupDatabaseDir();
-                setupModulesDir();
-                setupApplicationSettingsDir();
-                setupModuleSettingsDir();                
-                setupResourcesDir();
-                setupReportsDir();
-                setupIconDir();
-                setupImagesDir();
-                setupWebDir();
-                setupUpgradeDir();
+                if (copymode) {
+                    try {
+                        Utilities.rename(new File(DataCrow.installationDir, "data_crow.log"), new File(userDir, "data_crow.log"), true);
+                    } catch (IOException e) {}
+                    
+                    setupDatabaseDir();
+                    setupModulesDir();
+                    setupApplicationSettingsDir();
+                    setupModuleSettingsDir();                
+                    setupResourcesDir();
+                    setupReportsDir();
+                    setupIconDir();
+                    setupImagesDir();
+                    setupWebDir();
+                    setupUpgradeDir();
+                }
                 
                 File userHome = new File(System.getProperty("user.home"));
                 userHome.mkdir();
@@ -258,23 +301,26 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
           
             Directory dir = new Directory(DataCrow.databaseDir, false, new String[] {"script"});
             File file;
+            File target;
             for (String s : dir.read()) {
                 file = new File(s);
-                Utilities.rename(file, new File(databaseDir, file.getName()));
+                target = new File(databaseDir, file.getName());
                 
+                Utilities.rename(file, target, overwrite);
+                    
                 try {
                     file = new File(file.getParentFile(), file.getName().replace(".script", ".properties"));
-                    Utilities.rename(file, new File(databaseDir, file.getName()));
+                    Utilities.rename(file, new File(databaseDir, file.getName()), overwrite);
                 } catch (FileNotFoundException fne) {}
                 
                 try {
                     file = new File(file.getParentFile(), file.getName().replace(".properties", ".log"));
-                    Utilities.rename(file, new File(databaseDir, file.getName()));
+                    Utilities.rename(file, new File(databaseDir, file.getName()), overwrite);
                 } catch (FileNotFoundException fne) {}
                 
                 try {
                     file = new File(file.getParentFile(), file.getName().replace(".log", ".lck"));
-                    Utilities.rename(file, new File(databaseDir, file.getName()));
+                    Utilities.rename(file, new File(databaseDir, file.getName()), overwrite);
                 } catch (FileNotFoundException fne) {}
             }
         }
@@ -297,7 +343,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
                 
                 targetDir = (new File(webDir, s.substring(idx + "webapp/datacrow/".length())).getParentFile());
                 targetDir.mkdirs();
-                Utilities.copy(file, new File(targetDir, file.getName()));
+                Utilities.copy(file, new File(targetDir, file.getName()), overwrite);
             }
             
             client.addMessage("Web root has been set up");
@@ -313,7 +359,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
             File file;
             for (String s : dir.read()) {
                 file = new File(s);
-                Utilities.copy(file, new File(upgradeDir, file.getName()));
+                Utilities.copy(file, new File(upgradeDir, file.getName()), overwrite);
             }
             
             client.addMessage("Upgrade folder has been set up");
@@ -329,7 +375,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
             File file;
             for (String s : dir.read()) {
                 file = new File(s);
-                Utilities.copy(file, new File(modulesDir, file.getName()));
+                Utilities.copy(file, new File(modulesDir, file.getName()), overwrite);
             }
             
             File modulesDataDir = new File(modulesDir, "data");
@@ -344,12 +390,12 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
                 if (file.isDirectory()) continue;
                 
                 if (file.getParent().endsWith("data")) {
-                    Utilities.copy(file, new File(modulesDataDir, file.getName()));
+                    Utilities.copy(file, new File(modulesDataDir, file.getName()), overwrite);
                 } else {
                     idx = s.indexOf("/data/") > -1 ? s.indexOf("/data/") : s.indexOf("\\data\\");
                     targetDir = new File(modulesDataDir, s.substring(idx + 6)).getParentFile();
                     targetDir.mkdirs();
-                    Utilities.copy(file, new File(targetDir, file.getName()));
+                    Utilities.copy(file, new File(targetDir, file.getName()), overwrite);
                 }
             }
             
@@ -363,28 +409,28 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
             applicationSettingsDir.mkdirs();
             
             try {
-                Utilities.rename(new File(DataCrow.userDir, "data_crow.properties"), new File(applicationSettingsDir, "data_crow.properties"));
+                Utilities.rename(new File(DataCrow.userDir, "data_crow.properties"), new File(applicationSettingsDir, "data_crow.properties"), overwrite);
             } catch (IOException e) {}
             try {
-                Utilities.rename(new File(DataCrow.userDir, "data_crow_queries.txt"), new File(applicationSettingsDir, "data_crow_queries.txt"));
+                Utilities.rename(new File(DataCrow.userDir, "data_crow_queries.txt"), new File(applicationSettingsDir, "data_crow_queries.txt"), overwrite);
             } catch (IOException e) {}
             try {
-                Utilities.rename(new File(DataCrow.userDir, "filepatterns.xml"), new File(applicationSettingsDir, "filepatterns.xml"));
+                Utilities.rename(new File(DataCrow.userDir, "filepatterns.xml"), new File(applicationSettingsDir, "filepatterns.xml"), overwrite);
             } catch (IOException e) {}
             try {
-                Utilities.rename(new File(DataCrow.userDir, "filters.xml"), new File(applicationSettingsDir, "filters.xml"));
+                Utilities.rename(new File(DataCrow.userDir, "filters.xml"), new File(applicationSettingsDir, "filters.xml"), overwrite);
             } catch (IOException e) {}
             try {
-                Utilities.copy(new File(DataCrow.installationDir, "log4j.properties"), new File(applicationSettingsDir, "log4j.properties"));
+                Utilities.copy(new File(DataCrow.installationDir, "log4j.properties"), new File(applicationSettingsDir, "log4j.properties"), overwrite);
             } catch (IOException e) {}
             try {
-                Utilities.copy(new File(DataCrow.userDir, "enhancers_autoincrement.properties"), new File(applicationSettingsDir, "enhancers_autoincrement.properties"));
+                Utilities.copy(new File(DataCrow.userDir, "enhancers_autoincrement.properties"), new File(applicationSettingsDir, "enhancers_autoincrement.properties"), overwrite);
             } catch (IOException e) {}
             try {
-                Utilities.copy(new File(DataCrow.userDir, "enhancers_titlerewriters.properties"), new File(applicationSettingsDir, "enhancers_titlerewriters.properties"));
+                Utilities.copy(new File(DataCrow.userDir, "enhancers_titlerewriters.properties"), new File(applicationSettingsDir, "enhancers_titlerewriters.properties"), overwrite);
             } catch (IOException e) {}
             try {
-                Utilities.copy(new File(DataCrow.userDir, "enhancers_associatenamerewriters.properties"), new File(applicationSettingsDir, "enhancers_associatenamerewriters.properties"));
+                Utilities.copy(new File(DataCrow.userDir, "enhancers_associatenamerewriters.properties"), new File(applicationSettingsDir, "enhancers_associatenamerewriters.properties"), overwrite);
             } catch (IOException e) {}
             
             client.addMessage("Applications have been set up");
@@ -399,7 +445,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
             File file;
             for (String s : dir.read()) {
                 file = new File(s);
-                Utilities.copy(file, new File(resourcesSettingsDir, file.getName()));
+                Utilities.copy(file, new File(resourcesSettingsDir, file.getName()), overwrite);
             }
             client.addMessage("Resources have been moved");
         }
@@ -419,12 +465,12 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
                 if (file.isDirectory()) continue;
                 
                 if (file.getParent().endsWith("reports")) {
-                    Utilities.copy(file, new File(reportsDir, file.getName()));
+                    Utilities.copy(file, new File(reportsDir, file.getName()), overwrite);
                 } else {
                     idx = s.indexOf("/reports/") > -1 ? s.indexOf("/reports/") : s.indexOf("\\reports\\");
                     targetDir = new File(reportsDir, s.substring(idx + 9)).getParentFile();
                     targetDir.mkdirs();
-                    Utilities.copy(file, new File(targetDir, file.getName()));
+                    Utilities.copy(file, new File(targetDir, file.getName()), overwrite);
                 }
             }
             
@@ -440,7 +486,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
             File file;
             for (String s : dir.read()) {
                 file = new File(s);
-                Utilities.rename(file, new File(modulesSettingsDir, file.getName()));
+                Utilities.rename(file, new File(modulesSettingsDir, file.getName()), overwrite);
             }
             client.addMessage("Module have been moved");
         }
@@ -458,7 +504,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
             
             for (String s : images) {
                 file = new File(s);
-                Utilities.rename(file, new File(imagesDir, file.getName()));
+                Utilities.rename(file, new File(imagesDir, file.getName()), overwrite);
                 client.addMessage("Moved " + file.getName());
                 client.updateProgressBar();
             }
@@ -476,7 +522,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
             File file;
             for (String s : dir.read()) {
                 file = new File(s);
-                Utilities.rename(file, new File(iconsDir, file.getName()));
+                Utilities.rename(file, new File(iconsDir, file.getName()), overwrite);
             }
             client.addMessage("Icons have been moved");
             new File(DataCrow.imageDir, "icons").delete();

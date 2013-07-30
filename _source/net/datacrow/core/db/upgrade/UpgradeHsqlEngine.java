@@ -141,7 +141,8 @@ public class UpgradeHsqlEngine {
                 new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script").delete();
                 Utilities.rename(
                         new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".dcnew"), 
-                        new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script"));
+                        new File(DataCrow.databaseDir, DcSettings.getString(DcRepository.Settings.stConnectionString) + ".script"), 
+                        true);
                 
             } catch (Exception e) {
                 logger.error(e, e);

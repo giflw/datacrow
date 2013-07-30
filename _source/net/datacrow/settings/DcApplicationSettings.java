@@ -81,7 +81,7 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
         
         try {
             if (fileDefault.exists() && !fileClient.exists())
-                Utilities.copy(fileDefault, fileClient);
+                Utilities.copy(fileDefault, fileClient, true);
         } catch (Exception e) {
             logger.warn("Could not use the default settings as template for " + clientID + 
                     "_data_crow.properties. Failed to copy " + fileDefault, e);

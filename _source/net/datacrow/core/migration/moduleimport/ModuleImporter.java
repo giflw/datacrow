@@ -251,7 +251,7 @@ public class ModuleImporter {
 		            try {
 		                client.notifyMessage(DcResources.getText("msgModuleIsNewCreatingItems"));
 		                storeImages(key, icons.get(key), false);
-                        Utilities.rename(data.get(key), new File(DataCrow.moduleDir + "data", key + ".xml"));
+                        Utilities.rename(data.get(key), new File(DataCrow.moduleDir + "data", key + ".xml"), true);
                     } catch (IOException e) {
                         client.notifyError(e);
                     }

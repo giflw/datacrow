@@ -135,7 +135,7 @@ public class FileRenamer {
                     
                     File newFile = new File(filename);
                     try {
-                        Utilities.rename(currentFile, newFile);
+                        Utilities.rename(currentFile, newFile, false);
                         
                         dco.setValue(DcObject._SYS_FILENAME, newFile.toString());
                         try {

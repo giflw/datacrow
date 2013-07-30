@@ -292,7 +292,7 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
             if (newDir != null) {
                 try {
                     File newFile = new File(newDir, file.getName());
-                    Utilities.rename(file, newFile);
+                    Utilities.rename(file, newFile, true);
                     dco.setValue(dco.getFileField().getIndex(), newFile.toString());
                     try {
                         dco.saveUpdate(true, false);

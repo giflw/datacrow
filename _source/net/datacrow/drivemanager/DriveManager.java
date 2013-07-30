@@ -208,7 +208,11 @@ public class DriveManager {
         if (file.exists()) return;
         
         try {
-            for (String filename : file.list()) {
+            String[] files = file.list();
+            
+            if (files == null) return;
+            
+            for (String filename : files) {
                 if (filename.endsWith(getTempFileSuffix())) {
                     File tempFile = new File(getTempDir() + filename);
                     if (tempFile.isFile())

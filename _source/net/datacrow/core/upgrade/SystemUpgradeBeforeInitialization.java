@@ -132,7 +132,7 @@ public class SystemUpgradeBeforeInitialization {
                     "The installation folder has new language files available. Do you want to install these to your user folder?");
             if (copy) {
                 for (File source : files.keySet()) {
-                    Utilities.copy(source, files.get(source));
+                    Utilities.copy(source, files.get(source), true);
                 }
             }
             
@@ -173,7 +173,7 @@ public class SystemUpgradeBeforeInitialization {
                 for (File source : files.keySet()) {
                     targetDir = files.get(source).getParentFile();
                     targetDir.mkdirs();
-                    Utilities.copy(source, files.get(source));
+                    Utilities.copy(source, files.get(source), true);
                 }
             }
             

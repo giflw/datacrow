@@ -144,7 +144,7 @@ public class Conversions {
             File newFile = new File(file.getParent(), prefix + file.getName());
             
             try {
-                Utilities.rename(new File(filename), newFile);
+                Utilities.rename(new File(filename), newFile, true);
             } catch (IOException e) {
                 logger.error("Could not rename the conversion file from " + file + " to " + newFile, e);
             }

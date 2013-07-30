@@ -197,7 +197,7 @@ public class DcFileLauncherField extends JComponent implements IComponent, Actio
             if (newDir != null) {
                 try {
                     File newFile = new File(newDir, file.getName());
-                    Utilities.rename(file, newFile);
+                    Utilities.rename(file, newFile, true);
                     setFile(newFile);
                 } catch (IOException e1) {
                     logger.error(e1, e1);

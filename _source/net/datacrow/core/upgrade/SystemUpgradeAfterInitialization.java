@@ -89,7 +89,7 @@ public class SystemUpgradeAfterInitialization {
                     
                     targetDir = (new File(webDir, s.substring(idx + "webapp/datacrow/".length())).getParentFile());
                     targetDir.mkdirs();
-                    Utilities.copy(file, new File(targetDir, file.getName()));
+                    Utilities.copy(file, new File(targetDir, file.getName()), true);
                 }
             }
             

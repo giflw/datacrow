@@ -84,6 +84,7 @@ import net.datacrow.util.Utilities;
 import net.datacrow.util.logging.TextPaneAppender;
 
 import org.apache.log4j.Appender;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -905,11 +906,12 @@ public class DataCrow {
     }
     
     private static void initTemporaryLog4j() {
-        Properties properties = new Properties();
-        properties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
-        properties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F\\:%L) - %m%n");
-        properties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
-        PropertyConfigurator.configure(properties);        
+        BasicConfigurator.configure();
+//        Properties properties = new Properties();
+//        properties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
+//        properties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F\\:%L) - %m%n");
+//        properties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
+//        PropertyConfigurator.configure(properties);        
     }
     
     private static void initLog4j() {

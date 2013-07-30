@@ -110,20 +110,14 @@ public class Utilities {
         Pattern.compile("('|~|\\!|@|#|\\$|%|\\^|\\*|_|\\[|\\{|\\]|\\}|\\||\\\\|;|:|`|\"|<|,|>|\\.|\\?|/|&|_|-)"),
         Pattern.compile("[(,)]")};
     
-    static {
-        try {
-            FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "languages.properties"));
-            languages.load(fis);
-            fis.close();
-        } catch (Exception e) {
-            logger.error("Could not load languages file", e);
-        }
-    }
-    
     public static Toolkit getToolkit() {
         return tk;
     }
     
+    /**
+     * Converts an ordinary string to something which is allowed to be used in a
+     * filename or pathname.
+     */
     public static String toFilename(String text) {
         String s = text == null ? "" : text.trim().toLowerCase();
 
@@ -142,6 +136,10 @@ public class Utilities {
         return s.trim();
     }
     
+    /**
+     * Converts an ordinary string to something which is allowed to be used in a
+     * column or table name. It does not check for any preserved names (!). 
+     */
     public static String toDatabaseName(String text) {
         String s = toFilename(text);
         
@@ -379,6 +377,17 @@ public class Utilities {
     }
     
     public static String getLanguage(String iso) {
+        
+        if (languages.isEmpty()) {
+            try {
+                FileInputStream fis = new FileInputStream(new File(DataCrow.resourcesDir, "languages.properties"));
+                languages.load(fis);
+                fis.close();
+            } catch (Exception e) {
+                logger.error("Could not load languages file", e);
+            }
+        }
+        
         return (String) languages.get(iso);
     }
     
@@ -713,9 +722,12 @@ public class Utilities {
         return Utilities.isEmpty(o) ? "" : o instanceof String ? ((String) o) : o.toString();
     }
     
-    public static void copy(File currentFile, File newFile) throws IOException {
+    public static void copy(File currentFile, File newFile, boolean overwrite) throws IOException {
         
         if (currentFile.equals(newFile))
+            return;
+        
+        if (!overwrite && newFile.exists())
             return;
         
         // native code failed to move the file; do it the custom way
@@ -742,18 +754,21 @@ public class Utilities {
         bos.close();
     }
     
-    public static void rename(File currentFile, File newFile) throws IOException {
+    public static void rename(File currentFile, File newFile, boolean overwrite) throws IOException {
         
         if (currentFile.equals(newFile))
             return;
 
+        if (newFile.exists() && !overwrite)
+            return;
+        
         if (newFile.getParentFile() != null)
             newFile.getParentFile().mkdirs();
         
         boolean success = currentFile.renameTo(newFile);
         
         if (!success) {
-            copy(currentFile, newFile);
+            copy(currentFile, newFile, overwrite);
             currentFile.delete();
         }
     }
