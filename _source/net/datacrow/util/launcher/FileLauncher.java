@@ -57,7 +57,7 @@ public class FileLauncher extends Launcher {
             this.filename = new File(DataCrow.installationDir, filename.substring(2, filename.length())).toString();
         }
         
-        this.file = new File(filename);
+        this.file = new File(this.filename);
     }
     
     @Override

@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.11.1  [Released on August xx 2013]  [testing: moderate]  [target: production]
+Data Crow 3.11.1  [Released on July 30 2013]  [target: production]     [R. van der Waals]
 -----------------------------------------------------------------------------------------
 
 [Fixed]
@@ -8,6 +8,8 @@ Data Crow 3.11.1  [Released on August xx 2013]  [testing: moderate]  [target: pr
 - Indicated "run as administrator" for the data crow executable and the setup executables
 - Column names in the database are no longer allowed to start with a digit. The
   module wizards have been updated accordingly.
+- Still a Log4j not initialized message at the command prompt, argh.., fixed forever!
+- Imdb.com not working.
 
 [Changed]
 - Paths for files linked to items are now handled a bit differently;
@@ -20,7 +22,9 @@ Data Crow 3.11.1  [Released on August xx 2013]  [testing: moderate]  [target: pr
   a) existing folder selected, containing files (continue y/n).
   b) moving from one location to another (move files y/n).
   c) root folder not allowed as a Data Crow user folder.
-  
+- Readme.txt added for the installer (which setup executable to use..)
+- Readme.txt of Data Crow updated.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow 3.11  [Released on July 22 2013]  [testing: moderate]  [target: production]

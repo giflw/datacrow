@@ -52,11 +52,14 @@ public class DcMenuBar extends JMenuBar {
         
         JMenu menu;
         for (int i = 0; i < getMenuCount(); i++) {
-            menu = getMenu(i);
-            menu.setFont(ComponentFactory.getSystemFont());
-            for (int j = 0; j < menu.getMenuComponents().length; j++) {
-                menu.getMenuComponents()[j].setFont(ComponentFactory.getStandardFont());
-            }
+            
+            try {
+                menu = getMenu(i);
+                menu.setFont(ComponentFactory.getSystemFont());
+                for (int j = 0; j < menu.getMenuComponents().length; j++) {
+                    menu.getMenuComponents()[j].setFont(ComponentFactory.getStandardFont());
+                }
+            } catch (Exception e) {}
         }
         revalidate();
     }    

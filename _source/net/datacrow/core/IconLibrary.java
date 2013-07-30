@@ -37,6 +37,7 @@ public abstract class IconLibrary {
 
     public static final String picPath = DataCrow.installationDir + "icons/";
     
+    public static final DcImageIcon _icoTwitter = new DcImageIcon(picPath + "twitter.png");
     public static final DcImageIcon _icoGrayscale = new DcImageIcon(picPath + "grayscale.png");
     public static final DcImageIcon _icoRotateLeft = new DcImageIcon(picPath + "rotate_left.png");
     public static final DcImageIcon _icoRotateRight = new DcImageIcon(picPath + "rotate_right.png");

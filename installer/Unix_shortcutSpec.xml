@@ -26,4 +26,34 @@
      initialState="normal">   
    </shortcut>
    
+   <shortcut
+     name="Data Crow Readme"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\readme\readme.txt"
+     workingDirectory="$INSTALL_PATH"
+     commandLine=""
+     description="Data Crow"
+     initialState="normal"
+     iconIndex="0">
+   </shortcut>
+   
+   <shortcut
+     name="Data Crow Change Log"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\readme\changelog.txt"
+     workingDirectory="$INSTALL_PATH"
+     commandLine=""
+     description="Data Crow"
+     initialState="normal"
+     iconIndex="0">
+   </shortcut>
+   
 </shortcuts>

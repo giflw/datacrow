@@ -26,12 +26,16 @@
 package net.datacrow.console.menu;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
 import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.DcButton;
 import net.datacrow.console.components.DcMenu;
 import net.datacrow.console.components.DcTitledBorder;
 import net.datacrow.core.DataCrow;
@@ -44,9 +48,14 @@ import net.datacrow.core.plugin.Plugin;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.plugin.Plugins;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.util.launcher.URLLauncher;
+
+import org.apache.log4j.Logger;
 
 public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar {
 
+    private static Logger logger = Logger.getLogger(MainFrameMenuBar.class.getName());
+    
 	public static final int _SEARCHPANEL = 0;
     public static final int _INSERTPANEL = 1;
     public static final int _NOTEPANEL = 2;
@@ -291,5 +300,22 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
             this.add(menuWebServer);
         
         this.add(menuHelp);
+        
+        
+        DcButton btTwitter = ComponentFactory.getIconButton(IconLibrary._icoTwitter);
+        btTwitter.addActionListener(new TwitterActionListener());
+        this.add(btTwitter);
+    }
+    
+    private class TwitterActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            try {
+                URLLauncher launcher = new URLLauncher(new URL("http://twitter.com/data_crow"));
+                launcher.launch();
+            } catch (Exception e) {
+                logger.error(e, e);
+            }
+        }
     }
 }
