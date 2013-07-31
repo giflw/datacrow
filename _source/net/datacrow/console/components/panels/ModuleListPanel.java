@@ -63,6 +63,7 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.util.Utilities;
 
 public class ModuleListPanel extends DcPanel {
     
@@ -121,6 +122,7 @@ public class ModuleListPanel extends DcPanel {
             
             this.mmb = new MainModuleButton(module);
             this.mmb.setBackground(getBackground());
+            this.setToolTipText(module.getLabel() + (Utilities.isEmpty(module.getDescription()) ? "" : "\n" + module.getDescription()));
             
             addMouseListener(new ModuleMouseListener(module.getIndex()));
             
@@ -140,12 +142,16 @@ public class ModuleListPanel extends DcPanel {
         }
         
         @Override
+        public JToolTip createToolTip() {
+            return new DcMultiLineToolTip();
+        }
+        
+        @Override
         public Border getBorder() {
             return (mmb != null && mmb.getModule() == DcModules.getCurrent()) ? borderSelected : borderDefault;
         }
 
         private void build() {
-            
             borderDefault = BorderFactory.createTitledBorder(
                     BorderFactory.createLineBorder(Color.LIGHT_GRAY, 0));
             borderSelected = BorderFactory.createTitledBorder(
@@ -163,11 +169,22 @@ public class ModuleListPanel extends DcPanel {
                     GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
         }
         
+        public DcModule getModule() {
+            return module;
+        }
+        
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().startsWith("module_change")) {
                 ReferenceModuleButton mb = (ReferenceModuleButton) ae.getSource();
+                
+                module = mb.getModule();
+                mmb.setModule(mb.module);
+                
                 setSelectedModule(mb.getModule().getIndex());
+                                
+                repaint();
+                revalidate();
             }
         }
     }
@@ -181,8 +198,9 @@ public class ModuleListPanel extends DcPanel {
         }
         
         @Override
-        public void mouseReleased(MouseEvent e) {
-            setSelectedModule(module);
+        public void mouseReleased(MouseEvent me) {
+            ModuleSelector mmb = (ModuleSelector) me.getSource();
+            setSelectedModule(mmb.getModule().getIndex());
         }
         
         @Override
@@ -197,13 +215,15 @@ public class ModuleListPanel extends DcPanel {
     
     protected class MainModuleButton extends JPanel {
         
-        private final DcModule module;
+        private DcModule module;
         
         private final Color selectedColor;
         private final Color normalColor;
         
         private final JMenuBar mb;
         private final JMenu menu;
+        
+        DcLabel lblModule;
         
         public MainModuleButton(DcModule module) {
             super(Layout.getGBL());
@@ -220,10 +240,10 @@ public class ModuleListPanel extends DcPanel {
             
             setBorder(null);
             
-            setMinimumSize(new Dimension(60, 40));
-            setPreferredSize(new Dimension(60, 40));
+            setMinimumSize(new Dimension(60, 50));
+            setPreferredSize(new Dimension(60, 50));
             
-            DcLabel lblModule = ComponentFactory.getLabel(module.getIcon32());
+            lblModule = ComponentFactory.getLabel(module.getIcon32());
             add(lblModule, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.CENTER, GridBagConstraints.NONE,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -244,6 +264,11 @@ public class ModuleListPanel extends DcPanel {
             mb.add(menu);
             add(mb, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, 
                     GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+        }
+        
+        public void setModule(DcModule module) {
+            this.lblModule.setIcon(module.getIcon32());
+            this.module = module;
         }
         
         public void addModule(DcModule module, ModuleSelector ms) {

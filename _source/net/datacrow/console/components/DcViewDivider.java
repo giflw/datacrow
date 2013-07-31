@@ -51,8 +51,20 @@ public class DcViewDivider extends JSplitPane implements ComponentListener {
     }
     
     public void applyDividerLocation() {
-        if (isEnabled())
+        if (isEnabled()) {
+            removeComponentListener(this);
             setDividerLocation(DcSettings.getInt(settingKey));
+            addComponentListener(this);
+        }
+    }
+    
+    public void listenForResize(boolean b) {
+        if (!b) {
+            removeComponentListener(this);
+        } else {
+            removeComponentListener(this);
+            addComponentListener(this);
+        }
     }
 
     @Override

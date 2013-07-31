@@ -97,8 +97,8 @@ public class View extends DcPanel implements ListSelectionListener {
     protected ViewActionPanel actionPanel;
     
     private GroupingPane groupingPane;
-    
     protected QuickViewPanel quickView;
+    
     protected boolean updateQuickView = true;
     private boolean checkForChanges = true;
 
@@ -232,14 +232,21 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void applyViewDividerLocation() {
-        if (vdGroupingPane != null)
+        if (vdGroupingPane != null) {
+            vdGroupingPane.listenForResize(false);
             vdGroupingPane.applyDividerLocation();
+        }
         
-        if (vdQuickPane != null)
+        if (vdQuickPane != null) {
+            vdQuickPane.listenForResize(false);
             vdQuickPane.applyDividerLocation();
+        }
         
         revalidate();
         repaint();
+        
+        if (vdGroupingPane != null) vdGroupingPane.listenForResize(true);
+        if (vdQuickPane != null) vdQuickPane.listenForResize(true);
     }
     
     public DataTask getCurrentTask() {
@@ -396,21 +403,23 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void activate() {
-        
         if (groupingPane != null) {
+            vdGroupingPane.listenForResize(false);
             vdGroupingPane.remove(groupingPane);
             vdGroupingPane.add(groupingPane);
+            vdGroupingPane.listenForResize(true);
         }
         
         if (groupingPane != null && !groupingPane.isHoldingItems()) {
             groupingPane.groupBy();
         }
         
-        applyViewDividerLocation();
         vc.activate();
         
         if (childView != null) 
         	childView.activate();
+        
+        applyViewDividerLocation();
     }
     
     public void groupBy() {
