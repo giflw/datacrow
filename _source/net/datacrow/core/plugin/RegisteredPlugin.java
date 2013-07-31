@@ -51,13 +51,14 @@ public class RegisteredPlugin {
         return base.isAuthorizable();
     }
     
-    public Plugin get(DcObject dco, DcTemplate template, int viewIdx, int moduleIdx) {
+    public Plugin get(DcObject dco, DcTemplate template, int viewIdx, int moduleIdx, int viewType) {
         if (dco != null) return null;
 
         for (Plugin plugin : cache) {
             if (plugin.getTemplate() == template &&
                 plugin.getViewIdx() == viewIdx &&
-                plugin.getModuleIdx() == moduleIdx)
+                plugin.getModuleIdx() == moduleIdx &&
+                plugin.getViewType() == viewType)
                 return plugin;
         }
         return null;

@@ -37,7 +37,7 @@ public class Plugins {
      */
     private void loadPlugins() {
         String check = File.separator + "plugins" + File.separator;
-        Object[] params = new Object[] {null, null, -1, -1};
+        Object[] params = new Object[] {null, null, -1, -1, -1};
         PluginClassLoader cl = new PluginClassLoader(DataCrow.pluginsDir);
         
         Directory dir = new Directory(DataCrow.pluginsDir, true, new String[] {"class"});
@@ -62,13 +62,14 @@ public class Plugins {
         return new ArrayList<RegisteredPlugin>(registered);
     }
     
-    public Collection<Plugin> getUserPlugins(DcObject dco, int viewIdx, int moduleIdx) {
+    public Collection<Plugin> getUserPlugins(DcObject dco, int viewIdx, int moduleIdx, int viewType) {
         Collection<Plugin> plugins = new ArrayList<Plugin>();
         for (RegisteredPlugin rp : registered) {
             if (!rp.isSystemPlugin()) {
                 Object[] params = new Object[] {dco, null,  
                                                 Integer.valueOf(viewIdx), 
-                                                Integer.valueOf(moduleIdx)};
+                                                Integer.valueOf(moduleIdx),
+                                                Integer.valueOf(viewType)};
                 plugins.add(getInstance(rp.getClazz(), params));
             }
         }
@@ -76,14 +77,14 @@ public class Plugins {
     }
     
     public Plugin get(String key, int moduleIdx) throws InvalidPluginException {
-        return get(key, null, null, -1, moduleIdx);
+        return get(key, null, null, -1, moduleIdx, -1);
     }
 
     public Plugin get(String key) throws InvalidPluginException {
-        return get(key, null, null, -1, -1);
+        return get(key, null, null, -1, -1, -1);
     }
     
-    public Plugin get(String key, DcObject dco, DcTemplate template, int viewIdx, int moduleIdx) throws InvalidPluginException {
+    public Plugin get(String key, DcObject dco, DcTemplate template, int viewIdx, int moduleIdx, int viewType) throws InvalidPluginException {
         
         RegisteredPlugin registeredPlugin = getRegisteredPlugin(key);
         
@@ -92,11 +93,13 @@ public class Plugins {
             throw new InvalidPluginException("Could not find plugin " + key);
         }
         
-        Plugin plugin = registeredPlugin.get(dco, template, viewIdx, moduleIdx);
+        Plugin plugin = registeredPlugin.get(dco, template, viewIdx, moduleIdx, viewType);
         if (plugin == null) {
-            Object[] params = new Object[] {dco, template,  
+            Object[] params = new Object[] {dco, 
+                                            template,  
                                             Integer.valueOf(viewIdx), 
-                                            Integer.valueOf(moduleIdx)};
+                                            Integer.valueOf(moduleIdx),
+                                            Integer.valueOf(viewType)};
             
             plugin = getInstance(registeredPlugin.getClazz(), params);
             registeredPlugin.add(plugin);

@@ -73,7 +73,7 @@ public class ViewActionPanel extends JPanel implements ActionListener {
         buttonSave.setToolTipText(DcResources.getText("tpSaveChanges"));
         buttonRemove.setToolTipText(DcResources.getText("tpRemoveRow"));
     
-        PluginHelper.addListener(buttonAdd, "AddRow", view.getModule().getIndex());
+        PluginHelper.addListener(buttonAdd, "AddRow", view.getModule().getIndex(), view.getType());
         
         buttonClear.addActionListener(this);
         buttonClear.setActionCommand("clear");
@@ -81,8 +81,8 @@ public class ViewActionPanel extends JPanel implements ActionListener {
         buttonCancel.addActionListener(this);
         buttonCancel.setActionCommand("cancelTask");
         
-        PluginHelper.addListener(buttonSave, "SaveAll", view.getModule().getIndex());
-        PluginHelper.addListener(buttonRemove, "RemoveRow", view.getModule().getIndex());
+        PluginHelper.addListener(buttonSave, "SaveAll", view.getModule().getIndex(), view.getType());
+        PluginHelper.addListener(buttonRemove, "RemoveRow", view.getModule().getIndex(), view.getType());
     
         // Build the panel
         SecuredUser user = SecurityCentre.getInstance().getUser();

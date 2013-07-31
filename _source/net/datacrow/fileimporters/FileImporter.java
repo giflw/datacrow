@@ -33,7 +33,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.datacrow.console.windows.fileimport.FileImportDialog;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilter;
 import net.datacrow.core.data.DataFilterEntry;
@@ -174,10 +173,8 @@ public abstract class FileImporter implements ISynchronizerClient {
             public void run() {
                 getClient().addMessage(DcResources.getText("msgImportStarts"));
                 
-                if (getClient().getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly))
-                    DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._SEARCHTAB);
-                else 
-                    DataCrow.mainFrame.setSelectedTab(net.datacrow.console.MainFrame._INSERTTAB);
+                if (!getClient().getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly))
+                    getClient().getModule().getNewItemsDialog().setVisible(true);
                 
                 getClient().addMessage(DcResources.getText("msgParsingXFiles", 
                                     String.valueOf(sources.size())));
@@ -281,8 +278,10 @@ public abstract class FileImporter implements ISynchronizerClient {
                 getClient().addError(e);
             }
         } else {
-            if (getClient().getModule() != null && getClient().getModule().getCurrentInsertView() != null)
+            if (getClient().getModule() != null && getClient().getModule().getCurrentInsertView() != null) {
+                
                 getClient().getModule().getCurrentInsertView().add(dco, false);
+            }
         }
     }
 

@@ -111,7 +111,7 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
-        
+        public static final String stNewItemsDialogSize = "new_items_dialog_size";
         public static final String stChartsDialogSize = "charts_dialog_size";
         public static final String stICalendarFullExport = "icalendar_full_export";
         public static final String stDoNotAskAgainChangeUserDir = "do_not_ask_again_change_user_dir";

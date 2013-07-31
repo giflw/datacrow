@@ -81,6 +81,8 @@ public class ImportBatch extends Thread {
             client.initProgressBar(files.size());
             int counter = 1;
             
+            DcModules.getCurrent().getNewItemsDialog().setVisible(true);
+            
             for (String filename : files) {
 
                 if  (client.cancelled()) break;

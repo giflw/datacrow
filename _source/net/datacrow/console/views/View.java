@@ -796,7 +796,7 @@ public class View extends DcPanel implements ListSelectionListener {
         if (isParent()) {
             try {
                 JButton btAddChild = ComponentFactory.getButton(DcResources.getText("lblAddChild", getModule().getChild().getObjectName()));
-                btAddChild.addActionListener(Plugins.getInstance().get("AddChild", null, null, getIndex(), getModule().getIndex()));
+                btAddChild.addActionListener(Plugins.getInstance().get("AddChild", null, null, getIndex(), getModule().getIndex(), getType()));
                 btAddChild.setMnemonic('T');
                 components.add(btAddChild);
             } catch (InvalidPluginException ipe) {

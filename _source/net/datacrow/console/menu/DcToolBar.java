@@ -54,20 +54,21 @@ public class DcToolBar extends JToolBar implements MouseListener {
     public DcToolBar(DcModule module) {
         
         PluginHelper.add(this, "NewItemWizard");
+        PluginHelper.add(this, "NewItems");
         
         addSeparator();
         
-        PluginHelper.add(this, "OpenItem");
+        PluginHelper.add(this, "OpenItem", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         
         addSeparator();
 
-        PluginHelper.add(this, "CreateNew", module.getIndex());
-        PluginHelper.add(this, "Delete", module.getIndex());
+        PluginHelper.add(this, "CreateNew", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        PluginHelper.add(this, "Delete", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         
         addSeparator();
         
-        PluginHelper.add(this, "SaveSelected");
-        PluginHelper.add(this, "SaveAll");
+        PluginHelper.add(this, "SaveSelected", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        PluginHelper.add(this, "SaveAll", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         
         addSeparator();
 
@@ -81,7 +82,7 @@ public class DcToolBar extends JToolBar implements MouseListener {
         
         addSeparator();
 
-        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(null, -1, module.getIndex());
+        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(null, -1, module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         for (Plugin plugin : plugins) {
             if (plugin.isShowOnToolbar())
                 add(ComponentFactory.getToolBarButton(plugin));

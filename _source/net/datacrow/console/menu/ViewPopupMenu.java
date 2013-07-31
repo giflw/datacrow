@@ -87,7 +87,7 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
             PluginHelper.add(this, "EditItem");
             
             if (module.getIndex() != DcModules._USER)
-                PluginHelper.add(this, "EditAsNew", null, dco, null, -1, module.getIndex());
+                PluginHelper.add(this, "EditAsNew", null, dco, null, -1, module.getIndex(), viewType);
         }
         
         String filename = dco.getFilename();
@@ -156,20 +156,24 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
             SecurityCentre.getInstance().getUser().isAuthorized("SetPassword")) {
 
             addSeparator();
-            PluginHelper.add(this, "SetPassword", "", dco, null, viewType, DcModules.getCurrent().getIndex());
+            PluginHelper.add(this, "SetPassword", "", dco, null, viewType, DcModules.getCurrent().getIndex(), viewType);
         }
 
-        if (!DcModules.getCurrent().isAbstract()) {
+        if (viewType == View._TYPE_SEARCH && !DcModules.getCurrent().isAbstract()) {
             addSeparator();
-            PluginHelper.add(this, "ItemExporterWizard", "", dco, null, viewIdx, dco.getModule().getIndex());
+            PluginHelper.add(this, "ItemExporterWizard", "", dco, null, viewIdx, dco.getModule().getIndex(), viewType);
         }
         
         if (viewType == View._TYPE_SEARCH && DcModules.getCurrent().hasReports()) {
-            PluginHelper.add(this, "Report", "", dco, null, viewIdx, DcModules.getCurrent().getIndex());
+            PluginHelper.add(this, "Report", "", dco, null, viewIdx, DcModules.getCurrent().getIndex(), viewType);
         }
         
-        addSeparator();
-        PluginHelper.add(this, "Sort");
+        
+        
+        if (viewType == View._TYPE_SEARCH) {
+            addSeparator();
+            PluginHelper.add(this, "Sort");
+        }
         
         if (	viewType == View._TYPE_SEARCH && 
         		module.canBeLend() &&
@@ -195,7 +199,7 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
 
         for (DcModule pm : modules) {
             try {
-                Plugin plugin = Plugins.getInstance().get("ManageItem", dco, null, viewIdx,  pm.getIndex());
+                Plugin plugin = Plugins.getInstance().get("ManageItem", dco, null, viewIdx,  pm.getIndex(), Plugin._VIEWTYPE_SEARCH);
                 if (    plugin != null &&SecurityCentre.getInstance().getUser().isAuthorized(plugin) &&
                         UserMode.isCorrectXpLevel(plugin.getXpLevel())) {
                     
@@ -224,17 +228,16 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
             }
         }
         
-        addSeparator();
-        
-        if (current.getIndex() != DcModules._ITEM) {
-            PluginHelper.add(this, "UpdateAll", module.getIndex());
-            PluginHelper.add(this, "FindReplace", module.getIndex());
+        if (viewType == View._TYPE_SEARCH && !current.isAbstract()) {
+            addSeparator();
+            PluginHelper.add(this, "UpdateAll", module.getIndex(), viewType);
+            PluginHelper.add(this, "FindReplace", module.getIndex(), viewType);
         }
         
-        if (file != null && dco.getModule().isFileBacked())
-            PluginHelper.add(this, "FileLauncher", module.getIndex());
+        if (viewType == View._TYPE_SEARCH &&  file != null && dco.getModule().isFileBacked())
+            PluginHelper.add(this, "FileLauncher", module.getIndex(), viewType);
         
-        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(dco, viewType, module.getIndex());
+        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(dco, viewIdx, module.getIndex(), viewType);
         for (Plugin plugin : plugins) {
             if (plugin.isShowInPopupMenu()) {
                 addSeparator();

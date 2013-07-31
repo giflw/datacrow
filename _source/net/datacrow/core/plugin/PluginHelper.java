@@ -26,12 +26,12 @@ public class PluginHelper {
     private static Logger logger = Logger.getLogger(PluginHelper.class.getName());
 
     public static void registerKey(JRootPane pane, String key) {
-        registerKey(pane, key, -1, -1);
+        registerKey(pane, key, -1, -1, -1);
     }
     
-    public static void registerKey(JRootPane pane, String key, int viewIdx, int moduleIdx) {
+    public static void registerKey(JRootPane pane, String key, int viewIdx, int moduleIdx, int viewType) {
         try {
-            Plugin plugin = Plugins.getInstance().get(key, null, null, viewIdx, moduleIdx);
+            Plugin plugin = Plugins.getInstance().get(key, null, null, viewIdx, moduleIdx, viewType);
             if (plugin != null) {
                 
                 if (    !plugin.isAuthorizable() ||
@@ -53,10 +53,11 @@ public class PluginHelper {
     
     public static void addListener(JButton button, 
                                    String key, 
-                                   int moduleIdx) {
+                                   int moduleIdx,
+                                   int viewType) {
         
         try {
-            Plugin plugin = Plugins.getInstance().get(key, moduleIdx);
+            Plugin plugin = Plugins.getInstance().get(key, null, null, -1, moduleIdx, viewType);
             button.addActionListener(plugin);
         } catch (InvalidPluginException e) {
             logger.error(e, e);
@@ -65,20 +66,24 @@ public class PluginHelper {
     }
     
     public static void add(JComponent c, String key) {
-        add(c, key, null, null, null, -1, -1);
+        add(c, key, null, null, null, -1, -1, -1);
     }
     
     public static void add(JComponent c, String key, int moduleIdx) {
-        add(c, key, null, null, null, -1, moduleIdx);
+        add(c, key, null, null, null, -1, moduleIdx, -1);
+    }
+    
+    public static void add(JComponent c, String key, int moduleIdx, int viewType) {
+        add(c, key, null, null, null, -1, moduleIdx, viewType);
     }
 
     public static void add(JComponent c, String key, String label, int moduleIdx) {
-        add(c, key, label, null, null, -1, moduleIdx);
+        add(c, key, label, null, null, -1, moduleIdx, -1);
     }
     
-    public static void add(JComponent c, String key, String label, DcObject dco, DcTemplate template, int viewIdx, int moduleIdx) {
+    public static void add(JComponent c, String key, String label, DcObject dco, DcTemplate template, int viewIdx, int moduleIdx, int viewType) {
         try {
-            Plugin plugin = Plugins.getInstance().get(key, dco, template, viewIdx, moduleIdx);
+            Plugin plugin = Plugins.getInstance().get(key, dco, template, viewIdx, moduleIdx, viewType);
             
             if (plugin != null && label != null && label.length() > 0)
                 plugin.setLabel(label);

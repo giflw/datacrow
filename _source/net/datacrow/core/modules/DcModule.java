@@ -44,6 +44,7 @@ import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.menu.MainFrameMenuBar;
 import net.datacrow.console.views.MasterView;
 import net.datacrow.console.views.View;
+import net.datacrow.console.windows.NewItemsDialog;
 import net.datacrow.console.windows.filerenamer.FileRenamerDialog;
 import net.datacrow.console.windows.filtering.FilterDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
@@ -170,7 +171,9 @@ public class DcModule implements Comparable<DcModule> {
     protected MasterView insertView;
     protected MasterView searchView;
     private FilterDialog filterForm;
+    
     private FileRenamerDialog fileRenamerDialog;
+    private NewItemsDialog newItemsDialog;
     
     protected Map<Integer, DcField> fields = new HashMap<Integer, DcField>();
     
@@ -779,6 +782,14 @@ public class DcModule implements Comparable<DcModule> {
         initializeUI();
         return searchView;
     }
+    
+    /**
+     * Returns the current search view.
+     */
+    public View getCurrentInsertView() {
+        initializeUI();
+        return getInsertView() != null ? getInsertView().getCurrent() : null;
+    }
 
     /**
      * Returns the current search view.
@@ -791,9 +802,10 @@ public class DcModule implements Comparable<DcModule> {
     /**
      * Returns the current insert view.
      */
-    public View getInsertViewDialog() {
+    public NewItemsDialog getNewItemsDialog() {
         initializeUI();
-        return getInsertView() != null ? getInsertView().getCurrent() : null;
+        newItemsDialog = newItemsDialog == null ? new NewItemsDialog(this) : newItemsDialog;
+        return newItemsDialog;
     }    
     
     /**
@@ -1512,16 +1524,16 @@ public class DcModule implements Comparable<DcModule> {
 	                    IconLibrary._icoItemsNew, MasterView._TABLE_VIEW);
 	            table.setView(tableView);
 	            insertView.addView(MasterView._TABLE_VIEW, tableView);
+            } else {
+                // list view, only for abstract modules
+                DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
+                View listView = new View(insertView, View._TYPE_INSERT, list, 
+                        DcResources.getText("lblNewItem", getObjectNamePlural()), 
+                        IconLibrary._icoItemsNew, MasterView._LIST_VIEW);
+                list.setView(listView);
+                
+                insertView.addView(MasterView._LIST_VIEW, listView);
             }
-            
-            // list view
-            DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
-            View listView = new View(insertView, View._TYPE_INSERT, list, 
-                    DcResources.getText("lblNewItem", getObjectNamePlural()), 
-                    IconLibrary._icoItemsNew, MasterView._LIST_VIEW);
-            list.setView(listView);
-            
-            insertView.addView(MasterView._LIST_VIEW, listView);
         }
         
         if (searchView == null && hasSearchView() ) {

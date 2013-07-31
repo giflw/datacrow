@@ -45,12 +45,12 @@ import net.datacrow.core.objects.DcTemplate;
 public abstract class Plugin extends AbstractAction {
 
     private static final long serialVersionUID = 4600350535556305957L;
-
-    protected static final int _SEARCHTAB = 0;
-    protected static final int _INSERTTAB = 1;
-    protected static final int _NOTETAB = 2;
+    
+    public static final int _VIEWTYPE_SEARCH = 0;
+    public static final int _VIEWTYPE_INSERT = 1;
     
     private final int viewIdx;
+    private final int viewType;
     private final int moduleIdx;
     
     private DcObject dco;
@@ -68,10 +68,12 @@ public abstract class Plugin extends AbstractAction {
     protected Plugin(DcObject dco, 
                      DcTemplate template, 
                      int viewIdx, 
-                     int moduleIdx) {
+                     int moduleIdx,
+                     int viewType) {
         
         this.moduleIdx = moduleIdx;
         this.viewIdx = viewIdx;
+        this.viewType = viewType;
         this.template = template;
         this.dco = dco;
     }
@@ -82,6 +84,10 @@ public abstract class Plugin extends AbstractAction {
      */
     public int getXpLevel() {
         return UserMode._XP_BEGINNER;
+    }
+
+    public int getViewType() {
+        return viewType;
     }
 
     /**

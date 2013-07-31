@@ -95,7 +95,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         // view menu
         DcMenu menuView = ComponentFactory.getMenu(DcResources.getText("lblView"));
         for (int view : module.getSupportedViews())
-            PluginHelper.add(menuView, "ChangeView", null, null, null, view, -1);   
+            PluginHelper.add(menuView, "ChangeView", null, null, null, view, -1, Plugin._VIEWTYPE_SEARCH);   
         
         menuView.addSeparator();
         PluginHelper.add(menuView, "ToggleQuickFilterBar");
@@ -165,23 +165,23 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
             Templates.refresh();
             for (DcTemplate template : Templates.getTemplates(module.getTemplateModule().getIndex())) {
                 templatesPresent = true;
-                PluginHelper.add(menuCreateNew, "CreateNew", null, null, template, -1, module.getIndex());
+                PluginHelper.add(menuCreateNew, "CreateNew", null, null, template, -1, module.getIndex(), Plugin._VIEWTYPE_SEARCH);
             }
         }        
         
-        PluginHelper.add(menuFile, "NewItemWizard");
+        PluginHelper.add(menuFile, "NewItemWizard", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         menuFile.addSeparator();
-        PluginHelper.add(menuFile, "FileLauncher");
+        PluginHelper.add(menuFile, "FileLauncher", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         menuFile.addSeparator();
 
         if (templatesPresent)
             menuFile.add(menuCreateNew);
         
-        PluginHelper.add(menuFile, "CreateNew", module.getIndex());
-        PluginHelper.add(menuFile, "OpenItem");
-        PluginHelper.add(menuFile, "EditItem");
-        PluginHelper.add(menuFile, "SaveAll");
-        PluginHelper.add(menuFile, "Delete", module.getIndex());
+        PluginHelper.add(menuFile, "CreateNew", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        PluginHelper.add(menuFile, "OpenItem", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        PluginHelper.add(menuFile, "EditItem", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        PluginHelper.add(menuFile, "SaveAll", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        PluginHelper.add(menuFile, "Delete", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         menuFile.addSeparator();
         PluginHelper.add(menuFile, "Log");
         PluginHelper.add(menuFile, "Exit");
@@ -224,6 +224,8 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         
         if (!module.isAbstract()) {
             menuTools.addSeparator();
+            PluginHelper.add(menuTools, "NewItems");
+            menuTools.addSeparator();
             PluginHelper.add(menuTools, "UpdateAll");
             PluginHelper.add(menuTools, "FindReplace");
             PluginHelper.add(menuTools, "AutoIncrementer");
@@ -234,7 +236,7 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
                 PluginHelper.add(menuTools, "TitleRewriter");
         }
         
-        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(null, -1, module.getIndex());
+        Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(null, -1, module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         for (Plugin plugin : plugins) {
             if (plugin.isShowInMenu())
                 menuPlugins.add(ComponentFactory.getMenuItem(plugin));
