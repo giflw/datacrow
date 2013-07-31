@@ -1,4 +1,13 @@
 -----------------------------------------------------------------------------------------
+Data Crow 3.11.2  [Released on August xx 2013]  [target: production]   [R. van der Waals]
+-----------------------------------------------------------------------------------------
+
+[Fixed]
+- On startup Data Crow tries to modify files in the installation folder, causing problems
+  for Windows platforms.
+
+
+-----------------------------------------------------------------------------------------
 Data Crow 3.11.1  [Released on July 30 2013]  [target: production]     [R. van der Waals]
 -----------------------------------------------------------------------------------------
 

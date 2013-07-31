@@ -51,17 +51,17 @@ import javax.swing.border.Border;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcLongTextField;
+import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.DcMenu;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcMultiLineToolTip;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 
 public class ModuleListPanel extends DcPanel {
@@ -112,13 +112,16 @@ public class ModuleListPanel extends DcPanel {
     
     private class ModuleSelector extends DcPanel implements ActionListener {
         
-        private JMenuBar menuBar;
-        private MainModuleButton mb;
+        private MainModuleButton mmb;
         private List<DcModule> referencedModules = new ArrayList<DcModule>();
+        private DcModule module;
         
         private ModuleSelector(DcModule module) {
-            mb = new MainModuleButton(module);
-            mb.setBackground(getBackground());
+            this.module = module;
+            
+            this.mmb = new MainModuleButton(module);
+            this.mmb.setBackground(getBackground());
+            
             addMouseListener(new ModuleMouseListener(module.getIndex()));
             
             DcModule rm;
@@ -133,84 +136,31 @@ public class ModuleListPanel extends DcPanel {
                     referencedModules.add(rm);
                 }
             }
-            
             build();
         }
         
         @Override
-        public void setFont(Font font) {
-            super.setFont(font);
-            
-            if (menuBar != null) menuBar.setFont(font);
-            if (mb != null) mb.setFont(font);
-        }
-        
-        @Override
         public Border getBorder() {
-            if (mb != null && mb.getModule() == DcModules.getCurrent()) {
-                return borderSelected;
-            } else {
-                return borderDefault;
-            }
+            return (mmb != null && mmb.getModule() == DcModules.getCurrent()) ? borderSelected : borderDefault;
         }
 
         private void build() {
             
             borderDefault = BorderFactory.createTitledBorder(
-                    BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+                    BorderFactory.createLineBorder(Color.LIGHT_GRAY, 0));
             borderSelected = BorderFactory.createTitledBorder(
-                    BorderFactory.createLineBorder(DcSettings.getColor(DcRepository.Settings.stSelectionColor), 1));
+                    BorderFactory.createLineBorder(DcSettings.getColor(DcRepository.Settings.stSelectionColor), 3));
             
             setBorder(borderDefault);
             setLayout(Layout.getGBL());
             
-            ReferenceModuleButton mi;
-            if (referencedModules.size() > 0) {
-                menuBar = ComponentFactory.getMenuBar();
-                menuBar.setBorderPainted(false);
-                menuBar.setBackground(getBackground());
-                
-                components.add(menuBar);
-                
-                JMenu menu = new DcMenu(DcResources.getText("lblSubModule")) {
-                    private Font f = new Font(DcSettings.getFont(DcRepository.Settings.stSystemFontBold).getFontName(), Font.ITALIC, 9);
-                    @Override
-                    public void setFont(Font font) {
-                        super.setFont(this.f);
-                    }
-                };
-                
-                menu.setFont(null);
-                
-                menu.setHorizontalAlignment(SwingConstants.CENTER);
-                menu.setVerticalAlignment(SwingConstants.CENTER);
-                
-                menu.setRolloverEnabled(false);
-                menu.setContentAreaFilled(false);
-                
-                menu.setMinimumSize(new Dimension(100, 12));
-                menu.setPreferredSize(new Dimension(100, 12));
-                
-                menu.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
-                
-                for (DcModule rm : referencedModules) {
-                    mi = new ReferenceModuleButton(rm);
-                    mi.setActionCommand("module_change");
-                    mi.addActionListener(this);
-                    mi.setBackground(getBackground());
-                    mi.setMinimumSize(new Dimension(118, 39));
-                    mi.setPreferredSize(new Dimension(118, 39));
-                         
-                    menu.add(mi);
-                }
-                
-                menuBar.add(menu);
-                add(menuBar, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTH, 
-                        GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+            mmb.addModule(module, this);
+            for (DcModule rm : referencedModules) {
+                mmb.addModule(rm, this);
             }
             
-            add(mb, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTH, 
-                    GridBagConstraints.BOTH,new Insets(0, 0, 0, 0), 0, 0));
+            add(mmb, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, 
+                    GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
         }
         
         @Override
@@ -220,8 +170,6 @@ public class ModuleListPanel extends DcPanel {
                 setSelectedModule(mb.getModule().getIndex());
             }
         }
-        
-
     }
     
     private class ModuleMouseListener implements MouseListener {
@@ -251,34 +199,74 @@ public class ModuleListPanel extends DcPanel {
         
         private final DcModule module;
         
+        private final Color selectedColor;
+        private final Color normalColor;
+        
+        private final JMenuBar mb;
+        private final JMenu menu;
+        
         public MainModuleButton(DcModule module) {
             super(Layout.getGBL());
+            
+            this.mb = ComponentFactory.getMenuBar();
+            this.mb.setBorderPainted(false);
+            this.mb.setBackground(getBackground());
+            
+            components.add(mb);
+            
             this.module = module;
+            this.selectedColor = DcSettings.getColor(DcRepository.Settings.stSelectionColor);
+            this.normalColor = super.getBackground();
             
             setBorder(null);
             
-            setMinimumSize(new Dimension(100, 35));
-            setPreferredSize(new Dimension(100, 35));
-            add(ComponentFactory.getLabel(module.getIcon32()), Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                    ,GridBagConstraints.WEST, GridBagConstraints.NONE,
-                    new Insets(0, 3, 0, 0), 0, 0));
+            setMinimumSize(new Dimension(75, 40));
+            setPreferredSize(new Dimension(75, 40));
             
-            DcLongTextField ltf = ComponentFactory.getHelpTextField();
-            ltf.setText(module.getLabel());
-            for (MouseListener ml : ltf.getMouseListeners())
-                ltf.removeMouseListener(ml);
+            DcLabel lblModule = ComponentFactory.getLabel(module.getIcon32());
+            add(lblModule, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                    ,GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
             
-            ltf.setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
-            ltf.addMouseListener(new ModuleMouseListener(module.getIndex()));
-            ltf.setBackground(getBackground());
+            menu = new DcMenu("");
+            menu.setIcon(IconLibrary._icoModuleBarSelector);
+            menu.setFont(null);
             
-            add(ltf, Layout.getGBC( 1, 0, 1, 1, 100.0, 100.0
-                    ,GridBagConstraints.WEST, GridBagConstraints.BOTH,
-                    new Insets(2, 2, 0, 0), 0, 0));;
+            menu.setHorizontalAlignment(SwingConstants.CENTER);
+            menu.setVerticalAlignment(SwingConstants.CENTER);
+            
+            menu.setRolloverEnabled(false);
+            menu.setContentAreaFilled(false);
+            
+            menu.setMinimumSize(new Dimension(75, 10));
+            menu.setPreferredSize(new Dimension(75, 10));
+            
+            mb.add(menu);
+            add(mb, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, 
+                    GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+        }
+        
+        public void addModule(DcModule module, ModuleSelector ms) {
+            ReferenceModuleButton rmb = new ReferenceModuleButton(module);
+            rmb.setActionCommand("module_change");
+            rmb.addActionListener(ms);
+            rmb.setBackground(getBackground());
+            rmb.setMinimumSize(new Dimension(180, 39));
+            rmb.setPreferredSize(new Dimension(180, 39));
+            menu.add(rmb);
         }
         
         public DcModule getModule() {
             return module;
+        }
+        
+        @Override
+        public Color getBackground() {
+            if (getModule() == DcModules.getCurrent()) {
+                return selectedColor;
+            } else {
+                return normalColor;
+            }
         }
         
         @Override
@@ -312,8 +300,8 @@ public class ModuleListPanel extends DcPanel {
             setRolloverEnabled(false);
             setFont(DcSettings.getFont(DcRepository.Settings.stSystemFontBold));
             
-            setMinimumSize(new Dimension(120, 35));
-            setPreferredSize(new Dimension(120, 35));
+            setMinimumSize(new Dimension(50, 35));
+            setPreferredSize(new Dimension(50, 35));
         }
         
         public DcModule getModule() {

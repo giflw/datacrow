@@ -851,7 +851,6 @@ public class DataCrow {
         DataCrow.createDirectory(new File(imageDir), "images");
         DataCrow.createDirectory(new File(iconsDir), "icons");
         DataCrow.createDirectory(new File(reportDir), "reports");
-        DataCrow.createDirectory(new File(servicesDir), "services");
         DataCrow.createDirectory(new File(moduleSettingsDir), "moduleSettingsDir");
         DataCrow.createDirectory(new File(applicationSettingsDir), "applicationSettingsDir");
         DataCrow.createDirectory(new File(resourcesDir), "resourcesDir");
