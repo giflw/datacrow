@@ -69,7 +69,6 @@ public class ModuleSelectPanel extends ToolSelectBasePanel {
         }
 
         DataCrow.mainFrame.changeModule(module);
-        DataCrow.mainFrame.setViews();
         
         Tool tool = getTool();
         tool.setModule(module);

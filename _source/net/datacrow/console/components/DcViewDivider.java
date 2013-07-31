@@ -43,10 +43,16 @@ public class DcViewDivider extends JSplitPane implements ComponentListener {
         super(JSplitPane.HORIZONTAL_SPLIT, left, right);
         this.settingKey = settingKey;
         left.addComponentListener(this);
-        setDividerLocation(DcSettings.getInt(settingKey));
-        
+                
         Border border = BorderFactory.createEmptyBorder(0, 0, 0, 0);
         setBorder(border);
+        
+        applyDividerLocation();
+    }
+    
+    public void applyDividerLocation() {
+        if (isEnabled())
+            setDividerLocation(DcSettings.getInt(settingKey));
     }
 
     @Override

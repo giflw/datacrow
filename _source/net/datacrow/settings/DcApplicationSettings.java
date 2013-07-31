@@ -771,15 +771,6 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             false, -1));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
-                            DcRepository.Settings.stTabbedPaneSize,
-                            new Dimension(575, 463),
-                            -1,
-                            "",
-                            "",
-                            false,
-                            false, -1));
-        getSettings().addSetting(_General,
-                new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stReferencesDialogSize,
                             new Dimension(300, 600),
                             -1,

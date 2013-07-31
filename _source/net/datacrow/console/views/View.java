@@ -233,10 +233,10 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public void applyViewDividerLocation() {
         if (vdQuickPane != null)
-            vdQuickPane.setDividerLocation(DcSettings.getInt(DcRepository.Settings.stQuickViewDividerLocation));
+            vdQuickPane.applyDividerLocation();
         
         if (vdGroupingPane != null)
-            vdGroupingPane.setDividerLocation(DcSettings.getInt(DcRepository.Settings.stTreeDividerLocation));
+            vdGroupingPane.applyDividerLocation();
     }
     
     public DataTask getCurrentTask() {
@@ -401,6 +401,12 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void activate() {
+        
+        if (groupingPane != null) {
+            vdGroupingPane.remove(groupingPane);
+            vdGroupingPane.add(groupingPane);
+        }
+        
         if (groupingPane != null && !groupingPane.isHoldingItems()) {
             groupingPane.groupBy();
         }

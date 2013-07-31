@@ -31,8 +31,6 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import net.datacrow.console.views.View;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.UserMode;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -100,13 +98,6 @@ public abstract class Plugin extends AbstractAction {
         return viewIdx;
     }
 
-    public View getView() {
-        if (getCurrentTab() == _SEARCHTAB)
-            return getModule().getSearchView().get(viewIdx);
-        else 
-            return getModule().getInsertView().get(viewIdx);
-    }    
-
     /**
      * Retrieves the item for which this plugin was called / created.
      */
@@ -123,10 +114,6 @@ public abstract class Plugin extends AbstractAction {
      */
     public String getLabelShort() {
         return getLabel();
-    }
-    
-    public final int getCurrentTab() {
-        return DataCrow.mainFrame.getSelectedTab();
     }
     
     /**

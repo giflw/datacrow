@@ -120,6 +120,10 @@ public class MasterView {
         if (current == null) {
             for (Integer key : views.keySet()) { 
                 current = views.get(key);
+                
+                if (current != null)
+                    getModule().getSettings().set(DcRepository.ModuleSettings.stDefaultView, Long.valueOf(current.getIndex())); 
+                
                 break;
             }
         }

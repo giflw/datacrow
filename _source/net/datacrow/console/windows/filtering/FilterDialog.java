@@ -368,7 +368,6 @@ public class FilterDialog extends DcFrame implements ActionListener {
             parent.add(keys);
 
             DataFilters.setCurrent(module.getIndex(), df);
-            DataCrow.mainFrame.setSelectedTab(0);   
             
             try {
                 poller.finished(true);

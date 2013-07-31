@@ -213,7 +213,6 @@ public abstract class DcRepository {
         public static final String stMainViewSize = "main_view_size";
         public static final String stMainViewState = "main_view_state";
         public static final String stMainViewLocation = "main_view_location";
-        public static final String stTabbedPaneSize = "tabbed_pane_size";
         public static final String stHelpFormSize = "help_form_size";
         public static final String stExpertFormSize = "expert_form_size";
         public static final String stUpdateAllDialogSize = "update_all_dialog_size";

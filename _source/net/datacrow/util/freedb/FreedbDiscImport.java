@@ -25,9 +25,6 @@
 
 package net.datacrow.util.freedb;
 
-import net.datacrow.console.MainFrame;
-import net.datacrow.core.DataCrow;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
@@ -74,10 +71,11 @@ public class FreedbDiscImport {
 	            if (audioCDs.length == 0) {
 	                DcSwingUtilities.displayWarningMessage(DcResources.getText("msgNoResultsForDiscID", discId));
 	            } else {
-	            	for (DcObject audioCD : audioCDs)
-	            		DcModules.get(DcModules._AUDIOCD).getCurrentInsertView().add(audioCD);
-	            	
-	            	DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
+	            	for (DcObject audioCD : audioCDs) {
+	            	    audioCD.setValidate(false);
+	            	    audioCD.saveNew(false);
+	            	    audioCD.setValidate(true);
+	            	}
 	            }
 	        } catch (Exception e) {
                 DcSwingUtilities.displayErrorMessage(DcResources.getText("msgErrorDiscID", e.getMessage()));

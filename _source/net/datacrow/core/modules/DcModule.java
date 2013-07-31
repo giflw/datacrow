@@ -793,7 +793,7 @@ public class DcModule implements Comparable<DcModule> {
     /**
      * Returns the current insert view.
      */
-    public View getCurrentInsertView() {
+    public View getInsertViewDialog() {
         initializeUI();
         return getInsertView() != null ? getInsertView().getCurrent() : null;
     }    

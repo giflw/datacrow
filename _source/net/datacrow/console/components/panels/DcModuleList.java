@@ -176,7 +176,6 @@ public class DcModuleList extends DcList implements ListSelectionListener {
                 setSelectedModule(currentIndex);
                 if (DataCrow.mainFrame != null) {
                     DataCrow.mainFrame.changeModule(module);
-                    DataCrow.mainFrame.setViews();
                 }
             }
         }

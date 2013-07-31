@@ -49,14 +49,12 @@ import javax.swing.event.ChangeListener;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.MainFrame;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.panels.OnlineServiceSettingsPanel;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.IViewComponent;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.console.windows.itemforms.ItemForm;
-import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
@@ -394,10 +392,15 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
                                             clone = o.clone();
                                             clone.setValue(DcObject._ID, null);
                                             clone.setIDs();
-                                            getModule().getCurrentInsertView().add(clone);
+                                            
+                                            try {
+                                                clone.setValidate(false);
+                                                clone.saveNew(false);
+                                                clone.setValidate(true);
+                                            } catch (Exception e) {
+                                                logger.error(e, e);
+                                            }
                                         }
-                                        
-                                        DataCrow.mainFrame.setSelectedTab(MainFrame._INSERTTAB);
                                     }
                                 }));
                     }

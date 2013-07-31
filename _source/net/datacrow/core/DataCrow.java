@@ -440,7 +440,6 @@ public class DataCrow {
         
                                 DataCrow.mainFrame.initialize();
                                 DataCrow.mainFrame.setVisible(true);
-                                mainFrame.setViews();
                                 
                                 if (logger.isDebugEnabled()) {
                                     long end = new Date().getTime();
