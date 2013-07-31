@@ -232,11 +232,14 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void applyViewDividerLocation() {
+        if (vdGroupingPane != null)
+            vdGroupingPane.applyDividerLocation();
+        
         if (vdQuickPane != null)
             vdQuickPane.applyDividerLocation();
         
-        if (vdGroupingPane != null)
-            vdGroupingPane.applyDividerLocation();
+        revalidate();
+        repaint();
     }
     
     public DataTask getCurrentTask() {
@@ -353,14 +356,6 @@ public class View extends DcPanel implements ListSelectionListener {
     protected void setSelected() {
         setSelected(0);
     }    
-    
-    @Override
-    public void setVisible(boolean b) {
-    	if (b && groupingPane != null && vdGroupingPane != null) {
-			vdGroupingPane.setLeftComponent(groupingPane);
-    	}
-    	super.setVisible(b);
-    }
     
     public void checkForChanges(boolean b) {
         checkForChanges = b;
