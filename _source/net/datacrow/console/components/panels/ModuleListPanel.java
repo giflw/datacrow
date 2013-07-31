@@ -220,8 +220,8 @@ public class ModuleListPanel extends DcPanel {
             
             setBorder(null);
             
-            setMinimumSize(new Dimension(75, 40));
-            setPreferredSize(new Dimension(75, 40));
+            setMinimumSize(new Dimension(60, 40));
+            setPreferredSize(new Dimension(60, 40));
             
             DcLabel lblModule = ComponentFactory.getLabel(module.getIcon32());
             add(lblModule, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
@@ -238,8 +238,8 @@ public class ModuleListPanel extends DcPanel {
             menu.setRolloverEnabled(false);
             menu.setContentAreaFilled(false);
             
-            menu.setMinimumSize(new Dimension(75, 10));
-            menu.setPreferredSize(new Dimension(75, 10));
+            menu.setMinimumSize(new Dimension(60, 10));
+            menu.setPreferredSize(new Dimension(60, 10));
             
             mb.add(menu);
             add(mb, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, 
