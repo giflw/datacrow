@@ -39,7 +39,6 @@ import javax.swing.KeyStroke;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.components.lists.DcObjectList;
-import net.datacrow.console.components.panels.ChartPanel;
 import net.datacrow.console.components.panels.QuickViewPanel;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.menu.MainFrameMenuBar;
@@ -171,7 +170,6 @@ public class DcModule implements Comparable<DcModule> {
     protected MasterView insertView;
     protected MasterView searchView;
     private FilterDialog filterForm;
-    private ChartPanel chartPanel;
     private FileRenamerDialog fileRenamerDialog;
     
     protected Map<Integer, DcField> fields = new HashMap<Integer, DcField>();
@@ -963,18 +961,6 @@ public class DcModule implements Comparable<DcModule> {
         return fileRenamerDialog;
     }    
 
-    /**
-     * Creates the chart panel (if not created already).
-     * @param create Indicates if the panel should be created when it does not yet exist.
-     * @return The panel or null if not available.
-     */
-    public ChartPanel getChartPanel(boolean create) {
-        if (create)
-            chartPanel = chartPanel == null && isTopModule() ? new ChartPanel(getIndex()) : chartPanel;
-            
-        return chartPanel;
-    }
-    
     /**
      * Indicates if this module is used by multiple modules.
      */

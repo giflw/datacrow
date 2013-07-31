@@ -172,7 +172,7 @@ public class ModuleListPanel extends DcPanel {
         public DcModule getModule() {
             return module;
         }
-        
+
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().startsWith("module_change")) {
@@ -182,6 +182,7 @@ public class ModuleListPanel extends DcPanel {
                 mmb.setModule(mb.module);
                 
                 setSelectedModule(mb.getModule().getIndex());
+                this.setToolTipText(module.getLabel() + (Utilities.isEmpty(module.getDescription()) ? "" : "\n" + module.getDescription()));
                                 
                 repaint();
                 revalidate();

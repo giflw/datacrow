@@ -23,7 +23,7 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.console.components.panels;
+package net.datacrow.console.windows.charts;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;

@@ -76,12 +76,14 @@ public class DcToolBar extends JToolBar implements MouseListener {
         
         if (module.deliversOnlineService())
             PluginHelper.add(this, "OnlineSearch");
+
+        PluginHelper.add(this, "Charts");
         
         addSeparator();
 
         Collection<Plugin> plugins = Plugins.getInstance().getUserPlugins(null, -1, module.getIndex());
         for (Plugin plugin : plugins) {
-            if (plugin.isShowInPopupMenu())
+            if (plugin.isShowOnToolbar())
                 add(ComponentFactory.getToolBarButton(plugin));
         }
         
