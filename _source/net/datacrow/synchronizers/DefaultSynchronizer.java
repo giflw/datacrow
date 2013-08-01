@@ -31,7 +31,6 @@ import java.util.Collection;
 import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.ValidationException;
@@ -186,17 +185,15 @@ public abstract class DefaultSynchronizer extends Synchronizer {
                     
                     try {
                         if (updated) {
-                            dco.saveUpdate(true);
-                            
-                            while (DatabaseManager.getQueueSize() > 0) {
-                                try {
-                                    sleep(100);
-                                } catch (Exception exp) {}
-                            }
+                            dco.saveUpdate(false);
                         }
                     } catch (ValidationException ve) {
                         client.addMessage(ve.getMessage());
                     }
+                    
+                    try {
+                        sleep(1000);
+                    } catch (Exception exp) {}
                 }
             } finally {
                 client.addMessage(DcResources.getText("msgSynchronizerEnded"));
