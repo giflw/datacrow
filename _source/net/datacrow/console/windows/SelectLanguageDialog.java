@@ -57,7 +57,8 @@ public class SelectLanguageDialog extends NativeDialog implements ActionListener
         setLocation(Utilities.getCenteredWindowLocation(getSize(), true));
     }
     
-    private void close() {
+    @Override
+    public void close() {
         DcSettings.set(DcRepository.Settings.stLanguage, cbLanguage.getSelectedItem());
         setVisible(false);
         dispose();

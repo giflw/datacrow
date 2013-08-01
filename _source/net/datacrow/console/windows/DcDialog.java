@@ -104,6 +104,7 @@ public class DcDialog extends JDialog implements IDialog {
         super.setVisible(b);
     }
 
+    @Override
     public void close() {
         long start = logger.isDebugEnabled() ? new Date().getTime() : 0;
 

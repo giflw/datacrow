@@ -65,6 +65,7 @@ public class NativeQuestionBox extends NativeDialog implements ActionListener {
         return affirmative;
     }
     
+    @Override
     public void close() {
         textMessage = null;
         buttonYes = null;

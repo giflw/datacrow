@@ -85,6 +85,7 @@ public class NativeMessageBox extends NativeDialog implements ActionListener, ID
         setVisible(true);
     }
 
+    @Override
     public void close() {
         textMessage = null;
         buttonOk = null;

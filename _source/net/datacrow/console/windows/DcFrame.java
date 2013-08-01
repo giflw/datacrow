@@ -73,6 +73,7 @@ public class DcFrame extends JFrame implements WindowFocusListener, IWindow {
         DcSwingUtilities.addOpenWindow(this);
     }
     
+    @Override
     public void close() {
 
         DcSwingUtilities.removeOpenWindow(this);

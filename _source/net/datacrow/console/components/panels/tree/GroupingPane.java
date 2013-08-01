@@ -119,7 +119,7 @@ public class GroupingPane extends JPanel implements ChangeListener {
     }
     
     public TreePanel getCurrent() {
-    	return panels.get(current);
+    	return current < 0 ? null : panels.get(current);
     }
     
     public void load() {

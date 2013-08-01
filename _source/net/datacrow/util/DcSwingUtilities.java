@@ -95,6 +95,8 @@ public class DcSwingUtilities {
      * @return
      */    
     public static void displayMessage(String msg) {
+        if (msg == null) return;
+        
         MessageBox mb = new MessageBox(msg.startsWith("msg") ? DcResources.getText(msg) : msg, MessageBox._INFORMATION);
         open(mb);
     }
@@ -105,6 +107,8 @@ public class DcSwingUtilities {
      * @return
      */    
     public static void displayErrorMessage(String msg) {
+        if (msg == null) return;
+        
         MessageBox mb = new MessageBox(msg.startsWith("msg") ? DcResources.getText(msg) : msg, MessageBox._ERROR);
         open(mb);
     }
@@ -115,6 +119,8 @@ public class DcSwingUtilities {
      * @return
      */    
     public static void displayWarningMessage(String msg) {
+        if (msg == null) return;
+        
         String text = msg != null && msg.startsWith("msg") ? DcResources.getText(msg) : msg;
         MessageBox mb = new MessageBox(text, MessageBox._WARNING);
         open(mb);

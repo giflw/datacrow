@@ -98,6 +98,7 @@ public class UserDirSetupDialog extends NativeDialog implements ActionListener {
         enableActions(true);
     }
     
+    @Override
     public void close() {
         setVisible(false);
     }    
