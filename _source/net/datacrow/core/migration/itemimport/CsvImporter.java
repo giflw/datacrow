@@ -57,7 +57,6 @@ public class CsvImporter extends ItemImporter {
     
     @Override
     protected void initialize() throws Exception {
-        @SuppressWarnings("resource")
         InputStreamReader reader = new InputStreamReader(new FileInputStream(file), getCharacterSet());
         CSVReader csvReader = new CSVReader(reader, getSeperator());
         String[] headers = csvReader.readNext();

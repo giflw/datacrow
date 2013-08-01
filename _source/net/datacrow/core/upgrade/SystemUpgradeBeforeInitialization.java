@@ -196,7 +196,6 @@ public class SystemUpgradeBeforeInitialization {
         }
     }
     
-    @SuppressWarnings("resource")
     private boolean isExistingConstraint(Statement stmt, String contraint) {
         boolean exists = false;
         ResultSet rs = null;
@@ -220,7 +219,6 @@ public class SystemUpgradeBeforeInitialization {
         return exists;
     }
     
-    @SuppressWarnings("resource")
     private boolean createIndexes() throws Exception {
         Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = null;
@@ -411,8 +409,6 @@ public class SystemUpgradeBeforeInitialization {
     }
     
     private void cleanupReferences() {
-        
-        @SuppressWarnings("resource")
         Connection conn = DatabaseManager.getAdminConnection();
         Statement stmt = null;
         String sql;

@@ -125,7 +125,6 @@ public class XmlImporter extends ItemImporter {
             return dco;
         }
         
-        @SuppressWarnings("resource")
         @Override
         public void run() {
             FileInputStream fis = null;

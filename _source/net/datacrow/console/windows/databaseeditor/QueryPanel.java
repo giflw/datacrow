@@ -112,7 +112,6 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
         table.applyHeaders();
     }
 
-    @SuppressWarnings("resource")
     protected void runQuery() {
         String sql   = textInput.getText().trim();
 

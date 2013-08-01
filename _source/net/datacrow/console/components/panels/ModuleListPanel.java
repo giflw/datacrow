@@ -252,6 +252,8 @@ public class ModuleListPanel extends DcPanel {
             menu = new DcMenu("");
             menu.setIcon(IconLibrary._icoModuleBarSelector);
             menu.setFont(null);
+            menu.setBorderPainted(false);
+            mb.setBorderPainted(false);
             
             menu.setHorizontalAlignment(SwingConstants.CENTER);
             menu.setVerticalAlignment(SwingConstants.CENTER);
@@ -261,7 +263,7 @@ public class ModuleListPanel extends DcPanel {
             
             menu.setMinimumSize(new Dimension(60, 10));
             menu.setPreferredSize(new Dimension(60, 10));
-            
+
             mb.add(menu);
             add(mb, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, 
                     GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));

@@ -279,7 +279,6 @@ public class SystemUpgradeAfterInitialization {
         return success;
     }
     
-    @SuppressWarnings("resource")
     private boolean cleanupReferences() {
     	MappingModule mm;
     	DcModule pm;
@@ -328,7 +327,6 @@ public class SystemUpgradeAfterInitialization {
     	return true;
     }
 
-    @SuppressWarnings("resource")
     private boolean correctAssociateNames() {
 
         boolean upgraded = false;
@@ -431,7 +429,6 @@ public class SystemUpgradeAfterInitialization {
         return upgraded;
     }
     
-    @SuppressWarnings("resource")
     private boolean fillUIPersistFieldsPersons() {
         boolean upgraded = false;
         
@@ -504,7 +501,6 @@ public class SystemUpgradeAfterInitialization {
         return upgraded;
     }
     
-    @SuppressWarnings("resource")
     private boolean fillUIPersistFields() {
         boolean upgraded = false;
         

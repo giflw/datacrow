@@ -130,8 +130,6 @@ public class DcDatabase {
      * @throws Exception
      */
     protected void initiliaze() throws Exception {
-        
-        @SuppressWarnings("resource")
         Connection connection = DatabaseManager.getAdminConnection();
         
         if (!isNew())
@@ -155,7 +153,6 @@ public class DcDatabase {
     /**
      * Removes unused columns.
      */
-    @SuppressWarnings("resource")
     protected void cleanup() {
         
         // As we might still need the info during the upgrade..... 
@@ -258,7 +255,6 @@ public class DcDatabase {
         }
     }
 
-    @SuppressWarnings("resource")
     private void initialize(Connection connection) throws Exception {
         Statement stmt = connection.createStatement();
 

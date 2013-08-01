@@ -37,7 +37,6 @@ public class ServiceClassLoader extends ClassLoader {
     public ServiceClassLoader(String path) {
         init(path);
         
-        @SuppressWarnings("resource")
         ZipFile zf = null;
         Enumeration<? extends ZipEntry> entries;
         ZipEntry entry;

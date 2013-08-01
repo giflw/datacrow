@@ -478,7 +478,6 @@ abstract class FileProperties {
         String result = "";
         
         // do not close rdr, reused throughout the session
-        @SuppressWarnings("resource")
         BufferedReader rdr = 
                 type == _TYPE_AUDIO_CODEC ? rdrAudio :
                 type == _TYPE_VIDEO_CODEC ? rdrVideo : rdrVideoExt;

@@ -145,7 +145,6 @@ public class DataManager {
         }
     }
     
-    @SuppressWarnings("resource")
     public static int getCount(int module, int field, Object value) {
         int count = 0;
         
@@ -547,7 +546,6 @@ public class DataManager {
         return items.size() > 0 ? (Loan) items.get(0) : new Loan();
     }
     
-    @SuppressWarnings("resource")
     public static DcObject getObjectByExternalID(int moduleIdx, String type, String externalID) {
         DcModule module =  DcModules.get(moduleIdx);
        
@@ -752,7 +750,6 @@ public class DataManager {
      * @param filter
      * @param fields 
      */
-    @SuppressWarnings("resource")
     public static List<DcSimpleValue> getSimpleValues(int module, boolean icons) {
         DcModule m = DcModules.get(module);
         boolean useIcons = icons && m.getIconField() != null;

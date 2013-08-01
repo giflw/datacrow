@@ -63,7 +63,6 @@ public class SelectQuery extends Query {
         this.df = df;
     }
     
-    @SuppressWarnings("resource")
     @Override
     public List<DcObject> run()  {
         boolean success = false;

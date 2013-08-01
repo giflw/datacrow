@@ -78,8 +78,6 @@ public class ModuleImporter {
 		
 		@Override
 		public void run() {
-		    
-		    @SuppressWarnings("resource")
             ZipFile zf = null;
 		    
 		    try {

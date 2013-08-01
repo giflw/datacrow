@@ -126,7 +126,6 @@ public class DatabaseManager {
      * @return The current version. If version information could not be found an undetermined
      * version is returned.
      */
-    @SuppressWarnings("resource")
     public static Version getVersion() {
         Connection connection = getAdminConnection();
         if (connection != null)
@@ -302,7 +301,6 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
-    @SuppressWarnings("resource")
     public static ResultSet executeSQL(String sql) throws SQLException {
         Connection connection = getConnection();
         Statement stmt = connection.createStatement();
@@ -314,7 +312,6 @@ public class DatabaseManager {
      * @param sql SQL statement.
      * @param log Indicates if information on the query should be logged.
      */
-    @SuppressWarnings("resource")
     public static boolean execute(String sql) throws SQLException {
         Statement stmt = null;
         boolean success = false;
@@ -340,7 +337,6 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
-    @SuppressWarnings("resource")
     public static ResultSet executeQueryAsAdmin(String sql) throws SQLException {
         Connection connection = getAdminConnection();
         Statement stmt = connection.createStatement(); // can't close the Statement since this would close the rs as well.
@@ -353,7 +349,6 @@ public class DatabaseManager {
      * @param log Indicates if information on the query should be logged.
      * @return The result set.
      */
-    @SuppressWarnings("resource")
     public static void executeAsAdmin(String sql) throws SQLException {
         Connection connection = getAdminConnection();
         Statement stmt = null;
@@ -452,7 +447,6 @@ public class DatabaseManager {
      * @param user
      * @param password
      */
-    @SuppressWarnings("resource")
     public static void changePassword(User user, String password) {
         Connection c = null;
         Statement stmt = null;
@@ -477,7 +471,6 @@ public class DatabaseManager {
     /**
      * Removes a user from the database
      */
-    @SuppressWarnings("resource")
     public static void deleteUser(User user) {
         Connection c = null;
         Statement stmt = null;
@@ -506,7 +499,6 @@ public class DatabaseManager {
     /**
      * Creates a user with all the correct privileges
      */
-    @SuppressWarnings("resource")
     public static void createUser(User user, String password) {
         Connection c = null;
         Statement stmt = null;
@@ -574,7 +566,6 @@ public class DatabaseManager {
      * @param user
      * @param admin
      */
-    @SuppressWarnings("resource")
     protected static void setPriviliges(DcModule module, String user, boolean admin) {
 
        Connection c = null;

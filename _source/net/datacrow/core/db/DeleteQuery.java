@@ -61,7 +61,6 @@ public class DeleteQuery extends Query {
         dco = null;
     }
     
-    @SuppressWarnings("resource")
     @Override
     public List<DcObject> run() {
     	boolean success = false;

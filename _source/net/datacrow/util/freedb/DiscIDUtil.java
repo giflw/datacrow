@@ -55,7 +55,6 @@ public class DiscIDUtil {
      * @return valid disc id (with track offsets)
      * @throws IOException
      */
-    @SuppressWarnings("resource")
     public String readDiscID() throws IOException {
         String exec = getScript();
         setExecutionAllowed(exec);
