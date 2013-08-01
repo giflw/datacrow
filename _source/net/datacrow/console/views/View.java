@@ -89,6 +89,8 @@ public class View extends DcPanel implements ListSelectionListener {
     public static final int _TYPE_SEARCH = 0;
     public static final int _TYPE_INSERT = 1;
     
+    private boolean active = false;
+    
     protected IViewComponent vc;
     protected DataTask task;
     
@@ -232,8 +234,10 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void applyViewDividerLocation() {
-        if (vdQuickPane != null) vdQuickPane.applyDividerLocation();
-        if (vdGroupingPane != null) vdGroupingPane.applyDividerLocation();
+        if (vdQuickPane != null) 
+            vdQuickPane.applyDividerLocation();
+        if (vdGroupingPane != null) 
+            vdGroupingPane.applyDividerLocation();
         
         revalidate();
         repaint();
@@ -392,10 +396,36 @@ public class View extends DcPanel implements ListSelectionListener {
         updateProgressBar(0);
     }
     
+    public void deactivate() {
+        active = false;
+        
+        if (vdGroupingPane != null) vdGroupingPane.deactivate();
+        if (vdQuickPane != null) vdQuickPane.deactivate();
+    }
+    
+    private void reinstallGroupingPane() {
+        // only the search view uses view dividers
+        if (getType() == _TYPE_SEARCH && !getModule().isChildModule()) {
+            Component c = vdQuickPane != null ? vdQuickPane : panelResult;
+            remove(c);
+            
+            vdGroupingPane = new DcViewDivider(groupingPane, panelResult, DcRepository.Settings.stTreeDividerLocation);
+            quickView = getModule().getQuickView();
+            vdQuickPane = new DcViewDivider(vdGroupingPane, quickView, DcRepository.Settings.stQuickViewDividerLocation);
+            quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
+            
+            c = vdQuickPane != null ? vdQuickPane : panelResult;
+            add(    c, Layout.getGBC( 0, 1, 3, 1, 100.0, 100.0
+                   ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                    new Insets(5, 5, 5, 5), 0, 0)); 
+        }
+    }
+    
     public void activate() {
+        active = true;
+        
         if (groupingPane != null) {
-            vdGroupingPane.remove(groupingPane);
-            vdGroupingPane.add(groupingPane);
+            reinstallGroupingPane();
             
             if (!groupingPane.isHoldingItems())
                 groupingPane.groupBy();
@@ -405,6 +435,8 @@ public class View extends DcPanel implements ListSelectionListener {
         
         if (childView != null) 
         	childView.activate();
+        
+        applyViewDividerLocation();
     }
     
     public void groupBy() {
@@ -822,24 +854,10 @@ public class View extends DcPanel implements ListSelectionListener {
             addChildView();
         }
         
-        // only the search view uses view dividers
-        if (getType() == _TYPE_SEARCH && !getModule().isChildModule()) {
-            vdGroupingPane = new DcViewDivider(groupingPane, panelResult, DcRepository.Settings.stTreeDividerLocation);
-            quickView = getModule().getQuickView();
-            vdQuickPane = new DcViewDivider(vdGroupingPane, quickView, DcRepository.Settings.stQuickViewDividerLocation);
-
-            quickView.setVisible(DcSettings.getBoolean(DcRepository.Settings.stShowQuickView));
-        }
-        
         //**********************************************************
         //Main panel
         //**********************************************************
         setLayout(Layout.getGBL());
-        
-        Component c = vdQuickPane != null ? vdQuickPane : panelResult;
-        add(    c, Layout.getGBC( 0, 1, 3, 1, 100.0, 100.0
-               ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                new Insets(5, 5, 5, 5), 0, 0)); 
         
         if (actionPanel != null)
             add(    actionPanel,    Layout.getGBC( 0, 2, 3, 1, 1.0, 1.0

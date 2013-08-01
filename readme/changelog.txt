@@ -7,29 +7,35 @@ further. This is also a preparation for the web GUI since I want to keep the lay
 both the same, for as far as possible.
 
 [Changed]
+- The screen is now much cleaner and it makes the application look simpler.
+- The file associations setting now also allows parameters to be defined.
 - New items tab has been removed. 
-- Online Search will now direct save the item instead of adding the item to the new 
+- Online Search will now directly save the item instead of adding the item to the 
   "new" tab.
 - Chart tab has been removed. You can open the new charts dialog from the tools menu
   as well as from the tool bar.
-- Create Multiple tool has been added (as a replacement for the new items tab).
+- Create Multiple Items tool has been added (as a replacement for the new items tab).
 - Item importer will open the new items dialog to lists the imported items before saving
   them.
 - The module bar has been changed. Labels have been removed. Additionally the select 
   module section has been improved. Selecting a sub module will highlight it on the 
   main module panel.
 - Improved startup time by building forms on demand instead of on startup (where
-  possible).
+  possible) - 4.9 seconds on an almost empty database in 3.12 against 6.0 seconds on
+  the same database with version 3.11.1.
 - ISBNdb.com has been changed and the information is of limited use now to Data Crow.
-  This service has now been disabled.
-- The file associations setting now also allows parameters to be defined.
+  This service has been disabled.
+- Help has been updated to reflect all of the above (press F1 once in a while just for
+  the sake of using it).
 
 [Fixed]
-- On startup Data Crow tries to modify files in the installation folder, causing problems
-  for Windows platforms.
-- Apply settings such as the language change was only properly applied after a restart.
-- Sort order of persons has been fixed.
-- Screen parts resized ever so slightly.
+- On startup Data Crow tried to modify files in the installation folder, causing problems
+  for Windows platforms. Data Crow can now be launched without administrator permissions.
+- Applying settings such as the language change was only properly applied after a restart.
+- Sort order of persons has been fixed (always sorts on complete name now, takes care of
+  rewritten names).
+- Screen parts resized ever so slightly and ever so annoyingly.
+- Could not really tell which module was selected.
 - Fix for launching files from the Quick View Panel.
 
 

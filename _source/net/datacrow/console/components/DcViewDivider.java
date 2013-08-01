@@ -25,9 +25,6 @@
 
 package net.datacrow.console.components;
 
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
@@ -35,41 +32,25 @@ import javax.swing.border.Border;
 
 import net.datacrow.settings.DcSettings;
 
-public class DcViewDivider extends JSplitPane implements ComponentListener {
+public class DcViewDivider extends JSplitPane {
     
     private final String settingKey;
     
     public DcViewDivider(JComponent left, JComponent right, String settingKey) {
         super(JSplitPane.HORIZONTAL_SPLIT, left, right);
         this.settingKey = settingKey;
-        left.addComponentListener(this);
-                
+        
         Border border = BorderFactory.createEmptyBorder(0, 0, 0, 0);
         setBorder(border);
     }
     
-    public void applyDividerLocation() {
-        if (isEnabled()) {
-            removeComponentListener(this);
-            setDividerLocation(DcSettings.getInt(settingKey));
-            addComponentListener(this);
-        }
+    public void deactivate() {
+        DcSettings.set(settingKey, getDividerLocation());
     }
     
-    @Override
-    public void componentHidden(ComponentEvent ce) {}
-    @Override
-    public void componentMoved(ComponentEvent ce) {}
-    @Override
-    public void componentShown(ComponentEvent e) {}
-
-    @Override
-    public void componentResized(ComponentEvent ce) {
-        if (	getLeftComponent() != null && 
-        		getLeftComponent().isVisible() && 
-        		getRightComponent() != null && 
-        		getRightComponent().isVisible())
-        	
-            DcSettings.set(settingKey, getDividerLocation());
+    public void applyDividerLocation() {
+        if (isEnabled()) {
+            setDividerLocation(DcSettings.getInt(settingKey));
+        }
     }
 }
