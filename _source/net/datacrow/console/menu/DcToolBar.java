@@ -55,18 +55,12 @@ public class DcToolBar extends JToolBar implements MouseListener {
         
         PluginHelper.add(this, "NewItemWizard");
         PluginHelper.add(this, "NewItems");
-        
-        addSeparator();
-        
-        PluginHelper.add(this, "OpenItem", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
-        
-        addSeparator();
-
         PluginHelper.add(this, "CreateNew", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         PluginHelper.add(this, "Delete", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         
         addSeparator();
         
+        PluginHelper.add(this, "OpenItem", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         PluginHelper.add(this, "SaveSelected", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         PluginHelper.add(this, "SaveAll", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         
@@ -75,9 +69,12 @@ public class DcToolBar extends JToolBar implements MouseListener {
         PluginHelper.add(this, "Filter");
         PluginHelper.add(this, "ApplyFilter");
         
-        if (module.deliversOnlineService())
+        if (module.deliversOnlineService()) {
+            addSeparator();
             PluginHelper.add(this, "OnlineSearch");
-
+        }
+            
+        addSeparator();
         PluginHelper.add(this, "Charts");
         
         addSeparator();

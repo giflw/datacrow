@@ -87,6 +87,9 @@ public class ViewActionPanel extends JPanel implements ActionListener {
         // Build the panel
         SecuredUser user = SecurityCentre.getInstance().getUser();
             
+        if (view.getType() == View._TYPE_INSERT)
+            panelActionsRight.add(buttonClear);
+        
         if (user == null || user.isEditingAllowed(view.getModule()))
         	panelActionsRight.add(buttonSave);
         
@@ -101,11 +104,8 @@ public class ViewActionPanel extends JPanel implements ActionListener {
         for (Component c: view.getAdditionalActions())
             panelActionsLeft.add(c);
     
-        if (view.getType() == View._TYPE_INSERT)
-            panelActionsRight.add(buttonClear);
-    
-        if (user == null || user.isEditingAllowed(view.getModule()))
-        	panelActionsRight.add(buttonCancel);
+//        if (user == null || user.isEditingAllowed(view.getModule()))
+//        	panelActionsRight.add(buttonCancel);
         
         setLayout(Layout.getGBL());
         add(panelActionsLeft, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST,

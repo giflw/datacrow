@@ -28,6 +28,8 @@ public class NewItemsDialog extends DcFrame implements ActionListener {
         
         this.module = module;
         
+        setHelpIndex("dc.items.createmultiple");
+        
         build();
         
         pack();

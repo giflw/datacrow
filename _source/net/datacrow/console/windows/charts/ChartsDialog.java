@@ -24,6 +24,7 @@ public class ChartsDialog extends DcDialog implements ActionListener {
         
         setIconImage(IconLibrary._icoChart.getImage());
         setTitle(DcResources.getText("lblCharts"));
+        setHelpIndex("dc.charts");
         
         build();
         

@@ -77,6 +77,7 @@
     <tocitem target="dc.tools" text="Tools">
       <tocitem target="dc.tools.backup_restore" text="Backup &amp; Restore" />
       <tocitem target="dc.tools.databaseeditor" text="Database Editor"/>
+      <tocitem target="dc.items.createmultiple" text="Create Multiple Items"/>
       <tocitem target="dc.tools" text="Updating Items">
         <tocitem target="dc.tools.massupdate" text="Mass Update"/>
         <tocitem target="dc.tools.titlerewriter" text="Title Rewriting" />

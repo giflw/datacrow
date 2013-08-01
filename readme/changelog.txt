@@ -25,6 +25,7 @@ as possible.
 - On startup Data Crow tries to modify files in the installation folder, causing problems
   for Windows platforms.
 - Apply settings such as the language change was only properly applied after a restart.
+- Sort order of persons has been fixed.
 
 
 -----------------------------------------------------------------------------------------
