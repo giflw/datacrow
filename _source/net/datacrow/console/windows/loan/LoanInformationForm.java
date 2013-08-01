@@ -223,61 +223,67 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
     
             setLayout(Layout.getGBL());
             
-            add(ComponentFactory.getLabel(DcResources.getText("lblLoanType")),  
+            JPanel left = new JPanel();
+            left.setLayout(Layout.getGBL());
+            
+            left.add(ComponentFactory.getLabel(DcResources.getText("lblLoanType")),  
                     Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 5, 5, 0), 0, 0));
-            add(cbLoans,  
+            left.add(cbLoans,  
                     Layout.getGBC( 1, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));       
             
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LENDBY).getLabel()),  
+            left.add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LENDBY).getLabel()),  
                     Layout.getGBC( 0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 5, 5, 0), 0, 0));
-            add(cbPersons,   
+            left.add(cbPersons,   
                     Layout.getGBC( 1, 1, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));
             
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_MODULE).getLabel()),  
+            left.add(ComponentFactory.getLabel(module.getField(DcObject._SYS_MODULE).getLabel()),  
                     Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 5, 5, 0), 0, 0));
-            add(cbModules,  
+            left.add(cbModules,  
                     Layout.getGBC( 1, 2, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0)); 
 
-            add(ComponentFactory.getLabel(DcResources.getText("lblOnlyOverdueLoans")),  
+            left.add(ComponentFactory.getLabel(DcResources.getText("lblOnlyOverdueLoans")),  
                     Layout.getGBC( 0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 5, 5, 0), 0, 0));
-            add(cbOnlyTooLate,  
+            left.add(cbOnlyTooLate,  
                     Layout.getGBC( 1, 3, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0)); 
 
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
+            JPanel right = new JPanel();
+            right.setLayout(Layout.getGBL());
+            
+            right.add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
                     DcResources.getText("lblFrom")),  
                     Layout.getGBC( 2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));
-            add(dtDueFrom,  
+            right.add(dtDueFrom,  
                     Layout.getGBC( 3, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));        
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
+            right.add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANDUEDATE).getLabel() + " " +
                     DcResources.getText("lblTo")),  
                     Layout.getGBC( 2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));        
-            add(dtDueTo,  
+            right.add(dtDueTo,  
                     Layout.getGBC( 3, 1, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));
             
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANSTARTDATE).getLabel() + " " +
+            right.add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANSTARTDATE).getLabel() + " " +
                     DcResources.getText("lblFrom")),  
                     Layout.getGBC( 2, 2, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));
-            add(dtStartFrom,  
+            right.add(dtStartFrom,  
                     Layout.getGBC( 3, 2, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));        
-            add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANSTARTDATE).getLabel() + " " +
+            right.add(ComponentFactory.getLabel(module.getField(DcObject._SYS_LOANSTARTDATE).getLabel() + " " +
                     DcResources.getText("lblTo")),  
                     Layout.getGBC( 2, 3, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                     new Insets(5, 20, 5, 0), 0, 0));        
-            add(dtStartTo,  
+            right.add(dtStartTo,  
                     Layout.getGBC( 3, 3, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 0), 0, 0));            
 
@@ -293,8 +299,14 @@ public class LoanInformationForm extends DcFrame implements ActionListener {
             panelActions.add(btCancel);
             panelActions.add(btSearch);
             
-            add(panelActions, Layout.getGBC(3, 4, 1, 1, 1.0, 1.0,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                    new Insets(10, 5, 5, 5), 0, 0));  
+            
+            add(left, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));  
+            add(right, Layout.getGBC(1, 0, 1, 1, 1.0, 1.0,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));              
+            
+            add(panelActions, Layout.getGBC(0, 1, 2, 1, 1.0, 1.0,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                    new Insets(10, 5, 5, 0), 0, 0));  
         }
         
         protected void allowActions(boolean b) {
