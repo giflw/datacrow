@@ -27,11 +27,15 @@ package net.datacrow.util.launcher;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.StringTokenizer;
 
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.definitions.ProgramDefinition;
 import net.datacrow.settings.definitions.ProgramDefinitions;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.Utilities;
@@ -73,13 +77,13 @@ public class FileLauncher extends Launcher {
         }
             
         ProgramDefinitions definitions = (ProgramDefinitions) DcSettings.getDefinitions(DcRepository.Settings.stProgramDefinitions);
-        String program = null;
+        ProgramDefinition pd = null;
         String extension = Utilities.getExtension(file);
         if (definitions != null && !Utilities.isEmpty(extension)) 
-            program = definitions.getProgramForExtension(extension);
+            pd = definitions.getDefinition(extension);
 
         Desktop desktop = getDesktop();
-        if (program == null || program.trim().length() == 0) {
+        if (pd == null) {
             boolean launched = true;
             if (desktop != null) {
                 try {
@@ -100,7 +104,18 @@ public class FileLauncher extends Launcher {
             }
         } else { // a program has been defined to open the specified file
             try {
-                runCmd(new String[] {program, filename});
+                if (pd.hasParameters()) {
+                    StringTokenizer st = new StringTokenizer(pd.getParameters(), " ");
+                    Collection<String> c = new ArrayList<String>();
+                    c.add(pd.getProgram());
+                    c.add(filename);
+                    while (st.hasMoreTokens()) {
+                        c.add(st.nextToken());
+                    }
+                    runCmd(c.toArray(new String[0]));
+                } else {
+                    runCmd(new String[] {pd.getProgram(), filename});
+                }
             } catch (Exception ignore) {
                 DcSwingUtilities.displayWarningMessage(DcResources.getText("msgErrorWhileExecuting", filename));
             } 

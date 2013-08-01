@@ -140,7 +140,6 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     	pictures.add(picture);    
 
                     	picField = ComponentFactory.getPictureField(true, false);
-//                    	ComponentFactory.setBorder(this);
                         
                         panel = new JPanel();
                         panel.setLayout(Layout.getGBL());

@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.12    [Released on August xx 2013]  [target: production]   [R. van der Waals]
+Data Crow version 3.12                                             Released on 2013-08-01
 -----------------------------------------------------------------------------------------
 Poor version 3.11. It only took a couple of days and then it got replaced by version 3.12.
 This really is for the most part a cosmetic edition. I have changed the layout a bit 
-further. This is also a preparation for the web GUI since I want to keep them as close
-as possible.
+further. This is also a preparation for the web GUI since I want to keep the layout for
+both the same, for as far as possible.
 
 [Changed]
 - New items tab has been removed. 
@@ -22,6 +22,7 @@ as possible.
   possible).
 - ISBNdb.com has been changed and the information is of limited use now to Data Crow.
   This service has now been disabled.
+- The file associations setting now also allows parameters to be defined.
 
 [Fixed]
 - On startup Data Crow tries to modify files in the installation folder, causing problems
@@ -29,10 +30,11 @@ as possible.
 - Apply settings such as the language change was only properly applied after a restart.
 - Sort order of persons has been fixed.
 - Screen parts resized ever so slightly.
+- Fix for launching files from the Quick View Panel.
 
 
 -----------------------------------------------------------------------------------------
-Data Crow 3.11.1  [Released on July 30 2013]  [target: production]     [R. van der Waals]
+Data Crow version 3.11.1                                           Released on 2013-07-20
 -----------------------------------------------------------------------------------------
 
 [Fixed]

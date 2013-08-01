@@ -55,11 +55,15 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
     private DcTable programTable = ComponentFactory.getDCTable(true, false);
 	private DcShortTextField extensionField = ComponentFactory.getShortTextField(10);
 	private DcFileField programField = ComponentFactory.getFileField(false, false);
+	private DcShortTextField parametersFields = ComponentFactory.getShortTextField(255);
 	
     private JLabel labelExtention = ComponentFactory.getLabel(DcResources.getText("lblFileExtension"));
     private JLabel labelProgram = ComponentFactory.getLabel(DcResources.getText("lblProgram"));
+    private JLabel labelParameters = ComponentFactory.getLabel(DcResources.getText("lblParameters"));
+    
     private JButton buttonAdd = ComponentFactory.getButton(DcResources.getText("lblAdd"));
     private JButton buttonRemove = ComponentFactory.getButton(DcResources.getText("lblRemove"));
+    
 
     /**
      * Initializes this field
@@ -105,11 +109,13 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
     	ProgramDefinitions definitions = new ProgramDefinitions();
     	String extension;
     	String program;
+    	String parameters;
         for (int i = 0; i < programTable.getRowCount(); i++) {
             extension = (String) programTable.getValueAt(i, 0, true);
             program = (String) programTable.getValueAt(i, 1, true);
+            parameters = (String) programTable.getValueAt(i, 2, true);
             
-            ProgramDefinition definition = new ProgramDefinition(extension, program);
+            ProgramDefinition definition = new ProgramDefinition(extension, program, parameters);
     		definitions.add(definition);
     	}
 
@@ -125,7 +131,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
     		ProgramDefinitions definitions = (ProgramDefinitions) o;
     		Object[] row;
     		for (ProgramDefinition definition : definitions.getDefinitions()) {
-                row = new Object[] {definition.getExtension(), definition.getProgram()}; 
+                row = new Object[] {definition.getExtension(), definition.getProgram(), definition.getParameters()}; 
                 programTable.addRow(row);
     		}
     	}
@@ -142,26 +148,29 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
         if (row > -1) {
             String extension = (String) programTable.getValueAt(row, 0, true);
             String program = (String) programTable.getValueAt(row, 1, true);
+            String parameters = (String) programTable.getValueAt(row, 2, true);
+            
             extensionField.setText(extension);
             programField.setValue(program);
+            parametersFields.setText(parameters);
             
             programTable.cancelEdit();
             remove();
         }
     }
     
-    private void addDefinition(String extension, String program) {
+    private void addDefinition(String extension, String program, String parameters) {
         if (extension.trim().length() > 0 && program.trim().length() > 0) {
             ProgramDefinitions definitions = getDefinitions();
 
-            String current = definitions.getProgramForExtension(extension);
-            if (current != null) {
+            if (definitions.getDefinition(extension) != null) {
                 DcSwingUtilities.displayWarningMessage("msgProgramAlreadyDefined");
             } else {
-                Object[] row = {extension, program}; 
+                Object[] row = {extension, program, parameters}; 
                 programTable.addRow(row);
 
                 extensionField.setText("");
+                parametersFields.setText("");
                 programField.setValue(null);
             }
         } else {
@@ -192,7 +201,15 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
                  new Insets( 1, 0, 0, 5), 0, 0));
         panelInput.add(programField,    Layout.getGBC( 1, 1, 1, 1, 10.0, 10.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                 new Insets( 0, 0, 0, 0), 0, 0));        
+                 new Insets( 0, 0, 0, 0), 0, 0)); 
+        
+        
+        panelInput.add(labelParameters,  Layout.getGBC( 0, 2, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 1, 0, 0, 5), 0, 0));
+        panelInput.add(parametersFields, Layout.getGBC( 1, 2, 1, 1, 10.0, 10.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0)); 
 
         //**********************************************************
         //Action panel
@@ -218,7 +235,7 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
         //**********************************************************           
         JScrollPane scroller = new JScrollPane(programTable);
         programTable.addMouseListener(this);
-        programTable.setColumnCount(2);
+        programTable.setColumnCount(3);
 
         TableColumn columnExtension = programTable.getColumnModel().getColumn(0);
         columnExtension.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));       
@@ -228,11 +245,14 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
         columnProgram.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
         columnProgram.setHeaderValue(DcResources.getText("lblProgram"));
         
+        TableColumn columnParameters = programTable.getColumnModel().getColumn(2);
+        columnParameters.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));
+        columnParameters.setHeaderValue(DcResources.getText("lblParameters"));
+        
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroller.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);        
         
         programTable.applyHeaders();
-        
         
         //**********************************************************
         //Main panel
@@ -247,7 +267,6 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
         add(scroller,    	 Layout.getGBC( 0, 2, 2, 1, 20.0, 20.0
                 			,GridBagConstraints.SOUTHWEST, GridBagConstraints.BOTH,
                 			 new Insets( 0, 0, 0, 0), 0, 0));
-        
     }
     
     @Override
@@ -256,10 +275,9 @@ public class DcProgramDefinitionsField extends JComponent implements IComponent,
 	@Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("add"))
-            addDefinition(extensionField.getText(), programField.getFilename());
+            addDefinition(extensionField.getText(), programField.getFilename(), parametersFields.getText());
         else if (e.getActionCommand().equals("remove"))
             remove();
-            
 	}
     
     @Override

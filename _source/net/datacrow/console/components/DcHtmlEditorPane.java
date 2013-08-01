@@ -154,9 +154,9 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
             String query = url.getQuery();
             
             if (url.getProtocol().equals("file")) {
-                String file = url.getFile();
+                String file = url.toString();
+                file = file.startsWith("file://") ? file.substring(7) : file;
                 file = file.replaceAll("%20", " ");
-                //file = file.substring(1);
                 new FileLauncher(file).launch();
             } else if (query == null || !query.contains("module=")) {
                 try {

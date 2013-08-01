@@ -27,6 +27,7 @@ package net.datacrow.settings.definitions;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.StringTokenizer;
 
 public class ProgramDefinitions implements IDefinitions {
 
@@ -53,11 +54,11 @@ public class ProgramDefinitions implements IDefinitions {
         return definitions.size();
     }     
     
-	public String getProgramForExtension(String extension) {
+	public ProgramDefinition getDefinition(String extension) {
 	    for (ProgramDefinition definition : definitions) {
 			if (    definition.getExtension().equals(extension) || 
 			        definition.getExtension().endsWith(extension)) 
-				return definition.getProgram();
+				return definition;
 		}
 		return null;
 	}
@@ -74,10 +75,18 @@ public class ProgramDefinitions implements IDefinitions {
     
     @Override
     public void add(String s) {
-        int index = s.indexOf("/&/");
-        String extension = s.substring(0, index);
-        String program = s.substring(index + 3, s.length());
+        StringTokenizer st = new StringTokenizer(s, "/&/");
+        String[] row = {"", "", ""};
+        
+        if (st.hasMoreElements())
+            row[0] = (String) st.nextElement();
+        
+        if (st.hasMoreElements())
+            row[1] = (String) st.nextElement();
 
-        add(new ProgramDefinition(extension, program));
+        if (st.hasMoreElements())
+            row[2] = (String) st.nextElement();
+        
+        add(new ProgramDefinition(row[0], row[1], row[2]));
     }
 }

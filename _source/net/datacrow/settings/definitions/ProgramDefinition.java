@@ -25,14 +25,22 @@
 
 package net.datacrow.settings.definitions;
 
+import net.datacrow.util.Utilities;
+
 public class ProgramDefinition extends Definition {
 
 	private String extension = "";
 	private String program = "";
+	private String parameters = "";
 	
-	public ProgramDefinition(String extension, String program) {
+	public ProgramDefinition(String extension, String program, String parameters) {
 		this.extension = extension;
 		this.program = program;
+		this.parameters = parameters;
+	}
+	
+	public boolean hasParameters() {
+	    return !Utilities.isEmpty(parameters);
 	}
 	
 	public String getExtension() {
@@ -43,13 +51,17 @@ public class ProgramDefinition extends Definition {
 		return program;
 	}
 
+    public String getParameters() {
+        return parameters;
+    }
+
     @Override
     public String toSettingValue() {
-        return extension + "/&/" + program;
+        return extension + "/&/" + program + "/&/" + parameters;
     }    
     
     @Override
 	public String toString() {
-		return "[" + extension + "] " + program;
+		return "[" + extension + "] " + program + " " + parameters;
 	}
 }
