@@ -87,6 +87,15 @@ public class ContainerTreePanel extends TreePanel {
     }
     
     @Override
+    public void applySettings() {
+        super.applySettings();
+        if (top != null) {
+            NodeElement ne = new NodeElement(getModule(), DcModules.get(DcModules._CONTAINER).getLabel(), null);
+            top.setUserObject(ne);
+        }
+    }
+
+    @Override
 	public void sort() {}
     
     @Override

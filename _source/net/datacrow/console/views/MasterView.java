@@ -187,6 +187,9 @@ public class MasterView {
     public void applySettings() {
         for (View view : getViews())
             view.applySettings();
+        
+        if (groupingPane != null)
+            groupingPane.applySettings();
     }
     
     public void sort() {

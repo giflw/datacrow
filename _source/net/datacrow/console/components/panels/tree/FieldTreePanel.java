@@ -485,18 +485,20 @@ public class FieldTreePanel extends TreePanel {
     }
     
     @Override
+    public void applySettings() {
+        super.applySettings();
+        
+        if (top != null) {
+            DcModule mod = DcModules.get(getModule());
+            String label = mod.getObjectNamePlural();
+            top.setUserObject(new NodeElement(null, label, null));
+        }
+    }
+
+    @Override
     protected void createTopNode() {
         DcModule mod = DcModules.get(getModule());
         String label = mod.getObjectNamePlural();
-        
-        if (isEnabled() && fields != null && fields.length > 0) {
-            label += " by ";
-            for (int i = 0; i < fields.length; i++) {
-                if (mod.getField(fields[i]) == null) continue;
-                
-                label += (i > 0 ? " & " : "") + mod.getField(fields[i]).getLabel();
-            }
-        }
         
         top = new DcDefaultMutableTreeNode(label);
         top.setUserObject(new NodeElement(null, label, null));

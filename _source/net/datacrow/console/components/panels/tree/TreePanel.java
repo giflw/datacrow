@@ -74,19 +74,31 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     protected boolean activated = false;
     private boolean saveChanges = true;
     
+    private JMenuBar menu;
+    
     public TreePanel(GroupingPane gp) {
         this.gp = gp;
         
         setLayout(Layout.getGBL());
         
-        JMenuBar menu = getMenu();
+        installMenu();
+        build();
+    }
+    
+    private void installMenu() {
+        if (menu != null)
+            remove(menu);
+        
+        menu = getMenu();
         if (menu != null) {
             add(menu, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(5, 5, 0, 5), 0, 0));
         }
-        
-        build();
+    }
+    
+    public void applySettings() {
+        installMenu();
     }
     
     public boolean isActivated() {

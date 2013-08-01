@@ -53,6 +53,8 @@ public class GroupingPane extends JPanel implements ChangeListener {
     private int module;
     private MasterView view;
     
+    private JTabbedPane tp;
+    
     public GroupingPane(int module, MasterView view) {
         this.module = module;
         this.view = view;
@@ -65,13 +67,21 @@ public class GroupingPane extends JPanel implements ChangeListener {
         if (DcModules.get(module).isFileBacked())
             panels.add(new FileTreePanel(this));
         
-        build();
+        // There is no need to build - applySettings will do this for us.
+        // build();
     }
     
     @Override
 	public boolean isEnabled() {
 		return super.isEnabled() && DcSettings.getBoolean(DcRepository.Settings.stShowGroupingPanel);
 	}
+    
+    public void applySettings() {
+        for (TreePanel tp : panels)
+            tp.applySettings();
+        
+        build();
+    }
     
     public void update(DcObject dco) {
     	for (TreePanel tp : panels)
@@ -171,8 +181,13 @@ public class GroupingPane extends JPanel implements ChangeListener {
     }
     
     private void build() {
-        JTabbedPane tp = ComponentFactory.getTabbedPane();
         
+        if (tp != null) {
+            tp.removeChangeListener(this);
+            remove(tp);
+        }
+        
+        tp = ComponentFactory.getTabbedPane();
         tp.addChangeListener(this);
         
         for (TreePanel panel : panels)

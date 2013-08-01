@@ -18,10 +18,13 @@ as possible.
 - The module bar has been changed. Labels have been removed. Additionally the select 
   module section has been improved. Selecting a sub module will highlight it on the 
   main module panel.
+- Improved startup time by building forms on demand instead of on startup (where
+  possible).
 
 [Fixed]
 - On startup Data Crow tries to modify files in the installation folder, causing problems
   for Windows platforms.
+- Apply settings such as the language change was only properly applied after a restart.
 
 
 -----------------------------------------------------------------------------------------
