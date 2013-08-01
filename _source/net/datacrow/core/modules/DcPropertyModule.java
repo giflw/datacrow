@@ -122,6 +122,11 @@ public class DcPropertyModule extends DcModule {
     public boolean hasDependingModules() {
         return true;
     }
+    
+    @Override
+    public int getDisplayFieldIdx() {
+        return DcProperty._A_NAME;
+    }
 
     /**
      * Retrieves the index of the field on which is sorted by default.  
@@ -131,7 +136,7 @@ public class DcPropertyModule extends DcModule {
     @Override
     public int getDefaultSortFieldIdx() {
         return DcProperty._A_NAME;
-    } 
+    }
     
     @Override
     public void resetForms() {

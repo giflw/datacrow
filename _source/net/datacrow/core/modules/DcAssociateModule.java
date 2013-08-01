@@ -33,6 +33,11 @@ public class DcAssociateModule extends DcModule {
               tableName, tableShortName);
     }
     
+    @Override
+    public int getDisplayFieldIdx() {
+        return DcAssociate._A_NAME;
+    }
+    
     /**
      * Creates this module based on an XML module definition.
      * @param module
