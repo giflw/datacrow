@@ -46,8 +46,6 @@ public class DcViewDivider extends JSplitPane implements ComponentListener {
                 
         Border border = BorderFactory.createEmptyBorder(0, 0, 0, 0);
         setBorder(border);
-        
-        applyDividerLocation();
     }
     
     public void applyDividerLocation() {
@@ -58,15 +56,6 @@ public class DcViewDivider extends JSplitPane implements ComponentListener {
         }
     }
     
-    public void listenForResize(boolean b) {
-        if (!b) {
-            removeComponentListener(this);
-        } else {
-            removeComponentListener(this);
-            addComponentListener(this);
-        }
-    }
-
     @Override
     public void componentHidden(ComponentEvent ce) {}
     @Override

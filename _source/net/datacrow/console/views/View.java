@@ -232,21 +232,11 @@ public class View extends DcPanel implements ListSelectionListener {
     }
     
     public void applyViewDividerLocation() {
-        if (vdGroupingPane != null) {
-            vdGroupingPane.listenForResize(false);
-            vdGroupingPane.applyDividerLocation();
-        }
-        
-        if (vdQuickPane != null) {
-            vdQuickPane.listenForResize(false);
-            vdQuickPane.applyDividerLocation();
-        }
+        if (vdQuickPane != null) vdQuickPane.applyDividerLocation();
+        if (vdGroupingPane != null) vdGroupingPane.applyDividerLocation();
         
         revalidate();
         repaint();
-        
-        if (vdGroupingPane != null) vdGroupingPane.listenForResize(true);
-        if (vdQuickPane != null) vdQuickPane.listenForResize(true);
     }
     
     public DataTask getCurrentTask() {
@@ -404,22 +394,17 @@ public class View extends DcPanel implements ListSelectionListener {
     
     public void activate() {
         if (groupingPane != null) {
-            vdGroupingPane.listenForResize(false);
             vdGroupingPane.remove(groupingPane);
             vdGroupingPane.add(groupingPane);
-            vdGroupingPane.listenForResize(true);
-        }
-        
-        if (groupingPane != null && !groupingPane.isHoldingItems()) {
-            groupingPane.groupBy();
+            
+            if (!groupingPane.isHoldingItems())
+                groupingPane.groupBy();
         }
         
         vc.activate();
         
         if (childView != null) 
         	childView.activate();
-        
-        applyViewDividerLocation();
     }
     
     public void groupBy() {
