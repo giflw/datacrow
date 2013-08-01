@@ -135,6 +135,7 @@ public class ModuleListPanel extends DcPanel {
                         rm.getType() != DcModule._TYPE_EXTERNALREFERENCE_MODULE &&
                         rm.getIndex() != DcModules._CONTACTPERSON &&
                         rm.getIndex() != DcModules._CONTAINER) {
+                    
                     referencedModules.add(rm);
                 }
             }
@@ -161,8 +162,14 @@ public class ModuleListPanel extends DcPanel {
             setLayout(Layout.getGBL());
             
             mmb.addModule(module, this);
+            ReferenceModuleButton rmb;
             for (DcModule rm : referencedModules) {
-                mmb.addModule(rm, this);
+                rmb = mmb.addModule(rm, this);
+                
+                DcModule cm = DcModules.getCurrent();
+                if (rm.getIndex() == cm.getIndex()) {
+                    switchModule(rmb);
+                }
             }
             
             add(mmb, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, 
@@ -172,20 +179,23 @@ public class ModuleListPanel extends DcPanel {
         public DcModule getModule() {
             return module;
         }
+        
+        private void switchModule(ReferenceModuleButton mb) {
+            module = mb.getModule();
+            mmb.setModule(mb.module);
+            
+            this.setToolTipText(module.getLabel() + (Utilities.isEmpty(module.getDescription()) ? "" : "\n" + module.getDescription()));
+            
+            repaint();
+            revalidate();
+        }
 
         @Override
         public void actionPerformed(ActionEvent ae) {
             if (ae.getActionCommand().startsWith("module_change")) {
                 ReferenceModuleButton mb = (ReferenceModuleButton) ae.getSource();
-                
-                module = mb.getModule();
-                mmb.setModule(mb.module);
-                
+                switchModule(mb);
                 setSelectedModule(mb.getModule().getIndex());
-                this.setToolTipText(module.getLabel() + (Utilities.isEmpty(module.getDescription()) ? "" : "\n" + module.getDescription()));
-                                
-                repaint();
-                revalidate();
             }
         }
     }
@@ -274,7 +284,7 @@ public class ModuleListPanel extends DcPanel {
             this.module = module;
         }
         
-        public void addModule(DcModule module, ModuleSelector ms) {
+        public ReferenceModuleButton addModule(DcModule module, ModuleSelector ms) {
             ReferenceModuleButton rmb = new ReferenceModuleButton(module);
             rmb.setActionCommand("module_change");
             rmb.addActionListener(ms);
@@ -282,6 +292,7 @@ public class ModuleListPanel extends DcPanel {
             rmb.setMinimumSize(new Dimension(180, 39));
             rmb.setPreferredSize(new Dimension(180, 39));
             menu.add(rmb);
+            return rmb;
         }
         
         public DcModule getModule() {
