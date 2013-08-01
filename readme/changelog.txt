@@ -1,6 +1,23 @@
 -----------------------------------------------------------------------------------------
-Data Crow 3.11.2  [Released on August xx 2013]  [target: production]   [R. van der Waals]
+Data Crow 3.12    [Released on August xx 2013]  [target: production]   [R. van der Waals]
 -----------------------------------------------------------------------------------------
+Poor version 3.11. It only took a couple of days and then it got replaced by version 3.12.
+This really is for the most part a cosmetic edition. I have changed the layout a bit 
+further. This is also a preparation for the web GUI since I want to keep them as close
+as possible.
+
+[Changed]
+- New items tab has been removed. 
+- Online Search will now direct save the item instead of adding the item to the new 
+  "new" tab.
+- Chart tab has been removed. You can open the new charts dialog from the tools menu
+  as well as from the tool bar.
+- Create Multiple tool has been added (as a replacement for the new items tab).
+- Item importer will open the new items dialog to lists the imported items before saving
+  them.
+- The module bar has been changed. Labels have been removed. Additionally the select 
+  module section has been improved. Selecting a sub module will highlight it on the 
+  main module panel.
 
 [Fixed]
 - On startup Data Crow tries to modify files in the installation folder, causing problems
