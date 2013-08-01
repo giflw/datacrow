@@ -8,6 +8,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 
 public class DcAssociateModule extends DcModule {
+    
     /**
      * Creates a new instance.
      * @param index The module index.

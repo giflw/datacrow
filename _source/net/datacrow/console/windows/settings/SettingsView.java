@@ -169,7 +169,7 @@ public class SettingsView extends DcDialog implements ActionListener {
             panel.saveSettings();
 
         DataCrow.mainFrame.applySettings();
-        toFront();
+        close();
     }
 
     @SuppressWarnings("unchecked")

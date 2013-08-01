@@ -99,7 +99,7 @@ public class DcPropertyModule extends DcModule {
      * Creates (if needed) the simple item view.
      */
     public DcMinimalisticItemView getForm() {
-        initializeUI();
+        form = form == null ? new DcMinimalisticItemView(getIndex(), false) : form;
         return form;
     }
     
@@ -131,16 +131,19 @@ public class DcPropertyModule extends DcModule {
     @Override
     public int getDefaultSortFieldIdx() {
         return DcProperty._A_NAME;
-    }    
+    } 
     
+    @Override
+    public void resetForms() {
+        super.resetForms();
+        this.form = null;
+    }
+
     /**
      * Initializes the simple item view.
      */
     @Override
-    public void initializeUI() {
-        if (form == null)
-            form = new DcMinimalisticItemView(getIndex(), false);
-    }
+    public void initializeUI() {}
     
     @Override
     public int[] getSupportedViews() {

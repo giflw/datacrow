@@ -49,7 +49,7 @@ public class TemplateForm extends DcMinimalisticItemView {
     @Override
     public void close() {
         getModule().setSetting(DcRepository.ModuleSettings.stSimpleItemViewSize, getSize());
-        DataCrow.mainFrame.updateMenuBar();
+        DataCrow.mainFrame.rebuildMenuBar();
         super.close();      
     }
 

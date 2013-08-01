@@ -44,7 +44,7 @@ public abstract class UserMode {
         if (current != mode) {
             current = mode;
             
-            DataCrow.mainFrame.updateMenuBar();
+            DataCrow.mainFrame.rebuildMenuBar();
         }
         
         DcSettings.set(DcRepository.Settings.stXpMode, mode);

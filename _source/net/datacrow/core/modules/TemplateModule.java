@@ -112,10 +112,16 @@ public class TemplateModule extends DcModule {
      * @return
      */
     public DcMinimalisticItemView getForm() {
-        initializeUI();
+        form = form == null ? new TemplateForm(getIndex(), false) : form;
         return form;    
-    }  
+    } 
     
+    @Override
+    public void resetForms() {
+        super.resetForms();
+        form = null;
+    }
+
     /**
      * Creates a new template item.
      * @see DcTemplate
@@ -164,15 +170,8 @@ public class TemplateModule extends DcModule {
         return true;
     }    
 
-    /**
-     * Creates (of need be) the template form.
-     * @see TemplateForm
-     */
     @Override
-    protected void initializeUI() {
-        if (form == null)
-            form = new TemplateForm(getIndex(), false);
-    }
+    protected void initializeUI() {}
     
     @Override
     public int[] getSupportedViews() {

@@ -948,6 +948,11 @@ public class DcModule implements Comparable<DcModule> {
         
         return -1;
     }
+    
+    public void resetForms() {
+        newItemsDialog = null;
+        filterForm = null;
+    }
 
     /**
      * Creates the filter form (if not created already).
