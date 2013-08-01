@@ -250,7 +250,10 @@ public class DcList extends JList implements ComponentListener {
                 increment = (r == null) ? 0 : r.height - (visibleRect.y - r.y);
             } else {
                 Rectangle r = getCellBounds(firstIndex, firstIndex);
-                if ((r.y == visibleRect.y) && (row == 0))  {
+                
+                if (r == null) {
+                    increment = 0;
+                } else if ((r.y == visibleRect.y) && (row == 0))  {
                     increment = 0;
                 } else if (r.y == visibleRect.y) {
                     Rectangle prevR = getCellBounds(firstIndex - 1, firstIndex - 1);

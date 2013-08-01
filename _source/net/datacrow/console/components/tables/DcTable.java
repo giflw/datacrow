@@ -189,6 +189,9 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
     @Override
     public void setView(View view) {
         this.view = view;
+        
+        if (view != null && view.getType() == View._TYPE_INSERT && getTableHeader() != null)
+            getTableHeader().removeMouseListener(this);
     }
 
     @Override

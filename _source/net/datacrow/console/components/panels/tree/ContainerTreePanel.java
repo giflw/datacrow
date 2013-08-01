@@ -89,9 +89,9 @@ public class ContainerTreePanel extends TreePanel {
     @Override
     public void applySettings() {
         super.applySettings();
-        if (top != null) {
-            NodeElement ne = new NodeElement(getModule(), DcModules.get(DcModules._CONTAINER).getLabel(), null);
-            top.setUserObject(ne);
+        if (top != null && top.getUserObject() != null) {
+            NodeElement ne = (NodeElement) top.getUserObject();
+            ne.setDisplayValue(DcModules.get(DcModules._CONTAINER).getLabel());
         }
     }
 

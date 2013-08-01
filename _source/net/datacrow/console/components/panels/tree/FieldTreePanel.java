@@ -488,10 +488,11 @@ public class FieldTreePanel extends TreePanel {
     public void applySettings() {
         super.applySettings();
         
-        if (top != null) {
+        if (top != null && top.getUserObject() != null) {
             DcModule mod = DcModules.get(getModule());
             String label = mod.getObjectNamePlural();
-            top.setUserObject(new NodeElement(null, label, null));
+            NodeElement ne = (NodeElement) top.getUserObject();
+            ne.setDisplayValue(label);
         }
     }
 

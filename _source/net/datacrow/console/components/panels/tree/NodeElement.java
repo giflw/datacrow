@@ -22,6 +22,18 @@ public class NodeElement {
         this.icon = icon;
     }
     
+    public void setKey(Object key) {
+        this.key = key;
+    }
+
+    public void setDisplayValue(String displayValue) {
+        this.displayValue = displayValue;
+    }
+    
+    public void setIcon(DcImageIcon icon) {
+        this.icon = icon;
+    }
+    
     public void addItem(String item, Integer moduleIdx) {
     	if (!items.containsKey(item))
     		items.put(item, moduleIdx);
