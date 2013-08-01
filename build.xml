@@ -6,11 +6,13 @@
     <path id="datacrow.class.path">
         <fileset dir="lib/">
             <include name="*.jar"/>
-            <include name="chart/*.jar"/>
+        	<include name="bol*.jar"/>
+        	<include name="chart/*.jar"/>
             <include name="html/*.jar"/>
             <include name="jetty/*.jar"/>
             <include name="laf/*.jar"/>
             <include name="pdf/*.jar"/>
+        	<include name="tmdb/*.jar"/>
             <include name="xml/*.jar"/>
             <include name="zip/*.jar"/>
             <include name="xml-rpc/*.jar"/>
@@ -24,7 +26,7 @@
     <target name="build-datacrow">
     
         <mkdir dir="_classes/" />
-        <javac srcdir="_source/" destdir="_classes/" debug="true">
+        <javac srcdir="_source/" destdir="_classes/" debug="true" encoding="iso-8859-1">
             <classpath refid="datacrow.class.path"/>
         </javac>
         
