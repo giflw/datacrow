@@ -41,16 +41,6 @@ public class DcMinimalisticItemForm extends ItemForm {
         this.parent = parent;
     }
     
-//    @Override
-//    protected void applySettings() {
-//        setSize(DcModules.get(moduleIdx).getSettings().getDimension(DcRepository.ModuleSettings.stSimpleItemFormSize));
-//    }
-//    
-//    @Override
-//    protected void saveSettings() {
-//        DcModules.get(moduleIdx).setSetting(DcRepository.ModuleSettings.stSimpleItemFormSize, getSize());        
-//    }
-    
     @Override
     protected void saveValues() {
         apply();

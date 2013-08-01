@@ -93,7 +93,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     private JPanel panelActions = new JPanel();
     private JPanel statusPanel;
     
-    private JButton buttonCreateMultiple = ComponentFactory.getButton(DcResources.getText("lblAddMultiple"));
+    private JButton buttonCreateMultiple = ComponentFactory.getButton(DcResources.getText("lblCreateMultiple"));
     private JButton buttonNew = ComponentFactory.getButton(DcResources.getText("lblNew"));
     private JButton buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
     
@@ -289,7 +289,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         
         buttonCreateMultiple.addActionListener(this);
         buttonCreateMultiple.setActionCommand("createMultiple");
-        buttonCreateMultiple.setToolTipText("tpCreateMultiple");
+        buttonCreateMultiple.setToolTipText(DcResources.getText("tpCreateMultiple"));
         
         buttonNew.addActionListener(this);
         buttonNew.setActionCommand("createNew");

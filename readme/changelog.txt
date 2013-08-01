@@ -20,12 +20,15 @@ as possible.
   main module panel.
 - Improved startup time by building forms on demand instead of on startup (where
   possible).
+- ISBNdb.com has been changed and the information is of limited use now to Data Crow.
+  This service has now been disabled.
 
 [Fixed]
 - On startup Data Crow tries to modify files in the installation folder, causing problems
   for Windows platforms.
 - Apply settings such as the language change was only properly applied after a restart.
 - Sort order of persons has been fixed.
+- Screen parts resized ever so slightly.
 
 
 -----------------------------------------------------------------------------------------
