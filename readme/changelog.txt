@@ -6,6 +6,16 @@ This really is for the most part a cosmetic edition. I have changed the layout a
 further. This is also a preparation for the web GUI since I want to keep the layout for
 both the same, for as far as possible.
 
+[New]
+- The property items overview (found in the Administration menu) gained a new tool: 
+  delete unassigned items. This will remove all properties not assigned to any other item
+  For example a category not used in software items will be removed.
+- Another new tool for the properties module is the merge functionality.
+  Having many categories (for example) which actually have the same meaning? Merge them
+  all into one property. All references to the properties will be corrected 
+  (without duplication, of course).
+- The Resource Editor now has find and replace functionality.
+
 [Changed]
 - The screen is now much cleaner and it makes the application look simpler.
 - The file associations setting now also allows parameters to be defined.
@@ -27,15 +37,7 @@ both the same, for as far as possible.
   This service has been disabled.
 - Help has been updated to reflect all of the above (press F1 once in a while just for
   the sake of using it).
-- The Resource Editor now has find and replace functionality.
 - The Find and Replace utility now also allows you to change one reference with another.
-- The property items overview (found in the Administration menu) gained a new tool: 
-  delete unassigned items. This will remove all properties not assigned to any other item
-  For example a category not used in software items will be removed.
-- Another new tool for the properties module is the merge functionality.
-  Having many categories (for example) which actually have the same meaning? Merge them
-  all into one property. All references to the properties will be corrected 
-  (without duplication, of course).
 - Update all now refreshed the overview after updating the items (instead of updating 
   one by one). 
 
