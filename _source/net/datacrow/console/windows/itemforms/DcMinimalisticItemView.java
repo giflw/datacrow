@@ -84,7 +84,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
 
     private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     
-    protected DataTask task;
+    protected DeletingThread task;
     
     private final boolean readonly;
     
@@ -342,15 +342,29 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         panel.updateProgressBar(value);
     }
     
+    public void deleteUnused() {
+        if (isTaskRunning() || !DcSwingUtilities.displayQuestion(
+                DcResources.getText("msgDeleteQuestionUnusedItems", DcModules.get(module).getObjectNamePlural()))) 
+            return;
+        
+        Collection<DcObject> objects = list.getItems();
+        if (objects.size() > 0) {
+            task = new DeletingThread(objects);
+            task.setIgnoreWarnings(true);
+            task.start();
+        }
+    }
+    
     public void delete() {
-        if (!isTaskRunning()) {
-            Collection<DcObject> objects = list.getSelectedItems();
-            if (objects.size() > 0) {
-                task = new DeletingThread(objects);
-                task.start();
-            } else {
-                DcSwingUtilities.displayWarningMessage("msgSelectItemToDel");
-            }
+        if (isTaskRunning() || !DcSwingUtilities.displayQuestion("msgDeleteQuestion")) 
+            return;
+        
+        Collection<DcObject> objects = list.getSelectedItems();
+        if (objects.size() > 0) {
+            task = new DeletingThread(objects);
+            task.start();
+        } else {
+            DcSwingUtilities.displayWarningMessage("msgSelectItemToDel");
         }
     }  
     
@@ -383,8 +397,14 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     
     protected class DeletingThread extends DataTask {
 
+        boolean ignoreWarning = false;
+        
         public DeletingThread(Collection<DcObject> objects) {
             super(null, objects);
+        }
+        
+        public void setIgnoreWarnings(boolean b) {
+            ignoreWarning = b;
         }
         
         @Override
@@ -394,40 +414,36 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 initProgressBar(items.size());   
                 list.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 
-                if (!DcSwingUtilities.displayQuestion("msgDeleteQuestion")) {
-                    return;
-                } else {
-                    startTask();
-                    denyActions();
-                    int counter = 1;
-                    Requests requests;
-                    for (DcObject dco : items) {
-                        updateProgressBar(counter);
-                        
-                        dco.markAsUnchanged();
-                        
-                        if (counter == items.size()) {
-                            requests = getAfterDeleteRequests();
-                            for (int j = 0; j < requests.get().length; j++) {
-                                dco.addRequest(requests.get()[j]);
-                            }
-                        } 
-
-                        try {
-                            dco.delete(true);
-                        } catch (ValidationException e) {
-                            DcSwingUtilities.displayWarningMessage(e.getMessage());
+                startTask();
+                denyActions();
+                int counter = 1;
+                Requests requests;
+                for (DcObject dco : items) {
+                    updateProgressBar(counter);
+                    
+                    dco.markAsUnchanged();
+                    
+                    if (counter == items.size()) {
+                        requests = getAfterDeleteRequests();
+                        for (int j = 0; j < requests.get().length; j++) {
+                            dco.addRequest(requests.get()[j]);
                         }
-                        
-                        try {
-                            sleep(300);
-                        } catch (Exception ignore) {}
-                        
-                        counter++;
+                    } 
+
+                    try {
+                        dco.delete(true);
+                    } catch (ValidationException e) {
+                        if (!ignoreWarning) DcSwingUtilities.displayWarningMessage(e.getMessage());
                     }
                     
-                    list.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    try {
+                        sleep(300);
+                    } catch (Exception ignore) {}
+                    
+                    counter++;
                 }
+                
+                list.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             } finally {
                 list.setSelectedIndex(0);
                 endTask();
@@ -491,6 +507,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             open(false);        
         else if (e.getActionCommand().equals("open_edit"))
             open(true);
+        else if (e.getActionCommand().equals("delete_unused"))
+            deleteUnused();
     }
     
     private class DcMinimalisticItemViewMenu extends DcMenuBar {
@@ -509,26 +527,33 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             DcMenuItem miEdit = new DcMenuItem(DcResources.getText("lblEdit"));
             DcMenuItem miAdd = new DcMenuItem(DcResources.getText("lblNewItem", ""));
             DcMenuItem miDelete = new DcMenuItem(DcResources.getText("lblDelete"));
+            DcMenuItem miDeleteUnused = new DcMenuItem(DcResources.getText("lblDeleteUnassigned", module.getObjectNamePlural()));
             
             miOpen.addActionListener(parent);
             miEdit.addActionListener(parent);
             miAdd.addActionListener(parent);
             miDelete.addActionListener(parent);
+            miDeleteUnused.addActionListener(parent);
             
             miOpen.setActionCommand("open_readonly");
             miEdit.setActionCommand("open_edit");
             miAdd.setActionCommand("createNew");
             miDelete.setActionCommand("delete");
+            miDeleteUnused.setActionCommand("delete_unused");
             
             miOpen.setIcon(IconLibrary._icoOpen);
             miEdit.setIcon(IconLibrary._icoOpen);
             miAdd.setIcon(IconLibrary._icoAdd);
             miDelete.setIcon(IconLibrary._icoDelete);
+            miDeleteUnused.setIcon(IconLibrary._icoDelete);
             
             menuEdit.add(miOpen);
             menuEdit.add(miEdit);
             menuEdit.add(miAdd);
             menuEdit.add(miDelete);
+            menuEdit.addSeparator();
+            menuEdit.add(miDeleteUnused);
+            
             add(menuEdit);
             
             DcMenu menuSettings = ComponentFactory.getMenu(DcResources.getText("lblSettings"));
