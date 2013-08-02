@@ -31,49 +31,29 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JViewport;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableColumn;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcList;
-import net.datacrow.console.components.tables.DcTable;
-import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.modules.DcModule;
-import net.datacrow.core.modules.DcModules;
-import net.datacrow.core.objects.DcField;
 import net.datacrow.core.resources.DcLanguageResource;
 import net.datacrow.core.resources.DcResources;
-import net.datacrow.settings.DcSettings;
 
 public class LanguageResourcePanel extends JPanel implements ListSelectionListener {
 
     private int selected = 0;
 
     private DcList topicList = new DcList();
-
-    private JPanel panelInput = new JPanel();
-
-    private List<JScrollPane> scrollers = new ArrayList<JScrollPane>();
-    private DcTable tableTips = ComponentFactory.getDCTable(false, false);
-    private DcTable tableSystemLabels = ComponentFactory.getDCTable(false, false);
-    private DcTable tableLabels = ComponentFactory.getDCTable(false, false);
-    private DcTable tableMessages = ComponentFactory.getDCTable(false, false);
-    private DcTable tableTooltips = ComponentFactory.getDCTable(false, false);
-
+    private Collection<ResourcePanel> panels = new ArrayList<ResourcePanel>();
+    
     private String language;
     
     public LanguageResourcePanel(String language) {
@@ -85,114 +65,27 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
     
     private void load() {
         DcLanguageResource resources = DcResources.getLanguageResource(language);
-        
-        Set<String> keys = resources.getResourcesMap().keySet();
-        ArrayList<String> list = new ArrayList<String>(keys);
-        Collections.sort(list);
-        
-        String value;
-        for (String key : list) {
-            value = resources.get(key);
-
-            if (key.startsWith("lbl")) tableLabels.addRow(new Object[] {key, value});
-            if (key.startsWith("msg")) tableMessages.addRow(new Object[] {key, value});
-            if (key.startsWith("tp")) tableTooltips.addRow(new Object[] {key, value});
-            if (key.startsWith("sys")) tableSystemLabels.addRow(new Object[] {key, value});
-            if (key.startsWith("tip")) tableTips.addRow(new Object[] {key, value});            
-        }
-        
-        String key;
-        for (DcModule module : DcModules.getAllModules()) {
-            
-            if (    module.isTopModule() || module.isChildModule() || 
-                    module.getType() == DcModule._TYPE_PROPERTY_MODULE || 
-                    module.isAbstract()) {
-                
-                key = module.getModuleResourceKey();
-                value = module.getLabel();
-                if ((value != null && value.length() > 0) && 
-                    (resources.get(key) == null || resources.get(key).length() == 0)) {
-                    tableSystemLabels.addRow(new Object[] {key, value});
-                }
-                
-                key = module.getItemResourceKey();
-                value = module.getObjectName();
-                if ((value != null && value.length() > 0) && 
-                    (resources.get(key) == null || resources.get(key).length() == 0)) {
-                    tableSystemLabels.addRow(new Object[] {key, value});
-                }
-
-                key = module.getItemPluralResourceKey();
-                value = module.getObjectNamePlural();
-                if ((value != null && value.length() > 0) && 
-                    (resources.get(key) == null || resources.get(key).length() == 0)) {
-                    tableSystemLabels.addRow(new Object[] {key, value});
-                }
-                
-                for (DcField field : module.getFields()) {
-                    value = field.getLabel();
-                    key = field.getResourceKey();
-                    
-                    if ((value != null && value.length() > 0) && 
-                        (resources.get(key) == null || resources.get(key).length() == 0)) {
-
-                        tableSystemLabels.addRow(new Object[] {key, value});
-                    }
-                }
-            }
-        }
+        for (ResourcePanel panel : panels)
+            panel.load(resources);
     }
     
     public void save() {
         DcLanguageResource resources = DcResources.getLanguageResource(language);
         
-        String key;
-        String value;
-        
-        for (int i = 0; i < tableLabels.getRowCount(); i++) {
-            key = (String) tableLabels.getValueAt(i, 0, true);
-            value = (String) tableLabels.getValueAt(i, 1, true);
-            resources.put(key, value);
+        for (ResourcePanel panel : panels) {
+            panel.save(resources);
         }
-        
-        for (int i = 0; i < tableMessages.getRowCount(); i++) {
-            key = (String) tableMessages.getValueAt(i, 0, true);
-            value = (String) tableMessages.getValueAt(i, 1, true);
-            resources.put(key, value);
-        }
-        
-        for (int i = 0; i < tableTooltips.getRowCount(); i++) {
-            key = (String) tableTooltips.getValueAt(i, 0, true);
-            value = (String) tableTooltips.getValueAt(i, 1, true);
-            resources.put(key, value);
-        }  
-        
-        for (int i = 0; i < tableSystemLabels.getRowCount(); i++) {
-            key = (String) tableSystemLabels.getValueAt(i, 0, true);
-            value = (String) tableSystemLabels.getValueAt(i, 1, true);
-            resources.put(key, value);
-        }   
 
-        for (int i = 0; i < tableTips.getRowCount(); i++) {
-            key = (String) tableTips.getValueAt(i, 0, true);
-            value = (String) tableTips.getValueAt(i, 1, true);
-            resources.put(key, value);
-        } 
-        
         resources.save();
     }
     
     private void setActiveTopic() {
-        Dimension size = panelInput.getSize();
         selected = topicList.getSelectedIndex();
         int counter = 0;
-        for (JScrollPane scroller : scrollers) {
-            scroller.setVisible(counter == selected);
+        for (ResourcePanel panel : panels) {
+            panel.setVisible(counter == selected);
             counter++;
         }
-        
-        if (size.height != 0 && size.width != 0)
-            panelInput.setPreferredSize(size);
         
         revalidate();
         repaint();
@@ -238,141 +131,22 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
     
     public void clear() {
         topicList = null;
-        panelInput = null;
-        scrollers.clear();
-        scrollers = null;
-        
-        tableTips = null;
-        tableSystemLabels = null;
-        tableLabels = null;
-        tableMessages = null;
-        tableTooltips = null;        
+        panels.clear();   
     }
     
     private void build() {
         setLayout(Layout.getGBL());
         
-        //**********************************************************
-        //Labels
-        //**********************************************************           
-        JScrollPane scrollerLabels = new JScrollPane(tableLabels);
-        tableLabels.setColumnCount(2);
+        panels.add(new ResourcePanel("lbl"));
+        panels.add(new ResourcePanel("sys"));
+        panels.add(new ResourcePanel("tp"));
+        panels.add(new ResourcePanel("msg"));
+        panels.add(new ResourcePanel("tip"));
 
-        TableColumn columnKey = tableLabels.getColumnModel().getColumn(0);
-        columnKey.setMaxWidth(300);
-        columnKey.setPreferredWidth(150);
-        columnKey.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));       
-        columnKey.setHeaderValue(DcResources.getText("lblKey"));
-        
-        TableColumn columnValue = tableLabels.getColumnModel().getColumn(1);
-        columnValue.setCellEditor(new DefaultCellEditor(ComponentFactory.getShortTextField(1000)));
-        columnValue.setHeaderValue(DcResources.getText("lblValue"));
-        
-        scrollerLabels.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollerLabels.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);        
-        
-        tableLabels.applyHeaders();
-        ComponentFactory.setBorder(scrollerLabels);
-        
-        //**********************************************************
-        //Tips
-        //**********************************************************           
-        JScrollPane scrollerTips = new JScrollPane(tableTips);
-        tableTips.setColumnCount(2);
-
-        columnKey = tableTips.getColumnModel().getColumn(0);
-        columnKey.setMaxWidth(300);
-        columnKey.setPreferredWidth(150);
-        columnKey.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));       
-        columnKey.setHeaderValue(DcResources.getText("lblKey"));
-        
-        columnValue = tableTips.getColumnModel().getColumn(1);
-        columnValue.setCellEditor(new DefaultCellEditor(ComponentFactory.getShortTextField(1000)));
-        columnValue.setHeaderValue(DcResources.getText("lblValue"));
-        
-        scrollerTips.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollerTips.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);        
-        
-        tableTips.applyHeaders();       
-        ComponentFactory.setBorder(scrollerTips);
-        
-        //**********************************************************
-        //Messages
-        //**********************************************************           
-        JScrollPane scrollerMessages = new JScrollPane(tableMessages);
-        tableMessages.setColumnCount(2);
-
-        columnKey = tableMessages.getColumnModel().getColumn(0);
-        columnKey.setMaxWidth(300);
-        columnKey.setPreferredWidth(150);
-        columnKey.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));       
-        columnKey.setHeaderValue(DcResources.getText("lblKey"));
-        
-        columnValue = tableMessages.getColumnModel().getColumn(1);
-        columnValue.setCellEditor(new DefaultCellEditor(ComponentFactory.getShortTextField(1000)));
-        columnValue.setHeaderValue(DcResources.getText("lblValue"));
-        
-        scrollerMessages.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollerMessages.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);        
-        
-        tableMessages.applyHeaders();       
-        ComponentFactory.setBorder(scrollerMessages);
-                
-        //**********************************************************
-        //Tooltips
-        //**********************************************************           
-        JScrollPane scrollerTooltips = new JScrollPane(tableTooltips);
-        tableTooltips.setColumnCount(2);
-
-        columnKey = tableTooltips.getColumnModel().getColumn(0);
-        columnKey.setMaxWidth(300);
-        columnKey.setPreferredWidth(150);
-        columnKey.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));       
-        columnKey.setHeaderValue(DcResources.getText("lblKey"));
-        
-        columnValue = tableTooltips.getColumnModel().getColumn(1);
-        columnValue.setCellEditor(new DefaultCellEditor(ComponentFactory.getShortTextField(1000)));
-        columnValue.setHeaderValue(DcResources.getText("lblValue"));
-        
-        scrollerTooltips.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollerTooltips.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);        
-        
-        tableTooltips.applyHeaders();
-        ComponentFactory.setBorder(scrollerTooltips);
-        
-        //**********************************************************
-        //System Labels
-        //**********************************************************           
-        JScrollPane scrollerSystemLabels = new JScrollPane(tableSystemLabels);
-        tableSystemLabels.setColumnCount(2);
-
-        columnKey = tableSystemLabels.getColumnModel().getColumn(0);
-        columnKey.setMaxWidth(300);
-        columnKey.setPreferredWidth(150);
-        columnKey.setCellEditor(new DefaultCellEditor(ComponentFactory.getTextFieldDisabled()));       
-        columnKey.setHeaderValue(DcResources.getText("lblKey"));
-        
-        columnValue = tableSystemLabels.getColumnModel().getColumn(1);
-        columnValue.setCellEditor(new DefaultCellEditor(ComponentFactory.getShortTextField(1000)));
-        columnValue.setHeaderValue(DcResources.getText("lblValue"));
-        
-        scrollerSystemLabels.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollerSystemLabels.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);        
-        
-        tableSystemLabels.applyHeaders();
-        ComponentFactory.setBorder(scrollerSystemLabels);
-        
         //**********************************************************
         //Topic List Panel
         //**********************************************************
-        scrollers.add(scrollerLabels);
-        scrollers.add(scrollerSystemLabels);
-        scrollers.add(scrollerTooltips);
-        scrollers.add(scrollerMessages);
-        scrollers.add(scrollerTips);
-        
         JPanel panelTopics = new JPanel();
-        
         topicList.addListSelectionListener(this);
         panelTopics.setLayout(new BorderLayout());
 
@@ -393,23 +167,11 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         //**********************************************************
         //Panel Input
         //**********************************************************
-        panelInput.setLayout(Layout.getGBL());
-        
-        panelInput.add(scrollerLabels,       Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
-        panelInput.add(scrollerSystemLabels, Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));        
-        panelInput.add(scrollerMessages,     Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
-        panelInput.add(scrollerTooltips,     Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
-        panelInput.add(scrollerTips,         Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
+        for (ResourcePanel panel : panels) {
+            add(panel, Layout.getGBC( 1, 0, 1, 1, 100.0, 100.0
+                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                     new Insets( 0, 0, 0, 0), 0, 0));
+        }
         
         //**********************************************************
         //Main panel
@@ -417,13 +179,8 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         add(panelTopics,  Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.VERTICAL,
                  new Insets( 5, 5, 5, 5), 0, 0));
-        add(panelInput,   Layout.getGBC( 1, 0, 1, 1, 10.0, 10.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                 new Insets( 5, 5, 5, 5), 0, 0));
 
         setTopics();
-        
-        panelInput.setPreferredSize(DcSettings.getDimension(DcRepository.Settings.stResourcesEditorViewSize));
         topicList.setSelectedIndex(0);        
     }
     
