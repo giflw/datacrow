@@ -28,7 +28,7 @@ both the same, for as far as possible.
 - Help has been updated to reflect all of the above (press F1 once in a while just for
   the sake of using it).
 - The Resource Editor now has find and replace functionality.
-
+- The Find and Replace utility now also allows you to change one reference with another.
 
 [Fixed]
 - On startup Data Crow tried to modify files in the installation folder, causing problems

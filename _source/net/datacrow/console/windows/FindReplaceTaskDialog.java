@@ -29,6 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -48,7 +49,9 @@ import net.datacrow.console.components.renderers.DcTableHeaderRenderer;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
@@ -74,11 +77,21 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
     
     private int[] fields;
     private int field;
-    private String replacement;
-    private String value;
+    
+    private Object replacement;
+    private Object value;
+    
     private List<DcObject> items;
 
-    public FindReplaceTaskDialog(JFrame parent, View view, List<DcObject> items, int[] fields, int field, String value, String replacement) {
+    public FindReplaceTaskDialog(
+            JFrame parent, 
+            View view, 
+            List<DcObject> items, 
+            int[] fields, 
+            int field, 
+            Object value, 
+            Object replacement) {
+        
         super(parent);
         setTitle(DcResources.getText("lblFindReplace"));
         
@@ -139,11 +152,8 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
     	                item.setValue(DcObject._ID, tblItems.getValueAt(row, colID, true));
     	                item.setValue(field, tblItems.getValueAt(row, colValue, true));
     	                try {
-                            if (view.getType() == View._TYPE_SEARCH) {
-                            	item.saveUpdate(false, false);
-                            } else if (view.getType() == View._TYPE_INSERT) {
-                                view.updateItem(item.getID(), item);
-                            }
+    	                    item.setUpdateGUI(false);
+                        	item.saveUpdate(false, false);
                         } catch (Exception e) {
                             // warn the user of the event that occurred (for example an incorrect parent for a container)
                             DcSwingUtilities.displayErrorMessage(e.getMessage());
@@ -161,7 +171,13 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
 	                count++;
 	            }
             } finally {
-            	if (view != null) view.setListSelectionListenersEnabled(true);
+                module.getSearchView().refresh();
+                
+            	if (view != null) {
+            	    view.setListSelectionListenersEnabled(true);
+            	}
+            	
+            	close();
             }
         }
     }
@@ -203,11 +219,38 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
         c.setHeaderRenderer(DcTableHeaderRenderer.getInstance());
         tblItems.addColumn(c);
         
-        String oldvalue;
+        Object oldValue;
+        Object newValue;
+        String s;
         for (DcObject item : items) {
-            oldvalue = (String) item.getValue(field);
-            oldvalue = oldvalue.replaceAll("(?i)" + value, replacement);
-            item.setValue(field, oldvalue);
+            oldValue = (Object) item.getValue(field);
+            
+            if (oldValue instanceof String) {
+                try {
+                    s = (String) value;
+                    newValue = ((String) oldValue).replaceAll("(?i)" + s, (String) replacement);
+                    item.setValue(field, newValue);
+                } catch (Exception e) {
+                    logger.error(e, e);
+                    DcSwingUtilities.displayErrorMessage(e.getMessage());
+                    break;
+                }
+            } else if (oldValue instanceof Collection) {
+                Collection<DcObject> collection = (Collection<DcObject>) oldValue;
+                for (DcObject o : collection) {
+                    oldValue = o;
+                    if (o.getValue(DcMapping._B_REFERENCED_ID).equals(((DcObject) value).getID()))
+                        break;
+                }
+                
+                if (oldValue != null)
+                    collection.remove(oldValue);
+                
+                DataManager.addMapping(item, (DcObject) replacement, field);
+            } else {
+                item.setValue(field, replacement);
+            }
+            
             tblItems.add(item);
         }
         
@@ -224,7 +267,7 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
         JPanel panelActions = new JPanel();
 
         buttonApply = ComponentFactory.getButton(DcResources.getText("lblApply"));
-        buttonClose = ComponentFactory.getButton(DcResources.getText("lblCancel"));
+        buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
 
         buttonApply.addActionListener(this);
         buttonApply.setActionCommand("start");

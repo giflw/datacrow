@@ -31,14 +31,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
+import net.datacrow.console.components.DcComboBox;
+import net.datacrow.console.components.DcEditableComboBox;
+import net.datacrow.console.components.DcReferenceField;
+import net.datacrow.console.components.renderers.ComboBoxRenderer;
 import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
@@ -47,10 +54,15 @@ import net.datacrow.core.data.DataFilterEntry;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.data.Operator;
 import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
+import net.datacrow.core.objects.DcSimpleValue;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.Utilities;
 
 public class FindReplaceDialog extends DcFrame implements ActionListener {
 
@@ -60,9 +72,9 @@ public class FindReplaceDialog extends DcFrame implements ActionListener {
     private DcModule module;
     private View view;
 
-    private JTextField txtFind = ComponentFactory.getShortTextField(255);
-    private JTextField txtReplace = ComponentFactory.getShortTextField(255);
-    private JComboBox cbFields = ComponentFactory.getComboBox();
+    private final DcEditableComboBox cbOld = new DcEditableComboBox();
+    private final DcEditableComboBox cbNew = new DcEditableComboBox();
+    private final DcComboBox cbFields = ComponentFactory.getComboBox(new DefaultComboBoxModel());
 
     public FindReplaceDialog(View view) {
 
@@ -77,45 +89,104 @@ public class FindReplaceDialog extends DcFrame implements ActionListener {
 
         setSize(DcSettings.getDimension(DcRepository.Settings.stFindReplaceDialogSize));
         setCenteredLocation();
+        
+        cbFields.setSelectedIndex(0);
     }
+    
+    private void applySelectedField(DcField field, DcComboBox cb) {
+        JComponent c = ComponentFactory.getComponent(field.getModule(), field.getReferenceIdx(), field.getIndex(), field.getFieldType(), field.getLabel(), 255);
+        
+        if (c instanceof DcReferenceField) 
+            c = ((DcReferenceField) c).getComboBox();
+        
+        cb.removeAllItems();
+        
+        if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+            if (DataManager.getCount(field.getReferenceIdx(), -1, null) > 1000) {
+                for (DcSimpleValue value : DataManager.getSimpleValues(field.getReferenceIdx(), false))
+                    cb.addItem(value);
+            } else {
+                int[] fields;
+                if (DcModules.get(field.getReferenceIdx()).getType() == DcModule._TYPE_PROPERTY_MODULE)
+                    fields = new int[] {DcObject._ID, DcProperty._A_NAME, DcProperty._B_ICON};
+                else
+                    fields = new int[] {DcObject._ID, DcModules.get(field.getReferenceIdx()).getDisplayFieldIdx()};
+                
+                List<DcObject> objects = DataManager.get(field.getReferenceIdx(), fields);
+                for (Object o : objects)
+                    cb.addItem(o);
+                
+                cb.setRenderer(ComboBoxRenderer.getInstance());
+                cb.setEditable(false);
+            }
+            
+        } else if (c instanceof JComboBox) {
+            JComboBox combo = (JComboBox) c;
+            for (int i = 0; i < combo.getItemCount(); i++)
+                cb.addItem(combo.getItemAt(i));
+            
+            cb.setRenderer(combo.getRenderer());
+            cb.setEditable(false);
+        } else {
+            cb.setEditable(true);
+        }
 
+        cb.setEnabled(true);
+    } 
+    
     private void replace() {
-        final DcField field = (DcField) cbFields.getSelectedItem();
-        DataFilter df = new DataFilter(module.getIndex());
-        df.addEntry(new DataFilterEntry(module.getIndex(), field.getIndex(), Operator.CONTAINS, txtFind.getText()));
         
-        Collection<Integer> include = new ArrayList<Integer>();
-        include.add(field.getIndex());
-        
-        if (txtFind.getText().length() == 0) {
-            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgEnterValueForFind"));
+        if (Utilities.isEmpty(cbOld.getValue())) {
+            DcSwingUtilities.displayWarningMessage(DcResources
+                    .getText("msgEnterValueForFind"));
             return;
         }
         
-        int[] fields =  module.getMinimalFields(include);
+        final DcField field = (DcField) cbFields.getSelectedItem();
+        DataFilter df = new DataFilter(module.getIndex());
+        df.addEntry(new DataFilterEntry(module.getIndex(), field.getIndex(), Operator.CONTAINS, cbOld.getValue()));
+
+        Collection<Integer> include = new ArrayList<Integer>();
+        include.add(field.getIndex());
+        int[] fields = module.getMinimalFields(include);
+        
         FindReplaceTaskDialog dlg = new FindReplaceTaskDialog(
-                this, view, DataManager.get(df, fields), fields, field.getIndex(), 
-                txtFind.getText(), txtReplace.getText());
+                this, 
+                view,
+                DataManager.get(df, fields), 
+                fields, 
+                field.getIndex(),
+                cbOld.getValue(), 
+                cbNew.getValue());
         dlg.setVisible(true);
     }
 
     @Override
     public void close() {
         DcSettings.set(DcRepository.Settings.stFindReplaceDialogSize, getSize());
-        
-        buttonApply = null;
-        buttonClose = null;
-        view = null;
-        module = null;
-        if (cbFields != null) cbFields.removeAllItems();
-        cbFields = null;
-        txtFind = null;
-        view = null;
-        
         super.close();
     }
 
     private void buildDialog(DcModule module) {
+
+        for (DcField field : module.getFields()) {
+            if (    field.isSearchable() && 
+                    field.isEnabled() && 
+                   !field.isReadOnly() &&
+                    field.getIndex() != DcObject._SYS_EXTERNAL_REFERENCES &&
+                   (field.getValueType() == DcRepository.ValueTypes._STRING ||
+                    field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
+                    field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE))
+                cbFields.addItem(field);
+        }
+
+        cbFields.addActionListener(this);
+        cbFields.setActionCommand("fieldSelected");
+        
+        cbOld.setRenderer(new DefaultListCellRenderer());
+        cbNew.setRenderer(new DefaultListCellRenderer());
+
+        
         //**********************************************************
         //Input panel
         //**********************************************************
@@ -123,11 +194,9 @@ public class FindReplaceDialog extends DcFrame implements ActionListener {
         panelInput.setLayout(Layout.getGBL());
         
         for (DcField field : module.getFields()) {
-            if (    field.getValueType() == DcRepository.ValueTypes._STRING && 
-                    field.isEnabled() && 
+            if (    field.isEnabled() && 
                    !field.isReadOnly() &&
-                   (field.getFieldType() == ComponentFactory._SHORTTEXTFIELD ||
-                    field.getFieldType() == ComponentFactory._LONGTEXTFIELD))
+                    field.isSearchable())
                 cbFields.addItem(field);
         }
 
@@ -140,13 +209,13 @@ public class FindReplaceDialog extends DcFrame implements ActionListener {
         panelInput.add(ComponentFactory.getLabel(DcResources.getText("lblFind")), Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 0, 0, 0), 0, 0));
-        panelInput.add(txtFind, Layout.getGBC(1, 1, 1, 1, 1.0, 1.0
+        panelInput.add(cbOld, Layout.getGBC(1, 1, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 0, 0, 0), 0, 0));
         panelInput.add(ComponentFactory.getLabel(DcResources.getText("lblReplacement")), Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 0, 0, 0), 0, 0));
-        panelInput.add(txtReplace, Layout.getGBC(1, 2, 1, 1, 1.0, 1.0
+        panelInput.add(cbNew, Layout.getGBC(1, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
                  new Insets(0, 0, 0, 0), 0, 0));
         
@@ -159,7 +228,7 @@ public class FindReplaceDialog extends DcFrame implements ActionListener {
         buttonClose = ComponentFactory.getButton(DcResources.getText("lblClose"));
 
         buttonApply.addActionListener(this);
-        buttonApply.setActionCommand("updateAll");
+        buttonApply.setActionCommand("replace");
         
         buttonClose.addActionListener(this);
         buttonClose.setActionCommand("close");
@@ -177,15 +246,19 @@ public class FindReplaceDialog extends DcFrame implements ActionListener {
         this.getContentPane().add(panelActions,Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
                                               ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                                                new Insets(5, 5, 5, 5), 0, 0));
-
+        
         pack();
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getActionCommand().equals("close"))
+        if (ae.getActionCommand().equals("close")) {
             close();
-        else if (ae.getActionCommand().equals("updateAll"))
+        } else if (ae.getActionCommand().equals("replace")) {
             replace();
+        } else if (ae.getActionCommand().equals("fieldSelected")) {
+            applySelectedField((DcField) cbFields.getSelectedItem(), cbNew);
+            applySelectedField((DcField) cbFields.getSelectedItem(), cbOld);
+        }
     }  
 }
