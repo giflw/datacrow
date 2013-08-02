@@ -92,6 +92,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
     private void updateAll() {
         Updater updater = new Updater();
         updater.start();
+        buttonApply.setEnabled(false);
     }
 
     public void initProgressBar(int maxValue) {
@@ -134,6 +135,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
                     if (item.isChanged()) {
                         try {
                             if (view.getType() == View._TYPE_SEARCH) {
+                                item.setUpdateGUI(false);
                             	item.saveUpdate(false, false);
                             } else if (view.getType() == View._TYPE_INSERT) {
                                 view.updateItem(item.getID(), item);
@@ -155,7 +157,10 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
 	                count++;
 	            }
             } finally {
-            	if (view != null) view.setListSelectionListenersEnabled(true);
+                buttonApply.setEnabled(true);
+                module.getSearchView().refresh();
+            	if (view != null) 
+            	    view.setListSelectionListenersEnabled(true);
             }
             
             SwingUtilities.invokeLater(new Runnable() {
@@ -181,12 +186,6 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
         }
 
         keepOnRunning = false;
-        
-        buttonApply = null;
-        buttonClose = null;
-        view = null;
-        checkSelectedItemsOnly = null;
-        module = null;
         
         if (itemForm != null) {
             itemForm.close(true);

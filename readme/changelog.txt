@@ -36,6 +36,8 @@ both the same, for as far as possible.
   Having many categories (for example) which actually have the same meaning? Merge them
   all into one property. All references to the properties will be corrected 
   (without duplication, of course).
+- Update all now refreshed the overview after updating the items (instead of updating 
+  one by one). 
 
 [Fixed]
 - On startup Data Crow tried to modify files in the installation folder, causing problems
