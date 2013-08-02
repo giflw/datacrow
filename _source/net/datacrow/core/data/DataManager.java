@@ -132,7 +132,7 @@ public class DataManager {
 
     public static void updateIcon(String ID) {
         DcImageIcon icon = icons.remove(ID);
-        if (icon != null) { 
+        if (icon != null && icon.getFilename() != null) { 
             new File(icon.getFilename()).delete();
             icon.flush();
         }

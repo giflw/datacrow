@@ -22,6 +22,7 @@
     <mapID target="dc.items.createmultiple" url="items/create_multiple.html"/>
     <mapID target="dc.items.itemform_property" url="items/itemform_property.html"/>
     <mapID target="dc.items.itemform_multiref" url="items/itemform_multireference.html"/>
+    <mapID target="dc.items.mergeitems" url="items/merging_property_items.html"/>
     
     <mapID target="dc.items.sort" url="items/sort.html"/>
     <mapID target="dc.items.administration" url="items/administration.html"/>

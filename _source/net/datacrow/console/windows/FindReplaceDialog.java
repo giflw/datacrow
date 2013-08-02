@@ -136,9 +136,11 @@ public class FindReplaceDialog extends DcFrame implements ActionListener {
     
     private void replace() {
         
-        if (Utilities.isEmpty(cbOld.getValue())) {
-            DcSwingUtilities.displayWarningMessage(DcResources
-                    .getText("msgEnterValueForFind"));
+        if (Utilities.isEmpty(cbOld.getValue()) || Utilities.isEmpty(cbNew.getValue())) {
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgEnterValueForFind"));
+            return;
+        } else if (cbOld.getValue().equals(cbNew.getValue())) {
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgFindReplaceValuesEqual"));
             return;
         }
         

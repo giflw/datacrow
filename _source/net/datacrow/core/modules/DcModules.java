@@ -599,6 +599,24 @@ public class DcModules {
             }
         }
         return references;
+    }
+    
+    /** 
+     * Retrieves all modules having a reference to the specified modules.
+     * Note: The check is based on the source module index (base module), 
+     * not the actual instances. Includes template modules.
+     * @see #getActualReferencingModules(int)
+     * @param moduleIdx
+     */
+    public static Collection<DcModule> getReferencingModulesAll(int moduleIdx) {
+        Collection<DcModule> refs = new ArrayList<DcModule>();
+        for (DcModule module : getAllModules()) {
+            if (module.getIndex() != moduleIdx) {
+                if (module.hasActualReferenceTo(moduleIdx))
+                    refs.add(module);
+            }
+        }
+        return refs;
     }  
     
     /** 

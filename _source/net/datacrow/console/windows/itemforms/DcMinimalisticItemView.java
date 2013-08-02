@@ -62,6 +62,7 @@ import net.datacrow.console.menu.DcPropertyViewPopupMenu;
 import net.datacrow.console.views.ISimpleItemView;
 import net.datacrow.console.windows.CreateMultipleItemsDialog;
 import net.datacrow.console.windows.DcFrame;
+import net.datacrow.console.windows.MergePropertyItemsDialog;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataFilter;
@@ -151,6 +152,16 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     	CreateMultipleItemsDialog dlg = new CreateMultipleItemsDialog(getModuleIdx());
     	dlg.setVisible(true);
     	load();
+    }
+    
+    public void mergeItems() {
+        Collection<DcObject> items = list.getSelectedItems();
+        if (items.size() == 0) {
+            DcSwingUtilities.displayWarningMessage(DcResources.getText("msgMergeNoItemsSelected"));
+        } else {
+            MergePropertyItemsDialog dlg = new MergePropertyItemsDialog(items, DcModules.get(module));
+            dlg.setVisible(true);
+        }
     }
     
     public void createNew() {
@@ -509,6 +520,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             open(true);
         else if (e.getActionCommand().equals("delete_unused"))
             deleteUnused();
+        else if (e.getActionCommand().equals("merge"))
+            mergeItems();
     }
     
     private class DcMinimalisticItemViewMenu extends DcMenuBar {
@@ -528,31 +541,37 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             DcMenuItem miAdd = new DcMenuItem(DcResources.getText("lblNewItem", ""));
             DcMenuItem miDelete = new DcMenuItem(DcResources.getText("lblDelete"));
             DcMenuItem miDeleteUnused = new DcMenuItem(DcResources.getText("lblDeleteUnassigned", module.getObjectNamePlural()));
+            DcMenuItem miMerge = new DcMenuItem(DcResources.getText("lblMergeItems", getModule().getObjectNamePlural()));
             
             miOpen.addActionListener(parent);
             miEdit.addActionListener(parent);
             miAdd.addActionListener(parent);
             miDelete.addActionListener(parent);
             miDeleteUnused.addActionListener(parent);
+            miMerge.addActionListener(parent);
             
             miOpen.setActionCommand("open_readonly");
             miEdit.setActionCommand("open_edit");
             miAdd.setActionCommand("createNew");
             miDelete.setActionCommand("delete");
             miDeleteUnused.setActionCommand("delete_unused");
+            miMerge.setActionCommand("merge");
             
             miOpen.setIcon(IconLibrary._icoOpen);
             miEdit.setIcon(IconLibrary._icoOpen);
             miAdd.setIcon(IconLibrary._icoAdd);
             miDelete.setIcon(IconLibrary._icoDelete);
             miDeleteUnused.setIcon(IconLibrary._icoDelete);
+            miMerge.setIcon(IconLibrary._icoMerge);
             
             menuEdit.add(miOpen);
             menuEdit.add(miEdit);
             menuEdit.add(miAdd);
-            menuEdit.add(miDelete);
             menuEdit.addSeparator();
+            menuEdit.add(miDelete);
             menuEdit.add(miDeleteUnused);
+            menuEdit.addSeparator();
+            menuEdit.add(miMerge);
             
             add(menuEdit);
             

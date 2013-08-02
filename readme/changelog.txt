@@ -29,6 +29,13 @@ both the same, for as far as possible.
   the sake of using it).
 - The Resource Editor now has find and replace functionality.
 - The Find and Replace utility now also allows you to change one reference with another.
+- The property items overview (found in the Administration menu) gained a new tool: 
+  delete unassigned items. This will remove all properties not assigned to any other item
+  For example a category not used in software items will be removed.
+- Another new tool for the properties module is the merge functionality.
+  Having many categories (for example) which actually have the same meaning? Merge them
+  all into one property. All references to the properties will be corrected 
+  (without duplication, of course).
 
 [Fixed]
 - On startup Data Crow tried to modify files in the installation folder, causing problems

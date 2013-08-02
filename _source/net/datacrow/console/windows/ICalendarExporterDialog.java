@@ -53,6 +53,11 @@ public class ICalendarExporterDialog extends DcDialog implements ActionListener,
         cbFullExport.setSelected(DcSettings.getBoolean(DcRepository.Settings.stICalendarFullExport));
     }
     
+    @Override
+    public void notifyTaskSize(int size) {
+        progressBar.setMaximum(size);   
+    }
+
     private void export() {
         
         File target = ffTarget.getFile();

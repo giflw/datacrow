@@ -110,6 +110,9 @@ public class FileImportFileSelectPanelSimple extends JPanel implements ActionLis
     }
     
     @Override
+    public void notifyTaskSize(int size) {}
+
+    @Override
     public boolean isStopped() {
         return canceled;
     }

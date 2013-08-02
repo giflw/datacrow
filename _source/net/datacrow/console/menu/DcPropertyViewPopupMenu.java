@@ -47,15 +47,21 @@ public class DcPropertyViewPopupMenu extends DcPopupMenu  implements ActionListe
 
         JMenuItem menuOpen = new JMenuItem(DcResources.getText("lblOpenItem", ""), IconLibrary._icoOpen);
         JMenuItem menuDelete = new JMenuItem(DcResources.getText("lblDelete"), IconLibrary._icoDelete);
+        JMenuItem menuMerge = new JMenuItem(DcResources.getText("lblMergeItems", form.getModule().getObjectNamePlural()), IconLibrary._icoMerge);
         
         menuOpen.addActionListener(this);
         menuOpen.setActionCommand("open");
         
         menuDelete.addActionListener(this);
         menuDelete.setActionCommand("delete");
+        
+        menuMerge.addActionListener(this);
+        menuMerge.setActionCommand("merge");
 
         add(menuOpen);
         add(menuDelete);
+        addSeparator();
+        add(menuMerge);
     }
 
     @Override
@@ -64,5 +70,7 @@ public class DcPropertyViewPopupMenu extends DcPopupMenu  implements ActionListe
             form.delete();
         else if (e.getActionCommand().equals("open"))
             form.open();
+        else if (e.getActionCommand().equals("merge"))
+            form.mergeItems();
     }
 }

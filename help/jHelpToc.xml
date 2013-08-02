@@ -27,6 +27,7 @@
       <tocitem target="dc.filters" text="Filter &amp; Search" />
       <tocitem target="dc.items.wizard" text="New Item Wizard"/>
       <tocitem target="dc.items.administration" text="Administration"/>
+      <tocitem target="dc.items.mergeitems" text="Merging Property Items"/>
       <tocitem target="dc.items.itemform" text="Item Form"/>
       <tocitem target="dc.items.itemform_property" text="Item Form for Properties"/>
       <tocitem target="dc.items.itemform_multiref" text="Item Form Multiple Reference Field"/>

@@ -699,6 +699,15 @@ public class DcApplicationSettings extends net.datacrow.settings.Settings {
                             true, -1));
         getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._DIMENSION,
+                            DcRepository.Settings.stMergeItemsDialog,
+                            new Dimension(500, 400),
+                            -1,
+                            "",
+                            "",
+                            false,
+                            false, -1));
+        getSettings().addSetting(_General,
+                new Setting(DcRepository.ValueTypes._DIMENSION,
                             DcRepository.Settings.stNewItemsDialogSize,
                             new Dimension(700, 600),
                             -1,

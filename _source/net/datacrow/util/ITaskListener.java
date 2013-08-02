@@ -27,6 +27,8 @@ package net.datacrow.util;
 
 public interface ITaskListener {
     
+    public void notifyTaskSize(int size);
+    
     public void notify(String msg);
     
     public void notifyTaskStopped();
