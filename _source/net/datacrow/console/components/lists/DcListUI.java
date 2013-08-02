@@ -228,7 +228,7 @@ public class DcListUI extends BasicListUI {
         int index = locationToIndex(list, p);
         if (index != -1) {
             Rectangle cell = getCellBounds(list, index, index);
-            if(cell.getX()+cell.getWidth()/2<p.getX())
+            if(cell != null && (cell.getX()+cell.getWidth()/2<p.getX()))
                 index++;
         } else {
             //It is possible, that we are on some white space on the

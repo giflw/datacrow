@@ -37,6 +37,7 @@ both the same, for as far as possible.
 - Screen parts resized ever so slightly and ever so annoyingly.
 - Could not really tell which module was selected.
 - Fix for launching files from the Quick View Panel.
+- Column order for tables not correctly applied.
 
 
 -----------------------------------------------------------------------------------------

@@ -26,7 +26,7 @@
     <target name="build-datacrow">
     
         <mkdir dir="_classes/" />
-        <javac srcdir="_source/" destdir="_classes/" debug="true" encoding="iso-8859-1">
+        <javac srcdir="_source/" destdir="_classes/" debug="true">
             <classpath refid="datacrow.class.path"/>
         </javac>
         
