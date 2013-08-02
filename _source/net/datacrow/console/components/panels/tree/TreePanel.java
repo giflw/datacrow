@@ -190,6 +190,9 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
             NodeElement ne = (NodeElement) top.getUserObject();
             ne.addItem(item, dco.getModule().getIndex());
             add(item, dco.getModule().getIndex(), path, top);
+            
+            if (top.getChildCount()  == 0)
+                setDefaultSelection();
         }
     }
     

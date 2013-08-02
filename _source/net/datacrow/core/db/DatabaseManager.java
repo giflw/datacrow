@@ -69,6 +69,8 @@ public class DatabaseManager {
     
     private static Connection connection;
     private static Connection adminConnection;
+    
+    private static Connection checkConnection;
    
     /**
      * Initializes the database. A connection with the HSQL database engine is established
@@ -105,6 +107,7 @@ public class DatabaseManager {
                 logger.debug("Database cleanup took " + (end - start) + "ms");
             }  
             
+            checkConnection = DatabaseManager.getConnection("DC_ADMIN", "UK*SOCCER*96");
             initialized = true;
 
         } catch (Exception e) {
@@ -169,6 +172,12 @@ public class DatabaseManager {
                 conversions.save();
                 
                 Connection connection = getAdminConnection();
+                
+                try {
+                    checkConnection.close();
+                } catch (SQLException se) {
+                    logger.error(se, se);
+                }
                 
                 if (connection != null) {
                     Statement stmt = connection.createStatement();

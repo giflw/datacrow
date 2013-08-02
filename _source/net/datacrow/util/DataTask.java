@@ -56,6 +56,18 @@ public class DataTask extends Thread {
     public void setModule(DcModule module) {
         this.module = module;
     }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        if (items != null) {
+            items.clear();
+            items = null;
+        }
+        
+        module = null;
+
+        super.finalize();
+    }
 
     public void startTask() {
         isRunning = true;
@@ -83,13 +95,6 @@ public class DataTask extends Thread {
         
         keepOnRunning = false;
         isRunning = false;
-        
-        if (items != null) {
-            items.clear();
-            items = null;
-        }
-        
-        module = null;
     }
 
     public void cancel() {

@@ -149,7 +149,10 @@ public class ModuleListPanel extends DcPanel {
         
         @Override
         public Border getBorder() {
-            return (mmb != null && mmb.getModule() == DcModules.getCurrent()) ? borderSelected : borderDefault;
+            return ((mmb != null &&  mmb.getModule() != null) &&
+                   (mmb.getModule() == DcModules.getCurrent() ||
+                    (mmb.getModule().getIndex() == DcModules._CONTAINER && 
+                     DcModules.getCurrent().getIndex() == DcModules._ITEM))) ? borderSelected : borderDefault;
         }
 
         private void build() {
@@ -301,7 +304,10 @@ public class ModuleListPanel extends DcPanel {
         
         @Override
         public Color getBackground() {
-            if (getModule() == DcModules.getCurrent()) {
+            if (getModule() != null && (
+                getModule() == DcModules.getCurrent() ||
+                   (getModule().getIndex() == DcModules._CONTAINER && 
+                    DcModules.getCurrent().getIndex() == DcModules._ITEM))) {
                 return selectedColor;
             } else {
                 return normalColor;

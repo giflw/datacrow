@@ -40,6 +40,8 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.panels.tree.GroupingPane;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.data.DataFilters;
+import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
@@ -201,13 +203,12 @@ public class MasterView {
     }
     
     public void refresh() {
-        for (View view : getViews()) {
-            view.clear();
-        }
-        
-        if (groupingPane != null && groupingPane.isEnabled())
+        if (groupingPane != null && groupingPane.isEnabled()) {
             groupingPane.groupBy();
-        
+        } else {
+            clear();
+            add(DataManager.getKeys(DataFilters.getCurrent(module)));
+        }
     }
 
     public void removeFromCache(String ID) {

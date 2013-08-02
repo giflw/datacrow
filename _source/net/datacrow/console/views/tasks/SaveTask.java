@@ -25,6 +25,7 @@
 
 package net.datacrow.console.views.tasks;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import net.datacrow.console.views.View;
@@ -56,7 +57,7 @@ public class SaveTask extends DataTask {
             boolean ignoreErrors = false;
             int counter = 1;
             
-            for (DcObject dco : items) {
+            for (DcObject dco : new ArrayList<DcObject>(items)) {
                 
                 dco.setLastInLine(counter == items.size());
                 

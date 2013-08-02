@@ -403,7 +403,7 @@ public class View extends DcPanel implements ListSelectionListener {
         if (vdQuickPane != null) vdQuickPane.deactivate();
     }
     
-    private void reinstallGroupingPane() {
+    private void reinstall() {
         // only the search view uses view dividers
         if (getType() == _TYPE_SEARCH && !getModule().isChildModule()) {
             Component c = vdQuickPane != null ? vdQuickPane : panelResult;
@@ -418,18 +418,22 @@ public class View extends DcPanel implements ListSelectionListener {
             add(    c, Layout.getGBC( 0, 1, 3, 1, 100.0, 100.0
                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                     new Insets(5, 5, 5, 5), 0, 0)); 
+        } else {
+            remove(panelResult);
+            add(panelResult, Layout.getGBC( 0, 1, 3, 1, 100.0, 100.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                 new Insets(5, 5, 5, 5), 0, 0)); 
         }
     }
     
     public void activate() {
         active = true;
         
-        if (groupingPane != null) {
-            reinstallGroupingPane();
-            
-            if (!groupingPane.isHoldingItems())
-                groupingPane.groupBy();
-        }
+        reinstall();
+        
+        if (groupingPane != null && !groupingPane.isHoldingItems())
+            groupingPane.groupBy();
+
         
         vc.activate();
         

@@ -128,7 +128,7 @@ public class DeleteModuleWizard extends Wizard {
             // not needed for property base modules
             if (DcModules.get(xmlModule.getIndex()) != null) {
                 DcModules.get(xmlModule.getIndex()).isEnabled(false);
-                DataCrow.mainFrame.applySettings();
+                DataCrow.mainFrame.applySettings(false);
             }
             
             close();

@@ -168,7 +168,7 @@ public class SettingsView extends DcDialog implements ActionListener {
         for (SettingsPanel panel : getPanels())
             panel.saveSettings();
 
-        DataCrow.mainFrame.applySettings();
+        DataCrow.mainFrame.applySettings(true);
         close();
     }
 
