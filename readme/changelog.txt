@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------
-Data Crow version 3.12                                             Released on 2013-08-xx
+Data Crow version 3.12                                             Released on 2013-08-04
 -----------------------------------------------------------------------------------------
 Poor version 3.11. It only took a couple of days and then it got replaced by version 3.12.
 This really is for the most part a cosmetic edition. I have changed the layout a bit 
