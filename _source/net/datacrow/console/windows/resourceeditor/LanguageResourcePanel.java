@@ -52,7 +52,7 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
     private int selected = 0;
 
     private DcList topicList = new DcList();
-    private Collection<ResourcePanel> panels = new ArrayList<ResourcePanel>();
+    private Collection<LanguageResourceEditPanel> panels = new ArrayList<LanguageResourceEditPanel>();
     
     private String language;
     
@@ -65,14 +65,14 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
     
     private void load() {
         DcLanguageResource resources = DcResources.getLanguageResource(language);
-        for (ResourcePanel panel : panels)
+        for (LanguageResourceEditPanel panel : panels)
             panel.load(resources);
     }
     
     public void save() {
         DcLanguageResource resources = DcResources.getLanguageResource(language);
         
-        for (ResourcePanel panel : panels) {
+        for (LanguageResourceEditPanel panel : panels) {
             panel.save(resources);
         }
 
@@ -82,7 +82,7 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
     private void setActiveTopic() {
         selected = topicList.getSelectedIndex();
         int counter = 0;
-        for (ResourcePanel panel : panels) {
+        for (LanguageResourceEditPanel panel : panels) {
             panel.setVisible(counter == selected);
             counter++;
         }
@@ -137,11 +137,11 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
     private void build() {
         setLayout(Layout.getGBL());
         
-        panels.add(new ResourcePanel("lbl"));
-        panels.add(new ResourcePanel("sys"));
-        panels.add(new ResourcePanel("tp"));
-        panels.add(new ResourcePanel("msg"));
-        panels.add(new ResourcePanel("tip"));
+        panels.add(new LanguageResourceEditPanel("lbl"));
+        panels.add(new LanguageResourceEditPanel("sys"));
+        panels.add(new LanguageResourceEditPanel("tp"));
+        panels.add(new LanguageResourceEditPanel("msg"));
+        panels.add(new LanguageResourceEditPanel("tip"));
 
         //**********************************************************
         //Topic List Panel
@@ -167,7 +167,7 @@ public class LanguageResourcePanel extends JPanel implements ListSelectionListen
         //**********************************************************
         //Panel Input
         //**********************************************************
-        for (ResourcePanel panel : panels) {
+        for (LanguageResourceEditPanel panel : panels) {
             add(panel, Layout.getGBC( 1, 0, 1, 1, 100.0, 100.0
                     ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                      new Insets( 0, 0, 0, 0), 0, 0));
