@@ -38,6 +38,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.menu.DcEditorMouseListener;
+import net.datacrow.console.windows.itemforms.IItemFormListener;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataManager;
@@ -47,13 +48,14 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.launcher.FileLauncher;
 import net.datacrow.util.launcher.URLLauncher;
 
 import org.apache.log4j.Logger;
 
-public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
+public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener, IItemFormListener {
 
     private static Logger logger = Logger.getLogger(DcHtmlEditorPane.class.getName());
     
@@ -125,6 +127,32 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
         return sb.toString();
     }
     
+    
+    
+    @Override
+    public void notifyItemSaved(DcObject dco) {
+        String s = getText();
+        
+        StringBuffer sb = new StringBuffer();
+        if (s.contains("http://" + dco.getID())) {
+
+            int idx = s.indexOf("<font", s.indexOf("http://" + dco.getID()));
+            sb.append(s.substring(0, idx));
+            
+            String temp = StringUtils.getValueBetween("<font", ">", s.substring(idx));
+            sb.append("<font");
+            sb.append(temp);
+            sb.append(">");
+            sb.append(dco.toString());
+            sb.append("</font></span>");
+            sb.append(s.substring(s.indexOf("</span>", s.indexOf("http://" + dco.getID())) +  7));
+        }
+        
+        setText("");
+        setHtml(sb.toString());
+        
+    }
+
     public String createLinks(Collection<DcObject> items) {
         StringBuffer sb = new StringBuffer();
         int i = 0;
@@ -171,7 +199,9 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener {
                 
                 if (dco != null) {
                     dco.markAsUnchanged();
-                    new ItemForm(!DcSettings.getBoolean(DcRepository.Settings.stOpenItemsInEditModus), true, dco, false).setVisible(true);
+                    ItemForm form = new ItemForm(!DcSettings.getBoolean(DcRepository.Settings.stOpenItemsInEditModus), true, dco, false);
+                    form.setListener(this);
+                    form.setVisible(true);
                 }
             }
         }

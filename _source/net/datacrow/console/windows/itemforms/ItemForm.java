@@ -622,7 +622,12 @@ public class ItemForm extends DcFrame implements ActionListener {
                 }
                 
             } else if (isChanged()) {
+                
+                if (listener != null)
+                    listener.notifyItemSaved(dco);
+                
                 dco.saveUpdate(true);
+                
             } else {
                 close();
             }
