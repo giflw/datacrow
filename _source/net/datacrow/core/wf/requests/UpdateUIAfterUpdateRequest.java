@@ -44,8 +44,11 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
         }
         
         if (updateRelatedModules && dco.isLastInLine()) {
-            Collection<DcModule> modules = DcModules.getReferencingModules(dco.getModule().getIndex());
+            Collection<DcModule> modules = DcModules.getReferencingModulesAll(dco.getModule().getIndex());
             for (DcModule module : modules) {
+                
+                if (module.getType() == DcModule._TYPE_MAPPING_MODULE) continue;
+                
                 if (module.isSearchViewInitialized() && module.getSearchView().isLoaded()) {
                     module.getSearchView().refreshQuickView();
                     
