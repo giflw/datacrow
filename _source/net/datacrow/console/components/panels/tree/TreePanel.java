@@ -42,6 +42,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import net.datacrow.console.ComponentFactory;
@@ -52,7 +53,6 @@ import net.datacrow.console.views.View;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.data.DataFilters;
 import net.datacrow.core.data.DataManager;
-import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
 
@@ -164,6 +164,26 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     	topElem.setItems(DataManager.getKeys(DataFilters.getCurrent(getModule())));
 	}
 	
+    public void updateTreeNodes(DcObject dco) {
+        updateTreeNodes(tree.getModel(), dco, top);
+    }
+    
+    private void updateTreeNodes(TreeModel model, DcObject dco, DcDefaultMutableTreeNode node) {
+        int cc;
+        cc = node.getChildCount();
+        for (int i = cc - 1; i > -1; i--) {
+            DcDefaultMutableTreeNode child = (DcDefaultMutableTreeNode) model.getChild(node, i);
+            NodeElement ne = (NodeElement) child.getUserObject();
+            if (ne.getKey().equals(dco.getID())) {
+                ne.setDisplayValue(dco.toString());
+                ne.setIcon(dco.getIcon());
+            }         
+            
+            if (child.getChildCount() > 0)
+                updateTreeNodes(model, dco, child);
+        }
+    }
+	
 	public void setSelected(DcObject dco) {
 	    
 	    if (top == null || top.getChildCount() == 0)
@@ -259,14 +279,8 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     public abstract boolean isChanged(DcObject dco);
     
     public void update(DcObject dco) {
-        
-        if (dco.getModule().getIndex() != DcModules._CONTAINER)
-            return;
-        
-    	if (isChanged(dco)) {
-    		remove(dco.getID());
-    		add(dco);
-    	}
+		remove(dco.getID());
+		add(dco);
     }
     
     /**
@@ -276,15 +290,6 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
      * @return node containing tree structure
      */
     public abstract DcDefaultMutableTreeNode getFullPath(DcObject dco);
-    
-    public NodeElement getNodeElement(Object key) {
-    	if (key instanceof DcObject) {
-    		DcObject dco = (DcObject) key;
-    		return new NodeElement(key, dco.toString(), dco.getIcon());
-    	} else {
-    		return new NodeElement(key, key.toString(), null);
-    	}
-    }
     
     public void collapseAll() {
         if (top == null) return;

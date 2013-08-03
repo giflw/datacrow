@@ -3,7 +3,9 @@ Data Crow version 3.12.1                                           Released on 2
 -----------------------------------------------------------------------------------------
 
 [Fixed]
-- Icons not shown for containers.
+- Icons not shown for containers in trees, fields and the quick view.
+- Tree does not reflect changes made to properties etc.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow version 3.12                                             Released on 2013-08-03

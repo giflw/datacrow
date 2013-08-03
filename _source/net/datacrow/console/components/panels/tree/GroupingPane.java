@@ -83,6 +83,11 @@ public class GroupingPane extends JPanel implements ChangeListener {
         build();
     }
     
+    public void updateTreeNodes(DcObject dco) {
+        for (TreePanel tp : panels)
+            tp.updateTreeNodes(dco);
+    }
+    
     public void update(DcObject dco) {
     	for (TreePanel tp : panels)
     		tp.update(dco);

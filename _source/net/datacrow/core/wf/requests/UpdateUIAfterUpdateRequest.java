@@ -1,5 +1,7 @@
 package net.datacrow.core.wf.requests;
 
+import java.util.Collection;
+
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
@@ -36,14 +38,21 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
         
         if (dco.getModule().hasSearchView()) {
             dco.getModule().getSearchView().update(dco);
-            if (dco.isLastInLine() && dco.getModule().getSearchView().getGroupingPane() != null)
+            if (dco.isLastInLine() && dco.getModule().getSearchView().getGroupingPane() != null) {
                 dco.getModule().getSearchView().getGroupingPane().getCurrent().setSelected(dco);
+            }
         }
         
         if (updateRelatedModules && dco.isLastInLine()) {
-            for (DcModule module : DcModules.getReferencingModules(dco.getModule().getIndex())) {
+            Collection<DcModule> modules = DcModules.getReferencingModules(dco.getModule().getIndex());
+            for (DcModule module : modules) {
                 if (module.isSearchViewInitialized() && module.getSearchView().isLoaded()) {
                     module.getSearchView().refreshQuickView();
+                    
+                    // update the tree of this module to reflect name changes, etc.
+                    if (module.getSearchView().getGroupingPane() != null) {
+                        module.getSearchView().getGroupingPane().updateTreeNodes(dco);
+                    }
                 }
             }
         }
