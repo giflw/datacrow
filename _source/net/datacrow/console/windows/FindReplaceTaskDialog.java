@@ -56,16 +56,17 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.ITaskListener;
 
 import org.apache.log4j.Logger;
 
-public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
+public class FindReplaceTaskDialog extends DcDialog implements ActionListener, ITaskListener {
 
     private static Logger logger = Logger.getLogger(FindReplaceTaskDialog.class.getName());
     
     private JProgressBar pb = new DcProgressBar();
     
-    private boolean keepOnRunning = true;
+    private boolean stopped = false;
     
     private JButton buttonApply;
     private JButton buttonClose;
@@ -109,35 +110,60 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
 
         setCenteredLocation();
     }
-    
-    public void stop() {
-        keepOnRunning = false;
-    }
 
     private void replace() {
-        Updater updater = new Updater();
+        Updater updater = new Updater(this);
         updater.start();
     }
 
-    public void initProgressBar(int maxValue) {
+    @Override
+    public void notifyTaskSize(int size) {
         pb.setValue(0);
-        pb.setMaximum(maxValue);
+        pb.setMaximum(size);
     }
 
-    public void updateProgressBar(int value) {
-        pb.setValue(value);
-    }    
-    
+    @Override
+    public void notify(String msg) {}
+
+    @Override
+    public void notifyTaskStopped() {
+        pb.setValue(pb.getMaximum());
+        buttonApply.setEnabled(true);
+        close();
+    }
+
+    @Override
+    public void notifyTaskStarted() {
+        pb.setValue(0);
+        buttonApply.setEnabled(false);
+    }
+
+    @Override
+    public void notifyProcessed() {
+        pb.setValue(pb.getValue() + 1);
+    }
+
+    @Override
+    public boolean isStopped() {
+        return stopped;
+    }
+
     private class Updater extends Thread {
+        
+        private ITaskListener listener;
+        
+        public Updater(ITaskListener listener) {
+            this.listener = listener;
+        }
         
         @Override
         public void run() {
             
-            int count = 1;
-            initProgressBar(items.size());
+            listener.notifyTaskStarted();
+            listener.notifyTaskSize(items.size());
             view.setListSelectionListenersEnabled(false);
+
             try {
-                
                 DcObject item = module.getItem();
                 int colID = tblItems.getColumnIndexForField(DcObject._ID);
                 int colValue = tblItems.getColumnIndexForField(field);
@@ -145,7 +171,7 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
                 
                 for (int row = 0; row < tblItems.getRowCount(); row++) {
                     
-	                if (!keepOnRunning) break;
+	                if (listener.isStopped()) break;
 	                
 	                if ((Boolean) tblItems.getValueAt(row, colEnabled)) {
     	                item.markAsUnchanged();
@@ -160,15 +186,13 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
                         }
 	                }
 
-	                updateProgressBar(count);
+	                listener.notifyProcessed();
 
 	                try {
 	                    sleep(100);
 	                } catch (Exception e) {
 	                    logger.error(e, e);
 	                }
-	                
-	                count++;
 	            }
             } finally {
                 module.getSearchView().refresh();
@@ -177,7 +201,7 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
             	    view.setListSelectionListenersEnabled(true);
             	}
             	
-            	close();
+            	listener.notifyTaskStopped();
             }
         }
     }
@@ -185,12 +209,6 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
     @Override
     public void close() {
         DcSettings.set(DcRepository.Settings.stFindReplaceTaskDialogSize, getSize());
-        
-        buttonApply = null;
-        buttonClose = null;
-        view = null;
-        module = null;
-        
         super.close();
     }
 
@@ -307,7 +325,7 @@ public class FindReplaceTaskDialog extends DcDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getActionCommand().equals("close")) {
-            stop();
+            stopped = true;
             close();
         } else if (ae.getActionCommand().equals("start")) {
             replace();
