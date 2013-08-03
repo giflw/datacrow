@@ -36,6 +36,8 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
         
         if (!DataCrow.isInitialized()) return;
         
+        DataManager.updateIcon(dco.getID());
+        
         if (dco.getModule().hasSearchView()) {
             dco.getModule().getSearchView().update(dco);
             if (dco.isLastInLine() && dco.getModule().getSearchView().getGroupingPane() != null) {
@@ -50,12 +52,13 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
                 if (module.getType() == DcModule._TYPE_MAPPING_MODULE) continue;
                 
                 if (module.isSearchViewInitialized() && module.getSearchView().isLoaded()) {
-                    module.getSearchView().refreshQuickView();
                     
                     // update the tree of this module to reflect name changes, etc.
                     if (module.getSearchView().getGroupingPane() != null) {
                         module.getSearchView().getGroupingPane().updateTreeNodes(dco);
                     }
+                    
+                    module.getSearchView().refreshQuickView();
                 }
             }
         }
@@ -72,8 +75,6 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
                 }
             }
         }
-        
-        DataManager.updateIcon(dco.getID());
         
         dco = null;
     }
