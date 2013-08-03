@@ -45,14 +45,14 @@
 		<Program_Release_Status>New Release</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
 		<Program_OS_Support>Java,Linux,Linux Gnome,Linux GPL,Linux Open Source,Mac OS X,Mac Other,Win2000,Win7 x32,Win7 x64,Win98,WinOther,WinServer,WinVista,WinVista x64,WinXP,Other</Program_OS_Support>
-		<Program_Language>English,Dutch,French,German,Italian,Spanish</Program_Language>
+		<Program_Language>English,Dutch,French,German,Italian,Portuguese,Spanish</Program_Language>
 		<Program_Change_Info>Layout changes and new functionality</Program_Change_Info>
 		<Program_Specific_Category>Home/Hobby</Program_Specific_Category>
 		<Program_Category_Class>Home &amp; Hobby::Cataloging</Program_Category_Class>
 		<Program_System_Requirements>512MB of memory / P3 800MHZ</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>79379587</File_Size_Bytes>
-			<File_Size_K>77519</File_Size_K>
+			<File_Size_Bytes>79379102</File_Size_Bytes>
+			<File_Size_K>77518</File_Size_K>
 			<File_Size_MB>75.70</File_Size_MB>
 		</File_Info>
 		<Expire_Info>

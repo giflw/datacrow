@@ -1,10 +1,12 @@
 -----------------------------------------------------------------------------------------
-Data Crow version 3.12                                             Released on 2013-08-04
+Data Crow version 3.12                                             Released on 2013-08-03
 -----------------------------------------------------------------------------------------
 Poor version 3.11. It only took a couple of days and then it got replaced by version 3.12.
 This really is for the most part a cosmetic edition. I have changed the layout a bit 
 further. This is also a preparation for the web GUI since I want to keep the layout for
-both the same, for as far as possible.
+both the same, for as far as possible. Due to the list of changes made and the addition 
+of new functionality I have decided to release this as a normal version instead of a minor 
+version.
 
 [New]
 - The property items overview (found in the Administration menu) gained a new tool: 
