@@ -48,7 +48,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
-import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 import net.datacrow.util.launcher.FileLauncher;
 import net.datacrow.util.launcher.URLLauncher;
@@ -127,31 +126,8 @@ public class DcHtmlEditorPane extends JEditorPane implements HyperlinkListener, 
         return sb.toString();
     }
     
-    
-    
     @Override
-    public void notifyItemSaved(DcObject dco) {
-        String s = getText();
-        
-        StringBuffer sb = new StringBuffer();
-        if (s.contains("http://" + dco.getID())) {
-
-            int idx = s.indexOf("<font", s.indexOf("http://" + dco.getID()));
-            sb.append(s.substring(0, idx));
-            
-            String temp = StringUtils.getValueBetween("<font", ">", s.substring(idx));
-            sb.append("<font");
-            sb.append(temp);
-            sb.append(">");
-            sb.append(dco.toString());
-            sb.append("</font></span>");
-            sb.append(s.substring(s.indexOf("</span>", s.indexOf("http://" + dco.getID())) +  7));
-        }
-        
-        setText("");
-        setHtml(sb.toString());
-        
-    }
+    public void notifyItemSaved(DcObject dco) {}
 
     public String createLinks(Collection<DcObject> items) {
         StringBuffer sb = new StringBuffer();

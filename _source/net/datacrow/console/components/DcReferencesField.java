@@ -58,7 +58,7 @@ import net.datacrow.util.Utilities;
 
 public class DcReferencesField extends JComponent implements IComponent, ActionListener, IItemFormListener, MouseListener {
 
-    private DcHtmlEditorPane fld = ComponentFactory.getHtmlEditorPane();
+    private DcHtmlEditorPane fld = new HtmlField();
 
     private List<DcObject> references = new ArrayList<DcObject>();
     private JButton btOpen = ComponentFactory.getIconButton(IconLibrary._icoOpen);
@@ -216,4 +216,20 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
     public void mousePressed(MouseEvent e) {}
     @Override
     public void mouseClicked(MouseEvent e) {}
+    
+    private class HtmlField extends DcHtmlEditorPane {
+
+        @Override
+        public void notifyItemSaved(DcObject dco) {
+            DcMapping m;
+            for (DcObject reference : references) {
+                m = (DcMapping) reference;
+                if (dco.getID().equals(m.getReferencedID()))
+                    m.setReference(dco);
+            }
+            
+            setDescription();
+        }
+        
+    }
 }
