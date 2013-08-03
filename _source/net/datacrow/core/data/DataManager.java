@@ -105,7 +105,7 @@ public class DataManager {
     
     public static DcImageIcon getIcon(DcObject dco) {
         DcImageIcon icon;
-        if (icons.containsKey(dco.getID())) {
+        if (icons.containsKey(dco.getID()) && icons.get(dco.getID()) != null) {
             icon = icons.get(dco.getID());
         } else {
             icon = dco.createIcon();
@@ -117,8 +117,15 @@ public class DataManager {
             icons.put(dco.getID(), icon);
         }
         
-        if (icon != null && !icon.exists())
+        if (icon != null && !icon.exists()) {
+            // check if the file exists
+            if (icon.getFile() == null && icon.getFilename() == null) {
+                icon.setFilename(DataCrow.iconsDir + dco.getID() + ".png");
+                icons.put(dco.getID(), icon);
+            }
+            
             icon.save();
+        }
         
         if (icon != null)
             icon.setImage(icon.getImage());

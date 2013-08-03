@@ -47,7 +47,6 @@ import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.PollerTask;
@@ -275,10 +274,10 @@ public class FieldTreePanel extends TreePanel {
 	                            joins.append(reference.getField(reference.getSystemDisplayFieldIdx()).getDatabaseFieldName());
 	                            joins.append(" as name,");
 	                            
-	                            if (reference.getType() == DcModule._TYPE_PROPERTY_MODULE) {
+	                            if (reference.getIconField() != null) {
 	                                joins.append(reference.getTableName());
 	                                joins.append(".");
-	                                joins.append(reference.getField(DcProperty._B_ICON).getDatabaseFieldName());
+	                                joins.append(reference.getIconField().getDatabaseFieldName());
 	                            } else {
 	                                joins.append("NULL");
 	                            }
