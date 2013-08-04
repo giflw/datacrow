@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import net.datacrow.console.ComponentFactory;
@@ -44,8 +43,8 @@ public class CachedChildView extends View implements ActionListener {
 
     private ArrayList<DcObject> children = new ArrayList<DcObject>();
     
-    public CachedChildView(MasterView mv, int type, IViewComponent vc, String title, ImageIcon icon, int index) {
-        super(mv, type, vc, title, icon, index);
+    public CachedChildView(MasterView mv, int type, IViewComponent vc, int index) {
+        super(mv, type, vc, index);
     }
     
     @Override

@@ -55,6 +55,7 @@ import net.datacrow.console.components.DcMenuBar;
 import net.datacrow.console.components.DcMenuItem;
 import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.DcShortTextField;
+import net.datacrow.console.components.lists.DcListModel;
 import net.datacrow.console.components.lists.DcObjectList;
 import net.datacrow.console.components.lists.elements.DcListElement;
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
@@ -71,23 +72,25 @@ import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
-import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.plugin.PluginHelper;
 import net.datacrow.core.resources.DcResources;
+import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
-import net.datacrow.core.wf.requests.Requests;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.Settings;
-import net.datacrow.util.DataTask;
 import net.datacrow.util.DcSwingUtilities;
+import net.datacrow.util.DeleteItemsTask;
+import net.datacrow.util.ITaskListener;
 
-public class DcMinimalisticItemView extends DcFrame implements ActionListener, MouseListener, ISimpleItemView, KeyListener {
+public class DcMinimalisticItemView extends DcFrame implements ActionListener, MouseListener, ISimpleItemView, KeyListener, ITaskListener {
 
     private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
     
-    protected DeletingThread task;
+    protected DeleteItemsTask task;
     
     private final boolean readonly;
+    
+    private boolean stopped = false;
     
     private JScrollPane scroller;
     
@@ -125,6 +128,10 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         setCenteredLocation();
     }
     
+    public void storeElements() {
+        all.addAll(list.getElements());
+    }
+    
     public void hideDialogActions(boolean b) {
         buttonClose.setVisible(!b);
         statusPanel.setVisible(!b);
@@ -132,6 +139,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
     
     @Override
     public void close() {
+        stopped = true;
         setVisible(false);
     }
     
@@ -169,24 +177,49 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         itemForm.setVisible(true);
     }
     
-    public Requests getAfterDeleteRequests() {
-        Requests requests = new Requests();
-        requests.add(new RefreshSimpleViewRequest(this));
-        return requests;
-    }    
-    
     public void setObjects(List<DcObject> objects) {
         all.clear();
         list.clear();
         list.add(objects);
         
-        all.addAll(list.getElements());
+        storeElements();
     }
     
     public Collection<DcObject> getItems() {
         return list.getItems();
     }
     
+    @Override
+    public void notifyTaskSize(int size) {
+        panel.initProgressBar(size);
+    }
+
+    @Override
+    public void notify(String msg) {}
+
+    @Override
+    public void notifyTaskStopped() {
+        list.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        allowActions();
+        list.setSelectedIndex(0);
+    }
+
+    @Override
+    public void notifyTaskStarted() {
+        denyActions();
+        list.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+    }
+
+    @Override
+    public void notifyProcessed() {
+        panel.updateProgressBar();
+    }
+
+    @Override
+    public boolean isStopped() {
+        return stopped;
+    }
+
     protected JPopupMenu getPopupMenu() {
         return new DcPropertyViewPopupMenu(this);
     }
@@ -237,7 +270,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         filter.setOrder(new DcField[] {dco.getField(DcModules.get(module).getDefaultSortFieldIdx())});
         list.add(DataManager.getKeys(filter));
         
-        all.addAll(list.getElements());
+        storeElements();
     }    
 
     @Override
@@ -268,9 +301,8 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
      * Indicates whether there is a data task running at this moment
      */
     protected boolean isTaskRunning() {
-        boolean isTaskRunning = task != null && task.isRunning();
-        if (isTaskRunning)
-            DcSwingUtilities.displayWarningMessage("msgJobRunning");
+        boolean isTaskRunning = task != null && task.isAlive();
+        if (isTaskRunning) DcSwingUtilities.displayWarningMessage("msgJobRunning");
 
         return isTaskRunning; 
     }     
@@ -311,24 +343,32 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         if (!getModule().isAbstract() && getModule().getType() != DcModule._TYPE_TEMPLATE_MODULE)
             panelActions.add(buttonCreateMultiple);
         
-        panelActions.add(buttonNew);
+        if (!getModule().isAbstract())
+            panelActions.add(buttonNew);
+        
         panelActions.add(buttonClose);
         
         //**********************************************************
         //Main panel
         //**********************************************************
-        statusPanel = panel.getStatusPanel();
+        statusPanel = panel.getProgressPanel();
         
-        if (DcModules.get(module).getType() == DcModule._TYPE_PROPERTY_MODULE) {
-            setJMenuBar(new DcMinimalisticItemViewMenu(DcModules.get(module), this));
-        
-            JTextField txtFilter = ComponentFactory.getShortTextField(255);
-            txtFilter.addKeyListener(this);        
+        setJMenuBar(new DcMinimalisticItemViewMenu(DcModules.get(module), this));
     
-            getContentPane().add(txtFilter, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
-                    ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                     new Insets( 0, 5, 0, 5), 0, 0));
-        }
+        JTextField txtFilter = ComponentFactory.getShortTextField(255);
+        txtFilter.addKeyListener(this);        
+
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(Layout.getGBL());
+        panel2.add(ComponentFactory.getLabel(DcResources.getText("lblFilter")), Layout.getGBC( 0, 0, 1, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+                 new Insets( 0, 0, 0, 5), 0, 0));
+        panel2.add(txtFilter, Layout.getGBC( 1, 0, 1, 1, 100.0, 100.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 0, 0, 0, 0), 0, 0));
+        getContentPane().add(panel2, Layout.getGBC( 0, 0, 2, 1, 1.0, 1.0
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                 new Insets( 10, 5, 0, 5), 0, 0));
         
         getContentPane().add(panel, Layout.getGBC( 0, 1, 1, 1, 80.0, 80.0
                 ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
@@ -342,15 +382,10 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                     ,GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                      new Insets(0, 0, 0, 0), 0, 0));
         }
-        
     }
     
-    public void initProgressBar(int maxValue) {
-        panel.initProgressBar(maxValue);
-    }
-    
-    public void updateProgressBar(int value) {
-        panel.updateProgressBar(value);
+    public IRequest getAfterDeleteRequest() {
+        return new RefreshSimpleViewRequest(this);
     }
     
     public void deleteUnused() {
@@ -360,19 +395,22 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         
         Collection<DcObject> objects = list.getItems();
         if (objects.size() > 0) {
-            task = new DeletingThread(objects);
+            task = new DeleteItemsTask(this, objects);
+            task.addRequest(getAfterDeleteRequest());
             task.setIgnoreWarnings(true);
             task.start();
         }
     }
     
     public void delete() {
-        if (isTaskRunning() || !DcSwingUtilities.displayQuestion("msgDeleteQuestion")) 
-            return;
+        stopped = false;
         
         Collection<DcObject> objects = list.getSelectedItems();
         if (objects.size() > 0) {
-            task = new DeletingThread(objects);
+            if (isTaskRunning() || !DcSwingUtilities.displayQuestion("msgDeleteQuestion")) 
+                return;
+            
+            task = new DeleteItemsTask(this, objects);
             task.start();
         } else {
             DcSwingUtilities.displayWarningMessage("msgSelectItemToDel");
@@ -390,90 +428,21 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
         String filter = txtFilter.getText();
         
         if (filter.trim().length() == 0) {
-            list.clear();
+            ((DcListModel) list.getModel()).clear();
             list.addElements(all);
         } else {
             List<DcListElement> filtered = new ArrayList<DcListElement>();
             for (DcListElement el : all) {
                 DcObjectListElement element = (DcObjectListElement) el;
-                if (element.getDcObject().toString().toLowerCase().startsWith(filter.toLowerCase()))
+                if (element.getDcObject().toString().toLowerCase().contains(filter.toLowerCase()))
                     filtered.add(el);
             }
         
-            list.clear();
-            
+            // DO NOT USE LIST.CLEAR() - will cleared the stored elements and force a reload of the items.
+            ((DcListModel) list.getModel()).clear();
             list.addElements(filtered);
         }
     }    
-    
-    protected class DeletingThread extends DataTask {
-
-        boolean ignoreWarning = false;
-        
-        public DeletingThread(Collection<DcObject> objects) {
-            super(null, objects);
-        }
-        
-        public void setIgnoreWarnings(boolean b) {
-            ignoreWarning = b;
-        }
-        
-        @Override
-        public void run() {
-            try {
-                updateProgressBar(0);
-                initProgressBar(items.size());   
-                list.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                
-                startTask();
-                denyActions();
-                int counter = 1;
-                Requests requests;
-                for (DcObject dco : items) {
-                    updateProgressBar(counter);
-                    
-                    dco.markAsUnchanged();
-                    
-                    if (counter == items.size()) {
-                        requests = getAfterDeleteRequests();
-                        for (int j = 0; j < requests.get().length; j++) {
-                            dco.addRequest(requests.get()[j]);
-                        }
-                    } 
-
-                    try {
-                        dco.delete(true);
-                    } catch (ValidationException e) {
-                        if (!ignoreWarning) DcSwingUtilities.displayWarningMessage(e.getMessage());
-                    }
-                    
-                    try {
-                        sleep(300);
-                    } catch (Exception ignore) {}
-                    
-                    counter++;
-                }
-                
-                list.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            } finally {
-                list.setSelectedIndex(0);
-                endTask();
-                allowActions();
-            }
-        }
-
-        @Override
-        public void startTask() {
-            denyActions();
-            super.startTask();
-        }
-
-        @Override
-        public void endTask() {
-            allowActions();
-            super.endTask();
-        }
-    }     
     
     @Override
     public void mouseReleased(MouseEvent e) {

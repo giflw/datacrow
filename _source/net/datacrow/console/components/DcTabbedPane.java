@@ -27,6 +27,7 @@ package net.datacrow.console.components;
 
 import java.awt.Graphics;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolTip;
 
@@ -35,7 +36,7 @@ import net.datacrow.util.DcSwingUtilities;
 public class DcTabbedPane extends JTabbedPane {
 
     public DcTabbedPane() {
-        setBorder(null);
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
     }
     
     @Override

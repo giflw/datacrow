@@ -49,7 +49,6 @@ import javax.swing.table.TableColumn;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
@@ -59,7 +58,7 @@ import net.datacrow.util.DcSwingUtilities;
 
 import org.apache.log4j.Logger;
 
-public class QueryPanel extends DcPanel implements ActionListener, ItemListener {
+public class QueryPanel extends JPanel implements ActionListener, ItemListener {
 
     private static Logger logger = Logger.getLogger(QueryPanel.class.getName());    
     
@@ -72,9 +71,7 @@ public class QueryPanel extends DcPanel implements ActionListener, ItemListener 
 	private DcTable table;
 
     public QueryPanel() {
-        super("", null);
         table = ComponentFactory.getDCTable(false, false);
-        setHelpIndex("dc.Tools.QueryTool");
         build();
     }
 

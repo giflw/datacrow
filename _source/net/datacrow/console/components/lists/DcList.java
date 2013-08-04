@@ -32,7 +32,6 @@ import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
@@ -294,8 +293,8 @@ public class DcList extends JList implements ComponentListener {
         return (DcListModel) getModel();
     }
     
-    public Collection<DcListElement> getElements() {
-        Collection<DcListElement> elements = new ArrayList<DcListElement>();
+    public List<DcListElement> getElements() {
+        List<DcListElement> elements = new ArrayList<DcListElement>();
         for (int i = 0 ; i < getDcModel().getSize(); i++)
             elements.add((DcListElement) getDcModel().getElementAt(i));
 

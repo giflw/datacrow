@@ -42,7 +42,6 @@ import net.datacrow.console.components.DcPanel;
 import net.datacrow.console.components.DcProgressBar;
 import net.datacrow.console.components.tables.DcTable;
 import net.datacrow.console.views.ISimpleItemView;
-import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
@@ -50,7 +49,6 @@ import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Loan;
 import net.datacrow.core.objects.helpers.Item;
 import net.datacrow.core.objects.helpers.Media;
-import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.security.SecurityCentre;
 
 import org.apache.log4j.Logger;
@@ -72,12 +70,7 @@ public class LoanInformationPanel extends DcPanel implements ISimpleItemView, Mo
     
     public LoanInformationPanel(DcObject person) {
         super();
-
-        setTitle(DcResources.getText("lblLoanInformation"));
-        setIcon(IconLibrary._icoLoan);
-
         this.person = person;
-        
         build();
     }
     

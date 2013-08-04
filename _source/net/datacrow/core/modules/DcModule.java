@@ -50,7 +50,6 @@ import net.datacrow.console.windows.filtering.FilterDialog;
 import net.datacrow.console.windows.itemforms.ItemForm;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
-import net.datacrow.core.IconLibrary;
 import net.datacrow.core.db.DatabaseManager;
 import net.datacrow.core.migration.itemimport.CsvImporter;
 import net.datacrow.core.migration.itemimport.ItemImporterHelper;
@@ -1528,17 +1527,13 @@ public class DcModule implements Comparable<DcModule> {
             if (!isAbstract()) {
 	            DcTable table = new DcTable(this, false, true);
 	            table.setDynamicLoading(false);
-	            View tableView = new View(insertView, View._TYPE_INSERT, table, 
-	                    DcResources.getText("lblNewItem", getObjectNamePlural()), 
-	                    IconLibrary._icoItemsNew, MasterView._TABLE_VIEW);
+	            View tableView = new View(insertView, View._TYPE_INSERT, table, MasterView._TABLE_VIEW);
 	            table.setView(tableView);
 	            insertView.addView(MasterView._TABLE_VIEW, tableView);
             } else {
                 // list view, only for abstract modules
                 DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
-                View listView = new View(insertView, View._TYPE_INSERT, list, 
-                        DcResources.getText("lblNewItem", getObjectNamePlural()), 
-                        IconLibrary._icoItemsNew, MasterView._LIST_VIEW);
+                View listView = new View(insertView, View._TYPE_INSERT, list, MasterView._LIST_VIEW);
                 list.setView(listView);
                 
                 insertView.addView(MasterView._LIST_VIEW, listView);
@@ -1552,7 +1547,7 @@ public class DcModule implements Comparable<DcModule> {
             // table view
             if (!isAbstract()) {
 	            DcTable table = new DcTable(this, false, true);
-	            View tableView = new View(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
+	            View tableView = new View(searchView, View._TYPE_SEARCH, table, MasterView._TABLE_VIEW);
 	            table.setView(tableView);
 	            
 	            searchView.addView(MasterView._TABLE_VIEW, tableView);
@@ -1560,7 +1555,7 @@ public class DcModule implements Comparable<DcModule> {
             
             // list view
             DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
-            View listView = new View(searchView, View._TYPE_SEARCH, list, getObjectNamePlural(), getIcon16(), MasterView._LIST_VIEW);
+            View listView = new View(searchView, View._TYPE_SEARCH, list, MasterView._LIST_VIEW);
             list.setView(listView);
             
             searchView.addView(MasterView._LIST_VIEW, listView);            

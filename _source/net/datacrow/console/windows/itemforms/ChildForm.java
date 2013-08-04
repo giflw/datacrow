@@ -28,8 +28,8 @@ package net.datacrow.console.windows.itemforms;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.RefreshChildView;
-import net.datacrow.core.wf.requests.Requests;
 
 public class ChildForm extends DcMinimalisticItemView {
 
@@ -55,6 +55,7 @@ public class ChildForm extends DcMinimalisticItemView {
     public void load() {
         list.clear();
         list.add(DataManager.getChildrenKeys(parentID, getModuleIdx()));
+        storeElements();
     }
     
     @Override
@@ -81,12 +82,10 @@ public class ChildForm extends DcMinimalisticItemView {
         ChildItemForm itemForm = new ChildItemForm(false, dco, this);
         itemForm.setVisible(true);
     }
-
+    
     @Override
-    public Requests getAfterDeleteRequests() {
-        Requests requests = new Requests();
-        requests.add(new RefreshChildView(this));
-        return requests;
+    public IRequest getAfterDeleteRequest() {
+        return new RefreshChildView(this);
     }
 
     public int getParentModuleIdx() {

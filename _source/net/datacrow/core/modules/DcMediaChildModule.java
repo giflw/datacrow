@@ -132,7 +132,7 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
                 insertView = new MasterView(getIndex());
                 DcTable table = new DcTable(this, false, true);
                 table.setDynamicLoading(false);
-                View view = new CachedChildView(insertView, View._TYPE_INSERT, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
+                View view = new CachedChildView(insertView, View._TYPE_INSERT, table, MasterView._TABLE_VIEW);
                 table.setView(view);
                 
                 insertView.addView(MasterView._TABLE_VIEW, view);
@@ -143,7 +143,7 @@ public class DcMediaChildModule extends DcMediaModule implements IChildModule {
                 searchView.setTreePanel(this);
                 
                 DcTable table = new DcTable(this, false, true);
-                View view = new View(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
+                View view = new View(searchView, View._TYPE_SEARCH, table, MasterView._TABLE_VIEW);
                 table.setView(view);
 
                 searchView.addView(MasterView._TABLE_VIEW, view);

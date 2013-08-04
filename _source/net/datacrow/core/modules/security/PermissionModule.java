@@ -160,7 +160,7 @@ public class PermissionModule extends DcChildModule {
             searchView.setTreePanel(this);
             
             DcTable table = new DcTable(this, true, true);
-            View view = new View(searchView, View._TYPE_SEARCH, table, getObjectNamePlural(), getIcon16(), MasterView._TABLE_VIEW);
+            View view = new View(searchView, View._TYPE_SEARCH, table, MasterView._TABLE_VIEW);
             table.setView(view);
 
             searchView.addView(MasterView._TABLE_VIEW, view);       

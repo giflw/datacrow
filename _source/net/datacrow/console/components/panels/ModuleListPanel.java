@@ -65,14 +65,13 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.Utilities;
 
-public class ModuleListPanel extends DcPanel {
+public class ModuleListPanel extends JPanel {
     
     private Collection<JComponent> components = new ArrayList<JComponent>();
     private static Border borderDefault;
     private static Border borderSelected;
     
     public ModuleListPanel() {
-        super(null, null);
     	buildPanel();
     }
     

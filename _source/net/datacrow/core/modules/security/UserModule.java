@@ -158,7 +158,7 @@ public class UserModule extends DcParentModule {
             
             // list view
             DcObjectList list = new DcObjectList(this, DcObjectList._CARDS, true, true);
-            View listView = new UserView(searchView, View._TYPE_SEARCH, list, getObjectNamePlural(), getIcon16(), MasterView._LIST_VIEW);
+            View listView = new UserView(searchView, View._TYPE_SEARCH, list, MasterView._LIST_VIEW);
             list.setView(listView);
 
             searchView.addView(MasterView._LIST_VIEW, listView);            

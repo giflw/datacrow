@@ -29,8 +29,8 @@ import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.template.Templates;
+import net.datacrow.core.wf.requests.IRequest;
 import net.datacrow.core.wf.requests.RefreshSimpleViewRequest;
-import net.datacrow.core.wf.requests.Requests;
 
 public class TemplateForm extends DcMinimalisticItemView {
 
@@ -60,10 +60,8 @@ public class TemplateForm extends DcMinimalisticItemView {
     }
 
     @Override
-    public Requests getAfterDeleteRequests() {
-        Requests requests = new Requests();
-        requests.add(new RefreshSimpleViewRequest(this));
-        return requests;
+    public IRequest getAfterDeleteRequest() {
+        return new RefreshSimpleViewRequest(this);
     }
 
     @Override

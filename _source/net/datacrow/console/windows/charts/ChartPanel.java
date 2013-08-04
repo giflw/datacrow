@@ -44,7 +44,6 @@ import javax.swing.SwingUtilities;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
-import net.datacrow.console.components.DcPanel;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.DcThread;
 import net.datacrow.core.IconLibrary;
@@ -65,7 +64,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 
-public class ChartPanel extends DcPanel implements ActionListener {
+public class ChartPanel extends JPanel implements ActionListener {
     
     private static Logger logger = Logger.getLogger(ChartPanel.class.getName());
     
@@ -79,20 +78,8 @@ public class ChartPanel extends DcPanel implements ActionListener {
     private final int module;
     
     public ChartPanel(int module) {
-        super(DcResources.getText("lblCharts"), IconLibrary._icoChart);
-        setHelpIndex("dc.charts");
         this.module = module;
         build();
-    }
-    
-    @Override
-    public void clear() {
-        super.clear();
-        comboFields = null;
-        comboTypes = null;
-        chartPanel = null;
-        btnAccept = null;
-        tg = null;
     }
     
     @Override

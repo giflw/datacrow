@@ -213,12 +213,12 @@ public class ItemForm extends DcFrame implements ActionListener {
             addLoanTab();
         }
 
-        getContentPane().add(tabbedPane,  Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
+        getContentPane().add(tabbedPane,  Layout.getGBC(0, 0, 1, 1, 100.0, 100.0
                             ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                             new Insets(0,0,15,0), 0, 0));
+                             new Insets(5, 5, 5, 5), 0, 0));
         getContentPane().add(panelActions,  Layout.getGBC(0, 1, 1, 1, 0.0, 0.0
                             ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                             new Insets(0, 0, 0, 0), 0, 0));
+                             new Insets(0, 0, 0, 5), 0, 0));
 
         setRequiredFields();
         setReadonly(readonly);

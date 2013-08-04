@@ -43,16 +43,15 @@ public class DcPanel extends JPanel {
     private String title;
     private ImageIcon icon;
 
-    private final JPanel panelStatus = new JPanel();
+    private final JPanel pnlProgress = new JPanel();
 
     public DcPanel() {
-        createStatusPanel();
+        buildProgressPanel();
     }
     
-    public DcPanel(String title, ImageIcon icon) {
+    public DcPanel(String title) {
         this.title = title;
-        this.icon = icon;
-        createStatusPanel();
+        buildProgressPanel();
     }
 
     public void setTitle(String s) {
@@ -83,46 +82,17 @@ public class DcPanel extends JPanel {
     public String getHelpIndex() {
     	return helpIndex;
     }
-
-//    public void setStatus(final String text) {
-//        if (text != null) {
-//            if (SwingUtilities.isEventDispatchThread()) {
-//                labelStatus.setText(text);
-//            } else {
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        labelStatus.setText(text);
-//                    }
-//                });
-//            }
-//        }
-//    }
     
-    
-    public void setMaxForProgressBar(final int maxValue) {
-        if (SwingUtilities.isEventDispatchThread()) {
-            progress.setMaximum(maxValue);
-        } else {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setMaximum(maxValue);
-                }
-            });
-        }
-    }
-
     public void initProgressBar(final int maxValue) {
         if (SwingUtilities.isEventDispatchThread()) {
-            progress.setValue(0);
-            progress.setMaximum(maxValue);
+            if (progress != null) progress.setValue(0);
+            if (progress != null) progress.setMaximum(maxValue);
         } else {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    progress.setValue(0);
-                    progress.setMaximum(maxValue);
+                    if (progress != null) progress.setValue(0);
+                    if (progress != null) progress.setMaximum(maxValue);
                 }
             });
         }
@@ -130,31 +100,31 @@ public class DcPanel extends JPanel {
 
     public void updateProgressBar() {
         if (SwingUtilities.isEventDispatchThread()) {
-            progress.setValue(progress.getValue() + 1);
+            if (progress != null) progress.setValue(progress.getValue() + 1);
         } else {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    progress.setValue(progress.getValue() + 1);                }
+                    if (progress != null) progress.setValue(progress.getValue() + 1);                }
             });
         }
     }
     
     public void updateProgressBar(final int value) {
         if (SwingUtilities.isEventDispatchThread()) {
-            progress.setValue(value);
+            if (progress != null) progress.setValue(value);
         } else {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    progress.setValue(value);
+                    if (progress != null) progress.setValue(value);
                 }
             });
         }
     }
 
-    public JPanel getStatusPanel() {
-    	return panelStatus;
+    public JPanel getProgressPanel() {
+    	return pnlProgress;
     }
     
     public void clear() {
@@ -164,16 +134,9 @@ public class DcPanel extends JPanel {
         icon = null;
     }
 
-    private void createStatusPanel() {
-        panelStatus.setLayout(Layout.getGBL());
-
-        JPanel panelProgress = new JPanel();
-        panelProgress.setLayout(Layout.getGBL());
-        panelProgress.add(progress, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0,
-                        GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
-                        new Insets(0, 0, 0, 0), 0, 0));
-
-        panelStatus.add(panelProgress, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
+    private void buildProgressPanel() {
+        pnlProgress.setLayout(Layout.getGBL());
+        pnlProgress.add(progress, Layout.getGBC(0, 1, 1, 1, 1.0, 1.0,
                         GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
                         new Insets(0, 0, 0, 0), 0, 0));
     }

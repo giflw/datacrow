@@ -39,7 +39,6 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -119,8 +118,7 @@ public class View extends DcPanel implements ListSelectionListener {
     
     private final ViewMouseListener vml = new ViewMouseListener();
     
-    public View(MasterView mv, int type, IViewComponent vc, String title, ImageIcon icon, int index) {
-        super(title, icon);  
+    public View(MasterView mv, int type, IViewComponent vc, int index) {
         
         this.groupingPane = mv.getGroupingPane();
         this.type = type;

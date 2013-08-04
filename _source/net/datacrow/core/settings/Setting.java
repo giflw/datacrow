@@ -46,6 +46,7 @@ import net.datacrow.settings.definitions.IDefinitions;
 import net.datacrow.settings.definitions.ProgramDefinitions;
 import net.datacrow.settings.definitions.QuickViewFieldDefinitions;
 import net.datacrow.util.StringUtils;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -230,6 +231,9 @@ public class Setting {
      */
     public void setStringAsValue(String s) {
         String sValue = s;
+        
+        if (Utilities.isEmpty(s)) return;
+        
         try {
             switch (dataType) {
 
