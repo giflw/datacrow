@@ -50,7 +50,7 @@ public class ToolSelectWizard extends Wizard {
         
         add(cb,  Layout.getGBC(1, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                 new Insets(5, 5, 5, 5), 0, 0));
+                 new Insets(5, 5, 5, 10), 0, 0));
         
         cb.setSelected(DcSettings.getBoolean(DcRepository.Settings.stShowToolSelectorOnStartup));
         

@@ -242,7 +242,7 @@ public abstract class Wizard extends DcFrame implements ActionListener {
                              new Insets(5, 5, 5, 5), 0, 0));
         getContentPane().add(getActionPanel(), Layout.getGBC(1, 3, 1, 2, 1.0, 1.0
                             ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                             new Insets(5, 5, 5, 15), 0, 0));
+                             new Insets(0, 0, 0, 5), 0, 0));
 
         // the actual content panels
         int counter = 0;

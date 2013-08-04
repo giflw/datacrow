@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import net.datacrow.console.components.DcPopupMenu;
 import net.datacrow.console.windows.itemforms.DcMinimalisticItemView;
 import net.datacrow.core.IconLibrary;
+import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.resources.DcResources;
 
 public class DcPropertyViewPopupMenu extends DcPopupMenu  implements ActionListener {
@@ -60,8 +61,12 @@ public class DcPropertyViewPopupMenu extends DcPopupMenu  implements ActionListe
 
         add(menuOpen);
         add(menuDelete);
-        addSeparator();
-        add(menuMerge);
+        
+        if (form.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE) {
+            addSeparator();
+            add(menuMerge);
+        }
+        
     }
 
     @Override

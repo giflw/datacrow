@@ -218,7 +218,7 @@ public class ItemForm extends DcFrame implements ActionListener {
                              new Insets(0,0,15,0), 0, 0));
         getContentPane().add(panelActions,  Layout.getGBC(0, 1, 1, 1, 0.0, 0.0
                             ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                             new Insets(5, 5, 5, 5), 0, 0));
+                             new Insets(0, 0, 0, 0), 0, 0));
 
         setRequiredFields();
         setReadonly(readonly);

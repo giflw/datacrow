@@ -213,7 +213,7 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
         }
         
         panelInput.add(itemForm.getTabbedPane(), Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-                ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+                ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                  new Insets(0, 0, 0, 0), 0, 0));
 
         //**********************************************************
@@ -257,8 +257,8 @@ public class UpdateAllDialog extends DcFrame implements ActionListener {
         //Main panel
         //**********************************************************
         this.getContentPane().setLayout(Layout.getGBL());
-        this.getContentPane().add(panelInput  ,Layout.getGBC(0, 0, 1, 1, 10.0, 10.0
-                                              ,GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+        this.getContentPane().add(panelInput  ,Layout.getGBC(0, 0, 1, 1, 100.0, 100.0
+                                              ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
                                                new Insets(5, 5, 5, 5), 0, 0));
         this.getContentPane().add(panelOptions,Layout.getGBC(0, 1, 1, 1, 1.0, 1.0
                                               ,GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,

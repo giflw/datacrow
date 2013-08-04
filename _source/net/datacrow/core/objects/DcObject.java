@@ -878,7 +878,7 @@ public class DcObject implements Comparable<DcObject>, Serializable {
             return false;
         }
 
-        return getValueDef(index).isChanged();
+        return getValueDef(index) != null ? getValueDef(index).isChanged() : false;
     }
 
     /**

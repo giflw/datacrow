@@ -81,6 +81,10 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
                             module.getSearchView().getGroupingPane().isEnabled() &&
                             module.getSearchView().getGroupingPane().isLoaded())
                         module.getSearchView().getGroupingPane().updateTreeNodes(dco);
+                    
+                    // only do this for the last item in queue
+                    if (dco.isLastInLine())
+                        module.getSearchView().refreshQuickView();
                 }
             }
         }

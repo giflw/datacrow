@@ -324,7 +324,7 @@ public class PanelFields extends ModuleWizardPanel implements ActionListener {
                  new Insets(5, 5, 5, 5), 0, 0)); 
         add(panelActions,   Layout.getGBC(0, 2, 1, 1, 1.0, 1.0
                 ,GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                 new Insets(5, 5, 5, 10), 0, 0)); 
+                 new Insets(0, 0, 0, 0), 0, 0)); 
     }
     
     @Override
