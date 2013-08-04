@@ -1,21 +1,29 @@
 -----------------------------------------------------------------------------------------
-Data Crow version 3.12.1                                           Released on 2013-08-xx
+Data Crow version 3.12.1                                           Released on 2013-08-04
 -----------------------------------------------------------------------------------------
+A minor release to include additional changes and new functionality. Much needed fixes
+for the references fields have finally been included. 
 
 [Fixed]
 - Icons for containers not shown in trees, fields and in the quick view.
 - Icon for modules disappears in the Media module.
-- Several minor layout fixes (button alignment) such as for the tool select wizard and
-  the update all dialog.
-- Error loading setting if value is empty.
+- Error loading setting if value is erroneously empty.
 
 [Changed]
 - Merging property items will now also update the "alternative names" field, merging
   items returned from online searches, etc., automatically.
 - In the past, due to performance issues, I had refrained from updating trees in case
   a property was changed. This has now been fully implemented; changing an icon will
-  immediately be reflected on trees, multi reference views and the quick view panel.
+  immediately be reflected on trees, multi-reference views and the quick view panel.
+- Added quick filter to the related items and fixed the sorting.
+- Added quick filter for the items tab of containers. Sorting cannot be fixed just yet.
+- Several minor layout changes (button alignment) such as for the tool select wizard and
+  the update all dialog.
   
+[New]
+- Added a right-click option for the related items tab of the item form to 
+  remove the selected items as a reference.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow version 3.12                                             Released on 2013-08-03

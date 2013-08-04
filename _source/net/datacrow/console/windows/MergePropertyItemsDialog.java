@@ -367,6 +367,9 @@ public class MergePropertyItemsDialog extends DcDialog implements ActionListener
                 
                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                     Collection<DcObject> mappings = (Collection<DcObject>) template.getValue(field.getIndex());
+                    
+                    if (mappings == null) continue;
+                    
                     for (DcObject mapping : mappings) { // loop through mappings
                         for (DcObject reference : items) { // loop through to be replaced values
                             if (mapping.getValue(DcMapping._B_REFERENCED_ID).equals(reference.getID()))
@@ -443,6 +446,8 @@ public class MergePropertyItemsDialog extends DcDialog implements ActionListener
                                 if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                                 
                                     Collection<DcObject> mappings = (Collection<DcObject>) dco.getValue(field.getIndex());
+                                    
+                                    if (mappings == null) continue;
                                    
                                     for (DcObject mapping : mappings) { // loop through mappings
                                         for (DcObject reference : items) { // loop through to be replaced values
