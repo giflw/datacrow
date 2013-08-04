@@ -53,6 +53,7 @@ import net.datacrow.core.modules.DcPropertyModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
 import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.DcProperty;
 import net.datacrow.core.objects.DcTemplate;
 import net.datacrow.core.objects.ValidationException;
 import net.datacrow.core.objects.template.Templates;
@@ -60,6 +61,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.util.DcSwingUtilities;
 import net.datacrow.util.ITaskListener;
+import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
 
@@ -261,6 +263,28 @@ public class MergePropertyItemsDialog extends DcDialog implements ActionListener
             }
             
             deleteItems();
+            
+            if (target.getModule().getType() == DcModule._TYPE_PROPERTY_MODULE) {
+                String alternatives = (String) target.getValue(DcProperty._C_ALTERNATIVE_NAMES);
+                alternatives = alternatives == null ? "" : alternatives;
+                String altName;
+                for (DcObject item : items) {
+                    altName = (String) item.getValue(DcProperty._A_NAME);
+                    
+                    if (!Utilities.isEmpty(altName) && !alternatives.toLowerCase().contains(";" + altName.toLowerCase() + ";")) {
+                        alternatives += alternatives.endsWith(";") ? "" : ";";
+                        alternatives += altName + ";";
+                    }
+                }
+                target.setValue(DcProperty._C_ALTERNATIVE_NAMES, alternatives);
+                
+                try {
+                    target.saveUpdate(false);
+                } catch (ValidationException ve) {
+                    listener.notify(ve.getMessage());
+                    logger.warn(ve, ve);
+                }
+            }
             
             listener.notify(DcResources.getText("msgMergeCompleted"));
             DcSwingUtilities.displayMessage(DcResources.getText("msgMergeCompleted"));

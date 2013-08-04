@@ -45,7 +45,7 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
             }
         }
         
-        if (updateRelatedModules && dco.isLastInLine()) {
+        if (updateRelatedModules) {
             Collection<DcModule> modules = DcModules.getReferencingModulesAll(dco.getModule().getIndex());
             for (DcModule module : modules) {
                 
@@ -54,11 +54,14 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
                 if (module.isSearchViewInitialized() && module.getSearchView().isLoaded()) {
                     
                     // update the tree of this module to reflect name changes, etc.
-                    if (module.getSearchView().getGroupingPane() != null) {
+                    if (    module.getSearchView().getGroupingPane() != null && 
+                            module.getSearchView().getGroupingPane().isEnabled() &&
+                            module.getSearchView().getGroupingPane().isLoaded())
                         module.getSearchView().getGroupingPane().updateTreeNodes(dco);
-                    }
                     
-                    module.getSearchView().refreshQuickView();
+                    // only do this for the last item in queue
+                    if (dco.isLastInLine())
+                        module.getSearchView().refreshQuickView();
                 }
             }
         }
@@ -72,6 +75,12 @@ public class UpdateUIAfterUpdateRequest implements IUpdateUIRequest {
                     if (module.getSearchView().getGroupingPane() != null && 
                         module.getSearchView().getGroupingPane().isEnabled())
                         module.getSearchView().getGroupingPane().getCurrent().setSelected(dco);
+                    
+                    // update the tree of this module to reflect name changes, etc.
+                    if (    module.getSearchView().getGroupingPane() != null && 
+                            module.getSearchView().getGroupingPane().isEnabled() &&
+                            module.getSearchView().getGroupingPane().isLoaded())
+                        module.getSearchView().getGroupingPane().updateTreeNodes(dco);
                 }
             }
         }

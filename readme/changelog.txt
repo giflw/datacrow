@@ -6,6 +6,10 @@ Data Crow version 3.12.1                                           Released on 2
 - Icons not shown for containers in trees, fields and the quick view.
 - Tree does not reflect changes made to properties etc.
 
+[Changed]
+- Merging property items will now also update the "alternative names" field, merging
+  items returned from online searches, etc., automatically.
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow version 3.12                                             Released on 2013-08-03

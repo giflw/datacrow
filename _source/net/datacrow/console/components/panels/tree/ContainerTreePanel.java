@@ -107,13 +107,6 @@ public class ContainerTreePanel extends TreePanel {
     }
     
     @Override
-    public void update(DcObject dco) {
-        if (dco.getModule().getIndex() == DcModules._CONTAINER) {
-            super.update(dco);
-        }
-    }
-    
-    @Override
     public DcDefaultMutableTreeNode getFullPath(DcObject dco) {
         DcDefaultMutableTreeNode node;
         DcObject parent = (DcObject) dco.getValue(Container._F_PARENT);
@@ -149,7 +142,8 @@ public class ContainerTreePanel extends TreePanel {
     
     @Override
 	public boolean isChanged(DcObject dco) {
-    	return dco.isChanged(Container._A_NAME) || dco.isChanged(Container._F_PARENT);
+    	return dco.getModule().getIndex() == DcModules._CONTAINER &&
+    	        (dco.isChanged(Container._A_NAME) || dco.isChanged(Container._F_PARENT));
 	}
     
     private class TreeHugger extends Thread {

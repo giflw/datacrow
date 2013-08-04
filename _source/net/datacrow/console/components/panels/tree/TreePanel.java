@@ -278,9 +278,17 @@ public abstract class TreePanel extends JPanel implements TreeSelectionListener 
     
     public abstract boolean isChanged(DcObject dco);
     
+    /**
+     * Updates the tree to reflect changes made to the item.
+     * It will check if the items update should have any effect on the tree and
+     * update the tree accordingly. 
+     * @param dco
+     */
     public void update(DcObject dco) {
-		remove(dco.getID());
-		add(dco);
+        if (isChanged(dco)) {
+            remove(dco.getID());
+            add(dco);
+        }
     }
     
     /**

@@ -221,6 +221,9 @@ public class DcReferencesField extends JComponent implements IComponent, ActionL
 
         @Override
         public void notifyItemSaved(DcObject dco) {
+            
+            // this will update the description of a property (for example)
+            // on this references field.
             DcMapping m;
             for (DcObject reference : references) {
                 m = (DcMapping) reference;

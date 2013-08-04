@@ -19,7 +19,7 @@ public class NodeElement {
     public NodeElement(Object key, String displayValue, DcImageIcon icon) {
         this.key = key;   
         this.displayValue = displayValue;
-        this.icon = icon;
+        this.icon = icon != null ? new DcImageIcon(icon.getBytes()) : icon;
     }
     
     public void setKey(Object key) {
@@ -31,7 +31,7 @@ public class NodeElement {
     }
     
     public void setIcon(DcImageIcon icon) {
-        this.icon = icon;
+        this.icon = icon != null ? new DcImageIcon(icon.getBytes()) : icon;
     }
     
     public void addItem(String item, Integer moduleIdx) {
