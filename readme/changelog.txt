@@ -1,4 +1,14 @@
 -----------------------------------------------------------------------------------------
+Data Crow version 3.12.2                                           Released on 2013-08-xx
+-----------------------------------------------------------------------------------------
+
+[Changed]
+- Updated German translation: big thanks to Ralf Geiﬂ!
+
+[bugs]
+- !! Changes not saved using the quick filter on resource editor (?)
+
+-----------------------------------------------------------------------------------------
 Data Crow version 3.12.1                                           Released on 2013-08-04
 -----------------------------------------------------------------------------------------
 A minor release to include additional changes and new functionality. Much needed fixes
