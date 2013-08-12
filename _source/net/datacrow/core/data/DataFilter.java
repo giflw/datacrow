@@ -334,7 +334,9 @@ public class DataFilter {
         String ids;
         for (DataFilterEntry entry : entries) {
             
-            if (entry == null || entry.getValue() == null) continue;
+            if (    entry == null || 
+                    entry.getOperator() == null || 
+                    (entry.getOperator().needsValue() && entry.getValue() == null)) continue;
 
             storage += "<ENTRY>\n";
             
@@ -344,22 +346,25 @@ public class DataFilter {
             storage += "<FIELD>" + entry.getField() + "</FIELD>\n";
             
             value = "";
-            if (entry.getValue() instanceof Collection) {
-                ids = "";
-                for (Object o : ((Collection) entry.getValue())) {
-                    if (o != null && o instanceof DcObject) {
-                        ids += (ids.length() > 0 ? "," : "") + ((DcObject) o).getID();
-                    } else {
-                        logger.debug("Expected an instance of DcObject for Collections for DataFilter. Unexpected value encountered " + o);
+            
+            if (entry.getOperator().needsValue()) {
+                if (entry.getValue() instanceof Collection) {
+                    ids = "";
+                    for (Object o : ((Collection) entry.getValue())) {
+                        if (o != null && o instanceof DcObject) {
+                            ids += (ids.length() > 0 ? "," : "") + ((DcObject) o).getID();
+                        } else {
+                            logger.debug("Expected an instance of DcObject for Collections for DataFilter. Unexpected value encountered " + o);
+                        }
                     }
+                    value = ids;
+                } else if (entry.getValue() instanceof DcObject) {
+                    value = ((DcObject) entry.getValue()).getID();
+                } else if (entry.getValue() instanceof Date) {
+                    value = sdf.format((Date) entry.getValue());
+                } else {
+                    value = entry.getValue().toString();
                 }
-                value = ids;
-            } else if (entry.getValue() instanceof DcObject) {
-                value = ((DcObject) entry.getValue()).getID();
-            } else if (entry.getValue() instanceof Date) {
-                value = sdf.format((Date) entry.getValue());
-            } else {
-                value = entry.getValue().toString();
             }
             
             storage += "<VALUE>" + value + "</VALUE>\n";
