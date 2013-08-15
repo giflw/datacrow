@@ -111,21 +111,21 @@ public class LanguageResourceEditPanel extends JPanel implements KeyListener, Ac
     private void filter() {
         String filter = txtFilter.getText().toLowerCase();
         
+        Map<String, String> current = getValues();
+        for (String key : current.keySet()) { 
+            allValues.put(key, current.get(key));
+        }
+        
         if (filter.trim().length() == 0) {
             setValues(allValues);
         } else {
             Map<String, String> filteredValues = new HashMap<String, String>();
-            Map<String, String> current = getValues();
-            
             String value;
             for (String key : allValues.keySet()) {
-                // safeguard edits - check current values based on resource key.
-                value = current.containsKey(key) ? current.get(key) : allValues.get(key);
-                allValues.put(key, value);
+                value = allValues.get(key);
                 if (value.toLowerCase().contains(filter))
                     filteredValues.put(key, value);
             }
-            
             setValues(filteredValues);
         }
     }

@@ -154,10 +154,11 @@ public class OnlineSearchForm extends DcFrame implements IOnlineSearchClient, Ac
     @Override
     public void addObject(DcObject dco) {
         if (task != null && !task.isCancelled()) {
-            dco.applyTemplate();
-                
-            if (ID == null)
+            
+            if (ID == null) {
                 removeValues(dco);
+                dco.applyTemplate();
+            }
             
             list.add(dco);
             table.add(dco);

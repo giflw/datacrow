@@ -523,6 +523,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             miEdit.setActionCommand("open_edit");
             miAdd.setActionCommand("createNew");
             miDelete.setActionCommand("delete");
+            
             miDeleteUnused.setActionCommand("delete_unused");
             miMerge.setActionCommand("merge");
             
@@ -538,16 +539,21 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
             menuEdit.add(miAdd);
             menuEdit.addSeparator();
             menuEdit.add(miDelete);
-            menuEdit.add(miDeleteUnused);
-            menuEdit.addSeparator();
-            menuEdit.add(miMerge);
+            
+            if (module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
+                menuEdit.add(miDeleteUnused);
+                menuEdit.addSeparator();
+                menuEdit.add(miMerge);
+            }
             
             add(menuEdit);
             
-            DcMenu menuSettings = ComponentFactory.getMenu(DcResources.getText("lblSettings"));
-            PluginHelper.add(menuSettings, "ItemFormSettings", module.getIndex());
-            PluginHelper.add(menuSettings, "FieldSettings", module.getIndex());
-            add(menuSettings);
+            if (module.getType() != DcModule._TYPE_TEMPLATE_MODULE) {
+                DcMenu menuSettings = ComponentFactory.getMenu(DcResources.getText("lblSettings"));
+                PluginHelper.add(menuSettings, "ItemFormSettings", module.getIndex());
+                PluginHelper.add(menuSettings, "FieldSettings", module.getIndex());
+                add(menuSettings);
+            }
         }
     }
 }

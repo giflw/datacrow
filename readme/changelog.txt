@@ -1,13 +1,16 @@
 -----------------------------------------------------------------------------------------
-Data Crow version 3.12.2                                           Released on 2013-08-xx
+Data Crow version 3.12.2                                           Released on 2013-08-15
 -----------------------------------------------------------------------------------------
 
 [Changed]
 - Updated German translation: big thanks to Ralf Geiﬂ!
+- Template default and name have been moved to the "Template Properties" tab.
 
-[bugs]
-- !! Changes not saved using the quick filter on resource editor (?)
+[Fixed]
+- Changes not saved using the quick filter on resource editor.
 - Filter not saved when value is empty.
+- Template not applied to items retrieved by the online search.
+- Templates overview settings incorrect
 
 
 -----------------------------------------------------------------------------------------
