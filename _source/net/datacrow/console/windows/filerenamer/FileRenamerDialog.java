@@ -218,7 +218,7 @@ public class FileRenamerDialog extends DcFrame implements ActionListener, IFileR
 	        		}
 	        	} else {
 	        		DcObject dco = DataManager.getItem(module, key, fields);
-	        		if (dco.isFilled(DcObject._SYS_FILENAME));
+	        		if (dco.isFilled(DcObject._SYS_FILENAME))
 	        			result.add(dco);
 	        	}
 	        	        	
