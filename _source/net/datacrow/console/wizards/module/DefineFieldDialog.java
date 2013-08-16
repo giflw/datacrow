@@ -262,11 +262,11 @@ public class DefineFieldDialog extends DcDialog implements ActionListener {
         if (ft.getIndex() == ComponentFactory._SHORTTEXTFIELD) {
             lblMaxLength.setVisible(true);
             numberMaxLength.setVisible(true);
-            numberMaxLength.setValue(255);
+            numberMaxLength.setValue(existingField && field.getMaximumLength() != 0 ? field.getMaximumLength() : 255);
         } else {
             lblMaxLength.setVisible(false);
             numberMaxLength.setVisible(false);
-            numberMaxLength.setValue(255);
+            numberMaxLength.setValue(existingField && field.getMaximumLength() != 0 ? field.getMaximumLength() : 255);
         }
         
         if (ft.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||

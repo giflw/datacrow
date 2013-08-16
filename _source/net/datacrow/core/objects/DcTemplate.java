@@ -34,8 +34,8 @@ public class DcTemplate extends DcObject {
 
     private static final long serialVersionUID = -6626046268821765360L;
 
-    public static final int _SYS_TEMPLATENAME = 50;
-    public static final int _SYS_DEFAULT = 51;
+    public static final int _SYS_TEMPLATENAME = 400;
+    public static final int _SYS_DEFAULT = 401;
     
     private final int parent;
  
