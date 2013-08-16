@@ -6,7 +6,7 @@ Data Crow version 3.12.3                                           Released on 2
 - Alter module wizard: change field; maximum length always defaulted to 255.
 - Potential issue for Template Name and Default field. These could conflict with the
   normal fields of the module.
-
+  
 
 -----------------------------------------------------------------------------------------
 Data Crow version 3.12.2                                           Released on 2013-08-15

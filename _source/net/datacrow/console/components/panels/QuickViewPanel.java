@@ -56,7 +56,9 @@ import net.datacrow.core.IconLibrary;
 import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcMapping;
+import net.datacrow.core.objects.DcMediaObject;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.objects.Picture;
 import net.datacrow.core.plugin.PluginHelper;
@@ -382,7 +384,13 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 }
 
                 String value = "";
-                if (dco.getField(index).getFieldType() == ComponentFactory._FILEFIELD ||
+                
+                DcField field = dco.getField(index);
+                
+                if (dco.getModule().getType() == DcModule._TYPE_MEDIA_MODULE && index == DcMediaObject._E_RATING) {
+                    int rating = ((Long) dco.getValue(index)).intValue();
+                    value = Utilities.getHtmlRating(rating);
+                } else if (field.getFieldType() == ComponentFactory._FILEFIELD ||
                     dco.getField(index).getFieldType() == ComponentFactory._FILELAUNCHFIELD) { 
                 
                     String filename = dco.getDisplayString(index);
@@ -391,15 +399,15 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     
                     filename = filename.replaceAll(" ", "%20");
                     value = "<a href=\"file://" + filename + "\" " + Utilities.getHtmlStyle(fText) + ">" + new File(filename.replaceAll("%20", " ")).getName() + "</a>";                        
-                } else if (dco.getField(index).getFieldType() == ComponentFactory._PICTUREFIELD) {
+                } else if (field.getFieldType() == ComponentFactory._PICTUREFIELD) {
                 	Picture p = (Picture) dco.getValue(index);
                 	value = "<img src=\"file:///" + DataCrow.imageDir + "/" + p.getScaledFilename() + "\" alt=\"" + dco.getLabel(index) + "\">";
-                } else if (dco.getField(index).getFieldType() == ComponentFactory._URLFIELD) {
+                } else if (field.getFieldType() == ComponentFactory._URLFIELD) {
                 	value = "<a href=\"" +  dco.getValue(index) + "\" " + Utilities.getHtmlStyle(fText) + ">" + DcResources.getText("lblLink") + "</a>";
-                } else if (dco.getField(index).getReferenceIdx() > 0 && 
-                    dco.getField(index).getReferenceIdx() != dco.getModule().getIndex()) {
+                } else if (field.getReferenceIdx() > 0 && 
+                        field.getReferenceIdx() != dco.getModule().getIndex()) {
                     
-                    if (dco.getField(index).getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                    if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
                         int i = 0;
                         
                         List<DcObject> references = (List<DcObject>) dco.getValue(index);
@@ -429,7 +437,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                 } else { // Add simple value
                     value = dco.getDisplayString(index);
                     
-                    if (dco.getField(index).getValueType() == DcRepository.ValueTypes._STRING) {
+                    if (field.getValueType() == DcRepository.ValueTypes._STRING) {
                         value = value.replaceAll("[\r\n]", "<br>");
                         value = value.replaceAll("[\t]", "    ");
                     }
