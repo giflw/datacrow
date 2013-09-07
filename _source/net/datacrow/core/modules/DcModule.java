@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -174,9 +174,9 @@ public class DcModule implements Comparable<DcModule> {
     private FileRenamerDialog fileRenamerDialog;
     private NewItemsDialog newItemsDialog;
     
-    protected Map<Integer, DcField> fields = new HashMap<Integer, DcField>();
+    protected Map<Integer, DcField> fields = new LinkedHashMap<Integer, DcField>();
+    private Map<Integer, DcField> systemFields = new LinkedHashMap<Integer, DcField>();
     
-    private Map<Integer, DcField> systemFields = new HashMap<Integer, DcField>();
     private Collection<DcField> sortedFields;
     
     private OnlineServices services;
@@ -1126,11 +1126,19 @@ public class DcModule implements Comparable<DcModule> {
      * Retrieves all field indices.
      */
     public int[] getFieldIndices() {
-        Set<Integer> keys = fields.keySet();
-        int[] indices = new int[keys.size()];
+        DcFieldDefinitions definitions = DataCrow.isInitialized() ? getFieldDefinitions() : null;
         int counter = 0;
-        for (Integer key : keys)
-            indices[counter++] = key.intValue();
+        int[] indices = null;
+        if (definitions == null) {
+            Set<Integer> keys = fields.keySet();
+            indices = new int[keys.size()];
+            for (Integer key : keys)
+                indices[counter++] = key.intValue();
+        } else {
+            indices = new int[definitions.getDefinitions().size()];
+            for (DcFieldDefinition def : definitions.getDefinitions())
+                indices[counter++] = def.getIndex();
+        }
 
         return indices;
     }

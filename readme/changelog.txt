@@ -1,11 +1,13 @@
 -----------------------------------------------------------------------------------------
-Data Crow version 3.12.3                                           Released on 2013-08-xx
+Data Crow version 3.12.3                                           Released on 2013-09-xx
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - Alter module wizard: change field; maximum length always defaulted to 255.
 - Potential issue for Template Name and Default field. These could conflict with the
   normal fields of the module.
+- Exported field order is now the same each time.
+- Item matching on import is now also done on the "key fields".
   
 
 -----------------------------------------------------------------------------------------

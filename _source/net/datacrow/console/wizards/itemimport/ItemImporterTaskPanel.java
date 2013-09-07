@@ -128,7 +128,8 @@ public class ItemImporterTaskPanel extends ItemImporterWizardPanel implements II
             // Check if the item exists and if so, update the item with the found values. Else just create a new item.
             // This is to make sure the order in which the files are processed (first software, then categories)
             // is of no importance (!).
-            other = other == null ? DataManager.getObjectForString(item.getModule().getIndex(), item.toString()) : other;
+            other = other == null ? DataManager.getItemByUniqueFields(item) : other;
+            other = other == null ? DataManager.getItemByKeyword(item.getModule().getIndex(), item.toString()) : other;
         }
 
         try {

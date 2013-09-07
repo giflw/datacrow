@@ -182,7 +182,7 @@ public abstract class Query {
                 
                 try { 
                     existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
-                    existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
+                    existing = existing == null ? DataManager.getItemByKeyword(reference.getModule().getIndex(), reference.toString()) : existing;
                     if (existing == null) {
                         // save the value that was set
                         reference.setValidate(false);
@@ -210,7 +210,7 @@ public abstract class Query {
                         createReferences(reference);
                         
                         existing = DataManager.getItem(reference.getModule().getIndex(), reference.getID());
-                        existing = existing == null ? DataManager.getObjectForString(reference.getModule().getIndex(), reference.toString()) : existing;
+                        existing = existing == null ? DataManager.getItemByKeyword(reference.getModule().getIndex(), reference.toString()) : existing;
 
                         if (existing == null) {
                             reference.setValidate(false);

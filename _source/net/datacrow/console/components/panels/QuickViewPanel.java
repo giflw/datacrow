@@ -431,7 +431,7 @@ public class QuickViewPanel extends JPanel implements ChangeListener, MouseListe
                     } else {
                         Object o = dco.getValue(index);
                         DcObject reference = o instanceof DcObject ? (DcObject) o : DataManager.getItem(dco.getField(index).getReferenceIdx(), (String) o);
-                        reference = reference == null && o instanceof String ? DataManager.getObjectForString(dco.getField(index).getReferenceIdx(), (String) o) : reference;
+                        reference = reference == null && o instanceof String ? DataManager.getItemByKeyword(dco.getField(index).getReferenceIdx(), (String) o) : reference;
                         value += descriptionPane.createLink(reference, reference.toString());
                     }
                 } else { // Add simple value

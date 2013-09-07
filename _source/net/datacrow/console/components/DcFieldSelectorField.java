@@ -34,7 +34,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.JCheckBox;
@@ -55,7 +55,7 @@ import net.datacrow.core.resources.DcResources;
 
 public class DcFieldSelectorField extends JComponent implements IComponent, ActionListener {
 
-    private Map<DcField, JCheckBox> componentMap = new HashMap<DcField, JCheckBox>();
+    private Map<DcField, JCheckBox> componentMap = new LinkedHashMap<DcField, JCheckBox>();
     private final int module;
 
     public DcFieldSelectorField(int module, boolean allFields, boolean showMenu) {

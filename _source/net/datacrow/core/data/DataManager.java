@@ -56,6 +56,7 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.core.services.OnlineSearchHelper;
 import net.datacrow.core.services.SearchTask;
 import net.datacrow.core.wf.WorkFlow;
+import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.WebFieldDefinition;
 import net.datacrow.util.DcImageIcon;
 import net.datacrow.util.DcSwingUtilities;
@@ -367,12 +368,12 @@ public class DataManager {
 
         // check if we are dealing with an external reference
         if (ref == null && module.getType() == DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
-            ref = getObjectForDisplayValue(moduleIdx, name);
+            ref = getItemByDisplayValue(moduleIdx, name);
 
         } else if (ref == null && module.getType() != DcModule._TYPE_EXTERNALREFERENCE_MODULE) {
             
             // method 2: simple external reference + display value comparison
-            ref = DataManager.getObjectForString(moduleIdx, name);
+            ref = DataManager.getItemByKeyword(moduleIdx, name);
     
             if (ref == null && fieldIdx != DcObject._SYS_EXTERNAL_REFERENCES) {
                 ref = module.getItem();
@@ -614,8 +615,38 @@ public class DataManager {
         }
         return result;
     }
+    
+    /**
+     * Retrieves a matching item based on the 'isKey' setting.
+     * @return Returns one of the matching item or NULL if none found
+     */
+    public static DcObject getItemByUniqueFields(DcObject o) {
+        DcObject result = null;
+        
+        if (o.hasPrimaryKey() && !o.getModule().isChildModule()) {
+            boolean hasUniqueFields = false;
+            DcObject dco = o.getModule().getItem();
 
-    public static DcObject getObjectForString(int module, String reference) {
+            for (DcFieldDefinition def : o.getModule().getFieldDefinitions().getDefinitions()) {
+                if (def.isUnique()) {
+                    dco.setValue(def.getIndex(), o.getValue(def.getIndex()));
+                    hasUniqueFields = true;
+                }
+            }
+                
+            if (hasUniqueFields) {
+                DataFilter df = new DataFilter(dco);
+                List<String> keys = DataManager.getKeyList(df);
+                
+                for (String key : keys) {
+                    result = o.isNew() || !key.equals(o.getID()) ? DataManager.getItem(dco.getModule().getIndex(), key) : null;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static DcObject getItemByKeyword(int module, String reference) {
         // Establish the names on which we will check if the item already exists.
         // Skip multiple checks for the external references; this will results in errors.
         String[] names = new String[(reference.indexOf(" ") > -1 && reference.indexOf(", ") == -1 && 
@@ -634,7 +665,7 @@ public class DataManager {
         
         if (dco == null) {
             for (String name : names) {
-                dco = getObjectForDisplayValue(module, name);
+                dco = getItemByDisplayValue(module, name);
                 if (dco != null) break;
             }
         }
@@ -648,7 +679,7 @@ public class DataManager {
      * @param s The display value.
      * @return Either the item or null. 
      */
-    private static DcObject getObjectForDisplayValue(int moduleIdx, String s) {
+    private static DcObject getItemByDisplayValue(int moduleIdx, String s) {
         DcModule module = DcModules.get(moduleIdx);
 
         Collection<String> values = new ArrayList<String>();
