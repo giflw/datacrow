@@ -289,7 +289,7 @@ public class DcField implements Serializable {
         
         if (DcModules.get(module) != null) {
             DcFieldDefinitions definitions = DcModules.get(module).getFieldDefinitions();
-            if (definitions != null)
+            if (definitions != null && definitions.get(getIndex()) != null)
                 s = definitions.get(getIndex()).getLabel();
         }
         

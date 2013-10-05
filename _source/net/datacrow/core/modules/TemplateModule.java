@@ -137,6 +137,10 @@ public class TemplateModule extends DcModule {
      */    
     @Override
     public DcFieldDefinitions getFieldDefinitions() {
+        
+        if (parent == null || parent.getFieldDefinitions() == null)
+            return null;
+        
         DcFieldDefinitions fds = parent.getFieldDefinitions();
         DcFieldDefinitions definitions = new DcFieldDefinitions(getIndex());
         

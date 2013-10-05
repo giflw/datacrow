@@ -1032,7 +1032,7 @@ public class DcModule implements Comparable<DcModule> {
      * @param key The setting key {@link DcRepository.ModuleSettings}.
      */
     public Object getSetting(String key) {
-        return settings.get(key);
+        return settings == null ? null : settings.get(key);
     }
     
     /**
