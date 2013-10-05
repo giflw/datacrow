@@ -76,6 +76,7 @@ import javax.swing.filechooser.FileSystemView;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
 import net.datacrow.core.DcRepository;
+import net.datacrow.core.IconLibrary;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.modules.DcModules;
 import net.datacrow.core.objects.DcAssociate;
@@ -755,30 +756,13 @@ public class Utilities {
     }
     
     public static String getHtmlRating(int rating) {
-        if (rating == 0)
-            return "&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;";
-        else if (rating == 1)
-            return "&#x2605;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;";
-        else if (rating == 2)
-            return "&#x2605;&#x2605;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;";
-        else if (rating == 3)
-            return "&#x2605;&#x2605;&#x2605;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;";
-        else if (rating == 4)
-            return "&#x2605;&#x2605;&#x2605;&#x2605;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;";                    
-        else if (rating == 5)
-            return "&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;";
-        else if (rating == 6)
-            return "&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2729;&#x2729;&#x2729;&#x2729;";
-        else if (rating == 7)
-            return "&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2729;&#x2729;&#x2729;";
-        else if (rating == 8)
-            return "&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2729;&#x2729;";
-        else if (rating == 9)
-            return "&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2729;";
-        else if (rating == 10)
-            return "&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;";
-        else 
-            return "&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;&#x2729;";
+        String result = "";
+        for (int i = 0; i < rating; i++) 
+            result += "<img src=\"file://" + IconLibrary.picPath + "rating_ok.png\" />";
+        for (int i = rating; i < 10; i++)
+            result += "<img src=\"file://" + IconLibrary.picPath + "rating_nok.png\" />";
+        
+        return result; 
     }
     
     public static void rename(File currentFile, File newFile, boolean overwrite) throws IOException {

@@ -110,7 +110,7 @@ public class QuestionBox extends DcDialog implements ActionListener {
         buttonYes = ComponentFactory.getButton(DcResources.getText("lblYes"));
         buttonNo = ComponentFactory.getButton(DcResources.getText("lblNo"));
 
-        textMessage.setBackground(buttonYes.getBackground());
+        textMessage.setBackground(scrollIn.getBackground());
         
         buttonYes.addActionListener(this);
         buttonYes.setActionCommand("confirm");

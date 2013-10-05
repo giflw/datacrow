@@ -81,6 +81,10 @@ public class UpgradeHsqlEngine {
             String address = "jdbc:hsqldb:file:" + DataCrow.databaseDir + DcSettings.getString(DcRepository.Settings.stConnectionString);
             
             String path = DataCrow.installationDir;
+            
+            if (DataCrow.getPlatform().isWin())
+                path = path.startsWith("/") ? path.substring(1) : path; 
+            
             String[] command  = new String[] {
                     "java", 
                     "-jar",
