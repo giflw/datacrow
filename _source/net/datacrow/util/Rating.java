@@ -43,11 +43,11 @@ public class Rating {
             Graphics2D g2d = (Graphics2D) bi.getGraphics();
             
             for (int i = 0; i < rating; i++) {
-                g2d.drawImage(IconLibrary._icoRatingOK.getImage(), i*10, 0, null);
+                g2d.drawImage(IconLibrary._icoRatingOK.getImage(), i*6, 0, null);
             }
             
             for (int i = rating; i < scale; i++) {
-                g2d.drawImage(IconLibrary._icoRatingNOK.getImage(), i*10, 0, null);
+                g2d.drawImage(IconLibrary._icoRatingNOK.getImage(), i*6, 0, null);
             }
 
             bi.flush();

@@ -13,6 +13,7 @@ Data Crow version 3.12.4                                           Released on 2
 [Changed]
 - Rating star images have been changed.
 - Added ISBN 10 and ISBN 13 fields to the quick filter.
+- The Mobygames.com online search has been rewritten completely.
 
 
 -----------------------------------------------------------------------------------------
