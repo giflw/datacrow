@@ -142,7 +142,7 @@ public class CSVReader {
                         char next = nextLine.charAt(i+1);
                     	if( inQuotes && (nextLine.length() == i - 1 || next == '\n' || next == '\r' || separator.equals("" + next))) {
                             inQuotes = false;
-                    	} else if (!inQuotes && i == 0 || separator.equals("" + nextLine.charAt(i-1))) {
+                    	} else if ((!inQuotes && i == 0) || (i > 0 && separator.equals("" + nextLine.charAt(i-1)))) {
                     	    inQuotes = true;
                     	} else {
                     	    sb.append(c);
@@ -155,7 +155,15 @@ public class CSVReader {
                 } else {
                     sb.append(c);
                 }
+                
+                if (inQuotes && (i == nextLine.length() - 1)) {
+                    inQuotes = nextLine.endsWith("\"\n") || nextLine.endsWith("\"\r");    
+                }
+                 
             }
+            
+            
+            
         } while (inQuotes);
         
         tokensOnThisLine.add(sb.toString());

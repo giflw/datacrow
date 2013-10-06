@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.core.DataCrow;
@@ -15,6 +16,7 @@ import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcImageIcon;
+import net.datacrow.util.StringUtils;
 import net.datacrow.util.Utilities;
 
 import org.apache.log4j.Logger;
@@ -130,11 +132,21 @@ public abstract class ItemImporter extends ItemMigrater {
         if (field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES)
             return;
         
+        // replace HTML enters characters
+        value = value.replaceAll("<br>", "\n");
+        value = StringUtils.trim(value);
+        
         try {
-            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION ||
-                field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
-
+            if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTREFERENCE) {
                 DataManager.createReference(dco, field.getIndex(), value);
+            
+            } else if (field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
+                StringTokenizer st = new StringTokenizer(value, ",");
+                String s;
+                while (st.hasMoreElements()) {
+                    s = (String) st.nextElement();
+                    DataManager.createReference(dco, field.getIndex(), StringUtils.trim(s));
+                }
                 
             } else if (field.getFieldType() == ComponentFactory._TIMEFIELD) { 
                 try {
@@ -147,6 +159,30 @@ public abstract class ItemImporter extends ItemMigrater {
                         dco.setValue(field.getIndex(), Long.valueOf(seconds + (minutes *60) + (hours * 60 * 60)));
                     }
                 }
+             } else if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX) {
+                 try {
+                     long rating = Math.round(Double.parseDouble(value));
+                     
+                     if (rating > 0 && rating <= 10)
+                         dco.setValue(field.getIndex(), Long.valueOf(rating));
+                 } catch (NumberFormatException nfe) {
+                     String sValue = ""; 
+                     for (char c : value.toCharArray()) {
+                         if (Character.isDigit(c) || c == '.' || c == ',')
+                             sValue += c;
+                         else 
+                             break;
+                     }
+                     
+                     try {
+                     long rating = Math.round(Double.parseDouble(sValue));
+                     if (rating > 0 && rating <= 10)
+                         dco.setValue(field.getIndex(), Long.valueOf(rating));
+                     } catch (NumberFormatException e) { 
+                         logger.warn("Could not parse rating from value " + value, e);
+                     }
+                 }
+                
              } else if (field.getFieldType() == ComponentFactory._RATINGCOMBOBOX ||
                         field.getFieldType() == ComponentFactory._FILESIZEFIELD) {
     

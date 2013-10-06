@@ -411,6 +411,7 @@ public class DcMinimalisticItemView extends DcFrame implements ActionListener, M
                 return;
             
             task = new DeleteItemsTask(this, objects);
+            task.addRequest(new RefreshSimpleViewRequest(this));
             task.start();
         } else {
             DcSwingUtilities.displayWarningMessage("msgSelectItemToDel");

@@ -6,11 +6,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.DcThread;
-import net.datacrow.core.data.DataManager;
 import net.datacrow.core.modules.DcModule;
 import net.datacrow.core.objects.DcField;
 import net.datacrow.core.objects.DcObject;
@@ -130,21 +128,12 @@ public class CsvImporter extends ItemImporter {
                                 field.getValueType() != DcRepository.ValueTypes._DCOBJECTCOLLECTION && 
                                 field.getValueType() != DcRepository.ValueTypes._PICTURE) ||  
                                 field.getIndex() == DcObject._SYS_EXTERNAL_REFERENCES) continue;
-                        
-                        if (value != null && field.getValueType() == DcRepository.ValueTypes._DCOBJECTCOLLECTION) {
-                            StringTokenizer st = new StringTokenizer(value, ",");
-                            String s;
-                            while (st.hasMoreElements()) {
-                                s = (String) st.nextElement();
-                                DataManager.createReference(dco, field.getIndex(), s);
-                            }
-                        } else {
-                            setValue(dco, field.getIndex(), value, listener);
-                        }
+
+                        setValue(dco, field.getIndex(), value, listener);
                     }
                     
                     try {
-                        sleep(100);
+                        sleep(1000);
                     } catch (Exception e) {
                         logger.error(e, e);
                     }
