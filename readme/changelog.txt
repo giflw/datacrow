@@ -9,6 +9,8 @@ Data Crow version 3.12.4                                           Released on 2
 - Cannot create new person-modules.
 - Upgrade error fixed for older versions.
 - Spelling errors (lend/lent)
+- CSV item importer could result in errors. 
+- IMDB.com service down. Switched to http://www.omdbapi.com for now.
 
 [Changed]
 - Rating star images have been changed.
