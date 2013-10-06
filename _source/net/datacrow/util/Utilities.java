@@ -757,10 +757,13 @@ public class Utilities {
     
     public static String getHtmlRating(int rating) {
         String result = "";
+        
+        String path = IconLibrary.picPath;
+//        path = path.replaceAll(" ", "%20");
         for (int i = 0; i < rating; i++) 
-            result += "<img src=\"file://" + IconLibrary.picPath + "rating_ok.png\" />";
+            result += "<img src=\"file:///" + path + "rating_ok.png\" />";
         for (int i = rating; i < 10; i++)
-            result += "<img src=\"file://" + IconLibrary.picPath + "rating_nok.png\" />";
+            result += "<img src=\"file:///" + path + "rating_nok.png\" />";
         
         return result; 
     }
@@ -898,7 +901,6 @@ public class Utilities {
         g.dispose();
         
         bi.flush();
-//        image.flush();
         
         return bi;
     }
