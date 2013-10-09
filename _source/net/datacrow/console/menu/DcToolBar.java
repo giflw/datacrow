@@ -56,7 +56,9 @@ public class DcToolBar extends JToolBar implements MouseListener {
         PluginHelper.add(this, "NewItemWizard");
         PluginHelper.add(this, "NewItems");
         PluginHelper.add(this, "CreateNew", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
-        PluginHelper.add(this, "Delete", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        
+        if (!module.isAbstract())
+            PluginHelper.add(this, "Delete", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         
         addSeparator();
         

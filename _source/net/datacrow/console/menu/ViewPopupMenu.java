@@ -94,17 +94,19 @@ public class ViewPopupMenu extends DcPopupMenu implements ActionListener {
         File file = !Utilities.isEmpty(filename) ? new File(filename) : null;
         
         if (viewType == View._TYPE_SEARCH) { 
-            if (dco.getModule().getParent() != null) {
-                // in case a child is selected, make sure its the child which is going to be deleted
-                // and not the parent (via the DcModules.getCurrent(), which returns the parent).
-                PluginHelper.add(this, "Delete", module.getIndex());
-            } else if ((current.getIndex() == DcModules._CONTAINER && dco.getModule().getIndex() != DcModules._CONTAINER)) {
-                PluginHelper.add(this, "Delete", DcModules._ITEM);                
-            } else {
-                // make sure the actual SELECTED module is used for deleting the item. otherwise, if
-                // the media module is selected, the item from the, for example, software module view
-                // is deleted.
-                PluginHelper.add(this, "Delete", DcModules.getCurrent().getIndex());
+            if (!DcModules.getCurrent().isAbstract()) {
+                if (dco.getModule().getParent() != null) {
+                    // in case a child is selected, make sure its the child which is going to be deleted
+                    // and not the parent (via the DcModules.getCurrent(), which returns the parent).
+                    PluginHelper.add(this, "Delete", module.getIndex());
+                } else if (current.getIndex() == DcModules._CONTAINER && dco.getModule().getIndex() != DcModules._CONTAINER) {
+                    PluginHelper.add(this, "Delete", DcModules._ITEM);                
+                } else {
+                    // make sure the actual SELECTED module is used for deleting the item. otherwise, if
+                    // the media module is selected, the item from the, for example, software module view
+                    // is deleted.
+                    PluginHelper.add(this, "Delete", DcModules.getCurrent().getIndex());
+                }
             }
             
             if (file != null && SecurityCentre.getInstance().getUser().isAdmin() && dco.getModule().isFileBacked()) {

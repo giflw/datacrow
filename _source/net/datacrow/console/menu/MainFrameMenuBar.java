@@ -181,7 +181,10 @@ public class MainFrameMenuBar extends net.datacrow.console.components.DcMenuBar 
         PluginHelper.add(menuFile, "OpenItem", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         PluginHelper.add(menuFile, "EditItem", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
         PluginHelper.add(menuFile, "SaveAll", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
-        PluginHelper.add(menuFile, "Delete", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        
+        if (!module.isAbstract())
+            PluginHelper.add(menuFile, "Delete", module.getIndex(), Plugin._VIEWTYPE_SEARCH);
+        
         menuFile.addSeparator();
         PluginHelper.add(menuFile, "Log");
         PluginHelper.add(menuFile, "Exit");

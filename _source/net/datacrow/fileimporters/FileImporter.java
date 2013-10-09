@@ -172,12 +172,7 @@ public abstract class FileImporter implements ISynchronizerClient {
             @Override
             public void run() {
                 getClient().addMessage(DcResources.getText("msgImportStarts"));
-                
-                if (!getClient().getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly))
-                    getClient().getModule().getNewItemsDialog().setVisible(true);
-                
-                getClient().addMessage(DcResources.getText("msgParsingXFiles", 
-                                    String.valueOf(sources.size())));
+                getClient().addMessage(DcResources.getText("msgParsingXFiles", String.valueOf(sources.size())));
                 
                 getClient().initProgressBar(sources.size());
                 
@@ -271,17 +266,12 @@ public abstract class FileImporter implements ISynchronizerClient {
         }
 
         dco.setIDs();
-        if (getClient().getModule().getSettings().getBoolean(DcRepository.ModuleSettings.stImportSaveDirectly)) {
-            try {
-                dco.saveNew(true);
-            } catch (Exception e) {
-                getClient().addError(e);
-            }
-        } else {
-            if (getClient().getModule() != null && getClient().getModule().getCurrentInsertView() != null) {
-                
-                getClient().getModule().getCurrentInsertView().add(dco, false);
-            }
+        
+        try {
+            dco.setUpdateGUI(false);
+            dco.saveNew(false);
+        } catch (Exception e) {
+            getClient().addError(e);
         }
     }
 

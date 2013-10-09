@@ -1,4 +1,27 @@
 -----------------------------------------------------------------------------------------
+Data Crow version 3.12.5                                           Released on 2013-10-09
+-----------------------------------------------------------------------------------------
+"Too many versions!!!" - "You do not have to upgrade"
+
+[Fixed]
+- Ratings again shown as boxes in the quick view. Fixed - for now and ever.
+- File Importer issues fixed where items were not added to the view (but became visible
+  after a restart). Rare occurrence.
+- Module settings for Software table view caused columns to show multiple times. Default
+  setting has been fixed.
+- Deletion no longer allowed from Media module. Enabling this would cause deletion in
+  general to go a lot slower.
+- Category was no longer processed correctly for the Softpedia online search.
+
+[Changed]
+- After an import the view will now always refresh instead of adding the items one by 
+  one immediately after they have been processed. This improves speed and just works a
+  better.
+- Removed setting "Add directly" from file import; Data Crow will now always add items
+  directly.
+  
+
+-----------------------------------------------------------------------------------------
 Data Crow version 3.12.4                                           Released on 2013-10-06
 -----------------------------------------------------------------------------------------
 

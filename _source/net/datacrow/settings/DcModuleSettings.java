@@ -706,15 +706,6 @@ public class DcModuleSettings extends net.datacrow.settings.Settings {
                             false,
                             false, module.getIndex()));
         getSettings().addSetting(_General,
-                new Setting(DcRepository.ValueTypes._BOOLEAN,
-                            DcRepository.ModuleSettings.stImportSaveDirectly,
-                            Boolean.FALSE,
-                            ComponentFactory._CHECKBOX,
-                            DcResources.getText("lblSaveDirectly"),
-                            DcResources.getText("lblSaveDirectly"),
-                            false,
-                            false, module.getIndex()));        
-        getSettings().addSetting(_General,
                 new Setting(DcRepository.ValueTypes._STRING,
                             DcRepository.ModuleSettings.stOnlineSearchDefaultServer,
                             null,
