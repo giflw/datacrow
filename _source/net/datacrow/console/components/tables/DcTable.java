@@ -1304,6 +1304,9 @@ public class DcTable extends JTable implements IViewComponent, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         
+        if (module.isChildModule())
+            return;
+        
         JTableHeader header = (JTableHeader)e.getComponent();
         TableColumnModel tcm = header.getColumnModel();
         int col = tcm.getColumnIndexAtX( e.getX() );
