@@ -48,7 +48,7 @@ public class MovieImporter extends FileImporter {
     public String[] getDefaultSupportedFileTypes() {
         return new String[] {"mpg", "mpeg", "riff", "avi", "vob",
                              "ogm", "mov",  "ifo",  "mkv", "asf", 
-                             "wmv", "mp4"};    
+                             "wmv", "mp4",  "divx", "swf", "flv"};    
     }
     
     @Override

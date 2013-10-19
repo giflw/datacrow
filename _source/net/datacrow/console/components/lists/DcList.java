@@ -91,19 +91,23 @@ public class DcList extends JList implements ComponentListener {
     }
     
     public void moveRowUp() {
-        moveSelectedRow(getSelectedIndex() > 0 ? getSelectedIndex() - 1 : 0);
+        if (getSelectedIndex() > 0)
+            moveSelectedRow(getSelectedIndex() -1);
     }
     
     public void moveRowDown() {
-        moveSelectedRow(getSelectedIndex() < getDcModel().getSize() -1 ? getSelectedIndex() + 1 : 0);
+        if (getSelectedIndex() > -1)
+            moveSelectedRow(getSelectedIndex() < getDcModel().getSize() -1 ? getSelectedIndex() + 1 : 0);
     }
 
     public void moveRowToTop() {
-        moveSelectedRow(0);
+        if (getSelectedIndex() > -1)
+            moveSelectedRow(0);
     }
 
     public void moveRowToBottom() {
-        moveSelectedRow(getDcModel().getSize() -1);
+        if (getSelectedIndex() > -1)
+            moveSelectedRow(getDcModel().getSize() -1);
     }
 
     private void moveSelectedRow(int toIdx) {
