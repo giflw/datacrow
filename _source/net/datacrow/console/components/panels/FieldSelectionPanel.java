@@ -58,10 +58,19 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
     
     private DcModule module;
     
-    public FieldSelectionPanel(DcModule module, Collection<DcField> fields) {
+    private IFieldSelectionListener listener;
+    
+    /**
+     * Initializes an empty field selector. Use {@link #setFields(Collection)} to add the fields manually.
+     * @param module
+     */
+    public FieldSelectionPanel(DcModule module) {
         this.module = module;
-
         build();
+    }
+    
+    public FieldSelectionPanel(DcModule module, Collection<DcField> fields) {
+        this(module);
 
         for (DcField field : fields)
             listLeft.add(field);
@@ -70,10 +79,12 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         elements.addAll(listLeft.getElements());
     }
     
+    public void setFieldSelectionListener(IFieldSelectionListener listener) {
+        this.listener = listener;
+    }
+    
     public FieldSelectionPanel(DcModule module, boolean allowPictureFields, boolean allowUiFields, boolean allowMultiRefFields) {
-        this.module = module;
-
-        build();
+        this(module);
 
         for (DcField field : module.getFields()) {
             if (    field.isEnabled() && 
@@ -89,10 +100,26 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         elements = new Vector<DcListElement>();
         elements.addAll(listLeft.getElements());
     }
+    
+    public void setFields(Collection<DcField> fields) {
+        listLeft.clear();
+        listRight.clear();
+        
+        for (DcField field : fields)
+            listLeft.add(field);
+    }
 
     public DcField[] getSelectedFields() {
         return listRight.getFields().toArray(new DcField[0]);
     }
+    
+    public void setSelectedFields(Collection<DcField> fields) {
+        reset();
+        for (DcField field : fields) {
+            listLeft.remove(field);
+            listRight.add(field);
+        }
+    } 
     
     public void setSelectedFields(DcField[] fields) {
         reset();
@@ -147,6 +174,7 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         
         elements = null;
         module = null;
+        listener = null;
     }    
     
     private void build() {
@@ -224,6 +252,8 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
                     
                     if (field == null) return;
                     
+                    if (listener != null) listener.fieldDeselected(field);
+                    
                     listLeft.add(field);
                     listRight.remove();
                     listRight.clearSelection();
@@ -231,6 +261,8 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
                     DcField field =  listLeft.getSelected();
                     
                     if (field == null) return;
+                    
+                    if (listener != null) listener.fieldSelected(field);
                     
                     listRight.add(field);
                     listLeft.remove();

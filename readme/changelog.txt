@@ -5,6 +5,10 @@ Data Crow version 3.12.6                                           Released on 2
 [Fixed]
 - One more small issue fixed when upgrading from an old version of Data Crow.
 
+[Changed]
+- Italian translation has been updated. Big thanks to Marco Artioli!
+- Added additional file support to the movie file import.
+
 
 -----------------------------------------------------------------------------------------
 Data Crow version 3.12.5                                           Released on 2013-10-09

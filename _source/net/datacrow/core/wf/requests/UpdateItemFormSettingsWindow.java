@@ -47,7 +47,7 @@ public class UpdateItemFormSettingsWindow implements IUpdateUIRequest {
 
     @Override
     public void execute() {
-        wdw.refresh(tabDeleted);
+//        wdw.refresh(tabDeleted);
     }
 
     @Override

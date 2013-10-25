@@ -30,65 +30,95 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.windows.DcFrame;
 import net.datacrow.core.DcRepository;
 import net.datacrow.core.IconLibrary;
-import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.data.DataManager;
+import net.datacrow.core.modules.DcModule;
+import net.datacrow.core.objects.DcObject;
+import net.datacrow.core.objects.Tab;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
+import net.datacrow.settings.definitions.DcFieldDefinition;
+import net.datacrow.settings.definitions.DcFieldDefinitions;
 
-public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
+public class ItemFormSettingsDialog extends DcFrame implements ActionListener, ChangeListener {
 
-    private int module;
+    private List<TabDesignPanel> panels = new ArrayList<TabDesignPanel>();
+    private DcModule module;
     
-    private TabPanel panelTab;
-    private TabFieldsPanel panelTabFields;
-    
-    public ItemFormSettingsDialog(int module) {
+    public ItemFormSettingsDialog(DcModule module) {
         super(DcResources.getText("lblItemFormSettings"), IconLibrary._icoSettings16);
         
         this.module = module;
-        
-        panelTab = new TabPanel(this);
-        panelTabFields = new TabFieldsPanel(DcModules.get(module));
-        
         setHelpIndex("dc.settings.itemformsettings");
-        
         setResizable(true);
-        
         build();
     }
     
-    public void refresh(boolean tabDelete) {
-        panelTab.refresh();
-        panelTabFields.refresh(tabDelete);
-    }
-    
     public int getModule() {
-        return module;
+        return module.getIndex();
     }
     
     public void save() {
-        panelTabFields.save();
-        panelTab.save();
-    }
+        DcFieldDefinitions definitions = new DcFieldDefinitions(module.getIndex());
+        
+        for (TabDesignPanel panel : panels)
+            panel.save(definitions);
 
+        // takes care for any missing field definition
+        for (DcFieldDefinition def : module.getFieldDefinitions().getDefinitions()) {
+            if (!definitions.exists(def)) 
+                definitions.add(def);
+        }
+        
+        module.setSetting(DcRepository.ModuleSettings.stFieldDefinitions, definitions);
+    }
+    
     private void build() {
         getContentPane().setLayout(Layout.getGBL());
+        
+        //**********************************************************
+        //Menu
+        //**********************************************************
+        JMenuBar mb = ComponentFactory.getMenuBar();
+        JMenu menu = ComponentFactory.getMenu(DcResources.getText("lblEdit"));
+        JMenuItem menuEdit = ComponentFactory.getMenuItem(DcResources.getText("lblEditItem", DcResources.getText("lblTabs")));
+        menuEdit.setActionCommand("editTabs");
+        menuEdit.addActionListener(this);
+        menu.add(menuEdit);
+        mb.add(menu);
+        setJMenuBar(mb);
         
         //**********************************************************
         //Tab Pane
         //**********************************************************
         JTabbedPane tp = ComponentFactory.getTabbedPane();
-        tp.addTab(DcResources.getText("lblTabs"), panelTab);
-        tp.addTab(DcResources.getText("lblTabDesign"), panelTabFields);
+        
+        tp.addChangeListener(this);
+
+        List<DcObject> tabs = DataManager.getTabs(module.getIndex());
+        
+        TabDesignPanel panel;
+        for (DcObject tab : tabs) {
+            panel = new TabDesignPanel(module, tab);
+            panels.add(panel);
+            tp.addTab(tab.getDisplayString(Tab._A_NAME), tab.getIcon(), panel);
+        }
         
         //**********************************************************
         //Action panel
@@ -123,8 +153,6 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
         Dimension size = DcSettings.getDimension(DcRepository.Settings.stItemFormSettingsDialogSize);
         setSize(size);
         setCenteredLocation();
-
-        refresh(false);
     }
 
     @Override
@@ -139,5 +167,17 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener {
             close();
         else if (ae.getActionCommand().equals("save"))
             save();
+        else if (ae.getActionCommand().equals("editTabs"))
+            save();
+        
+    }
+    
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        JTabbedPane tp = (JTabbedPane) e.getSource();
+        if (tp.getSelectedIndex() > -1) {
+            TabDesignPanel panel = panels.get(tp.getSelectedIndex());
+            panel.refresh();
+        }
     }
 }
