@@ -70,4 +70,15 @@ public class DcFieldListElement extends DcListElement {
 		super.finalize();
 		field = null;
 	}
+
+    @Override
+    public int hashCode() {
+        return field.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof DcFieldListElement ? 
+                ((DcFieldListElement) obj).getField().equals(field) : false;
+    }
 }

@@ -93,7 +93,7 @@ public class MergePropertyItemsDialog extends DcDialog implements ActionListener
 
         build();
 
-        setSize(DcSettings.getDimension(DcRepository.Settings.stMergeItemsDialog));
+        setSize(DcSettings.getDimension(DcRepository.Settings.stMergeItemsDialogSize));
         setCenteredLocation();
     }
 
@@ -153,7 +153,7 @@ public class MergePropertyItemsDialog extends DcDialog implements ActionListener
     @Override
     public void close() {
         canceled = true;
-        DcSettings.set(DcRepository.Settings.stMergeItemsDialog, getSize());
+        DcSettings.set(DcRepository.Settings.stMergeItemsDialogSize, getSize());
         super.close();
     }
 

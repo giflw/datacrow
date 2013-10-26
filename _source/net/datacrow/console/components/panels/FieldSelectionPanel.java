@@ -25,6 +25,7 @@
 
 package net.datacrow.console.components.panels;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
@@ -32,6 +33,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -52,7 +54,7 @@ import net.datacrow.core.resources.DcResources;
 
 public class FieldSelectionPanel extends JPanel implements KeyListener {
     
-    private Vector<DcListElement> elements;
+    private Vector<DcListElement> elements = new Vector<DcListElement>();;
     private DcFieldList listRight;
     private DcFieldList listLeft;
     
@@ -75,7 +77,6 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
         for (DcField field : fields)
             listLeft.add(field);
 
-        elements = new Vector<DcListElement>();
         elements.addAll(listLeft.getElements());
     }
     
@@ -97,16 +98,18 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
                 listLeft.add(field);
         }
 
-        elements = new Vector<DcListElement>();
         elements.addAll(listLeft.getElements());
     }
     
     public void setFields(Collection<DcField> fields) {
+        elements.clear();
         listLeft.clear();
         listRight.clear();
         
         for (DcField field : fields)
             listLeft.add(field);
+        
+        elements.addAll(listLeft.getElements());
     }
 
     public DcField[] getSelectedFields() {
@@ -231,6 +234,10 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(0, 5, 5, 5), 0, 0));
 
+        scrollerLeft.setMinimumSize(new Dimension(360, 100));
+        scrollerLeft.setPreferredSize(new Dimension(360, 100));
+        scrollerRight.setMinimumSize(new Dimension(360, 100));
+        scrollerRight.setPreferredSize(new Dimension(360, 100));
     }
     
     private class ListMouseListener implements MouseListener {
@@ -286,17 +293,31 @@ public class FieldSelectionPanel extends JPanel implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {}
 
+    private Vector<DcListElement> getAvailableElements() {
+        List<DcListElement> selected = listRight.getElements();;
+        Vector<DcListElement> available = new Vector<DcListElement>();
+        
+        // loop through all elements and ignore the ones that are selected
+        for (DcListElement elem : elements) {
+            if (!selected.contains(elem)) 
+                available.add(elem);
+        }
+        
+        return available;
+    }
+    
     @Override
     public void keyReleased(KeyEvent e) {
         DcShortTextField txtFilter = (DcShortTextField) e.getSource();
         String filter = txtFilter.getText();
         
         if (filter.trim().length() == 0) {
-            listLeft.setListData(elements);
+            listLeft.setListData(getAvailableElements());
         } else {
             Vector<DcListElement> newElements = new Vector<DcListElement>();
+
             String displayValue;
-            for (DcListElement element : elements) {
+            for (DcListElement element : getAvailableElements()) {
                 displayValue = ((DcFieldListElement) element).getField().getLabel();
                 if (displayValue.toLowerCase().startsWith(filter.toLowerCase()))
                     newElements.add(element);

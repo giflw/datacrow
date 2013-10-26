@@ -25,7 +25,7 @@
 
 package net.datacrow.core.wf.requests;
 
-import net.datacrow.console.windows.itemformsettings.ItemFormSettingsDialog;
+import net.datacrow.console.windows.itemformsettings.MaintainTabsDialog;
 
 /**
  * Request to close a form.
@@ -36,18 +36,18 @@ public class UpdateItemFormSettingsWindow implements IUpdateUIRequest {
 
     private static final long serialVersionUID = -8369080521270253879L;
 
-    private ItemFormSettingsDialog wdw;
+    private MaintainTabsDialog wdw;
     private boolean executeOnFail = false;
     private boolean tabDeleted;
 
-    public UpdateItemFormSettingsWindow(ItemFormSettingsDialog wdw, boolean tabDeleted) {
+    public UpdateItemFormSettingsWindow(MaintainTabsDialog wdw, boolean tabDeleted) {
         this.wdw = wdw;
         this.tabDeleted = tabDeleted;
     }
 
     @Override
     public void execute() {
-//        wdw.refresh(tabDeleted);
+        wdw.refresh();
     }
 
     @Override

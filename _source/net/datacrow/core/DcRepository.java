@@ -60,7 +60,6 @@ public abstract class DcRepository {
         public static final String stCardViewItemDescription = "card_view_item_description";
         public static final String stTitleCleanup = "title_cleanup";
         public static final String stTitleCleanupRegex = "title_cleanup_regex";
-//        public static final String stImportSaveDirectly = "import_save_directly";
         public static final String stImportLocalArt = "import_local_art";
         public static final String stImportLocalArtFrontKeywords = "import_local_art_front_keywords";
         public static final String stImportLocalArtBackKeywords = "import_local_art_back_keywords";
@@ -111,7 +110,8 @@ public abstract class DcRepository {
      * @author Robert Jan van der Waals
      */
     public static final class Settings {
-        public static final String stMergeItemsDialog = "merge_items_dialog_size";
+        public static final String stMaintainTabsDialogSize = "maintain_tabs_dialog_size";
+        public static final String stMergeItemsDialogSize = "merge_items_dialog_size";
         public static final String stNewItemsDialogSize = "new_items_dialog_size";
         public static final String stChartsDialogSize = "charts_dialog_size";
         public static final String stICalendarFullExport = "icalendar_full_export";

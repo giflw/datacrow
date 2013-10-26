@@ -31,6 +31,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -55,11 +56,14 @@ import net.datacrow.core.resources.DcResources;
 import net.datacrow.settings.DcSettings;
 import net.datacrow.settings.definitions.DcFieldDefinition;
 import net.datacrow.settings.definitions.DcFieldDefinitions;
+import net.datacrow.util.Utilities;
 
 public class ItemFormSettingsDialog extends DcFrame implements ActionListener, ChangeListener {
 
     private List<TabDesignPanel> panels = new ArrayList<TabDesignPanel>();
     private DcModule module;
+    
+    private JTabbedPane tp = ComponentFactory.getTabbedPane();
     
     public ItemFormSettingsDialog(DcModule module) {
         super(DcResources.getText("lblItemFormSettings"), IconLibrary._icoSettings16);
@@ -89,6 +93,47 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener, C
         module.setSetting(DcRepository.ModuleSettings.stFieldDefinitions, definitions);
     }
     
+    private void maintainTabs() {
+        MaintainTabsDialog dlg = new MaintainTabsDialog(this);
+        dlg.setVisible(true);
+    }
+    
+    private String getTabName(DcObject tab) {
+        String s = (String) tab.getValue(Tab._A_NAME);
+        return s != null && s.startsWith("lbl") ? DcResources.getText(s) : s;
+    }
+    
+    public void refresh() {
+        tp.removeChangeListener(this);
+        tp.removeAll();
+        
+        Collection<String> tabNames = new ArrayList<String>();
+        List<DcObject> tabs = DataManager.getTabs(module.getIndex());
+        for (DcObject tab : tabs) 
+            tabNames.add(getTabName(tab));
+        
+        // handles deletions
+        for (DcFieldDefinition def : module.getFieldDefinitions().getDefinitions()) {
+            if (Utilities.isEmpty(def.getTab())) continue;
+            
+            boolean exists = false;
+            for (String tab : tabNames)
+                if (tab.equals(def.getTab())) exists = true;
+            
+            if (!exists) def.setTab(null);
+        }
+        
+        TabDesignPanel panel;
+        panels.clear();
+        for (DcObject tab : tabs) {
+            panel = new TabDesignPanel(module, tab);
+            panels.add(panel);
+            tp.addTab(tab.getDisplayString(Tab._A_NAME), tab.getIcon(), panel);
+        }
+        
+        tp.addChangeListener(this);
+    }
+    
     private void build() {
         getContentPane().setLayout(Layout.getGBL());
         
@@ -96,9 +141,9 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener, C
         //Menu
         //**********************************************************
         JMenuBar mb = ComponentFactory.getMenuBar();
-        JMenu menu = ComponentFactory.getMenu(DcResources.getText("lblEdit"));
-        JMenuItem menuEdit = ComponentFactory.getMenuItem(DcResources.getText("lblEditItem", DcResources.getText("lblTabs")));
-        menuEdit.setActionCommand("editTabs");
+        JMenu menu = ComponentFactory.getMenu(DcResources.getText("lblTabs"));
+        JMenuItem menuEdit = ComponentFactory.getMenuItem(DcResources.getText("lblManageX", DcResources.getText("lblTabs")));
+        menuEdit.setActionCommand("maintainTabs");
         menuEdit.addActionListener(this);
         menu.add(menuEdit);
         mb.add(menu);
@@ -107,18 +152,7 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener, C
         //**********************************************************
         //Tab Pane
         //**********************************************************
-        JTabbedPane tp = ComponentFactory.getTabbedPane();
-        
-        tp.addChangeListener(this);
-
-        List<DcObject> tabs = DataManager.getTabs(module.getIndex());
-        
-        TabDesignPanel panel;
-        for (DcObject tab : tabs) {
-            panel = new TabDesignPanel(module, tab);
-            panels.add(panel);
-            tp.addTab(tab.getDisplayString(Tab._A_NAME), tab.getIcon(), panel);
-        }
+        refresh();
         
         //**********************************************************
         //Action panel
@@ -167,8 +201,8 @@ public class ItemFormSettingsDialog extends DcFrame implements ActionListener, C
             close();
         else if (ae.getActionCommand().equals("save"))
             save();
-        else if (ae.getActionCommand().equals("editTabs"))
-            save();
+        else if (ae.getActionCommand().equals("maintainTabs"))
+            maintainTabs();
         
     }
     
