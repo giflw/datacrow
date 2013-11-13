@@ -473,6 +473,7 @@ abstract class FileProperties {
      * (separated by a \t).
      */
            
+    @SuppressWarnings("resource")
     protected String findName(String id, int type) throws Exception {
         String line = null;
         String result = "";
