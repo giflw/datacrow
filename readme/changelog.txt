@@ -1,9 +1,12 @@
 -----------------------------------------------------------------------------------------
-Data Crow version 3.12.6                                           Released on 2013-10-09
+Data Crow version 4.0                                              Released on 2013-xx-xx
 -----------------------------------------------------------------------------------------
 
 [Fixed]
 - One more small issue fixed when upgrading from an old version of Data Crow.
+- Regex pattern for the file importer was applied after changes to the name were applied 
+  by Data Crow logic. This can cause the regex pattern to no longer match. The regex
+  pattern will now always be applied first.
 
 [Changed]
 - Italian translation has been updated. Big thanks to Marco Artioli!
@@ -13,7 +16,7 @@ Data Crow version 3.12.6                                           Released on 2
 -----------------------------------------------------------------------------------------
 Data Crow version 3.12.5                                           Released on 2013-10-09
 -----------------------------------------------------------------------------------------
-"Too many versions!!!" - "You do not have to upgrade"
+"Too many versions!!!" - "You do not have to upgrade" ;-)
 
 [Fixed]
 - Ratings again shown as boxes in the quick view. Fixed - for now and ever.

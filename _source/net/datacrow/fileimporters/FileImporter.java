@@ -292,7 +292,15 @@ public abstract class FileImporter implements ISynchronizerClient {
             int index = name.lastIndexOf(".");
             if (index > 0 && index > name.length() - 5)
                 name = name.substring(0, index);
-
+            
+            String regex = DcModules.get(getModule()).getSettings().getString(DcRepository.ModuleSettings.stTitleCleanupRegex);
+            if (!Utilities.isEmpty(regex)) {
+                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+                Matcher matcher = pattern.matcher(name);
+                while (matcher.find())
+                    name = matcher.replaceAll("");
+            }
+            
             name = name.replaceAll("\\.", " ");
             
             String remove = 
@@ -306,14 +314,6 @@ public abstract class FileImporter implements ISynchronizerClient {
                     if (idx > -1)
                         name = name.substring(0, idx) + name.substring(idx + s.length());
                 }
-            }
-            
-            String regex = DcModules.get(getModule()).getSettings().getString(DcRepository.ModuleSettings.stTitleCleanupRegex);
-            if (!Utilities.isEmpty(regex)) {
-                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-                Matcher matcher = pattern.matcher(name);
-                while (matcher.find())
-                    name = matcher.replaceAll("");
             }
         }
         
