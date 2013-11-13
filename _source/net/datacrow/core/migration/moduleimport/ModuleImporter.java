@@ -76,6 +76,7 @@ public class ModuleImporter {
 			canceled = true;
 		}
 		
+		@SuppressWarnings("resource")
 		@Override
 		public void run() {
             ZipFile zf = null;

@@ -91,6 +91,7 @@ public class Conversions {
         conversions.add(conversion);
     }
 
+    @SuppressWarnings("resource")
     public void load() {
         Directory directory = new Directory(
                 DataCrow.installationDir + "upgrade", 

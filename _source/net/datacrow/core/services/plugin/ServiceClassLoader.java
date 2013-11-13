@@ -33,7 +33,9 @@ public class ServiceClassLoader extends ClassLoader {
      * files in the path and first level of sub directories. The JAR and ZIP files
      * are stored in a Vector for future searches.
      * @param path the path to the services directory.
+     * 
      */
+    @SuppressWarnings("resource")
     public ServiceClassLoader(String path) {
         init(path);
         

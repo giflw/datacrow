@@ -53,6 +53,7 @@ public class CsvImporter extends ItemImporter {
         return sep == null ? DcSettings.getString(DcRepository.Settings.stImportSeperator) : sep; 
     }
     
+    @SuppressWarnings("resource")
     @Override
     protected void initialize() throws Exception {
         InputStreamReader reader = new InputStreamReader(new FileInputStream(file), getCharacterSet());

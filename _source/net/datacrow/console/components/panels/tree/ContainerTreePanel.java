@@ -167,6 +167,7 @@ public class ContainerTreePanel extends TreePanel {
             stop = true;
         }
         
+        @SuppressWarnings("resource")
         private void createTree() {
 	    	
 	    	build();

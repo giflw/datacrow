@@ -129,6 +129,7 @@ public class DcDatabase {
      * @param connection
      * @throws Exception
      */
+    @SuppressWarnings("resource")
     protected void initiliaze() throws Exception {
         Connection connection = DatabaseManager.getAdminConnection();
         

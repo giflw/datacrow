@@ -384,6 +384,7 @@ public class Restore extends Thread {
         return success;
     }
     
+    @SuppressWarnings("resource")
     private boolean restoreOldVersion() throws Exception {
         
         ZipFile zf = null;

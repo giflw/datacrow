@@ -106,6 +106,7 @@ public class AutoIncrementer implements IValueEnhancer {
     }
     
     @Override
+    @SuppressWarnings("resource")
     public Object apply(DcField field, Object value) {
         Object result = value;
         

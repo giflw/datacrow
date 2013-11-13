@@ -116,6 +116,7 @@ public class SecurityCentre {
         users.remove(user.getID());
     }
     
+    @SuppressWarnings("resource")
     public SecuredUser login(String username, String password, boolean web) throws SecurityException {
         Connection connection = DatabaseManager.getConnection(username, password);
         

@@ -61,6 +61,7 @@ public class InsertQuery extends Query {
         dco = null;
     }
     
+    @SuppressWarnings("resource")
     @Override
     public List<DcObject> run() {
         boolean success = false;

@@ -109,6 +109,7 @@ public class QueryPanel extends JPanel implements ActionListener, ItemListener {
         table.applyHeaders();
     }
 
+    @SuppressWarnings("resource")
     protected void runQuery() {
         String sql   = textInput.getText().trim();
 

@@ -48,8 +48,6 @@ public class LogForm extends DcFrame {
         build();
 
         setHelpIndex("dc.general.log");
-        setVisible(true);
-        toFront();
     }
     
     @Override

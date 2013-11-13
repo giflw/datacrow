@@ -48,6 +48,7 @@ public class CreateQuery extends Query {
         super(module, null);
     }
 
+    @SuppressWarnings("resource")
     @Override
     public List<DcObject> run() {
         Connection conn = null;

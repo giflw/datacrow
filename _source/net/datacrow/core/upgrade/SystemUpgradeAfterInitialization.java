@@ -162,6 +162,8 @@ public class SystemUpgradeAfterInitialization {
     private void init() {
         DataCrow.showSplashScreen(false);
         lf = lf == null ? new LogForm() : lf;
+        lf.setVisible(true);
+        lf.toFront();
     }
     
     private void cleanupOfPermission() {
@@ -327,6 +329,7 @@ public class SystemUpgradeAfterInitialization {
     	return true;
     }
 
+    @SuppressWarnings("resource")
     private boolean correctAssociateNames() {
 
         boolean upgraded = false;
@@ -501,6 +504,7 @@ public class SystemUpgradeAfterInitialization {
         return upgraded;
     }
     
+    @SuppressWarnings("resource")
     private boolean fillUIPersistFields() {
         boolean upgraded = false;
         

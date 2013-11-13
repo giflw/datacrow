@@ -70,7 +70,6 @@ public class HelpDialog {
             hb.setLocation(Utilities.getCenteredWindowLocation(hb.getSize(), false));
             hb.setFont(ComponentFactory.getSystemFont());
             hb.setDisplayed(true);
-            
 
             Window helpWindow = hb.getWindowPresentation().getHelpWindow();
             if (helpWindow instanceof JFrame) {

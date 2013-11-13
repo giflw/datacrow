@@ -554,6 +554,7 @@ public class DataManager {
         return items.size() > 0 ? (Loan) items.get(0) : new Loan();
     }
     
+    @SuppressWarnings("resource")
     public static DcObject getObjectByExternalID(int moduleIdx, String type, String externalID) {
         DcModule module =  DcModules.get(moduleIdx);
        

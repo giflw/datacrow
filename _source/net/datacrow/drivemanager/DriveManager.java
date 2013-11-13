@@ -303,6 +303,7 @@ public class DriveManager {
      * The size and the hash of the original file are used to determine its new
      * location.
      */
+    @SuppressWarnings("resource")
     public FileInfo find(FileInfo fi, int precision) {
         File file = new File(fi.getFilename());
         
