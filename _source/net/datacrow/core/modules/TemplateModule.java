@@ -86,8 +86,8 @@ public class TemplateModule extends DcModule {
     }
     
     @Override
-    public boolean isHasImages() {
-        return parent.isHasImages();
+    public boolean hasImages() {
+        return parent.hasImages();
     }
 
     /**
@@ -170,7 +170,7 @@ public class TemplateModule extends DcModule {
     }
     
     @Override
-    public boolean isHasReferences() {
+    public boolean hasReferences() {
         return true;
     }    
 

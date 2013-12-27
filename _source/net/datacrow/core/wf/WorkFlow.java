@@ -217,10 +217,10 @@ public class WorkFlow {
                 if (loan) 
                     item.setLoanInformation();
                 
-                if (images && item.getModule().isHasImages()) 
+                if (images && item.getModule().hasImages()) 
                     item.initializeImages();
                 
-                if (references && item.getModule().isHasReferences()) 
+                if (references && item.getModule().hasReferences()) 
                     item.initializeReferences();
             }
 

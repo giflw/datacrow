@@ -84,6 +84,7 @@ public class DcModules {
     public static final int _ITEM = 65;
     public static final int _LOAN = 66;
     public static final int _LOANEXPORT = 67;
+    public static final int _OBJECTPART = 68;
     
     public static final int _CATEGORY = 10000;
     public static final int _STORAGEMEDIA = 11000;

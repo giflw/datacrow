@@ -242,8 +242,12 @@ public class DcPictureField extends JComponent implements IComponent, ActionList
 
             int width = imageWidth;
             int height = imageHeight;
-
+            
             size = getSize(size);
+            
+            if (size.height <= 0) return;
+            if (size.width <= 0) return;
+            
             if (scalingAllowed(imageWidth, imageHeight)) {
                 width =  Math.min(size.width, imageWidth);
                 height = Math.min(size.height, imageHeight);

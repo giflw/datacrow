@@ -361,11 +361,11 @@ public class DcModule implements Comparable<DcModule> {
         }
     }
     
-    public boolean isHasImages() {
+    public boolean hasImages() {
         return hasImages;
     }
 
-    public boolean isHasReferences() {
+    public boolean hasReferences() {
         return hasReferences;
     }
 
@@ -1323,12 +1323,12 @@ public class DcModule implements Comparable<DcModule> {
             
             addField(getField(DcObject._SYS_DISPLAYVALUE));
             
-            if (isFileBacked) {
-                addField(getField(DcObject._SYS_FILENAME));
-                addField(getField(DcObject._SYS_FILESIZE));
-                addField(getField(DcObject._SYS_FILEHASH));
-                addField(getField(DcObject._SYS_FILEHASHTYPE));
-            }
+//            if (isFileBacked) {
+//                addField(getField(DcObject._SYS_FILENAME));
+//                addField(getField(DcObject._SYS_FILESIZE));
+//                addField(getField(DcObject._SYS_FILEHASH));
+//                addField(getField(DcObject._SYS_FILEHASHTYPE));
+//            }
             
             // do not check whether the contact person module is enabled.
             // just add the fields if the settings allow for this

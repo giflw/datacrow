@@ -60,7 +60,7 @@ import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcCheckBox;
 import net.datacrow.console.components.DcLabel;
 import net.datacrow.console.components.DcLongTextField;
-import net.datacrow.console.components.DcPictureField;
+import net.datacrow.console.components.DcPictureListField;
 import net.datacrow.console.components.panels.LoanPanel;
 import net.datacrow.console.components.panels.RelatedItemsPanel;
 import net.datacrow.console.views.MasterView;
@@ -118,6 +118,8 @@ public class ItemForm extends DcFrame implements ActionListener {
     private IItemFormListener listener;
     private LoanInformationPanel panelLoans;
     private DcTemplate template;
+    
+    private DcPictureListField pictureList; 
     
     public ItemForm(
             boolean readonly,
@@ -391,34 +393,27 @@ public class ItemForm extends DcFrame implements ActionListener {
             Object oldValue;
             Object newValue;
             boolean empty;
+            
+            if (DcModules.get(moduleIdx).hasImages()) 
+                pictureList.clear();
+            
             for (int i = 0; i < indices.length; i++) {
                 index = indices[i];
                 
                 field = dco.getField(index);
-                component = fields.get(field);
-                oldValue = ComponentFactory.getValue(component);
                 newValue = object.getValue(index);
-    
-                if (newValue instanceof Picture) {
-                    Picture pic = ((Picture) newValue);
-                    boolean isEdited = pic.isEdited();
-                    boolean isDeleted = pic.isDeleted();
-                    
-                    pic.loadImage(false);
-                    
-                    pic.isEdited(isEdited);
-                    pic.isDeleted(isDeleted);
-                    
-                    if ((isEdited || isDeleted) &&
-                         field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-                        dco.setChanged(DcObject._ID, true);
-                        dcoOrig.setChanged(field.getIndex(), true);
-                    }
+                
+                if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
+                    if (newValue != null)
+                    pictureList.add((Picture) object.getValue(index));
+                } else {
+                    component = fields.get(field);
+                    oldValue = ComponentFactory.getValue(component);
+        
+                    empty = Utilities.getComparableString(oldValue).length() == 0;
+                    if ((empty || overwrite) && (!Utilities.isEmpty(newValue)))
+                        ComponentFactory.setValue(component, newValue);
                 }
-    
-                empty = Utilities.getComparableString(oldValue).length() == 0;
-                if ((empty || overwrite) && (!Utilities.isEmpty(newValue)))
-                    ComponentFactory.setValue(component, newValue);
             }
         } catch (Exception e) {
             logger.error("Error while setting values of [" + dco + "] on the item form", e);
@@ -520,12 +515,6 @@ public class ItemForm extends DcFrame implements ActionListener {
                 changed = !oldValue.equals(newValue);
                 if (changed) logger.debug("Field " + field.getLabel() + " is changed. Old: " + oldValue + ". New: " + newValue);
             } 
-        } else if (field.getValueType() == DcRepository.ValueTypes._PICTURE) {
-            Picture picture = (Picture) dcoOrig.getValue(fieldIdx);
-            changed = (picture != null && (picture.isEdited() || picture.isNew() || picture.isDeleted())) ||
-                      ((DcPictureField) component).isChanged() || dcoOrig.isChanged(fieldIdx);
-            
-            if (changed) logger.debug("Picture " + field.getLabel() + " is changed.");
         }
         
         return changed;
@@ -852,34 +841,11 @@ public class ItemForm extends DcFrame implements ActionListener {
 
     protected void addPictureTabs() {
         DcModule module = DcModules.get(moduleIdx);
-
-        int index;
-        DcField field;
-        JComponent component;
-        JPanel panel;
-        for (DcFieldDefinition definition : module.getFieldDefinitions().getDefinitions()) {
-            index = definition.getIndex();
-            field = dco.getField(index);
-            component = fields.get(field);
-
-            if (field.isEnabled() &&
-               (field.getValueType() == DcRepository.ValueTypes._PICTURE || 
-                field.getValueType() == DcRepository.ValueTypes._ICON)) {
-
-                panel = new JPanel();
-                panel.setLayout(Layout.getGBL());
-
-                component.setPreferredSize(component.getMinimumSize());
-                panel.add(component, Layout.getGBC(0, 0, 1, 1, 1.0, 1.0
-                         ,GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                          new Insets(5, 5, 5, 5), 0, 0));
-
-                if (field.isReadOnly())
-                    ComponentFactory.setUneditable(component);
-                
-                tabbedPane.addTab(field.getLabel(), IconLibrary._icoPicture, panel);
-            }
-        }
+        
+        if (!module.hasImages()) return;
+        
+        pictureList = new DcPictureListField();
+        tabbedPane.addTab("Pictures", IconLibrary._icoPicture, pictureList);
     }
 
     public JPanel getActionPanel(DcModule module, boolean readonly) {

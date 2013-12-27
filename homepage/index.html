@@ -215,18 +215,19 @@
         <p>Status </p>
         
         <ul id="donations_overview" class="grid">
-          <li><b>July</b></li>
-          <li><b>August</b></li>
+
           <li><b>September</b></li>
           <li><b>October</b></li>
-          <li>&euro;  41,50</li>
-          <li>&euro; 136,00</li>
+          <li><b>November</b></li>
+          <li><b>December</b></li>
           <li>&euro;  85,00</li>
+          <li>&euro;  46,00</li>
+          <li>&euro; 203,00</li>
           <li>&euro;  25,00</li>
         </ul>
         
-        <p><br><b>A big thanks to all contributors!</b> The total for 2013 so far is: <b>&euro; 657,50</b>.</p>
-        <p><i>Last updated on October 9, 2013.</i></p>
+        <p><br><b>A big thanks to all contributors!</b> The total for 2013 so far is: <b>&euro; 906,50</b>.</p>
+        <p><i>Last updated on December 24, 2013.</i></p>
 
         <p><br>I hope you enjoy using Data Crow. In case you want to make a donation you can use one of the buttons below. Donations can be made
         via Paypal. In case you want your donation to be visible to the public I suggest you use the Sourceforge.net donation method.<br><br></p>
@@ -265,6 +266,68 @@
       <h3 class="page_title"> Latest News</h3>
         <div class="page_content"> 
           <ul>
+          
+            <p><i>24 December 2013</i> - Data Crow 4.0 Development Update</p>
+            <li><blockquote>
+            One month (well, ok, almost two months) has past and I thought it would be about time for an update on the upcoming 4.0 version. 
+            I have recently shifted priorities in the development (what!?) and have decided to give priority to the development of a full server
+            client architecture. I have been updating the code and separating it into three parts; datacrow-core, datacrow-client and datacrow-server.
+            (This is where it gets a bit more nerd-ish) The new core and server library have no dependency towards the GUI. There will be no more 
+            code mixture (bad practice) between GUI and &quot;infrastrure&quot; code. A headless server (this actually has been requested over and over
+            and over again) will therefore be fully possible. Better yet, that is precisely what I am working on.<br><br>
+            I know that not all of you (okay, most of you) will not be interested per se in running a client-server program at home. No fear, running just on one machine
+            will be fully supported (as it always has been). <br><br>So will you benefit? Yes. Why? Because it will allow for more extravagant feature development such as
+            a media streaming server, running it in the cloud (to throw in one buzz word) and having one single point of access for you and your partner / kid / 
+            friend.<br><br>
+            What else? This will neatly tie in with the new web development and the Android App development in the near future (the deadline is now pushed back to 
+            summer, 2014). Maybe I will run a server myself, somewhere in the cloud, to allow for a central repository. Anyway, that's not on the road map, so I'll stop right there.<br><br>
+            Server-client mode; what will it do? You will be able to run a server (it will not be a complicated thing to do, promise) and connect with as many clients
+            as needed to this server. Technically the server will be the host for the application settings (not all of them, only settings such as the field and
+            other data related settings). Also it will be the owner of the data, the modules and the reports. If a client has administrative rights he or she can decide
+            to change the settings and push these to the clients. Same goes for module and report changes.<br><br>
+            What else will be in version 4.0? The following still applies: 
+            <table>
+            <tr><td>-&nbsp;</td>
+                <td>Parts for items are introduced allowing a book item for example to contain multiple articles, a movie items multiple files / episodes  
+                    and a software item to consist out of multiple files.</td></tr>
+            <tr><td>-&nbsp;</td>
+                <td>The above allows all items to have an unlimited number of files.</td></tr>
+            <tr><td>-&nbsp;</td>
+                <td>Unlimited number of images per item.</td></tr>
+            <tr><td>-&nbsp;</td>
+                <td>Documentation update; module create guide, reporting guide, developer guide.</td></tr>
+            </table><br>
+            I am doing all of these changes at once as I have been withholding these for too long. The Data Crow platform is a solid one, but, it could do 
+            with a bit of a makeover. Solid, as I have noticed that many parts of the code are actually well suited for server-client development.<br>
+            The weakspot will still be the web application. Development of which will start right after the 4.0 version. Long term (>1 year) I am looking to replace the
+            current GUI with a solid web application. All of this will run on the, currently in development, new architecture.<br><br>
+            Schedule: end of March 2014 the production version has to be live. Beginning of March I will have a beta version available for testing purposes.
+            Confident I can make this date as the server code and the restructuring is well under its way.<br><br>
+            Merry Christmas! -Robert
+
+            </blockquote></li> 
+          
+            <p><i>1 November 2013</i> - Data Crow 4.0 Announcement</p>
+            <li><blockquote>
+            Data Crow, the ultimate cataloguer, needs one more major overhaul before I can confidently wrap up the App development. So here it is, the announcement of Data Crow version 4.0!
+            <br>Major changes:<br>
+            <br>
+            <table>
+            <tr><td>-&nbsp;</td>
+                <td>Parts for items are introduced allowing a book item for example to contain multiple articles, a movie items multiple files / episodes  
+                    and a software item to consist out of multiple files.</td></tr>
+            <tr><td>-&nbsp;</td>
+                <td>The above allows all items have an unlimited number of files.</td></tr>
+            <tr><td>-&nbsp;</td>
+                <td>Unlimited number of images per item.</td></tr>
+            <tr><td>-&nbsp;</td>
+                <td>Documentation update; module create guide, reporting guide, developer guide.</td></tr>
+            </table>
+            <br>
+            All of the above will make the Data Crow framework much more flexible and will accommodate for some of the most requested for features (of all time).
+            This is going to be awesome! :)
+            </blockquote></li> 
+
           
             <p><i>9 October 2013</i> - Data Crow 3.12.5</p>
             <li><blockquote>
@@ -471,11 +534,11 @@
         </div>
         <div class="one_half first">
           <div class="column_content">
-            <h4> Data Crow Link Sites</h4>
+            <h4> Data Crow's Favorites</h4>
             <ul>
               <li><a href="http://linux.softpedia.com/get/Information-Management/Data-Crow-18608.shtml" target="new">Softpedia</a></li>
-              <li><a href="http://tweakers.net/meuktracker/30612/data-crow-3922.html" target="new">Tweakers.net</a></il>
-              <li><a href="http://data-crow.findmysoft.com/" target="new">FindMySoft: Data Crow Review and a fancy Video</a></il>
+              <li><a href="http://tweakers.net/meuktracker/31499/" target="new">Tweakers.net</a></il>
+              <li><a href="http://www.majorgeeks.com/Data_Crow_d6378.html">Major Geeks</a></li>
             </ul>
           </div>
         </div>
@@ -484,24 +547,25 @@
             <h4> &nbsp;</h4>
             <ul>
               <li><a href="http://www.freewarefiles.com/Data-Crow_program_20918.html">Freeware Files</a></li>
-              <li><a href="http://www.majorgeeks.com/Data_Crow_d6378.html">Major Geeks</a></li>
+              
               <li><a href="http://www.hitechlegion.com/reviews/software/390-datacrow?showall=1" target="new">HiTechLegion (a lengthy review)</a></li>
             </ul>
           </div>
         </div>
         <div class="one_half first">
           <div class="column_content">
-            <h4> Sites mentioning Data Crow </h4>
+            <h4>Sites mentioning Data Crow </h4>
             <ul>
-              <li><a href="http://www.winpenpack.com/en/download.php?view.941" target="new">winPenPack: Portable Distribution</a></li>
-              <li><a href="http://portableapps.com/node/20087" target="new">PortableApps: Portable Distribution</a></il>
+              <li><a href="http://data-crow.giga.de " target="new">GIGA Software</a></li>
+              <li><a href="http://www.winpenpack.com/en/download.php?view.941" target="new">winPenPack: Portable Distribution (3.10.1)</a></li>
               <li><a href="http://fileforum.betanews.com/detail/Data-Crow/1186079402/1" target="new">File Forum</a></il>
               <li><a href="http://www.computeridee.nl/downloads.jsp?rubriek=1620616&id=2361857" target="new">Computer Idee</a></li>
               <li><a href="http://www.bestfreewaredownload.com/freeware/k-data-crow-t-free-data-crow-freeware-rcodtxpx.html" target="new">Best Freeware Download</a></li>
-              <li><a href="http://www.kaldata.net/comments.php?catid=1&id=34359" target="new">Kaldata</a></li>
               <li><a href="http://data-crow.updatestar.com/" target="new">Updatestar</a></li> 
               <li><a href="http://lifehacker.com/5466717/data-crow-is-a-cross+platform-manager-of-all-your-media" target="new">Life Hacker: Review of Data Crow</a></li>     
               <li><a href="http://www.zdnet.nl/software/116989/data-crow-3-8-14/" target="new">ZD Net: Review of Data Crow</a></li>
+              <li><a href="http://downloads.pcauthority.com.au/article/23314-data_crow" target="new">PC&amp;Tech Authority</a></li>
+              
             </ul>
           </div>
         </div>
@@ -513,16 +577,21 @@
               <li><a href="http://www.dodownload.com/learning+home+hobby/home+inventory/data+crow.html" target="new">dodownload.com</a></li>
               <li><a href="http://tipsandtricksforpc.com/?p=2762" target="new">Tips And Tricks For PC</a></li>
               <li><a href="http://www.makeuseof.com/tag/use-data-crow-to-organize-manage-all-your-stuff-windows/" target="new">MakeUseOf: Review of Data Crow</a></li>      
-                            <li><a href="http://www.freedownloadaday.com/2008/04/18/keep-track-of-your-stuff-with-data-crow" target="new">Free Download A Day</a></li>
+              <li><a href="http://www.freedownloadaday.com/2008/04/18/keep-track-of-your-stuff-with-data-crow" target="new">Free Download A Day</a></li>
               <li><a href="http://www.essential-freebies.de/board/viewtopic.php?p=93007" target="new">Essential Freebies</a></li>
               <li><a href="http://www.techspot.com/downloads/5240-data-crow.html" target="new">Techspot</a></li>
               <li><a href="http://www.chip.de/downloads/Data-Crow_43155462.html" target="new">Chip Online</a></li>
-              <li><a href="http://softfinder.com/data-crow" target="new">SoftFinder</a></li>
+              <li><a href="http://www.icewalkers.com/download/data-crow-3852.htmll" target="new">Ice Walkers</a></li>
             </ul>
           </div>
         </div>
         <div class="clear"> </div>
       </div>
+      
+      
+      
+      
+      
     </div>
     <div class="page" id="contact"> 
       <h3 class="page_title">Contact Information</h3>

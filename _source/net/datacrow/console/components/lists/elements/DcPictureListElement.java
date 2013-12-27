@@ -23,52 +23,56 @@
  *                                                                            *
  ******************************************************************************/
 
-package net.datacrow.core;
+package net.datacrow.console.components.lists.elements;
 
-import net.datacrow.settings.DcSettings;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.Collection;
 
-/**
- * The user mode determines which actions are available to the user.
- * A beginner might feel overwhelmed and therefore less features will be available to him.
- *  
- * @author Robert Jan van der Waals
- */
-public abstract class UserMode {
+import net.datacrow.console.ComponentFactory;
+import net.datacrow.console.components.DcPictureField;
+import net.datacrow.core.modules.DcModules;
+import net.datacrow.core.objects.Picture;
+import net.datacrow.util.DcImageIcon;
+
+public class DcPictureListElement extends DcObjectListElement {
+
+    private static final FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
+    private DcPictureField fldPicture = ComponentFactory.getPictureField(true, false);
     
-    public static final int _XP_BEGINNER = 0;
-    public static final int _XP_EXPERT = 1;
+    private static final Dimension fldPictureSize = new Dimension(400, 300);
     
-    private static int current = _XP_EXPERT;
+    public DcPictureListElement() {
+        super(DcModules._PICTURE);
+    }
     
-    public static void setUserMode(int mode) {
-        if (current != mode) {
-            current = mode;
-            
-            DataCrow.mainFrame.rebuildMenuBar();
-        }
+    @Override
+    public void build() {
+        fldPicture.setPreferredSize(fldPictureSize);
+        fldPicture.setMinimumSize(fldPictureSize);
+        fldPicture.setMaximumSize(fldPictureSize);
         
-        DcSettings.set(DcRepository.Settings.stXpMode, mode);
-        DataCrow.mainFrame.setTitle();
+        Picture p = (Picture) getDcObject();
+        p.loadImage(false);
+        
+        if (!p.hasImage()) return;
+        
+        DcImageIcon image = (DcImageIcon) p.getValue(Picture._D_IMAGE);
+        if (image != null) fldPicture.setValue(image);
+        add(fldPicture);
     }
 
-    /**
-     * @see #_XP_BEGINNER
-     * @see #_XP_EXPERT
-     */
-    public static int getUserMode() {
-        return current;
+    @Override
+    public Collection<Picture> getPictures() {
+        Collection<Picture> pics = new ArrayList<Picture>();
+        pics.add((Picture) getDcObject());
+        return pics;
     }
-    
-    /**
-     * Checks if the supplied user level corresponds with the current user mode.
-     * @param level
-     */
-    public static boolean isCorrectXpLevel(int level) {
-        if (getUserMode() == _XP_EXPERT)
-            return true;
-        else if (getUserMode() == _XP_BEGINNER && level == _XP_EXPERT)
-            return false;
-        else 
-            return true;    
-    }
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		fldPicture = null;
+	}
 }

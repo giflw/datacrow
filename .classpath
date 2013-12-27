@@ -86,5 +86,6 @@
 	<classpathentry kind="lib" path="lib/tmdb/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/tmdb/slf4j-jdk14-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/tmdb/themoviedbapi-3.7.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/datacrow-core"/>
 	<classpathentry kind="output" path="_build"/>
 </classpath>

@@ -42,6 +42,7 @@ import net.datacrow.console.components.lists.elements.DcMovieListHwElement;
 import net.datacrow.console.components.lists.elements.DcMusicAlbumListHwElement;
 import net.datacrow.console.components.lists.elements.DcMusicTrackListElement;
 import net.datacrow.console.components.lists.elements.DcObjectListElement;
+import net.datacrow.console.components.lists.elements.DcPictureListElement;
 import net.datacrow.console.components.lists.elements.DcPropertyListElement;
 import net.datacrow.console.components.lists.elements.DcShortObjectListElement;
 import net.datacrow.console.components.lists.elements.DcSoftwareListHwElement;
@@ -498,6 +499,8 @@ public class DcObjectList extends DcList implements IViewComponent {
         } else if (style == _CARDS) {
             if (module == DcModules._AUDIOTRACK)
                 element = new DcAudioTrackListElement(module);
+            else if (module == DcModules._PICTURE)
+                element = new DcPictureListElement();
             else if (moduleType == DcModule._TYPE_TEMPLATE_MODULE)
                 element = new DcTemplateListElement(module);
             else if (module == DcModules._MUSICTRACK)
