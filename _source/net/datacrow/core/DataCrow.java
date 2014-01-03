@@ -481,8 +481,8 @@ public class DataCrow {
                     Thread splashCloser = new Thread(new SplashScreenCloser());
                     splashCloser.start();
     
-                    if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
-                        new VersionChecker().start();
+//                    if (DcSettings.getBoolean(DcRepository.Settings.stCheckForNewVersion))
+//                        new VersionChecker().start();
                     
                     if (!webserverMode) {
                         DataFilter df = new DataFilter(DcModules._LOAN);

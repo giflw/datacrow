@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import net.datacrow.console.ComponentFactory;
 import net.datacrow.console.Layout;
 import net.datacrow.console.components.DcUrlField;
+import net.datacrow.core.http.HttpConnectionUtil;
 import net.datacrow.core.resources.DcResources;
 import net.datacrow.util.DcSwingUtilities;
 
